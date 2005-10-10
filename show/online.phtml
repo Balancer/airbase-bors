@@ -1,0 +1,68 @@
+<?
+include_once("$DOCUMENT_ROOT/inc/funcs/funcs.phtml");
+function online_show()
+{
+    global $DOCUMENT_ROOT;
+    $online=file("$DOCUMENT_ROOT/logs/online.txt");
+    $out=array();
+    $onlines=0;
+    $registred=0;
+
+    break_point('online-1');
+
+    for($i=0;$i<sizeof($online);$i++)
+    {
+        list($time,$ip,$login,$page,$ref,$agent)=split("\|",$online[$i].'|||||');
+        if(time()-$time<600)
+            $out[]="$time|$ip|$login|$page|$ref|$agent";
+    }
+
+    break_point('online-2');
+
+    $f=fopen("$DOCUMENT_ROOT/logs/online.txt","wt");
+    fwrite($f,join("\n",$out));
+    fclose($f);
+
+    $users_list="";
+
+    break_point('online-3');
+
+    for($i=0;$i<sizeof($out);$i++)
+    {
+        list($time,$ip,$login,$page,$ref,$agent)=split("\|",$out[$i]);
+        if($login) $id=$login; else $id=$ip;
+        if(!isset($exists[$id]) || !$exists[$id])
+        {
+            $exists[$id]=$out[$i];
+
+            $onlines++;
+            if($login)
+            {
+                if($users_list!="") $users_list.=", ";
+                $registred++;
+                $users_list.=user_data("nick",$login,$login);
+            }
+        }
+    }
+
+    break_point('online-5');
+
+    if($users_list) $users_list=" ($users_list)";
+    return "$onlines человек online. Из них зарегистрированых: $registred$users_list";
+}
+
+break_point('online-5');
+
+$file="$DOCUMENT_ROOT/inc/show/online.htm";
+if(!file_exists($file) || time()-filemtime($file)>60)
+{
+    $f=fopen($file,"wt");
+    fwrite($f,$res=online_show());
+    fclose($f);
+    echo $res;
+}
+else
+    readfile($file);
+
+break_point('online-6');
+?>

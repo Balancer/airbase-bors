@@ -1,0 +1,137 @@
+<?
+
+require_once("$DOCUMENT_ROOT/inc/funcs-date.phtml");
+require_once("$DOCUMENT_ROOT/inc/funcs-users.phtml");
+require_once("$DOCUMENT_ROOT/inc/funcs-text.phtml");
+
+if(!$lines)  $lines=$time?2000:50;
+if(!$forum)  $forum="1-100";
+if(!$t) $t=300;
+
+if($time[strlen($time)-1]=='h') $time=substr($time,0,strlen($time)-1)*3600;
+if($time[strlen($time)-1]=='d') $time=substr($time,0,strlen($time)-1)*86400;
+
+if(preg_match("!(\d+)\.(\d+)\.(\d+) (\d+):(\d+):(\d+)!",$time,$m))
+    $time=time()-mktime($m[4],$m[5],$m[6],$m[2],$m[1],$m[3]);
+if(preg_match("!(\d+)\.(\d+)\.(\d+) (\d+):(\d+)!",$time,$m))
+    $time=time()-mktime($m[4],$m[5],0,$m[2],$m[1],$m[3]);
+if(preg_match("!(\d+):(\d+):(\d+)!",$time,$m))
+    $time=time()-mktime($m[1],$m[2],$m[3],date('m'),date('d'),date('Y'));
+if(preg_match("!(\d+):(\d+)!",$time,$m))
+    $time=time()-mktime($m[1],$m[2],0,date('m'),date('d'),date('Y'));
+if(preg_match("!(\d\d)\.(\d\d)\.(\d\d\d\d)!",$time,$m))
+    $time=time()-mktime(0,0,0,$m[2],$m[1],$m[3]);
+if(preg_match("!(\d\d)\.(\d\d)!",$time,$m))
+    $time=time()-mktime(0,0,0,$m[2],$m[1],date('Y'));
+
+if($time==-1)
+{
+
+    if(!$login && $_login) $login=$_login;
+    if(!$password && $_password) $password=$_password;
+
+    if($login) @SetCookie("_login",$login,time()+2592000);
+    if($password) @SetCookie("_password",$password,time()+2592000);
+    
+    if($_show_time) $ctime=$_show_time;
+    if($_login)     $utime=user_data("show_time");
+
+    $ltime=$utime?$utime:$ctime;
+
+    if(!$lines)
+        $lines=2000;
+
+    $time=time()-$ltime;
+    if($time>86400*3)
+    {
+        $time=86400*3;
+        if(!$lines || $lines>2000)
+            $lines=2000;
+    }
+}
+
+@SetCookie("_show_time",time(),time()+2592000);
+if($_login) set_user_data("show_time",time());
+
+$forums=array();
+$f=split(",",$forum);
+
+for($i=0;$i<sizeof($f);$i++)
+{
+    if(strpos($f[$i],'-')===false)
+        $forums[]=$f[$i];
+    else
+    {
+        list($b,$e)=split('-',$f[$i]);
+        for($j=$b;$j<=$e;$j++)
+            $forums[]=$j;
+    }
+}
+
+$forums=@join(",",$forums);
+$time=time()-$time;
+
+$dbh = @mysql_connect("localhost", "forum", "localforum") or die ("Could not connect");
+@mysql_select_db("FORUM") or die ("Could not select database");
+
+$q="SELECT p.pid, p.post, p.author_name, p.post_date, p.forum_id, p.topic_id, p.author_id, t.title, f.name ".
+    "FROM ib_posts p, ib_topics t, ib_forums f ".
+    "WHERE t.tid=p.topic_id AND t.forum_id=f.id AND p.post_date > $time ".
+    "AND p.post_date = (select max(p1.post_date) from ib_posts p1 where p1.forum_id = p.forum_id AND p1.topic_id = p.topic_id) ".
+    "AND p.forum_id IN ($forums) ORDER BY pid DESC LIMIT 0,$lines";
+
+$query = mysql_query ($q) or  die ("Query '$q' failed, error ".mysql_errno().": ".mysql_error()."<BR>");
+
+if ($rows=mysql_num_rows($query) )
+{
+    require_once("/home/airbase/html/inc/funcs-text.phtml");
+
+    while( $out = mysql_fetch_array($query) ) 
+    {        
+        $thread_title = $out['title'];
+        $forum_name =$out['name'];
+        $author = $out['author_name'];          
+                
+        $date = strftime("%d.%m.%y %H:%M",$out['post_date']);
+
+        $thread_url = "/forums/?act=ST&f=".$out['forum_id']."&t=".$out['topic_id']."&hl=&view=getnewpost#entry".$out['pid'];
+        $thread_title = $thread_title;
+        $forum_url = "/forums/?act=SF&f=".$out['forum_id'];
+        $forum_name = $forum_name;
+        $date       = $date;
+        $author     = $author;
+        $profile_link   = "/forums/?act=Profile&CODE=03&MID=".$out['author_id'];
+        $message = strip_text($out['post'],256);
+
+        $to_echo .= <<<EOT
+<table style='border-left: 1px dotted gray; border-bottom: 1px dotted gray; width:100%;font-family:Verdana;font-size:10px'>
+<tr>
+<td>
+<font size=1><a href=$thread_url>$thread_title</a> [<a href=$forum_url>$forum_name</a>], $date<br>
+<b><a href=$profile_link>$author</a></b>: $message</font>
+</td>
+</tr>
+</table>
+<br>
+EOT;
+    }
+
+}
+
+// Parse template
+
+echo "<table cellpadding='2' cellspacing='1' border='0' width='100%' bgcolor='#000000'style='font-family:Verdana;font-size:11px'>";
+echo "<tr>";
+echo "<td align='left' bgcolor='#CCCCCC'><b>Last Posts</b></td>";
+echo "</tr>";
+echo "<tr>";
+echo "<td align='left'bgcolor='#FEFEFE'>";
+    echo $to_echo;
+echo "</td>";
+echo "</tr>";
+echo "</table>";
+echo "<br>";
+
+echo "<font size=1>Итого обновлений с ".strftime("%d.%m.%y %H:%M:%S",$time).": ".intval($rows)."</font>";
+
+?>

@@ -1,0 +1,8 @@
+<?
+    require_once("$DOCUMENT_ROOT/inc/config.site.php");
+    require_once('funcs/DataBaseHTS.php');
+    require_once('comments.php');
+
+    if(!empty($id))
+        show_forum_comments($id);
+?>

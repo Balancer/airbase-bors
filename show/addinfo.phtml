@@ -1,0 +1,17 @@
+<?
+
+$log=file("$DOCUMENT_ROOT/logs/addinfo.log");
+
+$n=0;
+?><table border=0 cellpadding=2 cellspacing=0><?
+for($i=sizeof($log)-1;$i>=0 && $n<10;$i--)
+{
+    list($date,$time,$url,$tit)=split("\|",chop($log[$i]));
+    if(!$u["$url"])
+    {
+        echo "<tr><td><b>$time</b><br>$date</td><td><a href=$url>$tit</a></td></tr>\n";
+        $u["$url"]=-1;
+        $n++;
+    }
+}
+?></table>

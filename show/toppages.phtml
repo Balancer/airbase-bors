@@ -1,0 +1,204 @@
+<?
+include("$DOCUMENT_ROOT/inc/funcs.phtml");
+function count_top()
+{
+    global $lines, $sort, $DOCUMENT_ROOT;
+
+    if(!$sort) $sort="p";
+    $lines=($sort=='p')?20:10;
+    
+    $a=array();
+    $urls=array();
+
+    $counts=array();
+
+    if ($dir = @opendir("$DOCUMENT_ROOT/inc/data/counts")) 
+        while($file = readdir($dir)) 
+            if($file[0]!=".")
+            {
+                if(preg_match("!ubb=!",$file)&&!preg_match("!ubb=get_topic&!",$file)&&!preg_match("!ubb=forum&!",$file))
+                {
+                    unlink("$DOCUMENT_ROOT/inc/data/counts/$file");
+                    continue;
+                }
+                $s=@file("$DOCUMENT_ROOT/inc/data/counts/$file");
+                $counts[]=chop($s[0]);
+            }
+    closedir($dir);
+
+    if ($dir = @opendir("$DOCUMENT_ROOT/../cgi-bin/data/counts"))
+        while($file = readdir($dir)) 
+            if($file[0]!=".")
+            {
+                if(preg_match("!ubb=!",$file)&&!preg_match("!ubb=get_topic&!",$file)&&!preg_match("!ubb=forum&!",$file))
+                {
+                    unlink("$DOCUMENT_ROOT/../cgi-bin/data/counts/$file");
+                    continue;
+                }
+                if(preg_match("!\.lck$!",$file))
+                    continue;
+                $file=preg_replace("!\.db$!","",$file);
+                $dbm=dbmopen("$DOCUMENT_ROOT/../cgi-bin/data/counts/$file", "r");
+                if($dbm)
+                {
+                    $counts[]=dbmfetch($dbm, "id")."|".dbmfetch($dbm, "count")."|".dbmfetch($dbm, "date")."|".dbmfetch($dbm, "rlast")."|".dbmfetch($dbm, "clast");
+                    dbmclose($dbm);
+                }
+            }
+    closedir($dir);
+
+
+    for($i=0; $i<sizeof($counts); $i++)
+    {
+        $line=chop($counts[$i]);
+//        echo "<!--$line-->";
+        list($url,$count,$date,$rlast,$last)=split("\|",$line);
+        if($url[0]!="/" || !$last || $last != intval($last))
+            continue;
+
+        if(
+            preg_match("!ubb=reply!",$url) ||
+            preg_match("!ubb=edit_post!",$url) ||
+            preg_match("!ubb=transfer!",$url)
+         )
+        {
+            $file=str_replace("/","#",substr($url,1));
+            @unlink("$DOCUMENT_ROOT/inc/data/counts/$file");
+            continue;
+        }
+
+
+        $url=preg_replace("!^(/ultimatebb.cgi)!","/cgi-bin/forum$1",$url);
+
+        if(preg_match("!/cgi-bin/forum/ultimatebb\.cgi\?ubb=get_topic&f=(\d+)&t=(\d+)(&p=(\d+))?!",$url,$data))
+            $url="/forum/Forum".$data[1]."/HTML/".$data[2].".html";
+        
+        if(preg_match("!^/cgi-bin/forum/ultimatebb\.cgi\??$!",$url))
+            $url="/cgi-bin/forum/ultimatebb.cgi";
+
+
+        $idx=$urls["$url"];
+        if($idx)
+        {
+            list($itag,$iurl,$icount,$iper_day,$idate,$ilast)=split("\|",$a[$idx]);
+            $count+=$icount;
+            $date=min($date,$idate);
+            $last=max($last,$ilast);
+        }
+        else
+        {
+            $idx=$i;
+            $urls["$url"]=$i;
+        }
+
+        if(time()==$date)
+            $per_day=0;
+        else
+            $per_day=86400*$count/(time()-$date);
+        $tag=sprintf("%06.3f",$per_day);
+        if($sort=="v") $tag=sprintf("%010d",$last);
+
+        $per_day=sprintf("%.1f",$per_day);
+        $date=strftime("%d.%m.%Y&nbsp;%H:%M",$date);
+        $last=strftime("%d.%m.%Y&nbsp;%H:%M",$last);
+
+        $a[$idx]="$tag|$url|$count|$per_day|$date|$last";
+    }
+
+    if($sort=="p")
+        rsort($a);
+    else
+        sort($a);
+
+    $res="";
+
+    for($i=0,$n=1; $i<sizeof($a) && $n<=$lines; $i++)
+    {
+        list($tag,$url,$count,$per_day,$date,$last)=split("\|",$a[$i]);
+
+        if($count<50 && $sort=="p") continue;
+
+        $title=$url;
+        $file=preg_replace("!\.html$!","",$url);
+        $file=preg_replace("!\.phtml$!","",$file);
+        $file="$DOCUMENT_ROOT$file";
+        if(preg_match("!/forum/Forum\d+/HTML/!",$url))
+        {
+            $file=preg_replace("!/HTML/!","/",$file);
+            $file=@file("$file.cgi");
+            list($type,$x1,$replies,$author,$subj,$x2,$ico,$x3)=split("\|\|",$file[0]);
+            $title=$subj;
+        }
+
+        if(preg_match("!/cgi-bin/forum/ultimatebb\.cgi\?ubb=forum&f=(\d+)!",$url,$data))
+        {
+            $forum[1] ="Авиационный форум";
+            $forum[2] ="Форум разработчиков";
+            $forum[3] ="Космический форум";
+            $forum[4] ="Общевоенный форум";
+            $forum[5] ="Игровой форум";
+            $forum[6] ="Новости русские";
+            $forum[7] ="English news";
+            $forum[8] ="Политический форум";
+            $forum[9] ="Компьютерный форум";
+            $forum[10]="Форум Грёзы";
+            $forum[11]="Научный форум";
+            $forum[12]="Новости космические";
+            $forum[13]="Психология";
+            $forum[14]="Форум Техника";
+            $forum[15]="Главный форум";
+            $forum[16]="Форум Прочее";
+            $forum[17]="English forum";
+            $title=$forum[$data[1]];
+        }
+
+
+        if(preg_match("!^/cgi-bin/forum/ultimatebb\.cgi$!",$url))
+            $title="Форумы Авиабазы";
+        
+        if(file_exists("$file.hts"))
+            $title=hts_title(from_file("$file.hts"));
+
+        if(strlen($title)>20)
+            $short=substr($title,0,17)."...";
+        else
+            $short=$title;
+
+        $title=preg_replace("/\"/","&quot;",$title);
+        $short=preg_replace("/\"/","&quot;",$short);
+
+        if(!$short)
+            $short="untitled";
+
+        $res.="$n. <a href=$url title=\"$title ";
+        $res.="$count visits after $date; ";
+        $res.="$per_day average visits per day; ";
+        $res.="last visit: $last\">$short</a><br>\n";
+        $n++;
+    }
+    return $res;
+}
+
+//$res=preg_replace("!\"!","\\\"",count_top());
+//$res=preg_replace("!\n!","\"\+\n\"",$reg);
+//$res=preg_replace("!\"!","\\\"",$res);
+//$res="<script>document.write(\"$res\")</script>";
+
+function make($srt)
+{
+    global $sort,$DOCUMENT_ROOT;
+    $sort=$srt;
+    $file="$DOCUMENT_ROOT/tmp/toppages-$sort.htm";
+    if(!file_exists($file) || time()-filemtime($file)>600)
+        to_file($file,$res=count_top());
+    else
+        $res=from_file($file);
+    echo "$res";
+}
+
+echo "<i>При наведении на ссылку всплывёт более подробная информация</i><br>";
+echo "<b>Популярные:</b><br>"; make("p");
+echo "<b>Малоизвестные:</b><br>"; make("u");
+echo "<b>Позабытые:</b><br>"; make("v");
+echo "<i>При наведении на ссылку всплывёт более подробная информация</i><br>";
+?>

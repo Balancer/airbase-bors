@@ -1,0 +1,25 @@
+<?
+
+    $link = @mysql_connect("localhost", "kron", "KTNXBR");
+    @mysql_select_db("KRON");
+    for($i=0;$i<12;$i++)
+    {
+        echo "<h2>$i:</h2>\n";
+
+        $sql = "SELECT * FROM `page_counts` WHERE id LIKE '%-$i.phtml'"; 
+        $top = mysql_query ($sql) or  die ("Query failed, error ".mysql_errno().": ".mysql_error()."<BR>");
+        
+        while($row = mysql_fetch_array($top))
+        {
+            echo $row['id']."<br>";
+            $idn=preg_replace("!^(.+)\-\d+\.phtml$!","$1.phtml",$row['id']);
+            $sql = "UPDATE `page_counts` SET count=count+".$row['count']." WHERE id LIKE '$idn'"; 
+            $xtop = mysql_query ($sql) or  die ("Query failed, error ".mysql_errno().": ".mysql_error()."<BR>");
+            $sql = "DELETE FROM `page_counts` WHERE id LIKE '".$row['id']."'"; 
+            $xtop = mysql_query ($sql) or  die ("Query failed, error ".mysql_errno().": ".mysql_error()."<BR>");
+        }
+    }
+
+    mysql_free_result($top);
+    mysql_close($link);
+?>

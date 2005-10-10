@@ -1,0 +1,8 @@
+<?if(rand(0,9)<2)
+{?>
+<h5>Бортжурнал</h5>
+<center><?include("$DOCUMENT_ROOT/inc/show/log-one.phtml")?></center>
+<?}else{?>
+<h5>Фотогалерея</h5>
+<center><small><?include("$DOCUMENT_ROOT/photos/random.phtml")?></small></center>
+<?}?>

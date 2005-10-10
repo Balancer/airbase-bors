@@ -1,0 +1,43 @@
+<?
+    include("$DOCUMENT_ROOT/inc/funcs.phtml");
+    break_point("forum-comments-1");
+/*
+A||||1||&lt;=KRoN= [Автогенерация]&gt;||Test page||||||||&lt;=KRoN= [Автогенерация]&gt;||
+Z||000000||&lt;=KRoN= [Автогенерация]&gt;||10-01-2001||01:01 AM||||<b>Комментарии и обсуждения страницы <a href="http://airbase.ru/test/index.phtml" target=_blank>Test page</a></b>.<BR><BR>Убедительная просьба писать сюда только по теме, касающейся данной страницы!||213.59.3.210||unreg||||&lt;=KRoN= [Автогенерация]&gt;||||no
+Z||000001||KRoN||10-01-2001||01:02 AM||kron@beep.ru||Проверка сообщения в комментарии...||195.239.1.243||reg||1||=KRoN=||00000151||yes
+*/
+    if($id)
+    {
+        break_point("forum-comments-2");
+        list($id,$forum,$title)=split(",",$id);
+        if(!$forum) $forum=17;
+        if(!$title) $title="Comments";
+        $id=sprintf("%06d",$id);
+//        if(!$lines)
+            $lines=5;
+        $sub_dir=substr($file,0,4);
+        $file=@file("$DOCUMENT_ROOT/forum/Forum$forum/$sub_dir/$id.cgi");
+        if(!$file)
+            $file=@file("$DOCUMENT_ROOT/forum/Forum$forum/$id.cgi");
+
+        $i=sizeof($file)-2;
+
+        break_point("forum-comments-3");
+        echo "<h2>$title: $i</h2>\n";
+
+        $i-=$lines-2;
+        if($i<2)
+            $i=2;
+        else
+            echo "\n<center>[ <a href=http://airbase.ru/forum-en/$forum/$id/>previous messages</a> ]</center>\n";
+
+        break_point("forum-comments-4");
+        for(;$i<sizeof($file);$i++)
+        {
+            list($type,$n,$user,$date,$time,$email,$message,$ip,$reg,$ico,$nick,$num,$yes)=split("\|\|",$file[$i]);
+            echo "<table id=btab width=100% cellSpacing=0><tr><td>$message <div align=right><small>$date $time, $nick</small></div></td></tr></table>\n";
+        }
+        echo "<center>[ <a href=http://airbase.uka.ru/admin/forum-comment.phtml?id=".intval($id).($forum?",$forum":"")."&page=$page>append comment message</a> ]</center>\n\n";
+    }
+    break_point("forum-comments-5");
+?>

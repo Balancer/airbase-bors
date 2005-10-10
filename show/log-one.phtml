@@ -1,0 +1,55 @@
+<?
+include_once("$DOCUMENT_ROOT/inc/funcs.phtml");
+include_once("$DOCUMENT_ROOT/inc/funcs/comments.phtml");
+
+srand(time());
+
+if($log && $log[0]!='/') $slog="/$log"; else $slog="$log";
+if(!isset($lines) || !$lines) $lines=15;
+
+$cache_name="$DOCUMENT_ROOT/tmp/cache/log/".($log?$log:"index");
+
+$file_name=strftime("$DOCUMENT_ROOT/$log/log/%Y/%M/index.phtml");
+
+if(!file_exists("$cache_name.txt") || @filemtime("$cache_name.txt")<@filemtime($file_name))
+    @virtual("/cgi-bin/tools/make/log-index.cgi");
+
+
+$records=intval(@join("",@file("$cache_name-total.txt")));
+
+$rnd=1;
+for($i=1;$i<4;$i++)
+{
+    $rnd*=rand(0,32000)/32001;
+}
+
+$n=intval($rnd*$records)+1;
+
+$fh=@fopen("$cache_name.txt","rt");
+
+for($i=0;$i<$n;$i++)
+    list(,$time,$nick,$text,$subj)=split("\|",@fgets($fh,32767).'||||');
+
+$id=$time.(isset($user)?$user:'');
+$para="?id=$id&title=$subj&log=$log&page=$page";
+
+$comms=comments_count($id);
+if($comms<0) $comms=0;
+
+$comments="Комментариев: $comms [ ";
+
+if(isset($coms) && $coms>0)
+    $comments.="<a href=\"/inc/show/comments.phtml$para\">читать</a> | ";
+$comments.="<a href=\"/admin/forum-comments.phtml$para\">писать</a> ]";
+
+if(strlen($text)>256)
+    $text=substr($text,0,256)."...";
+
+if(preg_match("!^(<br>)*<a href=(.+?)><img src=(.+?) align=left border=0 width=128 height=96></a>(.+)$!",$text,$m))
+    $text="<a href=$m[2]><img src=$m[3] width=128 height=96 border=0></a><br>$m[4]";
+if(preg_match("!^(<br>)*<img src=(.+?) align=left border=0 width=128 height=96>(.+)$!",$text,$m))
+    $text="<img src=$m[2] width=128 height=96 border=0><br>$m[3]";
+if(preg_match("/\w/",$subj))
+    $subj="<b>$subj</b>, ";
+echo "<table cellSpacing=0 cellPadding=0><tr><td><small>$subj$time<br>$text</small></td></tr></table>\n";
+?>

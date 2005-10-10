@@ -1,0 +1,44 @@
+<?
+include("$DOCUMENT_ROOT/inc/funcs.phtml");
+include("$DOCUMENT_ROOT/inc/funcs/comments.phtml");
+
+if($log && $log[0]!='/') $slog="/$log"; else $slog="$log";
+if(!$lines) $lines=15;
+
+$cache_name="$DOCUMENT_ROOT/tmp/cache/log/".($log?$log:"index");
+
+$file_name=strftime("$DOCUMENT_ROOT/$log/log/%Y/%M/index.phtml");
+
+if(!file_exists("$cache_name.txt") || @filemtime("$cache_name.txt")<@filemtime($file_name))
+    virtual("/cgi-bin/tools/make/log-index.cgi");
+
+$fh=fopen("$cache_name.txt","rt");
+
+$tr=1;
+
+while($lines--)
+{
+    echo "<table width=95%>\n";
+
+    list(,$time,$nick,$text,$subj)=split("\|",fgets($fh,32767));
+
+    $id="$time$user";
+    $para="?id=$id&title=$subj&log=$log&page=$page";
+
+    $comms=comments_count($id);
+    if($comms<0) $comms=0;
+
+    $comments="Комментариев: $comms [ ";
+
+    if($coms>0)
+        $comments.="<a href=\"/inc/show/comments.phtml$para\">читать</a> | ";
+    $comments.="<a href=\"/admin/forum-comments.phtml$para\">писать</a> ]";
+
+    //<br>$comments
+    echo "<tr id=tr$tr><td><h2>$subj</h2><table><tr><td>$text</td></tr></table><small><div align=right>$nick, $time</div></small></td></tr>\n";
+    $tr=3-$tr;
+}
+
+fclose($fh);
+
+?></table>

@@ -1,0 +1,29 @@
+<?
+    require_once('funcs/DataBaseHTS.php');
+
+    function lt_url($params) 
+    { 
+        $url = $params['url'];
+
+        if(!isset($params['description']))
+            $params['description']=$url;
+
+        if(preg_match("!^[^/]+\.\w{2,3}!",$url))
+            if(!preg_match("!^\w+://!",$url))
+                $params['url']="http://$url";
+
+        $hts = class_exists('DataBaseHTS') ? new DataBaseHTS : NULL;
+
+        if(!preg_match("!^\w+://!",$url) && !preg_match("!^/!",$url))
+            $url = $GLOBALS['page'].$url;
+
+        if($hts)
+            $parse = $hts->parse_uri($url);
+
+        $external = $parse['local'] ? '' : ' class="external"';
+
+        $title    = ($external || preg_match("!\?!",$url))? '' : ( $hts->get_data($url, 'modify_time') ? '' : "?title=".urlencode("{$params['description']}"));
+
+        return "<a href=\"$url$title\"$external>".lcml($params['description'])."</a>";
+    }
+?>

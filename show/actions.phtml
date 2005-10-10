@@ -1,0 +1,113 @@
+<?
+require_once("$DOCUMENT_ROOT/inc/funcs/funcs.phtml");
+
+function show_actions($page="",$lines=15,$actions="")
+{
+    global $DOCUMENT_ROOT, $PHP_SELF;
+    if(!$page) $page=$PHP_SELF;
+
+    $act["addinfo"]="Комментарий";
+    $act["edit"]="Редактирование";
+    $act["addlog"]="Бортжурнал";
+    $act["pageupload"]="Файл к странице";
+    $act["userupload"]="Файл пользователя";
+    $act["addurl"]="Ссылка";
+    $act["make404"]="Новое!";
+    $act["galupload"]="Фото/схема";
+    $act["forumupload"]="Файл/фото в форуме";
+    $act["add-forum-dispit"]="Добавление комментария";
+    if(!$lines) 
+        $lines=15;
+    if(!$actions) 
+        $actions="addinfo,edit,addlog,pageupload,forumupload,userupload,addurl,make404,galupload";
+
+    $actl=" ".str_replace(",","  ",$actions)." ";
+
+    $n=0;
+
+    preg_match("!^(.*)/[^/]+$!",$page,$m);
+    $path=isset($m[1])?$m[1]:'';
+
+    $year=intval(strftime("%Y"));
+    $mon=intval(strftime("%m"));
+    $out=Array();
+    $uu=Array();
+    $tr=1;
+
+    do
+    {
+        $file=secure_path(sprintf("$DOCUMENT_ROOT/$path/log/%04d/%02d.txt",$year,$mon));
+//        echo "<b>$n: $year/$mon: $file</b><br>";
+        $nlog=@file($file);
+        for($i=0; $i<sizeof($nlog) && $n<$lines; $i++)
+        {
+            list($time,$user,$action,$url,$ltitle,$text)=split("\|",chop($nlog[$i]));
+            $nlog[$i]=sprintf("%012d|%s|%s|%s|%s|%s",$time,$user,$action,$url,$ltitle,$text);
+        }
+
+        if(sizeof($nlog)>1) rsort($nlog);
+
+        for($i=0; $i<sizeof($nlog) && $n<$lines; $i++)
+        {
+//1033902062|shzh|edit|/hangar/equipment/radars/far/index.hts|Радиолокационные станции с фазированными антенными решетками|
+//1033903739|shzh|galupload|/hangar/equipment/radars/far/index.phtml|/cache/hangar/equipment/radars/far/img/200x150/airbase.uka.ru_users_muxel_files_par-1.jpg|: Рис. 1 Радиолокационная станция PAVE PAWS
+
+            list($time,$user,$action,$url,$ltitle,$text)=split("\|",chop($nlog[$i]));
+//            echo "$time,$user,$action,$url,$ltitle,$text<br>";
+            if($action && $url && (!isset($uu["$url"]["$action"]) || !$uu["$url"]["$action"] || $action!="edit"))
+            {
+                $ftime=strftime("%d.%m.%Y %H:%M",$time);
+                $time=sprintf("%012d",$time);
+//                echo "$actl === $action ";
+                if(strpos($actl," $action ")>0)
+                {
+//                    echo " yes ";
+                    if($action=="galupload")
+                        $ltitle="<img src=$ltitle align=left alt=\"$text\">";
+                    if($action=="forumupload")
+                    {
+                        $url=preg_replace("!\.(jpg|jpeg|jpe|gif|png)$!",".htm",$url);
+                        $ltitle="<img src=$ltitle align=left alt=\"$text\">";
+                        $nick=$user;
+                    }
+                    if($user)
+                        $nick=user_data("nick",$user,$user);
+                    $out[]="$time|<tr id=tr$tr><td><a href=$url>$ltitle</a> [$act[$action]]<br><small><i><b>$nick</b>, $ftime</i>: $text</small></td></tr>\n";
+                    $uu["$url"]["$action"]=-1;
+                    $tr=3-$tr;
+                    $n++;
+                }
+/*                else
+                {
+                    $nick=user_data("nick",$user,$user);
+                    $out[]="$time|<tr id=tr$tr><td><a href=$url>$ltitle</a> [$action]<br><small><i><b>$nick</b>, $ftime</i>: $text</small></td></tr>\n";
+                    $uu["$url"]["$action"]=-1;
+                    $tr=3-$tr;
+                    $n++;
+                }*/
+//                echo "<br>\n";
+            }
+        }
+        $mon--;
+        if($mon<=0)
+        {
+            $mon=12;
+            $year--;
+        }
+    } while ($n<=$lines && $year>=2002);
+
+    rsort($out);
+
+    echo "Lines: $lines, readed: $n<br>";
+    
+    echo "<table>\n";
+    while(list(,$val)=each($out))
+    {
+        list($time,$text)=split("\|",$val);
+        echo $text;
+    }
+    echo "</table>\n";
+}
+
+show_actions($page,isset($lines)?$lines:'',isset($action)?$action:'');
+?>
