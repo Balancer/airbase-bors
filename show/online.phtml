@@ -1,9 +1,8 @@
 <?
-include_once("$DOCUMENT_ROOT/inc/funcs/funcs.phtml");
+include_once("{$_SERVER['DOCUMENT_ROOT']}/inc/funcs/funcs.phtml");
 function online_show()
 {
-    global $DOCUMENT_ROOT;
-    $online=file("$DOCUMENT_ROOT/logs/online.txt");
+    $online=file("{$_SERVER['DOCUMENT_ROOT']}/logs/online.txt");
     $out=array();
     $onlines=0;
     $registred=0;
@@ -19,7 +18,7 @@ function online_show()
 
     break_point('online-2');
 
-    $f=fopen("$DOCUMENT_ROOT/logs/online.txt","wt");
+    $f=fopen("{$_SERVER['DOCUMENT_ROOT']}/logs/online.txt","wt");
     fwrite($f,join("\n",$out));
     fclose($f);
 
@@ -53,7 +52,7 @@ function online_show()
 
 break_point('online-5');
 
-$file="$DOCUMENT_ROOT/inc/show/online.htm";
+$file="{$_SERVER['DOCUMENT_ROOT']}/inc/show/online.htm";
 if(!file_exists($file) || time()-filemtime($file)>60)
 {
     $f=fopen($file,"wt");

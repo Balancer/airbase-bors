@@ -5,6 +5,6 @@
 	{
 //		echo "Page = $m[2]<br>";
 		$GLOBALS['cms']['page_number'] = max(1, intval($m[2]));
-		return $m[1];
+		return $GLOBALS['main_uri'] = $m[1];
     }
 ?>

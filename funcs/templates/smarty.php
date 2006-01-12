@@ -10,9 +10,14 @@
     function do_php($code)
     {
         ob_start();
+//		if(user_data('level') > 10)
+//			echo "...".print_r($GLOBALS['page_data'], true);
         eval($code);
         $out = ob_get_contents();
         ob_clean();
+		if(!$out)
+			return "Error in code<xmp>$code</xmp>";
+
         return $out;
     }
 
@@ -85,25 +90,42 @@
 //        $smarty->secure_dir += array("/home/airbase/forums/cms/funcs/templates");
 //        print_r($smarty->secure_dir);
 
-        $template = $hts->get_data($page, 'template', '', true);
+        $template = empty($GLOBALS['page_data']['template']) ? $hts->get_data($page, 'template', '', true) : $GLOBALS['page_data']['template'];
         
-        if($template)
-            $template = "$template/";
+		if($template)
+		{
+			$tpl1 = "/$template/";
+			$tpl2 = "/$template/";
+		}
+		else
+		{
+			$tpl1 = "/default/";
+			$tpl2 = "";
+		}
+		
+		
+		foreach(array(
+			"{$page}template$tpl2/",
+			"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
+			"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
+		) as $tpl)
+		{
+//			echo "Check '$tpl'<br />";
+			if($hts->get_data($tpl, 'source'))
+				break;
+		}
 
-        $tpl = "$page/template/$template";
-
-        if(!$hts->get_data("{$tpl}body/", 'source', '', true))
-            $tpl = "{$GLOBALS['cms']['base_uri']}/templates/$template";
-
-        if(!$hts->get_data("{$tpl}body/", 'source') || ($action && $action!='virtual'))
+        if(!$hts->get_data($tpl, 'source'))// || ($action && $action!='virtual'))
             $tpl = $GLOBALS['cms']['default_template'];
 
-        if(!$hts->get_data("{$tpl}body/", 'source'))
+//		echo $tpl;
+
+        if(!$hts->get_data($tpl, 'source'))
             $tpl = $GLOBALS['cms']['default_template_file'];
 
-		$tpl = preg_match("!^/!", $tpl) ? $tpl : "hts:{$tpl}body/";
+		$tpl = preg_match("!^/!", $tpl) ? $tpl : "hts:$tpl";
 		
-//		echo "base={$GLOBALS['cms']['base_uri']}; tpl='$tpl' Using template $template";	exit();
+//		echo "<br/>base={$GLOBALS['cms']['base_uri']}; tpl='$tpl' Using template $template";	exit();
 
         if(!$hts->get_data($page, 'views_first')) $hts->set_data($page, 'views_first', time());
         $hts->set_data($page, 'views', $hts->get_data($page, 'views') + 1);
@@ -118,7 +140,8 @@
 
 		$access = access_allowed($page, $hts) ? 1 : 0;
 		$us = new User();
-		$data['level'] = $us->data('level');
+		$level = $us->data('level');
+		$user_id = $us->data('id');
 		
 		include_once("funcs/actions/subscribe.php");
 
@@ -132,7 +155,7 @@
         {
 			$GLOBALS['cms']['cached_copy'] = 0;	
 		
-            $page_vars = 'copyright compile_time create_time description modify_time right_column subscribed title version views views_first views_last';
+            $page_vars = 'author copyright compile_time create_time description modify_time publisher right_column subscribe title version views views_first views_last';
 
             foreach(split(' ', $page_vars) as $key)
 			{
@@ -174,7 +197,7 @@
                     $$key = $hts->get_data($page, $key);
             }
 
-            foreach(split(' ', "access action body $page_vars") as $key)
+            foreach(split(' ', "access level action body user_id $page_vars") as $key)
             {
 //                echo "<xmp>'$key' -> '{$$key}'</xmp>";
                 $smarty->assign("$key", "{$$key}");
@@ -187,8 +210,10 @@
             $smarty->assign("views_average", sprintf("%.1f",86400*$views/($views_last-$views_first+1)));
             $smarty->assign("page_template", $template);
             $smarty->assign("page", $page);
-            $smarty->assign("uri", $uri);
+            $smarty->assign("uri", $page);
+            $smarty->assign("main_uri", $GLOBALS['main_uri']);
             $smarty->assign("time", time());
+            $smarty->assign("ref", @$_SERVER['HTTP_REFERER']);
 
 			$hts->set_data($page, 'cache_create_time', time());
 
@@ -231,36 +256,12 @@
 		}
 
 
-//        $smarty->load_filter('output', 'php_include');
-
-//		echo "<xmp>$template:$body</xmp>";
         $out = $smarty->fetch($tpl, $page);
 		
-//		exit("123<xmp>$out</xmp>");
-		
-//	    $out = $smarty->fetch("/home/airbase/forums/cms/funcs/templates/test.tpl");
-
-//		exit(__LINE__.":<xmp>".$out."</xmp>");
         $out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
 
         echo $out;
 
-//		echo "<tt>SP4: $uri -> $page, tpl=hts:{$template}body/</tt>";
-//		echo "tpl====".$hts->get_data("{$template}body/", "source");
-//		echo "vars = ".print_r($smarty->get_template_vars(),true);
-//		exit();
-
-?>
-<div align="right" style="margin: 8px;">
-<small><?/*debug_page_stat();*/?></small>
-<? 
-//    if(user_data('member_id') == 1)
-//        xdebug_dump_function_profile(XDEBUG_PROFILER_CPU); 
-?>
-</div>
-</body>
-</html>
-<?
         $hts->set_data($page, 'views_last', time());
     }
 ?>

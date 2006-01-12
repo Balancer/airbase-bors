@@ -1,5 +1,5 @@
 <?
-    include("$DOCUMENT_ROOT/inc/funcs.phtml");
+    include("{$_SERVER['DOCUMENT_ROOT']}/inc/funcs.phtml");
     break_point("forum-comments-1");
 /*
 A||||1||&lt;=KRoN= [Автогенерация]&gt;||Test page||||||||&lt;=KRoN= [Автогенерация]&gt;||
@@ -16,9 +16,9 @@ Z||000001||KRoN||10-01-2001||01:02 AM||kron@beep.ru||Проверка сообщения в коммен
 //        if(!$lines)
             $lines=5;
         $sub_dir=substr($file,0,4);
-        $file=@file("$DOCUMENT_ROOT/forum/Forum$forum/$sub_dir/$id.cgi");
+        $file=@file("{$_SERVER['DOCUMENT_ROOT']}/forum/Forum$forum/$sub_dir/$id.cgi");
         if(!$file)
-            $file=@file("$DOCUMENT_ROOT/forum/Forum$forum/$id.cgi");
+            $file=@file("{$_SERVER['DOCUMENT_ROOT']}/forum/Forum$forum/$id.cgi");
 
         $i=sizeof($file)-2;
 

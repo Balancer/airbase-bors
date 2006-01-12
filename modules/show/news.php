@@ -16,7 +16,7 @@
 //		echo $GLOBALS['page'];
 
 //		$GLOBALS['log_level']=10;
-		$pages = $db->dbh->get_array("SELECT b.*, t.value as time FROM `hts_data_body` b LEFT JOIN `hts_data_create_time` t ON (b.id LIKE t.id) WHERE b.id LIKE '".addslashes($GLOBALS['page'])."%' AND b.id NOT LIKE '".addslashes($GLOBALS['page'])."' ORDER BY t.value DESC LIMIT 0,10");
+		$pages = $db->dbh->get_array("SELECT b.*, t.value as time FROM `hts_data_bodies` b LEFT JOIN `hts_data_create_times` t ON (b.id LIKE t.id) WHERE b.id LIKE '".addslashes($GLOBALS['main_uri'])."%' AND b.id NOT LIKE '".addslashes($GLOBALS['main_uri'])."' ORDER BY t.value DESC LIMIT 0,10");
 		foreach($pages as $p)
 		{
 //			print_r($p);

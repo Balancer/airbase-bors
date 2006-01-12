@@ -5,15 +5,20 @@
 //    if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
 //        echo __FILE__.__LINE__." ".$GLOBALS['REQUEST_URI']."<br />\n";
 
+    header('Content-Type: text/html; charset=utf-8');
+    header('Content-Language: ru');
+    ini_set('default_charset','utf-8');
+    setlocale(LC_ALL, "ru_RU.utf8");
+
     $query = $_SERVER['REQUEST_URI'];
     $ref   = empty($_SERVER['HTTP_REFERER']) ? NULL : $_SERVER['HTTP_REFERER'];
     $query=preg_replace("!^(.+?)/+$!","$1",$query);
     $query=urldecode($query);
 
-    $REQUEST_URI = $_SERVER['REQUEST_URI'];
+	$page = @$_GET['page'];
 
-    if(empty($REQUEST_URI))
-        $REQUEST_URI = $page;
+    if(empty($_SERVER['REQUEST_URI']))
+        $_SERVER['REQUEST_URI'] = $page;
 
     require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
     require_once("funcs/navigation/go.php");
@@ -22,7 +27,7 @@
     require_once("funcs/strings.php");
     $QUERY_ENCODED=$query;
 
-    //Ответим, что всё ок.
+    //п·я┌п╡п╣я┌п╦п╪, я┤я┌п╬ п╡я│я▒ п╬п╨.
     header("HTTP/1.1 200 OK\n");
     header("Status: 200 OK\n");
 
@@ -81,7 +86,7 @@
             go("$script");
     }
 
-    // Полноразмерные картинки
+    // п÷п╬п╩п╫п╬я─п╟п╥п╪п╣я─п╫я▀п╣ п╨п╟я─я┌п╦п╫п╨п╦
     if(preg_match("!^/images(/.+)/(.+?)\.(jpg|jpe|jpeg|png|gif)$!i",$QUERY_ENCODED,$m))
     {
         $url="$m[1]/$m[2].$m[3]";
@@ -127,7 +132,7 @@
         if(file_exists("$img.GIF"))     show_full_image("$url.GIF");
     }
 
-    // Страницы картинок
+    // п║я┌я─п╟п╫п╦я├я▀ п╨п╟я─я┌п╦п╫п╬п╨
     if(preg_match("!^(.+)/(.+?)\.htm$!",$QUERY_ENCODED,$data))
     {
         $url="$data[1]/$data[2]";
@@ -144,7 +149,7 @@
         if(file_exists("$img.GIF"))     show_image("$url.GIF");
     }
 
-    // Иконки картинок
+    // п≤п╨п╬п╫п╨п╦ п╨п╟я─я┌п╦п╫п╬п╨
     if(preg_match("!^/cache(/.+)?/(200x150|200x|128x|468x468|128x96)/(.+?\.(jpg|jpeg|gif|jpe|png))$!i",$QUERY_ENCODED,$data))
     {
 //        include("{$_SERVER['DOCUMENT_ROOT']}/scripts/inc/funcs.php");
@@ -166,13 +171,13 @@
                 @chmod("{$_SERVER['DOCUMENT_ROOT']}/cache$data[1]/$data[2]",0777);
                 `/usr/local/bin/convert -geometry $size {$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[3] {$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED`;
                 @chmod("{$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED",0666);
-                header("Location: $REQUEST_URI");
+                header("Location: {$_SERVER['REQUEST_URI']}");
                 exit();
             }
         }
     }
 
-    // Иконки картинок
+    // п≤п╨п╬п╫п╨п╦ п╨п╟я─я┌п╦п╫п╬п╨
     if(preg_match("!^(.+)/(gal|200|128|468x468|128x96)/(.+?\.(jpg|jpeg|gif|jpe|png))$!i",$QUERY_ENCODED,$data))
     {
         if(file_exists("{$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[3]"))
@@ -188,7 +193,7 @@
             @chmod("{$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[2]",0777);
             `/usr/local/bin/convert -geometry $size {$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[3] {$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED`;
             @chmod("{$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED",0666);
-            header("Location: $REQUEST_URI");
+            header("Location: {$_SERVER['REQUEST_URI']}");
             exit();
         }
     }
@@ -209,13 +214,13 @@
     function is_digit($s){return strlen($s)==1 && ord($s)>=ord('0') && ord($s)<=ord('9');}
     function is_char($s){return strlen($s)==1 && (ord($s)>=ord('A') && ord($s)<=ord('Z') || ord($s)>=ord('a') && ord($s)<=ord('z'));}
 
-    // Ключевые слова
+    // п п╩я▌я┤п╣п╡я▀п╣ я│п╩п╬п╡п╟
 
     require_once('funcs/DataBaseHTS.php');
     $hts = new DataBaseHTS();
 
     $_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
-    $full_uri = empty($page) ? "http://{$_SERVER['HTTP_HOST']}{$REQUEST_URI}" : $page;
+    $full_uri = empty($page) ? "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" : $page;
 
 //    if($hts->normalize_uri($full_uri) != $full_uri)
 //        go($hts->normalize_uri($full_uri));
@@ -223,7 +228,7 @@
     $parse = $hts->normalize_uri($full_uri);
 
 
-//    echo "********$full_uri = $REQUEST_URI / $page****<br>\n";
+//    echo "********$full_uri = {$_SERVER['REQUEST_URI']} / $page****<br>\n";
 
     if($hts->get_data($full_uri, 'modify_time'))
     {
@@ -231,7 +236,7 @@
         exit();
     }
 
-    $iid = substr($REQUEST_URI,1);
+    $iid = substr($_SERVER['REQUEST_URI'],1);
     if(preg_match("!^\d+$!", $iid) && $hts->get_data($iid, 'body'))
     {
         $page = $hts->page_uri_by_id($iid);
@@ -247,13 +252,13 @@
     $query=preg_replace("!/$!","",$QUERY_ENCODED);
     $query=preg_replace("!^/!","",$query);
 
-    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_title` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
+    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_titles` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
     {
         go($page);
         exit();
     }
 
-    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_keyword` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
+    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_keywords` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
     {
 //        $page = $hts->page_uri_by_id($page);
         go($page);
@@ -283,8 +288,8 @@
 
     $trans=array(
         'A'=>'a','B'=>'b','C'=>'c','D'=>'d','E'=>'e','F'=>'f','G'=>'g','H'=>'h','I'=>'i','J'=>'j','K'=>'k','L'=>'l','M'=>'m','N'=>'n','O'=>'o','P'=>'p','Q'=>'q','R'=>'r','S'=>'s','T'=>'t','U'=>'u','V'=>'v','W'=>'w','X'=>'x','Y'=>'y','Z'=>'z',
-        'а'=>'a','б'=>'b','в'=>'v','г'=>'g','д'=>'d','е'=>'e','ё'=>'e','ж'=>'zh','з'=>'z','и'=>'i','й'=>'j','к'=>'k','л'=>'l','м'=>'m','н'=>'n','о'=>'o','п'=>'p','р'=>'r','с'=>'s','т'=>'t','у'=>'u','ф'=>'f','х'=>'kh','ц'=>'ts','ч'=>'ch','ш'=>'sh','щ'=>'sch','ъ'=>'','ы'=>'y','ь'=>'','э'=>'e','ю'=>'yu','я'=>'ya',
-        'А'=>'a','Б'=>'b','В'=>'v','Г'=>'g','Д'=>'d','Е'=>'e','Ё'=>'e','Ж'=>'zh','З'=>'z','И'=>'i','Й'=>'j','К'=>'k','Л'=>'l','М'=>'m','Н'=>'n','О'=>'o','П'=>'p','Р'=>'r','С'=>'s','Т'=>'t','У'=>'u','Ф'=>'f','Х'=>'kh','Ц'=>'ts','Ч'=>'ch','Ш'=>'sh','Щ'=>'sch','Ъ'=>'','Ы'=>'y','Ь'=>'','Э'=>'e','Ю'=>'yu','Я'=>'ya',
+        'п╟'=>'a','п╠'=>'b','п╡'=>'v','пЁ'=>'g','п╢'=>'d','п╣'=>'e','я▒'=>'e','п╤'=>'zh','п╥'=>'z','п╦'=>'i','п╧'=>'j','п╨'=>'k','п╩'=>'l','п╪'=>'m','п╫'=>'n','п╬'=>'o','п©'=>'p','я─'=>'r','я│'=>'s','я┌'=>'t','я┐'=>'u','я└'=>'f','я┘'=>'kh','я├'=>'ts','я┤'=>'ch','я┬'=>'sh','я┴'=>'sch','я┼'=>'','я▀'=>'y','я▄'=>'','я█'=>'e','я▌'=>'yu','я▐'=>'ya',
+        'п░'=>'a','п▒'=>'b','п▓'=>'v','п⌠'=>'g','п■'=>'d','п∙'=>'e','п│'=>'e','п√'=>'zh','п≈'=>'z','п≤'=>'i','п≥'=>'j','п '=>'k','п⌡'=>'l','п°'=>'m','п²'=>'n','п·'=>'o','п÷'=>'p','п═'=>'r','п║'=>'s','п╒'=>'t','пё'=>'u','п╓'=>'f','п╔'=>'kh','п╕'=>'ts','п╖'=>'ch','п╗'=>'sh','п╘'=>'sch','п╙'=>'','п╚'=>'y','п╛'=>'','п╜'=>'e','п╝'=>'yu','п╞'=>'ya',
         '-'=>'/','.'=>'/',' '=>'/',
     );
 
@@ -323,7 +328,7 @@
         $last_type=$type;
     }
 
-    if(!$REQUEST_URI)
+    if(!$_SERVER['REQUEST_URI'])
         $page="http://airbase.ru/alpha/$suffix$first_char/$res/$file_name";
     else
         $page=$full_uri;
@@ -351,7 +356,7 @@ $dir=preg_replace("!^(.+/).*?!","$1",$QUERY_ENCODED);
 $dh=@opendir("{$_SERVER['DOCUMENT_ROOT']}$dir");
 if($dh)
 {
-    echo "<h2>Каталог <a href=$dir>$dir</a></h2>\n<ul>";
+    echo "<h2>п п╟я┌п╟п╩п╬пЁ <a href=$dir>$dir</a></h2>\n<ul>";
     while($file=readdir($dh))
     {
         if($file!='.')
@@ -384,11 +389,11 @@ if($dh)
 </blockquote>
 
 <!--<hr>
-<h2>Служебная информация</h2>
+<h2>п║п╩я┐п╤п╣п╠п╫п╟я▐ п╦п╫я└п╬я─п╪п╟я├п╦я▐</h2>
 <?
     echo "HTTP_REFERER=$HTTP_REFERER<br>\n";
 //    echo "SERVER_NAME=$SERVER_NAME<br>\n";
-    echo "REQUEST_URI=$REQUEST_URI<br>\n";
+    echo "REQUEST_URI={$_SERVER['REQUEST_URI']}<br>\n";
     echo "HTTP_REFERER=$HTTP_REFERER<br>\n";
 //    echo "HTTP_USER_AGENT=$HTTP_USER_AGENT<br>\n";
     echo "REMOTE_HOST=$REMOTE_HOST<br>\n";
@@ -406,7 +411,7 @@ if($dh)
     if(strpos($query,"/")===false)
     {
         $keyword="&keyword=$query";
-        echo "<li><a href=http://airbase.ru/admin/edit.php?page=$page$keyword&ref=$ref>создать страницу</a> <font color=red>$QUERY_ENCODED</font> в новом формате (<a href=/admin/edit.php?page=$page>$page</a>)\n";
+        echo "<li><a href=http://airbase.ru/admin/edit.php?page=$page$keyword&ref=$ref>я│п╬п╥п╢п╟я┌я▄ я│я┌я─п╟п╫п╦я├я┐</a> <font color=red>$QUERY_ENCODED</font> п╡ п╫п╬п╡п╬п╪ я└п╬я─п╪п╟я┌п╣ (<a href=/admin/edit.php?page=$page>$page</a>)\n";
     }
     else
         $keyword="";
@@ -437,10 +442,10 @@ if($dh)
         $file="";
 
     $nick=user_data("nick");
-    $page="http://{$_SERVER['HTTP_HOST']}".preg_replace("!^(/.+)index\.phtml$!","$1",$script);
+    $page="http://{$_SERVER['HTTP_HOST']}".preg_replace("!^(/.+)\.phtml$!","$1.hts",$script);
     $edit_uri = "http://airbase.ru/admin/edit.php?page=$page&ref=$ref";
     if(!preg_match("![\x80-\xFF]!",$query))
-        echo("$page");
+        echo "<li><a href=\"$edit_uri\">я│п╬п╥п╢п╟я┌я▄ я│я┌я─п╟п╫п╦я├я┐</a> <font color=red>$QUERY_ENCODED</font> п╡ я│я┌п╟я─п╬п╪ я└п╬я─п╪п╟я┌п╣ (<a href=\"$edit_uri\">$page</a>)\n";
 ?>
 </ul>
 <br><br>

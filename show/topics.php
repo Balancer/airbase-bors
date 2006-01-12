@@ -9,9 +9,11 @@ require_once('funcs/datetime.php');
 require_once('funcs/users.php');
 require_once('funcs/texts.php');
 
+foreach(split(" ", "lines time show t forum ignore_forums") as $var)
+	$$var = @$_GET[$var];
 
 if(empty($lines))  $lines=empty($time)?50:2000;
-if(empty($forum) && empty($ignore_forums)) $forum="1-100";
+if(empty($forum) && empty($ignore_forums)) $forum="1-150";
 if(empty($t)) $t=300;
 if(empty($time)) $time='3d';
 if(empty($show)) $show='last';
@@ -110,6 +112,7 @@ EOT;
     $visit_time=strftime("%d.%m.%y %H:%M:%S",$time);
     echo <<<EOT
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<noindex>
 
 <table cellpadding='1' cellspacing='1' border='0' width='100%' bgcolor='#000000'; style='font-family:Verdana;font-size:smaller'>
 <tr>
@@ -162,3 +165,4 @@ EOT;
     }
 
 ?>
+</noindex>

@@ -1,4 +1,11 @@
 <?
+    @header('Content-Type: text/html; charset=utf-8');
+    @header('Content-Language: ru');
+
+    ini_set('default_charset','utf-8');
+    ini_set('mbstring.func_overload','7');
+    setlocale(LC_ALL, "ru_RU.utf8");
+
     $dbh = @mysql_connect("localhost", "forum", "localforum") or die ("Could not connect");
     @mysql_select_db("FORUM") or die ("Could not select database");
     mysql_query ("SET CHARACTER SET utf8");

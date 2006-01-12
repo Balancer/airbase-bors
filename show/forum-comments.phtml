@@ -1,7 +1,9 @@
 <?
-    require_once("$DOCUMENT_ROOT/inc/config.site.php");
+    require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/config.site.php");
     require_once('funcs/DataBaseHTS.php');
     require_once('comments.php');
+
+	$id = @$_GET['id'];
 
     if(!empty($id))
         show_forum_comments($id);

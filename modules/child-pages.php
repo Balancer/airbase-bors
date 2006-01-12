@@ -1,3 +1,9 @@
+<?
+    @header('Content-Type: text/html; charset=utf-8');
+    @header('Content-Language: ru');
+    ini_set('default_charset','utf-8');
+    setlocale(LC_ALL, "ru_RU.utf8");
+?>
 <style>
 ul.children{margin: 0 0 0 16px; padding: 0px; font-size: xx-small; font-family: sans-serif;}
 li.folder{margin-bottom: 2px; list-style-image: URL("/img/design/icons/folder-12x10.png");}
@@ -135,6 +141,6 @@ li.document{margin-bottom: 2px; list-style-image: URL("/img/design/icons/documen
 
 //    echo "page=$page<br>$xpage<br>";
 
-    print_child_pages($xpage,$limit,$depth);
+//    print_child_pages($xpage,$limit,$depth);
     unset($xpage, $limit);
 ?>

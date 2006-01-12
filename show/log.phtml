@@ -1,13 +1,13 @@
 <?
-include("$DOCUMENT_ROOT/inc/funcs.phtml");
-include("$DOCUMENT_ROOT/inc/funcs/comments.phtml");
+include("{$_SERVER['DOCUMENT_ROOT']}/inc/funcs.phtml");
+include("{$_SERVER['DOCUMENT_ROOT']}/inc/funcs/comments.phtml");
 
 if($log && $log[0]!='/') $slog="/$log"; else $slog="$log";
 if(!$lines) $lines=15;
 
-$cache_name="$DOCUMENT_ROOT/tmp/cache/log/".($log?$log:"index");
+$cache_name="{$_SERVER['DOCUMENT_ROOT']}/tmp/cache/log/".($log?$log:"index");
 
-$file_name=strftime("$DOCUMENT_ROOT/$log/log/%Y/%M/index.phtml");
+$file_name=strftime("{$_SERVER['DOCUMENT_ROOT']}/$log/log/%Y/%M/index.phtml");
 
 if(!file_exists("$cache_name.txt") || @filemtime("$cache_name.txt")<@filemtime($file_name))
     virtual("/cgi-bin/tools/make/log-index.cgi");

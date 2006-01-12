@@ -1,4 +1,5 @@
 <?
+    require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
     require_once("funcs/modules/translit.php");
 
     function translite_uri($uri)

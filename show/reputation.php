@@ -1,3 +1,11 @@
+<?
+    @header('Content-Type: text/html; charset=utf-8');
+    @header('Content-Language: ru');
+
+    ini_set('default_charset','utf-8');
+    ini_set('mbstring.func_overload','7');
+    setlocale(LC_ALL, "ru_RU.utf8");
+?>
 <link rel=stylesheet type="text/css" href="/inc/css/style.phtml">
 <table border=0 id=btab cellSpacing=0>
 <tr>

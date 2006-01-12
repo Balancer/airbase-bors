@@ -1,9 +1,9 @@
 <?
-require_once("$DOCUMENT_ROOT/inc/funcs-hts.phtml");
+require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/funcs-hts.phtml");
 
 function top($lines,$cond)
 {
-    global $DOCUMENT_ROOT, $title;
+    global $title;
 
     $link = @mysql_connect("localhost", "kron", "KTNXBR");
     @mysql_select_db("KRON");
@@ -18,16 +18,16 @@ function top($lines,$cond)
         if(preg_match("!^/forum/(\d+)/(\d+)!",$row['id'],$m))
         {
             $subdir=sprintf("%04d",intval($m[2]/100));
-            $file=@file("$DOCUMENT_ROOT/forum/Forum$m[1]/$subdir/".sprintf("%06d",$m[2]).".cgi");
+            $file=@file("{$_SERVER['DOCUMENT_ROOT']}/forum/Forum$m[1]/$subdir/".sprintf("%06d",$m[2]).".cgi");
             list($type,$x1,$replies,$author,$subj,$x2,$ico,$x3)=split("\|\|",$file[0]);
             $title=$subj;
         }
         else
         {
             if(preg_match("!^(/.*)\.phtml$!",$row['id'],$m))
-                $file="$DOCUMENT_ROOT$m[1].hts";
+                $file="{$_SERVER['DOCUMENT_ROOT']}$m[1].hts";
             if(preg_match("!^(/.*)\-\d+\.phtml$!",$row['id'],$m))
-                $file="$DOCUMENT_ROOT$m[1].hts";
+                $file="{$_SERVER['DOCUMENT_ROOT']}$m[1].hts";
             
             if(file_exists("$file"))
             {

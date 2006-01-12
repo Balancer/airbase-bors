@@ -63,10 +63,10 @@
 
 //        $hts->get_data($uri,'source');
 
-//		if($title)
-//	       $hts->set_data($uri, 'title', $title);
+		if($title)
+ 	       $hts->set_data($uri, 'title', $title);
 		   
-		if(!empty($ref))
+		if(@$ref)
  	       $hts->nav_link($ref, $uri);
 
         $hts->set_data($uri, 'source', $source);
@@ -76,6 +76,6 @@
 
         recompile($uri);
 
-        go("$uri?rnd=".time());
+        go("$uri?");
    	}
 ?>

@@ -5,7 +5,7 @@
         include_once('funcs/DataBase.php');
         $db = new DataBase('l2jdb','la2', 'la2kkk');
 
-    	if(!intval($clan_id))
+    	if(!intval($clan_id) || intval($clan_id) < 1000000)
 		{
 			$clan_name = $clan_id;
 	        $clan_id = $db->get("SELECT `clan_id` FROM `clan_data` WHERE `clan_name` LIKE '".addslashes($clan_id)."';");

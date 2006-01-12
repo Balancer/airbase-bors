@@ -8,11 +8,8 @@
 
         $ps = "";
 		foreach($params as $key=>$value)
-			$ps.="\$GLOBALS['module_data']['$key'] = '".addslashes($value)."';\n";
+			$ps.="\$GLOBALS['module_data']['$key'] = '".addslashes($value)."'; ";
 
-        return save_format("<?php 
-$ps
-include_once(\"modules/{$params['url']}.php\");
-?>");
+        return /*save_format*/("<?php $ps include_once(\"modules/{$params['url']}.php\"); ?>");
     }
 ?>

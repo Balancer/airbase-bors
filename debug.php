@@ -34,8 +34,13 @@
     function debug($message,$comment='',$level=3)
     {
 //        return;
-        $fh=@fopen('/home/airbase/html/logs/debug.txt','at');
-        @fwrite($fh,strftime("%Y-%m-%d %H:%M:%S|").($comment?"$comment:\n":__FILE__.':'.__LINE__."\n")."$message\n==============\n");
+		$trace = debug_backtrace();
+		$caller = $trace[0];
+		$file = $caller['file'];
+		$line = $caller['line'];
+		
+        $fh=@fopen($GLOBALS['cms']['base_dir'].'/logs/debug.log','at');
+        @fwrite($fh,strftime("***	%Y-%m-%d %H:%M:%S			").($comment?"$comment:\n":"{$file}[$line]\n")."$message\n----------------------\n");
         @fclose($fh);
     }
 

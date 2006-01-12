@@ -6,11 +6,11 @@
 		$us = new User;
 		$us->do_logout();
 
-		$GLOBALS['page_data']['title'] = "÷ÙÈÏÄ";
-		$GLOBALS['page_data']['source'] = '÷Ù ÕÓÐÅÛÎÏ ×ÙÛÌÉ ÉÚ ÓÉÓÔÅÍÙ';
+//		$GLOBALS['page_data']['title'] = ec("Ð’Ñ‹Ñ…Ð¾Ð´");
+//		$GLOBALS['page_data']['source'] = ec('Ð’Ñ‹ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð²Ñ‹ÑˆÐ»Ð¸ Ð¸Ð· ÑÐ¸ÑÑ‚ÐµÐ¼Ñ‹');
+//		show_page($uri);
 
-		show_page($uri);
-		go("/{$GLOBALS['cms']['conferences_path']}/",false,1);
+		go("$uri?");
 		return true;
 	}
 ?>

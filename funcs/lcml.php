@@ -39,7 +39,7 @@
 		if($ch->get($ch_type,$ch_key))
 			return $ch->last;
 
-		foreach(split(' ','b br code hr i li p pre s u ul xmp') as $tag)
+/*		foreach(split(' ','b br code hr i li p pre s u ul xmp') as $tag)
 		{
 			$txt = preg_replace("!<$tag>!","[$tag]", $txt);
 			$txt = preg_replace("!<$tag\s+/>!","[$tag]", $txt);
@@ -47,9 +47,16 @@
 		}
 
 //		if(empty($params['with_html']))
-//			$txt = htmlspecialchars($txt);
+//			$txt = htmlspecialchars($txt); */
 
         global $page;
+
+		$hts = new DataBaseHTS();
+
+		$data = $hts->parse_uri($page);
+
+		if(empty($params['page_path']))
+			$params['page_path'] = $data['path'];
 
         $outfile=0;
 
@@ -60,10 +67,16 @@
             fclose($fh);
         }
 
+		$GLOBALS['lcml'] = array();
+
         if(is_array($params))
         {
             foreach($params as $key => $value)
+			{
+//				if(user_data('level')>100)
+//					$txt .= "$key = {$value}<br/>";
                 $GLOBALS['lcml'][$key] = $value;
+			}
         }
         else
         {
@@ -307,6 +320,12 @@
         }
 
 //	echo "nohref={$params['nohref']}<br />";
+
+        if(empty($params['uri']))
+			$params['uri'] = @$params['url'];
+
+        if(empty($params['uri']))
+			$params['uri'] = @$params['cms']['main_uri'];
 
         list($iws, $ihs) = split("x", $params['size']."x");
         if(!$params['width'] && $iws)

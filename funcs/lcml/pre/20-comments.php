@@ -3,7 +3,8 @@
 
     function lcml_comments($txt)
     {
-        $txt=preg_replace("!^# .+$!m","",$txt);
+		if(! @$GLOBALS['lcml']['sharp_not_comment'])
+	        $txt=preg_replace("!^# .+$!m","",$txt);
 
         return $txt;
     }

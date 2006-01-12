@@ -90,7 +90,6 @@
 
         function get_data($uri, $key, $default=NULL, $inherit=false, $skip=false, $fields='`value`', $search='`id`')
         {
-		
             echolog("Get key '$key' for '$uri'");
 
             $uri = $this->normalize_uri($uri);
@@ -100,9 +99,8 @@
 
             $skip_save = $skip;
 
-			$mark = "$uri,$inherit,$fields,$search,$skip_save";
-            if(is_global_key("uri_data($mark)",$key))// && global_key("uri_data($uri,$inherit,$skip_save)",$key)) 
-                return global_key("uri_data($mark)",$key);
+            if(!$fields && !$search && !$skip && is_global_key("uri_data($uri)",$key))// && global_key("uri_data($uri,$inherit,$skip_save)",$key)) 
+                return global_key("uri_data($uri)",$key);
 
             $key_table_name = $this->create_data_table($key);
 
@@ -112,7 +110,7 @@
             {
                 // echo "key_id/key_type ($key) =$key_id/$key_type<br>";
                 if(!$skip && $val = $this->dbh->get("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."'"))
-                    return set_global_key("uri_data($mark)",$key,$val); //stripslashes(
+                    return set_global_key("uri_data($uri)",$key,$val); //stripslashes(
 				
                 if($inherit)
                 {
@@ -136,7 +134,7 @@
 //            include_once("funcs/DataBaseHTS/ipb.php");
             $value = NULL;//dbhts_ipb($uri, $key, $this);
             
-            set_global_key("uri_data($mark)",$key,$value);
+            set_global_key("uri_data($uri)",$key,$value);
 
             return $value ? $value : $default;
         }
@@ -179,8 +177,7 @@
             else
                 $this->dbh->store($key_table_name, "`id`='".addslashes($uri)."'", array('id'=>$uri,'value'=>$value)+$params, $append);
 
-            if(!$params)
-                set_global_key("uri_data($uri)",$key,$value);
+           set_global_key("uri_data($uri)",$key,$value);
             
             return $value;
         }
@@ -340,7 +337,7 @@
 
             set_global_key('key_table_name', $key, $key_table_name);
             
-            if(!$create_table)
+            if(1 || !$create_table)
                 return $key_table_name;
 
             $res = $this->dbh->get("SELECT * FROM `hts_keys` WHERE `name`='".addslashes($key)."'");
@@ -468,7 +465,7 @@ CREATE TABLE `hts_keys` (
             $data = parse_url($uri);
 
             if(empty($data['host']))
-                $data['host'] = $GLOBALS['host'];
+                $data['host'] = $_SERVER['HTTP_HOST'];
 
             $data['root'] = $this->dbh->get("SELECT `doc_root`  as `root` FROM `hts_hosts` WHERE `host` = '".addslashes($data['host'])."'");
             $data['local_path'] = $data['root'] . str_replace('http://'.$data['host'],'',$uri);
@@ -518,6 +515,21 @@ CREATE TABLE `hts_keys` (
 				$ret = $default;
 				
 			return $ret;
+		}
+		
+		function set_flag($uri, $flag)
+		{
+			$this->append_data($uri, 'flags', $flag);
+		}
+
+		function drop_flag($uri, $flag)
+		{
+			$this->remove_data($uri, 'flags', $flag);
+		}
+
+		function is_flag($uri, $flag)
+		{
+			return $this->data_exists($uri, 'flags', $flag);
 		}
     }
 ?>

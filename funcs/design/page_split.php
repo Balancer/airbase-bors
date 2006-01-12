@@ -2,6 +2,11 @@
 	function pages_select($uri, $current_page, $total_pages)
 	{
 		$pages = array();
+
+		$q = "";
+		if(!empty($_GET))
+			foreach($_GET as $key => $value)
+				$q .= ($q=="") ? "?$key=$value" : "&$key=$value";
 		
 		if($total_pages > 1)
 		{
@@ -20,7 +25,7 @@
 				if($i > 1)
 					$p .= "~page$i/";
 			
-				$pages[] = "<a href=\"$p\" class=\"".(($i==$current_page)?'current_page':'select_page')."\">$i</a>";
+				$pages[] = "<a href=\"$p$q\" class=\"".(($i==$current_page)?'current_page':'select_page')."\">$i</a>";
 			}
 		}
 		

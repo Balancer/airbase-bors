@@ -100,7 +100,7 @@
                     return $this->result;
 
             if(!$ignore_error)
-                echolog("Invalid query '<xmp>$query</xmp>': " . mysql_error($this->dbh),1);
+                echolog("Invalid query '<tt>$query</tt>': " . mysql_error($this->dbh),1);
 
             return false;
         }
