@@ -1,0 +1,54 @@
+<?
+	$GLOBALS['log_level'] = 2;
+
+    ini_set('include_path', ini_get('include_path') . ":{$_SERVER['DOCUMENT_ROOT']}/cms:{$_SERVER['DOCUMENT_ROOT']}/cms-local:{$_SERVER['DOCUMENT_ROOT']}/include");
+
+    $GLOBALS['cms'] = array(
+		'sites_store_path' => "{$_SERVER['DOCUMENT_ROOT']}/sites",
+		'sites_store_uri' => "http://{$_SERVER['HTTP_HOST']}/sites",
+		'cache_dir' => "{$_SERVER['DOCUMENT_ROOT']}/cache/system",
+		'base_dir' => "{$_SERVER['DOCUMENT_ROOT']}/cms",
+		'local_dir' => "{$_SERVER['DOCUMENT_ROOT']}/cms-local",
+		'base_uri' => "http://{$_SERVER['HTTP_HOST']}/cms",
+		'default_template' => "http://airbase.ru/cms/templates/skins/default/body/",
+
+		'main_host_dir' => "/var/www/airbase.ru/htdocs",
+		'main_host_uri' => "http://airbase.ru",
+
+		'mysql_database' => 'HTS',
+		'mysql_login' => 'user',
+		'mysql_pw' => 'user756',
+		'mysql_server' => 'localhost',
+		'cache_disabled' => false,
+		'charset'=>'utf-8',
+		'charset_u'=>'utf8',
+		'locale'=>'ru_RU.utf8',
+	);
+	
+	// Вторичные переменные, которые могут задаваться заданными ранее.
+	$GLOBALS['cms'] += array(
+		'main_base_uri' => $GLOBALS['cms']['main_host_uri'].'/cms',
+		'mysql_cache_database' => 'CACHE',
+		'mysql_cache_login' => $GLOBALS['cms']['mysql_login'],
+		'mysql_cache_pw' => $GLOBALS['cms']['mysql_pw'],
+		'mysql_cache_server' => $GLOBALS['cms']['mysql_server'],
+		'default_template_file' => "{$GLOBALS['cms']['base_dir']}/funcs/templates/default.tpl",
+
+		'smilies_dir' => "{$GLOBALS['cms']['main_host_dir']}/forum/smilies",
+		'smilies_uri' => "{$GLOBALS['cms']['main_host_uri']}/forum/smilies",
+
+	);
+	
+	// Для совместимости
+	$GLOBALS['doc_root'] = $_SERVER['DOCUMENT_ROOT'];
+
+	$DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
+
+	if(get_magic_quotes_gpc())
+		foreach($_POST as $key => $val)
+			 $_POST[$key] = stripslashes($val);
+
+	@include_once("{$_SERVER['DOCUMENT_ROOT']}/cms-local/config.php");
+    require_once("debug.php");
+    require_once("localization/main.php");
+?>
