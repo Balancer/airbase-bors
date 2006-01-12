@@ -1,9 +1,8 @@
 <?
-require_once("$DOCUMENT_ROOT/inc/funcs/funcs.phtml");
+require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/funcs/funcs.phtml");
 
 function show_actions($page="",$lines=15,$actions="")
 {
-    global $DOCUMENT_ROOT, $PHP_SELF;
     if(!$page) $page=$PHP_SELF;
 
     $act["addinfo"]="Комментарий";
@@ -36,7 +35,7 @@ function show_actions($page="",$lines=15,$actions="")
 
     do
     {
-        $file=secure_path(sprintf("$DOCUMENT_ROOT/$path/log/%04d/%02d.txt",$year,$mon));
+        $file=secure_path(sprintf("{$_SERVER['DOCUMENT_ROOT']}/$path/log/%04d/%02d.txt",$year,$mon));
 //        echo "<b>$n: $year/$mon: $file</b><br>";
         $nlog=@file($file);
         for($i=0; $i<sizeof($nlog) && $n<$lines; $i++)

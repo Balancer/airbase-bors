@@ -9,7 +9,7 @@ function secure_path($path)
 
 function get_script($s="")
 {
-    global $script, $DOCUMENT_ROOT, $SCRIPT_NAME, $QUERY_STRING;
+    global $script;
 
     $script=$s?$s:$script;
 
@@ -30,7 +30,7 @@ function get_script($s="")
             $script=$script."index.hts";
         }
         $script=preg_replace("!^(.*/)(\w+?)\.\w+?$!","\\1\\2.hts",$script);
-        $script=secure_path(preg_replace("!^$DOCUMENT_ROOT!","",$script));
+        $script=secure_path(preg_replace("!^{$_SERVER['DOCUMENT_ROOT']}!","",$script));
     }
 
     return $script;

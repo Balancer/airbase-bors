@@ -6,7 +6,9 @@
 
     function handler_edit_data($uri, $action)
 	{
-		if(!check_action_access(9, $uri))
+		require_once("funcs/check/access.php");
+
+		if(!check_action_access(3, $uri))
 			return true;
 
 		$GLOBALS['page_data']['source'] = "[module admin/edit-data]";

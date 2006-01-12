@@ -5,12 +5,14 @@
 	{
 //		echo "Test edit handler. Action = $action. global = {$GLOBALS['cms']['action']}";
 
-		if(!check_action_access(9))
+		require_once("funcs/check/access.php");
+
+		if(!check_action_access(3, $uri))
 			return true;
 		
         $hts  = new DataBaseHTS;
 
-		$GLOBALS['page_data']['source'] = $hts->get_data($uri, 'source') ? '[module admin/edit]' : '[module admin/create]';
+		$GLOBALS['page_data']['source'] = $hts->get_data($uri, 'source') ? '[module admin/edit]' : '[module admin/create-page]';
 
 		show_page($uri);
 

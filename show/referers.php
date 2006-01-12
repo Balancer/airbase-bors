@@ -1,4 +1,9 @@
 <?
+    @header('Content-Type: text/html; charset=utf-8');
+    @header('Content-Language: ru');
+    ini_set('default_charset','utf-8');
+    setlocale(LC_ALL, "ru_RU.utf8");
+
     require_once("/home/airbase/html/inc/funcs/DataBase.php");
     require_once("/home/airbase/html/inc/funcs/DataBaseHTS.php");
     require_once("/home/airbase/html/inc/funcs/Cache.php");

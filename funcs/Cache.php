@@ -17,10 +17,11 @@
 			if($GLOBALS['cms']['cache_disabled'])
            		return $this->last = $default;
 
-//            $GLOBALS['log_level']=2;
             $hmd = md5("$type:$key");
 			
+//            $GLOBALS['log_level']=4;
             $this->last = $this->dbh->get("SELECT `value` FROM `cache` WHERE `hmd`='$hmd'");
+//            $GLOBALS['log_level']=2;
 
 //            echo "Get from cache $type:$key = $this->last<br>";
 
@@ -52,8 +53,8 @@
 
         function clear($key)
         {
-        	return;
-            $this->dbh->query("DELETE FROM `cache` WHERE `key`='".addslashes($key)."'");
+//        	return;
+            $this->dbh->query("DELETE FROM `cache` WHERE `key` LIKE '".addslashes($key)."'");
         }
 
         function clear_all()

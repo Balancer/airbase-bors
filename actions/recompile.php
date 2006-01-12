@@ -20,6 +20,7 @@
             $body = lcml($hts->get_data($page, 'source'), array(
                 'page' => $page, 
                 'cr_type' => $hts->get_data($page, 'cr_type'),
+				'with_html' => true,
                 ));
 //            $GLOBALS['log_level'] = 9;
             $hts->set_data($page, 'body', $body);
@@ -58,7 +59,7 @@ __EOT__;
         else
         {
             debug(__FILE__."[".__LINE__."] Not found page_id for '$page'!");
-            echo("Не найден идентификатор страницы '$page'!");
+            exit("Не найден идентификатор страницы '$page'!");
         }
     }
 ?>

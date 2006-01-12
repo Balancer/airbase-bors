@@ -1,19 +1,16 @@
 <?
     require_once('debug.php');
 
-    function go($uri, $permament = true, $time = 0, $text = true)
+    function go($uri, $permament = true)
     {
-        if (!headers_sent($filename, $linenum) && $time==0) 
+        if (!headers_sent($filename, $linenum)) 
         {
             header("Status: 302 Moved temporary");
             header("Location: $uri");
             exit();
         }
 
-		if($text)
-	        echo "Load page <a href=\"$uri\">$uri</a><br />\n";
-			
-		echo "<meta http-equiv=\"refresh\" content=\"$time; url=$uri\">";
+        echo "Загружаю страницу <a href=\"$uri\">$uri</a><br>\n<meta http-equiv=\"refresh\" content=\"5; url=$uri\">";
 
         debug("headers already out in $filename:$linenum");
 

@@ -1,12 +1,16 @@
-<?
-    require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
+	<?
+    require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/config.site.php");
+    require_once("config.php");
     require_once('funcs/DataBaseHTS.php');
     require_once('funcs/users.php');
     require_once("funcs/images/fill.php");
+    ini_set('default_charset','utf-8');
+    @header('Content-Type: text/html; charset=utf-8');
+    setlocale(LC_ALL, "ru_RU.utf8");
 
     function show_image($img)
     {
-        global $doc_root, $host, $DOCUMENT_ROOT, $HTTP_HOST;
+        global $doc_root, $host;
         preg_match("!^(.+)/(.+?)\.([^\.]+?)$!",$img,$m);
 
         $hts = new DataBaseHTS();
@@ -60,7 +64,14 @@
             $ico800_url="/cache$m[1]/800x600/$m[2].$m[3]";
             $ico1024_url="/cache$m[1]/1024x768/$m[2].$m[3]";
 
-            function img_x_size($img) { global $host, $doc_root; $tmp=file("http://$host$img"); list($w,$h)=GetImageSize("$doc_root$img"); return $w."x".$h; }
+            function img_x_size($img) 
+			{ 
+				global $host, $doc_root; 
+				$tmp = @file("http://{$_SERVER['HTTP_HOST']}$img"); 
+				list($w,$h) = @GetImageSize("$doc_root$img"); 
+				return $w."x".$h; 
+			}
+			
             $ico640_url =($ow>640  || $oh>480)?"<a href=\"$ico640_url\">".img_x_size("$ico640_url")."</a>":"";
             $ico800_url =($ow>800  || $oh>600)?"<a href=\"$ico800_url\">".img_x_size("$ico800_url")."</a>":"";
             $ico1024_url=($ow>1024 || $oh>768)?"<a href=\"$ico1024_url\">".img_x_size("$ico1024_url")."</a>":"";
@@ -87,12 +98,11 @@
 <tr><th align="right">Страницы с этой картинкой:</th><td><small><ul><?
         foreach($hts->get_data_array($img, 'parent') as $parent)
         {
-            $url = $hts->page_uri_by_id($parent);
-            $title = $hts->get_data($url, 'title', $url);
-            echo "<li><nobr><a href=\"$url\">$title</a></nobr>\n";
+            $title = $hts->get_data($parent, 'title');
+            echo "<li><nobr><a href=\"$parent\">$title</a></nobr>\n";
         }
 ?></ul></small></td></tr>
-<tr><td colSpan="2"><a href="/admin/img.phtml?img=<?echo$img?>">Редактировать параметры картинки</a></td></tr>
+<!--<tr><td colSpan="2"><a href="/admin/img.phtml?img=<?echo$img?>">Редактировать параметры картинки</a></td></tr>-->
 </table>
 </body></html>
 <?
@@ -101,10 +111,9 @@
 
     function show_full_image($img)
     {
-        global $DOCUMENT_ROOT;
         echo "<html><head><link rel=stylesheet type=text/css href=/inc/css/style.phtml></head><body><center>";
-        include("$DOCUMENT_ROOT/inc/banners-top.phtml");
-        list($w,$h,$t,$x)=GetImageSize("$DOCUMENT_ROOT$img");
+        include("{$_SERVER['DOCUMENT_ROOT']}/inc/banners-top.phtml");
+        list($w,$h,$t,$x)=GetImageSize("{$_SERVER['DOCUMENT_ROOT']}$img");
         preg_match("!^(.+)/(.+?)\.([^\.]+?)$!",$img,$m);
         echo "<br>[ <a href=$m[1]/$m[2].htm>Назад на страницу картинки</a> ]<br><br><img src=/images$m[1]/$m[2].$m[3] $x><br>[ <a href=$m[1]/$m[2].htm>Назад на страницу картинки</a> ]</center></body></html>";
         exit();

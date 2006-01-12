@@ -1,6 +1,9 @@
 <?
-    require_once("$DOCUMENT_ROOT/inc/config.site.php");
+    require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/config.site.php");
     require_once('funcs/DataBaseHTS.php');
+    ini_set('default_charset','utf-8');
+    @header('Content-Type: text/html; charset=utf-8');
+    setlocale(LC_ALL, "ru_RU.utf8");
 
     function show_last_note($notes_page)
     {
@@ -14,7 +17,7 @@
 //        print_r($res);
 
 //        $GLOBALS['log_level'] = 9;
-        $page = $hts->dbh->get("SELECT `id` FROM `hts_data_create_time` WHERE `id` IN(".join(',',$res).") ORDER BY `value` DESC LIMIT 0, 1");
+        $page = $hts->dbh->get("SELECT `id` FROM `hts_data_create_times` WHERE `id` IN(".join(',',$res).") ORDER BY `value` DESC LIMIT 0, 1");
 //        $GLOBALS['log_level'] = 2;
         $page = $hts->page_uri_by_id($page);
 
@@ -40,7 +43,7 @@
 //        print_r($res);
 
 //        $GLOBALS['log_level'] = 9;
-        $pages = $hts->dbh->get_array("SELECT `id` FROM `hts_data_create_time` WHERE `id` IN(".join(',',$res).") ORDER BY `value`");
+        $pages = $hts->dbh->get_array("SELECT `id` FROM `hts_data_create_times` WHERE `id` IN(".join(',',$res).") ORDER BY `value`");
 //        $GLOBALS['log_level'] = 2;
         
         $year = 0;

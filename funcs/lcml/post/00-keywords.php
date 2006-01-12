@@ -15,7 +15,7 @@
 
         $n = 0;
 
-        foreach($h->dbh->get_array("SELECT * FROM `hts_data_keyword` ORDER BY `value` DESC;") as $i)
+        foreach($h->dbh->get_array("SELECT * FROM `hts_data_keywords` ORDER BY `value` DESC;") as $i)
         {
             $key = $i['value'];
             $id  = $i['id'];

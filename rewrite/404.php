@@ -5,6 +5,11 @@
 //    if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
 //        echo __FILE__.__LINE__." ".$GLOBALS['REQUEST_URI']."<br />\n";
 
+    header('Content-Type: text/html; charset=utf-8');
+    header('Content-Language: ru');
+    ini_set('default_charset','utf-8');
+    setlocale(LC_ALL, "ru_RU.utf8");
+
     $query = $_SERVER['REQUEST_URI'];
     $ref   = empty($_SERVER['HTTP_REFERER']) ? NULL : $_SERVER['HTTP_REFERER'];
     $query=preg_replace("!^(.+?)/+$!","$1",$query);
@@ -277,14 +282,14 @@
     $query=preg_replace("!/$!","",$QUERY_ENCODED);
     $query=preg_replace("!^/!","",$query);
 
-    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_title` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
+    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_titles` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
     {
         $page = $hts->page_uri_by_id($page);
         go($page);
         exit();
     }
 
-    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_keyword` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
+    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_keywords` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
     {
         $page = $hts->page_uri_by_id($page);
         go($page);

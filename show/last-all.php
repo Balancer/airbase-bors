@@ -1,5 +1,12 @@
 <?
-//$log="";include("$DOCUMENT_ROOT/inc/head.phtml");
+@header('Content-Type: text/html; charset=utf-8');
+@header('Content-Language: ru');
+
+ini_set('default_charset','utf-8');
+
+setlocale(LC_ALL, "ru_RU.utf8");
+
+//$log="";include("{$_SERVER['DOCUMENT_ROOT']}/inc/head.phtml");
 
 require_once("/home/airbase/html/inc/funcs/DataBaseHTS.php");
 require_once("/home/airbase/html/inc/funcs/Cache.php");
@@ -24,12 +31,12 @@ ob_start();
 <?
     foreach($hts->dbh->get_array("
         SELECT time.id id, d.value as description, time.value as time, title.value as title, h1.value as h1, h2.value as h2, h3.value as h3 
-            FROM hts_data_modify_time time 
-            LEFT JOIN hts_data_description d ON (d.id=time.id) 
-            LEFT JOIN hts_data_title title ON (time.id=title.id)  
-            LEFT JOIN hts_data_h1 h1 ON (time.id=h1.id)
-            LEFT JOIN hts_data_h2 h2 ON (time.id=h2.id)
-            LEFT JOIN hts_data_h3 h3 ON (time.id=h3.id)
+            FROM hts_data_modify_times time 
+            LEFT JOIN hts_data_descriptions d ON (d.id=time.id) 
+            LEFT JOIN hts_data_titles title ON (time.id=title.id)  
+            LEFT JOIN hts_data_h1s h1 ON (time.id=h1.id)
+            LEFT JOIN hts_data_h2s h2 ON (time.id=h2.id)
+            LEFT JOIN hts_data_h3s h3 ON (time.id=h3.id)
             ORDER BY time.value DESC LIMIT 0,10
     ") as $p)
     {
@@ -93,13 +100,13 @@ echo $to_echo;
 <tr><th>Чаты</th></tr>
 <?
     $out_array=array();
-    $chatlist=file("$DOCUMENT_ROOT/chat/chatlist.txt");
+    $chatlist=file("{$_SERVER['DOCUMENT_ROOT']}/chat/chatlist.txt");
     foreach($chatlist as $chat)
     {
         list($chat,$name)=@split("\|",$chat);
         if($name)
         {
-            $fh=fopen("$DOCUMENT_ROOT/chat/$chat.txt","rt");
+            $fh=fopen("{$_SERVER['DOCUMENT_ROOT']}/chat/$chat.txt","rt");
             $number=1;
             while(!feof($fh) && $number)
             {   

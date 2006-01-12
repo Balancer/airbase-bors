@@ -11,6 +11,9 @@
 		foreach(split(' ', "source title uri") as $p)
 			$$p = @$_POST[$p];
 
+		if(empty($source))
+			exit(__FILE__."[".__LINE__."] Нет тела страницы");
+		
 		if($_uri != $_POST['uri'])
 		{
 			echo "POST uri '{$_POST['uri']}' != parameters uri '$_uri'!";
@@ -36,9 +39,9 @@
 //		exit($uri);
 
 	    if(empty($ref))
-    	    $ref = @$_SERVER['HTTP_REFERER'];
+    	    $ref = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_HOST'].$_SERVER['HTTP_REFERER'] : NULL;
 
-	    if(preg_match("!/admin/!", $ref))
+	    if(preg_match("!/admin/!", $ref) && user_data('level') < 3)
     	    $ref = ''; //"http://airbase.ru/not_ref_pages/";
 
    		if(!empty($_POST['login']) && !empty($_POST['password']))
@@ -49,7 +52,7 @@
         
         // Потенциальная уязвимость в безопасности - пользователь может создать новую страницу,
    	    // используя права доступа произвольной страницы. На редактирование - не влияет.
-        check_access(empty($new_page) ? $uri : $ref, $hts);
+        check_access($ref, $hts);
 
         $log_action = 'new_page';
 
@@ -84,6 +87,6 @@
 
         recompile($uri);
 
-        go("$uri?rnd=".time()); ///cgi-bin/tools/compile/compile.cgi?page=
+        go("$uri?"); ///cgi-bin/tools/compile/compile.cgi?page=
 	}
 ?>

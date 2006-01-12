@@ -14,9 +14,12 @@
 
 //	print_r($_GET);
 
+	include_once('funcs/users.php');
     require_once('handlers.php');
 
 	handlers_load($GLOBALS['cms']['base_dir'].'/handlers');
+	handlers_load($GLOBALS['cms']['local_dir'].'/handlers');
+	handlers_load($GLOBALS['cms']['base_dir'].'/handlers-post');
 	
 	$_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
 
@@ -25,14 +28,14 @@
 //    exit("GET='".print_r($_GET,true)."', REQUEST_URI='{$_SERVER['REQUEST_URI']}'<br><br>");
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 	
-//	$GLOBALS['page'] = $uri;
-	
+	if(empty($GLOBALS['main_uri']))
+		$GLOBALS['main_uri'] = $uri;
+
 	if(isset($_POST['LoginForm']))
 	{
-		include_once('funcs/users.php');
 		$us = new User();
 
-		$GLOBALS['page_data']['title'] = "÷ÈÏÄ";
+		$GLOBALS['page_data']['title'] = ec("Ð’Ñ…Ð¾Ð´");
 
 		ob_start();
 		$us->do_login($_POST['FLogin'], $_POST['FPassword']);
@@ -51,7 +54,7 @@
 
 //	exit();
 
-//	print_r($GLOBALS['cms_patterns']);
+//	echo "<xmp>".print_r($GLOBALS['cms_patterns'], true)."</xmp>";
 //	print_r($_GET);
 
 	if(!empty($_GET))

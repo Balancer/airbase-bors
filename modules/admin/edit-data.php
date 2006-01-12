@@ -27,11 +27,11 @@
 <tr><th align=right>Description</th><td><textarea cols="32" rows="4" name="description"><?echo $description_source;?></textarea></td></tr>
 <!--<tr><th align=right>Authors</th><td><input name="copyright" size="64" value="<?echo $copyright;?>"></td></tr>-->
 <?/*
-<tr><th align=right>Тип кода текста</th><td>
+<tr><th align=right>п╒п╦п© п╨п╬п╢п╟ я┌п╣п╨я│я┌п╟</th><td>
 <select name="type">
-<option value="text"<?if($type=='text')echo' selected'?>>Простой текст
-<option value="html"<?if($type=='html')echo' selected'?>>Простой HTML
-<option value="hts"<?if(!$type || $type=='hts')echo' selected'?>>HTS+автокод
+<option value="text"<?if($type=='text')echo' selected'?>>п÷я─п╬я│я┌п╬п╧ я┌п╣п╨я│я┌
+<option value="html"<?if($type=='html')echo' selected'?>>п÷я─п╬я│я┌п╬п╧ HTML
+<option value="hts"<?if(!$type || $type=='hts')echo' selected'?>>HTS+п╟п╡я┌п╬п╨п╬п╢
 </select></td></tr>*/?>
 <tr><th align=right><a href="/support/hts/cr_type/">Carrige return type</a></th><td>
 <select name="cr_type">
@@ -43,11 +43,11 @@
 <option value="plain_text"<?if($cr_type=='plain_text')echo' selected'?>>Document is simple text
 </select></td></tr>
 <?
-/*<tr><th align=right><a href="/support/hts/split_type/">Тип нарезки страницы</a></th><td>
+/*<tr><th align=right><a href="/support/hts/split_type/">п╒п╦п© п╫п╟я─п╣п╥п╨п╦ я│я┌я─п╟п╫п╦я├я▀</a></th><td>
 <select name="split_type">
-<option value="auto"<?if($split_type=='auto' || !$split_type)echo' selected'?>>Автонарезка по параграфу
-<option value="user"<?if($split_type=='user')echo' selected'?>>Нарезка по тэгу #page
-<option value="none"<?if($split_type=='none')echo' selected'?>>Не делать нарезку
+<option value="auto"<?if($split_type=='auto' || !$split_type)echo' selected'?>>п░п╡я┌п╬п╫п╟я─п╣п╥п╨п╟ п©п╬ п©п╟я─п╟пЁя─п╟я└я┐
+<option value="user"<?if($split_type=='user')echo' selected'?>>п²п╟я─п╣п╥п╨п╟ п©п╬ я┌я█пЁя┐ #page
+<option value="none"<?if($split_type=='none')echo' selected'?>>п²п╣ п╢п╣п╩п╟я┌я▄ п╫п╟я─п╣п╥п╨я┐
 </select></td></tr>*/
 ?>
 <input type="hidden" name="split_type" value="auto">
@@ -61,12 +61,12 @@
     
     if($real_level < user_data('level'))
     {
-        echo "<tr><th align=right>Уровни доступа:<br><small>собст. ".($level?" = $level":"не задан").", родит. ".($up_level?" = $up_level":"не задан")."</th><td>";
+        echo "<tr><th align=right>пёя─п╬п╡п╫п╦ п╢п╬я│я┌я┐п©п╟:<br><small>я│п╬п╠я│я┌. ".($level?" = $level":"п╫п╣ п╥п╟п╢п╟п╫").", я─п╬п╢п╦я┌. ".($up_level?" = $up_level":"п╫п╣ п╥п╟п╢п╟п╫")."</th><td>";
 
         echo "<select name=\"access_level\">\n";
-        echo "<option value=\"$level\">не менять</option>\n";
+        echo "<option value=\"$level\">п╫п╣ п╪п╣п╫я▐я┌я▄</option>\n";
         if(user_data('level') >= 4 || ($up_level >= $real_level && $up_level <= user_data('level')))
-            echo "<option value=\"\">сбросить (до родительского)</option>\n";
+            echo "<option value=\"\">я│п╠я─п╬я│п╦я┌я▄ (п╢п╬ я─п╬п╢п╦я┌п╣п╩я▄я│п╨п╬пЁп╬)</option>\n";
         $min = $real_level;
         $max = user_data('level');
         if(user_data('level') >= 4)

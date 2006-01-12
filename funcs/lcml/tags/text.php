@@ -1,3 +1,3 @@
 <?
-    function lp_h($text) { return " <h2> $text </h2> "; }
+    function lp_h($text) { return '<h2>'.lcml($text)."</h2>\n"; }
 ?>

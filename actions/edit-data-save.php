@@ -5,8 +5,10 @@
     require_once("funcs/navigation/go.php");
     require_once("actions/recompile.php");
 
-    function actions_edit_data_save($edit_uri)
+    function actions_edit_data_save()
     {
+		$edit_uri = $GLOBALS['main_uri'];
+
 		foreach($_POST as $var=>$value)
 	    	$$var = $value;
 
@@ -108,6 +110,6 @@
 
         recompile($edit_uri);
 
-   	    go("$edit_uri?rnd=".time()); // /cgi-bin/tools/compile/compile.cgi?page=
+   	    go("$edit_uri?"); // /cgi-bin/tools/compile/compile.cgi?page=
 	}
 ?>

@@ -1,8 +1,8 @@
 <?
-include("$DOCUMENT_ROOT/inc/funcs.phtml");
+include("{$_SERVER['DOCUMENT_ROOT']}/inc/funcs.phtml");
 function count_top()
 {
-    global $lines, $sort, $DOCUMENT_ROOT;
+    global $lines, $sort;
 
     if(!$sort) $sort="p";
     $lines=($sort=='p')?20:10;
@@ -12,33 +12,33 @@ function count_top()
 
     $counts=array();
 
-    if ($dir = @opendir("$DOCUMENT_ROOT/inc/data/counts")) 
+    if ($dir = @opendir("{$_SERVER['DOCUMENT_ROOT']}/inc/data/counts")) 
         while($file = readdir($dir)) 
             if($file[0]!=".")
             {
                 if(preg_match("!ubb=!",$file)&&!preg_match("!ubb=get_topic&!",$file)&&!preg_match("!ubb=forum&!",$file))
                 {
-                    unlink("$DOCUMENT_ROOT/inc/data/counts/$file");
+                    unlink("{$_SERVER['DOCUMENT_ROOT']}/inc/data/counts/$file");
                     continue;
                 }
-                $s=@file("$DOCUMENT_ROOT/inc/data/counts/$file");
+                $s=@file("{$_SERVER['DOCUMENT_ROOT']}/inc/data/counts/$file");
                 $counts[]=chop($s[0]);
             }
     closedir($dir);
 
-    if ($dir = @opendir("$DOCUMENT_ROOT/../cgi-bin/data/counts"))
+    if ($dir = @opendir("{$_SERVER['DOCUMENT_ROOT']}/../cgi-bin/data/counts"))
         while($file = readdir($dir)) 
             if($file[0]!=".")
             {
                 if(preg_match("!ubb=!",$file)&&!preg_match("!ubb=get_topic&!",$file)&&!preg_match("!ubb=forum&!",$file))
                 {
-                    unlink("$DOCUMENT_ROOT/../cgi-bin/data/counts/$file");
+                    unlink("{$_SERVER['DOCUMENT_ROOT']}/../cgi-bin/data/counts/$file");
                     continue;
                 }
                 if(preg_match("!\.lck$!",$file))
                     continue;
                 $file=preg_replace("!\.db$!","",$file);
-                $dbm=dbmopen("$DOCUMENT_ROOT/../cgi-bin/data/counts/$file", "r");
+                $dbm=dbmopen("{$_SERVER['DOCUMENT_ROOT']}/../cgi-bin/data/counts/$file", "r");
                 if($dbm)
                 {
                     $counts[]=dbmfetch($dbm, "id")."|".dbmfetch($dbm, "count")."|".dbmfetch($dbm, "date")."|".dbmfetch($dbm, "rlast")."|".dbmfetch($dbm, "clast");
@@ -63,7 +63,7 @@ function count_top()
          )
         {
             $file=str_replace("/","#",substr($url,1));
-            @unlink("$DOCUMENT_ROOT/inc/data/counts/$file");
+            @unlink("{$_SERVER['DOCUMENT_ROOT']}/inc/data/counts/$file");
             continue;
         }
 
@@ -121,7 +121,7 @@ function count_top()
         $title=$url;
         $file=preg_replace("!\.html$!","",$url);
         $file=preg_replace("!\.phtml$!","",$file);
-        $file="$DOCUMENT_ROOT$file";
+        $file="{$_SERVER['DOCUMENT_ROOT']}$file";
         if(preg_match("!/forum/Forum\d+/HTML/!",$url))
         {
             $file=preg_replace("!/HTML/!","/",$file);
@@ -186,9 +186,9 @@ function count_top()
 
 function make($srt)
 {
-    global $sort,$DOCUMENT_ROOT;
+    global $sort;
     $sort=$srt;
-    $file="$DOCUMENT_ROOT/tmp/toppages-$sort.htm";
+    $file="{$_SERVER['DOCUMENT_ROOT']}/tmp/toppages-$sort.htm";
     if(!file_exists($file) || time()-filemtime($file)>600)
         to_file($file,$res=count_top());
     else

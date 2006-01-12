@@ -14,37 +14,40 @@
             // Заменим ссылку в кеш на полную картинку
             $uri = preg_replace("!^(.+?)/cache/(.+)/\d*x\d*/(.+?)$!", "$1/$2/$3", $uri);
 
-            $fp = $_SERVER['DOCUMENT_ROOT'].$GLOBALS['cms']['page_path'].'/img/'.$uri;
+           	$fp = $_SERVER['DOCUMENT_ROOT'].$GLOBALS['lcml']['page_path'].'img/'.$uri;
             if(file_exists($fp))
             {
                 $path  = $fp; // локальный путь
-                $uri   = 'http://'.$_SERVER['HTTP_HOST'].$GLOBALS['cms']['page_path'].'/img/'.$uri;
+                $uri   = 'http://'.$_SERVER['HTTP_HOST'].$GLOBALS['lcml']['page_path'].'/img/'.$uri;
             }
             else
             {
-                $fp = $_SERVER['DOCUMENT_ROOT'].$GLOBALS['cms']['page_path']."/".$uri;
+                $fp = $_SERVER['DOCUMENT_ROOT'].$GLOBALS['lcml']['page_path']."/".$uri;
                 if(file_exists($fp))
                 {
                     $path  = $fp; // локальный путь
-                    $uri   = 'http://'.$_SERVER['HTTP_HOST'].$GLOBALS['cms']['page_path']."/".$uri;
+                    $uri   = 'http://'.$_SERVER['HTTP_HOST'].$GLOBALS['lcml']['page_path']."/".$uri;
                 }
             }
 
             $hts = new DataBaseHTS();
-			$uri = $hts->normalize_uri($uri, $GLOBALS['cms']['page_path']);
+			$uri = $hts->normalize_uri($uri, $GLOBALS['lcml']['page_path']);
+
             $data = $hts->parse_uri($uri);
 
-//			return "$path:$uri:{$GLOBALS['cms']['page_path']}:".str_replace(" ","&nbsp;",print_r($data,true));
 
             if(!file_exists($path) && $data['local'])
             {
                 $path = $data['local_path'];
-                $uri = "http://{$data['host']}{$data['path']}";
+                $uri  = $data['uri'];
             }
+
+//			return "$path:$uri:{$GLOBALS['cms']['page_path']}:".str_replace(" ","&nbsp;",print_r($data,true))."<br/>\n";
 
             if(!$data['local'])
             {
                 $path = $GLOBALS['cms']['sites_store_path']."/{$data['host']}{$data['path']}";
+
 
                 if(!file_exists($path) || filesize($path)==0)
                 {
@@ -54,33 +57,38 @@
                     $path = $GLOBALS['cms']['sites_store_path']."/$c1/$c2/{$data['host']}".translite_path($data['path']);
                 }
 
+
                 if(!file_exists($path) || filesize($path)==0)
                 {
 
-                    require_once('HTTP/Request.php');
-                    $req =& new HTTP_Request($uri);
-                    $req->addHeader('Content-Encoding', 'gzip');
-                    $req->addHeader('Referer', $uri);
 
-                    if(preg_match("!(lenta\.ru|pisem\.net|biorobot\.net)!",$uri))
-                        $req->setProxy('ap.airfleet.ru', 3128);
+                    require_once('HTTP/Request.php');
+                    $req =& new HTTP_Request($params['url']);
+                    $req->addHeader('Content-Encoding', 'gzip');
+                    $req->addHeader('Referer', $params['url']);
+
+//                    if(preg_match("!(lenta\.ru|pisem\.net|biorobot\.net|compulenta\.ru|ferra\.ru)!",$uri))
+//                        $req->setProxy('82.138.33.157', 3128);
+
+//                    return "=$path=<br />\n";
                     
+
                     $response = $req->sendRequest(array(
                         'allowRedirects' => true,
-                        'maxRedirects' => 5,
+                        'maxRedirects' => 2,
                         'timeout' => 5,
                         ));
 
                     if(!empty($response) && PEAR::isError($response)) 
-                        return lcml("Download image [url]{$uri}[/url] error: ".$response->getMessage());
+                        return "Download image =$uri= error: ".$response->getMessage();
 
                     $data = $req->getResponseBody();
                     if(strlen($data) <= 0)
-                        return lcml("Zero size image [url]{$uri}[/url] error.");
+                        return lcml("Zero size image ={$uri}= error.");
 
                     $content_type = $req->getResponseHeader('Content-Type');
                     if(!preg_match("!image!",$content_type))
-                        return lcml("Non-image content type ('$content_type') image [url]{$uri}[/url] error.");
+                        return lcml("Non-image content type ('$content_type') image ={$uri}= error.");
 
                     require_once('funcs/filesystem_ext.php');
                     mkpath(dirname($path));
@@ -95,7 +103,7 @@
                 if(file_exists($path) && filesize($path)>0)
                 {
                     $remote = $uri;
-                    $uri = str_replace($GLOBALS['cms']['sites_store_path'], $GLOBALS['cms']['sites_store_url'], $path);
+                    $uri = str_replace($GLOBALS['cms']['sites_store_path'], $GLOBALS['cms']['sites_store_uri'], $path);
                     $data['local'] = true;
                     if(!$hts->get_data($uri,'origin_uri'))
                         $hts->set_data($uri, 'origin_uri', $remote);
@@ -105,6 +113,7 @@
             }
 
 			$need_upload = false;
+
 
             if($data['local'])
             {
@@ -117,21 +126,22 @@
                 }
 
                 $img_ico_uri  = preg_replace("!^(http://[^/]+)(.*?)(/[^/]+)$!", "$1/cache$2/{$params['size']}$3", $uri);
+//			return "ico=$img_ico_uri; uri=$uri; params=".str_replace(" ","_",print_r($params,true))."<br/>\n";
 //                return "_$path, _$uri, _$img_ico_uri<br />\n";
                 $img_page_uri = preg_replace("!^(http://.+?)(\.[^\.]+)$!", "$1.htm", $uri);
 //                return "_$local_uri<br />_$img_ico_uri<br />";
                 
                 require_once('HTTP/Request.php');
                 $req =& new HTTP_Request($img_ico_uri);
-                $response = $req->sendRequest(array('allowRedirects' => true,'maxRedirects' => 3,'timeout' => 10));
+                $response = $req->sendRequest(array('allowRedirects' => true,'maxRedirects' => 2,'timeout' => 4));
                 if(!empty($response) && PEAR::isError($response))
                 {
                     sleep(5);
-                    $response = $req->sendRequest(array('allowRedirects' => true,'maxRedirects' => 3,'timeout' => 10));
+                    $response = $req->sendRequest(array('allowRedirects' => true,'maxRedirects' => 2,'timeout' => 8));
                 }
 
                 list($width, $height, $type, $attr) = getimagesize($img_ico_uri);
-//                return "list($width, $height, $type, $attr)";
+//                return "$img_ico_uri:list($width, $height, $type, $attr)";
 
                 if(!intval($width) || !intval($height))
                     return lcml("Get image [url]{$params['url']}[/url] error [spoiler|details]".
@@ -144,8 +154,8 @@
 ((!empty($response) && PEAR::isError($response))?("responce=".$response->getMessage()."\n"):'').
 "[/spoiler]\n");
 
-                if(!empty($GLOBALS['page']))
-                    $hts->nav_link($GLOBALS['page'], $uri);
+                if(!empty($GLOBALS['main_uri']))
+                    $hts->nav_link($GLOBALS['main_uri'], $uri);
                 require_once("funcs/images/fill.php");
                 fill_image_data($uri);
                
@@ -160,7 +170,7 @@
 <input type="hidden" name="upload_names[]" value="{$params['url']}">
 <input type="file" size="10" name="upload_file[]">
 <input type="submit" value="Load">
-<input type="hidden" name="page" value="{$GLOBALS['page']}">
+<input type="hidden" name="page" value="{$GLOBALS['main_uri']}">
 </form>
 __EOT__;
 				}
