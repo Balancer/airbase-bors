@@ -48,6 +48,7 @@
 	}
 
 	$parse = parse_url($uri);
+//	exit(print_r($parse,true));
 
 	$GLOBALS['cms']['page_path'] = preg_replace("!/~[\w\-]+/$!","/",$parse['path']);
 	$GLOBALS['cms']['page_number'] = 1;

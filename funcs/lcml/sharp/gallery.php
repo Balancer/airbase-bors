@@ -9,16 +9,22 @@
 
         $hts = new DataBaseHTS;
 
-        $page = $hts->normalize_uri($GLOBALS['page']);
+//		exit($GLOBALS['lcml']['page']);
+        $page = $hts->normalize_uri($GLOBALS['lcml']['page']);
+
+		$to_upload = array();
 
         foreach(split("\n", $txt) as $s)
         {
             list($iimg, $description, $copyright, $author) = split("\|", $s."|||");
+
+//			exit("$iimg, $page");
+
             $img = fill_image_data($iimg, $page);
-            
+			
             if(!$img)
             {
-                $GLOBALS['cms_images'][] = $iimg;
+                $to_upload[] = $iimg;
                 $img = 'http://airbase.ru/img/design/system/not-loaded.png';
                 $img = fill_image_data($img, $page);
             }
@@ -63,6 +69,26 @@
                 "<noscript><li><a href=\"".preg_replace("!\.(gif|jpg|png|jpeg)$!i",'.htm',$img)."\">[$t {$w}x{$h}]</a> $description<small>// $copyright</small></noscript>\n";
         }
         $out .= "<script charset=\"UTF-8\">endGallery()</script><noscript></ul></noscript>\n\n";
+
+		if($to_upload)
+		{
+			$out .= "<form action=\"{$GLOBALS['cms']['main_host_uri']}/admin/upload.php\" method=\"post\" enctype=\"multipart/form-data\">\n<table class=\"btab\" cellspacing=\"0\">\n";
+			foreach($to_upload as $img)
+			{
+				$out .= <<<__EOT__
+<tr><th>$img</th>
+<td><input type="hidden" name="upload_names[]" value="$img">
+<input type="file" size="10" name="upload_file[]"></td></tr>
+__EOT__;
+			}
+			$out .= <<<__EOT__
+<tr><th colSpan="2"><input type="hidden" name="page" value="$page"><br/>
+<input type="submit" value="Load"></th></tr>
+</table>
+</form>
+
+__EOT__;
+		}
        
         return $out;
     }

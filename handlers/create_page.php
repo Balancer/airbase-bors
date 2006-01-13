@@ -7,7 +7,7 @@
 	{
 		require_once("funcs/check/access.php");
 
-		if(!check_action_access(3))
+		if(!c_check_action_access(3))
 			return false;
 
 		action_create_page($uri);

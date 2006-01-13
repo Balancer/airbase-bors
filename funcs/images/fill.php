@@ -10,20 +10,26 @@
 
         $image2 = abs_path_from_relative($image, "{$page}img/");
 		
+        $hts = new DataBaseHTS();
+
+		$data = $hts->parse_uri($page);
+//		exit($image2.print_r($data, true));
+		
 //		exit("'$image2' = abs_path_from_relative('$image', '{$page}img');");
 
-        if(!file_exists(preg_replace("!^http://[^/]+!", $GLOBALS['DOCUMENT_ROOT'], $image2)))
+        if(!file_exists(preg_replace("!http://{$data['host']}!",$data['root'],$image2)))
             $image2 = abs_path_from_relative($image, $page);
 		
 //		exit("'$image2' = abs_path_from_relative('$image', '{$page}img')");
 
-        if(file_exists(preg_replace("!^http://[^/]+!", $GLOBALS['DOCUMENT_ROOT'], $image2)))
+        if(file_exists(preg_replace("!http://{$data['host']}!",$data['root'],$image2)))
             $image = $image2;
 
-        if(!file_exists(preg_replace("!^http://[^/]+!", $GLOBALS['DOCUMENT_ROOT'], $image)))
+//		exit(preg_replace("!http://{$data['host']}!",$data['root'],$image2));
+
+        if(!file_exists(preg_replace("!http://{$data['host']}!",$data['root'],$image)))
             return false;
             
-        $hts = new DataBaseHTS();
         if(!$hts->get_data($image, 'create_time'))
             $hts->set_data($image, 'create_time', time());
 

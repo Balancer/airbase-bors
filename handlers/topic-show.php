@@ -5,7 +5,7 @@
 	{
 		require_once('inc/access_check.php');
 
-		if(!access_check($uri))
+		if(!i_access_check($uri))
 			return true;
 
 		$hts = new DataBaseHTS();
