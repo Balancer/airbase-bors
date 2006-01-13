@@ -36,6 +36,7 @@
     function clear_global_key($type,$key)
     {
         // echo "set ({$this->last_type},{$this->last_key})=$value;<br>"; 
-        unset($GLOBALS['HTS'][md5($type)][md5($key)]);
+		if(!empty($GLOBALS['HTS'][md5($type)][md5($key)]))
+	        unset($GLOBALS['HTS'][md5($type)][md5($key)]);
     }
 ?>

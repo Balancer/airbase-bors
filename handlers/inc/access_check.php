@@ -1,5 +1,5 @@
 <?
-	function access_check($uri, $us = NULL)
+	function i_access_check($uri, $us = NULL)
 	{
 		if(!$us)
 			$us = new User;

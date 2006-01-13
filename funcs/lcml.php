@@ -49,14 +49,18 @@
 //		if(empty($params['with_html']))
 //			$txt = htmlspecialchars($txt); */
 
-        global $page;
+        $page = $GLOBALS['cms']['page_path'];
 
 		$hts = new DataBaseHTS();
 
 		$data = $hts->parse_uri($page);
+//		exit(print_r($data, true));
 
 		if(empty($params['page_path']))
 			$params['page_path'] = $data['path'];
+
+		if(empty($params['uri']))
+			$params['uri'] = $page;
 
         $outfile=0;
 
@@ -99,7 +103,7 @@
 
 		$page = empty($GLOBALS['lcml']['page']) ? $page : $GLOBALS['lcml']['page'];
 
-        if($page) include("config.php");
+//        if($page) include("config.php");
 
         $txt=str_replace("\r","",$txt);
 
@@ -316,7 +320,7 @@
             if(preg_match("!^nohref$!",$param)) { $params['nohref']=true; continue;}
             if(preg_match("!^(\w+)=\"(.*?)\"$!s",$param,$m)) { $params[$m[1]]=$m[2]; continue;}
             if(empty($params['url']))
-                $params['url']=$param;
+                $params['url'] = $param;
         }
 
 //	echo "nohref={$params['nohref']}<br />";
@@ -326,6 +330,9 @@
 
         if(empty($params['uri']))
 			$params['uri'] = @$params['cms']['main_uri'];
+
+		require_once("funcs/security.php");
+		$params['uri'] = secure_path($params['uri']);
 
         list($iws, $ihs) = split("x", $params['size']."x");
         if(!$params['width'] && $iws)

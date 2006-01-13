@@ -5,8 +5,8 @@
 
     function recompile($page)
     {
-//		echo "Recompile page '$page'";
-	
+//		echo "Recompile page '$page'";		exit();
+
         if(!$page)
             return;
 
@@ -15,14 +15,23 @@
 
         $hts = new DataBaseHTS;
 
-        if($hts->get_data($page,'source'))
+		$source = $hts->get_data($page, 'source');
+//		exit($source);
+
+        if($source)
         {
-            $body = lcml($hts->get_data($page, 'source'), array(
+			$ch_type = 'lcml-compiled';
+			$ch_key = md5($source);
+
+			$ch->set($ch_type,$ch_key,NULL);
+
+            $body = lcml($source, array(
                 'page' => $page, 
                 'cr_type' => $hts->get_data($page, 'cr_type'),
 				'with_html' => true,
                 ));
 //            $GLOBALS['log_level'] = 9;
+
             $hts->set_data($page, 'body', $body);
             $hts->set_data($page, 'compile_time', time());
 
