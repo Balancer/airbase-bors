@@ -153,27 +153,35 @@
     if(preg_match("!^/cache(/.+)?/(200x150|200x|128x|468x468|128x96)/(.+?\.(jpg|jpeg|gif|jpe|png))$!i",$QUERY_ENCODED,$data))
     {
 //        include("{$_SERVER['DOCUMENT_ROOT']}/scripts/inc/funcs.php");
-        if(file_exists("{$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[3]"))
+		$image0 = "{$_SERVER['DOCUMENT_ROOT']}{$data[1]}/{$data[3]}";
+		$image = "{$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED";
+        if(file_exists($image0))
         {
             list($w,$h)=split("x",$data[2]);
 
 //            die($w."x".$h);
 
+            list($w0,$h0,$t0)=GetImageSize($image0);
             if($w && !$h)
             {
-                list($w,$h,$t)=GetImageSize("{$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[3]");
-                $h=(intval($h*$size/($w+1)+1));
+				$w = $w0;
+				$t = $t0;
+                $h=(intval($h0*$size/($w0+1)+1));
             }
+
             if($w && $h)
             {
                 $size=$w."x".$h;
-                mkpath("{$_SERVER['DOCUMENT_ROOT']}/cache$data[1]/$data[2]",0777);
-                @chmod("{$_SERVER['DOCUMENT_ROOT']}/cache$data[1]/$data[2]",0777);
-                `/usr/local/bin/convert -geometry $size {$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[3] {$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED`;
+   	            mkpath("{$_SERVER['DOCUMENT_ROOT']}/cache$data[1]/$data[2]",0777);
+       	        @chmod("{$_SERVER['DOCUMENT_ROOT']}/cache$data[1]/$data[2]",0777);
+				if($h0>$h || $w0>$w)
+                	`/usr/local/bin/convert -geometry $size $image0 $image`;
+				else
+					copy($image0, $image);
                 @chmod("{$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED",0666);
-                header("Location: {$_SERVER['REQUEST_URI']}");
-                exit();
-            }
+   	            header("Location: {$_SERVER['REQUEST_URI']}");
+       	        exit();
+	        }
         }
     }
 

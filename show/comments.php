@@ -16,10 +16,10 @@
         if(!$tid)
             return;
 
-        $forum = $hts->dbh->get("SELECT `forum_id` FROM FORUM.ib_topics WHERE `tid`=$tid");
+        $forum = $hts->dbh->get("SELECT `forum_id` FROM forums_airbase_ru.ib_topics WHERE `tid`=$tid");
 
-        $posts  = $hts->dbh->get_array("SELECT p.pid, p.post, p.post_date, p.author_name FROM FORUM.ib_posts         p WHERE topic_id=$tid ORDER BY post_date");
-        $posts += $hts->dbh->get_array("SELECT p.pid, p.post, p.post_date, p.author_name FROM FORUM.ib_posts_archive p WHERE topic_id=$tid ORDER BY post_date");
+        $posts  = $hts->dbh->get_array("SELECT p.pid, p.post, p.post_date, p.author_name FROM forums_airbase_ru.ib_posts         p WHERE topic_id=$tid ORDER BY post_date");
+        $posts += $hts->dbh->get_array("SELECT p.pid, p.post, p.post_date, p.author_name FROM forums_airbase_ru.ib_posts_archive p WHERE topic_id=$tid ORDER BY post_date");
 
         $posts_number = sizeof($posts)-1;
         if(!$posts_number)

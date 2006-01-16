@@ -16,7 +16,7 @@
 <th>Topic</th>
 <?
     $dbh = mysql_connect("localhost", "forum", "localforum") or die ("Could not connect");
-    mysql_select_db("FORUM") or die ("Could not select database");
+    mysql_select_db("forums_airbase_ru") or die ("Could not select database");
     mysql_query ("SET CHARACTER SET utf8") or  die ("Query '$q' failed, error ".mysql_errno().": ".mysql_error()."<BR>");
 
     $q="SELECT * FROM `ib_reputation` WHERE `msg_date` > ".(time()-86400*7)." ORDER BY `msg_date` DESC";

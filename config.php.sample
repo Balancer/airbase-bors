@@ -16,8 +16,8 @@
 		'main_host_uri' => "http://airbase.ru",
 
 		'mysql_database' => 'HTS',
-		'mysql_login' => 'user',
-		'mysql_pw' => 'user756',
+		'mysql_login' => '<login>',
+		'mysql_pw' => '<password>',
 		'mysql_server' => 'localhost',
 		'cache_disabled' => false,
 		'charset'=>'utf-8',

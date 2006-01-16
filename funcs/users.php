@@ -4,16 +4,16 @@
     require_once('funcs/global-data.php');
 
     $GLOBALS['forums_data']=array(
-            'password' => 'password',
-            'nick' => 'name',
-            'name' => 'name',
-            'password' => 'member_login_key',
-            'reputation' => 'rep',
-            'member_login_key' => 'member_login_key',
-            'legacy_password' => 'legacy_password',
-            'joined' => 'joined',
-            'email' => 'email',
-            );
+            'nick' => 'forums_airbase_ru name.id',
+            'name' => 'forums_airbase_ru name.id',
+            'password' => 'forums_airbase_ru ib_members member_login_key id',
+            'reputation' => 'forums_airbase_ru ib_members rep id',
+            'member_login_key' => 'forums_airbase_ru  ib_members member_login_key id',
+            'converge_pass_hash' => 'forums_airbase_ru ib_members_converge converge_pass_hash converge_id',
+            'joined' => 'forums_airbase_ru ib_members joined id',
+            'email' => 'forums_airbase_ru ib_members email id',
+			'salt' => 'forums_airbase_ru ib_members_converge converge_pass_salt converge_id',
+        );
 
     function get_ip_nick()
     {
@@ -69,8 +69,8 @@
         $db = new DataBase('USERS');
 		
         if($user && !preg_match("!^\d+$!", $user))
-            $member_id = $db->get("SELECT `id` FROM FORUM.ib_members WHERE LOWER(`name`)='".addslashes(strtolower($member_id))."'");
-
+            $member_id = $db->get("SELECT `id` FROM `forums_airbase_ru`.`ib_members` WHERE `name` LIKE '".addslashes($user)."'", false);
+		
         $member_id = intval($member_id);
 
         if(!$member_id)
@@ -95,8 +95,11 @@
             if(!isset($forums_data[$key]) || !$forums_data[$key])
                 $value = $db->get("SELECT `value` FROM `users_data` WHERE `member_id`=$member_id AND `key`='".addslashes($key)."'");
             else
-                $value = $db->get("SELECT `".$forums_data[$key]."` FROM FORUM.ib_members WHERE `id`=$member_id");
-        }
+			{
+				list($base, $table, $field, $key) = split("\s+",$forums_data[$key]);
+                $value = $db->get("SELECT $field FROM $base.$table WHERE $key=$member_id");
+        	}
+		}
        
 //        echo "val=$value<br>\n";
 
@@ -123,7 +126,7 @@
         if(empty($forums_data[$key]))
             $db->store('users_data',"`member_id`=$member_id AND `key`='".addslashes($key)."'",array('member_id'=>$member_id,'key'=>$key,'value'=>$value));
         else
-            die("UPDATE FORUM.ib_members SET `".$forums_data[$key]."`='".addslashes($value)."'");
+            die("UPDATE forums_airbase_ru.ib_members SET `".$forums_data[$key]."`='".addslashes($value)."'");
         return set_global_key('user_data',$member_id."_".$key,$value);
     }
 
@@ -187,20 +190,8 @@
 
     function get_member_id_by_name($name)
     {
-        $db = new DataBase('FORUM');
+        $db = new DataBase('forums_airbase_ru');
         return intval($db->get("SELECT `id` FROM `ib_members` WHERE `name`='".addslashes($name)."'"));
-    }
-
-    function user_md5_check($user=NULL)
-    {
-        if(user_data('member_id',$user))
-        {
-            return md5(user_data('email',$user).'&'.user_data('member_login_key',$user).'&'.user_data('joined',$user));
-        }
-        else
-        {
-            return md5("this is only here to prevent it breaking on guests");
-        }
     }
 
     function access_allowed($page, $hts=NULL)
@@ -277,6 +268,11 @@
     	{
     		return user_data($data, $this->id, $default);
     	}
+	
+		function generate_compiled_passhash($salt, $md5_once_password)
+		{
+			return md5( md5( $salt ) . $md5_once_password );
+		}
 
 	    function do_login($user, $password)
     	{
@@ -284,22 +280,24 @@
 			
 			if(!$member_id)
 			{
-				echo "<b>Неизвестный пользователь '$user'</b>'";
+				echo("<b>Неизвестный пользователь '$user'</b>'");
 				return false;
 			}
 			
+//			$GLOBALS['log_level']=9;
+//			echo "salt=".user_data('salt', $member_id);
+//			$GLOBALS['log_level']=2;
 
-			$lp = user_data('legacy_password', $user);
+			$lp = user_data('converge_pass_hash', $user);
+			$pass_hash = $this->generate_compiled_passhash(user_data('salt', $member_id), md5($password));
 
-//			echo "pw=$password, md=".md5($password).", lp=$lp;";
+//			exit( "pw=$password, ph='$pass_hash', lp=$lp;");
 			
-			if(md5($password) != $lp)
+			if($pass_hash != $lp)
 			{
 				echo "<b>Неправильный пароль пользователя '$user'</b>'";
 				return false;
 			}
-
-			$pass_hash = user_md5_check($user);
 
 			SetCookie("member_id", $member_id, time()+2592000,"/", $_SERVER['HTTP_HOST']);
 			SetCookie("pass_hash", $pass_hash, time()+2592000,"/", $_SERVER['HTTP_HOST']);
@@ -307,7 +305,7 @@
 			$_COOKIE['member_id'] = $member_id;
 			$_COOKIE['pass_hash'] = $pass_hash;
 			
-			echo "<b>Login successful!<br><br></b><br />";
+//			exit("<b>Login successful!<br><br></b><br />");
 		}
 
 		function do_logout()

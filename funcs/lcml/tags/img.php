@@ -3,6 +3,8 @@
 
 	function lt_img($params) 
 	{ 
+//		exit(print_r($params,true));
+	
 		if(empty($params['size']))
 			$params['size'] = '468x468';
 
@@ -16,6 +18,7 @@
 
 			$hts = new DataBaseHTS();
 			$data = $hts->parse_uri($uri);
+//			echo $GLOBALS['lcml']['level'];
 //			exit(print_r($GLOBALS['lcml']['uri'],true));
 //			exit(print_r($data,true));
 

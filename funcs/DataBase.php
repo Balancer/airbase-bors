@@ -75,7 +75,7 @@
                 $GLOBALS['global_db_queries'] = 0;
             $GLOBALS['global_db_queries']++;
 
-            echolog("<xmp>query='$query'</xmp>",4);
+            echolog("<xmp>query=|$query|</xmp>",4);
 
             list($usec, $sec) = explode(" ",microtime());
             $qstart = ((float)$usec + (float)$sec);
@@ -91,6 +91,8 @@
                 fputs($fh,"$query\n");
                 fclose($fh);
             }
+
+            echolog("<xmp>result=|".print_r($this->result,true)."|</xmp>",5);
 
             //   @mysql_num_rows(), ..    SELECT!
             if($this->result)

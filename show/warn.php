@@ -7,7 +7,7 @@
     setlocale(LC_ALL, "ru_RU.utf8");
 
     $dbh = @mysql_connect("localhost", "forum", "localforum") or die ("Could not connect");
-    @mysql_select_db("FORUM") or die ("Could not select database");
+    @mysql_select_db("forums_airbase_ru") or die ("Could not select database");
     mysql_query ("SET CHARACTER SET utf8");
 
     $res = mysql_query ("SELECT * FROM `ib_members` WHERE `warn_level`>0 OR `restrict_post` = 1 ORDER BY `warn_level` DESC, `name` ASC") or die ("Query failed, error ".mysql_errno().": ".mysql_error()."<BR>");
