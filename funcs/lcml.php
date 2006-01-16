@@ -27,7 +27,14 @@
 
     function lcml($txt, $params=array())
     {
+		if(!isset($GLOBALS['lcml']['level']))
+			$GLOBALS['lcml']['level'] = 0;
+		else
+			$GLOBALS['lcml']['level']++;
+	
 //		echo "<xmp>'".print_r($txt,true)."'</xmp>";
+
+//		$txt .= "g={$GLOBALS['lcml']['level']}";
 	
         if(!trim($txt))
             return $txt;
@@ -36,7 +43,7 @@
 		$ch_key = md5($txt);
 
 		$ch = new Cache();
-		if($ch->get($ch_type,$ch_key))
+		if($GLOBALS['lcml']['level']==0 && $ch->get($ch_type,$ch_key))
 			return $ch->last;
 
 /*		foreach(split(' ','b br code hr i li p pre s u ul xmp') as $tag)
@@ -71,7 +78,7 @@
             fclose($fh);
         }
 
-		$GLOBALS['lcml'] = array();
+//		$GLOBALS['lcml'] = array();
 
         if(is_array($params))
         {
@@ -106,6 +113,7 @@
 //        if($page) include("config.php");
 
         $txt=str_replace("\r","",$txt);
+
 
 //        require_once("tags/code.php");
 //        $txt=preg_replace("!\[code([^\]]*)\](.+?)\[/code\]!ise","lp_code_(\"$2\",'$1')",$txt);

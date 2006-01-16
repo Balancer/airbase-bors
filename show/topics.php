@@ -61,6 +61,8 @@ if(preg_match("!(\d\d)\.(\d\d)!",$time,$m))
     //$q="SELECT p.pid, p.author_name, p.post_date, p.forum_id, p.topic_id, p.author_id, t.title, t.description, f.name FROM {$GLOBALS['cms']['ipb_tables_pref']}posts p, {$GLOBALS['cms']['ipb_tables_pref']}topics t, {$GLOBALS['cms']['ipb_tables_pref']}forums f WHERE t.tid=p.topic_id AND t.forum_id=f.id AND p.post_date > $time AND p.forum_id IN ($forum) ORDER BY p.pid DESC LIMIT 0,10000";
     $q="SELECT p.pid, p.author_name, p.post_date, t.forum_id, p.topic_id, p.author_id, t.title, t.description, f.name, p.post FROM {$GLOBALS['cms']['ipb_tables_pref']}posts p, {$GLOBALS['cms']['ipb_tables_pref']}topics t, {$GLOBALS['cms']['ipb_tables_pref']}forums f WHERE t.tid=p.topic_id AND t.forum_id=f.id AND p.post_date > $time AND t.forum_id $forum AND f.id != 19 ORDER BY p.pid DESC LIMIT 0,1000";
 
+	//echo $q;
+
     $to_echo = '';
     $n=0;
 

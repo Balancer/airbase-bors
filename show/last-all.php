@@ -51,7 +51,7 @@ ob_start();
 
 $dbh = @mysql_connect("localhost", "forum", "localforum") or die (__FILE__.':'.__LINE__." Could not connect");
 @mysql_query ("SET CHARACTER SET utf8");
-@mysql_select_db("FORUM") or die (__FILE__.':'.__LINE__." Could not select database");
+@mysql_select_db("forums_airbase_ru") or die (__FILE__.':'.__LINE__." Could not select database");
 
 $q="SELECT p.pid, p.post, p.author_name, p.post_date, t.forum_id, p.topic_id, p.author_id, t.title, f.name FROM ib_posts p, ib_topics t, ib_forums f WHERE t.tid=p.topic_id AND t.forum_id=f.id AND t.forum_id NOT IN (17) ORDER BY pid DESC LIMIT 0,50";
 //echo "q='$q'";
