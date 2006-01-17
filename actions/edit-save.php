@@ -66,7 +66,7 @@
 		if($title)
  	       $hts->set_data($uri, 'title', $title);
 		   
-		if(@$ref)
+		if(!empty($ref))
  	       $hts->nav_link($ref, $uri);
 
         $hts->set_data($uri, 'source', $source);

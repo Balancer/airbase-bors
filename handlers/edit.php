@@ -7,7 +7,7 @@
 
 		require_once("funcs/check/access.php");
 
-		if(!c_check_action_access(3, $uri))
+		if(!check_action_access(4, $uri))
 			return true;
 		
         $hts  = new DataBaseHTS;

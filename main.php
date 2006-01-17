@@ -18,6 +18,7 @@
     require_once('handlers.php');
 
 	handlers_load($GLOBALS['cms']['base_dir'].'/handlers');
+	handlers_load("{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}/handlers");
 	handlers_load($GLOBALS['cms']['local_dir'].'/handlers');
 	handlers_load($GLOBALS['cms']['base_dir'].'/handlers-post');
 	
@@ -27,6 +28,10 @@
 
 //    exit("GET='".print_r($_GET,true)."', REQUEST_URI='{$_SERVER['REQUEST_URI']}'<br><br>");
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+	$GLOBALS['ref'] = @$_SERVER['HTTP_REFERER'];
+
+	include_once("funcs/logs.php");
+	log_session_update();
 	
 	if(empty($GLOBALS['main_uri']))
 		$GLOBALS['main_uri'] = $uri;
@@ -37,18 +42,13 @@
 
 		$GLOBALS['page_data']['title'] = ec("Вход");
 
-		ob_start();
-		$us->do_login($_POST['FLogin'], $_POST['FPassword']);
-    	$GLOBALS['page_data']['source'] = lcml(ob_get_contents());
-	    ob_end_clean();
+		if($err = $us->do_login($_POST['FLogin'], $_POST['FPassword'], false))
+			return error_messge($err, $uri);
 
-		show_page($uri);
-
-		go($uri,false,2,false);
+		return messge(ec("Вы успешно авторизовались"), $uri);
 	}
 
 	$parse = parse_url($uri);
-//	exit(print_r($parse,true));
 
 	$GLOBALS['cms']['page_path'] = preg_replace("!/~[\w\-]+/$!","/",$parse['path']);
 	$GLOBALS['cms']['page_number'] = 1;
@@ -57,6 +57,8 @@
 
 //	echo "<xmp>".print_r($GLOBALS['cms_patterns'], true)."</xmp>";
 //	print_r($_GET);
+
+//	$GLOBALS['cms']['action'] = '';
 
 	if(!empty($_GET))
 	{
@@ -67,10 +69,10 @@
 			{
 				$GLOBALS['cms']['action'] = $action;
 				$res = $func($uri, $action);
-	            if($res === true)
-    	            return;
-        	    if($res !== false)
-            	    $uri = $res;
+            	if($res === true)
+   	            	return;
+	       	    if($res !== false)
+    	       	    $uri = $res;
 			}
 		}
 	}
@@ -96,5 +98,5 @@
 	if(empty($title))
 		$title='';
 		
-	echo "Page '$uri' not found. Try make <a href=\"$uri?title=$title\">".($title?$title:'New page')."</a>";
+	echo ec("Страница '$uri' не найдена. Попробуйте <a href=\"$uri?edit\">создать её</a>");
 ?>
