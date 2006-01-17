@@ -28,10 +28,15 @@
             $body = lcml($source, array(
                 'page' => $page, 
                 'cr_type' => $hts->get_data($page, 'cr_type'),
+				'nocache' => true,
 				'with_html' => true,
                 ));
-//            $GLOBALS['log_level'] = 9;
 
+//			exit($page);
+			if(preg_match('!/200\d/\d\d/\d\d/\d+\.html$!', $page))
+				$body = str_replace('&quot;', '"', normalize_text(addslashes($body), true));
+				
+//            $GLOBALS['log_level'] = 9;
             $hts->set_data($page, 'body', $body);
             $hts->set_data($page, 'compile_time', time());
 

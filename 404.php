@@ -260,13 +260,13 @@
     $query=preg_replace("!/$!","",$QUERY_ENCODED);
     $query=preg_replace("!^/!","",$query);
 
-    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_titles` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
+    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_title` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
     {
         go($page);
         exit();
     }
 
-    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_keywords` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
+    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_keyword` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
     {
 //        $page = $hts->page_uri_by_id($page);
         go($page);

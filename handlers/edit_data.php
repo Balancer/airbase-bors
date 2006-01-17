@@ -8,7 +8,7 @@
 	{
 		require_once("funcs/check/access.php");
 
-		if(!c_check_action_access(3, $uri))
+		if(!check_action_access(9, $uri))
 			return true;
 
 		$GLOBALS['page_data']['source'] = "[module admin/edit-data]";
