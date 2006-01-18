@@ -87,8 +87,7 @@
         $smarty->security = false;
         $smarty->cache_modified_check = true;
         $smarty->cache_lifetime = 86400*7;
-//        $smarty->secure_dir += array("/home/airbase/forums/cms/funcs/templates");
-//        print_r($smarty->secure_dir);
+        $smarty->secure_dir += array("{$GLOBALS['cms']['base_dir']}/templates");
 
         $template = empty($GLOBALS['page_data']['template']) ? $hts->get_data($page, 'template', '', true) : $GLOBALS['page_data']['template'];
         
