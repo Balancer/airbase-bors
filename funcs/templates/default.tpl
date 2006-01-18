@@ -1,6 +1,7 @@
 <html>
 <head><title>{$title}</title></head>
 <body>
+<small>{call func=module param="top-navs.php"}</small>
 <div align="right">{$description}</div>
 <h1>{$title}</h1>
 {$body}
