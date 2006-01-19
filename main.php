@@ -53,6 +53,20 @@
 	$GLOBALS['cms']['page_path'] = preg_replace("!/~[\w\-]+/$!","/",$parse['path']);
 	$GLOBALS['cms']['page_number'] = 1;
 
+    foreach($GLOBALS['cms_aliases'] as $uri_pattern=>$func)
+    {
+//		echo "<pre>Test alias pattern '$uri_pattern' to '$uri' for $func</pre>\n";
+		if(preg_match($uri_pattern, $uri, $m))
+		{
+//			echo "ok!";
+            $res = $func($uri, $m);
+            if($res === true)
+                return;
+            if($res !== false)
+                $uri = $res;
+		}
+	}
+
 //	exit();
 
 //	echo "<xmp>".print_r($GLOBALS['cms_patterns'], true)."</xmp>";
