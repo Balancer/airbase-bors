@@ -15,6 +15,11 @@
 		$GLOBALS['cms_actions'][$action_type] = $func;
 	}
 
+	function register_alias($uri_regexp, $function)
+	{
+		$GLOBALS['cms_aliases'][$uri_regexp] = $function;
+	}
+
     function handlers_load($dir='handlers')
     {
         if(!is_dir($dir)) 

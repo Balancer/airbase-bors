@@ -5,17 +5,19 @@
 //    if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
 //        echo __FILE__.__LINE__." ".$GLOBALS['REQUEST_URI']."<br />\n";
 
-    header('Content-Type: text/html; charset=utf-8');
+    require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
+
+    header("Content-Type: text/html; charset={$GLOBALS['cms']['charset']}");
     header('Content-Language: ru');
-    ini_set('default_charset','utf-8');
-    setlocale(LC_ALL, "ru_RU.utf8");
+    ini_set('default_charset',$GLOBALS['cms']['charset']);
+    setlocale(LC_ALL, $GLOBALS['cms']['locale']);
 
     $query = $_SERVER['REQUEST_URI'];
     $ref   = empty($_SERVER['HTTP_REFERER']) ? NULL : $_SERVER['HTTP_REFERER'];
     $query=preg_replace("!^(.+?)/+$!","$1",$query);
     $query=urldecode($query);
 
-	$page = @$_GET['page'];
+    $page = @$_GET['page'];
 
     if(empty($_SERVER['REQUEST_URI']))
         $_SERVER['REQUEST_URI'] = $page;
