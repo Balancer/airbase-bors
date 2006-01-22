@@ -7,6 +7,12 @@
 		
 		$topics_per_page = 2;
 
+		$out = <<< __EOT__
+<div id="main-wide">
+<h3>Гостиная@Aviaport.ru</h3>
+__EOT__;
+		echo ec($out);
+
 		foreach($hts->dbh->get_array("
 			SELECT 	c.value as tid,
 					t.value as title,
@@ -28,13 +34,19 @@
 			include_once("funcs/datetime.php");
 		
 			$date = short_time($topic['create_time']);
+		
+			$go = ec("Перейти к обсуждению");
+			$det = ec("подробнее");
+			$alt = ec("Гостиная@Aviaport.ru: ").$topic['title'];
 
 			echo <<< __EOT__
-<table>
-<tr><td><b>$date</b>&nbsp;<a href="{$topic['tid']}">{$topic['author_name']}</a></b></td></tr>
-<tr><td>{$topic['description']}</td></tr>
-<tr><td><div class="red-right-link"><a href="{$topic['tid']}#reply_form" style="color: #ff9000;">������ ������</a></div></td></tr>
-</table>
+<div class="person">
+<a title="{$topic['title']}" class="person-photo" href="#"><img src="{$topic['icon_image']}" width="{$topic['icon_width']}" height="{$topic['icon_height']}" alt="" /></a>
+<h4><a title="Перейти к обсуждению" href="#">Владимир Путин</a></h4>
+<p>{$topic['description']}</p>
+<p><a title="$go" href="{$topic['tid']}">$det</a></p>
+</div>
+
 __EOT__;
 		}		
     }
