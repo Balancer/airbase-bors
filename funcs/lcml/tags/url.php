@@ -5,9 +5,6 @@
 	{ 
 		$url = $params['url'];
 
-		if(!isset($params['description']))
-			$params['description']=$url;
-
 		if(preg_match("!^[^/]+\.\w{2,3}!",$url))
 			if(!preg_match("!^\w+://!",$url))
 				$params['url']="http://$url";
@@ -29,7 +26,12 @@
 			$hts->set_data($url, 'title', $params['description']);
 			$hts->set_data($url, 'modify_time', time());
 		}
-		
-		return "<a href=\"$url\"$external>".lcml($params['description'])."</a>";
+
+		if(!isset($params['description']))
+			$params['description']=$url;
+		else
+			$params['description']=lcml($params['description']);
+
+		return "<a href=\"$url\"$external>{$params['description']}</a>";
 	}
 ?>
