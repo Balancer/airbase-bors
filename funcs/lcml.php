@@ -29,8 +29,8 @@
     {
 		if(!isset($GLOBALS['lcml']['level']))
 			$GLOBALS['lcml']['level'] = 0;
-		else
-			$GLOBALS['lcml']['level']++;
+
+		$GLOBALS['lcml']['level']++;
 	
 //		echo "<xmp>'".print_r($txt,true)."'</xmp>";
 
@@ -43,7 +43,7 @@
 		$ch_key = md5($txt);
 
 		$ch = new Cache();
-		if($GLOBALS['lcml']['level']==0 && $ch->get($ch_type,$ch_key))
+		if(/*$GLOBALS['lcml']['level']==1 &&*/ $ch->get($ch_type,$ch_key))
 			return $ch->last;
 
 /*		foreach(split(' ','b br code hr i li p pre s u ul xmp') as $tag)
@@ -103,8 +103,11 @@
         }
 
         if($GLOBALS['lcml']['cr_type'] == 'plain_text')
+		{
+			$GLOBALS['lcml']['level']--;
             return $ch->set($ch_type,$ch_key,"<xmp>$txt</xmp>");
-
+		}
+		
         if(empty($page))
             $page = '';
 
@@ -236,6 +239,7 @@
 
 //		echo "<xmp>Out: '$txt'</xmp>";
 
+		$GLOBALS['lcml']['level']--;
         return $ch->set($ch_type,$ch_key,$txt,1209600);
     }
 
