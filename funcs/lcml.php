@@ -61,7 +61,6 @@
 		$hts = new DataBaseHTS();
 
 		$data = $hts->parse_uri($page);
-//		exit(print_r($data, true));
 
 		if(empty($params['page_path']))
 			$params['page_path'] = $data['path'];
@@ -77,8 +76,6 @@
             fwrite($fh,$txt."\n---------------------------------------------\n");
             fclose($fh);
         }
-
-//		$GLOBALS['lcml'] = array();
 
         if(is_array($params))
         {
@@ -220,7 +217,7 @@
 //        $txt=str_replace("&#91;","[",$txt);
 //        $txt=str_replace("&#93;","]",$txt);
 
-        $txt=ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/post',$txt);
+        $txt = ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/post',$txt);
 
         if($outfile)
         {
@@ -369,7 +366,7 @@
         {
             if($params['align']=='center')
             {
-                $params['_align_b']="<div align=\"left\"><table{$params['_width']} cellPadding=\"0\" cellSpacing=\"0\"><tr><td>"; // {$params['_border']}{$params['_style']}
+                $params['_align_b']="<div {$params['_border']} style=\"text-align: left;\"><table{$params['_width']} cellPadding=\"0\" cellSpacing=\"0\"><tr><td style=\"text-align: justify;\">"; // {$params['_border']}{$params['_style']}
                 $params['_align_e']="</td></tr></table></div>";
             }
             else // right or left

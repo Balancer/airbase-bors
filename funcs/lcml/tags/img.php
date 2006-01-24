@@ -3,8 +3,6 @@
 
 	function lt_img($params) 
 	{ 
-//		exit(print_r($params,true));
-	
 		if(empty($params['size']))
 			$params['size'] = '468x468';
 
