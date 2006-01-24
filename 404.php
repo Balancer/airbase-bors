@@ -346,7 +346,7 @@
     if(!empty($title) && !empty($page))
     {
         $ref = empty($GLOBALS['HTTP_REFERER']) ? '' : $GLOBALS['HTTP_REFERER'];
-        go("http://airbase.ru/admin/edit.php?page=$page&title=".urlencode($GLOBALS['title'])."&ref=$ref");
+        go("?title=".urlencode($GLOBALS['title'])."&ref=$ref");
     }
     
 ?>
@@ -376,7 +376,7 @@
     if(strpos($query,"/")===false)
     {
         $keyword="&keyword=$query";
-        echo "<li><a href=http://airbase.ru/admin/edit.php?page=$page$keyword&ref=$ref>создать страницу</a> <font color=red>$QUERY_ENCODED</font> в новом формате (<a href=/admin/edit.php?page=$page>$page</a>)\n";
+        echo "<li><a href=\"?edit$keyword&ref=$ref\">создать страницу</a> <font color=red>$QUERY_ENCODED</font> в новом формате (<a href=\"?edit\">$page</a>)\n";
     }
     else
         $keyword="";
