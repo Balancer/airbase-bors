@@ -17,6 +17,8 @@
 	include_once('funcs/users.php');
     require_once('handlers.php');
 
+	$GLOBALS['cms_aliases'] = array();
+
 	handlers_load($GLOBALS['cms']['base_dir'].'/handlers');
 	handlers_load("{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}/handlers");
 	handlers_load($GLOBALS['cms']['local_dir'].'/handlers');
