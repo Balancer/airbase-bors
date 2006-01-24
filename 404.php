@@ -275,13 +275,6 @@
         exit();
     }
 
-    $f=fopen("/home/airbase/html/logs/errors.log","at");
-    if(empty($HTTP_REFERER)) $HTTP_REFERER = '';
-    if(empty($REMOTE_HOST)) $REMOTE_HOST = '';
-    if(empty($HTTP_X_FORWARDED_FOR)) $HTTP_X_FORWARDED_FOR = '';
-//    fwrite($f,"404|".time()."|{$_SERVER['REMOTE_ADDR']}|$QUERY_ENCODED|{$_SERVER['HTTP_REFERER']}|{$_SERVER['HTTP_USER_AGENT']}|{$_SERVER['REQUEST_URI']}\n");
-    fclose($f);
-
     $query=str_replace(".phtml",".hts",$QUERY_ENCODED);
     if(substr($query,-4) != ".hts")
     {
