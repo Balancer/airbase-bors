@@ -57,7 +57,7 @@
         {
 			// Такой страницы ещё нет - создаём
 
-            if(1 || !empty($GLOBALS['title']))
+            if(!empty($GLOBALS['title']))
             {
                 $ref = empty($GLOBALS['HTTP_REFERER']) ? '' : $GLOBALS['HTTP_REFERER'];
                 go($page,"/edit-new/?title=".urlencode($GLOBALS['title'])."&page=$page&ref=$ref");
