@@ -153,7 +153,7 @@
 "[pre]params=".print_r($params, true)."[/pre]\n".
 "img_ico_uri=_{$img_ico_uri}_[br]\n".
 "path=$path[br]\n".
-((!empty($response) && PEAR::isError($response))?("responce=".$response->getMessage()."\n"):'').
+str_replace(" ","_",((!empty($response) && PEAR::isError($response))?("responce=".$response->getMessage()."\n"):'')).
 "[/spoiler]\n");
 
 				if(!empty($GLOBALS['main_uri']))

@@ -15,8 +15,8 @@
         eval($code);
         $out = ob_get_contents();
         ob_clean();
-		if(!$out)
-			return "Error in code<xmp>$code</xmp>";
+//		if(!$out)
+//			return "Error in code<xmp>$code</xmp>";
 
         return $out;
     }
