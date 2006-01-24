@@ -628,21 +628,6 @@ CREATE TABLE `hts_id` (
   KEY `tmp` (`tmp`)
 );
 
---
--- Table structure for table `hts_keys`
---
-
-CREATE TABLE `hts_keys` (
-  `name` varchar(166) NOT NULL default '',
-  `type` varchar(166) NOT NULL default '',
-  `protected` tinyint(4) NOT NULL default '1',
-  `id_in_value` smallint(6) NOT NULL default '0',
-  `array` int(11) NOT NULL default '0',
-  `unique_id` int(11) NOT NULL default '1',
-  `autoinc_value` smallint(6) default NULL,
-  `params` text,
-  UNIQUE KEY `name` (`name`(80))
-);
 
 --
 -- Table structure for table `hts_save`
