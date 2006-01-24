@@ -1,4 +1,4 @@
-<?
+?
 //    if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
 //         xdebug_start_profiling();
     
@@ -352,44 +352,6 @@
 ?>
 <body bgcolor=#c0c0c0>
 <font face=Verdana size=-1>
-<blockquote>
-<hr>
-<?
-$dir=preg_replace("!^(.+/).*?!","$1",$QUERY_ENCODED);
-$dh=@opendir("{$_SERVER['DOCUMENT_ROOT']}$dir");
-if($dh)
-{
-    echo "<h2>Каталог <a href=$dir>$dir</a></h2>\n<ul>";
-    while($file=readdir($dh))
-    {
-        if($file!='.')
-            if(is_dir("{$_SERVER['DOCUMENT_ROOT']}$dir/$file"))
-                $dirs[]=$file;
-    }
-    closedir($dh);
-    @sort($dirs);
-    $dh=opendir("{$_SERVER['DOCUMENT_ROOT']}$dir");
-    while($file=readdir($dh))
-    {
-        if($file!='.' && $file!='..')
-            if(is_file("{$_SERVER['DOCUMENT_ROOT']}$dir/$file"))
-                $files[]=$file;
-    }
-    @sort($files);
-    closedir($dh);
-
-    for($i=0;$i<sizeof($dirs);$i++)
-        echo "<li><a href=$dirs[$i]/>$dirs[$i]/</a><br>";
-
-    for($i=0;$i<sizeof($files);$i++)
-        if(preg_match("!\.(gif|htm|phtml|jpg|jpeg|jpe|zip|rar|pdf)$!i",$files[$i]))
-            echo "<li><a href=$files[$i]>$files[$i]</a><br>";
-}
-
-?>
-</ul>
-<hr>
-</blockquote>
 
 <!--<hr>
 <h2>Служебная информация</h2>
