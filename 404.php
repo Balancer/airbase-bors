@@ -408,9 +408,8 @@
 
     $nick=user_data("nick");
     $page="http://{$_SERVER['HTTP_HOST']}".preg_replace("!^(/.+)\.phtml$!","$1.hts",$script);
-    $edit_uri = "http://airbase.ru/admin/edit.php?page=$page&ref=$ref";
     if(!preg_match("![\x80-\xFF]!",$query))
-        echo "<li><a href=\"$edit_uri\">создать страницу</a> <font color=red>$QUERY_ENCODED</font> в старом формате (<a href=\"$edit_uri\">$page</a>)\n";
+        echo "<li><a href=\"?edit&ref=$ref\">создать страницу</a> <font color=red>$QUERY_ENCODED</font> в старом формате (<a href=\"$edit_uri\">$page</a>)\n";
 ?>
 </ul>
 <br><br>
