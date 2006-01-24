@@ -8,6 +8,6 @@
 
 	function ec($txt)
 	{
-		return iconv('utf8', "{$GLOBALS['cms']['charset_u']}//translit", $txt);
+		return @iconv('utf8', "{$GLOBALS['cms']['charset_u']}//translit", $txt);
 	}
 ?>
