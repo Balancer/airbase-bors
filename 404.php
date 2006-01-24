@@ -1,4 +1,4 @@
-?
+<?
 //    if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
 //         xdebug_start_profiling();
     
