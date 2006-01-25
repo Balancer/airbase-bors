@@ -62,7 +62,6 @@
 					$path = $GLOBALS['cms']['sites_store_path']."/$c1/$c2/{$data['host']}".translite_path($data['path']);
 				}
 
-
 				if(!file_exists($path) || filesize($path)==0)
 				{
 					require_once('HTTP/Request.php');
@@ -74,7 +73,6 @@
 //						$req->setProxy('82.138.33.157', 3128);
 
 //					return "=$path=<br />\n";
-					
 
 					$response = $req->sendRequest(array(
 						'allowRedirects' => true,
@@ -196,7 +194,7 @@ __EOT__;
 //				$out = <<<__EOT__
 //{$params['_align_b']}<table class="box" style="width: {$width}px;" cellSpacing="0" cellPadding="2"><tr><td width="$width">$a_href_b<img src="$img_ico_uri" width="$width" height="$height" border="0">$a_href_e</td></tr>$description</table>{$params['_align_e']}
 //__EOT__;
-				$out = "{$params['_align_b']}$a_href_b<img src=\"$img_ico_uri\" width=\"$width\" height=\"$height\" border=\"0\">$a_href_e<div style=\"font-size: xx-small;\">".lcml($description)."</div>{$params['_align_e']}";
+				$out = "{$params['_align_b']}$a_href_b<img src=\"$img_ico_uri\" width=\"$width\" height=\"$height\" border=\"0\">$a_href_e<div style=\"font-size: xx-small;\">".lcml($description, array('html_disabled'=>false))."</div>{$params['_align_e']}";
 
 //		$out .= "<!-- params ".print_r($params,true)." -->";
 

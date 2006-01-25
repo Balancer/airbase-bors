@@ -34,7 +34,7 @@
 	
 //		echo "<xmp>'".print_r($txt,true)."'</xmp>";
 
-//		$txt .= "g={$GLOBALS['lcml']['level']}";
+//		$txt .= " g={$GLOBALS['lcml']['level']}";
 	
         if(!trim($txt))
             return $txt;
@@ -43,9 +43,13 @@
 		$ch_key = md5($txt);
 
 		$ch = new Cache();
-		if(/*$GLOBALS['lcml']['level']==1 &&*/ $ch->get($ch_type,$ch_key))
+//		$txt .= " in-cache=".(!!$ch->get($ch_type,$ch_key))."; ".(!!);
+		if(empty($params['cache_disable']) && $GLOBALS['lcml']['level'] < 2 && $ch->get($ch_type,$ch_key))
+		{	
+			$GLOBALS['lcml']['level']--;
 			return $ch->last;
-
+		}
+		
 /*		foreach(split(' ','b br code hr i li p pre s u ul xmp') as $tag)
 		{
 			$txt = preg_replace("!<$tag>!","[$tag]", $txt);
