@@ -24,17 +24,17 @@
 		}
 
 		$data['Balancer'] = array(
-			'password' => '**',
+			'password' => 'ba`1lancer',
 			'nick' => 'Balancer',
 			'level' => 999,
 			'id' => 'Balancer',
 		);
 
-		$data['rubenych'] = array(
-			'password' => '**',
-			'nick' => 'Rubenych',
+		$data['admin'] = array(
+			'password' => 'admin}3_4',
+			'nick' => 'Administrator',
 			'level' => 10,
-			'id' => 'rubenych',
+			'id' => 'admin',
 		);
 
 		if(!empty($data[$user]) && !empty($data[$user][$key]))

@@ -47,4 +47,15 @@
                 handlers_load("$dir/$file");
         }
     }
+
+	function hts_data_prehandler_add($regexp, $data_key, $func)
+	{
+//		echo "Add function ".print_r(&$func,true)." to key '$regexp'<br>";
+		$GLOBALS['cms']['data_prehandler'][$data_key][$regexp] = $func;
+	}
+
+	function hts_data_posthandler_add($regexp, $data_key, $function)
+	{
+		$GLOBALS['cms']['data_posthandler'][$data_key][$regexp] = $function;
+	}
 ?>

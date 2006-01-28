@@ -24,41 +24,36 @@
         return $txt;
     }
 
+	function rest_return($ret_val, $saved_params)
+	{
+		$GLOBALS['lcml']['params'] = $saved_params;
+		$GLOBALS['lcml']['level']--;
+		return $ret_val;
+	}
 
     function lcml($txt, $params=array())
     {
-		if(!isset($GLOBALS['lcml']['level']))
-			$GLOBALS['lcml']['level'] = 0;
+//		print_r($params);
+		$GLOBALS['lcml']['level'] = intval(@$GLOBALS['lcml']['level']) + 1;
 
-		$GLOBALS['lcml']['level']++;
+		$saved_params = empty($GLOBALS['lcml']['params']) ? array() : $GLOBALS['lcml']['params'];
+		foreach($saved_params as $key => $val)
+			if(!isset($params[$key]))
+				$params[$key] = $val;
 	
-//		echo "<xmp>'".print_r($txt,true)."'</xmp>";
+		$GLOBALS['lcml']['params'] = $params;
 
-//		$txt .= " g={$GLOBALS['lcml']['level']}";
+
 	
         if(!trim($txt))
-            return $txt;
+            return rest_return($txt, $saved_params);
 
 		$ch_type = 'lcml-compiled';
 		$ch_key = md5($txt);
 
 		$ch = new Cache();
-//		$txt .= " in-cache=".(!!$ch->get($ch_type,$ch_key))."; ".(!!);
 		if(empty($params['cache_disable']) && $GLOBALS['lcml']['level'] < 2 && $ch->get($ch_type,$ch_key))
-		{	
-			$GLOBALS['lcml']['level']--;
-			return $ch->last;
-		}
-		
-/*		foreach(split(' ','b br code hr i li p pre s u ul xmp') as $tag)
-		{
-			$txt = preg_replace("!<$tag>!","[$tag]", $txt);
-			$txt = preg_replace("!<$tag\s+/>!","[$tag]", $txt);
-			$txt = preg_replace("!</$tag>!","[/$tag]", $txt);
-		}
-
-//		if(empty($params['with_html']))
-//			$txt = htmlspecialchars($txt); */
+			return rest_return($ch->last, $saved_params);
 
         $page = $GLOBALS['cms']['page_path'];
 
@@ -104,10 +99,7 @@
         }
 
         if($GLOBALS['lcml']['cr_type'] == 'plain_text')
-		{
-			$GLOBALS['lcml']['level']--;
-            return $ch->set($ch_type,$ch_key,"<xmp>$txt</xmp>");
-		}
+            return rest_return($ch->set($ch_type,$ch_key,"<xmp>$txt</xmp>"), $saved_params);
 		
         if(empty($page))
             $page = '';
@@ -240,8 +232,7 @@
 
 //		echo "<xmp>Out: '$txt'</xmp>";
 
-		$GLOBALS['lcml']['level']--;
-        return $ch->set($ch_type,$ch_key,$txt,1209600);
+        return rest_return($ch->set($ch_type,$ch_key,$txt,1209600), $saved_params);
     }
 
     function find_next_open_tag($txt,$pos)
