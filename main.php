@@ -17,8 +17,6 @@
 	include_once('funcs/users.php');
     require_once('handlers.php');
 
-	$GLOBALS['cms_aliases'] = array();
-
 	handlers_load($GLOBALS['cms']['base_dir'].'/handlers');
 	handlers_load("{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}/handlers");
 	handlers_load($GLOBALS['cms']['local_dir'].'/handlers');
@@ -54,20 +52,6 @@
 
 	$GLOBALS['cms']['page_path'] = preg_replace("!/~[\w\-]+/$!","/",$parse['path']);
 	$GLOBALS['cms']['page_number'] = 1;
-
-    foreach($GLOBALS['cms_aliases'] as $uri_pattern=>$func)
-    {
-//		echo "<pre>Test alias pattern '$uri_pattern' to '$uri' for $func</pre>\n";
-		if(preg_match($uri_pattern, $uri, $m))
-		{
-//			echo "ok!";
-            $res = $func($uri, $m);
-            if($res === true)
-                return;
-            if($res !== false)
-                $uri = $res;
-		}
-	}
 
 //	exit();
 
