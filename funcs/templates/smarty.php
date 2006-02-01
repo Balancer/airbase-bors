@@ -119,8 +119,11 @@
 
 //		echo $tpl;
 
-        if(!$hts->get_data($tpl, 'source'))
-            $tpl = $GLOBALS['cms']['default_template_file'];
+        if(!$hts->get_data($tpl, 'source')
+				// || ($action && $action!='virtual')
+				|| @$_GET['tpl']=='safe'
+			)
+            $tpl = $GLOBALS['cms']['default_template'];
 
 		$tpl = preg_match("!^/!", $tpl) ? $tpl : "hts:$tpl";
 		
