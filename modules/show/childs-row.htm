@@ -1,5 +1,5 @@
 <div class="tabs">
 {section name=i loop=$links}
-  <a href="{$uri}" class="{if $uri == $links[i].uri}selected{else}plain{/if}">{$links[i].title}</a>
+  <a href="{$links[i].uri}" class="{if $uri == $links[i].uri}selected{else}plain{/if}">{$links[i].title}</a>
 {/section}
 </div>

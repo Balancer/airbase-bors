@@ -7,7 +7,7 @@
 		$links = array();
 
 		foreach($hts->dbh->get_array("
-				SELECT c.id as uri, t.value as title
+				SELECT c.value as uri, t.value as title
 				FROM `hts_data_child` c
 					LEFT JOIN `hts_data_title` t ON c.value = t.id
 				WHERE c.id LIKE '".addslashes($parent_uri)."'", false) as $link)
