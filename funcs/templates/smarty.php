@@ -115,7 +115,7 @@
 		}
 
         if(!$hts->get_data($tpl, 'source'))// || ($action && $action!='virtual'))
-            $tpl = $GLOBALS['cms']['default_template'];
+            $tpl = $GLOBALS['cms']['default_template_file'];
 
 //		echo $tpl;
 
