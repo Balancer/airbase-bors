@@ -200,11 +200,11 @@ form {
     margin: 0;
 }
 
-xtextarea {
+textarea {
     border: 1px solid #8cacbb;  
     color: Black;
     background-color: white;
-    width: 88%;
+/*    width: 88%;*/
     padding: 0.1em;
 }
 
