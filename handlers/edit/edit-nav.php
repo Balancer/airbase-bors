@@ -60,6 +60,7 @@
 			'body'  =>  template_assign_data("xfile:".dirname(__FILE__)."/edit-nav.htm", $data),
 			'title' => ec("Редактирование навигации страницы ").$hts->get_data($uri, 'title'),
 			);
+		include_once("funcs/templates/show.php");
 		template_assign_and_show($uri, $data);
 		return true;
 	}
