@@ -20,7 +20,7 @@
 			if(!$user)
 				$user = @$_COOKIE['login'];
 			$_COOKIE['login'] = $user;
-			SetCookie("login", $user, time()+86400*7,"/", $_SERVER['HTTP_HOST']);
+//			SetCookie("login", $user, time()+86400*7,"/", $_SERVER['HTTP_HOST']);
 		}
 
 		$data['Balancer'] = array(
@@ -158,6 +158,7 @@
 			
 			if($show_success)
 				echo "<b>Вы успешно вошли в систему!</b>";
+
 			return "";
 		}
 
