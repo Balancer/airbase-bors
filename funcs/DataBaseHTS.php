@@ -293,6 +293,27 @@
 			$this->append_data($parent, 'child' , $child);
 		}
 
+		function parent_add($uri, $parent)
+		{
+			$uri  = $this->normalize_uri($uri);
+			$parent = $this->normalize_uri($parent);
+
+			if(!$parent || !$uri)
+			{
+				debug(__FILE__.':'.__LINE__." Can't add parent link $uri-$parent",1);
+				return;
+			}
+
+			if(!$this->parent_check($parent, $uri))
+			{
+				debug(__FILE__.':'.__LINE__." Try to cycle parents-link: $parent to $uri",1);
+				return;
+			}
+
+//			echo "Add $child as child for $parent";
+			$this->append_data($uri, 'parent' , $parent);
+		}
+
 		function parent_check($page, $parent_check)
 		{
 			if($page == $parent_check)
@@ -341,6 +362,30 @@
 				$this->dbh->query("DELETE FROM `hts_data_child`  WHERE `id` = '".addslashes($parent)."' OR `value` = '".addslashes($parent)."'");
 				$this->dbh->query("DELETE FROM `hts_data_parent` WHERE `id` = '".addslashes($parent)."' OR `value` = '".addslashes($parent)."'");
 			}
+		}
+
+		function child_remove($uri,$child)
+		{
+			if(!$uri || !$child)
+			{
+				debug(__FILE__.':'.__LINE__." Can't remove child link: $uri-$child",1);
+				return;
+			}
+			$uri = $this->normalize_uri($uri);
+			$child  = $this->normalize_uri($child);
+			$this->dbh->query("DELETE FROM `hts_data_child`  WHERE `id`	= '".addslashes($uri)."' AND `value` = '".addslashes($child)."'");
+		}
+
+		function parent_remove($uri,$parent)
+		{
+			if(!$parent || !$uri)
+			{
+				debug(__FILE__.':'.__LINE__." Can't remove parent link: $uri-$parent",1);
+				return;
+			}
+			$uri = $this->normalize_uri($uri);
+			$parent  = $this->normalize_uri($parent);
+			$this->dbh->query("DELETE FROM `hts_data_parent`  WHERE `id` = '".addslashes($uri)."' AND `value` = '".addslashes($parent)."'");
 		}
 
 		function page_uri_by_value($key, $value)

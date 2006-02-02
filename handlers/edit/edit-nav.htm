@@ -1,0 +1,22 @@
+<table class="btab" cellSpacing="0" style="width: 95%;">
+<caption>Родительские страницы</caption>
+{section name=i loop=$parents}
+<tr>
+	<td><a href="{$parents[i].uri}">{$parents[i].title}</a></td>
+	<td><a href="?nav_parent_delete&link={$parents[i].uri}" title="Удалить линк">{$icons.tools.delete}</a></td>
+</tr>
+{/section}
+<form method="post" action="?nav_parent_add"><tr><td><input name="link"></td><td><input type="image" src="http://www.aviaport.ru/images/tools/b_insrow.png" title="Добавить" alt="add"></td></tr></form>
+</table>
+
+<p/>
+
+<table class="btab" cellSpacing="0" style="width: 95%;">
+<caption>Дочерние страницы</caption>
+{section name=i loop=$children}
+<tr><td><a href="{$children[i].uri}">{$children[i].title}</a></td>
+	<td><a href="?nav_child_delete&link={$children[i].uri}" title="Удалить линк">{$icons.tools.delete}</a></td>
+</tr>
+{/section}
+<form method="post" action="?nav_child_add"><tr><td><input name="link"></td><td><input type="image" src="http://www.aviaport.ru/images/tools/b_insrow.png" title="Добавить" alt="add"></td></tr></form>
+</table>
