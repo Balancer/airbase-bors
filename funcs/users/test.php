@@ -151,8 +151,11 @@
 //			echo "pw=$password, pw=$pw, md=".md5($password).", lp=$lp;";
 			
 			if($password != $pw)
+			{
+				$this->do_logout();
 				return "<b>Wrong password for user '$user'</b>'";
-
+			}
+			
 			SetCookie("login", 		$user, time()+2592000,"/", $_SERVER['HTTP_HOST']);
 			SetCookie("password",	$pw, time()+2592000,"/", $_SERVER['HTTP_HOST']);
 			
@@ -165,10 +168,8 @@
 		function do_logout()
 		{
 			SetCookie("login","",0,"/");
-			SetCookie("member_id","",0,"/");
 			SetCookie("password","",0,"/");
 			$_COOKIE['login'] = "";
-			$_COOKIE['member_id'] = "";
 			$_COOKIE['password'] = "";
 		}
 		
