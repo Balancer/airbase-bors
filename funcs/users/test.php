@@ -24,7 +24,7 @@
 		}
 
 		$data['Balancer'] = array(
-			'password' => 'ba`1lancer',
+			'password' => 'test',
 			'nick' => 'Balancer',
 			'level' => 999,
 			'id' => 'Balancer',
@@ -144,26 +144,21 @@
         	$this->id = user_data('id', $user);
 			
 			if(!$this->id)
-			{
-				echo "<b>Unknown user '$user'</b>'";
-				return false;
-			}
+				return "<b>Unknown user '$user'</b>'";
 
 			$pw = user_data('password', $user);
 
 //			echo "pw=$password, pw=$pw, md=".md5($password).", lp=$lp;";
 			
 			if($password != $pw)
-			{
-				echo "<b>Wring password for user '$user'</b>'";
-				return false;
-			}
+				return "<b>Wrong password for user '$user'</b>'";
 
 			SetCookie("login", 		$user, time()+2592000,"/", $_SERVER['HTTP_HOST']);
 			SetCookie("password",	$pw, time()+2592000,"/", $_SERVER['HTTP_HOST']);
 			
 			if($show_success)
 				echo "<b>Вы успешно вошли в систему!</b>";
+			return "";
 		}
 
 		function do_logout()
