@@ -1,7 +1,7 @@
 <?
     $page = @$GLOBALS['uri'];
 
-//    echo "Page = $edit_uri, action=$action";
+//    exit( "Page = $edit_uri, action=$action");
 
     require_once("funcs/DataBaseHTS.php");
     require_once("funcs/users.php");
@@ -10,7 +10,7 @@
     $hts = new DataBaseHTS();
     $page = $hts->normalize_uri($page);
 
-    foreach(split(' ','copyright create_time cr_type description_source flags h1 h2 h3 nav_name split_type template title type') as $p)
+    foreach(split(' ','copyright create_time cr_type description_source flags nav_name split_type template title type') as $p)
         $$p = htmlspecialchars($hts->get_data($page,$p));
 
 	if(!$create_time)
