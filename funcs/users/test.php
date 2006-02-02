@@ -168,8 +168,12 @@
 
 		function do_logout()
 		{
-			SetCookie("AviasID","",0,"/");
-			$_COOKIE['AviasID'] = "";
+			SetCookie("login","",0,"/");
+			SetCookie("member_id","",0,"/");
+			SetCookie("password","",0,"/");
+			$_COOKIE['login'] = "";
+			$_COOKIE['member_id'] = "";
+			$_COOKIE['password'] = "";
 		}
 		
 		function get_page()
