@@ -19,10 +19,14 @@
 	
 	function template_assign($uri, $template, $data=NULL)
 	{
+		$hts = new DataBaseHTS();
+	
 		if(is_null($data))
 		{
 			$data = $template;
-			$template = $GLOBALS['cms']['default_template'];
+			$template = $hts->get_data($uri, 'template');
+			if(!$template)
+				$template = $GLOBALS['cms']['default_template'];
 		}
 		
 		require_once('Smarty/Smarty.class.php');
@@ -47,15 +51,15 @@
 //		$smarty->secure_dir += array("/home/airbase/forums/cms/funcs/templates");
 //		print_r($smarty->secure_dir);
 
-		$modify_time = $data['modify_time'];
-		$source = $data['source'];
+		$modify_time = empty($data['modify_time']) ? time() : $data['modify_time'];
+		$source = @$data['source'];
 		$action = @$data['action'];
 //		if(!$action)
 //			$action = $GLOBALS['cms']['action'];
 
 		$cct = @$data['cache_create_time'];
 
-		if($action || $modify_time > $cct)
+		if($uri && ($action || $modify_time > $cct))
 			$smarty->clear_cache("hts:{$template}", $uri);
 		
 		$data['access'] = access_allowed($uri) ? 1 : 0;
@@ -70,7 +74,18 @@
 		$last_modify = gmdate('D, d M Y H:i:s', $modify_time).' GMT';
    		header('Last-Modified: '.$last_modify);
 
-		if(!$smarty->is_cached("hts:{$template}", $uri))
+		if(empty($data['body']) && !empty($data['source']))
+		{
+			$lcml_params = NULL;
+			if(!empty($data['lcml_params']))
+				$lcml_params = $data['lcml_params'];
+			$data['body'] = lcml($data['source'], $lcml_params);
+		}
+
+		if(empty($data['ref']) && !empty($_SERVER['HTTP_REFERER']))
+			$data['ref'] = $_SERVER['HTTP_REFERER'];
+		
+		if(!$uri || !$smarty->is_cached("hts:{$template}", $uri))
 		{
 			foreach($data as $key => $val)
 			{
@@ -123,7 +138,7 @@
 		}
 
 		$smarty->assign("uri", $uri);
-		$smarty->assign("main_uri", $GLOBALS['main_uri']);
+		$smarty->assign("main_uri", @$GLOBALS['main_uri']);
 //		$smarty->assign("action", $GLOBALS['cms']['action']);
 
 		debug("fetch(\"hts:{$template}\", $uri)");
@@ -140,4 +155,175 @@
 //</html>
 		return $out;
 	}
+
+	function smarty_init()
+	{
+		require_once('Smarty/Smarty.class.php');
+
+		$smarty = new Smarty;
+
+		require('mysql-smarty.php');
+
+		$smarty->compile_dir = $GLOBALS['cms']['cache_dir'].'/smarty-templates_c/';
+		$smarty->plugins_dir = $GLOBALS['cms']['base_dir'].'/funcs/templates/plugins/';
+		$smarty->cache_dir   = $GLOBALS['cms']['cache_dir'].'/smarty-cache/';
+
+		if(!file_exists($smarty->compile_dir))
+			mkdir($smarty->compile_dir, 0775, true);
+		if(!file_exists($smarty->cache_dir))
+			mkdir($smarty->cache_dir, 0775, true);
+
+		$smarty->caching = empty($data['caching']) ? !$GLOBALS['cms']['cache_disabled'] : $data['caching'];
+		$smarty->compile_check = true; 
+		$smarty->php_handling = SMARTY_PHP_QUOTE; //SMARTY_PHP_PASSTHRU;
+		$smarty->security = false;
+		$smarty->cache_modified_check = true;
+		$smarty->cache_lifetime = 86400*7;
+//		$smarty->secure_dir += array("/home/airbase/forums/cms/funcs/templates");
+//		print_r($smarty->secure_dir);
+
+		return $smarty;
+	}
+
+	function get_parsed_page($uri, $data = array())
+	{
+
+		$hts = new DataBaseHTS();
+
+		if($template = $hts->get_data($uri, 'template'))
+		{
+			$tpl1 = "/$template/";
+			$tpl2 = "/$template/";
+		}
+		else
+		{
+			$tpl1 = "/default/";
+			$tpl2 = "";
+		}
+		
+		
+		foreach(array(
+			"{$uri}template$tpl2/",
+			"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
+			"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
+		) as $tpl)
+		{
+//			echo "Check '$tpl'<br />";
+			if($hts->get_data($tpl, 'source'))
+				break;
+		}
+		
+        if(!$hts->get_data($tpl, 'source'))// || ($action && $action!='virtual'))
+            $tpl = $GLOBALS['cms']['default_template'];
+
+//		echo $tpl;
+
+        if(!$hts->get_data($tpl, 'source'))
+            $tpl = $GLOBALS['cms']['default_template_file'];
+
+		$tpl = preg_match("!^/!", $tpl) ? $tpl : "hts:$tpl";
+		
+		$smarty = smarty_init();
+
+		$modify_time = $hts->get_data($uri, 'modify_time');
+		if(!$modify_time)
+			$modify_time = time();
+
+		$source = $hts->get_data($uri, 'source');
+
+//		if($uri && ($action || $modify_time > $cct))
+//			$smarty->clear_cache("hts:{$template}", $uri);
+		
+		$access = access_allowed($uri) ? 1 : 0;
+		$us = new User();
+		$level = $us->data('level');
+		$user_id = $us->data('id');
+
+		include_once("funcs/actions/subscribe.php");
+		$subscribed = cms_funcs_action_is_subscribed($uri);
+
+		$last_modify = gmdate('D, d M Y H:i:s', $modify_time).' GMT';
+   		header('Last-Modified: '.$last_modify);
+
+		if(empty($data['ref']) && !empty($_SERVER['HTTP_REFERER']))
+			$data['ref'] = $_SERVER['HTTP_REFERER'];
+		
+		if(!$smarty->is_cached("hts:{$template}", $uri))
+		{
+			foreach(split(" +","title body") as $key)
+				$smarty->assign($key, $hts->get_data($uri, $key));
+
+			foreach(split(" +","access level user_id") as $key)
+				$smarty->assign($key, $$key);
+
+			foreach($data as $key => $value)
+				$smarty->assign($key, $value);
+	
+			$smarty->assign("views_average", sprintf("%.1f",86400*@$views/(@$views_last-@$views_first+1)));
+			$smarty->assign("page_template", $template);
+			$smarty->assign("time", time());
+
+			$smarty->clear_cache("hts:{$template}", $uri);
+			
+			header("X-Recompiled: Yes");
+		}
+		else
+		{
+			if(strstr($source, '[module')===false)
+			{
+				$hdr = getallheaders();
+				if(isset($hdr['If-Modified-Since']))
+				{ 
+					// Разделяем If-Modified-Since (Netscape < v6 отдаёт их неправильно) 
+					$modifiedSince = explode(';', $hdr['If-Modified-Since']); 
+					// Преобразуем запрос клиента If-Modified-Since в таймштамп
+					$modifiedSince = strtotime($modifiedSince[0]); 
+				} 
+				else 
+				{ 
+					// Устанавливаем время модификации в ноль
+					$modifiedSince = 0; 
+				}
+
+				if($modifiedSince >= $modify_time)
+				{
+					header("HTTP/1.1 304 Not Modified");
+					echo "Not modified since $last_modify";
+					return false;
+				}
+			}
+		}
+
+		if(strstr($source, '[module')!==false)
+		{
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); 
+			header('Cache-Control: no-store, no-cache, must-revalidate'); 
+			header('Cache-Control: post-check=0, pre-check=0', false); 
+			header('Pragma: no-cache');
+		}
+
+		$smarty->assign("uri", $uri);
+		$smarty->assign("main_uri", @$GLOBALS['main_uri']);
+		
+		if(is_array(@$GLOBALS['cms']['smarty']))
+			foreach($GLOBALS['cms']['smarty'] as $key => $val)
+				$smarty->assign($key, $val);
+			
+//		$smarty->assign("action", $GLOBALS['cms']['action']);
+
+//		echo("fetch(\"$tpl\", $uri)");
+		$out = $smarty->fetch("$tpl", $uri);
+
+		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
+
+//<div align="right" style="margin: 8px;">
+//<small>debug_page_stat();</small>
+//	if(user_data('member_id') == 1)
+//		xdebug_dump_function_profile(XDEBUG_PROFILER_CPU); 
+//</div>
+//</body>
+//</html>
+		return $out;
+	}
+
 ?>
