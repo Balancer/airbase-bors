@@ -23,7 +23,7 @@
 			$name = $params['param'];
 		else
 		{
-			$name = $params['name'];
+			$name = $params['name'].".php";
 			foreach($params as $key=>$val)
 				$GLOBALS['module_data'][$key] = $val;
 		}
