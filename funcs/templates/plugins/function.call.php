@@ -17,7 +17,7 @@
         return debug_page_stat();
     }
 
-    function sfc_module($name)
+    function sfc_module($params)
     {
 		if(!empty($params['param']))
 			$name = $params['param'];
