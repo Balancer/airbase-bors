@@ -9,7 +9,7 @@
         if(!function_exists($fn))
             return "call $fn error - function not exists";
 
-        return $fn(empty($params['param'])?NULL:$params['param']);
+        return $fn($params);
     }
 
     function sfc_debug_page_stat()
@@ -19,6 +19,15 @@
 
     function sfc_module($name)
     {
+		if(!empty($params['param']))
+			$name = $params['param'];
+		else
+		{
+			$name = $params['name'];
+			foreach($params as $key=>$val)
+				$GLOBALS['module_data'][$key] = $val;
+		}
+		
 		ob_start();
         include_once("modules/$name");
 //		echo "$name";
@@ -27,9 +36,13 @@
 		return $res;
     }
 
-    function sfc_forum($id)
+    function sfc_forum($params)
     {
-        include("show/forum-comments.phtml");
+		if(!empty($params['param']))
+		{
+			$id = $params['param'];
+	        include("show/forum-comments.phtml");
+		}
     }
 
 ?>
