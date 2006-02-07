@@ -6,7 +6,7 @@
 		$data = array();
 		$links = array();
 
-		if(!empty($GLOBALS['module_data']['add']) && is_array($GLOBALS['module_data']['add']))
+		if(!empty($GLOBALS['module_data']['add']))
 			foreach(split(' ',$GLOBALS['module_data']['add']) as $l)
 				$links[] = array('uri'=>$hts->normalize_uri($l), 'title'=>$hts->get_data($l, 'title'));
 
