@@ -22,25 +22,29 @@
 	
 	function modules_design_navleft($uri, $data, $indent)
 	{
+//		echo "Get for $uri:<br/>";
+	
 		$GLOBALS['loop']++;
 		
 		if($GLOBALS['loop'] > 50)
 			return $data;
 		
-		if(!empty($data[$uri]))
-			return $data;
+//		if(!empty($data[$uri]))
+//			return $data;
 		
 		$hts = new DataBaseHTS();
 
 		$children = $hts->get_data_array($uri, 'child');
 		
 		$out = array();
-		$out['uri'] = array(
+		$out[$uri] = array(
 				'indent' => $indent,
 				'uri' => $uri,
 				'title' => $hts->get_data($uri, 'nav_name'),
 				'children' => sizeof($children)
 			);
+
+//		echo "Get for $uri:".print_r($out, true)."<br/>";
 
 		if(!$data)
 		{
