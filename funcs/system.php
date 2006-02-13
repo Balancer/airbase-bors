@@ -11,9 +11,10 @@
 		return $array;
 	}
 
-	function get_new_id()
+	function get_new_global_id()
 	{
 		$db = new DataBase();
-		return $db->get("BEGIN TRANSACTION")
+		$db->query("UPDATE hts_ext_system_data SET `value`=`value`+1 WHERE `key`='global_id';", false);
+		return $db->get("SELECT `value` FROM hts_ext_system_data WHERE `key`='global_id';", false);
 	}
 ?>
