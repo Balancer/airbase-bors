@@ -10,4 +10,10 @@
 		}
 		return $array;
 	}
+
+	function get_new_id()
+	{
+		$db = new DataBase();
+		return $db->get("BEGIN TRANSACTION")
+	}
 ?>
