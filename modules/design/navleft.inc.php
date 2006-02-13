@@ -37,7 +37,7 @@
 		$children = $hts->get_data_array($uri, 'child');
 		
 		$out = array();
-		$out[$uri] = array(
+		$out["$uri"] = array(
 				'indent' => $indent,
 				'uri' => $uri,
 				'title' => $hts->get_data($uri, 'nav_name'),
@@ -69,7 +69,7 @@
 //		echo "<p><b>Parent for $uri = $parent</b></p>";
 //		print_r($data); echo "<br/>";
 		
-		if(!$parent || !empty($data[$parent]))
+		if(!$parent || !empty($data["$parent"]))
 			return $data;
 
 		$indent++;		
