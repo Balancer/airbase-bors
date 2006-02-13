@@ -50,18 +50,12 @@
 		{
 			if($children)
 			{
-				foreach($hts->dbh->get_array("
-					SELECT ch.value as uri,
-							nn.value as title
-						FROM hts_data_child ch
-							LEFT JOIN hts_data_nav_name nn ON nn.id = ch.value
-						WHERE ch.id = '".addslashes($uri)."'
-							AND nn.id IS NOT NULL
-						GROUP BY ch.value
-						ORDER BY nn.value") as $u)
+				foreach($children as $child)
 				{
-					$data[$u['uri']] = $u + array(
-							'children' => sizeof($hts->get_data_array($u['uri'],'child')),
+					$data[$child] = array(
+							'uri' => $child,
+							'title' => $hts->get_data($child, 'title'),
+							'children' => sizeof($hts->get_data_array($child,'child')),
 							'indent' => $indent-1
 						);
 				}
@@ -89,26 +83,17 @@
 					'children' => sizeof($hts->get_data_array($parent, 'child'))
 				);
 
-		foreach($hts->dbh->get_array("
-			SELECT ch.value as uri,
-					nn.value as title,
-					".intval($indent-1)." as indent
-				FROM hts_data_child ch
-					LEFT JOIN hts_data_nav_name nn ON nn.id = ch.value
-				WHERE ch.id = '".addslashes($parent)."'
-					AND nn.id IS NOT NULL
-				GROUP BY ch.value
-				ORDER BY nn.value
-			") as $u)
+		foreach($hts->get_data_array($parent, 'child') as $child)
 		{
-//			echo "<p>Before:</p><xmp>"; print_r($out); echo "</xmp>;u=".(print_r($u,true))."<br/>";
-			{
-				if($u['uri'] == $uri)
-					$out = array_merge($out, $data);
-				else
-					$out[$u['uri']] = $u + array('children'=>sizeof($hts->get_data_array($u['uri'],'child')));
-			}
-//			echo "After:<br/><xmp>"; print_r($out); echo "</xmp><br/>";
+			if($child == $uri)
+				$out = array_merge($out, $data);
+			else
+				$out[$child] = array(
+						'uri' => $child,
+						'title' => $hts->get_data($parent, 'nav_name'),
+						'indent' => $indent-1,
+						'children' => sizeof($hts->get_data_array($child, 'child')),
+					);
 		}
 
 		return modules_design_navleft($parent, $out, $indent);
