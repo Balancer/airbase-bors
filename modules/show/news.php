@@ -1,14 +1,4 @@
 <?
-    ini_set('include_path', ini_get('include_path') . ":/www/docs/www1001kran/www/cms");
-
-    error_reporting(E_ALL);
-    ini_set('display_errors', 'On');
-    ini_set('log_errors', 'On');
-
-    require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/config.site.php");
-    require_once("funcs/DataBaseHTS.php");
-    require_once("funcs/Cache.php");
-
     echo module_show_news();
     
     function module_show_news()
