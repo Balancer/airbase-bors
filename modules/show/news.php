@@ -16,7 +16,7 @@
 //		echo $GLOBALS['page'];
 
 //		$GLOBALS['log_level']=10;
-		$pages = $db->dbh->get_array("SELECT b.*, t.value as time FROM `hts_data_bodies` b LEFT JOIN `hts_data_create_times` t ON (b.id LIKE t.id) WHERE b.id LIKE '".addslashes($GLOBALS['main_uri'])."%' AND b.id NOT LIKE '".addslashes($GLOBALS['main_uri'])."' ORDER BY t.value DESC LIMIT 0,10");
+		$pages = $db->dbh->get_array("SELECT b.*, t.value as time FROM `hts_data_body` b LEFT JOIN `hts_data_create_time` t ON (b.id LIKE t.id) WHERE b.id LIKE '".addslashes($GLOBALS['page'])."%' AND b.id NOT LIKE '".addslashes($GLOBALS['page'])."' ORDER BY t.value DESC LIMIT 0,10");
 		foreach($pages as $p)
 		{
 //			print_r($p);
@@ -35,7 +35,7 @@
 		    if(!$height)	
 		    	$height = 600;
 
-			$more = "<div align=\"right\"><a href=\"$page\" class=\"popup\" target=\"_blank\" onClick=\"window.open('$page','Popup".md5($page)."','toolbar=no,directories=no,width=$width,height=$height,resizable=yes'); return false;\">Подробнее &#187;&#187;&#187;&nbsp;&nbsp;&nbsp;</a></div>"
+			$more = ec("<div align=\"right\"><a href=\"$page\" class=\"popup\" target=\"_blank\" onClick=\"window.open('$page','Popup".md5($page)."','toolbar=no,directories=no,width=$width,height=$height,resizable=yes'); return false;\">РџРѕРґСЂРѕР±РЅРµРµ &#187;&#187;&#187;&nbsp;&nbsp;&nbsp;</a></div>");
 
 ?>
 <div style="background-color: #F0EBCB; border: 1px solid #906030; padding: 2px; font-size: 9pt; font-weight: bold; text-align: center;"><?echo $title?></div>

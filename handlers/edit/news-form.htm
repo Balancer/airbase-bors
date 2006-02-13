@@ -1,0 +1,16 @@
+<form method="post" action="?news-add-do">
+<table class="btab" cellSpacing="0" style="width: auto;">
+<caption>Добавление новости</caption>
+<tr><th>Заголовок:</th>
+	<td><input name="title" size="64"></td>
+</tr>
+<tr><th>Краткое описание:</th>
+	<td><textarea name="description" cols="50" rows="3"></textarea></td>
+</tr>
+<tr><th>Текст:</th>
+	<td><textarea name="text" cols="50" rows="12"></textarea></td>
+</tr>
+<tr><th>&nbsp;</th><td><input type="submit" value="Отправить"></td></tr>
+</table>
+<input type="hidden" name="base_uri" value="{$main_uri}">
+</form>
