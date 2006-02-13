@@ -29,10 +29,10 @@
 		$ht = new DataBaseHTS;
 		$us = new User;
 
-		if(!$us->data('id') || !$us->data('name'))
+		if(!$us->data('id'))
 		{
-			$GLOBALS['page_data']['title'] = "Ошибка";
-			$GLOBALS['page_data']['source'] = 'Вы не зашли в систему.';
+			$GLOBALS['page_data']['title'] = ec("Ошибка");
+			$GLOBALS['page_data']['source'] = ec('Вы не зашли в систему.');
 
 			show_page($uri);
 			return true;
