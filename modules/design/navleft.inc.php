@@ -22,7 +22,7 @@
 	
 	function modules_design_navleft($uri, $data, $indent)
 	{
-//		echo "Get for $uri:<br/>";
+//		echo "Get for ".print_r($uri, true)."<br/>";
 	
 		$GLOBALS['loop']++;
 		
@@ -54,7 +54,7 @@
 				{
 					$data[$child] = array(
 							'uri' => $child,
-							'title' => $hts->get_data($child, 'title'),
+							'title' => $hts->get_data($child, 'nav_name'),
 							'children' => sizeof($hts->get_data_array($child,'child')),
 							'indent' => $indent-1
 						);
@@ -64,13 +64,15 @@
 
 		$data = array_merge($out, $data);
 
-		$parent = $hts->get_data($uri, 'parent');
+		$parent = $hts->get_data_array($uri, 'parent');
 
 //		echo "<p><b>Parent for $uri = $parent</b></p>";
 //		print_r($data); echo "<br/>";
 		
 		if(!$parent || !empty($data["$parent"]))
 			return $data;
+
+		$parent = $parent[0];
 
 		$indent++;		
 
