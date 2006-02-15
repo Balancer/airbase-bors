@@ -92,7 +92,7 @@
 			else
 				$out[$child] = array(
 						'uri' => $child,
-						'title' => $hts->get_data($parent, 'nav_name'),
+						'title' => $hts->get_data($child, 'nav_name'),
 						'indent' => $indent-1,
 						'children' => sizeof($hts->get_data_array($child, 'child')),
 					);
