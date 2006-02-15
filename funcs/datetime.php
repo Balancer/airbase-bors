@@ -39,6 +39,29 @@ function short_time($time)
 		return strftime("%d.%m.%Y",$time);
 }
 
+function is_today($time)
+{
+	if(time() - $time < 86400 && strftime("%d",$time) == strftime("%d",time()))
+		return true;
+		
+//	echo "*{$GLOBALS['main_uri']}*";
+	if(preg_match("!\d{4}/\d{1,2}/\d{1,2}/$!", @$GLOBALS['main_uri']))
+		return true;
+
+	return false;
+}
+
+function news_time($time)
+{
+	if(is_today($time))
+		return strftime("%H:%M:%S",$time);
+	
+	if(time() - $time < 2*86400 && strftime("%d",$time) == strftime("%d",time()-86400))
+		return ec("Вчера, ").strftime("%H:%M:%S",$time);
+		
+	return strftime("%d.%m.%Y %H:%M:%S",$time);
+}
+
 function month_name($m)
 {
 		$mms = array(
