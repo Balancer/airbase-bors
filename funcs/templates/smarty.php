@@ -263,10 +263,9 @@
 		$out = $smarty->fetch($tpl, $page);
 	    error_reporting(E_ALL);
 
-		$out_save = $out;
 		do
 		{
-			$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
+			$out = preg_replace('!<\?php(.+?)\?>!es', "do_php(stripslashes('$1'))", $out_save = $out);
 		} while($out != $out_save);
 		
         echo $out;
