@@ -4,7 +4,7 @@
 		$GLOBALS['page_data']['title'] = ec("Ошибка");
 		$GLOBALS['page_data']['source'] = $text;
 
-		show_page($GLOBALS['main_uri']);
+		show_page(@$GLOBALS['main_uri']);
 		
 		if($redir === true)
 		{
@@ -25,7 +25,7 @@
 		$GLOBALS['page_data']['title'] = $title?$title:ec("Сообщение");
 		$GLOBALS['page_data']['source'] = $text;
 
-		show_page($GLOBALS['main_uri']);
+		show_page(@$GLOBALS['main_uri']);
 		
 		if($redir)
 			if($redir !== true)
