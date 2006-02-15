@@ -30,7 +30,6 @@
 		
 		ob_start();
         include_once("modules/$name");
-//		echo "$name";
     	$res = ob_get_contents();
 	    ob_end_clean();
 		return $res;

@@ -11,12 +11,12 @@
     {
         ob_start();
 //		if(user_data('level') > 10)
-//			echo "...".print_r($GLOBALS['page_data'], true);
+//			echo "do code<xmp>$code</xmp>";
         eval($code);
         $out = ob_get_contents();
         ob_clean();
-//		if(!$out)
-//			return "Error in code<xmp>$code</xmp>";
+		if(preg_match("!{$_SERVER['DOCUMENT_ROOT']}/cms/funcs/templates/smarty.php!", $out))
+        	return "$out Error in code<xmp>$code</xmp>";
 
         return $out;
     }
@@ -35,8 +35,6 @@
 
 
 //        echo "************".$hts->get_data($page, 'modify_time');
-
-
 	
 		if(empty($GLOBALS['page_data']['source']))
 		{
@@ -201,7 +199,7 @@
 
             foreach(split(' ', "access level action body user_id $page_vars") as $key)
             {
-//                echo "<xmp>'$key' -> '{$$key}'</xmp>";
+//                echo "assign <xmp>'$key' -> '{$$key}'</xmp>";
                 $smarty->assign("$key", "{$$key}");
             }
     
@@ -213,7 +211,7 @@
             $smarty->assign("page_template", $template);
             $smarty->assign("page", $page);
             $smarty->assign("uri", $page);
-            $smarty->assign("main_uri", $GLOBALS['main_uri']);
+            $smarty->assign("main_uri", @$GLOBALS['main_uri']);
             $smarty->assign("time", time());
             $smarty->assign("ref", @$_SERVER['HTTP_REFERER']);
 
@@ -257,10 +255,15 @@
 			header('Pragma: no-cache');
 		}
 
+		if(is_array(@$GLOBALS['cms']['smarty']))
+			foreach($GLOBALS['cms']['smarty'] as $key => $val)
+				$smarty->assign($key, $val);
 
+	    error_reporting(E_ALL & ~E_NOTICE);
         $out = $smarty->fetch($tpl, $page);
-		
-        $out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
+	    error_reporting(E_ALL);
+
+		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
 
         echo $out;
 
