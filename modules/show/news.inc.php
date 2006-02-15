@@ -8,18 +8,29 @@
 
 		include_once("funcs/datetime.php");
 
-		$children = $hts->get_data_array($uri, 'child');
-		rsort($children);
-		foreach($children as $child)
+		$children = array();
+		foreach($hts->get_data_array($uri, 'child') as $child)
+			if(empty($children->$child))
+				$children[$child] = $hts->get_data($child, 'create_time');
+		
+		for($i=0; $i<3; $i++)
+			foreach(array_keys($children) as $child)
+				foreach($hts->get_data_array($child, 'child') as $ch2)
+					if(empty($children->$ch2))
+						$children[$ch2] = $hts->get_data($ch2, 'create_time');
+					
+		arsort($children);
+		
+		foreach($children as $child => $create_time)
 		{
-			if(!preg_match("!^$uri\d{4}/\d{1,2}/\d{1,2}/!",$child))
+			if(!preg_match("!^$uri\d{4}/\d{1,2}/\d{1,2}/.+!",$child))
 				continue;
 
 			$records[] = array(
 					'uri' => $child,
 					'title' => $hts->get_data($child, 'title'),
 					'description' => lcml($hts->get_data($child, 'description')),
-					'date' => news_time($hts->get_data($child, 'create_time')),
+					'date' => news_time($create_time),
 					'body' => lcml($hts->get_data($child, 'source')),
 				);
 		}
