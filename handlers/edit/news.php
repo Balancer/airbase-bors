@@ -38,6 +38,14 @@
 			return true;
 		}
 
+		include_once("funcs/modules/messages.php");
+
+		if(empty($_POST['title']))
+			return error_message(ec("Вы не указали заголовок новости", false));
+
+		if(empty($_POST['description']) && empty($_POST['text']))
+			return error_message(ec("Вы должны указать текст новости или её описание", false));
+
 		include_once("funcs/system.php");
 		$year_uri  = $uri.strftime("%Y/");
 		$month_uri = $year_uri.strftime("%m/");
@@ -52,13 +60,15 @@
 //		$GLOBALS['log_level']=2;
 
 
-		$ht->set_data($new_uri, 'title', @$_POST['title']);
+		$ht->set_data($new_uri, 'source', @$_POST['text']);
+		$ht->set_data($new_uri, 'title',  $_POST['title']);
+		$ht->set_data($new_uri, 'description', @$_POST['description']);
+
 		$ht->set_data($new_uri, 'create_time', time());
 		$ht->set_data($new_uri, 'modify_time', time());
 		$ht->set_data($new_uri, 'author', $us->data('id'));
 		$ht->set_data($new_uri, 'author_name', $us->data('name'));
 
-		$ht->set_data($new_uri, 'source', $_POST['text']);
 
 		go($new_uri);
 		return true;
