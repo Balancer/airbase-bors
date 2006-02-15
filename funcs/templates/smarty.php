@@ -260,7 +260,7 @@
 				$smarty->assign($key, $val);
 
 	    error_reporting(E_ALL & ~E_NOTICE);
-        $out = $smarty->fetch($tpl, $page);
+		$out = $smarty->fetch($tpl, $page);
 	    error_reporting(E_ALL);
 
 		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);

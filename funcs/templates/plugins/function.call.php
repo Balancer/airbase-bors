@@ -29,9 +29,9 @@
 		}
 		
 		ob_start();
-        include_once("modules/$name");
-    	$res = ob_get_contents();
-	    ob_end_clean();
+		include("modules/$name");
+		$res = ob_get_contents();
+		ob_end_clean();
 		return $res;
     }
 
