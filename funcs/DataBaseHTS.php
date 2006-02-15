@@ -319,6 +319,9 @@
 			if($page == $parent_check)
 				return false;
 
+			if(empty($GLOBALS['tmp_dbhts_nav_check_count']))
+				$GLOBALS['tmp_dbhts_nav_check_count'] = 0;
+				
 			if($GLOBALS['tmp_dbhts_nav_check_count']++ > 10)
 			{
 				debug(__FILE__.':'.__LINE__." Cycled parents-link: $page to $parent_check",1);
