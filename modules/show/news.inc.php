@@ -1,5 +1,5 @@
 <?
-    function module_show_news($uri)
+    function module_show_news($uri, $limit)
     {
 //		echo "msn=$uri<br/>";
 		$hts = new DataBaseHTS();
@@ -25,9 +25,14 @@
 
 //		print_r($children);
 		
+		$shown = 0;
+
 		foreach($children as $child => $create_time)
 		{
 			if(!preg_match("!^$uri\d{4}/\d{1,2}/\d{1,2}/.+!",$child))
+				continue;
+
+			if(++$shown > $limit)
 				continue;
 
 			$records[] = array(
