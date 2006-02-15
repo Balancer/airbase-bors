@@ -263,8 +263,12 @@
 		$out = $smarty->fetch($tpl, $page);
 	    error_reporting(E_ALL);
 
-		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
-
+		$out_save = $out;
+		do
+		{
+			$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
+		} while($out != $out_save);
+		
         echo $out;
 
         $hts->set_data($page, 'views_last', time());
