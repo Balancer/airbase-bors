@@ -1,6 +1,7 @@
 <?
     function module_show_news($uri)
     {
+//		echo "msn=$uri<br/>";
 		$hts = new DataBaseHTS();
 //		$GLOBALS['log_level']=10;
 
@@ -9,6 +10,7 @@
 		include_once("funcs/datetime.php");
 
 		$children = array();
+//		$GLOBALS['log_level'] = 10;
 		foreach($hts->get_data_array($uri, 'child') as $child)
 			if(empty($children->$child))
 				$children[$child] = $hts->get_data($child, 'create_time');
@@ -18,8 +20,10 @@
 				foreach($hts->get_data_array($child, 'child') as $ch2)
 					if(empty($children->$ch2))
 						$children[$ch2] = $hts->get_data($ch2, 'create_time');
-					
+//		$GLOBALS['log_level']=2;					
 		arsort($children);
+
+//		print_r($children);
 		
 		foreach($children as $child => $create_time)
 		{
