@@ -1,9 +1,11 @@
 <?
     function module_show_news($uri, $limit)
     {
-//		echo "msn=$uri<br/>";
+//		echo "msn=$uri. limit=$limit<br/>";
 		$hts = new DataBaseHTS();
 //		$GLOBALS['log_level']=10;
+
+		$uri = $hts->normalize_uri($uri);
 
 		$records = array();
 
