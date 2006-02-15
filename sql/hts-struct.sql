@@ -45,7 +45,7 @@ CREATE TABLE `hts_data_author` (
 -- Table structure for table `hts_data_author_names`
 --
 
-CREATE TABLE `hts_data_author_names` (
+CREATE TABLE `hts_data_author_name` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
