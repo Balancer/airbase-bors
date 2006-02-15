@@ -1,0 +1,22 @@
+CREATE TABLE `hts_logs` (
+  `record_id` int(11) NOT NULL auto_increment,
+  `type` varchar(255) NOT NULL default '',
+  `uri` varchar(255) NOT NULL default '',
+  `owner` int(11) NOT NULL default '0',
+  `ip` varchar(255) NOT NULL default '',
+  `time` int(11) NOT NULL default '0',
+  `svalue` varchar(255) default NULL,
+  `text` text NOT NULL,
+  `ivalue` int(11) default NULL,
+  `proxy_ip` varchar(255) default NULL,
+  PRIMARY KEY  (`record_id`),
+  KEY `type` (`type`),
+  KEY `uri` (`uri`),
+  KEY `time` (`time`),
+  KEY `ip` (`ip`),
+  KEY `owner` (`owner`),
+  KEY `svalue` (`svalue`),
+  KEY `ivalue` (`ivalue`),
+  KEY `proxy_ip` (`proxy_ip`),
+  FULLTEXT KEY `text` (`text`)
+);
