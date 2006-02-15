@@ -934,7 +934,45 @@ table.calendar td.todaynoevent {
 }
 
 
+dl.box {
+    width: auto;
+    border: 1px solid #8cacbb;
+    margin: 0px 4px 4px 4px;
+    padding: 0px;
+    background-color: #ffffff;
+}
 
+dl.box dt {
+    font-size : 90%;
+    margin: 0px;
+    background-color: #DEE7EC;
+    padding: 4px;
+    vertical-align: top; 
+    color: #436976;
+    text-align: left;
+    font-weight: bold;
+}
+
+dl.box dt a {
+    text-decoration: none;
+    color: #436976;
+}
+
+dl.box dd {
+    clear: both;
+    background-color: #ffffff;
+    padding: 5px 5px 5px 5px;
+    margin: 0 0 5px 0;
+    font-size: 90%;
+}
+
+dl.box dt a {
+    color: #436976;
+}
+
+dl.box dt {
+    border-bottom: 1px solid #8cacbb;
+}
 
 
 
