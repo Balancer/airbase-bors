@@ -44,10 +44,13 @@
 		$day_uri   = $month_uri.strftime("%d/");
 		$new_uri   = $day_uri.get_new_global_id()."/";
 
+	//	$GLOBALS['log_level']=10;
 		$ht->nav_link($uri, $year_uri);
 		$ht->nav_link($year_uri, $month_uri);
 		$ht->nav_link($month_uri, $day_uri);
 		$ht->nav_link($day_uri, $new_uri);
+//		$GLOBALS['log_level']=2;
+
 
 		$ht->set_data($new_uri, 'title', @$_POST['title']);
 		$ht->set_data($new_uri, 'create_time', time());
