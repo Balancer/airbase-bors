@@ -17,23 +17,11 @@
 */
 
 
-/*
-**  DTML instructions to set caching headers. Inside comments area to play nicer with CSS editors.
-**
-** **   
-**   
-**   
-**   
-** */
-/*  */
-
-
- 
 body {
     font: 65% Verdana, Helvetica, Arial, sans-serif;
     background: White;
     color: Black;
-    margin: 0;
+    margin: 1px;
     padding: 0;
 /* These work in IE only, changes the look of the scrollbar + textareas */
     scrollbar-base-color: #DEE7EC;
@@ -753,6 +741,7 @@ div.box div.body {
     background: transparent;
     border-collapse: collapse;
     border: 1px solid #8CACBB;
+    padding-top: 5px;
 }
 
 .boxDetails {
@@ -974,7 +963,4 @@ dl.box dt {
     border-bottom: 1px solid #8cacbb;
 }
 
-
-
 /*  */
-
