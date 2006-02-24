@@ -1,6 +1,8 @@
 <?  
-	function template_assign_data($template, $data, $uri=NULL)
+	function template_assign_data($assign_template, $data=array(), $uri=NULL)
 	{
+//		echo "tpl=$assign_template";
+	
 		require_once('Smarty/Smarty.class.php');
 		$smarty = new Smarty;
 		require('mysql-smarty.php');
@@ -26,15 +28,15 @@
 		$smarty->security = false;
 		$smarty->cache_modified_check = true;
 		$smarty->cache_lifetime = 86400*7;
-		$smarty->secure_dir += array(dirname($template));
+		$smarty->secure_dir += array(dirname($assign_template));
 //		print_r($smarty->secure_dir); exit();
 
 		$modify_time = empty($data['modify_time']) ? time() : $data['modify_time'];
 
 		if(!$caching)
-			$smarty->clear_cache($template, $uri);
+			$smarty->clear_cache($assign_template, $uri);
 		
-		if(!$caching || !$smarty->is_cached($template, $uri))
+		if(!$caching || !$smarty->is_cached($assign_template, $uri))
 		{
 			foreach($data as $key => $val)
 			{
@@ -43,10 +45,10 @@
 				$smarty->assign($key, $val);
 			}
 	
-			$smarty->assign("page_template", $template);
+			$smarty->assign("page_template", $assign_template);
 			$smarty->assign("time", time());
 
-			$smarty->clear_cache($template, $uri);
+			$smarty->clear_cache($assign_template, $uri);
 			
 			header("X-Recompile: Yes");
 		}
@@ -54,8 +56,8 @@
 		$smarty->assign("uri", $uri);
 		$smarty->assign("main_uri", @$GLOBALS['main_uri']);
 
-		debug("fetch(\"hts:{$template}\", $uri)");
-		$out = $smarty->fetch($template, $uri);
+		debug("fetch(\"hts:{$assign_template}\", $uri)");
+		$out = $smarty->fetch($assign_template, $uri);
 
 		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
 
