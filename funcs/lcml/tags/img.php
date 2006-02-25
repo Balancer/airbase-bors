@@ -62,6 +62,7 @@
 					$path = $GLOBALS['cms']['sites_store_path']."/$c1/$c2/{$data['host']}".translite_path($data['path']);
 				}
 
+
 				if(!file_exists($path) || filesize($path)==0)
 				{
 					require_once('HTTP/Request.php');
@@ -73,6 +74,7 @@
 //						$req->setProxy('82.138.33.157', 3128);
 
 //					return "=$path=<br />\n";
+					
 
 					$response = $req->sendRequest(array(
 						'allowRedirects' => true,
@@ -151,7 +153,7 @@
 "[pre]params=".print_r($params, true)."[/pre]\n".
 "img_ico_uri=_{$img_ico_uri}_[br]\n".
 "path=$path[br]\n".
-str_replace(" ","_",((!empty($response) && PEAR::isError($response))?("responce=".$response->getMessage()."\n"):'')).
+((!empty($response) && PEAR::isError($response))?("responce=".$response->getMessage()."\n"):'').
 "[/spoiler]\n");
 
 				if(!empty($GLOBALS['main_uri']))
