@@ -1,0 +1,33 @@
+<table cellSpacing="0" class="btab">
+<form method="post" action="{$main_uri}?edit-data-save" enctype="multipart/form-data">
+<tr><th align=right>Заголовок страницы</th><td><input name="title" size="64" value="{$title}"></td></tr>
+<tr><th align=right>Описание страницы</th><td><textarea cols="32" rows="4" name="description">{$description}</textarea></td></tr>
+<tr><th align=right><a href="/support/hts/cr_type/">Тип перевода строк</a></th><td>
+<select name="cr_type">
+<option value="empty_as_para"{if $cr_type == 'empty_as_para' || !$cr_type} selected="selected"{/if}>Пустая строка - параграф</option>
+<option value="string_as_para"{if $cr_type=='string_as_para'} selected="selected"{/if}>Каждая строка - параграф
+<option value="dblstring_as_para"{if $cr_type=='dblstring_as_para'} selected="selected"{/if}>Пустая строка - перевод строки
+<option value="save_cr"{if $cr_type=='save_cr'} selected="selected"{/if}>Сохранять переводу строк
+<option value="ignore_cr"{if $cr_type=='ignore_cr'} selected="selected"{/if}>Игнорировать переводы строк
+<option value="plain_text"{if $cr_type=='plain_text'} selected="selected"{/if}>Документ - преформатированный текст
+</select></td></tr>
+<tr><th align="right">Шаблон страницы</th><td><input name="template" size="64" value="{$template}"></td></tr>
+<tr><th align="right">Навигационное имя</th><td><input name="nav_name" size="64" value="{$nav_name}"></td></tr>
+<tr><th align="right">Дата создания<br/><small><nobr>(YYYY-MM-DD&nbsp;HH:MM:SS)</nobr></small></nobr></th>
+	<td><input name="create_time" size="20" value="{$create_time|strftime:"%Y-%m-%d %H:%M:%S"}">&nbsp;<input type="checkbox" name="create_time_changed">Сохранить изменения</td>
+</tr>
+<tr><th aligh="right">Иконка страницы</th>
+	<td>{if $page_icon}<img src="{$page_icon}"><br/>Обновить:{else}Отсутствует<br/>Добавить:{/if}
+		<input type="hidden" name="upload_names[]" value="index.%real_ext%">
+		<input type="file" size="10" name="upload_file[]">
+	</td>
+</tr>
+<tr><td>&nbsp;</td><td><input type=submit value="Сохранить"></td></tr>
+<input type="hidden" name="split_type" value="auto">
+<input type="hidden" name="page" value="{$main_uri}">
+<input type="hidden" name="access_level" value="3">
+</form>
+</table>
+<br/><br/>
+<b><span style="color: red;">Ваш уровень доступа: {$level}</span></b>
+<br/><br/>
