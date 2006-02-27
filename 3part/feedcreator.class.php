@@ -149,7 +149,7 @@ echo $rss->saveFeed("RSS1.0", "news/feed.xml");
 **************************************************************************/
 
 // your local timezone, set to "" to disable or for GMT
-define("TIME_ZONE","+01:00");
+define("TIME_ZONE","+03:00");
 
 
 
@@ -487,7 +487,7 @@ class FeedCreator extends HtmlDescribable {
 	 * This feed's character encoding.
 	 * @since 1.6.1
 	 **/
-	var $encoding = "ISO-8859-1";
+	var $encoding = "UTF-8";
 	
 	
 	/**
@@ -581,7 +581,7 @@ class FeedCreator extends HtmlDescribable {
 	
 	function _createStylesheetReferences() {
 		$xml = "";
-		if ($this->cssStyleSheet) $xml .= "<?xml-stylesheet href=\"".$this->cssStyleSheet."\" type=\"text/css\"?>\n";
+		if (!empty($this->cssStyleSheet)) $xml .= "<?xml-stylesheet href=\"".$this->cssStyleSheet."\" type=\"text/css\"?>\n";
 		if ($this->xslStyleSheet) $xml .= "<?xml-stylesheet href=\"".$this->xslStyleSheet."\" type=\"text/xsl\"?>\n";
 		return $xml;
 	}
@@ -799,7 +799,7 @@ class RSSCreator10 extends FeedCreator {
 	function createFeed() {     
 		$feed = "<?xml version=\"1.0\" encoding=\"".$this->encoding."\"?>\n";
 		$feed.= $this->_createGeneratorComment();
-		if ($this->cssStyleSheet=="") {
+		if (empty($this->cssStyleSheet)) {
 			$cssStyleSheet = "http://www.w3.org/2000/08/w3c-synd/style.css";
 		}
 		$feed.= $this->_createStylesheetReferences();
