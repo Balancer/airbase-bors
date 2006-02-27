@@ -10,8 +10,6 @@
 		if($err = $us->do_login(@$_POST['login'], @$_POST['password'], false))
 			return error_message($err, false);
 		
-//		exit("err=$err");
-
 		include_once("funcs/logs.php");
 		log_action("user-login", $uri);
 

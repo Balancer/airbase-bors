@@ -1,7 +1,7 @@
 <?
-	require_once("funcs/users.php");
+	$us = new User;
 
-	$access_level = user_data('level');
+	$access_level = $us->data('level');
 	$tpl_vars[] = 'access_level';
 
 	$is_moderator = $access_level > 3;

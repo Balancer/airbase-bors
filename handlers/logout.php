@@ -3,14 +3,16 @@
 
     function handler_action_logout($uri, $action)
 	{
+		include_once("funcs/logs.php");
+		log_action("user-logout", $uri);
+
 		$us = new User;
 		$us->do_logout();
 
-//		$GLOBALS['page_data']['title'] = ec("Выход");
-//		$GLOBALS['page_data']['source'] = ec('Вы успешно вышли из системы');
-//		show_page($uri);
+		include_once("funcs/modules/messages.php");
 
-		go("$uri?");
+//		return message(ec("Вы успешно вышли из системы"), "$uri?");
+		go("/");
 		return true;
 	}
 ?>
