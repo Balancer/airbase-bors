@@ -69,7 +69,8 @@
         
         $smarty = new Smarty;
         require("mysql-smarty.php");
-
+        require('smarty-register.php');
+		
         $smarty->compile_dir = $GLOBALS['cms']['cache_dir'].'/smarty-templates_c/';
         $smarty->plugins_dir = $GLOBALS['cms']['base_dir'].'/funcs/templates/plugins/';
         $smarty->cache_dir   = $GLOBALS['cms']['cache_dir'].'/smarty-cache/';

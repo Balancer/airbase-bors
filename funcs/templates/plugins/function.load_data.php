@@ -4,6 +4,8 @@
 
     function smarty_function_load_data($params, &$smarty)
     {
+//		print_r($params);
+	
         $hts = new DataBaseHTS;
 		
 		$norm = $hts->normalize_uri($params['page']);
