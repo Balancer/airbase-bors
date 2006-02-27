@@ -17,10 +17,11 @@
 	include_once('funcs/users.php');
     require_once('handlers.php');
 
-	handlers_load($GLOBALS['cms']['base_dir'].'/handlers');
-	handlers_load("{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}/handlers");
-	handlers_load($GLOBALS['cms']['local_dir'].'/handlers');
-	handlers_load($GLOBALS['cms']['base_dir'].'/handlers-post');
+	foreach(split(' ','handlers/pre handlers handlers/post') as $sub_path)
+		foreach(array($GLOBALS['cms']['local_dir'],
+					"{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}",
+					$GLOBALS['cms']['base_dir']) as $base_path)
+			handlers_load("$base_path/$sub_path");
 	
 	$_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
 
@@ -85,7 +86,11 @@
 //			echo "ok!";
             $res = $func($uri, $m);
             if($res === true)
+			{
+				if(isset($_GET['debug']))
+					echo "Loaded by pattern $uri_pattern=>$func<br/>";
                 return;
+			}
             if($res !== false)
                 $uri = $res;
 		}
