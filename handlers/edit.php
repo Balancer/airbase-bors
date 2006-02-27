@@ -7,12 +7,14 @@
 
 		require_once("funcs/check/access.php");
 
-		if(!check_action_access(3, $uri))
+		if(!check_action_access(4, $uri))
 			return true;
 		
         $hts  = new DataBaseHTS;
 
 		$GLOBALS['page_data']['source'] = $hts->get_data($uri, 'source') ? '[module admin/edit]' : '[module admin/create-page]';
+
+//		exit($GLOBALS['page_data']['source']);
 
 		show_page($uri);
 

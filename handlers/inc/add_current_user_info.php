@@ -1,9 +1,10 @@
 <?
 		include_once("funcs/users.php");
 		
-		$user_first_name = user_data('first_name');
-		$user_last_name = user_data('last_name');
-		$user_id = user_data('id');
+		$us = new User;
+		$user_first_name = $us->data('first_name');
+		$user_last_name = $us->data('last_name');
+		$user_id = $us->data('id');
 		
 		$tpl_vars[] = 'user_first_name';
 		$tpl_vars[] = 'user_last_name';
