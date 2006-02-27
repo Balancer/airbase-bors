@@ -22,6 +22,8 @@
 
     function handlers_load($dir='handlers')
     {
+//		echo "<b>Load handlers from $dir</b><br/>";
+	
         if(!is_dir($dir)) 
         	return;
         
@@ -43,7 +45,7 @@
 
             if(substr($file,-4)=='.php')
                 include_once("$dir/$file");
-            else
+            elseif(!preg_match("!(post|pre)$!", $file))
                 handlers_load("$dir/$file");
         }
     }
