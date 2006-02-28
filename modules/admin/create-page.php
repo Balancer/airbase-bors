@@ -46,4 +46,4 @@
 ?>
 </table>
 </form>
-<h3><?echo ec("Уровень доступа");?>: <?echo user_data("level",1)?></h3>
+<h3><?echo ec("Уровень доступа");?>: <?echo user_data("level")?></h3>

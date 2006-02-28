@@ -80,7 +80,7 @@
 
     foreach($GLOBALS['cms_patterns'] as $uri_pattern=>$func)
     {
-//		echo "<pre>Test pattern '$uri_pattern' to '$uri'</pre>\n";
+		echo "<pre>Test pattern '$uri_pattern' to '$uri'</pre>\n";
 		if(preg_match($uri_pattern, $uri, $m))
 		{
 //			echo "ok!";

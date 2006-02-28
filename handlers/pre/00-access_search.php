@@ -5,7 +5,7 @@
 	{
 		if(user_data('level') < 2)
 		{
-			$GLOBALS['page_data']['source'] = ec("Извините, у вас недостаточный уровень доступа для просмотра этой страницы. Ваш уровень " . user_data('level',1));
+			$GLOBALS['page_data']['source'] = ec("Извините, у вас недостаточный уровень доступа для просмотра этой страницы. Ваш уровень " . user_data('level'));
 			show_page($uri);
 			return true;
 		}
