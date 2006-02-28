@@ -36,6 +36,8 @@
 
 //        echo "************".$hts->get_data($page, 'modify_time');
 	
+//		exit($GLOBALS['page_data']['source']);
+
 		if(empty($GLOBALS['page_data']['source']))
 		{
 			$source = $hts->get_data($page, 'source');
@@ -47,10 +49,10 @@
 			$source = $GLOBALS['page_data']['source'];
 			$action = @$GLOBALS['cms']['action'];
 			$body = lcml($source, array('with_html'=>true));
+			$GLOBALS['cms']['cache_disabled'] = true;
 //			exit("<xmp>".$body."</xmp>");
 		}
 		
-
         if(!$source)
         {
 			// Такой страницы ещё нет - создаём

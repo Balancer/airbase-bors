@@ -353,20 +353,6 @@
 <body bgcolor=#c0c0c0>
 <font face=Verdana size=-1>
 
-<!--<hr>
-<h2>Служебная информация</h2>
-<?
-    echo "HTTP_REFERER=$HTTP_REFERER<br>\n";
-//    echo "SERVER_NAME=$SERVER_NAME<br>\n";
-    echo "REQUEST_URI={$_SERVER['REQUEST_URI']}<br>\n";
-    echo "HTTP_REFERER=$HTTP_REFERER<br>\n";
-//    echo "HTTP_USER_AGENT=$HTTP_USER_AGENT<br>\n";
-    echo "REMOTE_HOST=$REMOTE_HOST<br>\n";
-//    echo "REMOTE_ADDR=$REMOTE_ADDR<br>\n";
-    echo "HTTP_X_FORWARDED_FOR=$HTTP_X_FORWARDED_FOR<br>\n";
-
-?>
-<hr>-->
 <ul>
 <?
 
@@ -409,7 +395,7 @@
     $nick=user_data("nick");
     $page="http://{$_SERVER['HTTP_HOST']}".preg_replace("!^(/.+)\.phtml$!","$1.hts",$script);
     if(!preg_match("![\x80-\xFF]!",$query))
-        echo "<li><a href=\"?edit&ref=$ref\">создать страницу</a> <font color=red>$QUERY_ENCODED</font> в старом формате (<a href=\"$edit_uri\">$page</a>)\n";
+        echo "<li><a href=\"?edit&ref=$ref\">создать страницу</a> <font color=red>$QUERY_ENCODED</font>\n";
 ?>
 </ul>
 <br><br>
