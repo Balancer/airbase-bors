@@ -1,5 +1,7 @@
 <?
 
+//yyyyyyyyyyyyyyyy
+
 $_SERVER['DOCUMENT_ROOT'] = "/var/www/airbase.ru/htdocs";
 $_SERVER['HTTP_HOST'] = "airbase.ru";
 $GLOBALS['cms']['page_path'] = $GLOBALS['main_uri'] = "http://airbase.ru/";
@@ -19,6 +21,5 @@ EOT;
 //require_once('funcs/lcml/post/00-tables.php');
 
 echo lcml($txt);
-
 
 ?>
