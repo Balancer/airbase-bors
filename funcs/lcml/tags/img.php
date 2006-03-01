@@ -53,6 +53,9 @@
 			if(!$data['local'])
 			{
 				$path = $GLOBALS['cms']['sites_store_path']."/{$data['host']}{$data['path']}";
+				
+				if(preg_match("!/$!",$path))
+					$path .= "index";
 
 				if(!file_exists($path) || filesize($path)==0)
 				{
@@ -60,6 +63,9 @@
 					$c2 = substr($data['host'],1,1);
 					require_once('funcs/modules/uri.php');
 					$path = $GLOBALS['cms']['sites_store_path']."/$c1/$c2/{$data['host']}".translite_path($data['path']);
+
+					if(preg_match("!/$!",$path))
+						$path .= "index";
 				}
 
 
@@ -128,9 +134,9 @@
 				}
 
 				$img_ico_uri  = preg_replace("!^(http://[^/]+)(.*?)(/[^/]+)$!", "$1/cache$2/{$params['size']}$3", $uri);
-//			return "ico=$img_ico_uri; uri=$uri; params=".str_replace(" ","_",print_r($params,true))."<br/>\n";
+				return "ico=$img_ico_uri; uri=$uri; params=".str_replace(" ","_",print_r($params,true))."<br/>\n";
 //				return "_$path, _$uri, _$img_ico_uri<br />\n";
-				$img_page_uri = preg_replace("!^(http://.+?)(\.[^\.]+)$!", "$1.htm", $uri);
+//				$img_page_uri = preg_replace("!^(http://.+?)(\.[^\.]+)$!", "$1.htm", $uri);
 //				return "_$local_uri<br />_$img_ico_uri<br />";
 				
 				require_once('HTTP/Request.php');
@@ -162,6 +168,9 @@
 				fill_image_data($uri);
 			   
 //				return "==={$params['description']}===";
+
+				if(empty($params['description']))
+					$params['description'] = "";
 
 				if($need_upload)
 				{
