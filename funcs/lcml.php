@@ -55,7 +55,7 @@
 		if(empty($params['cache_disable']) && $GLOBALS['lcml']['level'] < 2 && $ch->get($ch_type,$ch_key))
 			return rest_return($ch->last, $saved_params);
 
-        $page = $GLOBALS['cms']['page_path'];
+        $page = @$GLOBALS['cms']['page_path'];
 
 		$hts = new DataBaseHTS();
 

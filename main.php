@@ -29,13 +29,17 @@
 
 //    exit("GET='".print_r($_GET,true)."', REQUEST_URI='{$_SERVER['REQUEST_URI']}'<br><br>");
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+
+	if(empty($GLOBALS['main_uri']))
+		$GLOBALS['main_uri'] = $uri;
+
+	$GLOBALS['cms']['page_path'] = $GLOBALS['main_uri'];
+
 	$GLOBALS['ref'] = @$_SERVER['HTTP_REFERER'];
 
 	include_once("funcs/logs.php");
 	log_session_update();
 	
-	if(empty($GLOBALS['main_uri']))
-		$GLOBALS['main_uri'] = $uri;
 
 	if(isset($_POST['LoginForm']))
 	{
