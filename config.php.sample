@@ -22,6 +22,8 @@
 		'cache_disabled' => false,
 		'charset'=>'utf-8',
 		'charset_u'=>'utf8',
+		'mysql_set_names_charset' => '',
+		'mysql_set_character_set' => '',
 		'locale'=>'ru_RU.utf8',
 	);
 	
