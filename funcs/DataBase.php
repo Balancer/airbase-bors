@@ -31,10 +31,14 @@
 				$this->dbh = global_key("DataBaseHandler",$base);
 //				echo "cont\[{$base}]=".$this->dbh."<br>\n";
 				mysql_select_db($base,$this->dbh) or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
-#				mysql_query("SET CHARACTER SET {$GLOBALS['cms']['charset_u']};",$this->dbh)
-#					 or die(__FILE__.':'.__LINE__." Could not set character set (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
-#				mysql_query("SET NAMES {$GLOBALS['cms']['charset_u']};",$this->dbh)
-#					 or die(__FILE__.':'.__LINE__." Could not set names (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
+
+				if(!empty($GLOBALS['cms']['mysql_set_character_set']))
+					mysql_query("SET CHARACTER SET {$GLOBALS['cms']['mysql_set_character_set']};",$this->dbh)
+						 or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
+
+				if(!empty($GLOBALS['cms']['mysql_set_names_charset']))
+					mysql_query("SET NAMES {$GLOBALS['cms']['mysql_set_names_charset']};",$this->dbh)
+						 or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
 			}
 			else
 			{
@@ -116,16 +120,46 @@
 		{
 			$this->row = $this->result ? mysql_fetch_assoc($this->result) : false;
 
-//  			echolog("fetch:<xmp>".print_r($this->row,true)."</xmp>");
+//			print_r($this->row);
 
-			if(is_array($this->row) && sizeof($this->row)==1)
-				foreach($this->row as $res)
-					$this->row = quote_fix($res);
+			if(is_array($this->row))
+				if(sizeof($this->row)==1)
+					foreach($this->row as $s)
+						$this->row = quote_fix($s);
+				else
+					foreach($this->row as $k => $v)
+						$this->row[$k] = quote_fix($v);
 
 			return $this->row;
 		}
 
-		function get($query, $ignore_error=true)
+		function fetch0()
+		{
+			$this->row = $this->result ? mysql_fetch_assoc($this->result) : false;
+
+			if(is_array($this->row) && sizeof($this->row)==1)
+				foreach($this->row as $s)
+					$this->row = quote_fix($s);
+
+			return $this->row;
+		}
+
+		function fetch1()
+		{
+			$this->row = $this->result ? mysql_fetch_assoc($this->result) : false;
+
+ 			echo("fetch:<xmp>".print_r($this->row,true)."</xmp>");
+
+			if(is_array($this->row))
+				foreach($this->row as $k => $v)
+					$this->row[$k] = quote_fix($v);
+
+ 			echo("fetch:<xmp>".print_r($this->row,true)."</xmp>");
+
+			return $this->row;
+		}
+
+		function get($query, $ignore_error=false)
 		{
 //			if(is_global_key("db_get",$query)) 
 //				return global_key("db_get",$query);
@@ -147,7 +181,7 @@
 			$this->free();
 		}
 
-		function get_array($query,$ignore_error=true)
+		function get_array($query, $ignore_error=false)
 		{
 //			echo "==<pre>$query</pre>==";
 			$res=array();
