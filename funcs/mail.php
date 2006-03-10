@@ -8,7 +8,7 @@
 		$headers['From']    = $from;
 		$headers['To']      = $to;
 		$headers['Subject'] = $subject;
-		$headers['Content-Type'] = 'text/plain; charset="utf-8"';
+		$headers['Content-Type'] = "text/plain; charset=\"{$GLOBALS['cms']['charset']}\"";
 
 //		$params['sendmail_path'] = '/usr/lib/sendmail';
 
