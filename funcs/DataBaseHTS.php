@@ -103,11 +103,19 @@
 
 		function get_data($uri, $key, $default=NULL, $inherit=false, $skip=false, $fields='`value`', $search='`id`')
 		{
+			if(preg_match("!^raw:(.+)$!", $key, $m))
+			{
+				$key = $m[1];
+				$raw = true;
+			}
+			else
+				$raw = false;
+			
 			echolog("Get key '$key' for '$uri'");
 
 			$uri = $this->normalize_uri($uri);
 
-			if(isset($GLOBALS['page_data_preset'][$key][$uri]))
+			if(!$raw && isset($GLOBALS['page_data_preset'][$key][$uri]))
 				return $GLOBALS['page_data_preset'][$key][$uri];
 
 			$skip_save = $skip;
@@ -115,12 +123,11 @@
 			if(!$fields && !$search && !$skip && is_global_key("uri_data($uri)",$key))// && global_key("uri_data($uri,$inherit,$skip_save)",$key)) 
 				return global_key("uri_data($uri)",$key);
 
-			if(($res = $this->pre_data_check($uri, $key)) !== false)
+			if(!$raw && ($res = $this->pre_data_check($uri, $key)) !== false)
 				return $res;
 
-			if(isset($GLOBALS['page_data_preset'][$key][$uri]))
+			if(!$raw && isset($GLOBALS['page_data_preset'][$key][$uri]))
 				return $GLOBALS['page_data_preset'][$key][$uri];
-
 
 			$key_table_name = $this->create_data_table($key);
 
@@ -606,7 +613,12 @@ CREATE TABLE `hts_keys` (
 		{
 			return $this->data_exists($uri, 'flags', $flag);
 		}
-		
+
+		function pages_with_flag($uri_like, $flag)
+		{
+			return $this->dbh->get_array("SELECT id FROM hts_data_flags WHERE value LIKE '".addslashes($flag)."' AND id RLIKE '".addslashes($uri_like)."'");
+		}
+
 		function export($uri)
 		{
 			$save = '';
