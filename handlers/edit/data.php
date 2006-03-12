@@ -9,7 +9,7 @@
 	{
 		require_once("funcs/check/access.php");
 
-		if(!check_action_access(9, $uri))
+		if(!check_action_access(3, $uri))
 			return true;
 
 		include_once("funcs/templates/assign.php");
