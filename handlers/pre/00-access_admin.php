@@ -12,6 +12,6 @@
 			return true;
 		}
 
-		return true;
+		return $uri;
     }
 ?>
