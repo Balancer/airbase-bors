@@ -2,6 +2,7 @@
 	function template_assign_data($assign_template, $data=array(), $uri=NULL)
 	{
 //		echo "tpl=$assign_template";
+//		print_r($data);
 	
 		require_once('Smarty/Smarty.class.php');
 		$smarty = new Smarty;
@@ -43,7 +44,6 @@
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = $GLOBALS['cms']['default_template'];
 
-
 		$modify_time = empty($data['modify_time']) ? time() : $data['modify_time'];
 
 		if(!$caching)
@@ -70,6 +70,11 @@
 
 		$smarty->assign("uri", $uri);
 		$smarty->assign("main_uri", @$GLOBALS['main_uri']);
+
+		if(preg_match('!^http://!',$template_uri))
+			$template_uri = "hts:".$template_uri;
+
+//		echo $template_uri;
 
 		$out = $smarty->fetch($template_uri, $uri);
 

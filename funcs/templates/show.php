@@ -32,6 +32,7 @@
 		require_once('Smarty/Smarty.class.php');
 		$smarty = new Smarty;
 		require('mysql-smarty.php');
+		require('smarty-register.php');
 
 		$smarty->compile_dir = $GLOBALS['cms']['cache_dir'].'/smarty-templates_c/';
 		$smarty->plugins_dir = $GLOBALS['cms']['base_dir'].'/funcs/templates/plugins/';
@@ -142,7 +143,11 @@
 //		$smarty->assign("action", $GLOBALS['cms']['action']);
 
 		debug("fetch(\"hts:{$template}\", $uri)");
-		$out = $smarty->fetch("hts:{$template}", $uri);
+
+		if(preg_match('!^http://!',$template))
+			$template = "hts:".$template;
+
+		$out = $smarty->fetch($template, $uri);
 
 		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
 
