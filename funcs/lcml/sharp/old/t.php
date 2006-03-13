@@ -1,6 +1,6 @@
 <?
     function lst_t($txt) 
     { 
-        return "<p>$txt\n";
+        return "<p/>".lcml($txt)."\n";
     }
 ?>

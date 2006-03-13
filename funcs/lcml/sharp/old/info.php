@@ -3,7 +3,7 @@
     { 
 
         list($n, $dtm, $login, $subj, $br, $text) = split("\|", $txt."|||||");
-        $user_nick=user_data($login, "nick", $login);
+-------------------        $user_nick=user_data($login, "nick", $login);
         
         if(!preg_match("!\d\d.\d\d.\d\d\d\d \d\d:\d\d!", $dtm))
             $dtm=strftime("%Y.%m.%d %H:%M",$dtm);

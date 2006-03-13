@@ -136,7 +136,7 @@
 			do
 			{
 				// echo "key_id/key_type ($key) =$key_id/$key_type<br>";
-				if(!$skip && $val = $this->dbh->get("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."'"))
+				if(!$skip && $val = $this->dbh->get("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."'", true))
 					return set_global_key("uri_data($uri)",$key,$val); //stripslashes(
 				
 				if($inherit)

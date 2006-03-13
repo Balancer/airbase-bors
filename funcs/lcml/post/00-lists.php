@@ -16,7 +16,7 @@
                 if($ul_open>$len)
                     for($ul_open;$ul_open>$len;$ul_open--)
                         $res.="</ul>";
-                $s = preg_replace("!^\*+\s+(.+)$!e","\"<li>\".lcml(stripslashes(\"$1\"))",$s);
+                $s = preg_replace("!^\*+\s+(.+)$!e","'<li>'.lcml(stripslashes(\"$1\")).'</li>'\n",$s);
                 $res .= $s;
             }
             else
