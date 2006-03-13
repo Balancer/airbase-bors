@@ -17,7 +17,7 @@
 
 		check_access($page, $hts);
 
-		foreach($_POST['upload_file'] as $i => $f)
+		foreach($_FILES['upload_file'] as $i => $f)
 		{
 			$name = @$_POST['upload_names'][$i];
 			$realname = $_FILES['upload_file']['name'][$i];
