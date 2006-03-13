@@ -18,7 +18,7 @@
 		check_access($page, $hts);
 
 
-		for($i=0, $size=sizeof($_FILES['upload_file']['name']); $i<$size; $i++)
+		for($i=0, $asize=sizeof($_FILES['upload_file']['name']); $i<$asize; $i++)
 		{
 			echo "$size ";
 			
