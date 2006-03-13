@@ -1,4 +1,4 @@
 <?
-	include_once("funcs/templates/assign.php");
-	return template_assign_data("attach.html", $data);
+	include_once("attach.inc.php");
+	echo module_admin_attach($GLOBALS['main_uri']);
 ?>
