@@ -639,7 +639,7 @@ CREATE TABLE `hts_keys` (
 
 		function pages_with_parent($uri)
 		{
-			return $this->dbh->get_array("SELECT value FROM parent WHERE id='".addslashes($uri)."'");
+			return $this->dbh->get_array("SELECT value FROM hts_data_parent WHERE id='".addslashes($uri)."'");
 		}
 	}
 ?>
