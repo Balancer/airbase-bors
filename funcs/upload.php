@@ -17,11 +17,8 @@
 
 		check_access($page, $hts);
 
-
 		for($i=0, $asize=sizeof($_FILES['upload_file']['name']); $i<$asize; $i++)
 		{
-			echo "$size ";
-			
 			$name = @$_POST['upload_names'][$i];
 			$realname = $_FILES['upload_file']['name'][$i];
 
@@ -59,7 +56,7 @@
 			}
 		}
 
-		echo "<xmp>"; print_r($_FILES); print_r($_POST); exit("</xmp>");
+//		echo "<xmp>"; print_r($_FILES); print_r($_POST); exit("</xmp>");
 
 		$hts->set_data($page, 'modify_time', time());
 		recompile($page);
