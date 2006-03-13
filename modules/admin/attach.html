@@ -3,3 +3,9 @@
 <li><a href="{$attaches[i].uri}">{$attaches[i].uri}</a></li>
 {/section}
 </ul>
+
+<form action="$main_uri?attach-upload" method="post" enctype="multipart/form-data">
+<input type="file" size="10" name="upload_file[]">
+<input type="submit" value="Загрузить">
+<input type="hidden" name="page" value="$main_uri">
+</form>
