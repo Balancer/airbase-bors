@@ -147,7 +147,6 @@
 		$user_id = $us->data('id');
 		
 		include_once("funcs/actions/subscribe.php");
-
 		$subscribed = cms_funcs_action_is_subscribed($page);
 
 		$modify_time = $hts->get_data($page, 'modify_time');
