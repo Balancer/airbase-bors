@@ -18,10 +18,8 @@
 		check_access($page, $hts);
 
 
-		foreach($_FILES['upload_file'] as $i => $f)
+		for($i=0, $size=sizeof($_FILES['upload_file']['name']; $i<$size; $i++)
 		{
-			echo "$i -> $f <br>";
-			
 			$name = @$_POST['upload_names'][$i];
 			$realname = $_FILES['upload_file']['name'][$i];
 
