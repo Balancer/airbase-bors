@@ -33,10 +33,12 @@ function full_time($time)
 
 function short_time($time)
 {
+	$time = intval($time);
+
 	if(time() - $time < 86400 && strftime("%d",$time) == strftime("%d",time()))
-		return strftime("%H:%M",$time);
+		return strftime("%H:%M", $time);
 	else
-		return strftime("%d.%m.%Y",$time);
+		return strftime("%d.%m.%Y", $time);
 }
 
 function is_today($time)

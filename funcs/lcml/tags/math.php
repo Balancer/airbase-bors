@@ -9,7 +9,6 @@
     function wfStrencode($s){return '';}
     function wfQuery($s){return '';}
     function wffetchobject(){return '';}
-	function wfIsWindows(){return false;}
     function wfdebug($s)
     {
         $fh = fopen('/home/airbase/forums/math.log','at');
@@ -71,33 +70,4 @@
         wfdebug($text);
         return $text;
     }
-
-	class math_tmp
-	{
-		function replace()
-		{
-			return;
-		}
-		
-		function selectRow()
-		{
-			return false;
-		}
-		
-	}
-	
-	function wfGetDB()
-	{
-		return new math_tmp();
-	}
-	
-	function wfEscapeShellArg($s)
-	{
-		return addslashes($s);
-	}
-
-	function wfReadOnly()
-	{
-		return false;
-	}
 ?>

@@ -19,7 +19,7 @@
 
 		$external = $parse['local'] ? '' : ' class="external"';
 
-		//exit("'External' for $url='$external'; parse=".print_r($parse,true));
+		debug("'External' for $url='$external'; parse=".print_r($parse,true));
 
 		if(!$hts->get_data($url, 'create_time') && !$hts->get_data($url, 'title'))
 		{
