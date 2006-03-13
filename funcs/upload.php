@@ -17,6 +17,8 @@
 
 		check_access($page, $hts);
 
+		echo "<xmp>"; print_r($_FILES); print_r($_POST); exit("</xmp>");
+
 		foreach($_FILES['upload_file'] as $i => $f)
 		{
 			$name = @$_POST['upload_names'][$i];
