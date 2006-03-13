@@ -20,6 +20,8 @@
 
 		for($i=0, $size=sizeof($_FILES['upload_file']['name']); $i<$size; $i++)
 		{
+			echo $size;
+			
 			$name = @$_POST['upload_names'][$i];
 			$realname = $_FILES['upload_file']['name'][$i];
 
