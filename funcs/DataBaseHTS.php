@@ -636,5 +636,10 @@ CREATE TABLE `hts_keys` (
 				exit("Unknown error. Can't get next ID for "+$uri);
 			return $id;
 		}
+
+		function pages_with_parent($uri)
+		{
+			return $this->dbh->get_array("SELECT value FROM parent WHERE id='".addslashes($uri)."'");
+		}
 	}
 ?>
