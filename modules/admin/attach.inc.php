@@ -3,6 +3,8 @@
 	{
 		$hts = new DataBaseHTS();
 
+		$attaches = array();
+
 		foreach($hts->pages_with_parent($uri) as $u)
 		{
 			$attaches[] = array(
