@@ -17,15 +17,18 @@
 
 		check_access($page, $hts);
 
-		foreach($_POST['upload_names'] as $i => $name)
+		foreach($_POST['upload_file'] as $i => $f)
 		{
+			$name = @$_POST['upload_names'][$i];
 			$realname = $_FILES['upload_file']['name'][$i];
+
+			if(!$name)
+				$name = $realname;
+
 			$type	 = $_FILES['upload_file']['type'][$i];
 			$tmp_name = $_FILES['upload_file']['tmp_name'][$i];
 			$error	= $_FILES['upload_file']['error'][$i];
 			$size	 = $_FILES['upload_file']['size'][$i];
-
-			$name	 = $_POST['upload_names'][$i];
 
 			$real_ext = preg_replace('!^.*\.(\w+?)$!', '$1', $realname);
 			$name = preg_replace('!\.%real_ext%$!', ".$real_ext", $name);
