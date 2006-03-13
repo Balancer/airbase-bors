@@ -30,4 +30,14 @@
 		
 		return $hts->data_exists($user->get_page(), 'subscribe', $hts->normalize_uri($page));
 	}
+
+	function cms_funcs_action_get_all_subscribed($user=NULL)
+	{
+		if(!$user)
+			$user = new User();
+
+		$hts = new DataBaseHTS();
+		
+		return $hts->get_data_array($user->get_page(), 'subscribe');
+	}
 ?>
