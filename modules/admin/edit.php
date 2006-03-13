@@ -3,7 +3,7 @@
 
     if(empty($title) && !empty($htitle))
         $title = $htitle;
-    
+
     foreach(split(' ','title ref description page uri nav_name') as $p)
         $$p = @$GLOBALS[$p];
 
@@ -36,7 +36,7 @@
     {
         echo "<table class=\"btab\" cellSpacing=\"0\">";
         if(!$title) echo ec("<tr><th><b>Название:</b></th><td><input name=\"title\" value=\"\" size=\"50\" maxlen=\"255\" /></td></tr>\n");
-        echo ec("<tr><th><b>Название для навигации:</b></th><td><input name=\"nav_name\" size=\"50\" maxlen=\"255\" value=\"".strtolower($title)."\"/></td></tr>\n");
+        echo ec("<tr><th><b>Название для навигации:</b></th><td><input name=\"nav_name\" size=\"50\" maxlen=\"255\" value=\"").strtolower($title)."\"/></td></tr>\n";
         echo ec("<tr><th><b>Краткое описание:</b></th><td><textarea name=\"description\" cols=\"32\" rows=\"3\" /></textarea></td></tr>\n");
 	    if($ref)   echo "<input type=\"hidden\" name=\"ref\"    value=\"".addslashes($ref)  ."\">\n";
     }
@@ -53,7 +53,7 @@
 ?>
 <tr><td colSpan="2"><textarea cols="64" rows="25" name="source"><?echo htmlspecialchars("$source")?></textarea></td></tr>
 <tr><td>&nbsp;</td><td>
-<input type="submit" value="<?echo ec("Сохранить");?>"></td></tr>
+<input type="submit" value="<? echo ec("Сохранить");?>"></td></tr>
 <input type="hidden" name="action" value="save">
 <input type="hidden" name="page"  value="<?echo $uri?>">
 <?
