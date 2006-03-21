@@ -45,14 +45,14 @@
 
             if(substr($file,-4)=='.php')
                 include_once("$dir/$file");
-            elseif(!preg_match("!(post|pre)$!", $file))
+            elseif(is_dir("$dir/$file") && !preg_match("!(post|pre)$!", $file))
                 handlers_load("$dir/$file");
         }
     }
 
 	function hts_data_prehandler_add($regexp, $data_key, $func)
 	{
-//		echo "Add function ".print_r(&$func,true)." to key '$regexp'<br>";
+//		echo "<small>Add function ".print_r(&$func,true)." to uri like '$regexp for key $data_key</small><br>/";
 		$GLOBALS['cms']['data_prehandler'][$data_key][$regexp] = $func;
 	}
 

@@ -7,7 +7,8 @@
         $res = '';
         foreach($txt as $s)
         {
-            if(preg_match("!^([\*]+) !m",$s,$m))
+        	$m=array();
+            if(preg_match("!^([\*]+) !m", $s, $m))
             {
                 $len = strlen($m[1]);
                 if($ul_open<$len)
