@@ -13,7 +13,7 @@
 //        print_r($res);
 
 //        $GLOBALS['log_level'] = 9;
-        $pages = $hts->dbh->get_array("SELECT `id` FROM `hts_data_create_times` WHERE `id` REGEXP '.*".addslashes($notes_page).".*/[0-9]{4}/[0-9]{1,2}/$' ORDER BY `value`");
+        $pages = $hts->dbh->get_array("SELECT `id` FROM `hts_data_create_time` WHERE `id` REGEXP '.*".addslashes($notes_page).".*/[0-9]{4}/[0-9]{1,2}/$' ORDER BY `value`");
 //        $GLOBALS['log_level'] = 2;
         
         $year = 0;

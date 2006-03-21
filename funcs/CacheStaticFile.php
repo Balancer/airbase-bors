@@ -4,7 +4,7 @@
 
     class CacheStaticFile
     {
-		$hts;
+		private $hts;
 	
         function CacheStaticFile()
         {
