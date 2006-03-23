@@ -73,7 +73,7 @@ __EOT__;
         else
         {
             debug(__FILE__."[".__LINE__."] Not found page_id for '$page'!");
-            exit("Не найден идентификатор страницы '$page'!");
+            exit(ec("Не найден идентификатор страницы '$page'!"));
         }
     }
 ?>
