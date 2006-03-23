@@ -12,7 +12,8 @@
 
 	function register_action_handler($action_type, $func)
 	{
-		$GLOBALS['cms_actions'][$action_type] = $func;
+		if(empty($GLOBALS['cms_actions'][$action_type]))
+			$GLOBALS['cms_actions'][$action_type] = $func;
 	}
 
 	function register_alias($uri_regexp, $function)
