@@ -147,6 +147,12 @@
 		if(preg_match('!^http://!',$template))
 			$template = "hts:".$template;
 
+		if(preg_match('!^/!',$template))
+		{
+			if(!file_exists($template))
+				$template = "hts:".$template;
+		}
+		
 		$out = $smarty->fetch($template, $uri);
 
 		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
