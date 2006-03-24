@@ -64,8 +64,14 @@
 					die (__FILE__.':'.__LINE__." Query failed, error ".mysql_errno($this->dbh).": ".mysql_error($this->dbh)."<BR />");
 				mysql_select_db($base,$this->dbh) or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
 
-//				mysql_query ("SET CHARACTER SET koi8-r",$this->dbh);
-				
+				if(!empty($GLOBALS['cms']['mysql_set_character_set']))
+					mysql_query("SET CHARACTER SET {$GLOBALS['cms']['mysql_set_character_set']};",$this->dbh)
+						 or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
+
+				if(!empty($GLOBALS['cms']['mysql_set_names_charset']))
+					mysql_query("SET NAMES {$GLOBALS['cms']['mysql_set_names_charset']};",$this->dbh)
+						 or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
+			
 				set_global_key("DataBaseHandler",$base,$this->dbh);
 //				echo "new\[{$base}]=".$this->dbh."<br>\n";
 			}
@@ -79,7 +85,7 @@
 				$GLOBALS['global_db_queries'] = 0;
 			$GLOBALS['global_db_queries']++;
 
-			echolog("<xmp>query=|$query|</xmp>",4);
+			echolog("<xmp>query=|$query|</xmp>", 4);
 
 			list($usec, $sec) = explode(" ",microtime());
 			$qstart = ((float)$usec + (float)$sec);
