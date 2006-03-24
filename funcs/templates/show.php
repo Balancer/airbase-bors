@@ -67,6 +67,7 @@
 		$us = new User();
 		$data['level'] = intval($us->data('level'));
 		$data['user_id'] = $us->data('id');
+		$data['user_name'] = $us->data('name');
 
 		include_once("funcs/actions/subscribe.php");
 
@@ -249,6 +250,7 @@
 		$us = new User();
 		$level = $us->data('level');
 		$user_id = $us->data('id');
+		$user_name = $us->data('name');
 
 		include_once("funcs/actions/subscribe.php");
 		$subscribed = cms_funcs_action_is_subscribed($uri);
@@ -264,7 +266,7 @@
 			foreach(split(" +","title body") as $key)
 				$smarty->assign($key, $hts->get_data($uri, $key));
 
-			foreach(split(" +","access level user_id") as $key)
+			foreach(split(" +","access level user_id user_name") as $key)
 				$smarty->assign($key, $$key);
 
 			foreach($data as $key => $value)

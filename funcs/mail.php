@@ -12,7 +12,7 @@
 
 //		$params['sendmail_path'] = '/usr/lib/sendmail';
 
-		$params['host'] = '192.168.1.1';
+		$params['host'] = 'localhost';
 
 		// Create the mail object using the Mail::factory method
 //		$mail_object =& Mail::factory('sendmail', $params);

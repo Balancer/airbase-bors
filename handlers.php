@@ -53,7 +53,8 @@
 
 	function hts_data_prehandler_add($regexp, $data_key, $func)
 	{
-//		echo "<small>Add function ".print_r(&$func,true)." to uri like '$regexp for key $data_key</small><br>/";
+		if(!empty($_GET['debug']))
+			echo "<small>Add function ".print_r(&$func,true)." to uri like '$regexp for key $data_key</small><br>/";
 		$GLOBALS['cms']['data_prehandler'][$data_key][$regexp] = $func;
 	}
 

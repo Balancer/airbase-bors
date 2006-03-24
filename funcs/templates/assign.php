@@ -69,7 +69,9 @@
 		}
 
 		$smarty->assign("uri", $uri);
-		$smarty->assign("main_uri", @$GLOBALS['main_uri']);
+
+		if(empty($data['main_uri']))
+			$smarty->assign("main_uri", @$GLOBALS['main_uri']);
 
 		if(preg_match('!^http://!',$template_uri))
 			$template_uri = "hts:".$template_uri;

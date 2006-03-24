@@ -145,6 +145,7 @@
 		$us = new User();
 		$level = $us->data('level');
 		$user_id = $us->data('id');
+		$user_name = $us->data('name');
 		
 		include_once("funcs/actions/subscribe.php");
 		$subscribed = cms_funcs_action_is_subscribed($page);
@@ -199,7 +200,7 @@
                     $$key = $hts->get_data($page, $key);
             }
 
-            foreach(split(' ', "access level action body user_id $page_vars") as $key)
+            foreach(split(' ', "access level action body user_id user_name $page_vars") as $key)
             {
 //                echo "assign <xmp>'$key' -> '{$$key}'</xmp>";
                 $smarty->assign("$key", "{$$key}");

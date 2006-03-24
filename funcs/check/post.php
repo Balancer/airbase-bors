@@ -25,7 +25,7 @@
 
 				$text = "Пользователь $nick (id=$uid) в сообщении $uri\n\n===========\n$text\n===========\n\nиспользует стоп-слово $word";
 
-				send_mail("mail@aviaport.ru", "balancer@balancer.ru", "Конференция: стоп-слово!", $text);
+//				send_mail("mail@aviaport.ru", "balancer@balancer.ru", "Конференция: стоп-слово!", $text);
 			}
 		}
 	
