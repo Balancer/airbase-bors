@@ -130,8 +130,7 @@
 		
 //		echo "<br/>base={$GLOBALS['cms']['base_uri']}; tpl='$tpl' Using template $template";	exit();
 
-        if(!$hts->get_data($page, 'views_first')) $hts->set_data($page, 'views_first', time());
-        $hts->set_data($page, 'views', $hts->get_data($page, 'views') + 1);
+        $hts->viewses_inc($page);
 
 		$GLOBALS['cms']['cache_copy'] = $hts->get_data($page, 'cache_create_time');
 
@@ -269,7 +268,5 @@
 		$out = preg_replace('!<\?php(.+?)\?>!es', "do_php(stripslashes('$1'))", $out_save = $out);
 		
         echo $out;
-
-        $hts->set_data($page, 'views_last', time());
     }
 ?>
