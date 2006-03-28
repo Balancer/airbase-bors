@@ -149,10 +149,10 @@
 			$template = "hts:".$template;
 
 		if(preg_match('!^/!',$template))
-		{
 			if(!file_exists($template))
 				$template = "hts:".$template;
-		}
+			else
+				$template = "hts:http://{$_SERVER['HTTP_HOST']}$template";
 		
 		$out = $smarty->fetch($template, $uri);
 
@@ -325,6 +325,13 @@
 //		$smarty->assign("action", $GLOBALS['cms']['action']);
 
 //		echo("fetch(\"$tpl\", $uri)");
+
+		if($tpl{0}=='/')
+			if(file_exists($tpl))
+				$tpl = "xfile:".$tpl;
+			else
+				$tpl = "hts:http://{$_SERVER['HTTP_HOST']}$tpl";
+
 		$out = $smarty->fetch("$tpl", $uri);
 
 		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);

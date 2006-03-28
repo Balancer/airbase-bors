@@ -78,6 +78,12 @@
 
 //		echo $template_uri;
 
+		if($template_uri{0}=='/')
+			if(file_exists($template_uri))
+				$template_uri = "xfile:".$template_uri;
+			else
+				$template_uri = "hts:http://{$_SERVER['HTTP_HOST']}$template_uri";
+
 		$out = $smarty->fetch($template_uri, $uri);
 
 		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
