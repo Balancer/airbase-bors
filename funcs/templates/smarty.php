@@ -265,6 +265,13 @@
 				$smarty->assign($key, $val);
 
 	    error_reporting(E_ALL & ~E_NOTICE);
+
+		if($tpl{0}=='/')
+			if(file_exists($tpl))
+				$tpl = "xfile:".$tpl;
+			else
+				$tpl = "hts:http://{$_SERVER['HTTP_HOST']}$tpl";
+
 		$out = $smarty->fetch($tpl, $page);
 	    error_reporting(E_ALL);
 
