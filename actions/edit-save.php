@@ -15,7 +15,7 @@
 			echo "POST uri '$uri' != parameters uri '$_uri'!";
 			exit();
 		}
-		
+
 		$user = new User();
 
     	$hts = new DataBaseHTS();
@@ -73,6 +73,8 @@
    	    $hts->set_data($uri, 'modify_time', time());
 
 //        append_log($uri, $log_action, $version);
+
+//		exit("$uri, $source");
 
         recompile($uri);
 

@@ -50,7 +50,7 @@
 		if($err = $us->do_login($_POST['FLogin'], $_POST['FPassword'], false))
 			return error_messge($err, $uri);
 
-		return messge(ec("Вы успешно авторизовались"), $uri);
+		return message(ec("Вы успешно авторизовались"), $uri);
 	}
 
 	$parse = parse_url($uri);
