@@ -106,6 +106,7 @@
 		
 		foreach(array(
 			"{$page}template$tpl2/",
+			$GLOBALS['cms']['default_template'],
 			"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
 			"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
 		) as $tpl)
@@ -114,6 +115,8 @@
 			if($hts->get_data($tpl, 'source'))
 				break;
 		}
+
+//		echo $hts->get_data($tpl, 'source');
 
         if(!$hts->get_data($tpl, 'source'))// || ($action && $action!='virtual'))
             $tpl = $GLOBALS['cms']['default_template'];
@@ -151,7 +154,7 @@
 
 		$modify_time = $hts->get_data($page, 'modify_time');
         $last_modify = gmdate('D, d M Y H:i:s', $modify_time).' GMT';
-   	    header ('Last-Modified: '.$last_modify);
+   	    @header ('Last-Modified: '.$last_modify);
 
         if($nocache || !$smarty->is_cached($tpl, $page))
         {
@@ -221,7 +224,7 @@
 
 	        $smarty->clear_cache($tpl, $page);
 			
-		    header("X-Recompile: Yes");
+		    @header("X-Recompile: Yes");
         }
         else
         {
@@ -251,10 +254,10 @@
 
 		if(strstr($source, '[module')!==false)
 		{
-			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); 
-			header('Cache-Control: no-store, no-cache, must-revalidate'); 
-			header('Cache-Control: post-check=0, pre-check=0', false); 
-			header('Pragma: no-cache');
+			@header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); 
+			@header('Cache-Control: no-store, no-cache, must-revalidate'); 
+			@header('Cache-Control: post-check=0, pre-check=0', false); 
+			@header('Pragma: no-cache');
 		}
 
 		if(is_array(@$GLOBALS['cms']['smarty']))
