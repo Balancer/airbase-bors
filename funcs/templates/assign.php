@@ -65,7 +65,7 @@
 
 			$smarty->clear_cache($template_uri, $uri);
 			
-			header("X-Recompile: Yes");
+			@header("X-Recompile: Yes");
 		}
 
 		$smarty->assign("uri", $uri);

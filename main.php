@@ -43,6 +43,8 @@
 
 	if(isset($_POST['LoginForm']))
 	{
+		include_once("funcs/modules/messages.php");
+		
 		$us = new User();
 
 		$GLOBALS['page_data']['title'] = ec("Вход");
