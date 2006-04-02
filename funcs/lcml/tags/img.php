@@ -128,8 +128,8 @@
 				if(!file_exists($path))
 				{
 					$GLOBALS['cms']['images'][] = $params['url'];
-					$uri  = $GLOBALS['cms']['main_host_uri'].'/img/design/system/not-loaded.png';
-					$path = $_SERVER['DOCUMENT_ROOT'].'/img/design/system/not-loaded.png';
+					$uri  = $GLOBALS['cms']['main_host_uri'].'/cms/templates/default/img/system/not-loaded.png';
+					$path = $_SERVER['DOCUMENT_ROOT'].'/cms/templates/default/img/system/not-loaded.png';
 					$need_upload = true;
 				}
 
