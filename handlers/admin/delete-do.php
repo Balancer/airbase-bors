@@ -25,6 +25,13 @@
 			return true;
 		}
 
+		if(user_data('level') < 10)
+		{
+			$GLOBALS['page_data']['source'] = ec('У Вас недостаточно прав для выполнения операции');
+			show_page($uri);
+			return true;
+		}
+
 		$hts = new DataBaseHTS();
 		$parent = $hts->get_data_array($uri, 'parent');
 		$parent = $parent[0];

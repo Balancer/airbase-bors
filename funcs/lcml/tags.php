@@ -51,6 +51,7 @@
                                 
                                 $part1 = substr($txt, 0, $pos);
 								$part2 = substr($txt, $end+1, $next_pos-$end-1);
+								echo "call '$cfunc' for '$part2'";
                                 $part2 = $cfunc($part2, params($params));
                                 $part3 = substr($txt, $next_end+1);
                                 $txt = $part1.$part2.$part3;

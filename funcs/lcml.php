@@ -13,9 +13,6 @@
     $GLOBALS['cms']['sites_store_path'] = "{$GLOBALS['cms']['main_host_dir']}/sites";
     $GLOBALS['cms']['sites_store_url'] = "{$GLOBALS['cms']['main_host_uri']}/sites";
 
-    foreach(split(" ","b big i s sub sup small u") as $tag) eval("function lp_$tag(\$txt){return '<$tag>'.lcml(\"\$txt\").'</$tag>';}");
-    foreach(split(" ","br hr") as $tag) eval("function lt_$tag(){return '<$tag />';}");
-
     ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/tags');
 
     function lcml_out($txt)
@@ -33,7 +30,6 @@
 
     function lcml($txt, $params=array())
     {
-//		print_r($params);
 		$GLOBALS['lcml']['level'] = intval(@$GLOBALS['lcml']['level']) + 1;
 
 		$saved_params = empty($GLOBALS['lcml']['params']) ? array() : $GLOBALS['lcml']['params'];
@@ -111,7 +107,8 @@
 //        require_once("tags/code.php");
 //        $txt=preg_replace("!\[code([^\]]*)\](.+?)\[/code\]!ise","lp_code_(\"$2\",'$1')",$txt);
 
-        $txt = ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/pre',$txt);
+
+        $txt = ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/pre', $txt);
 
         include_once("lcml/sharp.php");
 

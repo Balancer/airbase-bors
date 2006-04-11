@@ -404,6 +404,18 @@
 			return $this->dbh->get("SELECT `id` FROM `$key_table_name` WHERE `value`='".addslashes($value)."'");
 		}
 
+		function uri_array_by_value($key, $value)
+		{
+			$key_table_name = $this->create_data_table($key);
+			return $this->dbh->get_array("SELECT `id` FROM `$key_table_name` WHERE `value` = '".addslashes($value)."'");
+		}
+
+		function uri_array_by_condition($key, $condition)
+		{
+			$key_table_name = $this->create_data_table($key);
+			return $this->dbh->get_array("SELECT `id` FROM `$key_table_name` WHERE $condition");
+		}
+
 		function create_data_table($key,$create_table=true)
 		{
 //			echo "Create table name for $key";
