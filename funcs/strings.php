@@ -42,18 +42,16 @@ function utf8_win($s)
     return $s;
 }
 
-/*
-function sklon($n,$s1,$s2,$s5) // 1 íîæ 2 íîæà 5 íîæåé
-{
-    $ns=intval(substr($n,-1));
-    $n2=intval(substr($n,-2));
+	function sklon($n, $s1, $s2, $s5) // 1 Ğ½Ğ¾Ğ¶ 2 Ğ½Ğ¾Ğ¶Ğ° 5 Ğ½Ğ¾Ğ¶ĞµĞ¹
+	{
+    	$ns=intval(substr($n,-1));
+ 		$n2=intval(substr($n,-2));
 
-    if($n2>=10 && $n2<=19) return $s5;
-    if($ns==1) return $s1;
-    if($ns>=2&&$ns<=4) return $s2;
-    if($ns==0 || $ns>=5) return $s5;
-    die("Íåèçâåñòíàÿ ïàğà '$n $s1'! Ïîæàëóéñòà, ñîîáùè îá ıòîé îøèáêå =KRoN='ó!");
-}
-*/
+	    if($n2>=10 && $n2<=19) return $s5;
+    	if($ns==1) return $s1;
+	    if($ns>=2&&$ns<=4) return $s2;
+    	if($ns==0 || $ns>=5) return $s5;
+	    die("ĞĞµĞ¸Ğ·Ğ²ĞµÑÑ‚Ğ½Ğ°Ñ Ğ¿Ğ°Ñ€Ğ° '$n $s1'! ĞŸĞ¾Ğ¶Ğ°Ğ»ÑƒĞ¹ÑÑ‚Ğ°, ÑĞ¾Ğ¾Ğ±Ñ‰Ğ¸ Ğ¾Ğ± ÑÑ‚Ğ¾Ğ¹ Ğ¾ÑˆĞ¸Ğ±ĞºĞµ Ğ°Ğ´Ğ¼Ğ¸Ğ½Ğ¸ÑÑ‚Ñ€Ğ°Ñ‚Ğ¾Ñ€Ñƒ!");
+	}
 
 ?>
