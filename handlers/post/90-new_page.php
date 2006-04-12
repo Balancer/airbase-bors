@@ -6,7 +6,7 @@
 
     function handler_new_page($uri, $m=array())
 	{
-		if(user_data('level') < 10)
+		if(user_data('level') < 3)
 		{
 			$GLOBALS['page_data']['source'] = ec("Извините, страница не найдена или находится в стадии разработки.");
 			show_page($uri);

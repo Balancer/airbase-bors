@@ -3,7 +3,7 @@
 
     function go($uri, $permament = true, $time = 0, $text = true)
     {
-        if (!headers_sent($filename, $linenum) && $time==0) 
+        if(!headers_sent($filename, $linenum) && $time==0) 
         {
             header("Status: 302 Moved temporary");
             header("Location: $uri");
