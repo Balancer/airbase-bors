@@ -396,6 +396,11 @@
     $page="http://{$_SERVER['HTTP_HOST']}".preg_replace("!^(/.+)\.phtml$!","$1.hts",$script);
     if(!preg_match("![\x80-\xFF]!",$query))
         echo "<li><a href=\"?edit&ref=$ref\">создать страницу</a> <font color=red>$QUERY_ENCODED</font>\n";
+
+
+    header("HTTP/1.1 404 Not Found\n");
+    header("Status: 404 Not Found\n");
+
 ?>
 </ul>
 <br><br>

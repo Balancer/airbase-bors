@@ -106,9 +106,9 @@
 		
 		foreach(array(
 			"{$page}template$tpl2/",
-			$GLOBALS['cms']['default_template'],
 			"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
 			"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
+			$GLOBALS['cms']['default_template'],
 		) as $tpl)
 		{
 //			echo "Check '$tpl'<br />";
@@ -271,6 +271,8 @@
 				$tpl = "xfile:".$tpl;
 			else
 				$tpl = "hts:http://{$_SERVER['HTTP_HOST']}$tpl";
+
+//		echo $tpl;
 
 		$out = $smarty->fetch($tpl, $page);
 	    error_reporting(E_ALL);

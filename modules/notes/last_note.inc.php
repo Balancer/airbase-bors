@@ -8,7 +8,7 @@
 
         $hts = new DataBaseHTS();
     
-        $page = $hts->dbh->get("SELECT `id` FROM `hts_data_create_times` WHERE `id` REGEXP '.*".addslashes($notes_page).".*/[0-9]{4}/[0-9]{1,2}/$' ORDER BY `value` DESC LIMIT 0, 1");
+        $page = $hts->dbh->get("SELECT `id` FROM `hts_data_create_time` WHERE value > ".(time()-60*86400)." AND `id` REGEXP '".addslashes($notes_page).".*/[0-9]{4}/[0-9]{1,2}/$' ORDER BY `value` DESC LIMIT 0, 1");
 //        $GLOBALS['log_level'] = 2;
 
         $code = $hts->get_data($page, 'body');

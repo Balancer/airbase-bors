@@ -14,8 +14,8 @@
 
 //	print_r($_GET);
 
-	include_once('funcs/users.php');
-    require_once('handlers.php');
+	require_once("funcs/users.php");
+    require_once("handlers.php");
 
 	foreach(split(' ','handlers/pre handlers handlers/post') as $sub_path)
 		foreach(array($GLOBALS['cms']['local_dir'],
