@@ -1,0 +1,13 @@
+<h3>Архив за {$year} год</h3>
+ <table class="forum-threads" cellspacing="0" style="width: 47%; min-width: 14em; float: left; margin: 2px 4px;">
+  <tr>
+ 	<th>Месяц</th>
+ 	<th>Обновлено</th>
+  </tr>
+  {section name=m loop=$month}
+  <tr>
+	<td><a href="{$archive_uri}/{$year}/{$month[m].num}/">{$month[m].name}</a></td>
+	<td>{$month[m].updates}</td>
+  </tr>
+ {/section}
+ </table>
