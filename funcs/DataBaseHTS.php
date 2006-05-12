@@ -111,6 +111,8 @@
 				return false;
 
 			foreach($GLOBALS['cms']['data_posthandler'][$key] as $regexp => $func)
+			{
+//				echo "Check post_data_check($uri, $key) for $regexp<br/>\n";
 				if(preg_match($regexp, $uri, $m))
 				{
 					if(($res = $func($uri, $m)) != NULL)
@@ -119,6 +121,7 @@
 						return $res;
 					}
 				}
+			}
 			return false;
 		}
 
@@ -746,7 +749,7 @@ CREATE TABLE `hts_keys` (
 			$range			= intval(empty($params['range']) ? 86400: $params['range']);
 
 			$stop_time		= intval(empty($params['stop_time']) ? time() : $params['stop_time']);
-			$start_time		= intval(empty($params['start_time']) ? $stop_time - $range; : $params['start_time']);
+			$start_time		= intval(empty($params['start_time']) ? $stop_time - $range : $params['start_time']);
 
 			$deleted_join = $deleted_cond = $hidden_join = $hidden_cond = "";
 
