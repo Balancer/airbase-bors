@@ -2,7 +2,7 @@
 	$regex = "!^(http://.*/news/)(\d{4})/(\d{2})/?$!";
 	hts_data_prehandler_add($regex, 'body', 	"common_archives_month_get_body");
 	hts_data_prehandler_add($regex, 'source',	create_function('$uri, $m', 'return ec("Это виртуальная страница! Не сохраняйте значение.");'));
-	hts_data_prehandler_add($regex, 'title', 	create_function('$uri, $m', 'include_once("funcs/datetime.php"); return ec("Архив за ").month_name($m[3])." $m[2] ".ec("года");'));
+	hts_data_prehandler_add($regex, 'title', 	create_function('$uri, $m', 'include_once("funcs/datetime.php"); return ec("Архив за ").strtolower(month_name($m[3]))." $m[2] ".ec("года");'));
 	hts_data_prehandler_add($regex, 'nav_name', create_function('$uri, $m', 'include_once("funcs/datetime.php"); return month_name($m[3]);'));
 	hts_data_prehandler_add($regex, 'parent',	create_function('$uri, $m', 'return array("{$m[1]}/{$m[2]}/");'));
 	hts_data_prehandler_add($regex, 'child',	"common_archives_month_get_child");
@@ -62,7 +62,7 @@
 		}
 
 		include_once("funcs/datetime.php");
-		$data['month_name'] = month_name($month);
+		$data['month_name'] = strtolower(month_name($month));
 		$data['year'] = $year;
 		$data['week'] = $week;
 
