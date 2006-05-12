@@ -5,7 +5,11 @@
   <tr>
    {assign var="day" value=$week[w]}
    {section name=d loop=$day}
-	<td>{if $day[d].uri}<a href="{$day[d].uri}">{/if}{$day[d].day}{if $day[d].uri}</a>{/if}</td>
+	<td>
+	 {if $day[d].uri}<a href="{$day[d].uri}">{/if}
+	 {if $day[d].day}{$day[d].day}{else}&nbsp;{/if}
+	 {if $day[d].uri}</a>{/if}
+	</td>
    {/section}
   </tr>
  {/section}
