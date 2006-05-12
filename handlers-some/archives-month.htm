@@ -1,0 +1,12 @@
+<h3>Архив за {$month_name} {$year} года</h3>
+ <table class="btab" cellspacing="0" style="width: 47%; min-width: 14em; float: left; margin: 2px 4px;">
+  <tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>
+  {section name=w loop=$week}
+  <tr>
+   {assign var="day" value=$week[w]}
+   {section name=d loop=$day}
+	<td>{if $day[d].uri}<a href="{$day[d].uri}">{/if}{$day[d].day}{if $day[d].uri}</a>{/if}</td>
+   {/section}
+  </tr>
+ {/section}
+ </table>
