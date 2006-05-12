@@ -1,9 +1,10 @@
-	$regex = "!^(http://.*/)(\d{4})/({\d{2}})/?$!";
-	hts_data_posthandler_add($regex, 'body', 	"common_archives_month_get_body");
-	hts_data_posthandler_add($regex, 'source',	create_function('$uri, $m', 'return ec("Это виртуальная страница! Не сохраняйте значение.");'));
-	hts_data_posthandler_add($regex, 'title', 	create_function('$uri, $m', 'include_once("funcs/datetime.php"); return ec("Архив за ".month_name($m[3])." $m[2] года");'));
-	hts_data_posthandler_add($regex, 'nav_name',create_function('$uri, $m', 'include_once("funcs/datetime.php"); return month_name($m[3]);'));
-	hts_data_posthandler_add($regex, 'parent',	create_function('$uri, $m', 'return array("{$m[1]}/{$m[2]}/");'));
+<?
+	$regex = "!^(http://.*/news/)(\d{4})/(\d{2})/?$!";
+	hts_data_prehandler_add($regex, 'body', 	"common_archives_month_get_body");
+	hts_data_prehandler_add($regex, 'source',	create_function('$uri, $m', 'return ec("Это виртуальная страница! Не сохраняйте значение.");'));
+	hts_data_prehandler_add($regex, 'title', 	create_function('$uri, $m', 'include_once("funcs/datetime.php"); return ec("Архив за ".month_name($m[3])." $m[2] года");'));
+	hts_data_prehandler_add($regex, 'nav_name',create_function('$uri, $m', 'include_once("funcs/datetime.php"); return month_name($m[3]);'));
+	hts_data_prehandler_add($regex, 'parent',	create_function('$uri, $m', 'return array("{$m[1]}/{$m[2]}/");'));
 	
     function common_archives_month_get_body($uri, $m=array())
 	{
@@ -47,11 +48,11 @@
 					}
 					$time9 = intval(strtotime("$yy-$mm-$dd 00:00:00"))-1;
 
-					$curi = $uri.printf("%02d", $show_day)."/";
+					$curi = $uri.sprintf("%02d", $show_day)."/";
 
-					$children = $hts->get_array($curi, 'child');
+					$children = $hts->get_data_array($curi, 'child');
 
-					if($sizeof($children) == 0)
+					if(sizeof($children) == 0)
 						$curi = "";
 
 					$day[] = array('uri'=>$curi, 'day'=>$show_day);
