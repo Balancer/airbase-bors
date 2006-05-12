@@ -3,7 +3,7 @@
 	hts_data_prehandler_add($regex, 'body', 	"common_archives_post_year_get_body");
 	hts_data_prehandler_add($regex, 'source',	create_function('$uri, $m', 'return ec("Это виртуальная страница! Не сохраняйте значение.");'));
 	hts_data_prehandler_add($regex, 'title', 	create_function('$uri, $m', 'return ec("Архив за $m[2] год");'));
-	hts_data_prehandler_add($regex, 'nav_name',create_function('$uri, $m', 'return "$m[2]";'));
+	hts_data_prehandler_add($regex, 'nav_name', create_function('$uri, $m', 'return "$m[2]";'));
 	hts_data_prehandler_add($regex, 'parent',	create_function('$uri, $m', 'return array($m[1]);'));
 	
     function common_archives_post_year_get_body($uri, $m=array())

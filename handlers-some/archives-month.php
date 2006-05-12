@@ -51,9 +51,7 @@
 
 					$curi = $uri.sprintf("%02d", $show_day)."/";
 
-					$children = $hts->get_data_array($curi, 'child');
-
-					if(sizeof($children) == 0)
+					if(!$hts->get_data($curi, 'create_time'))
 						$curi = "";
 
 					$day[] = array('uri'=>$curi, 'day'=>$show_day);
