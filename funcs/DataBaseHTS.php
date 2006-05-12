@@ -7,9 +7,11 @@
 	class DataBaseHTS
 	{
 		var $dbh;
+		var $uri;
 		
-		function DataBaseHTS()
+		function DataBaseHTS($uri = NULL)
 		{
+			$this->uri = $uri;
 			$this->dbh = new DataBase();
 			if(!$this->dbh)
 				exit(__FILE__.__LINE." Can't create DataBase class");
@@ -96,9 +98,33 @@
 			foreach($GLOBALS['cms']['data_prehandler'][$key] as $regexp => $func)
 				if(preg_match($regexp, $uri, $m))
 					if(($res = $func($uri, $m)) != NULL)
+					{
+//						"Got pre $res for $key/$uri";
 						return $res;
-			
+					}	
 			return false;
+		}
+
+		function post_data_check($uri, $key)
+		{
+			if(empty($GLOBALS['cms']['data_posthandler'][$key]))
+				return false;
+
+			foreach($GLOBALS['cms']['data_posthandler'][$key] as $regexp => $func)
+				if(preg_match($regexp, $uri, $m))
+				{
+					if(($res = $func($uri, $m)) != NULL)
+					{
+//						"Got post $res for $key/$uri";
+						return $res;
+					}
+				}
+			return false;
+		}
+
+		function get($key)
+		{
+			return $this->get_data($this->uri, $key);
 		}
 
 		function get_data($uri, $key, $default=NULL, $inherit=false, $skip=false, $fields='`value`', $search='`id`')
@@ -111,12 +137,13 @@
 			else
 				$raw = false;
 			
-			echolog("Get key '$key' for '$uri'");
+//			echo("Get key '$key' for '$uri'");
 
 			$uri = $this->normalize_uri($uri);
 
 			if(!$raw && isset($GLOBALS['page_data_preset'][$key][$uri]))
 				return $GLOBALS['page_data_preset'][$key][$uri];
+
 
 			$skip_save = $skip;
 
@@ -125,6 +152,7 @@
 
 			if(!$raw && ($res = $this->pre_data_check($uri, $key)) !== false)
 				return $res;
+
 
 			if(!$raw && isset($GLOBALS['page_data_preset'][$key][$uri]))
 				return $GLOBALS['page_data_preset'][$key][$uri];
@@ -135,9 +163,8 @@
 
 			do
 			{
-				// echo "key_id/key_type ($key) =$key_id/$key_type<br>";
 				if(!$skip && $val = $this->dbh->get("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."'", true))
-					return set_global_key("uri_data($uri)",$key,$val); //stripslashes(
+					return set_global_key("uri_data($uri)", $key, $val); //stripslashes(
 				
 				if($inherit)
 				{
@@ -156,11 +183,14 @@
 				}
 				else
 					break;
-			}while($uri && $uri!='http://airbase.ru');
+			}while($uri && $uri != "http://{$_SERVER['HTTP_HOST']}");
+
+			if(!$raw && ($res = $this->post_data_check($uri, $key)) !== false)
+				return set_global_key("uri_data($uri)", $key, $res);
 
 //			include_once("funcs/DataBaseHTS/ipb.php");
 			$value = NULL;//dbhts_ipb($uri, $key, $this);
-			
+
 			set_global_key("uri_data($uri)",$key,$value);
 
 			return $value ? $value : $default;
@@ -177,7 +207,15 @@
 
 			$key_table_name = $this->create_data_table($key);
 
-			return $this->dbh->get_array("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."'");
+			$res = $this->dbh->get_array("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."'");
+
+			if($res)
+				return $res;
+	
+			if(($res = $this->post_data_check($uri, $key)) !== false)
+				return $res;
+			
+			return array();						
 		}
 
 		function data_exists($uri, $key, $value)
@@ -653,5 +691,136 @@ CREATE TABLE `hts_keys` (
 		{
 			return $this->dbh->get_array("SELECT id FROM hts_data_parent WHERE value LIKE '".addslashes($uri)."'");
 		}
+
+		function get_children_array_ex($parent, $params = array())
+		{
+			$show_hidden	= @$params['hidden'];
+			$show_deleted	= @$params['deleted'];
+			$limit			= intval(empty($params['limit']) ? 20 	: $params['limit']);
+			$range			= intval(empty($params['range']) ? 86400: $params['range']);
+
+			$stop_time		= time();
+			$start_time		= $stop_time - $range;
+
+			$deleted_join = $deleted_cond = $hidden_join = $hidden_cond = "";
+			
+			if(empty($params['hidden']))
+			{
+				$hidden_join = "
+					LEFT JOIN hts_data_flags fh ON (c.value = fh.id AND fh.value='hidden')";
+				$hidden_cond = "
+					AND fh.id IS NULL";
+			}
+
+			if(empty($params['deleted']))
+			{
+				$deleted_join = "
+					LEFT JOIN hts_data_flags fd ON (c.value = fd.id AND fd.value='deleted')";
+				$deleted_cond = "
+					AND fd.id IS NULL";
+			}
+
+			$query = "SELECT c.value as uri
+				FROM hts_data_child c
+					LEFT JOIN hts_data_modify_time mt ON (c.value = mt.id)
+					$hidden_join
+					$deleted_join
+				WHERE c.id LIKE '".addslashes($parent)."'
+					AND mt.value >= $start_time
+					AND mt.value <	$stop_time
+					$hidden_cond
+					$deleted_cond
+				ORDER BY mt.value DESC
+				LIMIT $limit;";
+			
+			$ret = $this->dbh->get_array($query);
+			
+			return $ret;
+		}
+
+		function get_array_ex($regexp, $params = array())
+		{
+			$show_hidden	= @$params['hidden'];
+			$show_deleted	= @$params['deleted'];
+			$limit			= intval(empty($params['limit']) ? 20 	: $params['limit']);
+			$range			= intval(empty($params['range']) ? 86400: $params['range']);
+
+			$stop_time		= intval(empty($params['stop_time']) ? time() : $params['stop_time']);
+			$start_time		= intval(empty($params['start_time']) ? $stop_time - $range; : $params['start_time']);
+
+			$deleted_join = $deleted_cond = $hidden_join = $hidden_cond = "";
+
+			$like_type = empty($params['like_type']) ? 'like' : addslashes($params['like_type']);
+			
+			if(empty($params['hidden']))
+			{
+				$hidden_join = "
+					LEFT JOIN hts_data_flags fh ON (ct.value = fh.id AND fh.value='hidden')";
+				$hidden_cond = "
+					AND fh.id IS NULL";
+			}
+
+			if(empty($params['deleted']))
+			{
+				$deleted_join = "
+					LEFT JOIN hts_data_flags fd ON (ct.value = fd.id AND fd.value='deleted')";
+				$deleted_cond = "
+					AND fd.id IS NULL";
+			}
+
+			$joined = array();
+			$join_cnt = 0;
+
+			if(is_array($params['where']))
+			{
+				$where_join = "";
+				$where_cond = "";
+				
+				foreach($params['where'] as $field => $value)
+				{
+					if(preg_match("!^(.+)\s+(.+?)$!", $field, $m2))
+					{
+						$field = $m2[1];
+						$cond  = addslashes($m2[2]);
+					}
+					else
+						$cond = "=";
+
+					$field = addslashes($field);
+					
+					if(empty($joined[$field]))
+					{
+						$join_cnt++;
+						$joined[$field] = $jt = "j$join_cnt";
+						$where_join .= "
+					LEFT JOIN hts_data_$field $jt ON (ct.id = $jt.id) ";
+					}
+					else
+						$jt = "j".$joined[$field];
+					$where_cond .= "
+					AND $jt.value $cond ".addslashes($value)." ";
+				}
+			}
+
+			$query = "SELECT ct.id as uri
+				FROM hts_data_create_time ct
+					LEFT JOIN hts_data_modify_time mt ON (ct.id = mt.id)
+					$where_join
+					$hidden_join
+					$deleted_join
+				WHERE ct.id $like_type '".addslashes($regexp)."'
+					$where_cond
+					$hidden_cond
+					$deleted_cond
+				ORDER BY mt.value DESC
+				LIMIT $limit;";
+			
+//			$GLOBALS['log_level'] = 10;
+			$ret = $this->dbh->get_array($query);
+//			$GLOBALS['log_level'] = 2;
+			
+			return $ret;
+		}
+
 	}
 ?>
