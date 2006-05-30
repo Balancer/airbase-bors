@@ -4,7 +4,6 @@
 		if(!$user)
 			$user = new User();
 			
-		
 		return "http://{$GLOBALS['cms']['conferences_host']}/{$GLOBALS['cms']['conferences_path']}/favorites/user".$user->data('id')."/";
 	}
 

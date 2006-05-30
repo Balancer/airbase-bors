@@ -10,10 +10,17 @@
 		$GLOBALS['cms_patterns'][$uri_pattern] = $func;
 	}
 
-	function register_action_handler($action_type, $func)
+	function register_action_handler($regexp, $action_type, $func=NULL)
 	{
-		if(empty($GLOBALS['cms_actions'][$action_type]))
-			$GLOBALS['cms_actions'][$action_type] = $func;
+		if(!$func)
+		{
+			$func        = $action_type;
+			$action_type = $regexp;
+			$regexp      = "!.*!";
+		}
+	
+		if(empty($GLOBALS['cms_actions'][$action_type][$regexp]))
+			$GLOBALS['cms_actions'][$action_type][$regexp] = $func;
 	}
 
 	function register_alias($uri_regexp, $function)
@@ -56,10 +63,12 @@
 		if(!empty($_GET['debug']))
 			echo "<small>Add function ".print_r(&$func,true)." to uri like '$regexp for key $data_key</small><br>/";
 		$GLOBALS['cms']['data_prehandler'][$data_key][$regexp] = $func;
+		krsort($GLOBALS['cms']['data_prehandler'][$data_key]);
 	}
 
 	function hts_data_posthandler_add($regexp, $data_key, $function)
 	{
 		$GLOBALS['cms']['data_posthandler'][$data_key][$regexp] = $function;
+		krsort($GLOBALS['cms']['data_posthandler'][$data_key]);
 	}
 ?>

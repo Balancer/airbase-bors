@@ -28,7 +28,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<?include("commerce-banner.phtml");?>
+<?/*include("commerce-banner.phtml");*/?>
 <br><table width="500" cellPadding="0" cellSpacing="0">
 <tr><td><div id="head">
 <h1><?echo $title;?></h1>

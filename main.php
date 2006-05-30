@@ -1,4 +1,6 @@
 <?
+	DebugBreak();
+	
     list($usec, $sec) = explode(" ",microtime());
     $GLOBALS['cms']['start_microtime'] = ((float)$usec + (float)$sec);
 
@@ -69,17 +71,22 @@
 
 	if(!empty($_GET))
 	{
-	    foreach($GLOBALS['cms_actions'] as $action=>$func)
+	    foreach($GLOBALS['cms_actions'] as $action => $reg)
     	{
-//			echo "<pre>Test action '$action' to '$uri'</pre>\n";
+//			echo "<pre>Test action '$action' to '$uri' for ".print_r($reg, true)."</pre>\n";
 			if(isset($_GET[$action]))
 			{
 				$GLOBALS['cms']['action'] = $action;
-				$res = $func($uri, $action);
-            	if($res === true)
-   	            	return;
-	       	    if($res !== false)
-    	       	    $uri = $res;
+				foreach($reg as $regexp => $func)
+				{
+					if(!preg_match($regexp, $uri, $m))
+						continue;
+					$res = $func($uri, $action, $m);
+        	    	if($res === true)
+   	        	    	return;
+	       	    	if($res !== false)
+    	       	    	$uri = $res;
+				}
 			}
 		}
 	}
