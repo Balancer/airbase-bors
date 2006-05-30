@@ -9,7 +9,7 @@
 
         $hts = new DataBaseHTS;
 
-        $page = $hts->normalize_uri($GLOBALS['page']);
+        $page = $hts->normalize_uri($GLOBALS['main_uri']);
 
         foreach(split("\n", $txt) as $s)
         {
