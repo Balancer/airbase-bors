@@ -103,31 +103,36 @@
 			$tpl2 = "";
 		}
 		
-		
-		foreach(array(
-			"{$page}template$tpl2/",
-			"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
-			"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
-			$GLOBALS['cms']['default_template'],
-		) as $tpl)
+		if(empty($GLOBALS['cms']['template_override']))
 		{
-//			echo "Check '$tpl'<br />";
-			if($hts->get_data($tpl, 'source'))
-				break;
+			foreach(array(
+				"{$page}template$tpl2/",
+				"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
+				"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
+				$GLOBALS['cms']['default_template'],
+			) as $tpl)
+			{
+//				echo "Check '$tpl'<br />";
+				if($hts->get_data($tpl, 'source'))
+					break;
+			}
+
+//			echo $hts->get_data($tpl, 'source');
+
+	        if(!$hts->get_data($tpl, 'source'))// || ($action && $action!='virtual'))
+    	        $tpl = $GLOBALS['cms']['default_template'];
+		
+//			echo $tpl;
+
+	        if(!$hts->get_data($tpl, 'source')
+					// || ($action && $action!='virtual')
+					|| @$_GET['tpl']=='safe'
+				)
+	            $tpl = $GLOBALS['cms']['default_template_file'];
+
 		}
-
-//		echo $hts->get_data($tpl, 'source');
-
-        if(!$hts->get_data($tpl, 'source'))// || ($action && $action!='virtual'))
-            $tpl = $GLOBALS['cms']['default_template'];
-
-//		echo $tpl;
-
-        if(!$hts->get_data($tpl, 'source')
-				// || ($action && $action!='virtual')
-				|| @$_GET['tpl']=='safe'
-			)
-            $tpl = $GLOBALS['cms']['default_template_file'];
+		else
+			$tpl = $GLOBALS['cms']['template_override'];
 
 		$tpl = preg_match("!^/!", $tpl) ? $tpl : "hts:$tpl";
 		

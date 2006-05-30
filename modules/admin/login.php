@@ -8,7 +8,7 @@
     require_once("funcs/DataBaseHTS.php");
     require_once("funcs/Cache.php");
     require_once("funcs/users.php");
-    require_once("funcs/modules/go.php");
+    require_once("funcs/navigation/go.php");
     require_once("actions/recompile.php");
 
     function data_clear()

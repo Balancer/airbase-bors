@@ -13,9 +13,9 @@
     if(empty($REQUEST_URI))
         $REQUEST_URI = $page;
 
-    require_once("funcs/modules/go.php");
+    require_once("funcs/navigation/go.php");
 
-    require_once("funcs-string.phtml");
+    require_once("funcs/strings.php");
     $QUERY_ENCODED=$query;
 
     //Ответим, что всё ок.
@@ -257,7 +257,7 @@
 
     if($hts->get_data($hts->alias_uri($full_uri), 'modify_time'))
     {
-        include_once('/home/airbase/html/cms/smarty/smarty.php');
+        include_once("{$_SERVER['DOCUMENT_ROOT']}cms/smarty/smarty.php");
         exit();
     }
 
@@ -439,7 +439,7 @@ if($dh)
         $keyword="";
     
 
-    include_once("funcs/funcs.phtml");
+//    include_once("funcs/funcs.phtml");
 
     $script=get_script($QUERY_ENCODED);
 

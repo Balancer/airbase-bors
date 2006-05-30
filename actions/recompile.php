@@ -37,7 +37,7 @@
 				$body = str_replace('&quot;', '"', normalize_text(addslashes($body), true));
 				
 //            $GLOBALS['log_level'] = 9;
-            $hts->set_data($page, 'body', $body);
+//            $hts->set_data($page, 'body', $body);
             $hts->set_data($page, 'compile_time', time());
 
 			$description_source = $hts->get_data($page, 'description_source');
