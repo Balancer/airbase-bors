@@ -7,7 +7,7 @@
     error_reporting(E_ALL);
     ini_set('display_errors', 'On');
     ini_set('log_errors', 'On');
-    require_once('config.php');
+    require_once("config.php");
 
     header("Content-Type: text/html; charset={$GLOBALS['cms']['charset']}");
     header('Content-Language: ru');
@@ -29,7 +29,9 @@
 
     $_SERVER['REQUEST_URI'] = preg_replace("!^(.+?)\?.*?$!", "$1", $_SERVER['REQUEST_URI']);
 
-//    exit("GET='".print_r($_GET,true)."', REQUEST_URI='{$_SERVER['REQUEST_URI']}'<br><br>");
+//	if($_SERVER['HTTP_HOST'] == "la2.wrk.ru")	
+//		echo("GET='".print_r($_GET,true)."', REQUEST_URI='{$_SERVER['REQUEST_URI']}'<br><br>");
+
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
 	if(empty($GLOBALS['main_uri']))
@@ -41,7 +43,6 @@
 
 	include_once("funcs/logs.php");
 	log_session_update();
-	
 
 	if(isset($_POST['LoginForm']))
 	{

@@ -96,7 +96,7 @@
                 $value = $db->get("SELECT `value` FROM `users_data` WHERE `member_id`=$member_id AND `key`='".addslashes($key)."'");
             else
 			{
-				list($base, $table, $field, $key) = split("\s+",$forums_data[$key]);
+				list($base, $table, $field, $key) = split(" +",$forums_data[$key]);
                 $value = $db->get("SELECT $field FROM $base.$table WHERE $key=$member_id");
         	}
 		}

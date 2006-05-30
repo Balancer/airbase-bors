@@ -14,10 +14,23 @@
         function get_static_uri($uri)
         {
 			$mtime = $hts->get($uri, 'modify_time');
+			$title = $hts->get($uri, 'title');
 			$md    = md5("$uri"."$mtime");
-			$path  = $md{0}."/".$md{1}."/".$md{2}."/".$md{3}."/".$md{4}."/".$md;
-			mkdirs("{$GLOBALS['cms']['cache_dir']}/$path");
-			
+			$path  = strftime("/%Y/%m/%d/%H/%M/%S/");
+			$file = translit_uri($title).substr($md,4).".htm");
+			mkdirs($path);
+			return $path."/".$file;
+		}
+
+        function get_static_uri($uri)
+        {
+			$mtime = $hts->get($uri, 'modify_time');
+			$title = $hts->get($uri, 'title');
+			$md    = md5("$uri"."$mtime");
+			$path  = strftime("/%Y/%m/%d/%H/%M/%S/");
+			$file = translit_uri($title).substr($md,4).".htm");
+			mkdirs($path);
+			return $path."/".$file;
 		}
     }
 ?>

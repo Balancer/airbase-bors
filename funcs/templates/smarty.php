@@ -235,7 +235,7 @@
         {
 			if(strstr($source, '[module')===false)
 			{
-				$hdr = getallheaders();
+				$hdr = function_exists("getallheaders") ? getallheaders() : array();
 				if(isset($hdr['If-Modified-Since']))
 				{ 
 					// Разделяем If-Modified-Since (Netscape < v6 отдаёт их неправильно) 
