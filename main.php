@@ -1,6 +1,4 @@
 <?
-	DebugBreak();
-	
     list($usec, $sec) = explode(" ",microtime());
     $GLOBALS['cms']['start_microtime'] = ((float)$usec + (float)$sec);
 
