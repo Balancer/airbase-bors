@@ -41,7 +41,12 @@
 		if(empty($GLOBALS['page_data']['source']))
 		{
 			$source = $hts->get_data($page, 'source');
-			$body 	= $hts->get_data($page, 'body');
+//			$body 	= $hts->get_data($page, 'body');
+//			$lcml_params = NULL;
+//			if(!empty($data['lcml_params']))
+//				$lcml_params = $data['lcml_params'];
+//			$body = lcml($source, $lcml_params);
+			$body = lcml($source, array('with_html'=>true));
 			$action = false;
 		}
 		else
