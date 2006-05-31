@@ -67,7 +67,7 @@
 			{ 
 				global $host, $doc_root; 
 				$tmp = @file("http://{$_SERVER['HTTP_HOST']}$img"); 
-				list($w,$h) = @GetImageSize("$doc_root$img"); 
+				list($w,$h,$rest) = @getimagesize($tmp); 
 				return $w."x".$h; 
 			}
 			
