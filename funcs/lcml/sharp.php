@@ -17,9 +17,15 @@
         $tag="";
 
 
-        for($i=0, $size=sizeof($array); $i<$size; $i++)
+//		$out = "";
+
+        for($i=0; $i<sizeof($array); $i++)
         {
+		
+		
             $s = $array[$i];
+
+//			$out .= "test $i: >=$s<=".print_r($array,true)."|".print_r($mask_array,true);
 
             if(preg_match("!^#(\w+)(\s*)(.*?)$!" ,$s,$m)) // Открывающийся или одиночный тэг
             {
@@ -45,7 +51,7 @@
                 {
                     $func = "lst_$m[1]";
                     $array[$i] = $func(trim($m[3]));
-					$array_mask[$j] = str_repeat('X', strlen($array[$i]));
+					$array_mask[$i] = str_repeat('X', strlen($array[$i]));
                     $changed = 1;
                     continue;
                 }
@@ -57,8 +63,12 @@
                 if(!$in_pair)
                 {
                     $func = "lsp_$tag";
+//					echo "start=".($start+1).", len=".($i-$start-1);
+					
                     $txt = $func(join("\n",array_slice($array,$start+1,$i-$start-1)),$params);
                     $txt = split("\n",$txt);
+
+//					print_r($txt);
 
                     $left       = array_slice($array, 0, $start);
                     $mask_left  = array_slice($mask_array, 0, $start);
@@ -68,12 +78,30 @@
 					$mask_txt = array();
 
 					for($j=0, $size=sizeof($txt); $j<$size; $j++)
+					{
+//						echo " <xmp>=>$txt[$j]<=</xmp> ".strlen($txt[$j]);
 						$mask_txt[$j] = str_repeat('X', strlen($txt[$j]));
+					}
 
-//					print_r($mask_array); echo "s=$start, i=$i\n";
+//					exit(print_r($mask_txt, true)."s=$start, i=$i\n");
+
+//					echo "<xmp>";
+//					print_r(array_merge($left, $txt, $right));
+//					print_r(array_merge($mask_left, $mask_txt, $mask_right));
+//					echo "</xmp>";
 
                     $array      = array_merge($left, $txt, $right);
                     $mask_array = array_merge($mask_left, $mask_txt, $mask_right);
+					
+//					$out .= print_r($array,true);
+//					$out .= print_r($mask_array,true);
+					
+//					$i = sizeof($left) + sizeof($txt);
+//					$out .= $i;
+
+//					print_r($array);
+
+//					exit("<xmp>$out</xmp>".sizeof($array));
 
                     $changed = 1;
                 }
@@ -91,7 +119,7 @@
 /*        if(!isset($GLOBALS['forum_tag_found'] && !$GLOBALS['forum_tag_found']))
             $txt.="\n<?\$id=\"$::page_data{forum_id}\";\$page=\"$::page\";include(\"/home/airbase/html/inc/show/forum-comments.phtml\");?>\n";
 */        
-        return $txt;
+        return /*"<xmp>$out</xmp>".*/$txt;
     }
 
     function lcml_sharp_getset($txt)
