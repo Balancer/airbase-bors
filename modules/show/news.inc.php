@@ -31,7 +31,7 @@
 
 		foreach($children as $child => $create_time)
 		{
-			if(!preg_match("!^$uri\d{4}/\d{1,2}/\d{1,2}/.+!",$child))
+			if(!preg_match("!^$uri\d{4}/\d{1,2}/\d{1,2}.*/$!",$child))
 				continue;
 
 			if(++$shown > $limit)
