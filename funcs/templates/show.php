@@ -154,6 +154,9 @@
 			else
 				$template = "hts:http://{$_SERVER['HTTP_HOST']}$template";
 		
+		if(!$smarty->template_exists($template_uri))
+			$template_uri = $GLOBALS['cms']['default_template'];
+
 		$out = $smarty->fetch($template, $uri);
 
 		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
