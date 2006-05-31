@@ -154,8 +154,10 @@
 			else
 				$template = "hts:http://{$_SERVER['HTTP_HOST']}$template";
 		
-		if(!$smarty->template_exists($template_uri))
-			$template_uri = $GLOBALS['cms']['default_template'];
+		if(!$smarty->template_exists($template))
+			$template = $GLOBALS['cms']['default_template'];
+		if(!$smarty->template_exists($template))
+			$template = $GLOBALS['cms']['default_template_file'];
 
 		$out = $smarty->fetch($template, $uri);
 
