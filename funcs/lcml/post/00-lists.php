@@ -3,7 +3,7 @@
     {
         $txt = split("\n",$txt);
         $sum = array();
-        $ul_open=0;
+        $ul_open = 0;
         $res = '';
         foreach($txt as $s)
         {
@@ -32,9 +32,14 @@
                 $sum[] = $s;
             }
         }
+
+		if($ul_open)
+			for($ul_open;$ul_open>0;$ul_open--)
+				$res.="</ul>";
+
         if($res)
             $sum[] = $res;
 
-        return join("\n",$sum);
+        return join("\n", $sum);
     }
 ?>
