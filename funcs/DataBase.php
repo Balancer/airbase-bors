@@ -240,9 +240,14 @@
 			return " SET $set ";
 		}
 
-		function insert($table,$fields)
+		function insert($table, $fields)
 		{
 			$this->query("INSERT INTO $table ".$this->make_string_values($fields));
+		}
+
+		function replace($table, $fields)
+		{
+			$this->query("REPLACE $table ".$this->make_string_values($fields));
 		}
 
 		function store($table, $where, $fields, $append=false)

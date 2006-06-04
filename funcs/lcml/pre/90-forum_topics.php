@@ -36,7 +36,7 @@
         $topic = intval($topic);
 
         $url="http://forums.airbase.ru/index.php?showtopic=$topic";
-        $res=$hts->dbh->get("SELECT `title` FROM FORUM.ib_topics WHERE `tid`='$topic'");
+        $res=$hts->dbh->get("SELECT `title` FROM forums_airbase_ru.ib_topics WHERE `tid`='$topic'");
 
         if($res)
             $title=chop($res);
@@ -49,7 +49,7 @@
     function lcml_forum_topics_post($topic,$post)
     {
         $dbh = @mysql_connect("localhost", "forum", "localforum") or die (__FILE__.':'.__LINE__." Could not connect");
-        mysql_select_db("FORUM") or die (__FILE__.':'.__LINE__." Could not select database");
+        mysql_select_db("forums_airbase_ru") or die (__FILE__.':'.__LINE__." Could not select database");
         mysql_query ("SET CHARACTER SET utf8");
 
         $q="SELECT t.title,t.tid,p.author_name,p.post_date FROM ib_posts p LEFT JOIN ib_topics t ON (t.tid=p.topic_id) WHERE p.pid=$post";
@@ -71,7 +71,7 @@
     function lcml_forum_topics_page($forum,$topic,$start)
     {
         $dbh = @mysql_connect("localhost", "forum", "localforum") or die (__FILE__.':'.__LINE__." Could not connect");
-        mysql_select_db("FORUM") or die (__FILE__.':'.__LINE__." Could not select database");
+        mysql_select_db("forums_airbase_ru") or die (__FILE__.':'.__LINE__." Could not select database");
         mysql_query ("SET CHARACTER SET utf8");
 
         if($forum)
