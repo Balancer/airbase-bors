@@ -45,6 +45,7 @@
 			$template_uri = $GLOBALS['cms']['default_template'];
 
 		$modify_time = empty($data['modify_time']) ? time() : $data['modify_time'];
+		$modify_time = max(@$data['compile_time'], $modify_time);
 
 		if(!$caching)
 			$smarty->clear_cache($template_uri, $uri);

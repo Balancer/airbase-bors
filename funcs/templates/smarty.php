@@ -41,12 +41,13 @@
 		if(empty($GLOBALS['page_data']['source']))
 		{
 			$source = $hts->get_data($page, 'source');
-//			$body 	= $hts->get_data($page, 'body');
+			$body 	= $hts->get_data($page, 'body');
 //			$lcml_params = NULL;
 //			if(!empty($data['lcml_params']))
 //				$lcml_params = $data['lcml_params'];
 //			$body = lcml($source, $lcml_params);
-			$body = lcml($source, array('with_html'=>true));
+			if(!$body)
+				$body = lcml($source, array('with_html'=>true));
 			$action = false;
 		}
 		else
@@ -111,6 +112,7 @@
 		if(empty($GLOBALS['cms']['template_override']))
 		{
 			foreach(array(
+				$template,
 				"{$page}template$tpl2/",
 				"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
 				"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
@@ -120,16 +122,18 @@
 //				echo "Check '$tpl'<br />";
 				if($hts->get_data($tpl, 'source'))
 					break;
+				if(!empty($tpl) && $tpl{0}=='/' && file_exists($tpl))
+					break;
 			}
 
 //			echo $hts->get_data($tpl, 'source');
 
-	        if(!$hts->get_data($tpl, 'source'))// || ($action && $action!='virtual'))
-    	        $tpl = $GLOBALS['cms']['default_template'];
+			if(!$smarty->template_exists($tpl))
+	  	        $tpl = $GLOBALS['cms']['default_template'];
 		
 //			echo $tpl;
 
-	        if(!$hts->get_data($tpl, 'source')
+			if(!$smarty->template_exists($tpl)
 					// || ($action && $action!='virtual')
 					|| @$_GET['tpl']=='safe'
 				)
@@ -148,7 +152,8 @@
 		$GLOBALS['cms']['cache_copy'] = $hts->get_data($page, 'cache_create_time');
 
 		$nocache = $action || $GLOBALS['cms']['cache_disabled'];
-		$nocache |= $hts->get_data($page, 'modify_time') > $hts->get_data($page, 'cache_create_time');
+		$modify_time = max($hts->get_data($page, 'modify_time'), $hts->get_data($page, 'compile_time'));
+		$nocache |= $modify_time > $hts->get_data($page, 'cache_create_time');
 
 		if($nocache)
 			$smarty->clear_cache($tpl, $page);
@@ -162,7 +167,6 @@
 		include_once("funcs/actions/subscribe.php");
 		$subscribed = cms_funcs_action_is_subscribed($page);
 
-		$modify_time = $hts->get_data($page, 'modify_time');
         $last_modify = gmdate('D, d M Y H:i:s', $modify_time).' GMT';
    	    @header ('Last-Modified: '.$last_modify);
 

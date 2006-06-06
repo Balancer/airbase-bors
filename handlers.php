@@ -35,7 +35,7 @@ function register_alias($uri_regexp, $function)
 
 function handlers_load($dir = 'handlers')
 {
-		//		echo "<b>Load handlers from $dir</b><br/>";
+//	echo "<b>Load handlers from $dir</b><br/>";
 
 	if (!is_dir($dir))
 		return;
@@ -53,7 +53,7 @@ function handlers_load($dir = 'handlers')
 
 	foreach ($files as $file)
 	{
-		//            echo "load $file<br>\n";
+//		echo "load $file<br>\n";
 
 		if (substr($file, -4) == '.php')
 			include_once ("$dir/$file");
@@ -76,7 +76,7 @@ function hts_data_posthandler_add($regexp, $data_key, $function)
 	krsort($GLOBALS['cms']['data_posthandler'][$data_key]);
 }
 
-function do_uri_handlers($uri, $handlers)
+function do_uri_handlers($uri, $match, $handlers)
 {
 	$ret = false;
 
@@ -85,7 +85,7 @@ function do_uri_handlers($uri, $handlers)
 		if (!empty ($_GET['debug']))
 			echo "<tt>Test pattern '$uri_pattern' to '$uri'</tt><br/>\n";
 		$m = array ();
-		if (preg_match($uri_pattern, $uri, $m))
+		if (preg_match($uri_pattern, $match, $m))
 		{
 			//			echo "ok!";
 			$res = $func ($uri, $m);
@@ -103,13 +103,13 @@ function do_uri_handlers($uri, $handlers)
 	return $ret;
 }
 
-function do_plugin_uri_handlers($match, $path)
+function do_plugin_uri_handlers($uri, $match, $path)
 {
 	$save = $GLOBALS['cms_patterns'];
 	$GLOBALS['cms_patterns'] = array ();
 
 	handlers_load($path);
-	$ret = do_uri_handlers($match[2], $GLOBALS['cms_patterns']);
+	$ret = do_uri_handlers($uri, $match[2], $GLOBALS['cms_patterns']);
 
 	$GLOBALS['cms_patterns'] = $save;
 	return $ret;
@@ -138,13 +138,50 @@ function hts_data_prehandler($pattern, $data)
 		hts_data_prehandler_add($pattern, 'nav_name', create_function('$uri, $m', '$hts = new DataBaseHTS(); return strtolower($hts->get_data($uri, "title"));'));
 
 	if (empty ($data['source']))
-		hts_data_prehandler_add($pattern, 'source', create_function('$uri, $m', 'return NULL;'));
+		hts_data_prehandler_add($pattern, 'source', create_function('$uri, $m', 'return ec("Виртуальная страница.");'));
 
-	if (empty ($data['modufy_time']))
+	if (empty ($data['modify_time']))
 		hts_data_prehandler_add($pattern, 'modify_time', create_function('$uri, $m', 'return time();'));
 
 	if (empty ($data['create_time']))
 		hts_data_prehandler_add($pattern, 'create_time', create_function('$uri, $m', 'return time();'));
+}
+
+function do_plugin_action_handlers($uri, $match, $path)
+{
+	$save = $GLOBALS['cms_actions'];
+	$GLOBALS['cms_actions'] = array ();
+
+	handlers_load($path);
+	$ret = do_action_handlers($uri, $match[2], $GLOBALS['cms_actions']);
+
+	$GLOBALS['cms_actions'] = $save;
+	return $ret;
+}
+
+function do_action_handlers($uri, $match, $actions)
+{
+	$ret = false;
+   	foreach($actions as $action => $reg)
+   	{
+//		echo "<pre>Test action '$action' to '$uri' for ".print_r($reg, true)."</pre>\n";
+		if(isset($_GET[$action]))
+		{
+			$GLOBALS['cms']['action'] = $action;
+			foreach($reg as $regexp => $func)
+			{
+				if(!preg_match($regexp, $match, $m))
+					continue;
+				$res = $func($uri, $action, $m);
+    	    	if($res === true)
+   	    	    	return true;
+   		    	if($res !== false)
+       		    	$ret = $uri = $res;
+			}
+		}
+	}
+	
+	return $ret;
 }
 ?>
 

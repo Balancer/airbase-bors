@@ -1,3 +1,8 @@
----
+<form id="message-form" method="post" action="{$base_uri}?new-ticket-post" ENCTYPE="multipart/form-data">
+<h3>Зарегистрировать тикет</h3>
 
-Шаблон нового тикета.
+<b>Заголовок:&nbsp;</b><input name="title" size="50" class="text" value="">
+<textarea name="source" rows="7" cols="50"></textarea>
+<br />
+<input class="add" type="submit" value="Отправить">
+</form>
