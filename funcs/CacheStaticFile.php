@@ -17,7 +17,7 @@
 			$title = $hts->get($uri, 'title');
 			$md    = md5("$uri"."$mtime");
 			$path  = strftime("/%Y/%m/%d/%H/%M/%S/");
-			$file = translit_uri($title).substr($md,4).".htm");
+			$file = "";//translit_uri($title).substr($md,4).".htm");
 			mkdirs($path);
 			return $path."/".$file;
 		}
@@ -28,7 +28,7 @@
 			$title = $hts->get($uri, 'title');
 			$md    = md5("$uri"."$mtime");
 			$path  = strftime("/%Y/%m/%d/%H/%M/%S/");
-			$file = translit_uri($title).substr($md,4).".htm");
+			$file = "";//translit_uri($title).substr($md,4).".htm");
 			mkdirs($path);
 			return $path."/".$file;
 		}

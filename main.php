@@ -17,12 +17,6 @@
 	require_once("funcs/users.php");
     require_once("handlers.php");
 
-	foreach(split(' ','handlers/pre handlers handlers/post') as $sub_path)
-		foreach(array($GLOBALS['cms']['local_dir'],
-					"{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}",
-					$GLOBALS['cms']['base_dir']) as $base_path)
-			handlers_load("$base_path/$sub_path");
-	
 	$_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
 
     $_SERVER['REQUEST_URI'] = preg_replace("!^(.+?)\?.*?$!", "$1", $_SERVER['REQUEST_URI']);
@@ -68,47 +62,48 @@
 
 //	$GLOBALS['cms']['action'] = '';
 
-	if(!empty($_GET))
+	foreach(split(' ','handlers/pre handlers handlers/post') as $sub_path)
 	{
-	    foreach($GLOBALS['cms_actions'] as $action => $reg)
-    	{
+		$GLOBALS['cms_patterns'] = array();
+		$GLOBALS['cms_actions']  = array();
+
+//		echo "Load $sub_path for $uri<br />\n";
+	
+		foreach(array($GLOBALS['cms']['local_dir'],
+					"{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}",
+					$GLOBALS['cms']['base_dir']) as $base_path)
+			handlers_load("$base_path/$sub_path");
+	
+		if(!empty($_GET))
+		{
+	    	foreach($GLOBALS['cms_actions'] as $action => $reg)
+	    	{
 //			echo "<pre>Test action '$action' to '$uri' for ".print_r($reg, true)."</pre>\n";
-			if(isset($_GET[$action]))
-			{
-				$GLOBALS['cms']['action'] = $action;
-				foreach($reg as $regexp => $func)
+				if(isset($_GET[$action]))
 				{
-					if(!preg_match($regexp, $uri, $m))
-						continue;
-					$res = $func($uri, $action, $m);
-        	    	if($res === true)
-   	        	    	return;
-	       	    	if($res !== false)
-    	       	    	$uri = $res;
+					$GLOBALS['cms']['action'] = $action;
+					foreach($reg as $regexp => $func)
+					{
+						if(!preg_match($regexp, $uri, $m))
+							continue;
+						$res = $func($uri, $action, $m);
+    	    	    	if($res === true)
+   	    	    	    	return;
+	       		    	if($res !== false)
+    	       		    	$uri = $res;
+					}
 				}
 			}
 		}
-	}
 
-    foreach($GLOBALS['cms_patterns'] as $uri_pattern=>$func)
-    {
-		if(!empty($_GET['debug']))
-			echo "<tt>Test pattern '$uri_pattern' to '$uri'</tt><br/>\n";
-		if(preg_match($uri_pattern, $uri, $m))
-		{
-//			echo "ok!";
-            $res = $func($uri, $m);
-            if($res === true)
-			{
-				if(isset($_GET['debug']))
-					echo "Loaded by pattern $uri_pattern=>$func<br/>";
-                return;
-			}
-            if($res !== false)
-                $uri = $res;
-		}
-	}
+		$ret = do_uri_handlers($uri, $GLOBALS['cms_patterns']);
+		
+		if($ret === true)
+			return;
 
+		if($ret !== false)
+			$uri = $ret;
+	}
 
 //   echo "<pre>";	print_r($_SERVER);    echo "</pre>";
 	echo "<pre>";
