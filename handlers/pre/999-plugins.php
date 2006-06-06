@@ -1,7 +1,6 @@
 <?
 	require_once('funcs/uris.php');
 
-
 	register_uri_handler('!.*!', 'plugins_base_load');
 
 	function plugins_base_load($uri)
@@ -24,12 +23,12 @@
 		return $ret;
 	}
 
-	function plugins_load($main_uri, $base_dir = 'plugins')
+	function plugins_load($uri, $base_dir = 'plugins')
     {
 //		echo "<b>Load plugins from $base_dir</b><br/>\n";
 		$ret = false;
 
-		$path = uri2path($main_uri);
+		$path = uri2path($uri);
 	
         if(!is_dir($base_dir)) 
         	return false;
@@ -60,8 +59,22 @@
 //						echo "---<br/>\n";
 					    ini_set('include_path', "$base_dir/$dir/handlers/:".ini_get('include_path'));
 						$GLOBALS['cms']['plugin_base_path'] = $m[1];
-						$GLOBALS['cms']['plugin_base_uri']  = preg_replace("!$pattern!", "", $main_uri).$m[1];
-						$res = do_plugin_uri_handlers($m, "$base_dir/$dir/handlers/");
+						$GLOBALS['cms']['plugin_base_uri']  = preg_replace("!$pattern!", "", $uri).$m[1]."/";
+					
+						include_once("$base_dir/$dir/config.php");
+
+						if(!empty($_GET))
+						{
+							$res = do_plugin_action_handlers($uri, $m, "$base_dir/$dir/handlers/");
+		
+							if($res === true)
+								return true;
+
+							if($res !== false)
+								$ret = $uri = $ret;
+						}
+
+						$res = do_plugin_uri_handlers($uri, $m, "$base_dir/$dir/handlers/");
 						if($res === true)
 							return true;
 						if($res !== false)

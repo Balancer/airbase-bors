@@ -9,7 +9,6 @@
 //		echo "<tt>try show page '$uri'</tt>";
 	
 	    $hts  = new DataBaseHTS;
-
 	    require_once('funcs/templates/smarty.php');
 		if($hts->get_data($uri, 'source'))
 		{

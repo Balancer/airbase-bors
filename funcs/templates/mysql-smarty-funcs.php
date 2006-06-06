@@ -9,7 +9,9 @@
         // populating $tpl_source
         $hts = new DataBaseHTS;
 		debug($tpl_name);
-        $tpl = $hts->get_data($tpl_name, 'source');
+        $tpl = $hts->get_data($tpl_name, 'title');
+		if(!$tpl)
+	        $tpl = $hts->get_data($tpl_name, 'source');
 
         if($tpl) 
         {

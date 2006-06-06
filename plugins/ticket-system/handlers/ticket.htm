@@ -1,0 +1,18 @@
+<h1>{$title}</h1>
+
+
+{section name=i loop=$posts}
+<table class="forum-threads" cellspacing="0">
+<tr><th><small>{$posts[i].author_name}, {$posts[i].date}</small></th></tr>
+<tr><td>
+{$posts[i].message}
+</td></tr>
+</table>
+{/section}
+
+<form id="message-form" method="post" action="?comment-add" ENCTYPE="multipart/form-data">
+<h3>Добавить комментарий</h3>
+<textarea name="source" rows="7" cols="50"></textarea>
+<br />
+<input class="add" type="submit" value="Отправить">
+</form>

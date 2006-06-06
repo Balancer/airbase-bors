@@ -706,44 +706,62 @@ class DataBaseHTS
 
 	function get_children_array_ex($parent, $params = array ())
 	{
-		$show_hidden = @ $params['hidden'];
-		$show_deleted = @ $params['deleted'];
 		$limit = intval(empty ($params['limit']) ? 20 : $params['limit']);
 		$range = intval(empty ($params['range']) ? 86400 : $params['range']);
 
 		$stop_time = time();
 		$start_time = $stop_time - $range;
 
-		$deleted_join = $deleted_cond = $hidden_join = $hidden_cond = "";
+		$join = $closed_cond = $deleted_cond = $hidden_cond = "";
+		$order = "ORDER BY mt.value DESC";
 
-		if (empty ($params['hidden']))
+		$tab = 1;
+
+		if(!empty($params['order']))
 		{
-			$hidden_join = "
-																	LEFT JOIN hts_data_flags fh ON (c.value = fh.id AND fh.value='hidden')";
-			$hidden_cond = "
-																	AND fh.id IS NULL";
+			list($table, $asc) = preg_split("!\s+!", $params['order']);
+			$join .= " LEFT JOIN hts_data_".addslashes($table)." tab$tab ON (c.value = tab$tab.id)\n";
+			$order = "ORDER BY tab$tab.value $asc\n";
 		}
 
-		if (empty ($params['deleted']))
+		if (!empty ($params['closed']))
 		{
-			$deleted_join = "
-																	LEFT JOIN hts_data_flags fd ON (c.value = fd.id AND fd.value='deleted')";
-			$deleted_cond = "
-																	AND fd.id IS NULL";
+			$not = $params['closed'] == 'yes' ? "NOT" : "";
+		
+			$join .= "
+																	LEFT JOIN hts_data_flags fc ON (c.value = fc.id AND fc.value='closed')";
+			$closed_cond = "
+																	AND fc.id IS $not NULL";
+		}
+		
+		if (empty ($params['hidden']) || $params['hidden'] == 'only')
+		{
+			$not = @$params['hidden'] == 'only' ? "NOT" : "";
+		
+			$join .= " LEFT JOIN hts_data_flags fh ON (c.value = fh.id AND fh.value='hidden')";
+			$hidden_cond = " AND fh.id IS $not NULL";
+		}
+
+		if (empty ($params['deleted']) || $params['deleted'] == 'only')
+		{
+			$not = @$params['deleted'] == 'only' ? "NOT" : "";
+			
+			$join .= " LEFT JOIN hts_data_flags fd ON (c.value = fd.id AND fd.value='deleted')";
+			$deleted_cond = " AND fd.id IS $not NULL";
 		}
 
 		$query = "SELECT c.value as uri
-												FROM hts_data_child c
-													LEFT JOIN hts_data_modify_time mt ON (c.value = mt.id)
-													$hidden_join
-													$deleted_join
-												WHERE c.id LIKE '".addslashes($parent)."'
-													AND mt.value >= $start_time
-													AND mt.value <	$stop_time
-													$hidden_cond
-													$deleted_cond
-												ORDER BY mt.value DESC
-												LIMIT $limit;";
+	FROM hts_data_child c
+		LEFT JOIN hts_data_modify_time mt ON (c.value = mt.id)
+		$join
+	WHERE c.id = '".addslashes($parent)."'
+		AND mt.value >= $start_time
+		AND mt.value <	$stop_time
+		$hidden_cond
+		$deleted_cond
+		$closed_cond
+	$order
+	LIMIT $limit;";
 
 		$ret = $this->dbh->get_array($query);
 
@@ -752,8 +770,6 @@ class DataBaseHTS
 
 	function get_array_ex($regexp, $params = array ())
 	{
-		$show_hidden = @ $params['hidden'];
-		$show_deleted = @ $params['deleted'];
 		$limit = intval(empty ($params['limit']) ? 20 : $params['limit']);
 		$range = intval(empty ($params['range']) ? 86400 : $params['range']);
 

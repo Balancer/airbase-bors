@@ -76,4 +76,20 @@ __EOT__;
             exit(ec("Не найден идентификатор страницы '$page'!"));
         }
     }
+	
+	function update_parents($uri)
+	{
+		$GLOBALS['cms']['recompiled_uris'] = array();
+		
+		$hts = new DataBaseHTS();
+		foreach($hts->get_data_array($uri, 'parent') as $parent)
+		{
+			if(!empty($GLOBALS['cms']['recompiled_uris'][$parent]))
+				continue;
+			
+			$GLOBALS['cms']['recompiled_uris'][$parent] = $uri;
+			
+			$hts->set_data($parent, 'compile_time', time());
+		}
+	}
 ?>

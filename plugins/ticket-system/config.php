@@ -1,7 +1,4 @@
 <?
-	if(!uri_match("!!"))
-
-	$GLOBALS['cms']['plugins']['ticket-system'] = array(
-			'path' => '/tickets/',
-		);
+//	$GLOBALS['cms']['default_template'] = "/var/www/bal.aviaport.ru/htdocs/cms/templates/aviaport/index.html";
+	$GLOBALS['page_data']['template'] = "/var/www/bal.aviaport.ru/htdocs/cms/templates/aviaport/index.html";
 ?>

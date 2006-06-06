@@ -1,0 +1,20 @@
+<table class="forum-threads" cellspacing="0">
+<tr>
+	<th class="created">обновлено</th>
+	<th>тема</th>
+	<th class="updated">создано</th>
+</tr>
+
+{section name=t loop=$tickets}
+<tr><td class="created">{$tickets[t].date}</td>
+<td><a title="Перейти к тикету" href="{$tickets[t].uri}">{$tickets[t].title}</a>&nbsp;
+<td class="updated">{$tickets[t].create_date}</td>
+</tr>
+{/section}
+
+</table>
+
+<ul>
+<li><a href="new_ticket/">Добавить тикет</a></li>
+</ul>
+

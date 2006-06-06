@@ -53,6 +53,8 @@
 //		print_r($smarty->secure_dir);
 
 		$modify_time = empty($data['modify_time']) ? time() : $data['modify_time'];
+		$modify_time = max($data['compile_time'], $modify_time);
+
 		$source = @$data['source'];
 		$action = @$data['action'];
 //		if(!$action)
@@ -242,9 +244,7 @@
 		
 		$smarty = smarty_init();
 
-		$modify_time = $hts->get_data($uri, 'modify_time');
-		if(!$modify_time)
-			$modify_time = time();
+		$modify_time = max($hts->get_data($page, 'modify_time'), $hts->get_data($page, 'compile_time'));
 
 		$source = $hts->get_data($uri, 'source');
 

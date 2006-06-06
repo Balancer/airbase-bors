@@ -22,6 +22,7 @@
 
 	function message($text, $redir = false, $title="", $timeout = 5)
 	{
+		require_once("funcs/templates/smarty.php");
 		
 		$GLOBALS['page_data']['title'] = $title?$title:ec("Сообщение");
 		$GLOBALS['page_data']['source'] = $text;

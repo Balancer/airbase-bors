@@ -25,6 +25,13 @@
 //		echo("GET='".print_r($_GET,true)."', REQUEST_URI='{$_SERVER['REQUEST_URI']}'<br><br>");
 
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+	$parse = parse_url($uri);
+
+//	if(preg_match("!/~page(\d+)/?$!", $parse['path'], $m))
+//		$GLOBALS['cms']['page_number'] = max(1, intval($m[1]));
+//	else
+	$GLOBALS['cms']['page_number'] = 1;
+//	$uri = "http://{$_SERVER['HTTP_HOST']}".preg_replace("!/~[\w\-]+/$!","/",$_SERVER['REQUEST_URI']);
 
 	if(empty($GLOBALS['main_uri']))
 		$GLOBALS['main_uri'] = $uri;
@@ -50,10 +57,7 @@
 		return message(ec("Вы успешно авторизовались"), $uri);
 	}
 
-	$parse = parse_url($uri);
 
-	$GLOBALS['cms']['page_path'] = preg_replace("!/~[\w\-]+/$!","/",$parse['path']);
-	$GLOBALS['cms']['page_number'] = 1;
 
 //	exit();
 
@@ -72,31 +76,25 @@
 		foreach(array($GLOBALS['cms']['local_dir'],
 					"{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}",
 					$GLOBALS['cms']['base_dir']) as $base_path)
+		{
+			if(!empty($_GET['dbg']))
+				DebugBreak();
+
 			handlers_load("$base_path/$sub_path");
-	
+		}
+		
 		if(!empty($_GET))
 		{
-	    	foreach($GLOBALS['cms_actions'] as $action => $reg)
-	    	{
-//			echo "<pre>Test action '$action' to '$uri' for ".print_r($reg, true)."</pre>\n";
-				if(isset($_GET[$action]))
-				{
-					$GLOBALS['cms']['action'] = $action;
-					foreach($reg as $regexp => $func)
-					{
-						if(!preg_match($regexp, $uri, $m))
-							continue;
-						$res = $func($uri, $action, $m);
-    	    	    	if($res === true)
-   	    	    	    	return;
-	       		    	if($res !== false)
-    	       		    	$uri = $res;
-					}
-				}
-			}
-		}
+			$ret = do_action_handlers($uri, $uri, $GLOBALS['cms_actions']);
+		
+			if($ret === true)
+				return;
 
-		$ret = do_uri_handlers($uri, $GLOBALS['cms_patterns']);
+			if($ret !== false)
+				$uri = $ret;
+		}
+		
+		$ret = do_uri_handlers($uri, $uri, $GLOBALS['cms_patterns']);
 		
 		if($ret === true)
 			return;
