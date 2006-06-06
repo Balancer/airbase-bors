@@ -1,74 +1,152 @@
 <?
-	function register_handler($uri_pattern, $func)
+function register_handler($uri_pattern, $func = NULL)
+{
+	register_uri_handler($uri_pattern, $func);
+}
+
+function register_uri_handler($uri_pattern, $func = NULL)
+{
+	if ($func == NULL)
 	{
-		$GLOBALS['cms_patterns'][$uri_pattern] = $func;
-//		print_r($GLOBALS['cms_patterns']);
+		$func = $uri_pattern;
+		$uri_pattern = "!.*!";
 	}
 
-	function register_uri_handler($uri_pattern, $func)
+	$GLOBALS['cms_patterns'][$uri_pattern] = $func;
+}
+
+function register_action_handler($regexp, $action_type, $func = NULL)
+{
+	if (!$func)
 	{
-		$GLOBALS['cms_patterns'][$uri_pattern] = $func;
+		$func = $action_type;
+		$action_type = $regexp;
+		$regexp = "!.*!";
 	}
 
-	function register_action_handler($regexp, $action_type, $func=NULL)
+	if (empty ($GLOBALS['cms_actions'][$action_type][$regexp]))
+		$GLOBALS['cms_actions'][$action_type][$regexp] = $func;
+}
+
+function register_alias($uri_regexp, $function)
+{
+	$GLOBALS['cms_aliases'][$uri_regexp] = $function;
+}
+
+function handlers_load($dir = 'handlers')
+{
+		//		echo "<b>Load handlers from $dir</b><br/>";
+
+	if (!is_dir($dir))
+		return;
+
+	$files = array ();
+
+	if ($dh = opendir($dir))
+		while (($file = readdir($dh)) !== false)
+			if (substr($file, 0, 1) != '.')
+				array_push($files, $file);
+
+	closedir($dh);
+
+	sort($files);
+
+	foreach ($files as $file)
 	{
-		if(!$func)
+		//            echo "load $file<br>\n";
+
+		if (substr($file, -4) == '.php')
+			include_once ("$dir/$file");
+		elseif (is_dir("$dir/$file") && !preg_match("!(post|pre)$!", $file)) handlers_load("$dir/$file");
+	}
+}
+
+function hts_data_prehandler_add($regexp, $data_key, $func)
+{
+	if (!empty ($_GET['debug']))
+		echo "<small>Add function $func to uri like '$regexp' for key $data_key</small><br />";
+
+	$GLOBALS['cms']['data_prehandler'][$data_key][$regexp] = $func;
+	krsort($GLOBALS['cms']['data_prehandler'][$data_key]);
+}
+
+function hts_data_posthandler_add($regexp, $data_key, $function)
+{
+	$GLOBALS['cms']['data_posthandler'][$data_key][$regexp] = $function;
+	krsort($GLOBALS['cms']['data_posthandler'][$data_key]);
+}
+
+function do_uri_handlers($uri, $handlers)
+{
+	$ret = false;
+
+	foreach ($handlers as $uri_pattern => $func)
+	{
+		if (!empty ($_GET['debug']))
+			echo "<tt>Test pattern '$uri_pattern' to '$uri'</tt><br/>\n";
+		$m = array ();
+		if (preg_match($uri_pattern, $uri, $m))
 		{
-			$func        = $action_type;
-			$action_type = $regexp;
-			$regexp      = "!.*!";
+			//			echo "ok!";
+			$res = $func ($uri, $m);
+			if ($res === true)
+			{
+				if (isset ($_GET['debug']))
+					echo "Loaded by pattern $uri_pattern=>$func<br/>";
+				return true;
+			}
+			if ($res !== false)
+				$ret = $uri = $res;
 		}
-	
-		if(empty($GLOBALS['cms_actions'][$action_type][$regexp]))
-			$GLOBALS['cms_actions'][$action_type][$regexp] = $func;
 	}
 
-	function register_alias($uri_regexp, $function)
+	return $ret;
+}
+
+function do_plugin_uri_handlers($match, $path)
+{
+	$save = $GLOBALS['cms_patterns'];
+	$GLOBALS['cms_patterns'] = array ();
+
+	handlers_load($path);
+	$ret = do_uri_handlers($match[2], $GLOBALS['cms_patterns']);
+
+	$GLOBALS['cms_patterns'] = $save;
+	return $ret;
+}
+
+function hts_data_prehandler($pattern, $data)
+{
+	foreach ($data as $key => $value)
 	{
-		$GLOBALS['cms_aliases'][$uri_regexp] = $function;
+		if ($value == 'default')
+			continue;
+
+		if (function_exists($value))
+		{
+			hts_data_prehandler_add($pattern, $key, $value);
+			continue;
+		}
+
+		hts_data_prehandler_add($pattern, $key, create_function('$uri, $m', "return \"".addslashes($value)."\";"));
 	}
 
-    function handlers_load($dir='handlers')
-    {
-//		echo "<b>Load handlers from $dir</b><br/>";
-	
-        if(!is_dir($dir)) 
-        	return;
-        
-        $files = array();
+	if (empty ($data['parent']))
+		hts_data_prehandler_add($pattern, 'parent', create_function('$uri, $m', 'return array($m[1]);'));
 
-        if($dh = opendir($dir)) 
-        {
-            while(($file = readdir($dh)) !== false)
-                if(substr($file,0,1)!='.')
-                    array_push($files, $file);
-        }
-        closedir($dh);
-        
-        sort($files);
+	if (empty ($data['nav_name']))
+		hts_data_prehandler_add($pattern, 'nav_name', create_function('$uri, $m', '$hts = new DataBaseHTS(); return strtolower($hts->get_data($uri, "title"));'));
 
-        foreach($files as $file) 
-        {
-//            echo "load $file<br>\n";
+	if (empty ($data['source']))
+		hts_data_prehandler_add($pattern, 'source', create_function('$uri, $m', 'return NULL;'));
 
-            if(substr($file,-4)=='.php')
-                include_once("$dir/$file");
-            elseif(is_dir("$dir/$file") && !preg_match("!(post|pre)$!", $file))
-                handlers_load("$dir/$file");
-        }
-    }
+	if (empty ($data['modufy_time']))
+		hts_data_prehandler_add($pattern, 'modify_time', create_function('$uri, $m', 'return time();'));
 
-	function hts_data_prehandler_add($regexp, $data_key, $func)
-	{
-		if(!empty($_GET['debug']))
-			echo "<small>Add function ".print_r(&$func,true)." to uri like '$regexp for key $data_key</small><br>/";
-		$GLOBALS['cms']['data_prehandler'][$data_key][$regexp] = $func;
-		krsort($GLOBALS['cms']['data_prehandler'][$data_key]);
-	}
-
-	function hts_data_posthandler_add($regexp, $data_key, $function)
-	{
-		$GLOBALS['cms']['data_posthandler'][$data_key][$regexp] = $function;
-		krsort($GLOBALS['cms']['data_posthandler'][$data_key]);
-	}
+	if (empty ($data['create_time']))
+		hts_data_prehandler_add($pattern, 'create_time', create_function('$uri, $m', 'return time();'));
+}
 ?>
+
+
+
