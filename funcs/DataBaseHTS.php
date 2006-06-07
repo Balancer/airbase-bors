@@ -853,7 +853,3 @@ class DataBaseHTS
 
 }
 ?>
-
-
-
-

@@ -144,5 +144,3 @@ function lcml($txt, $params = array ())
 
 //    function lp_code($txt,$params) { include_once("tags/code.php"); return lp_code_($txt,$params);}
 ?>
-
-
