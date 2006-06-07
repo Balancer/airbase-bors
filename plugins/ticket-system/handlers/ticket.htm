@@ -1,5 +1,10 @@
 <h1>{$title}</h1>
 
+{if $closed}
+<form id="message-form" method="post" action="?ticket-open"><input class="add" type="submit" value="Открыть тикет"></form>
+{else}
+<form id="message-form" method="post" action="?ticket-close"><input class="add" type="submit" value="Закрыть тикет"></form>
+{/if}
 
 {section name=i loop=$posts}
 <table class="forum-threads" cellspacing="0">

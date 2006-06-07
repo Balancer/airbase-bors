@@ -24,6 +24,7 @@
 				'title'  => $hts->get_data($ticket, 'title'),
 				'date'   => news_time($hts->get_data($ticket, 'modify_time')),
 				'create_date'   => news_time($hts->get_data($ticket, 'create_time')),
+				'priority'	=> $hts->get_data($ticket, 'priority'),
 				'closed' => false,
 			);
 
@@ -33,6 +34,7 @@
 				'title'  => $hts->get_data($ticket, 'title'),
 				'date'   => news_time($hts->get_data($ticket, 'modify_time')),
 				'create_date'   => news_time($hts->get_data($ticket, 'create_time')),
+				'priority'	=> $hts->get_data($ticket, 'priority'),
 				'closed' => true,
 			);
 
@@ -63,7 +65,8 @@
 
 		$posts = array();
 
-		$data['title'] = $hts->get_data($uri, 'title');
+		$data['title']  = $hts->get_data($uri, 'title');
+		$data['closed'] = $hts->is_flag($uri, 'closed');
 		
 		$posts[] = array(
 			'message' => lcml($hts->get_data($uri, 'source'), array('with_html'=>true, 'cr_type'=>'save_cr')),
@@ -136,6 +139,9 @@
 		$ht->set_data($new_ticket, 'author', $us->data('id'));
 		$ht->set_data($new_ticket, 'author_name', $us->data('name'));
 
+		if(!empty($_POST['priority']))
+			$ht->set_data($new_ticket, 'priority',  $_POST['priority']);
+
 		$us->set_data("last_answer", time());
 		$us->set_data("last_post_hash", md5($_POST['text']));
 
@@ -183,6 +189,50 @@
 
 		include_once('actions/recompile.php');
 		update_parents($comment);
+		go($uri);
+		return true;
+	}
+
+	register_action_handler('ticket-close', 'plugins_ticket_system_ticket_close');
+    function plugins_ticket_system_ticket_close($uri, $action)
+	{
+		include_once('funcs/mail.php');
+		include_once('funcs/DataBaseHTS.php');
+		include_once('funcs/templates/smarty.php');
+		require_once('funcs/system.php');
+		require_once('funcs/modules/messages.php');
+
+		$hts = new DataBaseHTS;
+		$us = new User;
+
+		if(!$us->data('id') || !$us->data('name'))
+			return error_message(ec("Вы не вошли в систему"));
+
+		$hts->set_flag($uri, 'closed');
+
+		update_parents($uri);
+		go($uri);
+		return true;
+	}
+
+	register_action_handler('ticket-open', 'plugins_ticket_system_ticket_open');
+    function plugins_ticket_system_ticket_open($uri, $action)
+	{
+		include_once('funcs/mail.php');
+		include_once('funcs/DataBaseHTS.php');
+		include_once('funcs/templates/smarty.php');
+		require_once('funcs/system.php');
+		require_once('funcs/modules/messages.php');
+
+		$hts = new DataBaseHTS;
+		$us = new User;
+
+		if(!$us->data('id') || !$us->data('name'))
+			return error_message(ec("Вы не вошли в систему"));
+
+		$hts->drop_flag($uri, 'closed');
+
+		update_parents($uri);
 		go($uri);
 		return true;
 	}
