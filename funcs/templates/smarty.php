@@ -128,12 +128,16 @@
 
 //			echo $hts->get_data($tpl, 'source');
 
-			if(!$smarty->template_exists($tpl))
+//			$tpl = "hts:$tpl";
+
+			if(!$smarty->template_exists("hts:$tpl"))
 	  	        $tpl = $GLOBALS['cms']['default_template'];
+
+//			echo $hts->get_data($tpl, 'source');
 		
 //			echo $tpl;
 
-			if(!$smarty->template_exists($tpl)
+			if(!$smarty->template_exists("hts:$tpl")
 					// || ($action && $action!='virtual')
 					|| @$_GET['tpl']=='safe'
 				)
@@ -279,6 +283,8 @@
 				$smarty->assign($key, $val);
 
 	    error_reporting(E_ALL & ~E_NOTICE);
+
+//		echo "::$tpl:".$hts->get_data(str_replace('hts:', '', $tpl), 'source')."<br/>\n";
 
 		if($tpl{0}=='/')
 			if(file_exists($tpl))
