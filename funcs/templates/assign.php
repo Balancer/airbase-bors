@@ -44,6 +44,8 @@
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = $GLOBALS['cms']['default_template'];
 
+//		echo $template_uri;
+
 		$modify_time = empty($data['modify_time']) ? time() : $data['modify_time'];
 		$modify_time = max(@$data['compile_time'], $modify_time);
 
@@ -84,6 +86,7 @@
 				$template_uri = "xfile:".$template_uri;
 			else
 				$template_uri = "hts:http://{$_SERVER['HTTP_HOST']}$template_uri";
+
 
 		$out = $smarty->fetch($template_uri, $uri);
 

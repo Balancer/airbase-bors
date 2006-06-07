@@ -152,7 +152,7 @@
     }
 
     // Иконки картинок
-    if(preg_match("!^/cache(/.+)?/(200x150|200x|128x|468x468|128x96)/(.+?\.(jpg|jpeg|gif|jpe|png))$!i",$QUERY_ENCODED,$data))
+    if(preg_match("!^/cache(/.+)?/(200x150|200x|64x|128x|468x468|128x96)/(.+?\.(jpg|jpeg|gif|jpe|png))$!i",$QUERY_ENCODED,$data))
     {
 //        include("{$_SERVER['DOCUMENT_ROOT']}/scripts/inc/funcs.php");
 		$image0 = "{$_SERVER['DOCUMENT_ROOT']}{$data[1]}/{$data[3]}";
@@ -168,7 +168,7 @@
             {
 				$w = $w0;
 				$t = $t0;
-                $h=(intval($h0*$size/($w0+1)+1));
+                $h=(intval($h0*$data[2]/($w0+1)+1));
             }
 
             if($w && $h)
@@ -268,12 +268,12 @@
         exit();
     }
 
-    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_keyword` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
-    {
+//    if($page = $hts->dbh->get("SELECT `id` FROM `hts_data_keyword` WHERE `value`='".addslashes($query)."' LIMIT 0,1"))
+//    {
 //        $page = $hts->page_uri_by_id($page);
-        go($page);
-        exit();
-    }
+//        go($page);
+//        exit();
+//    }
 
     $query=str_replace(".phtml",".hts",$QUERY_ENCODED);
     if(substr($query,-4) != ".hts")

@@ -70,6 +70,8 @@
         foreach($parents as $parent)
         {
 			$parent = $hts->normalize_uri($parent);
+			if($parent == $uri)
+				continue;
 //			echo "get recursive links for $parent-$uri<br>";
             if(!isset($GLOBALS['visited_pairs']["$parent#$uri"]))
             {

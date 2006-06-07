@@ -25,6 +25,8 @@
 		'mysql_set_names_charset' => '',
 		'mysql_set_character_set' => '',
 		'locale'=>'ru_RU.utf8',
+
+		'user_engine' => 'flat',
 	);
 	
 	// Вторичные переменные, которые могут задаваться заданными ранее.
