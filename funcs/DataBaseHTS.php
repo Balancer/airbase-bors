@@ -524,14 +524,14 @@ class DataBaseHTS
 
 		//			$GLOBALS['log_level']=9;
 		$q = "
-								CREATE TABLE IF NOT EXISTS `$key_table_name` (
-									`id` VARCHAR(166) NOT NULL,
-									`value` $type $charset NOT NULL $inc,
-									$params_fields
-									$index_id
-									UNIQUE KEY `pair` ( `id` , `value` $length $params_key),
-									$index
-								);"; //  CHARACTER SET = utf8
+		CREATE TABLE IF NOT EXISTS `$key_table_name` (
+			`id` VARCHAR(166) NOT NULL,
+			`value` $type $charset NOT NULL $inc,
+			$params_fields
+			$index_id
+			UNIQUE KEY `pair` ( `id` , `value` $length $params_key),
+			$index
+		);"; //  CHARACTER SET = utf8
 		//			echo $q;
 		$this->dbh->query($q);
 
@@ -712,7 +712,7 @@ class DataBaseHTS
 		$stop_time = time();
 		$start_time = $range > 0 ? $stop_time - $range : 0;
 
-		$join = $closed_cond = $deleted_cond = $hidden_cond = "";
+		$join = $cond = "";
 		$order = "ORDER BY mt.value DESC";
 
 		$tab = 1;
@@ -724,22 +724,20 @@ class DataBaseHTS
 			$order = "ORDER BY tab$tab.value $asc\n";
 		}
 
-		if (!empty ($params['closed']))
+		if(!empty ($params['closed']))
 		{
 			$not = $params['closed'] == 'yes' ? "NOT" : "";
 		
-			$join .= "
-																	LEFT JOIN hts_data_flags fc ON (c.value = fc.id AND fc.value='closed')";
-			$closed_cond = "
-																	AND fc.id IS $not NULL";
+			$join .= " LEFT JOIN hts_data_flags fc ON (c.value = fc.id AND fc.value='closed')";
+			$cond .= " AND fc.id IS $not NULL";
 		}
 		
-		if (empty ($params['hidden']) || $params['hidden'] == 'only')
+		if(empty ($params['hidden']) || $params['hidden'] == 'only')
 		{
 			$not = @$params['hidden'] == 'only' ? "NOT" : "";
 		
 			$join .= " LEFT JOIN hts_data_flags fh ON (c.value = fh.id AND fh.value='hidden')";
-			$hidden_cond = " AND fh.id IS $not NULL";
+			$cond .= " AND fh.id IS $not NULL";
 		}
 
 		if (empty ($params['deleted']) || $params['deleted'] == 'only')
@@ -747,7 +745,7 @@ class DataBaseHTS
 			$not = @$params['deleted'] == 'only' ? "NOT" : "";
 			
 			$join .= " LEFT JOIN hts_data_flags fd ON (c.value = fd.id AND fd.value='deleted')";
-			$deleted_cond = " AND fd.id IS $not NULL";
+			$cond .= " AND fd.id IS $not NULL";
 		}
 
 		$query = "SELECT c.value as uri
@@ -757,9 +755,7 @@ class DataBaseHTS
 	WHERE c.id = '".addslashes($parent)."'
 		AND mt.value >= $start_time
 		AND mt.value <	$stop_time
-		$hidden_cond
-		$deleted_cond
-		$closed_cond
+		$cond
 	$order
 	LIMIT $limit;";
 
@@ -776,79 +772,73 @@ class DataBaseHTS
 		$stop_time = intval(empty ($params['stop_time']) ? time() : $params['stop_time']);
 		$start_time = intval(empty ($params['start_time']) ? $stop_time - $range : $params['start_time']);
 
-		$deleted_join = $deleted_cond = $hidden_join = $hidden_cond = "";
+		$join = $cond = "";
 
 		$like_type = empty ($params['like_type']) ? 'like' : addslashes($params['like_type']);
 
-		if (empty ($params['hidden']))
+		if(empty ($params['hidden']))
 		{
-			$hidden_join = "
-																	LEFT JOIN hts_data_flags fh ON (ct.value = fh.id AND fh.value='hidden')";
-			$hidden_cond = "
-																	AND fh.id IS NULL";
+			$join .= " LEFT JOIN hts_data_flags fh ON (ct.value = fh.id AND fh.value='hidden')";
+			$cond .= " AND fh.id IS NULL";
 		}
 
-		if (empty ($params['deleted']))
+		if(empty ($params['deleted']))
 		{
-			$deleted_join = "
-																	LEFT JOIN hts_data_flags fd ON (ct.value = fd.id AND fd.value='deleted')";
-			$deleted_cond = "
-																	AND fd.id IS NULL";
+			$join .= " LEFT JOIN hts_data_flags fd ON (ct.value = fd.id AND fd.value='deleted')";
+			$cond .= " AND fd.id IS NULL";
 		}
 
-		$joined = array ();
-		$join_cnt = 0;
 
-		if (is_array($params['where']))
-		{
-			$where_join = "";
-			$where_cond = "";
-
-			$m2 = array ();
-			foreach ($params['where'] as $field => $value)
-			{
-				if (preg_match("!^(.+)\s+(.+?)$!", $field, $m2))
-				{
-					$field = $m2[1];
-					$cond = addslashes($m2[2]);
-				}
-				else
-					$cond = "=";
-
-				$field = addslashes($field);
-
-				if (empty ($joined[$field]))
-				{
-					$join_cnt ++;
-					$joined[$field] = $jt = "j$join_cnt";
-					$where_join .= "
-																									LEFT JOIN hts_data_$field $jt ON (ct.id = $jt.id) ";
-				}
-				else
-					$jt = "j".$joined[$field];
-				$where_cond .= "
-																					AND $jt.value $cond ".addslashes($value)." ";
-			}
-		}
+		add_where($params, $join, $cond);
 
 		$query = "SELECT ct.id as uri
-												FROM hts_data_create_time ct
-													LEFT JOIN hts_data_modify_time mt ON (ct.id = mt.id)
-													$where_join
-													$hidden_join
-													$deleted_join
-												WHERE ct.id $like_type '".addslashes($regexp)."'
-													$where_cond
-													$hidden_cond
-													$deleted_cond
-												ORDER BY mt.value DESC
-												LIMIT $limit;";
+	FROM hts_data_create_time ct
+		LEFT JOIN hts_data_modify_time mt ON (ct.id = mt.id)
+		$join
+	WHERE ct.id $like_type '".addslashes($regexp)."'
+		$cond
+	ORDER BY mt.value DESC
+	LIMIT $limit;";
 
 		//			$GLOBALS['log_level'] = 10;
 		$ret = $this->dbh->get_array($query);
 		//			$GLOBALS['log_level'] = 2;
 
 		return $ret;
+	}
+
+	private function add_where($params, &$join, &$cond)
+	{
+		if(!is_array($params['where']))
+			return;
+		
+		$joined = array ();
+		$join_cnt = 0;
+
+		$m2 = array ();
+		foreach ($params['where'] as $field => $value)
+		{
+			if(preg_match("!^(.+)\s+(.+?)$!", $field, $m2))
+			{
+				$field = $m2[1];
+				$op = addslashes($m2[2]);
+			}
+			else
+				$op = "=";
+
+			$field = addslashes($field);
+
+			if(empty ($joined[$field]))
+			{
+				$join_cnt ++;
+				$jt = $joined[$field] = "j$join_cnt";
+				$join .= " LEFT JOIN hts_data_$field $jt ON (ct.id = $jt.id) ";
+			}
+			else
+				$jt = "j".$joined[$field];
+
+			$cond .= " AND $jt.value $op ".addslashes($value)." ";
+		}
 	}
 
 }
