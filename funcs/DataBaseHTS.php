@@ -710,7 +710,7 @@ class DataBaseHTS
 		$range = intval(empty ($params['range']) ? 86400 : $params['range']);
 
 		$stop_time = time();
-		$start_time = $stop_time - $range;
+		$start_time = $range > 0 ? $stop_time - $range : 0;
 
 		$join = $closed_cond = $deleted_cond = $hidden_cond = "";
 		$order = "ORDER BY mt.value DESC";
