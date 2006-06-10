@@ -18,7 +18,7 @@
 
 		$tickets = array();
 
-		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'no')) as $ticket)
+		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'no', 'range' => -1)) as $ticket)
 			$tickets[] = array(
 				'uri'    => $ticket,
 				'title'  => $hts->get_data($ticket, 'title'),
@@ -28,7 +28,7 @@
 				'closed' => false,
 			);
 
-		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'yes')) as $ticket)
+		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'yes', 'range' => -1)) as $ticket)
 			$tickets[] = array(
 				'uri'    => $ticket,
 				'title'  => $hts->get_data($ticket, 'title'),
@@ -76,7 +76,7 @@
 
 //		print_r($uri);
 
-		foreach($hts->get_children_array_ex($uri, array('order'=>'create_time asc')) as $post)
+		foreach($hts->get_children_array_ex($uri, array('order'=>'create_time asc', 'range' => -1)) as $post)
 			$posts[] = array(
 				'message' => lcml($hts->get_data($post, 'source'), array('with_html'=>true, 'cr_type'=>'save_cr')),
 				'author_name' => $hts->get_data($post, 'author_name'),
