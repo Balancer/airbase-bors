@@ -231,6 +231,28 @@ class DataBaseHTS
 		return array ();
 	}
 
+	function get_data_array_size($uri, $key)
+	{
+		echolog("Get keys array size '$key' for '$uri' (fields=$fields, search=id)");
+
+		$uri = $this->normalize_uri($uri);
+
+		if (($res = $this->pre_data_check($uri, $key)) !== false)
+			return sizeof($res);
+
+		$key_table_name = $this->create_data_table($key);
+
+		$res = $this->dbh->get("SELECT COUNT(*) FROM `$key_table_name` WHERE id='".addslashes($uri)."'");
+
+		if ($res)
+			return $res;
+
+		if (($res = $this->post_data_check($uri, $key)) !== false)
+			return sizeof($res);
+
+		return 0;
+	}
+
 	function data_exists($uri, $key, $value)
 	{
 		foreach ($this->get_data_array($uri, $key) as $val)

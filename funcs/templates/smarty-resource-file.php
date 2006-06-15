@@ -19,6 +19,9 @@
     
     function smarty_resource_file_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
     {
+		if(!empty($GLOBALS['cms']['templates_cache_disabled']))
+			return time();
+
 		if(file_exists($tpl_name))
 		{
 			$tpl_timestamp = filemtime($tpl_name);
@@ -40,5 +43,4 @@
     {
         // not used for templates
     }
-
 ?>

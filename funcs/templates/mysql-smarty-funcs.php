@@ -26,6 +26,9 @@
     
     function db_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
     {
+		if(!empty($GLOBALS['cms']['templates_cache_disabled']))
+			return time();
+	
         global $page;
         // do database call here to populate $tpl_timestamp.
         $hts  = new DataBaseHTS;

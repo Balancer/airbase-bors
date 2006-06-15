@@ -96,7 +96,7 @@
 Промахов в кеш данных: <?echo $GLOBALS['global_key_count_miss'];?><br />
 Время генерации страницы: <?
 list($usec, $sec) = explode(" ",microtime());
-echo ((float)$usec + (float)$sec) - $GLOBALS['cms']['start_microtime'];
+echo ((float)$usec + (float)$sec) - $GLOBALS['stat']['start_microtime'];
 ?> сек.<br />
 <?
 	if($GLOBALS['cms']['cache_copy'])

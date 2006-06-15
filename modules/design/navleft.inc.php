@@ -2,7 +2,33 @@
 	function modules_design_navleft_get($uri)
 	{
 		include_once("funcs/templates/assign.php");
-		$data = modules_design_navleft($uri, array(), 1);
+
+		$hts = new DataBaseHTS();
+
+		$children = $hts->get_data_array($uri, 'child');
+
+		$data = array();
+	
+//		Это статус нашей собственной страницы
+		$data[$uri] = array(
+			'indent' => 1,
+			'uri' => $uri,
+			'title' => $hts->get_data($uri, 'nav_name'),
+			'children' => sizeof($children),
+			'here' => true,
+		);
+
+//		Явные дети нашей страницы
+		foreach($children as $child)
+			$data[$child] = array(
+				'uri' => $child,
+				'title' => $hts->get_data($child, 'nav_name'),
+				'children' => $hts->get_data_array_size($child, 'child'),
+				'indent' => 0,
+			);
+
+		$data = modules_design_navleft_get_parent($uri, $data, 1);
+
 		$max = 0;
 
 		foreach($data as $d)
@@ -15,89 +41,79 @@
 			$data2[] = $d;
 		}
 		
-		return template_assign_data("xfile:".dirname(__FILE__)."/navleft.htm", array('links'=>$data2));
+		return template_assign_data("navleft.htm", array('links'=>$data2));
 	}
+	
 
-	$GLOBALS['loop'] = 0;
-	
-	function modules_design_navleft($uri, $data, $indent)
+	function modules_design_navleft_get_parent($uri, &$children, $indent)
 	{
-//		echo "Get for ".print_r($uri, true)."<br/>";
-	
-		$GLOBALS['loop']++;
-		
-		if($GLOBALS['loop'] > 50)
-			return $data;
-		
-//		if(!empty($data[$uri]))
-//			return $data;
+//		echo "<span style=\"font-size: 6pt;\">$indent: $uri</span><br/>\n";
+
+		if($indent > 20)
+			return $children;
+
+		$list = array();
 		
 		$hts = new DataBaseHTS();
 
-		$children = $hts->get_data_array($uri, 'child');
+//		-----------------------------------
+//		Собираем информацию о братьях:
+//		дети первого родителя - наши братья
+//		-----------------------------------
+
+		$parents = $hts->get_data_array($uri, 'parent');
+
+		// Список реально использовавшихся родителей
+		$parents2 = array();
 		
-		$out = array();
-		$out["$uri"] = array(
-				'indent' => $indent,
-				'uri' => $uri,
-				'title' => $hts->get_data($uri, 'nav_name'),
-				'children' => sizeof($children)
-			);
-
-//		echo "Get for $uri:".print_r($out, true)."<br/>";
-
-		if(!$data)
+		foreach($parents as $parent)
 		{
-			if($children)
+//			if(!empty($children[$parent]) || !empty($list[$parent]) || $parent == $uri)
+			if($parent == $uri)
+				continue;
+
+			$parents2[] = $parent;
+
+//			echo "<span style=\"font-size: 6pt;\">&nbsp;p: $parent</span><br/>\n";
+
+// 			Цикл по нашим братьям
+			foreach($hts->get_data_array($parent, 'child') as $child)
 			{
-				foreach($children as $child)
+//				echo "<span style=\"font-size: 6pt;\">&nbsp;&nbsp;c: $child</span><br/>\n";
+
+				$list[$child] = array(
+					'uri' => $child,
+					'title' => $hts->get_data($child, 'nav_name'),
+					'indent' => $indent,
+					'children' => $hts->get_data_array_size($child, 'child'),
+				);
+				
+				if($child == $uri && $children)
 				{
-					$data[$child] = array(
-							'uri' => $child,
-							'title' => $hts->get_data($child, 'nav_name'),
-							'children' => sizeof($hts->get_data_array($child,'child')),
-							'indent' => $indent-1
-						);
+//					echo "<span style=\"font-size: 6pt;\">----- join </span><br/>\n";
+					$list = array_merge($list, $children);
+					$children = false;
 				}
 			}
-		}
-
-		$data = array_merge($out, $data);
-
-		$parent = $hts->get_data_array($uri, 'parent');
-
-//		echo "<p><b>Parent for $uri = $parent</b></p>";
-//		print_r($data); echo "<br/>";
 		
-		if(!$parent || !empty($data["$parent"]))
-			return $data;
-
-		$parent = $parent[0];
-
-		$indent++;		
-
-		$out = array();
-		if($hts->get_data_array($parent, 'parent'))
-			$out[$parent] = array(
-					'indent' => $indent, 
-					'uri' => $parent, 
-					'title' => $hts->get_data($parent, 'nav_name'),
-					'children' => sizeof($hts->get_data_array($parent, 'child'))
-				);
-
-		foreach($hts->get_data_array($parent, 'child') as $child)
-		{
-			if($child == $uri)
-				$out = array_merge($out, $data);
-			else
-				$out[$child] = array(
-						'uri' => $child,
-						'title' => $hts->get_data($child, 'nav_name'),
-						'indent' => $indent-1,
-						'children' => sizeof($hts->get_data_array($child, 'child')),
-					);
 		}
 
-		return modules_design_navleft($parent, $out, $indent);
+		if($children !== false)
+			$children = array_merge($children, $list);
+		else
+			$children = $list;
+
+		$list = array();
+		foreach($parents2 as $parent)
+			if(empty($children[$parent]) && empty($list[$parent]))
+				$list = array_merge($list, modules_design_navleft_get_parent($parent, $children, $indent + 1));
+	
+		if($children !== false)
+			$children = array_merge($children, $list);
+		else
+			$children = $list;
+			
+		return $children;
 	}
+
 ?>

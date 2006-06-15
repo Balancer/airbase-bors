@@ -84,7 +84,7 @@
         $smarty->cache_dir   = $GLOBALS['cms']['cache_dir'].'/smarty-cache/';
 
 		if(!file_exists($smarty->compile_dir))
-			@mkdir($smarty->compile_dir, 0775, true);
+		    @mkdir($smarty->compile_dir, 0775, true);
 		if(!file_exists($smarty->cache_dir))
 			@mkdir($smarty->cache_dir, 0775, true);
 
@@ -96,7 +96,9 @@
         $smarty->cache_lifetime = 86400*7;
         $smarty->secure_dir += array("{$GLOBALS['cms']['base_dir']}/templates");
 
-        $template = empty($GLOBALS['page_data']['template']) ? $hts->get_data($page, 'template', '', true) : $GLOBALS['page_data']['template'];
+		$template = $hts->get_data($page, 'template', '', true);
+		if(!$template && !empty($GLOBALS['page_data']['template']))
+			$template = $GLOBALS['page_data']['template'];
         
 		if($template)
 		{
@@ -237,6 +239,10 @@
             $smarty->assign("main_uri", @$GLOBALS['main_uri']);
             $smarty->assign("time", time());
             $smarty->assign("ref", @$_SERVER['HTTP_REFERER']);
+            $smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
+            $smarty->assign("queries", $GLOBALS['global_db_queries']);
+		    list($usec, $sec) = explode(" ",microtime());
+            $smarty->assign("make_time", sprintf("%.3f", ((float)$usec + (float)$sec) - $GLOBALS['stat']['start_microtime']));
 
 			$hts->set_data($page, 'cache_create_time', time());
 
@@ -286,7 +292,7 @@
 
 //		echo "::$tpl:".$hts->get_data(str_replace('hts:', '', $tpl), 'source')."<br/>\n";
 
-		if($tpl{0}=='/')
+		if($tpl{0} == '/')
 			if(file_exists($tpl))
 				$tpl = "xfile:".$tpl;
 			else

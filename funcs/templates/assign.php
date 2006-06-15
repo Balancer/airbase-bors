@@ -34,6 +34,12 @@
 		$caller = array_shift(debug_backtrace());
 		$caller_path = dirname($caller['file']);
 		
+		if(!empty($data['template_dir']))
+			if($data['template_dir'] == 'caller')
+				$smarty->template_dir = $caller_path;
+			else
+				$smarty->template_dir = $data['template_dir'];
+		
 		$smarty->secure_dir += array($caller_path);
 
 		$template_uri = $assign_template;
@@ -86,7 +92,6 @@
 				$template_uri = "xfile:".$template_uri;
 			else
 				$template_uri = "hts:http://{$_SERVER['HTTP_HOST']}$template_uri";
-
 
 		$out = $smarty->fetch($template_uri, $uri);
 

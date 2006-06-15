@@ -28,9 +28,10 @@
 				if(!isset($GLOBALS['global_db_resume_connections']))
 					$GLOBALS['global_db_resume_connections'] = 0;
 				$GLOBALS['global_db_resume_connections']++;
+
 				$this->dbh = global_key("DataBaseHandler",$base);
 //				echo "cont\[{$base}]=".$this->dbh."<br>\n";
-				mysql_select_db($base,$this->dbh) or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
+				mysql_select_db($base, $this->dbh) or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
 
 				if(!empty($GLOBALS['cms']['mysql_set_character_set']))
 					mysql_query("SET CHARACTER SET {$GLOBALS['cms']['mysql_set_character_set']};",$this->dbh)
@@ -95,9 +96,14 @@
 			list($usec, $sec) = explode(" ",microtime());
 			$qtime = ((float)$usec + (float)$sec) - $qstart;
 
-			if(0)
+			if(empty($GLOBALS['stat']['queries_time']))
+				$GLOBALS['stat']['queries_time'] = 0;
+				
+			$GLOBALS['stat']['queries_time'] += $qtime;
+
+			if($GLOBALS['log_level'] > 5)
 			{
-				$fh = fopen('/var/www/localhost/htdocs/hts-queries.log','at');
+				$fh = fopen("{$_SERVER['DOCUMENT_ROOT']}/hts-queries.log",'at');
 				fputs($fh,"$query\n");
 				fclose($fh);
 			}
@@ -112,7 +118,15 @@
 					return $this->result;
 
 			if(!$ignore_error)
-				echolog("Invalid query '<tt>$query</tt>': " . mysql_error($this->dbh),1);
+			{
+				if($GLOBALS['log_level'] > 5)
+				{
+					$fh = fopen("{$_SERVER['DOCUMENT_ROOT']}/hts-queries.log",'at');
+					fputs($fh,"Error: ".mysql_error($this->dbh)."\n");
+					fclose($fh);
+				}
+				echolog("Invalid query '<tt>$query</tt>': " . mysql_error($this->dbh), 1);
+			}
 
 			return false;
 		}
