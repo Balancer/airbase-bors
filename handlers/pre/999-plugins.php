@@ -62,7 +62,7 @@
 						$GLOBALS['cms']['plugin_parent_uri']= preg_replace("!$pattern!", "", $uri)."/";
 						$GLOBALS['cms']['plugin_base_uri']	= $GLOBALS['cms']['plugin_parent_uri'].$m[1]."/";
 					
-						include_once("$base_dir/$dir/config.php");
+						@include_once("$base_dir/$dir/config.php");
 
 						if(!empty($_GET))
 						{
