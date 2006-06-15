@@ -3,7 +3,13 @@
  <span>
   {if $links[i].indent > 4}{assign var="links[i].indent" value=4}{/if}
   {if $links[i].indent}{""|indent:$links[i].indent:"&nbsp;"}{/if}<a href="{$links[i].uri}" class="plain" title="{$links[i].title}">
-  <img src="{if $links[i].children}http://www.jabber.ru/folder_icon.gif{else}http://www.jabber.ru/topic_icon.gif{/if}" alt="*" title="{$links[i].title}" height="16" width="16" border="0" />&nbsp;{$links[i].title}</a>
+  {assign var="img" value="mimetypes/empty"}
+  {if $links[i].here}{assign var="img" value="status/folder-visiting"}{/if}
+  {if $links[i].children}
+    {assign var="img" value="places/folder"}
+    {if $links[i].here}{assign var="img" value="status/folder-open"}{/if}
+  {/if}
+  <img src="http://balancer.ru/cms/templates/forum/icons/16x16/{$img}.png" alt="*" title="{$links[i].title}" height="16" width="16" border="0" />&nbsp;{$links[i].title}</a>
  </span>
 </div>
 {/section}

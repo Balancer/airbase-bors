@@ -1,6 +1,6 @@
 <?
     list($usec, $sec) = explode(" ",microtime());
-    $GLOBALS['cms']['start_microtime'] = ((float)$usec + (float)$sec);
+    $GLOBALS['stat']['start_microtime'] = ((float)$usec + (float)$sec);
 
     error_reporting(E_ALL);
     ini_set('display_errors', 'On');

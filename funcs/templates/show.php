@@ -53,7 +53,7 @@
 //		print_r($smarty->secure_dir);
 
 		$modify_time = empty($data['modify_time']) ? time() : $data['modify_time'];
-		$modify_time = max($data['compile_time'], $modify_time);
+		$modify_time = max(@$data['compile_time'], $modify_time);
 
 		$source = @$data['source'];
 		$action = @$data['action'];

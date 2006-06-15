@@ -57,9 +57,10 @@
 					if(preg_match("!^$pattern$!", $path, $m))
 					{
 //						echo "---<br/>\n";
-					    ini_set('include_path', "$base_dir/$dir/handlers/:".ini_get('include_path'));
-						$GLOBALS['cms']['plugin_base_path'] = $m[1];
-						$GLOBALS['cms']['plugin_base_uri']  = preg_replace("!$pattern!", "", $uri).$m[1]."/";
+					    ini_set('include_path', "$base_dir/$dir:".ini_get('include_path'));
+						$GLOBALS['cms']['plugin_base_path']	= $m[1];
+						$GLOBALS['cms']['plugin_parent_uri']= preg_replace("!$pattern!", "", $uri)."/";
+						$GLOBALS['cms']['plugin_base_uri']	= $GLOBALS['cms']['plugin_parent_uri'].$m[1]."/";
 					
 						include_once("$base_dir/$dir/config.php");
 
@@ -83,7 +84,7 @@
 				}
 			}
 			else
-				plugins_load("$base_dir/$dir");
+				plugins_load($uri, "$base_dir/$dir");
         }
 
 		return $ret;
