@@ -20,12 +20,13 @@
 
 //		Явные дети нашей страницы
 		foreach($children as $child)
-			$data[$child] = array(
-				'uri' => $child,
-				'title' => $hts->get_data($child, 'nav_name'),
-				'children' => $hts->get_data_array_size($child, 'child'),
-				'indent' => 0,
-			);
+			if($hts->get_data($child, 'nav_name'))
+				$data[$child] = array(
+					'uri' => $child,
+					'title' => $hts->get_data($child, 'nav_name'),
+					'children' => $hts->get_data_array_size($child, 'child'),
+					'indent' => 0,
+				);
 
 		$data = modules_design_navleft_get_parent($uri, $data, 1);
 
