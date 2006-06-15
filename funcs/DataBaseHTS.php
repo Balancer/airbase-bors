@@ -829,7 +829,7 @@ class DataBaseHTS
 		return $ret;
 	}
 
-	private function add_where($params, &$join, &$cond)
+	function add_where($params, &$join, &$cond)
 	{
 		if(!is_array($params['where']))
 			return;

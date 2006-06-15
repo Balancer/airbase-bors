@@ -121,7 +121,7 @@
 				$GLOBALS['cms']['default_template'],
 			) as $tpl)
 			{
-				echo "Check '$tpl'<br />";
+//				echo "Check '$tpl'<br />";
 				if($hts->get_data($tpl, 'source'))
 					break;
 				if(!empty($tpl) && $tpl{0}=='/' && file_exists($tpl))
