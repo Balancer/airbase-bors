@@ -6,7 +6,7 @@
 		if(empty($params['size']))
 			$params['size'] = '468x468';
 
-		if($params['url'])
+		if(!empty($params['url']))
 		{
 			$path = NULL;
 			$uri = html_entity_decode($params['url']);
