@@ -121,7 +121,7 @@
 		$ht = new DataBaseHTS;
 		$us = new User;
 
-		if(!$us->data('id') || !$us->data('name'))
+		if(!$us->data('id'))
 			return error_message(ec("Вы не вошли в систему"));
 
 		if(empty($_POST['title']))
