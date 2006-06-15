@@ -18,6 +18,8 @@
 
 		$tickets = array();
 
+//		$GLOBALS['log_level'] = 10;
+
 		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'no', 'range' => -1)) as $ticket)
 			$tickets[] = array(
 				'uri'    => $ticket,
@@ -28,6 +30,8 @@
 				'closed' => false,
 			);
 
+//		$GLOBALS['log_level'] = 2;
+		
 		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'yes', 'range' => -1)) as $ticket)
 			$tickets[] = array(
 				'uri'    => $ticket,
@@ -39,7 +43,7 @@
 			);
 
 		$data['tickets'] = $tickets;
-
+		
         include_once("funcs/templates/assign.php");
         return template_assign_data("tickets-list.htm", $data);
 	}

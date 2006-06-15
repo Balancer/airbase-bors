@@ -184,6 +184,3 @@ function do_action_handlers($uri, $match, $actions)
 	return $ret;
 }
 ?>
-
-
-
