@@ -27,10 +27,10 @@
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
  * @package Smarty
- * @version 2.6.11
+ * @version 2.6.9
  */
 
-/* $Id: Smarty.class.php,v 1.521 2005/11/23 20:36:03 boots Exp $ */
+/* $Id: Smarty.class.php,v 1.514 2005/03/22 08:45:06 messju Exp $ */
 
 /**
  * DIR_SEP isn't used anymore, but third party apps might
@@ -464,7 +464,7 @@ class Smarty
      *
      * @var string
      */
-    var $_version              = '2.6.11';
+    var $_version              = '2.6.9';
 
     /**
      * current template inclusion depth
@@ -1055,12 +1055,9 @@ class Smarty
     {
         if(!isset($name)) {
             return $this->_tpl_vars;
-        } elseif(isset($this->_tpl_vars[$name])) {
+        }
+        if(isset($this->_tpl_vars[$name])) {
             return $this->_tpl_vars[$name];
-        } else {
-            // var non-existant, return valid reference
-            $_tmp = null;
-            return $_tmp;   
         }
     }
 
@@ -1077,10 +1074,6 @@ class Smarty
             return $this->_config[0]['vars'];
         } else if(isset($this->_config[0]['vars'][$name])) {
             return $this->_config[0]['vars'][$name];
-        } else {
-            // var non-existant, return valid reference
-            $_tmp = null;
-            return $_tmp;
         }
     }
 
@@ -1698,8 +1691,8 @@ class Smarty
      */
     function _dequote($string)
     {
-        if ((substr($string, 0, 1) == "'" || substr($string, 0, 1) == '"') &&
-            substr($string, -1) == substr($string, 0, 1))
+        if (($string{0} == "'" || $string{0} == '"') &&
+            $string{strlen($string)-1} == $string{0})
             return substr($string, 1, -1);
         else
             return $string;
@@ -1896,7 +1889,7 @@ class Smarty
 
         if ($this->_cache_including) {
             /* return next set of cache_attrs */
-            $_return = current($_cache_attrs);
+            $_return =& current($_cache_attrs);
             next($_cache_attrs);
             return $_return;
 
