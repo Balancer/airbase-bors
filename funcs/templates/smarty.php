@@ -121,7 +121,7 @@
 				$GLOBALS['cms']['default_template'],
 			) as $tpl)
 			{
-//				echo "Check '$tpl'<br />";
+				echo "Check '$tpl'<br />";
 				if($hts->get_data($tpl, 'source'))
 					break;
 				if(!empty($tpl) && $tpl{0}=='/' && file_exists($tpl))
@@ -149,9 +149,15 @@
 		else
 			$tpl = $GLOBALS['cms']['template_override'];
 
+//		echo $smarty->template_dir;
+//		if(empty($smarty->template_dir))
+		$smarty->template_dir = dirname($tpl);
+		
 		$tpl = preg_match("!^/!", $tpl) ? $tpl : "hts:$tpl";
 		
 //		echo "<br/>base={$GLOBALS['cms']['base_uri']}; tpl='$tpl' Using template $template";	exit();
+
+
 
         $hts->viewses_inc($page);
 
@@ -241,9 +247,12 @@
             $smarty->assign("ref", @$_SERVER['HTTP_REFERER']);
             $smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
             $smarty->assign("queries", $GLOBALS['global_db_queries']);
-		    list($usec, $sec) = explode(" ",microtime());
-            $smarty->assign("make_time", sprintf("%.3f", ((float)$usec + (float)$sec) - $GLOBALS['stat']['start_microtime']));
-
+			if(!empty($GLOBALS['stat']['start_microtime']))
+			{
+			    list($usec, $sec) = explode(" ",microtime());
+    	        $smarty->assign("make_time", sprintf("%.3f", ((float)$usec + (float)$sec) - $GLOBALS['stat']['start_microtime']));
+			}
+			
 			$hts->set_data($page, 'cache_create_time', time());
 
 	        $smarty->clear_cache($tpl, $page);
@@ -293,11 +302,13 @@
 //		echo "::$tpl:".$hts->get_data(str_replace('hts:', '', $tpl), 'source')."<br/>\n";
 
 		if($tpl{0} == '/')
+		{
 			if(file_exists($tpl))
 				$tpl = "xfile:".$tpl;
 			else
 				$tpl = "hts:http://{$_SERVER['HTTP_HOST']}$tpl";
-
+		}
+		
 //		echo $tpl;
 
 		$out = $smarty->fetch($tpl, $page);

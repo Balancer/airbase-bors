@@ -2,7 +2,7 @@
     // from PHP script
     // put these function somewhere in your application
 
-    function smarty_resource_file_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+    function smarty_resource_file_get_template($tpl_name, &$tpl_source, &$smarty)
     {
         // do database call here to fetch your template,
         // populating $tpl_source
@@ -11,13 +11,17 @@
 			$tpl_source = ec(file_get_contents($tpl_name));
 			return true;
 		}
-        else 
-        {
-            return false;
-        }
+
+		if(file_exists($smarty->template_dir."/".$tpl_name))
+		{
+			$tpl_source = ec(file_get_contents($smarty->template_dir."/".$tpl_name));
+			return true;
+		}
+
+        return false;
     }
     
-    function smarty_resource_file_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+    function smarty_resource_file_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty)
     {
 		if(!empty($GLOBALS['cms']['templates_cache_disabled']))
 			return time();
@@ -27,10 +31,14 @@
 			$tpl_timestamp = filemtime($tpl_name);
 			return true;
 		}
-        else 
-        {
-            return false;
-        }
+
+		if(file_exists($smarty->template_dir."/".$tpl_name))
+		{
+			$tpl_timestamp = filemtime($smarty->template_dir."/".$tpl_name);
+			return true;
+		}
+
+        return false;
     }
 
     function smarty_resource_file_get_secure($tpl_name, &$smarty_obj)
