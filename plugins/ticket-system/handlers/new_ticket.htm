@@ -4,10 +4,21 @@
 <b>Заголовок:&nbsp;</b><input name="title" size="50" class="text" value="">
 <textarea name="source" rows="7" cols="50"></textarea>
 <br />
+Блок:&nbsp;<select name="category">
+<option value="news">Новости</options>
+<option value="conferences">Конференция</options>
+<option value="list">Рассылка</options>
+<option value="job">Персонал</options>
+<option value="torg">Торг</options>
+<option value="">Общий</options>
+</select>&nbsp;
+
 Приоритет:&nbsp;<select name="priority">
-<option value="">Обычный</options>
-<option value="hi">Важно!</options>
-<option value="low">Второстепенная задача</options>
+<option value="critical">Критическая ошибка</options>
+<option value="error">Ошибка</options>
+<option value="fix">Исправление</options>
+<option value="">Дополнение</options>
+<option value="task">Второстепенная задача</options>
 </select><br />
 <input class="add" type="submit" value="Отправить">
 </form>

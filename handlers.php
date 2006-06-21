@@ -51,6 +51,9 @@ function handlers_load($dir = 'handlers')
 
 	sort($files);
 
+//	if(!empty($_GET['dbg']))
+//		DebugBreak();
+
 	foreach ($files as $file)
 	{
 //		echo "load $file<br>\n";
@@ -109,7 +112,9 @@ function do_plugin_uri_handlers($uri, $match, $path)
 	$GLOBALS['cms_patterns'] = array ();
 
 	handlers_load($path);
-	$ret = do_uri_handlers($uri, $match[2], $GLOBALS['cms_patterns']);
+	// match[3] - это путь относительно базы плагинов.
+	// Там формат шаблона (/path/to/plugin/)(plugin_name)(/plugin/sub/path/)
+	$ret = do_uri_handlers($uri, $match[3], $GLOBALS['cms_patterns']);
 
 	$GLOBALS['cms_patterns'] = $save;
 	return $ret;
@@ -153,7 +158,9 @@ function do_plugin_action_handlers($uri, $match, $path)
 	$GLOBALS['cms_actions'] = array ();
 
 	handlers_load($path);
-	$ret = do_action_handlers($uri, $match[2], $GLOBALS['cms_actions']);
+	// match[3] - это путь относительно базы плагинов.
+	// Там формат шаблона (/path/to/plugin/)(plugin_name)(/plugin/sub/path/)
+	$ret = do_action_handlers($uri, $match[3], $GLOBALS['cms_actions']);
 
 	$GLOBALS['cms_actions'] = $save;
 	return $ret;

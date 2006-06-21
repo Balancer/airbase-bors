@@ -77,8 +77,8 @@
 					"{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}",
 					$GLOBALS['cms']['base_dir']) as $base_path)
 		{
-			if(!empty($_GET['dbg']))
-				DebugBreak();
+//			if(!empty($_GET['dbg']))
+//				DebugBreak();
 
 			handlers_load("$base_path/$sub_path");
 		}

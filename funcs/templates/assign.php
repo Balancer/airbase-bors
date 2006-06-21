@@ -3,7 +3,7 @@
 	{
 //		echo "tpl=$assign_template";
 //		print_r($data);
-	
+
 		require_once('Smarty/Smarty.class.php');
 		$smarty = new Smarty;
 		require('mysql-smarty.php');
@@ -34,11 +34,15 @@
 		$caller = array_shift(debug_backtrace());
 		$caller_path = dirname($caller['file']);
 		
-		if(!empty($data['template_dir']))
-			if($data['template_dir'] == 'caller')
-				$smarty->template_dir = $caller_path;
-			else
-				$smarty->template_dir = $data['template_dir'];
+//		if($uri == NULL)
+//			$uri = "$caller_path/$assign_template";
+	
+		if(preg_match("!^[\w\-]+\.[\w\-]+$!", $assign_template))
+			$assign_template = "xfile:$caller_path/$assign_template";
+
+		$smarty->template_dir = $caller_path;
+		if(!empty($data['template_dir']) && $data['template_dir'] != 'caller')
+			$smarty->template_dir = $data['template_dir'];
 		
 		$smarty->secure_dir += array($caller_path);
 
