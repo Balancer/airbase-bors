@@ -1,8 +1,56 @@
 <?
+	if(!empty($_GET['dbg']))
+		DebugBreak();
+
 	hts_data_prehandler("!^(http://[^/]+/)[a-z]+/?$!", array(
 			'body' => 'plugins_ticket_system_body',
 			'title' => ec('Система тикетов'),
 		));
+
+	function get_category($cat)
+	{
+		$cats = array(
+			"news"=>'Новости',
+			"conferences"=>'Конференция',
+			"list"=>'Рассылка',
+			"job"=>'Персонал',
+			"torg"=>'Торг',
+			""=>'Общий',
+		);
+		
+		if(isset($cats[$cat]))
+			return ec($cats[$cat]);
+		
+		return $cat;
+	}
+
+	function get_priority($priority)
+	{
+		$priors = array(
+			"critical"=>'Критическая ошибка',
+			"error"=>'Ошибка',
+			"fix"=>'Исправление',
+			""=>'Дополнение',
+			"task"=>'Второстепенная задача',
+		);
+		
+		if(isset($priors[$priority]))
+			return ec($priors[$priority]);
+		
+		return $priority;
+	}
+
+	function get_color($priority)
+	{
+		$colors = array(
+			"critical"=>'#ffc0c0',
+		);
+		
+		if(isset($colors[$priority]))
+			return " style=\"background-color: $colors[$priority];\"";
+		
+		return '';
+	}
 
 	function plugins_ticket_system_body($uri, $m)
 	{
@@ -26,7 +74,9 @@
 				'title'  => $hts->get_data($ticket, 'title'),
 				'date'   => news_time($hts->get_data($ticket, 'modify_time')),
 				'create_date'   => news_time($hts->get_data($ticket, 'create_time')),
-				'priority'	=> $hts->get_data($ticket, 'priority'),
+				'priority'	=> get_priority($hts->get_data($ticket, 'priority')),
+				'color'	=> get_color($hts->get_data($ticket, 'priority')),
+				'category'	=> get_category($hts->get_data($ticket, 'category')),
 				'closed' => false,
 			);
 
@@ -38,7 +88,9 @@
 				'title'  => $hts->get_data($ticket, 'title'),
 				'date'   => news_time($hts->get_data($ticket, 'modify_time')),
 				'create_date'   => news_time($hts->get_data($ticket, 'create_time')),
-				'priority'	=> $hts->get_data($ticket, 'priority'),
+				'priority'	=> get_priority($hts->get_data($ticket, 'priority')),
+				'color'	=> get_color($hts->get_data($ticket, 'priority')),
+				'category'	=> get_category($hts->get_data($ticket, 'category')),
 				'closed' => true,
 			);
 
@@ -132,6 +184,7 @@
 
 		$new_ticket = $GLOBALS['cms']['plugin_base_uri'].get_new_global_id()."/";
 
+//		print_r($_POST);
 //		exit($new_ticket);
 
 		$ht->nav_link($GLOBALS['cms']['plugin_base_uri'], $new_ticket);
@@ -145,6 +198,9 @@
 
 		if(!empty($_POST['priority']))
 			$ht->set_data($new_ticket, 'priority',  $_POST['priority']);
+
+		if(!empty($_POST['category']))
+			$ht->set_data($new_ticket, 'category',  $_POST['category']);
 
 		$us->set_data("last_answer", time());
 		$us->set_data("last_post_hash", md5($_POST['text']));
@@ -215,7 +271,7 @@
 		$hts->set_flag($uri, 'closed');
 
 		update_parents($uri);
-		go($uri);
+		go($GLOBALS['cms']['plugin_base_uri']);
 		return true;
 	}
 

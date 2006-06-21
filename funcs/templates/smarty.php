@@ -122,7 +122,7 @@
 			) as $tpl)
 			{
 //				echo "Check '$tpl'<br />";
-				if($hts->get_data($tpl, 'source'))
+				if($tpl && $hts->get_data($tpl, 'source'))
 					break;
 				if(!empty($tpl) && $tpl{0}=='/' && file_exists($tpl))
 					break;
@@ -229,14 +229,15 @@
             }
 
             foreach(split(' ', "access level action body user_id user_name $page_vars") as $key)
-            {
-//                echo "assign <xmp>'$key' -> '{$$key}'</xmp>";
                 $smarty->assign("$key", "{$$key}");
-            }
     
 			$uri = @$GLOBALS['uri'];
 			if(!$uri)
 				$uri = $page;
+
+			if(!empty($GLOBALS['cms']['templates']['data']))
+	            foreach($GLOBALS['cms']['templates']['data'] as $key => $value)
+        	        $smarty->assign("$key", "$value");
 
             $smarty->assign("views_average", sprintf("%.1f",86400*$views/($views_last-$views_first+1)));
             $smarty->assign("page_template", $template);

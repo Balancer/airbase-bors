@@ -1,6 +1,8 @@
 <?
 	function error_message($text, $redir = false, $title="", $timeout = 5)
 	{
+		include_once("funcs/templates/smarty.php");
+	
 		$GLOBALS['page_data']['title'] = ec("Ошибка");
 		$GLOBALS['page_data']['source'] = $text;
 

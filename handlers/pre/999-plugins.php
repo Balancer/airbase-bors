@@ -7,7 +7,7 @@
 	{
 //		echo "<b>Do plugins for $uri</b><br/>\n";
 		$ret = false;
-	
+
 		foreach(array($GLOBALS['cms']['local_dir'],
 					"{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}",
 					$GLOBALS['cms']['base_dir']) as $base_path
@@ -30,6 +30,9 @@
 
 		$path = uri2path($uri);
 	
+		if(!empty($_GET['debug']))
+			DebugBreak();
+	
         if(!is_dir($base_dir)) 
         	return false;
         
@@ -45,7 +48,6 @@
         closedir($dh);
         sort($dirs);
 
-
         foreach($dirs as $dir) 
         {
             if(file_exists("$base_dir/$dir/main.uri"))
@@ -58,10 +60,14 @@
 					{
 //						echo "---<br/>\n";
 					    ini_set('include_path', "$base_dir/$dir:".ini_get('include_path'));
-						$GLOBALS['cms']['plugin_base_path']	= $m[1];
-						$GLOBALS['cms']['plugin_parent_uri']= preg_replace("!$pattern!", "", $uri)."/";
-						$GLOBALS['cms']['plugin_base_uri']	= $GLOBALS['cms']['plugin_parent_uri'].$m[1]."/";
-					
+						
+						$GLOBALS['cms']['plugin_base_path']	= $m[1].$m[2]."/";
+						$GLOBALS['cms']['plugin_parent_uri']= preg_replace("!$pattern!", $m[1], $uri);
+						$GLOBALS['cms']['plugin_base_uri']	= $GLOBALS['cms']['plugin_parent_uri'].$m[2]."/";
+
+						$GLOBALS['cms']['templates']['data']['plugin_base_uri'] = $GLOBALS['cms']['plugin_base_uri'];
+						$GLOBALS['cms']['templates']['data']['plugin_base_path'] = $GLOBALS['cms']['plugin_base_path'];
+
 						@include_once("$base_dir/$dir/config.php");
 
 						if(!empty($_GET))

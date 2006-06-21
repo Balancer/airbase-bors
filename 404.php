@@ -350,8 +350,8 @@
     }
     
 ?>
-<body bgcolor=#c0c0c0>
-<font face=Verdana size=-1>
+<body bgcolor="#c0c0c0">
+<font face="Verdana" size="-1">
 
 <ul>
 <?

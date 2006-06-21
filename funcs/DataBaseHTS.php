@@ -98,6 +98,9 @@ class DataBaseHTS
 		if (!empty ($_GET['debug']))
 			echo "<small>pre_data_check('$uri', '$key')</small><br/>\n";
 
+		if($key=='source' || $key=='body')
+			DebugBreak();
+
 		if (empty ($GLOBALS['cms']['data_prehandler'][$key]))
 			return false;
 
@@ -106,9 +109,10 @@ class DataBaseHTS
 			if (preg_match($regexp, $uri, $m))
 				if (($res = $func ($uri, $m)) != NULL)
 				{
-					//						"Got pre $res for $key/$uri";
+//					echo "Got pre $func($res) for $key/$uri<br/>";
 					return $res;
 				}
+
 		return false;
 	}
 
