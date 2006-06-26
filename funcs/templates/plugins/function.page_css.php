@@ -5,6 +5,6 @@
     function smarty_function_page_css($params, &$smarty)
     {
         $hts = new DataBaseHTS;
-        return $hts->get_data($GLOBALS['page']."style/", 'body');
+        return $hts->get_data($GLOBALS['main_uri']."style/", 'body');
     }
 ?>

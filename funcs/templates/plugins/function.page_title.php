@@ -5,6 +5,6 @@
     function smarty_function_page_title($params, &$smarty)
     {
         $hts = new DataBaseHTS;
-        return $hts->get_data($GLOBALS['page'], 'title');
+        return $hts->get_data($GLOBALS['main_uri'], 'title');
     }
 ?>

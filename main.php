@@ -12,8 +12,19 @@
     ini_set('default_charset',$GLOBALS['cms']['charset']);
     setlocale(LC_ALL, $GLOBALS['cms']['locale']);
 
-//	print_r($_GET);
+	if(empty($_GET) && preg_match("!^(.+?)\?(.+)$!", $_SERVER['REQUEST_URI'], $m))
+	{
+		$_SERVER['REQUEST_URI'] = $m[1];
+		foreach(split("&", $m[2]) as $pair)
+		{
+			@list($var, $val) = split("=", $pair);
+			$_GET[$var] = "$val";
+			$_POST[$var] = "$val";
+		}
+	}
 
+//	print_r($_GET);
+	
 	require_once("funcs/users.php");
     require_once("handlers.php");
 
@@ -26,6 +37,17 @@
 
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 	$parse = parse_url($uri);
+	
+    require_once("funcs/CacheStaticFile.php");
+	$cs = new CacheStaticFile($uri);
+	if(empty($_GET) && empty($_POST) && $cs_uri = $cs->get_name($uri))
+	{
+		include_once("funcs/navigation/go.php");
+		go($cs_uri); 
+		exit();
+	}
+
+//	exit($uri);
 
 //	if(preg_match("!/~page(\d+)/?$!", $parse['path'], $m))
 //		$GLOBALS['cms']['page_number'] = max(1, intval($m[1]));
@@ -58,11 +80,7 @@
 	}
 
 
-
-//	exit();
-
-//	echo "<xmp>".print_r($GLOBALS['cms_patterns'], true)."</xmp>";
-//	print_r($_GET);
+//	echo "<xmp>".print_r($_POST, true)."</xmp>";	print_r($_GET);	exit();
 
 //	$GLOBALS['cms']['action'] = '';
 
@@ -83,9 +101,14 @@
 			handlers_load("$base_path/$sub_path");
 		}
 		
-		if(!empty($_GET))
+		if(@$GLOBALS['cms']['only_load'])
+			continue;
+
+		if(!empty($_GET) || !empty($_POST) )
 		{
+//			echo "=====================================================";
 			$ret = do_action_handlers($uri, $uri, $GLOBALS['cms_actions']);
+//			exit(print_r($_GET, true));
 		
 			if($ret === true)
 				return;
@@ -102,6 +125,9 @@
 		if($ret !== false)
 			$uri = $ret;
 	}
+
+	if(@$GLOBALS['cms']['only_load'])
+		return;
 
 //   echo "<pre>";	print_r($_SERVER);    echo "</pre>";
 	echo "<pre>";

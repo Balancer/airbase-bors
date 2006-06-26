@@ -264,6 +264,7 @@
 			$this->query("REPLACE $table ".$this->make_string_values($fields));
 		}
 
+		//TODO: Change 'where' to array-type
 		function store($table, $where, $fields, $append=false)
 		{
 			if(!$append)
@@ -282,7 +283,8 @@
 			}
 		}
 
-		function store_array($table,$where,$fields_array)
+		//TODO: Change 'where' to array-type
+		function store_array($table, $where, $fields_array)
 		{
 			$n=$this->query("SELECT * FROM `".addslashes($table)."` WHERE $where LIMIT 1");
 

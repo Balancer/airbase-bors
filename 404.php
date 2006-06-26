@@ -240,6 +240,8 @@
 
 //    echo "********$full_uri = {$_SERVER['REQUEST_URI']} / $page****<br>\n";
 
+//	print_r($_GET);
+
     if($hts->get_data($full_uri, 'modify_time'))
     {
         include_once('main.php');

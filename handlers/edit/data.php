@@ -129,7 +129,7 @@
 
         $ch = new Cache();
 
-        foreach(split("\n", $parents) as $p)
+        foreach(split("\n", @$parents) as $p)
    	    {
        	    $p = trim($p);
            	if($p)

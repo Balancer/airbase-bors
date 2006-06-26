@@ -1,22 +1,32 @@
 <?
     require_once("funcs/DataBaseHTS.php");
     require_once("funcs/Cache.php");
+    require_once("funcs/CacheStaticFile.php");
     require_once("funcs/lcml.php");
+    require_once("funcs/templates/smarty.php");
 
-    function recompile($page)
+    function recompile($uri, $update_parents = true)
     {
-//		echo "Recompile page '$page'";		exit();
-
-        if(!$page)
+		if(empty($GLOBALS['cms']['recompiled_uris']))
+			$GLOBALS['cms']['recompiled_uris'] = array();
+		
+        if(empty($uri))
             return;
 
+		if(!empty($GLOBALS['cms']['recompiled_uris'][$uri]))
+			return;
+			
         $ch = new Cache();
-        $ch->clear($page);
+        $ch->clear($uri);
+
+		$sf = new CacheStaticFile($uri);
+		$sf->save(show_page($uri, false));
+
+//		exit("Recompiled $uri");
 
         $hts = new DataBaseHTS;
 
-		$source = $hts->get_data($page, 'source');
-//		exit($source);
+		$source = $hts->get_data($uri, 'source');
 
         if($source)
         {
@@ -25,29 +35,14 @@
 
 			$ch->set($ch_type,$ch_key,NULL);
 
-            $body = lcml($source, array(
-                'page' => $page, 
-                'cr_type' => $hts->get_data($page, 'cr_type'),
-				'nocache' => true,
-				'with_html' => true,
-                ));
+//            $body = lcml($source, array(
+//              'page' => $uri, 
+//                'cr_type' => $hts->get_data($uri, 'cr_type'),
+//				'nocache' => true,
+//				'with_html' => true,
+//              ));
 
-//			exit($page);
-			if(preg_match('!/200\d/\d\d/\d\d/\d+\.html$!', $page))
-				$body = str_replace('&quot;', '"', normalize_text(addslashes($body), true));
-				
-//            $GLOBALS['log_level'] = 9;
-//            $hts->set_data($page, 'body', $body);
-            $hts->set_data($page, 'compile_time', time());
-
-			$description_source = $hts->get_data($page, 'description_source');
-			if($description_source)
-			{
-	            $description = lcml($description_source, array('page' => $page));
-				$hts->set_data($page, 'description', $description);
-			}
-
-            $out = '';
+            $hts->set_data($uri, 'compile_time', time());
 
             if(!empty($GLOBALS['cms_images']))
             {
@@ -62,34 +57,39 @@
 <div align="left"><ul>$out</ul></div>
 <input type="submit" value="Load">
 </dd></dl>
-<input type="hidden" name="page" value="$page">
+<input type="hidden" name="page" value="$uri">
 </form>
 __EOT__;
                 $GLOBALS['cms_right_column'][] = $out;
             }
 
-            $hts->set_data($page, 'right_column', !empty($GLOBALS['cms_right_column']) ? join("\n",$GLOBALS['cms_right_column']) : NULL);
+            $hts->set_data($uri, 'right_column', !empty($GLOBALS['cms_right_column']) ? join("\n",$GLOBALS['cms_right_column']) : NULL);
         }
         else
         {
-            debug(__FILE__."[".__LINE__."] Not found page_id for '$page'!");
-            exit(ec("Не найден идентификатор страницы '$page'!"));
+            debug(__FILE__."[".__LINE__."] Not found page_id for '$uri'!");
+            exit(ec("Не найден идентификатор страницы '$uri'!"));
         }
-    }
-	
-	function update_parents($uri)
-	{
-		$GLOBALS['cms']['recompiled_uris'] = array();
-		
-		$hts = new DataBaseHTS();
+
+		// Перекомпилируем родителей
 		foreach($hts->get_data_array($uri, 'parent') as $parent)
 		{
-			if(!empty($GLOBALS['cms']['recompiled_uris'][$parent]))
-				continue;
-			
 			$GLOBALS['cms']['recompiled_uris'][$parent] = $uri;
 			
-			$hts->set_data($parent, 'compile_time', time());
+			recompile($parent);
+		}
+
+		// Чтобы не пришлось перекомпилировать вообще всю систему 
+		// (через родителей потом ко всех их потомкам)
+		if(!$update_parents)
+			return;
+			
+		// Перекомпилируем детей. На тему имени навигации
+		foreach($hts->get_data_array($uri, 'child') as $child)
+		{
+			$GLOBALS['cms']['recompiled_uris'][$child] = $uri;
+			
+			recompile($child, false);
 		}
 	}
 ?>

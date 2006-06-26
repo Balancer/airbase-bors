@@ -7,6 +7,7 @@
 
 	function action_create_page($_uri)
 	{
+//		exit("Try create $_uri");
 
 		foreach(split(' ', "source title uri") as $p)
 			$$p = @$_POST[$p];
@@ -50,7 +51,7 @@
  				return;
 	   	}
         
-        // Потенциальная уязвимость в безопасности - пользователь может создать новую страницу,
+        //TODO: Потенциальная уязвимость в безопасности - пользователь может создать новую страницу,
    	    // используя права доступа произвольной страницы. На редактирование - не влияет.
         check_access(empty($new_page) ? $uri : $ref, $hts);
 
@@ -84,6 +85,8 @@
    	    $hts->set_data($uri, 'modify_time', time());
 
 //        append_log($uri, $log_action, $version);
+
+//		exit("Created page $uri");
 
         recompile($uri);
 
