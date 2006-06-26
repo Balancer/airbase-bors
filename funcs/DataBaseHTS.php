@@ -98,9 +98,6 @@ class DataBaseHTS
 		if (!empty ($_GET['debug']))
 			echo "<small>pre_data_check('$uri', '$key')</small><br/>\n";
 
-		if($key=='source' || $key=='body')
-			DebugBreak();
-
 		if (empty ($GLOBALS['cms']['data_prehandler'][$key]))
 			return false;
 
@@ -118,18 +115,23 @@ class DataBaseHTS
 
 	function post_data_check($uri, $key)
 	{
+//		if (!empty ($_GET['debug']))
+//			echo "<small>post_data_check('$uri', '$key')</small><br/>\n";
+
 		if (empty ($GLOBALS['cms']['data_posthandler'][$key]))
 			return false;
 
 		$m = array ();
 		foreach ($GLOBALS['cms']['data_posthandler'][$key] as $regexp => $func)
 		{
-			//				echo "Check post_data_check($uri, $key) for $regexp<br/>\n";
+//			echo "Check post_data_check($uri, $key) for $regexp<br/>\n";
 			if (preg_match($regexp, $uri, $m))
 			{
+//				echo "Got post $res for $key/$uri: $func";
 				if (($res = $func ($uri, $m)) != NULL)
 				{
-					//						"Got post $res for $key/$uri";
+//					if (!empty ($_GET['debug']))
+//						echo "<small>post_data_check return $res</small><br/>\n";
 					return $res;
 				}
 			}
@@ -144,6 +146,9 @@ class DataBaseHTS
 
 	function get_data($uri, $key, $default = NULL, $inherit = false, $skip = false, $fields = '`value`', $search = '`id`')
 	{
+//		if(!empty($_GET['debug']))
+//			echo("Get key '$key' for '$uri'");
+	
 		$m = array ();
 		if (preg_match("!^raw:(.+)$!", $key, $m))
 		{
@@ -153,7 +158,6 @@ class DataBaseHTS
 		else
 			$raw = false;
 
-		//			echo("Get key '$key' for '$uri'");
 
 		$uri = $this->normalize_uri($uri);
 
@@ -161,6 +165,7 @@ class DataBaseHTS
 			return $GLOBALS['page_data_preset'][$key][$uri];
 
 		$skip_save = $skip;
+
 
 		if (!$fields && !$search && !$skip && is_global_key("uri_data($uri)", $key)) // && global_key("uri_data($uri,$inherit,$skip_save)",$key)) 
 			return global_key("uri_data($uri)", $key);
@@ -210,6 +215,9 @@ class DataBaseHTS
 
 		set_global_key("uri_data($uri)", $key, $value);
 
+//		if(!empty($_GET['debug']))
+//			echo("Get key '$key' for '$uri' => '$value'");
+
 		return $value ? $value : $default;
 	}
 
@@ -237,7 +245,7 @@ class DataBaseHTS
 
 	function get_data_array_size($uri, $key)
 	{
-		echolog("Get keys array size '$key' for '$uri' (fields=$fields, search=id)");
+//		echolog("Get keys array size '$key' for '$uri' (fields=$fields, search=id)");
 
 		$uri = $this->normalize_uri($uri);
 

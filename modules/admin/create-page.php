@@ -23,7 +23,7 @@
 	$source = $hts->get_data($uri, 'source');
 
 ?>
-<form method="POST" action="<?echo $uri?>?create-page" ENCTYPE="multipart/form-data">
+<form method="post" action="<?echo $uri?>" ENCTYPE="multipart/form-data">
 <h1><?echo $title?$title:ec('Новая страница');?></h1>
 <table class="btab" cellSpacing="0">
 <?
@@ -45,5 +45,6 @@
     if($uri)   echo "<input type=\"hidden\" name=\"uri\"    value=\"".addslashes($uri)  ."\">\n";
 ?>
 </table>
+<input type="hidden" name="create-page" value="1">
 </form>
 <h3><?echo ec("Уровень доступа");?>: <?echo user_data("level")?></h3>

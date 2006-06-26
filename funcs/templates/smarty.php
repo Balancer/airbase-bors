@@ -21,7 +21,7 @@
         return $out;
     }
 
-    function show_page($uri)
+    function show_page($uri, $do_print = true)
     {
         $hts  = new DataBaseHTS();
 
@@ -223,7 +223,9 @@
     	            $compile_time < time()-86400*7
                 	))
             {
-                recompile($page);
+				if($do_print)
+	                recompile($page, false);
+
                 foreach(split(' ', $page_vars) as $key)
                     $$key = $hts->get_data($page, $key);
             }
@@ -301,6 +303,7 @@
 	    error_reporting(E_ALL & ~E_NOTICE);
 
 //		echo "::$tpl:".$hts->get_data(str_replace('hts:', '', $tpl), 'source')."<br/>\n";
+//		echo $tpl;
 
 		if($tpl{0} == '/')
 		{
@@ -317,6 +320,13 @@
 
 		$out = preg_replace('!<\?php(.+?)\?>!es', "do_php(stripslashes('$1'))", $out_save = $out);
 		
-        echo $out;
+		if($do_print)
+		{
+	        echo $out;
+			if(empty($_GET) && empty($_POST))
+				recompile($page, false);
+		}
+		else
+			return $out;
     }
 ?>

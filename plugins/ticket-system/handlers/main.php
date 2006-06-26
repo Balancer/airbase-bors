@@ -203,7 +203,7 @@
 			$ht->set_data($new_ticket, 'category',  $_POST['category']);
 
 		$us->set_data("last_answer", time());
-		$us->set_data("last_post_hash", md5($_POST['text']));
+		$us->set_data("last_post_hash", md5($_POST['source']));
 
 		go($new_ticket);
 		return true;
@@ -248,7 +248,7 @@
 		$us->set_data("last_post_hash", md5($_POST['text']));
 
 		include_once('actions/recompile.php');
-		update_parents($comment);
+		recompile($comment);
 		go($uri);
 		return true;
 	}
@@ -270,7 +270,7 @@
 
 		$hts->set_flag($uri, 'closed');
 
-		update_parents($uri);
+		recompile($uri);
 		go($GLOBALS['cms']['plugin_base_uri']);
 		return true;
 	}
@@ -292,7 +292,7 @@
 
 		$hts->drop_flag($uri, 'closed');
 
-		update_parents($uri);
+		recompile($uri);
 		go($uri);
 		return true;
 	}

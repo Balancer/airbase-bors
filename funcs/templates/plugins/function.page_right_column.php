@@ -4,6 +4,6 @@
     function smarty_function_page_right_column($params, &$smarty)
     {
         $hts = new DataBaseHTS;
-        return $hts->get_data($GLOBALS['page'], 'right_column');
+        return $hts->get_data($GLOBALS['main_uri'], 'right_column');
     }
 ?>

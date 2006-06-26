@@ -18,7 +18,7 @@
 
         $uri = $hts->page_uri_by_value('title', $title);
         if(!$uri)
-            return "<a href=\"http://airbase.ru/admin/wiki-new.php?title=".urlencode($title)."&ref=".urlencode($GLOBALS['page'])."\" class=\"wiki_none\">$text</a>";
+            return "<a href=\"http://airbase.ru/admin/wiki-new.php?title=".urlencode($title)."&ref=".urlencode($GLOBALS['main_uri'])."\" class=\"wiki_none\">$text</a>";
 
         return "<a href=\"$uri\" class=\"wiki_int\">$text</a>";
         

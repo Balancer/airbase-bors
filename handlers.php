@@ -67,7 +67,7 @@ function handlers_load($dir = 'handlers')
 function hts_data_prehandler_add($regexp, $data_key, $func)
 {
 	if (!empty ($_GET['debug']))
-		echo "<small>Add function $func to uri like '$regexp' for key $data_key</small><br />";
+		echo "<small>Add pre function $func to uri like '$regexp' for key $data_key</small><br />";
 
 	$GLOBALS['cms']['data_prehandler'][$data_key][$regexp] = $func;
 	krsort($GLOBALS['cms']['data_prehandler'][$data_key]);
@@ -75,6 +75,9 @@ function hts_data_prehandler_add($regexp, $data_key, $func)
 
 function hts_data_posthandler_add($regexp, $data_key, $function)
 {
+	if (!empty ($_GET['debug']))
+		echo "<small>Add post function $function to uri like '$regexp' for key $data_key</small><br />";
+
 	$GLOBALS['cms']['data_posthandler'][$data_key][$regexp] = $function;
 	krsort($GLOBALS['cms']['data_posthandler'][$data_key]);
 }
@@ -172,8 +175,9 @@ function do_action_handlers($uri, $match, $actions)
    	foreach($actions as $action => $reg)
    	{
 //		echo "<pre>Test action '$action' to '$uri' for ".print_r($reg, true)."</pre>\n";
-		if(isset($_GET[$action]))
+		if(isset($_GET[$action]) || isset($_POST[$action]))
 		{
+//			echo "*<br/>";
 			$GLOBALS['cms']['action'] = $action;
 			foreach($reg as $regexp => $func)
 			{

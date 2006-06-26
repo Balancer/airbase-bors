@@ -12,7 +12,7 @@
 
     function mkpath($strPath, $mode=0777)
     {
-        if (is_dir($strPath)) 
+        if(is_dir($strPath)) 
             return true;
   
         $pStrPath = dirname($strPath);
@@ -20,6 +20,6 @@
         if(!mkpath($pStrPath, $mode)) 
             return false;
 
-        return mkdir($strPath);
+        return mkdir($strPath, $mode);
     }
 ?>
