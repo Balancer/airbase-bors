@@ -77,6 +77,7 @@
 		if(isset($_POST['link']))
 			$hts->add_child($uri, $_POST['link']);
 
+        recompile($_POST['link']);
 		go("$uri?nav_edit");
 	}
 
@@ -92,6 +93,7 @@
 		if(isset($_GET['link']))
 			$hts->child_remove($uri, $_GET['link']);
 
+        recompile($_GET['link']);
 		go("$uri?nav_edit");
 	}
 
@@ -107,6 +109,7 @@
 		if(isset($_POST['link']))
 			$hts->parent_add($uri, $_POST['link']);
 
+        recompile($uri);
 		go("$uri?nav_edit");
 	}
 
@@ -122,6 +125,7 @@
 		if(isset($_GET['link']))
 			$hts->parent_remove($uri, $_GET['link']);
 
+        recompile($uri);
 		go("$uri?nav_edit");
 	}
 ?>

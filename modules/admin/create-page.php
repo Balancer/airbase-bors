@@ -11,6 +11,8 @@
 	if(!$ref)
 		$ref = preg_replace("!(\?.*?)$!","",@$_SERVER['HTTP_REFERER']);
 
+	$ref = preg_replace("!/[^/]+\.html$!", "/", $ref);
+
     $hts = new DataBaseHTS();
     $uri = $hts->normalize_uri($uri);
 
