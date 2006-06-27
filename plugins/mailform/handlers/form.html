@@ -1,0 +1,41 @@
+<script LANGUAGE="JavaScript"><!--{literal}
+  function CheckEntry() 
+  {
+    if ((document.form.fio.value=="") && (document.form.company.value=="")) {
+      alert("Одно из полей \"Контактное лицо\" или \"Название организации\" должно быть заполнено");
+      return(false)
+    }
+    if ((document.form.email.value=="") || (document.form.message.value=="") || (document.form.phone.value=="")) {
+      alert("Пожалуйста заполните все поля \"email\", \"телефон\", \"оборудование\"");
+      return(false)
+    }
+
+  } 
+{/literal}// --></script>
+
+<form method="post" action="?send-form" onSubmit="return CheckEntry()" name="form">
+<table cellSpacing="0" class="btab">
+<tr>
+      <th align="right"><b>ФИО контактного лица:</b></td>
+      <td><input type="text" maxLength="128" name="fio" size="33" style="width: 100%"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Название организации:</b></td>
+      <td><input type="text" maxLength="128" name="company" size="33" style="width: 100%"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Ваш E-mail:</b></td>
+      <td><input type="text" maxLength="128" name="email" size="33" style="width: 100%"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Телефон или факс с кодом города:</b></td>
+      <td><input type="text" maxLength="500" name="phone" size="33"
+      style="width: 100%"></td>
+    </tr>
+	<tr>
+		<td align="right" valign="top" class="tech"><b>Описание требуемого оборудования (в свободной форме)</b></td>
+		<td><textarea cols="45" name="message" rows="5" style="width: 100%" wrap="virtual"></textarea>
+		<div align="center"><input type="submit" value="Отправить"></td>
+	</tr>
+</table>
+</form>

@@ -146,7 +146,7 @@ function hts_data_prehandler($pattern, $data)
 		hts_data_prehandler_add($pattern, 'nav_name', create_function('$uri, $m', '$hts = new DataBaseHTS(); return strtolower($hts->get_data($uri, "title"));'));
 
 	if (empty ($data['source']))
-		hts_data_prehandler_add($pattern, 'source', create_function('$uri, $m', 'return ec("Виртуальная страница.");'));
+		hts_data_prehandler_add($pattern, 'source', create_function('$uri, $m', 'return NULL;'));
 
 	if (empty ($data['modify_time']))
 		hts_data_prehandler_add($pattern, 'modify_time', create_function('$uri, $m', 'return time();'));

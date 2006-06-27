@@ -10,7 +10,7 @@
 	
 	    $hts  = new DataBaseHTS;
 	    require_once('funcs/templates/smarty.php');
-		if($hts->get_data($uri, 'source'))
+		if($hts->get_data($uri, 'source') || $hts->get_data($uri, 'body'))
 		{
 			show_page($uri);
 			return true;
@@ -31,7 +31,7 @@
 		hts_store($uri, $data);
 //		echo $GLOBALS['body'];
 
-		if($hts->get_data($uri, 'source'))
+		if($hts->get_data($uri, 'source') || $hts->get_data($uri, 'body'))
 		{
 			show_page($uri);
 			return true;

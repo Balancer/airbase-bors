@@ -19,16 +19,20 @@
         $ch = new Cache();
         $ch->clear($uri);
 
-		$sf = new CacheStaticFile($uri);
-		$sf->save(show_page($uri, false));
-
+		if(!empty($GLOBALS['cms']['cache_static']))
+		{
+			$sf = new CacheStaticFile($uri);
+			$sf->save(show_page($uri, false));
+		}
+		
 //		exit("Recompiled $uri");
 
         $hts = new DataBaseHTS;
 
 		$source = $hts->get_data($uri, 'source');
+		$body   = $hts->get_data($uri, 'body');
 
-        if($source)
+        if($source || $body)
         {
 			$ch_type = 'lcml-compiled';
 			$ch_key = md5($source);
