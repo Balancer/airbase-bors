@@ -78,19 +78,17 @@
 
     function translite_uri_simple($uri)
     {
-        $uri = strtolower($uri);
+//        $uri = strtolower($uri);
 
         $uri = to_translit($uri);
 
         $uri = strtr($uri, array(
         ' ' => '_', 
-        '"' => "\'", 
+        '"' => "'", 
         '#' => '$', 
-        '%' => '@', 
         '&' => '$_', 
         '+' => '_',
-        '`' => '~',
-        ',' => '.',
+        '`' => "'",
         '/' => '-',
         '<' => '_',
         '=' => '-',
@@ -100,9 +98,8 @@
         '|'=> '!', 
         ));
 
-        $uri = rawurlencode($uri);
-
-        $uri = str_replace('%','_',$uri);
+//        $uri = rawurlencode($uri);
+//        $uri = str_replace('%','_',$uri);
         return $uri;        
     }
 

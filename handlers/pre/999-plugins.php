@@ -30,8 +30,8 @@
 
 		$path = uri2path($uri);
 	
-		if(!empty($_GET['debug']))
-			DebugBreak();
+//		if(!empty($_GET['debug']))
+//			DebugBreak();
 	
         if(!is_dir($base_dir)) 
         	return false;

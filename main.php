@@ -24,7 +24,7 @@
 	}
 
 //	print_r($_GET);
-	
+
 	require_once("funcs/users.php");
     require_once("handlers.php");
 
@@ -36,11 +36,14 @@
 //		echo("GET='".print_r($_GET,true)."', REQUEST_URI='{$_SERVER['REQUEST_URI']}'<br><br>");
 
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+	
+	$uri = preg_replace("!/[^/]+\.html$!", "/", $uri);
+	
 	$parse = parse_url($uri);
 	
     require_once("funcs/CacheStaticFile.php");
 	$cs = new CacheStaticFile($uri);
-	if(empty($_GET) && empty($_POST) && $cs_uri = $cs->get_name($uri))
+	if(empty($_GET) && empty($_POST) && ($cs_uri = $cs->get_name($uri)) && file_exists($cs->get_file($uri)))
 	{
 		include_once("funcs/navigation/go.php");
 		go($cs_uri); 
