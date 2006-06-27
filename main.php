@@ -43,7 +43,7 @@
 	
     require_once("funcs/CacheStaticFile.php");
 	$cs = new CacheStaticFile($uri);
-	if(empty($_GET) && empty($_POST) && ($cs_uri = $cs->get_name($uri)) && file_exists($cs->get_file($uri)))
+	if(!empty($GLOBALS['cms']['cache_static']) && empty($_GET) && empty($_POST) && ($cs_uri = $cs->get_name($uri)) && file_exists($cs->get_file($uri)))
 	{
 		include_once("funcs/navigation/go.php");
 		go($cs_uri); 

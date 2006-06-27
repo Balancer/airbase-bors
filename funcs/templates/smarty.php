@@ -58,8 +58,8 @@
 			$GLOBALS['cms']['cache_disabled'] = true;
 //			exit("<xmp>".$body."</xmp>");
 		}
-		
-        if(!$source)
+
+        if(!$source && !$body)
         {
 			// Такой страницы ещё нет - создаём
 
@@ -142,6 +142,7 @@
 			if(!$smarty->template_exists("hts:$tpl")
 					// || ($action && $action!='virtual')
 					|| @$_GET['tpl']=='safe'
+					|| !$hts->get_data($tpl, 'source')
 				)
 	            $tpl = $GLOBALS['cms']['default_template_file'];
 
@@ -182,6 +183,7 @@
         $last_modify = gmdate('D, d M Y H:i:s', $modify_time).' GMT';
    	    @header ('Last-Modified: '.$last_modify);
 
+
         if($nocache || !$smarty->is_cached($tpl, $page))
         {
 			$GLOBALS['cms']['cached_copy'] = 0;	
@@ -206,7 +208,8 @@
 //            echo "</xmp>";
                 if(!empty($res['title'])) $title = $res['title'];
                 if(!empty($res['description_source'])) $description = lcml($res['description_source']);
-                if(!empty($res['source'])) $body = lcml($res['source']);
+                if(!empty($res['source']))
+					$body = lcml($res['source']);
 
                 echo "<h2>Версия $version, сохранённая ".strftime("%d.%m.%Y %H:%M:%S", $res['backup_time'])."</h2>\n";
             }
@@ -313,8 +316,6 @@
 				$tpl = "hts:http://{$_SERVER['HTTP_HOST']}$tpl";
 		}
 		
-//		echo $tpl;
-
 		$out = $smarty->fetch($tpl, $page);
 	    error_reporting(E_ALL);
 
