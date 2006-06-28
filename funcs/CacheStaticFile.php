@@ -5,9 +5,9 @@
 
     class CacheStaticFile
     {
-		private $file;
-		private $uri;
-		private $original_uri;
+		var $file;
+		var $uri;
+		var $original_uri;
 	
         function CacheStaticFile($uri = NULL)
         {

@@ -823,7 +823,7 @@ class DataBaseHTS
 		}
 
 
-		add_where($params, $join, $cond);
+		$this->add_where($params, $join, $cond);
 
 		$query = "SELECT ct.id as uri
 	FROM hts_data_create_time ct
@@ -874,6 +874,5 @@ class DataBaseHTS
 			$cond .= " AND $jt.value $op ".addslashes($value)." ";
 		}
 	}
-
 }
 ?>
