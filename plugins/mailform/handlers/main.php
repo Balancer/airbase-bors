@@ -1,5 +1,5 @@
 <?
-	hts_data_prehandler("!^({$GLOBALS['cms']['plugin_parent_uri']}).+?$!", array(
+	hts_data_prehandler("!^({$GLOBALS['cms']['plugin_parent_uri']})\w+/?$!", array(
 			'body' => 'plugins_mailform_main_body',
 			'title' => ec('Заказ'),
 		));
