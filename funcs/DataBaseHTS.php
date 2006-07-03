@@ -843,7 +843,7 @@ class DataBaseHTS
 
 	function add_where($params, &$join, &$cond)
 	{
-		if(!is_array($params['where']))
+		if(!is_array(@$params['where']))
 			return;
 		
 		$joined = array ();
