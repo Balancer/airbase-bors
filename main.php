@@ -1,4 +1,6 @@
 <?
+//	ini_set("xdebug.profiler_enable", "1");
+
     list($usec, $sec) = explode(" ",microtime());
     $GLOBALS['stat']['start_microtime'] = ((float)$usec + (float)$sec);
 

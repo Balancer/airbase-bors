@@ -62,7 +62,7 @@
 					$nnn++;
 				}
 				if(!$this->dbh)
-					die (__FILE__.':'.__LINE__." Query failed, error ".mysql_errno($this->dbh).": ".mysql_error($this->dbh)."<BR />");
+					die (__FILE__.':'.__LINE__." Query failed, error ".mysql_errno().": ".mysql_error()."<BR />");
 				mysql_select_db($base,$this->dbh) or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
 
 				if(!empty($GLOBALS['cms']['mysql_set_character_set']))

@@ -149,7 +149,7 @@
 				}
 
 				list($width, $height, $type, $attr) = getimagesize($img_ico_uri);
-//				return "$img_ico_uri:list($width, $height, $type, $attr)";
+//				return "__$img_ico_uri:list($width, $height, $type, $attr)__";
 
 				if(!intval($width) || !intval($height))
 					return lcml("Get image [url]{$params['url']}[/url] error [spoiler|details]".
