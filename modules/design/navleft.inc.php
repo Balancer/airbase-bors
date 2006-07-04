@@ -81,6 +81,8 @@
 			foreach($hts->get_data_array($parent, 'child') as $child)
 			{
 //				echo "<span style=\"font-size: 6pt;\">&nbsp;&nbsp;c: $child</span><br/>\n";
+				if(!$hts->get_data($child, 'nav_name'))
+					continue;
 
 				$list[$child] = array(
 					'uri' => $child,
