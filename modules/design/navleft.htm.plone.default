@@ -1,0 +1,17 @@
+{section name=i loop=$links}
+<div style="white-space: nowrap;">
+ <span>
+  {if $links[i].indent > 4}{assign var="links[i].indent" value=4}{/if}
+  {if $links[i].indent}{""|indent:$links[i].indent:"&nbsp;"}{/if}
+  {assign var="img" value="topic_icon"}
+  {if $links[i].here}{assign var="img" value="folder_icon"}{/if}
+  {if $links[i].children}
+   {assign var="img" value="folder_icon"}
+   {if $links[i].here}
+    {assign var="img" value="folder_icon"}
+   {/if}
+  {/if}
+<a href="{$links[i].uri}" class="plain" title="{$links[i].title}"><img src="http://balancer.ru/cms/templates/plone/img/{$img}.gif" alt="*" title="{$links[i].title}" height="16" width="16" border="0" /></a>&nbsp;<a href="{$links[i].uri}" class="plain" title="{$links[i].title}">{$links[i].title}</a>
+ </span>
+</div>
+{/section}
