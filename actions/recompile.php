@@ -7,6 +7,8 @@
 
     function recompile($uri, $update_parents = true)
     {
+		$params['cache_disable'] = true;
+	
 		if(empty($GLOBALS['cms']['recompiled_uris']))
 			$GLOBALS['cms']['recompiled_uris'] = array();
 		
@@ -72,7 +74,7 @@ __EOT__;
         else
         {
             debug(__FILE__."[".__LINE__."] Not found page_id for '$uri'!");
-            exit(ec("Не найден идентификатор страницы '$uri'!"));
+//            exit(ec("Не найден идентификатор страницы '$uri'!"));
         }
 
 		// Перекомпилируем родителей

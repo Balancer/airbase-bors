@@ -15,7 +15,7 @@
 		$data = $hts->parse_uri($page);
 //		exit($image2.print_r($data, true));
 		
-//		exit("'$image2' = abs_path_from_relative('$image', '{$page}img');");
+//		exit("'$image2' = abs_path_from_relative('$image', '$page');");
 
         if(!file_exists(preg_replace("!http://{$data['host']}!",$data['root'],$image2)))
             $image2 = abs_path_from_relative($image, $page);
