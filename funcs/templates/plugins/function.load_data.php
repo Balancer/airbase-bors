@@ -15,12 +15,31 @@
         if(empty($params['page']))
             $params['page'] = $GLOBALS['main_uri'];
 
+		$lcml = false;
+		if($params['key'] == 'body')
+		{
+			$params['key'] = 'source';
+			$lcml = true;
+		}
+
         $ldp = $params['page'];
-        $src = $hts->get_data($hts->normalize_uri($ldp), $params['key']);
+		$uri = $hts->normalize_uri($ldp);
+        $src = $hts->get_data($uri, $params['key']);
 		$add .= $hts->normalize_uri($ldp);
 
         if(!$src)
-            $src = $hts->get_data($hts->normalize_uri($GLOBALS['main_uri']."$ldp/"), $params['key']);
+		{
+			$uri = $hts->normalize_uri($GLOBALS['main_uri']."$ldp/");
+            $src = $hts->get_data($uri, $params['key']);
+		}
+			
+		if($lcml)
+			$src = lcml($src, array(
+				"page"      => $uri,
+				"cr_type"   => $hts->get_data($uri, "cr_type"),
+				"with_html" => true,
+			));
+
 
         return /*"=$add|{$params['key']}=".*/ $src;
     }

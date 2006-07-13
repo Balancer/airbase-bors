@@ -28,9 +28,9 @@
 		}
 
 		if(!isset($params['description']))
-			$params['description']=$url;
+			$params['description'] = $url;
 		else
-			$params['description']=lcml($params['description']);
+			$params['description'] = lcml($params['description'], array('noautouri'=>true));
 
 		return "<a href=\"$url\"$external>{$params['description']}</a>";
 	}

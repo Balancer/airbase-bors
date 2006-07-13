@@ -7,50 +7,7 @@
 			'title' => ec('Система тикетов'),
 		));
 
-	function get_category($cat)
-	{
-		$cats = array(
-			"news"=>'Новости',
-			"conferences"=>'Конференция',
-			"list"=>'Рассылка',
-			"job"=>'Персонал',
-			"torg"=>'Торг',
-			""=>'Общий',
-		);
-		
-		if(isset($cats[$cat]))
-			return ec($cats[$cat]);
-		
-		return $cat;
-	}
-
-	function get_priority($priority)
-	{
-		$priors = array(
-			"critical"=>'Критическая ошибка',
-			"error"=>'Ошибка',
-			"fix"=>'Исправление',
-			""=>'Дополнение',
-			"task"=>'Второстепенная задача',
-		);
-		
-		if(isset($priors[$priority]))
-			return ec($priors[$priority]);
-		
-		return $priority;
-	}
-
-	function get_color($priority)
-	{
-		$colors = array(
-			"critical"=>'#ffc0c0',
-		);
-		
-		if(isset($colors[$priority]))
-			return " style=\"background-color: $colors[$priority];\"";
-		
-		return '';
-	}
+	include_once("include/funcs.php");
 
 	function plugins_ticket_system_body($uri, $m)
 	{
@@ -62,11 +19,7 @@
 		
 		$hts = new DataBaseHTS;
 
-//		print_r($hts->get_data_array($data['base_uri'], 'child'));
-
 		$tickets = array();
-
-//		$GLOBALS['log_level'] = 10;
 
 		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'no', 'range' => -1)) as $ticket)
 			$tickets[] = array(
@@ -78,20 +31,6 @@
 				'color'	=> get_color($hts->get_data($ticket, 'priority')),
 				'category'	=> get_category($hts->get_data($ticket, 'category')),
 				'closed' => false,
-			);
-
-//		$GLOBALS['log_level'] = 2;
-		
-		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'yes', 'range' => -1)) as $ticket)
-			$tickets[] = array(
-				'uri'    => $ticket,
-				'title'  => $hts->get_data($ticket, 'title'),
-				'date'   => news_time($hts->get_data($ticket, 'modify_time')),
-				'create_date'   => news_time($hts->get_data($ticket, 'create_time')),
-				'priority'	=> get_priority($hts->get_data($ticket, 'priority')),
-				'color'	=> get_color($hts->get_data($ticket, 'priority')),
-				'category'	=> get_category($hts->get_data($ticket, 'category')),
-				'closed' => true,
 			);
 
 		$data['tickets'] = $tickets;

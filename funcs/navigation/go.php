@@ -19,4 +19,9 @@
 
         exit();
     }
+
+    function go_ref()
+	{
+		go($GLOBALS['ref']);
+	}
 ?>

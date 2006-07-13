@@ -12,6 +12,8 @@ function register_uri_handler($uri_pattern, $func = NULL)
 		$uri_pattern = "!.*!";
 	}
 
+//	echo "Register uri '$uri_pattern' handler: $func<br/>";
+
 	$GLOBALS['cms_patterns'][$uri_pattern] = $func;
 }
 
