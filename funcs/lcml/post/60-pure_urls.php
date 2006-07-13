@@ -11,6 +11,9 @@
 
     function lcml_pure_urls($txt)
     {
+		if(!empty($GLOBALS['lcml']['params']['noautouri']))
+			return $txt;
+	
         $txt=preg_replace("!\[(http://[^\s\|\]]+?)\]!ie","lcml_pure_urls_title('$1')",$txt);
         $txt=preg_replace("!\[(www\.[^\s\|\]]+?)\]!ie","lcml_pure_urls_title('http://$1')",$txt);
         $txt=preg_replace("!\[(ftp://[^\s\|\]]+?)\]!i","<a href=\"$1\" class=\"external\">$1</a>",$txt);

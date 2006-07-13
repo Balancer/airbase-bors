@@ -1,3 +1,7 @@
+<ul>
+<li><a href="new_ticket/">Добавить тикет</a></li>
+</ul>
+
 <table class="forum-threads" cellspacing="0">
 <tr>
 	<th>задача</th>
@@ -22,6 +26,11 @@
 </table>
 
 <ul>
-<li><a href="new_ticket/">Добавить тикет</a></li>
+<li>
+{if $main_uri|regex_match:"/closed/?"}
+<a href="../">Открытые</a></li>
+{else}
+<a href="closed/">Закрытые</a></li>
+{/if}
 </ul>
 

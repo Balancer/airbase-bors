@@ -1,6 +1,8 @@
 <?
 //	ini_set("xdebug.profiler_enable", "1");
 
+//	print_r($_SERVER);
+
     list($usec, $sec) = explode(" ",microtime());
     $GLOBALS['stat']['start_microtime'] = ((float)$usec + (float)$sec);
 
@@ -39,7 +41,7 @@
 
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 	
-	$uri = preg_replace("!/[^/]+\.html$!", "/", $uri);
+//	$uri = preg_replace("!/[^/]+\.html$!", "/", $uri);
 	
 	$parse = parse_url($uri);
 	
