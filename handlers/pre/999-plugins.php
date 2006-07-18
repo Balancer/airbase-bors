@@ -39,17 +39,16 @@
         $dirs = array();
 
         if($dh = opendir($base_dir)) 
-        {
             while(($dir = readdir($dh)) !== false)
                 if(is_dir("$base_dir/$dir") && $dir{0} != '.')
                    	array_push($dirs, $dir);
-        }
   
         closedir($dh);
         sort($dirs);
 
         foreach($dirs as $dir) 
         {
+//			echo "Dir: $base_dir/$dir/main.uri<br/>";
             if(file_exists("$base_dir/$dir/main.uri"))
 			{
 				foreach(file("$base_dir/$dir/main.uri") as $pattern)
@@ -58,7 +57,7 @@
 //					echo "Apply '$pattern' to '$path'<br/>\n";
 					if(preg_match("!^$pattern$!", $path, $m))
 					{
-//						echo "---<br/>\n";
+//						echo "$path::$pattern---<br/>\n";
 					    ini_set('include_path', "$base_dir/$dir:".ini_get('include_path'));
 						
 						$GLOBALS['cms']['plugin_base_path']	= $m[1].$m[2]."/";

@@ -237,7 +237,7 @@
                 {
 //                    $params['_align_b']="<table{$params['_width']} cellPadding=\"0\" cellSpacing=\"0\" align=\"{$params['align']}\"><tr><td>"; // {$params['_border']}{$params['_style']}
 //                    $params['_align_e']="</td></tr></table>";
-                    $params['_align_b']="<div{$params['_border']} style=\"{$params['xwidth']} xdisplay: xblock; float: {$params['align']}; margin-left: 10px; margin-right: 10px;\">"; // {$params['_style']}
+                    $params['_align_b']="<div{$params['_border']} style=\"{$params['xwidth']} float: {$params['align']}; margin-left: 10px; margin-right: 10px;\">"; // {$params['_style']}
                     $params['_align_e']="</div>";
                 }
                 else

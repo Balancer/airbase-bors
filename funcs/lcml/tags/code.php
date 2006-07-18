@@ -40,9 +40,10 @@
         else
             $txt=join("\n",$txt);
 
-        $txt="<table border='0' align='center' width='95%' cellpadding='3' cellspacing='1'><tr><td class='code' id='CODE'><tt>$txt</tt></td></tr></table>";
+        $txt = "<table border='0' align='center' width='95%' cellpadding='3' cellspacing='1'><tr><td class='code' id='CODE'><tt>$txt</tt>";
         if(isset($m[2]))
-            $txt.="<div style=\"font-size: xx-small; text-align: right;\">Created with Colorer, type '<b>$m[2]</b>'</div>";
+            $txt.="<div style=\"font-size: xx-small; text-align: right;\">code, type '<b>$m[2]</b>'</div>";
+		$txt .= "</td></tr></table>";
         
         $txt=preg_replace("!( {2,})!em","str_repeat('&nbsp;',strlen('$1'))",$txt);
 //        $txt=str_replace(" ", "&nbsp", $txt);

@@ -16,7 +16,7 @@
     ini_set('default_charset',$GLOBALS['cms']['charset']);
     setlocale(LC_ALL, $GLOBALS['cms']['locale']);
 
-	if(empty($_GET) && preg_match("!^(.+?)\?(.+)$!", $_SERVER['REQUEST_URI'], $m))
+	if(empty($GLOBALS['cms']['only_load']) && empty($_GET) && preg_match("!^(.+?)\?(.+)$!", $_SERVER['REQUEST_URI'], $m))
 	{
 		$_SERVER['REQUEST_URI'] = $m[1];
 		foreach(split("&", $m[2]) as $pair)
@@ -32,10 +32,13 @@
 	require_once("funcs/users.php");
     require_once("handlers.php");
 
-	$_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
+	if(empty($GLOBALS['cms']['only_load']))
+	{
+		$_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
 
-    $_SERVER['REQUEST_URI'] = preg_replace("!^(.+?)\?.*?$!", "$1", $_SERVER['REQUEST_URI']);
-
+    	$_SERVER['REQUEST_URI'] = preg_replace("!^(.+?)\?.*?$!", "$1", $_SERVER['REQUEST_URI']);
+	}
+	
 //	if($_SERVER['HTTP_HOST'] == "la2.wrk.ru")	
 //		echo("GET='".print_r($_GET,true)."', REQUEST_URI='{$_SERVER['REQUEST_URI']}'<br><br>");
 
@@ -108,10 +111,7 @@
 			handlers_load("$base_path/$sub_path");
 		}
 		
-		if(@$GLOBALS['cms']['only_load'])
-			continue;
-
-		if(!empty($_GET) || !empty($_POST) )
+		if(empty($GLOBALS['cms']['only_load']) && (!empty($_GET) || !empty($_POST)))
 		{
 //			echo "=====================================================";
 			$ret = do_action_handlers($uri, $uri, $GLOBALS['cms_actions']);

@@ -1,6 +1,12 @@
 <?
 	function modules_design_navleft_get($uri)
 	{
+		include_once("funcs/Cache.php");
+		$ch = new Cache();
+		
+		if($ch->get('modules-design-navleft-2', $uri))
+			return $ch->last;
+	
 		include_once("funcs/templates/assign.php");
 
 		$hts = new DataBaseHTS();
@@ -42,7 +48,7 @@
 			$data2[] = $d;
 		}
 		
-		return template_assign_data("navleft.htm", array('links'=>$data2));
+		return $ch->set(template_assign_data("navleft.htm", array('links'=>$data2)), 86400);
 	}
 	
 
