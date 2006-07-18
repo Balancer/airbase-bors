@@ -2,7 +2,8 @@
     require_once('funcs/DataBaseHTS.php');
     require_once('funcs/templates/smarty.php');
 
-    register_uri_handler('!^(http://[^/]+.*)/$!', 'handler_new_page');
+	if(empty($GLOBALS['cms']['only_load']))
+	    register_uri_handler('!^(http://[^/]+.*)/$!', 'handler_new_page');
 
     function handler_new_page($uri, $m=array())
 	{

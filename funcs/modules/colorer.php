@@ -6,8 +6,8 @@
         list($type, $color)=preg_split("!\s+!",$type.' ');
 
 
-		if(@$GLOBALS['lcml']['forum_type'] == 'punbb' && !$color)
-			$color = 'black';
+//		if(@$GLOBALS['lcml']['forum_type'] == 'punbb' && !$color)
+//			$color = 'black';
 
         if(trim($color))
         {
