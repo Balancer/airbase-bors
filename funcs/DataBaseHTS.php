@@ -798,8 +798,9 @@ class DataBaseHTS
 		return $ret;
 	}
 
-	function get_array_ex($regexp, $params = array ())
+	function get_array_ex($regexp, $table, $params = array ())
 	{
+		//print_r($params);
 		$limit = intval(empty ($params['limit']) ? 20 : $params['limit']);
 		$range = intval(empty ($params['range']) ? 86400 : $params['range']);
 
@@ -808,7 +809,8 @@ class DataBaseHTS
 
 		$join = $cond = "";
 
-		$like_type = empty ($params['like_type']) ? 'like' : addslashes($params['like_type']);
+		//echo $params['like_type'];
+		$like_type = empty ($params['like_type']) ? '=' : addslashes($params['like_type']);
 
 		if(empty ($params['hidden']))
 		{
@@ -826,7 +828,7 @@ class DataBaseHTS
 		$this->add_where($params, $join, $cond);
 
 		$query = "SELECT ct.id as uri
-	FROM hts_data_create_time ct
+	FROM hts_data_".addslashes($table)." ct
 		LEFT JOIN hts_data_modify_time mt ON (ct.id = mt.id)
 		$join
 	WHERE ct.id $like_type '".addslashes($regexp)."'

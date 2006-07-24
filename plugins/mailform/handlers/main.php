@@ -1,5 +1,5 @@
 <?
-	hts_data_prehandler("!^({$GLOBALS['cms']['plugin_parent_uri']})\w+/?$!", array(
+	hts_data_prehandler("!^({$GLOBALS['cms']['plugin_parent_uri']})request+/?$!", array(
 			'body' => 'plugins_mailform_main_body',
 			'title' => ec('Заказ'),
 		));
@@ -34,7 +34,7 @@
 			$message .= "$name: {$_POST[$key]}\n\n";
 		}
 
-		send_mail("balancer@balancer.ru", "balancer@balancer.ru", ec("Заказ"), $message);
+		send_mail($_POST['email'], "commerce@1001kran.ru", ec("Заказ"), $message);
 		return message(ec("Заказ отправлен"));
 	}
 ?>
