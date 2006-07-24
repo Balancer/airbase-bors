@@ -1,6 +1,6 @@
 <?
-    function lp_red($txt)   { return "<font color=\"red\">$txt</font>";}
-    function lp_green($txt) { return "<font color=\"green\">$txt</font>";}
-    function lp_blue($txt)  { return "<font color=\"blue\">$txt</font>";}
-    function lp_color($txt, $params)  { return "<span style=\"color: {$params['name']}\">$txt</span>";}
+	foreach(split(' ','red green blue yellow gray silver orange white black') as $color)
+		eval("function lp_$color(\$txt)   { return \"<span style=\\\"color: $color;\\\">\".lcml(\$txt).\"</font>\"; }");
+	
+    function lp_color($txt, $params)  { return "<span style=\"color: {$params['name']}\">".lcml($txt)."</span>";}
 ?>

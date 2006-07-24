@@ -67,13 +67,13 @@
         function clear($key)
         {
 //        	return;
-            $this->dbh->query("DELETE FROM `cache` WHERE `key` LIKE '".addslashes($key)."'");
+//            $this->dbh->query("DELETE FROM `cache` WHERE `key` = '".addslashes($key)."'");
         }
 
         function clear_all()
         {
         	return;
-            $this->dbh->query("DELETE FROM `cache` WHERE 1=1");
+            $this->dbh->query("TRUNCATE `cache`");
         }
     }
 ?>

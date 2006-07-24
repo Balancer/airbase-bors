@@ -3,8 +3,7 @@
 
     function handler_edit($uri, $action)
 	{
-//		echo "Test edit handler. Action = $action. global = {$GLOBALS['cms']['action']}";
-
+//		exit("Test edit handler. Action = $action. global = {$GLOBALS['cms']['action']}");
 		require_once("funcs/check/access.php");
 
 		if(!check_action_access(3, $uri))

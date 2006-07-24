@@ -191,7 +191,12 @@
             if(preg_match("!^nohref$!",$param)) { $params['nohref']=true; continue;}
             if(preg_match("!^(\w+)=\"(.*?)\"$!s",$param,$m)) { $params[$m[1]]=$m[2]; continue;}
             if(empty($params['url']))
-                $params['url'] = $param;
+			{
+				if(preg_match("!\"(.+)\"!", $param, $m))
+	                $params['url'] = $m[1];
+				else
+	                $params['url'] = $param;
+			}
         }
 
 //	echo "nohref={$params['nohref']}<br />";

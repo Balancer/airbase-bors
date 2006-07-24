@@ -2,9 +2,9 @@
 
 //yyyyyyyyyyyyyyyy
 
-$_SERVER['DOCUMENT_ROOT'] = "/var/www/www.aviaport.ru/htdocs";
-$_SERVER['HTTP_HOST'] = "www.aviaport..ru";
-$GLOBALS['cms']['page_path'] = $GLOBALS['main_uri'] = "http://www.aviaport.ru/";
+$_SERVER['DOCUMENT_ROOT'] = "/var/www/balancer.ru/htdocs";
+$_SERVER['HTTP_HOST'] = "balancer.ru";
+$GLOBALS['cms']['page_path'] = $GLOBALS['main_uri'] = "http://balancer.ru/";
 
 require_once($_SERVER['DOCUMENT_ROOT'].'/cms/config.php');
 require_once('funcs/lcml.php');
@@ -15,19 +15,23 @@ $GLOBALS['cms']['cache_disabled'] = true;
 $txt=<<<EOT
 =====================
 
-[url]www.ru[/url]
+[COLOR=red]
+[FONT=Arial](c) Ааа. Цурупяне!!! Будем жить...[/FONT]
+[/COLOR]
 
-ВОПРОС О РАЗВИТИИ ОТЕЧЕСТВЕННОГО ВОЗДУХОПЛАВАНИЯ И ДИРИЖАБЛЕСТРОЕНИЯ
-
-<url>http://president.yandex.ru/question.xml?id=145670</url>
-
-ПОДДЕРЖИТЕ ГОЛОСОВАНИЕМ, ЧТОБ ПО РЕЙТИНГУ ВОПРОС БЫЛ ОЗВУЧЕН ВЕРХАМИ И НАЧАЛИСЬ ТЕЛОДВИЖЕНИЯ ВЛАСТИ
+[white]csdcsdc[/white]
 
 =====================
 EOT;
 
 //require_once('funcs/lcml/post/00-tables.php');
 
-echo lcml($txt);
+echo lcml($txt, array(
+				'cr_type' => 'save_cr',
+				'forum_type' => 'punbb',
+				'forum_base_uri' => 'http://balancer.ru/forum',
+				'sharp_not_comment' => true,
+				'html_disable' => true,
+			));
 
 ?>
