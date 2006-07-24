@@ -1,5 +1,5 @@
 <?
-	function strip_text($text,$len=192)
+	function strip_text($text, $len=192)
 	{
     	$text=to_one_string($text);
 
@@ -39,17 +39,15 @@
     	    $text=$res."&#133";
 	    }
 
-	    $close_tags=split(" ","a i b u s font div span td tr table blockquote pre xmp");
+	    $close_tags=split(" ","a i b u s font div span td tr tt table blockquote pre xmp");
 
     	for($i=0; $i<sizeof($close_tags); $i++)
 	    {
-    	    $tag=$close_tags[$i];
-        	$n=preg_match("!<$tag(\s|>)!i",$text)-preg_match("!</$tag(\s|>)!i",$text);
-	        if($n>0)
-    	    {
+			$tag = $close_tags[$i];
+        	$n = preg_match_all("!<$tag(\s|>)!i", $text, $m) - preg_match_all("!</$tag(\s|>)!i", $text, $m);
+	        if($n > 0)
         	    while($n--)
-            	    $text.="</$tag xxx>";
-	        }
+            	    $text .="</$tag>";
     	}
 
 	    return "$text";

@@ -48,7 +48,7 @@
 			$data2[] = $d;
 		}
 		
-		return $ch->set(template_assign_data("navleft.htm", array('links'=>$data2)), 86400);
+		return $ch->set(template_assign_data("navleft.htm", array('links'=>$data2)), 86400*7);
 	}
 	
 

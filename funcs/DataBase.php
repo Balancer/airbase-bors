@@ -192,7 +192,7 @@
 			return set_global_key("db_get",$query, $this->row);
 		}
 
-		function loop($func,$query)
+		function loop($func, $query)
 		{
 			$this->query($query);
 			
