@@ -14,12 +14,12 @@ $GLOBALS['cms']['cache_disabled'] = true;
 
 $txt=<<<EOT
 =====================
+ В прошлом месяце [[i]лето 2005, BaL[/i]] начались летные испытания опытного экземпляра авиадвигателя на летающей лаборатории на базе истребителя Су-27М.
 
-[COLOR=red]
-[FONT=Arial](c) Ааа. Цурупяне!!! Будем жить...[/FONT]
-[/COLOR]
+[url http://www.ru|[b]www.ru[/b]]
 
-[white]csdcsdc[/white]
+
+.
 
 =====================
 EOT;
@@ -30,7 +30,7 @@ echo lcml($txt, array(
 				'cr_type' => 'save_cr',
 				'forum_type' => 'punbb',
 				'forum_base_uri' => 'http://balancer.ru/forum',
-				'sharp_not_comment' => true,
+//				'sharp_not_comment' => true,
 				'html_disable' => true,
 			));
 

@@ -1,7 +1,6 @@
 <?
     function lcml_tags($txt, &$mask)
     {
-
 		$mask = str_repeat('X', strlen($txt));
 
         $end = -1;
@@ -87,11 +86,10 @@
                     continue;
                 }
 
-
 //                $txt=substr($txt,0,$pos)."&#91;".substr($txt,$pos+1,$end-$pos-1).($end<strlen($txt)?"&#93;":"").substr($txt,$end+1);
                 // Неопределённый тэг - пропускаем
                 if($pos !== false)
-                    $end = $pos + 1;
+                    $end = $pos;
                 else
                     $end = false;
 //                echo "$pos($func):====$txt\n====";

@@ -27,11 +27,15 @@
 			$hts->set_data($url, 'modify_time', time());
 		}
 
-		if(!isset($params['description']))
+		if(!isset($params['description']) || $url == $params['description'])
 			$params['description'] = $url;
 		else
-			$params['description'] = ($params['description']);
-
+		{
+			$description = lcml($params['description'],  array('html_disable'=>false));
+//			if(!preg_match('!a href!', $description))
+				$params['description'] = $description;
+		}
+		
 		return "<a href=\"$url\"$external>{$params['description']}</a>";
 	}
 ?>
