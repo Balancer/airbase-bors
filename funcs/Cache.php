@@ -24,8 +24,15 @@
 
             $hmd = md5("$type:$key");
 			
-            $this->last = $this->dbh->get("SELECT `value` FROM `cache` WHERE `hmd`='$hmd'");
+            $row = $this->dbh->get("SELECT `value`, `expire_time` FROM `cache` WHERE `hmd`='$hmd'");
+			$this->last = $row['value'];
 
+			if($row['expire_time'] <= time())
+			{
+				$this->last = NULL;
+	            $this->dbh->query("DELETE FROM `cache` WHERE `hmd`='$hmd'");
+			}
+			
 //            echo "Get from cache $type:$key = $this->last<br>";
 
             if($this->last)
