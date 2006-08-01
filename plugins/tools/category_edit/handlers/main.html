@@ -1,0 +1,34 @@
+<h3>Подкатегории</h3>
+<ul>
+<table class="btab" cellSpacing="0">
+{section name=i loop=$categories_list}
+<tr>
+<td>
+	{if $categories_list[i].default}<b>{/if}
+	<a href="{$categories_list[i].link}">{$categories_list[i].title}</a>
+	{if $categories_list[i].default}</b>{/if}
+</td><td>
+	{if $categories_list[i].default}
+	<a href="{$categories_list[i].link}?drop-default-flag">0</a>
+	{else}
+	<a href="{$categories_list[i].link}?set-default-flag">1</a>
+	{/if}
+</td>
+<td>	
+	<form action="{$categories_list[i].link}?set-order" method="post" style="padding:0; margin:0;">
+	<input name="order" size="3" value="{$categories_list[i].order}">
+	<input type="submit" value="!">
+	</form>
+</td>
+</tr>
+{/section}
+</table>
+
+<h3>Добавление новой категории в этот раздел</h3>
+<form action="?category_add" method="post">
+<table class="box">
+ <tr><th>Название категории:</th> <td><input name="title" /></td></tr>
+ <tr><th>Название категории для URL (транслит):</th><td><input name="title_latin" /></td></tr>
+ <tr><th>Порядок:</th><td><input name="order" /></td></tr>
+ <tr><th colSpan="2"><input type="submit" value="Добавить" /></th></tr>
+</table>
