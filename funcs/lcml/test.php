@@ -11,18 +11,19 @@ require_once('funcs/lcml.php');
 require_once('funcs/global-data.php');
 
 $GLOBALS['cms']['cache_disabled'] = true;
+$GLOBALS['cms']['templates_cache_disabled'] = true;
 
 $txt=<<<EOT
 =====================
- В прошлом месяце [[i]лето 2005, BaL[/i]] начались летные испытания опытного экземпляра авиадвигателя на летающей лаборатории на базе истребителя Су-27М.
 
-[url http://www.ru|[b]www.ru[/b]]
-
-
-.
+= Заголовок1 =
+== Заголовок2 ==
 
 =====================
 EOT;
+
+//exit(preg_replace("!(\s|^)(http://\S+?([^/]+\.mp3))(\s|$)!ie", "'$1=$2=$4'", $txt));
+
 
 //require_once('funcs/lcml/post/00-tables.php');
 

@@ -55,7 +55,7 @@
 			$source = $GLOBALS['page_data']['source'];
 			$action = @$GLOBALS['cms']['action'];
 			$body = lcml($source, array('with_html'=>true));
-			$GLOBALS['cms']['cache_disabled'] = true;
+			$GLOBALS['cms']['templates_cache_disabled'] = true;
 //			exit("<xmp>".$body."</xmp>");
 		}
 
@@ -87,8 +87,8 @@
 		    @mkdir($smarty->compile_dir, 0775, true);
 		if(!file_exists($smarty->cache_dir))
 			@mkdir($smarty->cache_dir, 0775, true);
-
-        $smarty->caching = $action ? false : !$GLOBALS['cms']['cache_disabled'];
+//		echo $GLOBALS['cms']['templates_cache_disabled'];
+        $smarty->caching = $action ? false : $GLOBALS['cms']['templates_cache_disabled'] != true;
         $smarty->compile_check = true; 
         $smarty->php_handling = SMARTY_PHP_QUOTE; //SMARTY_PHP_PASSTHRU;
         $smarty->security = false;
@@ -164,7 +164,7 @@
 
 		$GLOBALS['cms']['cache_copy'] = $hts->get_data($page, 'cache_create_time');
 
-		$nocache = $action || $GLOBALS['cms']['cache_disabled'];
+		$nocache = $action || $GLOBALS['cms']['templates_cache_disabled'];
 		$modify_time = max($hts->get_data($page, 'modify_time'), $hts->get_data($page, 'compile_time'));
 		$nocache |= $modify_time > $hts->get_data($page, 'cache_create_time');
 
