@@ -16,7 +16,7 @@
 // | Author: Phil Kernick <philk@rotfl.com.au>                            |
 // +----------------------------------------------------------------------+
 //
-// $Id: null.php,v 1.1.2.1 2005/09/07 12:50:25 balancer Exp $
+// $Id: null.php,v 1.1.2.1 2006/08/01 14:22:46 balancer Exp $
 //
 
 /**

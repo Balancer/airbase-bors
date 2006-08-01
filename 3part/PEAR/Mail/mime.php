@@ -35,7 +35,7 @@
 // |         Tomas V.V.Cox <cox@idecnet.com> (port to PEAR)                |
 // +-----------------------------------------------------------------------+
 //
-// $Id: mime.php,v 1.1.2.1 2005/09/07 12:50:25 balancer Exp $
+// $Id: mime.php,v 1.1.2.1 2006/08/01 14:22:46 balancer Exp $
 
 require_once('PEAR.php');
 require_once('Mail/mimePart.php');

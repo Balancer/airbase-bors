@@ -87,7 +87,7 @@ require_once 'PEAR.php';
 
 *
 * @author  Richard Heyes <richard@phpguru.org>
-* @version $Revision: 1.1.2.2 $
+* @version $Revision: 1.1.2.1 $
 * @package Mail
 */
 class Mail_mimeDecode extends PEAR
