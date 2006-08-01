@@ -47,9 +47,15 @@
 					$GLOBALS['global_db_new_connections'] = 0;
 				$GLOBALS['global_db_new_connections']++;
 
-				if(empty($login))	$login	= $GLOBALS['cms']['mysql_login'];
-				if(empty($password)) $password = $GLOBALS['cms']['mysql_pw'];
-				if(empty($server))   $server   = $GLOBALS['cms']['mysql_server'];
+				if(empty($login))	$login		= @$GLOBALS['cms']['mysql'][$base]['login'];
+				if(empty($password)) $password	= @$GLOBALS['cms']['mysql'][$base]['password'];
+				if(empty($server))   $server	= @$GLOBALS['cms']['mysql'][$base]['server'];
+
+				if(empty($login))	$login		= @$GLOBALS['cms']['mysql_login'];
+				if(empty($password)) $password	= @$GLOBALS['cms']['mysql_pw'];
+				if(empty($server))   $server	= @$GLOBALS['cms']['mysql_server'];
+
+				if(empty($server))   $server	= 'localhost';
 
 				$this->dbh = 0;
 				$nnn = 0;
@@ -282,6 +288,11 @@
 				echo("Invalid query: " . mysql_error($this->dbh) ." ");
 				die(__FILE__.":".__LINE__." Error and try autorepair ('$table','$where','$fields').");
 			}
+		}
+
+		function update($table, $where, $fields)
+		{
+			$res = $this->query("UPDATE `".addslashes($table)."` ".$this->make_string_set($fields)." WHERE $where");
 		}
 
 		//TODO: Change 'where' to array-type

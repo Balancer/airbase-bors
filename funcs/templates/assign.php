@@ -20,7 +20,7 @@
 
 		$caching = !is_null($uri)
 				&& @$data['caching'] !== false
-				&& @$GLOBALS['cms']['cache_disabled'] !== true
+				&& @$GLOBALS['cms']['templates_cache_disabled'] !== true
 			;
 			
 		$smarty->caching = $caching;

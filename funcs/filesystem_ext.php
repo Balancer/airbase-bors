@@ -22,4 +22,18 @@
 
         return mkdir($strPath, $mode);
     }
+
+	function smart_size($size)
+	{
+		if($size<1024)
+			return $size.ec("Б");
+
+		$size = $size/1024;
+
+		if($size<1024)
+			return round($size,2).ec("КБ");
+
+		return round($size/1024,2).ec("МБ");
+	}
+
 ?>
