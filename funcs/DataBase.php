@@ -47,15 +47,20 @@
 					$GLOBALS['global_db_new_connections'] = 0;
 				$GLOBALS['global_db_new_connections']++;
 
+//				echo $base;
+//				print_r($GLOBALS['cms']['mysql'][$base]);
+
 				if(empty($login))	$login		= @$GLOBALS['cms']['mysql'][$base]['login'];
 				if(empty($password)) $password	= @$GLOBALS['cms']['mysql'][$base]['password'];
 				if(empty($server))   $server	= @$GLOBALS['cms']['mysql'][$base]['server'];
+//				echo "$login:$server";
 
 				if(empty($login))	$login		= @$GLOBALS['cms']['mysql_login'];
 				if(empty($password)) $password	= @$GLOBALS['cms']['mysql_pw'];
 				if(empty($server))   $server	= @$GLOBALS['cms']['mysql_server'];
 
 				if(empty($server))   $server	= 'localhost';
+
 
 				$this->dbh = 0;
 				$nnn = 0;
@@ -132,7 +137,7 @@
 					fputs($fh,"Error: ".mysql_error($this->dbh)."\n");
 					fclose($fh);
 				}
-				echolog("Invalid query '<tt>$query</tt>': " . mysql_error($this->dbh), 1);
+				echolog(mysql_error($this->dbh)." in query '<tt>$query</tt>'", 1);
 			}
 
 			return false;

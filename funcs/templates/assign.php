@@ -73,7 +73,10 @@
 	
 			$smarty->assign("page_template", $assign_template);
 			$smarty->assign("template_uri", $template_uri);
-			$smarty->assign("template_dirname", dirname($template_uri));
+			$dirname = dirname($template_uri);
+			if(!preg_match("!^\w+:!", $dirname))
+				$dirname = "xfile:$dirname";
+			$smarty->assign("template_dirname", $dirname);
 			$smarty->assign("time", time());
 
 			$smarty->clear_cache($template_uri, $uri);

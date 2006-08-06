@@ -17,10 +17,11 @@
 		
 		$data['base_uri'] = $GLOBALS['cms']['plugin_base_uri'];
 		
-		$hts = new DataBaseHTS;
+		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
 
 		$tickets = array();
 
+//		$GLOBALS['log_level'] = 10;
 		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'no', 'range' => -1)) as $ticket)
 			$tickets[] = array(
 				'uri'    => $ticket,
@@ -54,7 +55,7 @@
 		
 		$data['base_uri'] = $GLOBALS['cms']['plugin_base_uri'];
 		
-		$hts = new DataBaseHTS;
+		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
 
 //		print_r($hts->get_data_array($data['base_uri'], 'child'));
 
@@ -109,7 +110,7 @@
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
 
-		$ht = new DataBaseHTS;
+		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
 		$us = new User;
 
 		if(!$us->data('id'))
@@ -126,20 +127,20 @@
 //		print_r($_POST);
 //		exit($new_ticket);
 
-		$ht->nav_link($GLOBALS['cms']['plugin_base_uri'], $new_ticket);
+		$hts->nav_link($GLOBALS['cms']['plugin_base_uri'], $new_ticket);
 
-		$ht->set_data($new_ticket, 'title',  $_POST['title']);
-		$ht->set_data($new_ticket, 'source', $_POST['source']);
-		$ht->set_data($new_ticket, 'create_time', time());
-		$ht->set_data($new_ticket, 'modify_time', time());
-		$ht->set_data($new_ticket, 'author', $us->data('id'));
-		$ht->set_data($new_ticket, 'author_name', $us->data('name'));
+		$hts->set_data($new_ticket, 'title',  $_POST['title']);
+		$hts->set_data($new_ticket, 'source', $_POST['source']);
+		$hts->set_data($new_ticket, 'create_time', time());
+		$hts->set_data($new_ticket, 'modify_time', time());
+		$hts->set_data($new_ticket, 'author', $us->data('id'));
+		$hts->set_data($new_ticket, 'author_name', $us->data('name'));
 
 		if(!empty($_POST['priority']))
-			$ht->set_data($new_ticket, 'priority',  $_POST['priority']);
+			$hts->set_data($new_ticket, 'priority',  $_POST['priority']);
 
 		if(!empty($_POST['category']))
-			$ht->set_data($new_ticket, 'category',  $_POST['category']);
+			$hts->set_data($new_ticket, 'category',  $_POST['category']);
 
 		$us->set_data("last_answer", time());
 		$us->set_data("last_post_hash", md5($_POST['source']));
@@ -158,7 +159,7 @@
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
 
-		$ht = new DataBaseHTS;
+		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
 		$us = new User;
 
 		if(!$us->data('id') || !$us->data('name'))
@@ -174,14 +175,14 @@
 
 //		exit($comment);
 
-		$ht->nav_link($uri, $comment);
+		$hts->nav_link($uri, $comment);
 
-		$ht->set_data($comment, 'title',  @$_POST['title']);
-		$ht->set_data($comment, 'source', $_POST['source']);
-		$ht->set_data($comment, 'create_time', time());
-		$ht->set_data($comment, 'modify_time', time());
-		$ht->set_data($comment, 'author', $us->data('id'));
-		$ht->set_data($comment, 'author_name', $us->data('name'));
+		$hts->set_data($comment, 'title',  @$_POST['title']);
+		$hts->set_data($comment, 'source', $_POST['source']);
+		$hts->set_data($comment, 'create_time', time());
+		$hts->set_data($comment, 'modify_time', time());
+		$hts->set_data($comment, 'author', $us->data('id'));
+		$hts->set_data($comment, 'author_name', $us->data('name'));
 
 		$us->set_data("last_answer", time());
 		$us->set_data("last_post_hash", md5($_POST['text']));
@@ -201,7 +202,7 @@
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
 
-		$hts = new DataBaseHTS;
+		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
 		$us = new User;
 
 		if(!$us->data('id') || !$us->data('name'))
@@ -223,7 +224,7 @@
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
 
-		$hts = new DataBaseHTS;
+		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
 		$us = new User;
 
 		if(!$us->data('id') || !$us->data('name'))
