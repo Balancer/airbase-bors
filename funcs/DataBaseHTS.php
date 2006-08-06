@@ -9,10 +9,27 @@ class DataBaseHTS
 	var $dbh;
 	var $uri;
 
-	function DataBaseHTS($uri = NULL)
+	function DataBaseHTS($data = NULL)
 	{
-		$this->uri = $uri;
-		$this->dbh = new DataBase();
+		if(is_array($data))
+		{
+			$this->uri = @$data['uri'];
+			$this->dbh = new DataBase(@$data['db']);
+		}
+		else
+		{
+			if(preg_match("!^[\w]+://!", $data))
+			{
+				$this->uri = $data;
+				$this->dbh = new DataBase();
+			}
+			else
+			{
+				$this->uri = NULL;
+				$this->dbh = new DataBase($data);
+			}
+		}
+		
 		if (!$this->dbh)
 			exit (__FILE__.__LINE." Can't create DataBase class");
 	}
