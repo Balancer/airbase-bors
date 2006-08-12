@@ -2,7 +2,7 @@
 
 //yyyyyyyyyyyyyyyy
 
-$_SERVER['DOCUMENT_ROOT'] = "/var/www/balancer.ru/htdocs";
+$_SERVER['DOCUMENT_ROOT'] = "/var/www/bal.aviaport.ru/htdocs";
 $_SERVER['HTTP_HOST'] = "balancer.ru";
 $GLOBALS['cms']['page_path'] = $GLOBALS['main_uri'] = "http://balancer.ru/";
 
@@ -16,8 +16,7 @@ $GLOBALS['cms']['templates_cache_disabled'] = true;
 $txt=<<<EOT
 =====================
 
-= Заголовок1 =
-== Заголовок2 ==
+сделай енто:s291:
 
 =====================
 EOT;

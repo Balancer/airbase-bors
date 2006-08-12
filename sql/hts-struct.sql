@@ -12,7 +12,7 @@
 -- Table structure for table `hts_aliases`
 --
 
-CREATE TABLE `hts_aliases` (
+CREATE TABLE IF NOT EXISTS `hts_aliases` (
   `alias` varchar(255) NOT NULL default '',
   `uri` varchar(255) NOT NULL default '',
   UNIQUE KEY `alias` (`alias`(80))
@@ -22,7 +22,7 @@ CREATE TABLE `hts_aliases` (
 -- Table structure for table `hts_data_access_level`
 --
 
-CREATE TABLE `hts_data_access_level` (
+CREATE TABLE IF NOT EXISTS `hts_data_access_level` (
   `id` varchar(255) default NULL,
   `value` int(11) NOT NULL default '0',
   UNIQUE KEY `pair` (`id`,`value`),
@@ -34,7 +34,7 @@ CREATE TABLE `hts_data_access_level` (
 -- Table structure for table `hts_data_author`
 --
 
-CREATE TABLE `hts_data_author` (
+CREATE TABLE IF NOT EXISTS `hts_data_author` (
   `id` varchar(255) NOT NULL default '',
   `value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
@@ -45,7 +45,7 @@ CREATE TABLE `hts_data_author` (
 -- Table structure for table `hts_data_author_names`
 --
 
-CREATE TABLE `hts_data_author_name` (
+CREATE TABLE IF NOT EXISTS `hts_data_author_name` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
@@ -56,7 +56,7 @@ CREATE TABLE `hts_data_author_name` (
 -- Table structure for table `hts_data_autolink`
 --
 
-CREATE TABLE `hts_data_autolink` (
+CREATE TABLE IF NOT EXISTS `hts_data_autolink` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
@@ -68,7 +68,7 @@ CREATE TABLE `hts_data_autolink` (
 -- Table structure for table `hts_data_backup`
 --
 
-CREATE TABLE `hts_data_backup` (
+CREATE TABLE IF NOT EXISTS `hts_data_backup` (
   `id` varchar(255) default NULL,
   `value` int(11) NOT NULL auto_increment,
   `time` int(11) NOT NULL default '0',
@@ -91,7 +91,7 @@ CREATE TABLE `hts_data_backup` (
 -- Table structure for table `hts_data_body`
 --
 
-CREATE TABLE `hts_data_body` (
+CREATE TABLE IF NOT EXISTS `hts_data_body` (
   `id` varchar(255) NOT NULL default '',
   `value` mediumtext NOT NULL,
   PRIMARY KEY  (`id`)
@@ -101,7 +101,7 @@ CREATE TABLE `hts_data_body` (
 -- Table structure for table `hts_data_cache_create_time`
 --
 
-CREATE TABLE `hts_data_cache_create_time` (
+CREATE TABLE IF NOT EXISTS `hts_data_cache_create_time` (
   `id` varchar(255) NOT NULL default '0',
   `value` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
@@ -112,7 +112,7 @@ CREATE TABLE `hts_data_cache_create_time` (
 -- Table structure for table `hts_data_cache_create_times`
 --
 
-CREATE TABLE `hts_data_cache_create_times` (
+CREATE TABLE IF NOT EXISTS `hts_data_cache_create_times` (
   `id` varchar(255) NOT NULL default '0',
   `value` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
@@ -123,7 +123,7 @@ CREATE TABLE `hts_data_cache_create_times` (
 -- Table structure for table `hts_data_child`
 --
 
-CREATE TABLE `hts_data_child` (
+CREATE TABLE IF NOT EXISTS `hts_data_child` (
   `id` varchar(255) NOT NULL default '',
   `value` varchar(255) NOT NULL default '0',
   PRIMARY KEY  (`id`(166),`value`(166)),
@@ -135,7 +135,7 @@ CREATE TABLE `hts_data_child` (
 -- Table structure for table `hts_data_color`
 --
 
-CREATE TABLE `hts_data_color` (
+CREATE TABLE IF NOT EXISTS `hts_data_color` (
   `id` varchar(255) default NULL,
   `value` varchar(32) NOT NULL default ''
 );
@@ -144,7 +144,7 @@ CREATE TABLE `hts_data_color` (
 -- Table structure for table `hts_data_compile_time`
 --
 
-CREATE TABLE `hts_data_compile_time` (
+CREATE TABLE IF NOT EXISTS `hts_data_compile_time` (
   `id` varchar(255) NOT NULL default '',
   `value` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
@@ -154,7 +154,7 @@ CREATE TABLE `hts_data_compile_time` (
 -- Table structure for table `hts_data_copyright`
 --
 
-CREATE TABLE `hts_data_copyright` (
+CREATE TABLE IF NOT EXISTS `hts_data_copyright` (
   `id` varchar(255) NOT NULL default '',
   `value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
@@ -164,7 +164,7 @@ CREATE TABLE `hts_data_copyright` (
 -- Table structure for table `hts_data_cr_type`
 --
 
-CREATE TABLE `hts_data_cr_type` (
+CREATE TABLE IF NOT EXISTS `hts_data_cr_type` (
   `id` varchar(255) default NULL,
   `value` varchar(16) NOT NULL default ''
 );
@@ -173,7 +173,7 @@ CREATE TABLE `hts_data_cr_type` (
 -- Table structure for table `hts_data_create_time`
 --
 
-CREATE TABLE `hts_data_create_time` (
+CREATE TABLE IF NOT EXISTS `hts_data_create_time` (
   `id` varchar(255) NOT NULL default '',
   `value` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`id`)
@@ -183,7 +183,7 @@ CREATE TABLE `hts_data_create_time` (
 -- Table structure for table `hts_data_description`
 --
 
-CREATE TABLE `hts_data_description` (
+CREATE TABLE IF NOT EXISTS `hts_data_description` (
   `id` varchar(255) NOT NULL default '0',
   `value` text NOT NULL,
   PRIMARY KEY  (`id`),
@@ -194,7 +194,7 @@ CREATE TABLE `hts_data_description` (
 -- Table structure for table `hts_data_description_source`
 --
 
-CREATE TABLE `hts_data_description_source` (
+CREATE TABLE IF NOT EXISTS `hts_data_description_source` (
   `id` varchar(255) NOT NULL default '0',
   `value` text NOT NULL,
   PRIMARY KEY  (`id`),
@@ -205,7 +205,7 @@ CREATE TABLE `hts_data_description_source` (
 -- Table structure for table `hts_data_flags`
 --
 
-CREATE TABLE `hts_data_flags` (
+CREATE TABLE IF NOT EXISTS `hts_data_flags` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   UNIQUE KEY `id` (`id`(166),`value`(166))
@@ -215,7 +215,7 @@ CREATE TABLE `hts_data_flags` (
 -- Table structure for table `hts_data_forum_id`
 --
 
-CREATE TABLE `hts_data_forum_id` (
+CREATE TABLE IF NOT EXISTS `hts_data_forum_id` (
   `id` varchar(255) NOT NULL default '',
   `value` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
@@ -225,7 +225,7 @@ CREATE TABLE `hts_data_forum_id` (
 -- Table structure for table `hts_data_h1s`
 --
 
-CREATE TABLE `hts_data_h1s` (
+CREATE TABLE IF NOT EXISTS `hts_data_h1s` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
@@ -236,7 +236,7 @@ CREATE TABLE `hts_data_h1s` (
 -- Table structure for table `hts_data_h2s`
 --
 
-CREATE TABLE `hts_data_h2s` (
+CREATE TABLE IF NOT EXISTS `hts_data_h2s` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
@@ -247,7 +247,7 @@ CREATE TABLE `hts_data_h2s` (
 -- Table structure for table `hts_data_h3s`
 --
 
-CREATE TABLE `hts_data_h3s` (
+CREATE TABLE IF NOT EXISTS `hts_data_h3s` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
@@ -258,7 +258,7 @@ CREATE TABLE `hts_data_h3s` (
 -- Table structure for table `hts_data_height`
 --
 
-CREATE TABLE `hts_data_height` (
+CREATE TABLE IF NOT EXISTS `hts_data_height` (
   `id` varchar(255) NOT NULL default '',
   `value` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
@@ -268,7 +268,7 @@ CREATE TABLE `hts_data_height` (
 -- Table structure for table `hts_data_images_upload`
 --
 
-CREATE TABLE `hts_data_images_upload` (
+CREATE TABLE IF NOT EXISTS `hts_data_images_upload` (
   `id` varchar(255) NOT NULL default '0',
   `value` text NOT NULL,
   PRIMARY KEY  (`id`),
@@ -280,7 +280,7 @@ CREATE TABLE `hts_data_images_upload` (
 -- Table structure for table `hts_data_keyword`
 --
 
-CREATE TABLE `hts_data_keyword` (
+CREATE TABLE IF NOT EXISTS `hts_data_keyword` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   UNIQUE KEY `id_2` (`id`(166),`value`(166)),
@@ -292,7 +292,7 @@ CREATE TABLE `hts_data_keyword` (
 -- Table structure for table `hts_data_local_path`
 --
 
-CREATE TABLE `hts_data_local_path` (
+CREATE TABLE IF NOT EXISTS `hts_data_local_path` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   UNIQUE KEY `id_2` (`id`(166),`value`(166)),
@@ -304,7 +304,7 @@ CREATE TABLE `hts_data_local_path` (
 -- Table structure for table `hts_data_logdir`
 --
 
-CREATE TABLE `hts_data_logdir` (
+CREATE TABLE IF NOT EXISTS `hts_data_logdir` (
   `id` varchar(255) default NULL,
   `value` varchar(255) NOT NULL default ''
 );
@@ -313,7 +313,7 @@ CREATE TABLE `hts_data_logdir` (
 -- Table structure for table `hts_data_modify_time`
 --
 
-CREATE TABLE `hts_data_modify_time` (
+CREATE TABLE IF NOT EXISTS `hts_data_modify_time` (
   `id` varchar(255) NOT NULL default '',
   `value` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
@@ -325,7 +325,7 @@ CREATE TABLE `hts_data_modify_time` (
 -- Table structure for table `hts_data_nav_name`
 --
 
-CREATE TABLE `hts_data_nav_name` (
+CREATE TABLE IF NOT EXISTS `hts_data_nav_name` (
   `id` varchar(255) default NULL,
   `value` varchar(255) NOT NULL default '',
   KEY `id` (`id`),
@@ -336,7 +336,7 @@ CREATE TABLE `hts_data_nav_name` (
 -- Table structure for table `hts_data_origin_uri`
 --
 
-CREATE TABLE `hts_data_origin_uri` (
+CREATE TABLE IF NOT EXISTS `hts_data_origin_uri` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   UNIQUE KEY `id_2` (`id`(166),`value`(166)),
@@ -348,7 +348,7 @@ CREATE TABLE `hts_data_origin_uri` (
 -- Table structure for table `hts_data_parent`
 --
 
-CREATE TABLE `hts_data_parent` (
+CREATE TABLE IF NOT EXISTS `hts_data_parent` (
   `id` varchar(255) default NULL,
   `value` varchar(255) NOT NULL default '0',
   UNIQUE KEY `pairs` (`id`(166),`value`(166)),
@@ -360,7 +360,7 @@ CREATE TABLE `hts_data_parent` (
 -- Table structure for table `hts_data_positions`
 --
 
-CREATE TABLE `hts_data_positions` (
+CREATE TABLE IF NOT EXISTS `hts_data_positions` (
   `id` varchar(255) NOT NULL default '0',
   `value` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
@@ -372,7 +372,7 @@ CREATE TABLE `hts_data_positions` (
 -- Table structure for table `hts_data_rcolumn`
 --
 
-CREATE TABLE `hts_data_rcolumn` (
+CREATE TABLE IF NOT EXISTS `hts_data_rcolumn` (
   `id` varchar(255) NOT NULL default '0',
   `value` text NOT NULL,
   `index` int(11) NOT NULL default '0',
@@ -387,7 +387,7 @@ CREATE TABLE `hts_data_rcolumn` (
 -- Table structure for table `hts_data_referer`
 --
 
-CREATE TABLE `hts_data_referer` (
+CREATE TABLE IF NOT EXISTS `hts_data_referer` (
   `id` varchar(255) default NULL,
   `value` varchar(255) NOT NULL default '0',
   `count` int(11) NOT NULL default '0',
@@ -403,7 +403,7 @@ CREATE TABLE `hts_data_referer` (
 -- Table structure for table `hts_data_right_column`
 --
 
-CREATE TABLE `hts_data_right_column` (
+CREATE TABLE IF NOT EXISTS `hts_data_right_column` (
   `id` varchar(255) NOT NULL default '0',
   `value` text NOT NULL,
   PRIMARY KEY  (`id`),
@@ -414,7 +414,7 @@ CREATE TABLE `hts_data_right_column` (
 -- Table structure for table `hts_data_site_store`
 --
 
-CREATE TABLE `hts_data_site_store` (
+CREATE TABLE IF NOT EXISTS `hts_data_site_store` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   UNIQUE KEY `id_2` (`id`(166),`value`(166)),
@@ -426,7 +426,7 @@ CREATE TABLE `hts_data_site_store` (
 -- Table structure for table `hts_data_size`
 --
 
-CREATE TABLE `hts_data_size` (
+CREATE TABLE IF NOT EXISTS `hts_data_size` (
   `id` varchar(255) NOT NULL default '',
   `value` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
@@ -436,7 +436,7 @@ CREATE TABLE `hts_data_size` (
 -- Table structure for table `hts_data_source`
 --
 
-CREATE TABLE `hts_data_source` (
+CREATE TABLE IF NOT EXISTS `hts_data_source` (
   `id` varchar(255) NOT NULL default '',
   `value` mediumtext NOT NULL,
   PRIMARY KEY  (`id`)
@@ -446,7 +446,7 @@ CREATE TABLE `hts_data_source` (
 -- Table structure for table `hts_data_split_type`
 --
 
-CREATE TABLE `hts_data_split_type` (
+CREATE TABLE IF NOT EXISTS `hts_data_split_type` (
   `id` varchar(255) default NULL,
   `value` varchar(16) NOT NULL default ''
 );
@@ -455,7 +455,7 @@ CREATE TABLE `hts_data_split_type` (
 -- Table structure for table `hts_data_style`
 --
 
-CREATE TABLE `hts_data_style` (
+CREATE TABLE IF NOT EXISTS `hts_data_style` (
   `id` varchar(255) default NULL,
   `value` varchar(32) NOT NULL default ''
 );
@@ -464,7 +464,7 @@ CREATE TABLE `hts_data_style` (
 -- Table structure for table `hts_data_template`
 --
 
-CREATE TABLE `hts_data_template` (
+CREATE TABLE IF NOT EXISTS `hts_data_template` (
   `id` varchar(255) NOT NULL default '',
   `value` varchar(64) NOT NULL default '',
   PRIMARY KEY  (`id`)
@@ -474,7 +474,7 @@ CREATE TABLE `hts_data_template` (
 -- Table structure for table `hts_data_title`
 --
 
-CREATE TABLE `hts_data_title` (
+CREATE TABLE IF NOT EXISTS `hts_data_title` (
   `id` varchar(255) NOT NULL default '0',
   `value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
@@ -485,7 +485,7 @@ CREATE TABLE `hts_data_title` (
 -- Table structure for table `hts_data_type`
 --
 
-CREATE TABLE `hts_data_type` (
+CREATE TABLE IF NOT EXISTS `hts_data_type` (
   `id` varchar(255) NOT NULL default '',
   `value` varchar(16) NOT NULL default '',
   PRIMARY KEY  (`id`)
@@ -495,7 +495,7 @@ CREATE TABLE `hts_data_type` (
 -- Table structure for table `hts_data_version`
 --
 
-CREATE TABLE `hts_data_version` (
+CREATE TABLE IF NOT EXISTS `hts_data_version` (
   `id` varchar(255) default NULL,
   `value` int(11) NOT NULL default '0',
   UNIQUE KEY `pair` (`id`,`value`),
@@ -507,7 +507,7 @@ CREATE TABLE `hts_data_version` (
 -- Table structure for table `hts_data_views`
 --
 
-CREATE TABLE `hts_data_views` (
+CREATE TABLE IF NOT EXISTS `hts_data_views` (
   `id` varchar(255) default NULL,
   `value` int(11) NOT NULL default '0',
   KEY `id` (`id`),
@@ -518,7 +518,7 @@ CREATE TABLE `hts_data_views` (
 -- Table structure for table `hts_data_views_first`
 --
 
-CREATE TABLE `hts_data_views_first` (
+CREATE TABLE IF NOT EXISTS `hts_data_views_first` (
   `id` varchar(255) default NULL,
   `value` int(11) NOT NULL default '0',
   UNIQUE KEY `pair` (`id`,`value`),
@@ -530,7 +530,7 @@ CREATE TABLE `hts_data_views_first` (
 -- Table structure for table `hts_data_views_last`
 --
 
-CREATE TABLE `hts_data_views_last` (
+CREATE TABLE IF NOT EXISTS `hts_data_views_last` (
   `id` varchar(255) default NULL,
   `value` int(11) NOT NULL default '0',
   UNIQUE KEY `pair` (`id`,`value`),
@@ -542,7 +542,7 @@ CREATE TABLE `hts_data_views_last` (
 -- Table structure for table `hts_data_width`
 --
 
-CREATE TABLE `hts_data_width` (
+CREATE TABLE IF NOT EXISTS `hts_data_width` (
   `id` varchar(255) NOT NULL default '',
   `value` int(11) default NULL,
   PRIMARY KEY  (`id`)
@@ -552,7 +552,7 @@ CREATE TABLE `hts_data_width` (
 -- Table structure for table `hts_ext_log`
 --
 
-CREATE TABLE `hts_ext_log` (
+CREATE TABLE IF NOT EXISTS `hts_ext_log` (
   `id` int(11) NOT NULL auto_increment,
   `time` int(11) NOT NULL default '0',
   `pid` varchar(255) NOT NULL default '0',
@@ -568,7 +568,7 @@ CREATE TABLE `hts_ext_log` (
 -- Table structure for table `hts_ext_referers`
 --
 
-CREATE TABLE `hts_ext_referers` (
+CREATE TABLE IF NOT EXISTS `hts_ext_referers` (
   `id` varchar(255) NOT NULL default '0',
   `referer` varchar(255) NOT NULL default '0',
   `count` int(11) NOT NULL default '0',
@@ -582,7 +582,7 @@ CREATE TABLE `hts_ext_referers` (
 -- Table structure for table `hts_ext_system_data`
 --
 
-CREATE TABLE `hts_ext_system_data` (
+CREATE TABLE IF NOT EXISTS `hts_ext_system_data` (
   `key` varchar(32) NOT NULL default '',
   `value` varchar(255) NOT NULL default '',
   `type` varchar(255) NOT NULL default '',
@@ -595,7 +595,7 @@ CREATE TABLE `hts_ext_system_data` (
 -- Table structure for table `hts_host_redirect`
 --
 
-CREATE TABLE `hts_host_redirect` (
+CREATE TABLE IF NOT EXISTS `hts_host_redirect` (
   `from` varchar(255) NOT NULL default '',
   `to` varchar(255) NOT NULL default '',
   UNIQUE KEY `from` (`from`(80))
@@ -605,7 +605,7 @@ CREATE TABLE `hts_host_redirect` (
 -- Table structure for table `hts_hosts`
 --
 
-CREATE TABLE `hts_hosts` (
+CREATE TABLE IF NOT EXISTS `hts_hosts` (
   `host` varchar(255) NOT NULL default '',
   `doc_root` varchar(255) NOT NULL default '',
   `default_access_level` int(11) NOT NULL default '3',
@@ -617,7 +617,7 @@ CREATE TABLE `hts_hosts` (
 -- Table structure for table `hts_id`
 --
 
-CREATE TABLE `hts_id` (
+CREATE TABLE IF NOT EXISTS `hts_id` (
   `id` int(11) NOT NULL auto_increment,
   `uri` varchar(255) NOT NULL default '',
   `tmp` int(11) NOT NULL default '0',
@@ -633,7 +633,7 @@ CREATE TABLE `hts_id` (
 -- Table structure for table `hts_save`
 --
 
-CREATE TABLE `hts_save` (
+CREATE TABLE IF NOT EXISTS `hts_save` (
   `id` varchar(255) default NULL,
   `value` int(11) NOT NULL default '0'
 );
@@ -642,7 +642,7 @@ CREATE TABLE `hts_save` (
 -- Table structure for table `hts_save2`
 --
 
-CREATE TABLE `hts_save2` (
+CREATE TABLE IF NOT EXISTS `hts_save2` (
   `id` int(11) NOT NULL default '0',
   `value` varchar(255) NOT NULL default ''
 );
@@ -651,7 +651,7 @@ CREATE TABLE `hts_save2` (
 -- Table structure for table `hts_save3`
 --
 
-CREATE TABLE `hts_save3` (
+CREATE TABLE IF NOT EXISTS `hts_save3` (
   `id` int(11) NOT NULL default '0',
   `value` text NOT NULL
 );
@@ -660,7 +660,7 @@ CREATE TABLE `hts_save3` (
 -- Table structure for table `sources`
 --
 
-CREATE TABLE `sources` (
+CREATE TABLE IF NOT EXISTS `sources` (
   `id` int(11) NOT NULL default '0',
   `value` text NOT NULL,
   FULLTEXT KEY `value` (`value`)
@@ -670,7 +670,7 @@ CREATE TABLE `sources` (
 -- Table structure for table `tables_data`
 --
 
-CREATE TABLE `tables_data` (
+CREATE TABLE IF NOT EXISTS `tables_data` (
   `id` int(11) NOT NULL auto_increment,
   `object` varchar(166) NOT NULL default '',
   `field` varchar(166) NOT NULL default '',
@@ -684,14 +684,22 @@ CREATE TABLE `tables_data` (
 -- Table structure for table `test`
 --
 
-CREATE TABLE `test` (
+CREATE TABLE IF NOT EXISTS `test` (
   `id` int(11) NOT NULL default '0',
   `val` varchar(255) NOT NULL default '',
   KEY `val` (`val`)
 );
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+CREATE TABLE IF NOT EXISTS `hts_data_position` (
+  `id` int(11) NOT NULL default '0',
+  `value` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `value` (`value`)
+);
 
+CREATE TABLE IF NOT EXISTS `hts_data_publisher` (
+  `id` varchar(255) NOT NULL default '',
+  `value` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `value` (`value`)
+);
