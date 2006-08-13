@@ -156,16 +156,26 @@ class DataBaseHTS
 		return false;
 	}
 
-	function get($key)
+	function get($uri, $key = NULL)
 	{
-		return $this->get_data($this->uri, $key);
+		if($key == NULL)
+			return $this->get_data($this->uri, $uri);
+		else
+			return $this->get_data($uri, $key);
 	}
 
 	function get_data($uri, $key, $default = NULL, $inherit = false, $skip = false, $fields = '`value`', $search = '`id`')
 	{
 //		if(!empty($_GET['debug']))
-//			echo("Get key '$key' for '$uri'");
-	
+//		echo("<small><tt>Get key '$key' for '$uri'</tt></small><br />");
+		global $transmap;
+
+//		print_r($transmap);
+
+		if(!preg_match('!^http://!', $uri))
+			if(preg_match('!^(\w+)://([^/]+)/?!', $uri, $m) && !empty($transmap[@$m[1]]))
+				return $this->get_proto($m[1], $m[2], $key);
+		
 		$m = array ();
 		if (preg_match("!^raw:(.+)$!", $key, $m))
 		{
@@ -293,10 +303,20 @@ class DataBaseHTS
 		return false;
 	}
 
+	function set($uri, $key, $value)
+	{
+		return $this->set_data($uri, $key, $value);
+	}
+
 	function set_data($uri, $key, $value, $params = array (), $append = false)
 	{
 		echolog("Set for '$uri' as '$key'='$value'");
+		global $transmap;
 
+		if(!preg_match('!^http://!', $uri))
+			if(preg_match('!^(\w+)://([^/]+)!', $uri, $m) && !empty($transmap[$m[1]]))
+				return $this->set_proto($m[1], $m[2], $key, $value);
+		
 		if (!is_null($value) && is_global_key("uri_data($uri)", $key) && global_key("uri_data($uri)", $key) == $value)
 			return;
 
@@ -893,5 +913,64 @@ class DataBaseHTS
 			$cond .= " AND $jt.value $op ".addslashes($value)." ";
 		}
 	}
+
+	function get_proto($proto, $id, $key)
+	{
+		global $transmap;
+		$t = &$transmap[$proto];
+		
+		$r = $this->dbh->get("SELECT {$t[$key]['r']} FROM {$t['table']} WHERE {$t['*']} = '".addslashes($id)."'");
+		if($t[$key]['q'])
+			$r = html_entity_decode($r);
+		return $r;
+	}
+
+	function set_proto($proto, $id, $key, $value)
+	{
+		global $transmap;
+		$t = &$transmap[$proto];
+		
+		$w = str_replace('$1', $value, $t[$key]['w']);
+		
+		if($t[$key]['q'])
+			$value = htmlspecialchars($value);
+		
+		if($value != 'NULL')
+			$this->dbh->query("UPDATE {$t['table']} SET  $w WHERE {$t['*']} = '".addslashes($id)."'");
+		else
+			$this->dbh->query("DELETE FROM {$t['table']} WHERE {$t['*']} = '".addslashes($id)."'");
+	}
 }
-?>
+
+	function register_data_translate($proto, $table, $trans)
+	{
+		global $transmap;
+		$t = &$transmap[$proto];
+		
+		$t['table'] = $table;
+		
+		foreach($trans as $key => $value)
+		{
+			if(preg_match('!^Q:(.+)$!i', $value, $m))
+			{
+				$t[$key]['q'] = true;
+				$value = $m[1];
+			}
+			else
+				$t[$key]['q'] = false;
+
+			if(preg_match('!^\w+$!', $value))
+			{
+				$t[$key]['r'] = "`$value` AS $key";
+				$t[$key]['w'] = "`$value` = '$1'";
+				if($key == 'id')
+					$t['*'] = $key;
+			}
+			else
+			{
+				list($r, $w) = split("\|", $value);
+				$t[$key]['r'] = trim($r)." AS $key";
+				$t[$key]['w'] = trim($w);
+			}
+		}
+	}
