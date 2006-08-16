@@ -71,6 +71,10 @@
 				$smarty->assign($key, $val);
 			}
 	
+			if(!empty($GLOBALS['cms']['templates']['data']))
+	            foreach($GLOBALS['cms']['templates']['data'] as $key => $value)
+        	        $smarty->assign($key, $value);
+
 			$smarty->assign("page_template", $assign_template);
 			$smarty->assign("template_uri", $template_uri);
 			$dirname = dirname($template_uri);

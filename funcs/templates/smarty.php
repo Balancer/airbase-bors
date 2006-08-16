@@ -242,8 +242,8 @@
 
 			if(!empty($GLOBALS['cms']['templates']['data']))
 	            foreach($GLOBALS['cms']['templates']['data'] as $key => $value)
-        	        $smarty->assign("$key", "$value");
-
+        	        $smarty->assign($key, $value);
+				
             $smarty->assign("views_average", sprintf("%.1f",86400*$views/($views_last-$views_first+1)));
             $smarty->assign("page_template", $template);
             $smarty->assign("page", $page);
@@ -306,10 +306,10 @@
 	    error_reporting(E_ALL & ~E_NOTICE);
 
 //		echo "::$tpl:".$hts->get_data(str_replace('hts:', '', $tpl), 'source')."<br/>\n";
-//		echo $tpl;
 
 		if($tpl{0} == '/')
 		{
+//			echo $tpl;
 			if(file_exists($tpl))
 				$tpl = "xfile:".$tpl;
 			else

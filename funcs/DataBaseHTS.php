@@ -861,7 +861,6 @@ class DataBaseHTS
 			$cond .= " AND fd.id IS NULL";
 		}
 
-
 		$this->add_where($params, $join, $cond);
 
 		$query = "SELECT ct.id as uri
@@ -873,9 +872,7 @@ class DataBaseHTS
 	ORDER BY mt.value DESC
 	LIMIT $limit;";
 
-		//			$GLOBALS['log_level'] = 10;
 		$ret = $this->dbh->get_array($query);
-		//			$GLOBALS['log_level'] = 2;
 
 		return $ret;
 	}
@@ -919,10 +916,129 @@ class DataBaseHTS
 		global $transmap;
 		$t = &$transmap[$proto];
 		
-		$r = $this->dbh->get("SELECT {$t[$key]['r']} FROM {$t['table']} WHERE {$t['*']} = '".addslashes($id)."'");
-		if($t[$key]['q'])
-			$r = html_entity_decode($r);
+		if(is_array($key))
+		{
+			$fields = array();
+			$join	= array();
+			foreach($key as $k)
+			{
+				$fields[] = $t[$k]['r'];
+				if(empty($joined[$t[$k]['join']]))
+				{
+					$join[] = $t[$k]['join'];
+					$joined[$t[$k]['join']] = true;
+				}
+			}
+			
+			$fields = join(", ", $fields);
+			$join   = join(" ", $join);
+		}
+		else
+		{
+			if($t[$key]['rf'])
+				return $t[$key]['rf']($id);
+		
+			$fields = $t[$key]['r'];
+			$join = $t[$key]['join'];
+		}
+		
+		if(!empty($t['db']))
+			$db = "`{$t['db']}`.";
+		else
+			$db = "";
+
+		$r = $this->dbh->get("SELECT $fields FROM $db{$t['table']} $join WHERE {$t['*']} = '".addslashes($id)."'");
+
+		if(is_array($key))
+		{
+			foreach($key as $k)
+				if($t[$k]['q'])
+					$r[$k] = html_entity_decode($r[$k]);
+		}
+		else
+			if($t[$key]['q'])
+				$r = html_entity_decode($r);
+
 		return $r;
+	}
+
+	function get_proto_array($proto, $id, $key, $para = array())
+	{
+		global $transmap;
+		$t = &$transmap[$proto];
+
+		if(is_array($key))
+		{
+			$fields = array();
+			$join	= array();
+			foreach($key as $k)
+			{
+				$fields[] = $t[$k]['r'];
+				if(empty($joined[$t[$k]['join']]))
+				{
+					$join[] = $t[$k]['join'];
+					$joined[$t[$k]['join']] = true;
+				}
+			}
+			$fields = join(", ", $fields);
+			$join   = join(" ", $join);
+		}
+		else
+			$fields = $t[$key]['r'];
+		
+		if(empty($para['like_type']))
+			$para['like_type'] = 'like';
+	
+		if($para['like_type'] == 'like')
+			$where = "{$t['*']} LIKE '".addslashes($id)."'";
+
+		$limit = "";
+		if(isset($para['start']) && isset($para['limit']))
+			$limit = "LIMIT ".intval($para['start']).", ".intval($para['limit']);
+			
+		$order = "";
+		if(isset($para['order']))
+			$order = "ORDER BY {$t[$para['order']]['k']}";
+
+		if(!empty($t['db']))
+			$db = "`{$t['db']}`.";
+		else
+			$db = "";
+
+		$r = $this->dbh->get_array("SELECT $fields  FROM $db{$t['table']} $join WHERE $where $order $limit");
+
+		if(is_array($key))
+		{
+			foreach($key as $k)
+				if($t[$k]['q'])
+					for($i=0, $stop=sizeof($r); $i<$stop; $i++)
+						$r[$i][$k] = html_entity_decode($r[$i][$k]);
+		}
+		else
+			if($t[$key]['q'])
+				for($i=0, $stop=sizeof($r); $i<$stop; $i++)
+					$r[$i] = html_entity_decode($r[$i]);
+
+		return $r;
+	}
+
+	function get_proto_array_size($proto, $id, $para = array())
+	{
+		global $transmap;
+		$t = &$transmap[$proto];
+
+		if(empty($para['like_type']))
+			$para['like_type'] = 'like';
+	
+		if($para['like_type'] == 'like')
+			$where = "{$t['*']} LIKE '".addslashes($id)."'";
+
+		if(!empty($t['db']))
+			$db = "`{$t['db']}`.";
+		else
+			$db = "";
+
+		return intval($this->dbh->get("SELECT COUNT(*)  FROM $db{$t['table']} WHERE $where"));
 	}
 
 	function set_proto($proto, $id, $key, $value)
@@ -935,10 +1051,15 @@ class DataBaseHTS
 		if($t[$key]['q'])
 			$value = htmlspecialchars($value);
 		
-		if($value != 'NULL')
-			$this->dbh->query("UPDATE {$t['table']} SET  $w WHERE {$t['*']} = '".addslashes($id)."'");
+		if(!empty($t['db']))
+			$db = "`{$t['db']}`.";
 		else
-			$this->dbh->query("DELETE FROM {$t['table']} WHERE {$t['*']} = '".addslashes($id)."'");
+			$db = "";
+
+		if($value != 'NULL')
+			$this->dbh->query("UPDATE $db{$t['table']} SET  $w WHERE {$t['*']} = '".addslashes($id)."'");
+		else
+			$this->dbh->query("DELETE FROM $db{$t['table']} WHERE {$t['*']} = '".addslashes($id)."'");
 	}
 }
 
@@ -946,6 +1067,12 @@ class DataBaseHTS
 	{
 		global $transmap;
 		$t = &$transmap[$proto];
+
+		if(preg_match("!^(\w+)\.(\w+)$!", $table, $m))
+		{
+			$t['db'] = $m[1];
+			$table = $m[2];
+		}
 		
 		$t['table'] = $table;
 		
@@ -959,18 +1086,43 @@ class DataBaseHTS
 			else
 				$t[$key]['q'] = false;
 
-			if(preg_match('!^\w+$!', $value))
+			if($key == 'id')
+				$t['*'] = $key;
+
+			$t[$key]['join'] = NULL;
+			$t[$key]['rf'] = NULL;
+			
+			if(!preg_match('!^(.+)\|(.+)$!', $value, $m))
 			{
-				$t[$key]['r'] = "`$value` AS $key";
-				$t[$key]['w'] = "`$value` = '$1'";
-				if($key == 'id')
-					$t['*'] = $key;
+				if(preg_match("!^(\S+)\.(\S+?)\s+(\S+)=(\S+)$!", trim($value), $m))
+				{
+					$value = "{$m[1]}.`{$m[2]}`";
+					$t[$key]['k'] = $value;
+					$t[$key]['r'] = "$value AS $key";
+					$t[$key]['w'] = "$value = '$1'";
+					$t[$key]['join'] = "LEFT JOIN {$m[1]} ON `$table`.`{$m[3]}` = {$m[1]}.`{$m[4]}`";
+				}
+				else
+				{
+					if(function_exists($value))
+					{
+						$t[$key]['rf'] = $value;
+					}
+					else
+					{
+						$t[$key]['k'] = $value;
+						$t[$key]['r'] = "`$value` AS $key";
+						$t[$key]['w'] = "`$value` = '$1'";
+					}
+				}
 			}
 			else
 			{
-				list($r, $w) = split("\|", $value);
-				$t[$key]['r'] = trim($r)." AS $key";
-				$t[$key]['w'] = trim($w);
+				$r = trim($m[1]);
+				$w = trim($m[2]);
+				$t[$key]['k'] = $r;
+				$t[$key]['r'] = "$r AS $key";
+				$t[$key]['w'] = $w;
 			}
 		}
 	}
