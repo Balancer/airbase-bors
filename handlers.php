@@ -71,6 +71,9 @@ function hts_data_prehandler_add($regexp, $data_key, $func)
 	if (!empty ($_GET['debug']))
 		echo "<small>Add pre function $func to uri like '$regexp' for key $data_key</small><br />";
 
+	if(!function_exists($func))
+		$func = create_function('$uri, $m', "return \"".addslashes($func)."\";");
+
 	$GLOBALS['cms']['data_prehandler'][$data_key][$regexp] = $func;
 	krsort($GLOBALS['cms']['data_prehandler'][$data_key]);
 }

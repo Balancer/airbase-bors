@@ -122,6 +122,8 @@
 			) as $tpl)
 			{
 //				echo "Check '$tpl'<br />";
+				if($tpl && $smarty->template_exists($tpl))
+					break;
 				if($tpl && $hts->get_data($tpl, 'source'))
 					break;
 				if(!empty($tpl) && $tpl{0}=='/' && file_exists($tpl))
@@ -130,7 +132,7 @@
 
 //			echo $hts->get_data($tpl, 'source');
 
-//			$tpl = "hts:$tpl";
+//			echo "tpl = $tpl <br />";
 
 			if(!$smarty->template_exists("hts:$tpl"))
 	  	        $tpl = $GLOBALS['cms']['default_template'];
@@ -139,10 +141,10 @@
 		
 //			echo $tpl;
 
-			if(!$smarty->template_exists("hts:$tpl")
+			if((!$smarty->template_exists($tpl) && !$smarty->template_exists("hts:$tpl"))
 					// || ($action && $action!='virtual')
 					|| @$_GET['tpl']=='safe'
-					|| !$hts->get_data($tpl, 'source')
+					|| (preg_match("!^hts:!", $tpl) && !$hts->get_data($tpl, 'source'))
 				)
 	            $tpl = $GLOBALS['cms']['default_template_file'];
 
@@ -150,15 +152,15 @@
 		else
 			$tpl = $GLOBALS['cms']['template_override'];
 
+//		echo $tpl;
 //		echo $smarty->template_dir;
 //		if(empty($smarty->template_dir))
-		$smarty->template_dir = dirname($tpl);
+		$smarty->template_dir = dirname(preg_replace("!^xfile:!", "", $tpl));
 		
-		$tpl = preg_match("!^/!", $tpl) ? $tpl : "hts:$tpl";
+		if(preg_match("!^http://!", $tpl))
+			$tpl = "hts:$tpl";
 		
 //		echo "<br/>base={$GLOBALS['cms']['base_uri']}; tpl='$tpl' Using template $template";	exit();
-
-
 
         $hts->viewses_inc($page);
 
@@ -305,7 +307,7 @@
 
 	    error_reporting(E_ALL & ~E_NOTICE);
 
-//		echo "::$tpl:".$hts->get_data(str_replace('hts:', '', $tpl), 'source')."<br/>\n";
+//		echo ":$tpl:".$hts->get_data(str_replace('hts:', '', $tpl), 'source')."<br/>\n";
 
 		if($tpl{0} == '/')
 		{

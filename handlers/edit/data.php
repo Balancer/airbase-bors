@@ -138,20 +138,20 @@
        	        {
            	        case '*clear*':
                	        $hts->remove_nav_link($edit_uri); 
-                        $ch->clear_all();
+                        $ch->clear_by_type('%nav%');
    	                    $p=NULL; 
        	                break;
            	        case 'delete:':
                	    case 'remove:':
                    	    $p = substr($p,7);
                        	$hts->remove_nav_link($p, $edit_uri); 
-                        $ch->clear($p);
-   	                    $ch->clear($edit_uri);
+                        $ch->clear_by_id($p);
+   	                    $ch->clear_by_id($edit_uri);
        	                break;
            	        default:
                	        $hts->nav_link($p, $edit_uri); 
-                   	    $ch->clear($p);
-                       	$ch->clear($edit_uri);
+                   	    $ch->clear_by_id($p);
+                       	$ch->clear_by_id($edit_uri);
                         break;
    	            }
        	        if(!$p)

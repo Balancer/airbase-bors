@@ -71,16 +71,19 @@
             $this->dbh->query("DELETE FROM `cache` WHERE `type`='$type' AND `create_time` < ".(time()-$time));
         }
 
-        function clear($key)
+        function clear_by_id($key)
         {
-//        	return;
-//            $this->dbh->query("DELETE FROM `cache` WHERE `key` = '".addslashes($key)."'");
+			$this->dbh->query("DELETE FROM `cache` WHERE `key` = '".addslashes($key)."'");
         }
 
-        function clear_all()
+        function clear_by_type($type)
         {
-        	return;
-            $this->dbh->query("TRUNCATE `cache`");
+			$this->dbh->query("DELETE FROM `cache` WHERE `type` LIKE '".addslashes($type)."'");
+        }
+
+        function clear($type, $key)
+        {
+			$this->dbh->query("DELETE FROM `cache` WHERE `type` = '".addslashes($type)."' AND `key` = '".addslashes($key)."'");
         }
     }
 ?>

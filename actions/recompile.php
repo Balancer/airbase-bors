@@ -19,7 +19,7 @@
 			return;
 			
         $ch = new Cache();
-        $ch->clear($uri);
+        $ch->clear_by_id($uri);
 
 		if(!empty($GLOBALS['cms']['cache_static']))
 		{
@@ -36,17 +36,7 @@
 
         if($source || $body)
         {
-			$ch_type = 'lcml-compiled';
-			$ch_key = md5($source);
-
-			$ch->set($ch_type,$ch_key,NULL);
-
-//            $body = lcml($source, array(
-//              'page' => $uri, 
-//                'cr_type' => $hts->get_data($uri, 'cr_type'),
-//				'nocache' => true,
-//				'with_html' => true,
-//              ));
+			$ch->clear('lcml-compiled', md5($source));
 
             $hts->set_data($uri, 'compile_time', time());
 

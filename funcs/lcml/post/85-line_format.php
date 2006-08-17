@@ -11,8 +11,12 @@
 
         switch($cr_type)
         {
-            case 'empty_as_para':   
-                $txt = preg_replace("!(\n\n)!", "\n<p>", $txt); 
+            case 'empty_as_para':
+                $txt = split("\n\n", $txt);
+				if(sizeof($txt) > 1)
+					$txt = "<p>".join("</p>\n\n<p>", $txt)."</p>";
+				else
+					$txt = $txt[0];
                 break;
             case 'string_as_para':  
                 $txt = preg_replace("!(^|\n)!", "\n<p>", $txt); 
