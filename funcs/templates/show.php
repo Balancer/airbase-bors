@@ -64,6 +64,8 @@
 
 		if($uri && ($action || $modify_time > $cct))
 			$smarty->clear_cache("hts:{$template}", $uri);
+
+		$smarty->template_dir = dirname(preg_replace("!^xfile:!", "", $template));
 		
 		$data['access'] = access_allowed($uri) ? 1 : 0;
 		$us = new User();
