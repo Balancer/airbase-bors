@@ -14,7 +14,7 @@
 			// Заменим ссылку в кеш на полную картинку
 			$uri = secure_path(abs_path_from_relative(preg_replace("!^(.+?)/cache/(.+)/\d*x\d*/(.+?)$!", "$1/$2/$3", $uri), $GLOBALS['lcml']['uri']));
 
-			$hts = new DataBaseHTS();
+			$hts = new DataBaseHTS('HTS');
 			$data = $hts->parse_uri($uri);
 //			echo $GLOBALS['lcml']['level'];
 //			exit(print_r($GLOBALS['lcml']['uri'],true));
