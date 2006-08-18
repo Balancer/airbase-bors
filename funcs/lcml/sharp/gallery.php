@@ -13,8 +13,13 @@
 
         foreach(split("\n", $txt) as $s)
         {
-            list($iimg, $description, $copyright, $author) = split("\|", $s."|||");
-            $img = fill_image_data($iimg, $page);
+//			echo $s;
+		
+			@list($iimg, $description, $copyright, $author, $uri) = @split("\|", $s);
+			
+//			echo "($iimg, $description, $copyright, $author, uri=$uri)";
+			
+			$img = fill_image_data($iimg, $page);
             
             if(!$img)
             {
@@ -32,16 +37,16 @@
                     $hts->get_data($img, $p, $$p);
 
             $admin_url = "http://airbase.ru/admin/img.phtml?img=$img";
-            $img_admin = "<a href=\"$admin_url\" title=\"Управление картинкой\" onClick=\"window.open('$admin_url','_blank','scrollbars=yes,status=yes,toolbar=no,directories=no,width=600,height=400,resizable=yes'); return false;\"><img src=\"http://airbase.ru/admin/img/tools.gif\" width=\"16\" height=\"13\" border=\"0\" align=\"absmiddle\"></a>";
+            $img_admin = ""; // "<a href=\"$admin_url\" title=\"Управление картинкой\" onClick=\"window.open('$admin_url','_blank','scrollbars=yes,status=yes,toolbar=no,directories=no,width=600,height=400,resizable=yes'); return false;\"><img src=\"http://airbase.ru/admin/img/tools.gif\" width=\"16\" height=\"13\" border=\"0\" align=\"absmiddle\"></a>";
 
-            $w = $hts->get_data($img, 'width');
+			$w = $hts->get_data($img, 'width');
             $h = $hts->get_data($img, 'height');
             $tt= array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG', 4 => 'SWF', 5 => 'PSD', 6 => 'BMP', 7 => 'TIFF(intel byte order)', 8 => 'TIFF(motorola byte order)', 9 => 'JPC', 10 => 'JP2', 11 => 'JPX', 12 => 'JB2', 13 => 'SWC', 14 => 'IFF', 15 => 'WBMP', 16 => 'XBM');
             $t = $hts->get_data($img, 'type');
             if(!empty($tt[$t]))
                 $t = $tt[$t];
 
-            $ico = preg_replace("!^(http://[^/]+)(.*?)(/[^/]+)$!", "$1/cache$2/200x150$3", $img);
+			$ico = preg_replace("!^(http://[^/]+)(.*?)(/[^/]+)$!", "$1/cache$2/200x150$3", $img);
 
             list($iw, $ih, $it) = getimagesize($ico);
 
@@ -55,12 +60,19 @@
 
             $icons= $ico640_url ? "Другие размеры: $ico640_url $ico800_url $ico1024_url":"";
 
+			$idesc = "";
+			if(!$uri)
+			{
+				$uri = preg_replace("!\.(gif|jpe?g|png)$!i", ".htm", $img);
+				$idesc = "$img_admin $t {$w}x{$h} ".intval($hts->get_data($img, 'size')/1024+0.5)."K";
+			}
+			
             $out .= "<script charset=\"UTF-8\">galItem(".
-                "'".addslashes(preg_replace("!\.(gif|jpg|png|jpeg)$!i",'.htm',$img))."',".
+                "'".addslashes($uri)."',".
                 "'".addslashes($description)."',".
-                "'".addslashes("$img_admin $t {$w}x{$h} ".intval($hts->get_data($img, 'size')/1024+0.5).""."K")."<br>$icons',".
+                "'".addslashes($idesc)."<br />$icons',".
                 "'$ico',$iw,$ih,'".addslashes($copyright)."')</script>".
-                "<noscript><li><a href=\"".preg_replace("!\.(gif|jpg|png|jpeg)$!i",'.htm',$img)."\">[$t {$w}x{$h}]</a> $description<small>// $copyright</small></noscript>\n";
+                "<noscript><li><a href=\"$uri\">[$t {$w}x{$h}]</a> $description<small>// $copyright</small></noscript>\n";
         }
         $out .= "<script charset=\"UTF-8\">endGallery()</script><noscript></ul></noscript>\n\n";
        
