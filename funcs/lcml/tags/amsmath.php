@@ -1,5 +1,5 @@
 <?
-    function lp_math($text,$params)
+    function lp_amsmath($text,$params)
     {
 		global $wgScriptPath;
 		error_reporting( E_ALL & ~ E_NOTICE );
