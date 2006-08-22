@@ -65,7 +65,11 @@
 		$data['closed'] = $hts->is_flag($uri, 'closed');
 		
 		$posts[] = array(
-			'message' => lcml($hts->get_data($uri, 'source'), array('with_html'=>true, 'cr_type'=>'save_cr')),
+			'message' => lcml($hts->get_data($uri, 'source'), array(
+				'with_html'=>false,
+				'html_disabled' => true,
+				'cache_disable' => true,
+				'cr_type'=>'save_cr')),
 			'author_name' => $hts->get_data($uri, 'author_name'),
 			'date' => news_time($hts->get_data($uri, 'create_time')),
 		);

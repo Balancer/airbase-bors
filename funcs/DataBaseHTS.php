@@ -120,13 +120,16 @@ class DataBaseHTS
 		if (empty ($GLOBALS['cms']['data_prehandler'][$key]))
 			return false;
 
+		if(is_global_key("uri_data($uri)", $key)) 
+			return global_key("uri_data($uri)", $key);
+
 		$m = array ();
 		foreach ($GLOBALS['cms']['data_prehandler'][$key] as $regexp => $func)
 			if (preg_match($regexp, $uri, $m))
 				if (($res = $func ($uri, $m)) != NULL)
 				{
 //					echo "Got pre $func($res) for $key/$uri<br/>";
-					return $res;
+					return set_global_key("uri_data($uri)", $key, $res);
 				}
 
 		return false;
@@ -140,6 +143,9 @@ class DataBaseHTS
 		if (empty ($GLOBALS['cms']['data_posthandler'][$key]))
 			return false;
 
+		if(is_global_key("uri_data($uri)", $key)) 
+			return global_key("uri_data($uri)", $key);
+
 		$m = array ();
 		foreach ($GLOBALS['cms']['data_posthandler'][$key] as $regexp => $func)
 		{
@@ -151,7 +157,7 @@ class DataBaseHTS
 				{
 //					if (!empty ($_GET['debug']))
 //						echo "<small>post_data_check return $res</small><br/>\n";
-					return $res;
+					return set_global_key("uri_data($uri)", $key, $res);
 				}
 			}
 		}
