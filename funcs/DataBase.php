@@ -291,7 +291,7 @@
 			{
 #				mysql_query ("REPAIR TABLE `$table`");
 				echo("Invalid query: " . mysql_error($this->dbh) ." ");
-				die(__FILE__.":".__LINE__." Error and try autorepair ('$table','$where','$fields').");
+//				die(__FILE__.":".__LINE__." Error and try autorepair ('$table','$where','$fields').");
 			}
 		}
 

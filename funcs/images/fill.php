@@ -12,20 +12,85 @@
 		
         $hts = new DataBaseHTS();
 
-		$data = $hts->parse_uri($page);
-//		exit($image2.print_r($data, true));
-		
-//		exit("'$image2' = abs_path_from_relative('$image', '$page');");
+		$data = $hts->parse_uri($image2);
 
-        if(!file_exists(preg_replace("!http://{$data['host']}!",$data['root'],$image2)))
+		if(!$data['local'])
+		{
+			$path = $GLOBALS['cms']['sites_store_path']."/{$data['host']}{$data['path']}";
+				
+			if(preg_match("!/$!",$path))
+				$path .= "index";
+
+			if(!file_exists($path) || filesize($path)==0)
+			{
+				$c1 = substr($data['host'],0,1);
+				$c2 = substr($data['host'],1,1);
+				require_once('funcs/modules/uri.php');
+				$path = $GLOBALS['cms']['sites_store_path']."/$c1/$c2/{$data['host']}".translite_path($data['path']);
+
+				if(preg_match("!/$!",$path))
+					$path .= "index";
+			}
+
+			if(!file_exists($path) || filesize($path)==0)
+			{
+				require_once('HTTP/Request.php');
+				$req =& new HTTP_Request($image);
+				$req->addHeader('Referer', $image);
+
+//				if(preg_match("!(lenta\.ru|pisem\.net|biorobot\.net|compulenta\.ru|ferra\.ru)!", $image))
+//					$req->setProxy('home.balancer.ru', 3128);
+
+//				return "=$path=<br />\n";
+					
+				$response = $req->sendRequest(array(
+					'allowRedirects' => true,
+					'maxRedirects' => 3,
+					'timeout' => 10,
+				));
+
+				if(!empty($response) && PEAR::isError($response)) 
+					return "Download image =$image= error: ".$response->getMessage();
+
+				$data = $req->getResponseBody();
+				if(strlen($data) <= 0)
+					return lcml("Zero size image ={$image}= error.");
+
+				$content_type = $req->getResponseHeader('Content-Type');
+				if(!preg_match("!image!",$content_type))
+					return lcml("Non-image content type ('$content_type') image ={$image}= error.");
+
+				require_once('funcs/filesystem_ext.php');
+				mkpath(dirname($path));
+				$fh = fopen($path,'wb');
+				fwrite($fh, $data);
+				fclose($fh);
+//				$cmd = "wget --header=\"Referer: $image\" -O \"$path\" \"".html_entity_decode($image)."\"";
+//				return "cmd:$cmd=<br />\n";
+//				system($cmd);
+			}
+
+			if(file_exists($path) && filesize($path)>0)
+			{
+				$remote = $image;
+				$image = str_replace($GLOBALS['cms']['sites_store_path'], $GLOBALS['cms']['sites_store_uri'], $path);
+				$data['local'] = true;
+				if(!$hts->get_data($image,'origin_uri'))
+					$hts->set_data($image, 'origin_uri', $remote);
+				if(!$hts->get_data($image,'local_path'))
+					$hts->set_data($image, 'local_path', $path);
+			}
+
+			$image2 = $image;
+		}
+
+		$data = $hts->parse_uri($page);
+
+        if(!file_exists(preg_replace("!http://{$data['host']}!",$data['root'], $image2)))
             $image2 = abs_path_from_relative($image, $page);
 		
-//		exit("'$image2' = abs_path_from_relative('$image', '{$page}img')");
-
         if(file_exists(preg_replace("!http://{$data['host']}!",$data['root'],$image2)))
             $image = $image2;
-
-//		exit(preg_replace("!http://{$data['host']}!",$data['root'],$image2));
 
         if(!file_exists(preg_replace("!http://{$data['host']}!",$data['root'],$image)))
             return false;

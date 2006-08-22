@@ -24,7 +24,7 @@
 
             $hmd = md5("$type:$key");
 			
-            $row = $this->dbh->get("SELECT `value`, `expire_time` FROM `cache` WHERE `hmd`='$hmd'");
+            $row = $this->dbh->get("SELECT `value`, `expire_time`, 0 as `count` FROM `cache` WHERE `hmd`='$hmd'");
 			$this->last = $row['value'];
 
 			if($row['expire_time'] <= time())
@@ -35,8 +35,8 @@
 			
 //            echo "Get from cache $type:$key = $this->last<br>";
 
-            if($this->last)
-                $this->dbh->query("UPDATE `cache` SET `access_time` = ".time()." WHERE `hmd`='$hmd'");
+//            if($this->last)
+//                $this->dbh->query("UPDATE `cache` SET `access_time` = ".time().", `count`=".(intval($row['count'])+1)." WHERE `hmd`='$hmd'");
 
             return ($this->last ? $this->last : $default);
         }
