@@ -26,6 +26,8 @@ class DataBaseHTS
 			else
 			{
 				$this->uri = NULL;
+				if(!$data)
+					$data = $GLOBALS['cms']['mysql_database'];
 				$this->dbh = new DataBase($data);
 			}
 		}

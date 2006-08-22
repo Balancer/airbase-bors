@@ -1,15 +1,17 @@
 <?
 	function modules_design_navleft_get($uri)
 	{
+//		echo "uri=$uri";
+	
 		include_once("funcs/Cache.php");
 		$ch = new Cache();
 		
-		if($ch->get('modules-design-navleft-2', $uri))
+		if($ch->get('modules-design-navleft-4', $uri))
 			return $ch->last;
 	
 		include_once("funcs/templates/assign.php");
 
-		$hts = new DataBaseHTS();
+		$hts = new DataBaseHTS('HTS');
 
 		$children = $hts->get_data_array($uri, 'child');
 
@@ -61,7 +63,7 @@
 
 		$list = array();
 		
-		$hts = new DataBaseHTS();
+		$hts = new DataBaseHTS('HTS');
 
 //		-----------------------------------
 //		Собираем информацию о братьях:
