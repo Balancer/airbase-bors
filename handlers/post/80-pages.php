@@ -7,7 +7,7 @@
 
 	function handler_pages($uri, $m=array())
 	{
-//		echo "<tt>try show page '$uri'</tt>";
+//		echo "<tt>try show page '$uri'</tt><br/>";
 	
 	    $hts  = new DataBaseHTS;
 	    require_once('funcs/templates/smarty.php');

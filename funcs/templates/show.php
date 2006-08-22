@@ -153,8 +153,8 @@
 			$template = "hts:".$template;
 
 		if(preg_match('!^/!',$template))
-			if(!file_exists($template))
-				$template = "hts:".$template;
+			if(file_exists($template))
+				$template = "xfile:$template";
 			else
 				$template = "hts:http://{$_SERVER['HTTP_HOST']}$template";
 		

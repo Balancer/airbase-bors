@@ -123,6 +123,8 @@
 			if($ret !== false)
 				$uri = $ret;
 		}
+
+//		echo "********do_uri_handlers($uri, $uri, ".print_r($GLOBALS['cms_patterns'], true)."**************<br/>";
 		
 		$ret = do_uri_handlers($uri, $uri, $GLOBALS['cms_patterns']);
 		
