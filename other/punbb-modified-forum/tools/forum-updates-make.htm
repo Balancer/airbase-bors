@@ -1,0 +1,5 @@
+<html>
+{section name=i loop=$topics}
+<a href="http://balancer.ru/forum/topic/{$topics[i].sub}/{$topics[i].topic_id},new/" title="{$topics[i].title}"><img src="http://airbase.ru/img/design/icons/topic-9x10.png" width="9" heght="10" border="0" align="absmiddle">&nbsp;{$topics[i].title|truncate:22}</a><br />
+{/section}
+</html>

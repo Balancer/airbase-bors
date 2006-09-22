@@ -1,0 +1,96 @@
+DIV.postmsg { 
+	font-size: small; 
+	text-align: justify;
+	overflow: hidden;
+}
+
+.pun TEXTAREA {
+	FONT-FAMILY: Lucida Console, Terminus, Courier, monospace;
+	font-size: small; 
+}
+
+.pun A:link, .pun A:visited 
+{
+	text-decoration: none;
+	border-bottom: none;
+}
+
+.pun BLOCKQUOTE, DIV.codebox {MARGIN: 4px; PADDING: 8px;}
+.pun BLOCKQUOTE {text-align: justify; font-size: 90%;}
+
+.tclcon a
+{
+	font-size: small; 
+}
+
+.topic_left_column {
+	width: 170px;
+	border-style: none;
+}
+
+.topic_right_column {
+	width: 150px;
+	border-style: none;
+}
+
+.topic_middle_column {
+	width: 17cm; 
+	border-style: none;
+}
+
+.pagelink, .postlink
+{
+	font-size: 120%;
+}
+
+DIV.postsignature {
+	text-align: right;
+	color: #bbc;
+}
+
+td#CODE {
+	background-color: white;
+}
+
+DIV.userinfo {
+	width: 100px; 
+	float: right; 
+	margin: 0px 0px 8px 16px; 
+	display: inline; 
+	border: 1px solid; 
+	background-color: white;
+}
+
+.subforums, .subforums a {
+	font-size: xx-small;
+}
+
+.blocktable h2 {
+	font-size: 110%;
+	font-weight: 900;
+}
+
+.btab, .btab td, .btab th { border: none; }
+
+.btab {
+        border-left: 1px solid #0066cc;
+        border-top: 1px solid #0066cc;
+        padding: 0;
+}
+
+.btab td, .btab caption, .btab th {
+        border-right: 1px solid #0066cc;
+        border-bottom: 1px solid #0066cc;
+        padding: 2px;
+        margin: 0;
+}
+
+.btab caption {
+        color: #d0d0f0;
+        background: #0066cc;
+}
+
+.btab th {
+    color: #000066;
+    background-color: #66ccff;
+}
