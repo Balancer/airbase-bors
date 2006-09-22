@@ -44,7 +44,7 @@ function lcml($txt, $params = array ())
 	if (!trim($txt))
 		return rest_return($txt, $saved_params);
 
-	$ch_type = 'lcml-compiled';
+	$ch_type = 'lcml-compiled-2';
 	$ch_key = md5($txt);
 
 	$ch = new Cache();

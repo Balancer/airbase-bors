@@ -1,0 +1,14 @@
+.topic_right_column {
+	display: none;
+	border-style: none;
+}
+
+.topic_left_column {
+	display: none;
+	border-style: none;
+}
+
+.topic_middle_column {
+	width: auto; 
+	border-style: none;
+}
