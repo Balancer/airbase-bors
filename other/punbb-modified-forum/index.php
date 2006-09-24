@@ -125,6 +125,7 @@ if($_SERVER['HTTP_HOST']!='balancer.ru' || !preg_match("!^/forum!", $_SERVER['RE
 }
 
 define('PUN_ROOT', './');
+require PUN_ROOT.'include/common.php';
 
 include_once("funcs/Cache.php");
 include_once("include/subforums.php");
@@ -139,7 +140,6 @@ else
 	$ich->set(serialize($subforums), 7200);
 }
 
-require PUN_ROOT.'include/common.php';
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
