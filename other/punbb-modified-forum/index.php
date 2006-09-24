@@ -24,20 +24,36 @@
 
 $fdiff = 0;
 $tdiff = 0;
+$pdiff = 0;
 
 if($_SERVER['HTTP_HOST']=='la2.wrk.ru' || $_SERVER['HTTP_HOST']=='la2.balancer.ru')
 {
 	$fdiff = 105;
 	$tdiff = 41000;
+	$pdiff = 794000;
+
 	if(preg_match("!^/forum/index.php/board,(d+).(d+).html$!", $_SERVER['REQUEST_URI'], $m))
 	{
 		$_GET['id'] = $m[1]+$fdiff;
 		$_GET['p'] = $m[2];
-		include("{$pun_config['root_uri']}/viewforum.php");
+		include("viewforum.php");
 		exit();
 	}
 }
 
+include_once("cms/funcs/navigation/go.php");
+
+if(!empty($_GET['topic']) && preg_match("!^(\d+)\.msg(\d+)$!", $_GET['topic'], $m))
+{
+	//http://forums.airbase.ru/index.php?topic=27581.msg415049
+	go("http://balancer.ru/forum/punbb/viewtopic.php?pid={$m[2]}#p{$m[2]}");
+}
+
+if(!empty($_GET['showforum']))
+{
+	//http://forums.airbase.ru/index.php?showforum=40
+	go("http://forums.airbase.ru/viewforum.php?id={$_GET['showforum']}");
+}
 
 if(!empty($_GET['view']))
 {
@@ -45,7 +61,7 @@ if(!empty($_GET['view']))
 	if($_GET['view'] == 'findpost' && !empty($_GET['p']))
 	{
 		$_GET['pid'] = $_GET['p'];
-		include("{$pun_config['root_uri']}/viewtopic.php");
+		include("viewtopic.php");
 		exit();
 	}
 }
@@ -53,19 +69,28 @@ if(!empty($_GET['view']))
 if(!empty($_GET['pid']))
 {
 	$_GET['pid'] += $tdiff;
-	include("{$pun_config['root_uri']}/viewtopic.php");
+	include("viewtopic.php");
 	exit();
 }
 
 if(!empty($_GET['act']))
 {
+	switch($_GET['act'])
+	{
+		case 'SF':
+			$_GET['id'] = $_GET['f'];
+			include("viewforum.php");
+			exit();
+	}
+	
 	//http://forums.airbase.ru/index.php?act=Print&client=printer&f=61&t=25524
 	if(!empty($_GET['t']))
 	{
 		$_GET['id'] = $_GET['t'];
-		include("{$pun_config['root_uri']}/viewtopic.php");
+		include("viewtopic.php");
 		exit();
 	}
+
 }
 
 //include_once("funcs/navigation/go.php");
@@ -73,7 +98,7 @@ if(!empty($_GET['showtopic']))
 {
 	$_GET['id'] = $_GET['showtopic'] + $tdiff;
 //	$_GET['p'] = $m[2];
-	include("{$pun_config['root_uri']}/viewtopic.php");
+	include("viewtopic.php");
 	exit();
 }
 
@@ -132,7 +157,7 @@ while ($cur_forum = $db->fetch_assoc($result))
 		++$cat_count;
 
 ?>
-<div id="idx<?php echo $cat_count ?>" class="blocktable">
+<div id="idx<?php echo $cat_count;/*"*/?>" class="blocktable">
 	<h2><span><?php echo pun_htmlspecialchars($cur_forum['cat_name']) ?></span></h2>
 	<div class="box">
 		<div class="inbox">
@@ -195,7 +220,7 @@ while ($cur_forum = $db->fetch_assoc($result))
 		$moderators = array();
 
 		while (list($mod_username, $mod_id) = @each($mods_array))
-			$moderators[] = '<a href="profile.php?id='.$mod_id.'">'.pun_htmlspecialchars($mod_username).'</a>';
+			$moderators[] = "<a href=\"{$pun_config['root_uri']}/profile.php?id=$mod_id\">".pun_htmlspecialchars($mod_username).'</a>';
 
 		$moderators = "\t\t\t\t\t\t\t\t".'<p><em>('.$lang_common['Moderated by'].'</em> '.implode(', ', $moderators).')</p>'."\n";
 	}
@@ -204,7 +229,7 @@ while ($cur_forum = $db->fetch_assoc($result))
  				<tr<?php if ($item_status != '') echo ' class="'.$item_status.'"'; ?>>
 					<td class="tcl">
 						<div class="intd">
-							<div class="<?php echo $icon_type ?>"><div class="nosize"><?php echo $icon_text ?></div></div>
+							<div class="<?php echo $icon_type;/*"*/?>"><div class="nosize"><?php echo $icon_text ?></div></div>
 							<div class="tclcon">
 								<?php echo $forum_field."\n".$moderators ?>
 							</div>
@@ -248,7 +273,7 @@ list($stats['total_topics'], $stats['total_posts']) = $db->fetch_row($result);
 			</dl>
 			<dl class="conl">
 				<dt><strong><?php echo $lang_index['User info'] ?></strong></dt>
-				<dd><?php echo $lang_index['Newest user'] ?>: <a href="profile.php?id=<?php echo $stats['last_user']['id'] ?>"><?php echo pun_htmlspecialchars($stats['last_user']['username']) ?></a></dd>
+				<dd><?php echo $lang_index['Newest user'] ?>: <a href="<?echo $pun_config['root_uri']?>/profile.php?id=<?php echo $stats['last_user']['id'];/*"*/?>"><?php echo pun_htmlspecialchars($stats['last_user']['username']) ?></a></dd>
 <?php
 
 if ($pun_config['o_users_online'] == '1')
@@ -261,7 +286,7 @@ if ($pun_config['o_users_online'] == '1')
 	while ($pun_user_online = $db->fetch_assoc($result))
 	{
 		if ($pun_user_online['user_id'] > 1)
-			$users[] = "\n\t\t\t\t".'<dd><a href="profile.php?id='.$pun_user_online['user_id'].'">'.pun_htmlspecialchars($pun_user_online['ident']).'</a>';
+			$users[] = "\n\t\t\t\t"."<dd><a href=\"{$pun_config['root_uri']}/profile.php?id={$pun_user_online['user_id']}\">".pun_htmlspecialchars($pun_user_online['ident']).'</a>';
 		else
 			++$num_guests;
 	}

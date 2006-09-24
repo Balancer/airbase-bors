@@ -1,5 +1,5 @@
 <?
-    require_once('debug.php');
+//    require_once('debug.php');
 
     function go($uri, $permament = true, $time = 0, $text = true)
     {
@@ -15,7 +15,7 @@
 			
 		echo "<meta http-equiv=\"refresh\" content=\"$time; url=$uri\">";
 
-        debug("headers already out in $filename:$linenum");
+//        debug("headers already out in $filename:$linenum");
 
         exit();
     }
