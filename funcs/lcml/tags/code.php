@@ -8,7 +8,9 @@
 
         include_once("funcs/modules/colorer.php");
 
-        $txt = colorer($txt,$params['orig']);
+        $txt = str_replace("<!--lcml_left_bracket-->", "[", $txt);
+
+        $txt = colorer($txt, $params['orig']);
 
 /*        $txt = preg_replace( "#&lt;#"   , "&#60;", $txt );
         $txt = preg_replace( "#&gt;#"   , "&#62;", $txt );
