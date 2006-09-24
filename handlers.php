@@ -160,19 +160,24 @@ function hts_data_prehandler($pattern, $data)
 		hts_data_prehandler_add($pattern, 'create_time', create_function('$uri, $m', 'return time();'));
 }
 
-function do_plugin_action_handlers($uri, $match, $path)
-{
-	$save = $GLOBALS['cms_actions'];
-	$GLOBALS['cms_actions'] = array ();
+	function do_plugin_action_handlers($uri, $match, $path)
+	{
+		$save = $GLOBALS['cms_actions'];
+		$GLOBALS['cms_actions'] = array ();
 
-	handlers_load($path);
-	// match[3] - это путь относительно базы плагинов.
-	// Там формат шаблона (/path/to/plugin/)(plugin_name)(/plugin/sub/path/)
-	$ret = do_action_handlers($uri, $match[3], $GLOBALS['cms_actions']);
+		handlers_load($path);
+		// match[3] - это путь относительно базы плагинов.
+		// Там формат шаблона (/path/to/plugin/)(plugin_name)(/plugin/sub/path/)
+		$ret = do_action_handlers($uri, $match[3], $GLOBALS['cms_actions']);
 
-	$GLOBALS['cms_actions'] = $save;
-	return $ret;
-}
+		$GLOBALS['cms_actions'] = $save;
+
+		// Если не было локального обработчика - пробуем глобальный.
+		if($ret === false)
+			$ret = do_action_handlers($uri, $match[3], $GLOBALS['cms_actions']);
+
+		return $ret;
+	}
 
 function do_action_handlers($uri, $match, $actions)
 {

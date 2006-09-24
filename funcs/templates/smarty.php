@@ -47,14 +47,14 @@
 //				$lcml_params = $data['lcml_params'];
 //			$body = lcml($source, $lcml_params);
 			if(!$body)
-				$body = lcml($source, array('with_html'=>true));
+				$body = lcml($source, array('html'=>true));
 			$action = false;
 		}
 		else
 		{
 			$source = $GLOBALS['page_data']['source'];
 			$action = @$GLOBALS['cms']['action'];
-			$body = lcml($source, array('with_html'=>true));
+			$body = lcml($source, array('html'=>true));
 			$GLOBALS['cms']['templates_cache_disabled'] = true;
 //			exit("<xmp>".$body."</xmp>");
 		}

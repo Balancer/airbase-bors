@@ -61,6 +61,14 @@
 
 		if(!$caching)
 			$smarty->clear_cache($template_uri, $uri);
+
+		if(!isset($data['access']))
+			$data['access'] = access_allowed($uri) ? 1 : 0;
+
+		$me = new User();
+
+		if(!isset($data['level']))
+			$data['level'] = $me->get('level');
 		
 		if(!$caching || !$smarty->is_cached($template_uri, $uri))
 		{

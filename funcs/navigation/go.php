@@ -20,8 +20,14 @@
         exit();
     }
 
-    function go_ref()
+    function go_ref($def = "/")
 	{
-		go($GLOBALS['ref']);
+		if(!empty($GLOBALS['ref']))
+			go($GLOBALS['ref']);
+
+		if(!empty($_SERVER['HTTP_REFERER']))
+			go($_SERVER['HTTP_REFERER']);
+			
+		go($def);
 	}
 ?>

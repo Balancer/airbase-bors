@@ -48,8 +48,11 @@ function lcml($txt, $params = array ())
 	$ch_key = md5($txt);
 
 	$ch = new Cache();
-	if (empty ($params['cache_disable']) && $GLOBALS['lcml']['level'] < 2 && $ch->get($ch_type, $ch_key))
-		return rest_return($ch->last, $saved_params);
+	if($ch->get($ch_type, $ch_key)
+			&& empty ($params['cache_disable']) 
+			&& $GLOBALS['lcml']['level'] < 2
+		)
+		return rest_return($ch->last(), $saved_params);
 
 	$page = @ $GLOBALS['cms']['page_path'];
 
