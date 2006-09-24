@@ -138,7 +138,7 @@
 		if(empty($forums))
 			return "";
 	
-		global $pun_user, $pun_config;
+		global $pun_user, $pun_config, $lang_index;
 		
 		$db = new DataBase('punbb');
 
@@ -160,9 +160,9 @@
 		
 			// Is this a redirect forum?
 			if($cur_forum['redirect_url'] != '')
-				$subforums[] = "<a href=\"".htmlspecialchars($cur_forum['redirect_url'])."\" title=\"{$lang_index['Link to']} ".pun_htmlspecialchars($cur_forum['redirect_url']).'">'.pun_htmlspecialchars($cur_forum['forum_name'])."</a>";
+				$subforums[] = "<a href=\"".htmlspecialchars($cur_forum['redirect_url'])."\" title=\"{$lang_index['Link to']} ".htmlspecialchars($cur_forum['redirect_url']).'">'.htmlspecialchars($cur_forum['forum_name'])."</a>";
 			else
-				$subforums[] = "<a href=\"{$pun_config['root_uri']}/viewforum.php?id=$fid\">".pun_htmlspecialchars($cur_forum['forum_name'])."</a>";
+				$subforums[] = "<a href=\"{$pun_config['root_uri']}/viewforum.php?id=$fid\">".htmlspecialchars($cur_forum['forum_name'])."</a>";
 		}
 		
 		return "<div class=\"subforums\"><b>Подфорумы:</b> ".join(", ", $subforums)."</div>\n";
