@@ -124,10 +124,22 @@ if($_SERVER['HTTP_HOST']!='balancer.ru' || !preg_match("!^/forum!", $_SERVER['RE
 	exit();
 }
 
-
 define('PUN_ROOT', './');
-require PUN_ROOT.'include/common.php';
 
+include_once("funcs/Cache.php");
+include_once("include/subforums.php");
+$ich = new Cache();
+if($ich->get("subforums-text", "all"))
+	$subforums = unserialize($ich->last());
+else
+{
+	$cms_db = new DataBase('punbb');
+	foreach($cms_db->get_array("SELECT id FROM forums") as $iid)
+		$subforums[$iid] = get_subforums_text(punbb_get_all_subforums($iid));
+	$ich->set(serialize($subforums), 7200);
+}
+
+require PUN_ROOT.'include/common.php';
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
@@ -141,7 +153,25 @@ define('PUN_ALLOW_INDEX', 1);
 require PUN_ROOT.'header.php';
 
 // Print the categories and forums
-$result = $db->query('SELECT c.id AS cid, c.cat_name, f.id AS fid, f.forum_name, f.forum_desc, f.redirect_url, f.moderators, f.num_topics, f.num_posts, f.last_post, f.last_post_id, f.last_poster FROM '.$db->prefix.'categories AS c INNER JOIN '.$db->prefix.'forums AS f ON c.id=f.cat_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE fp.read_forum IS NULL OR fp.read_forum=1 ORDER BY c.disp_position, c.id, f.disp_position', true) or error('Unable to fetch category/forum list', __FILE__, __LINE__, $db->error());
+$result = $db->query("SELECT c.id AS cid, 
+		c.cat_name, 
+		f.id AS fid, 
+		f.forum_name, 
+		f.forum_desc, 
+		f.redirect_url, 
+		f.moderators, 
+		f.num_topics, 
+		f.num_posts, 
+		f.last_post, 
+		f.last_post_id, 
+		f.last_poster 
+	FROM {$db->prefix}categories AS c 
+		LEFT JOIN {$db->prefix}forums AS f ON c.id=f.cat_id 
+		LEFT JOIN {$db->prefix}forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id={$pun_user['g_id']}) 
+	WHERE f.parent = 0
+		AND (fp.read_forum IS NULL OR fp.read_forum=1) 
+	ORDER BY c.disp_position, c.id, f.disp_position", true) 
+	or error('Unable to fetch category/forum list', __FILE__, __LINE__, $db->error());
 
 $cur_category = 0;
 $cat_count = 0;
@@ -207,6 +237,8 @@ while ($cur_forum = $db->fetch_assoc($result))
 	if ($cur_forum['forum_desc'] != '')
 		$forum_field .= "\n\t\t\t\t\t\t\t\t".$cur_forum['forum_desc'];
 
+	if($subforums[$cur_forum['fid']])
+		$forum_field .= $subforums[$cur_forum['fid']];
 
 	// If there is a last_post/last_poster.
 	if ($cur_forum['last_post'] != '')
