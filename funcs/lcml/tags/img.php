@@ -203,7 +203,7 @@ __EOT__;
 //				$out = <<<__EOT__
 //{$params['_align_b']}<table class="box" style="width: {$width}px;" cellSpacing="0" cellPadding="2"><tr><td width="$width">$a_href_b<img src="$img_ico_uri" width="$width" height="$height" border="0">$a_href_e</td></tr>$description</table>{$params['_align_e']}
 //__EOT__;
-				$out = "{$params['_align_b']}$a_href_b<img src=\"$img_ico_uri\" width=\"$width\" height=\"$height\" border=\"0\">$a_href_e<div style=\"font-size: xx-small;\">".lcml($description, array('html_disable'=>false))."</div>{$params['_align_e']}";
+				$out = "{$params['_align_b']}$a_href_b<img src=\"$img_ico_uri\" width=\"$width\" height=\"$height\" border=\"0\">$a_href_e<div style=\"font-size: xx-small;\">".lcml($description, array('html'=>'safe'))."</div>{$params['_align_e']}";
 
 //		$out .= "<!-- params ".print_r($params,true)." -->";
 

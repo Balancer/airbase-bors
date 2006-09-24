@@ -742,16 +742,34 @@ class DataBaseHTS
 
 	function set_flag($uri, $flag)
 	{
+		global $transmap;
+
+		if(!preg_match('!^http://!', $uri))
+			if(preg_match('!^(\w+)://([^/]+)/?!', $uri, $m) && !empty($transmap[@$m[1]]))
+				return $this->set_proto($m[1], $m[2], $flag, 1);
+
 		$this->append_data($uri, 'flags', $flag);
 	}
 
 	function drop_flag($uri, $flag)
 	{
+		global $transmap;
+
+		if(!preg_match('!^http://!', $uri))
+			if(preg_match('!^(\w+)://([^/]+)/?!', $uri, $m) && !empty($transmap[@$m[1]]))
+				return $this->set_proto($m[1], $m[2], $flag, NULL);
+
 		$this->remove_data($uri, 'flags', $flag);
 	}
 
 	function is_flag($uri, $flag)
 	{
+		global $transmap;
+
+		if(!preg_match('!^http://!', $uri))
+			if(preg_match('!^(\w+)://([^/]+)/?!', $uri, $m) && !empty($transmap[@$m[1]]))
+				return $this->get_proto($m[1], $m[2], $flag) ? true : false;
+
 		return $this->data_exists($uri, 'flags', $flag);
 	}
 
@@ -955,7 +973,12 @@ class DataBaseHTS
 		else
 			$db = "";
 
-		$r = $this->dbh->get("SELECT $fields FROM $db{$t['table']} $join WHERE {$t['*']} = '".addslashes($id)."'");
+		$table = @$t[is_array($key)?$key[0]:$key]['table'];
+		
+		if(empty($fields) || empty($table))
+			return NULL;
+
+		$r = $this->dbh->get("SELECT $fields FROM $db$table $join WHERE {$t['*']} = '".addslashes($id)."'");
 
 		if(is_array($key))
 		{
@@ -1013,7 +1036,9 @@ class DataBaseHTS
 		else
 			$db = "";
 
-		$r = $this->dbh->get_array("SELECT $fields  FROM $db{$t['table']} $join WHERE $where $order $limit");
+		$table = @$t[is_array($key)?$key[0]:$key]['table'];
+
+		$r = $this->dbh->get_array("SELECT $fields  FROM $db$table $join WHERE $where $order $limit");
 
 		if(is_array($key))
 		{
@@ -1054,9 +1079,9 @@ class DataBaseHTS
 		global $transmap;
 		$t = &$transmap[$proto];
 		
-		$w = str_replace('$1', $value, $t[$key]['w']);
+		$w = str_replace('$1', $value, @$t[$key]['w']);
 		
-		if($t[$key]['q'])
+		if(@$t[$key]['q'])
 			$value = htmlspecialchars($value);
 		
 		if(!empty($t['db']))
@@ -1064,10 +1089,12 @@ class DataBaseHTS
 		else
 			$db = "";
 
-		if($value != 'NULL')
-			$this->dbh->query("UPDATE $db{$t['table']} SET  $w WHERE {$t['*']} = '".addslashes($id)."'");
-		else
-			$this->dbh->query("DELETE FROM $db{$t['table']} WHERE {$t['*']} = '".addslashes($id)."'");
+//		exit("$proto://$id/, $key=$value: UPDATE $db{$t[$key]['table']} SET  $w WHERE {$t['*']} = '".addslashes($id)."'");
+
+//		if($value != 'NULL')
+			$this->dbh->query("UPDATE $db{$t[$key]['table']} SET  $w WHERE {$t['*']} = '".addslashes($id)."'");
+//		else
+//			$this->dbh->query("DELETE FROM $db{$t[$key]['table']} WHERE {$t['*']} = '".addslashes($id)."'");
 	}
 }
 
@@ -1081,11 +1108,14 @@ class DataBaseHTS
 			$t['db'] = $m[1];
 			$table = $m[2];
 		}
-		
-		$t['table'] = $table;
+
+		if($table)
+			$t['table'] = $table;
 		
 		foreach($trans as $key => $value)
 		{
+			$t[$key]['table'] = $table;
+		
 			if(preg_match('!^Q:(.+)$!i', $value, $m))
 			{
 				$t[$key]['q'] = true;
@@ -1119,6 +1149,13 @@ class DataBaseHTS
 					else
 					{
 						$t[$key]['k'] = $value;
+						if(preg_match("!^(\w+)\.(\w+)$!", $value, $m2))
+						{
+							$value = $m2[2];
+							$t[$key]['table'] = $m2[1];
+						}
+//						$value = split("\.", $value);
+//						$value = "`".join("`.`", $value)."`";
 						$t[$key]['r'] = "`$value` AS $key";
 						$t[$key]['w'] = "`$value` = '$1'";
 					}

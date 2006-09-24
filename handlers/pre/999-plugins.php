@@ -61,12 +61,15 @@
 					    ini_set('include_path', "$base_dir/$dir:".ini_get('include_path'));
 						
 						$GLOBALS['cms']['plugin_base_path']	= $m[1].$m[2]."/";
+						$GLOBALS['cms']['plugin_pattern']= $pattern;
 						$GLOBALS['cms']['plugin_parent_uri']= preg_replace("!$pattern!", $m[1], $uri);
 						$GLOBALS['cms']['plugin_base_uri']	= $GLOBALS['cms']['plugin_parent_uri'].$m[2]."/";
+						$GLOBALS['cms']['plugin_base_pattern_uri']	= "({$GLOBALS['cms']['plugin_parent_uri']})({$m[2]})/";
 
 						$GLOBALS['cms']['templates']['data']['plugin_base_uri'] = $GLOBALS['cms']['plugin_base_uri'];
 						$GLOBALS['cms']['templates']['data']['plugin_base_path'] = $GLOBALS['cms']['plugin_base_path'];
 
+//						echo "<br/>$base_dir/$dir/config.php<br />";
 						@include_once("$base_dir/$dir/config.php");
 
 						if(!empty($_GET))
