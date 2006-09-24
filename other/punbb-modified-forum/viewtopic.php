@@ -431,7 +431,7 @@ while ($cur_post = $db->fetch_assoc($result))
 						'forum_type' => 'punbb',
 						'forum_base_uri' => 'http://balancer.ru/forums',
 						'sharp_not_comment' => true,
-						'html_disable' => true,
+						'html' => false,
 				)));
 			}
 
