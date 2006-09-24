@@ -66,6 +66,6 @@ function parse_message($text, $hide_smilies)
 			'forum_type' => 'punbb',
 			'forum_base_uri' => 'http://balancer.ru/forum',
 			'sharp_not_comment' => true,
-			'html_disable' => true,
+			'html' => false,
 		)));
 }
