@@ -9,7 +9,7 @@
 		if(!empty($params['url']))
 		{
 			$path = NULL;
-			$uri = html_entity_decode($params['url']);
+			$uri = html_entity_decode($params['url'], ENT_COMPAT, 'UTF-8');
 
 			// Заменим ссылку в кеш на полную картинку
 			$uri = secure_path(abs_path_from_relative(preg_replace("!^(.+?)/cache/(.+)/\d*x\d*/(.+?)$!", "$1/$2/$3", $uri), $GLOBALS['lcml']['uri']));
@@ -104,7 +104,7 @@
 					$fh = fopen($path,'wb');
 					fwrite($fh, $data);
 					fclose($fh);
-//					$cmd = "wget --header=\"Referer: $uri\" -O \"$path\" \"".html_entity_decode($uri)."\"";
+//					$cmd = "wget --header=\"Referer: $uri\" -O \"$path\" \"".html_entity_decode($uri, ENT_COMPAT, 'UTF-8')."\"";
 //					return "cmd:$cmd=<br />\n";
 //					system($cmd);
 				}

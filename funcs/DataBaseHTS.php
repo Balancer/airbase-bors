@@ -984,11 +984,11 @@ class DataBaseHTS
 		{
 			foreach($key as $k)
 				if($t[$k]['q'])
-					$r[$k] = html_entity_decode($r[$k]);
+					$r[$k] = html_entity_decode($r[$k], ENT_COMPAT, 'UTF-8');
 		}
 		else
 			if($t[$key]['q'])
-				$r = html_entity_decode($r);
+				$r = html_entity_decode($r, ENT_COMPAT, 'UTF-8');
 
 		return $r;
 	}
@@ -1045,12 +1045,12 @@ class DataBaseHTS
 			foreach($key as $k)
 				if($t[$k]['q'])
 					for($i=0, $stop=sizeof($r); $i<$stop; $i++)
-						$r[$i][$k] = html_entity_decode($r[$i][$k]);
+						$r[$i][$k] = html_entity_decode($r[$i][$k], ENT_COMPAT, 'UTF-8');
 		}
 		else
 			if($t[$key]['q'])
 				for($i=0, $stop=sizeof($r); $i<$stop; $i++)
-					$r[$i] = html_entity_decode($r[$i]);
+					$r[$i] = html_entity_decode($r[$i], ENT_COMPAT, 'UTF-8');
 
 		return $r;
 	}
