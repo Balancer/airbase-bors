@@ -7,7 +7,7 @@
 		$incs =  ini_get('include_path');
 		include_once("/var/www/wiki.airbase.ru/htdocs/LocalSettings.php");
 		
-		$text = html_entity_decode($text, ENT_NOQUOTES);
+		$text = html_entity_decode($text, ENT_NOQUOTES, 'UTF-8');
 
 		$ret = Wikitex::music($text, array());
 		error_reporting( E_ALL );

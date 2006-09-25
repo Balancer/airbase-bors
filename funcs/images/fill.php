@@ -65,7 +65,7 @@
 				$fh = fopen($path,'wb');
 				fwrite($fh, $data);
 				fclose($fh);
-//				$cmd = "wget --header=\"Referer: $image\" -O \"$path\" \"".html_entity_decode($image)."\"";
+//				$cmd = "wget --header=\"Referer: $image\" -O \"$path\" \"".html_entity_decode($image, ENT_COMPAT, 'UTF-8')."\"";
 //				return "cmd:$cmd=<br />\n";
 //				system($cmd);
 			}
