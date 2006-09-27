@@ -39,24 +39,29 @@ function lcml($txt, $params = array ())
 		if (!isset ($params[$key]))
 			$params[$key] = $val;
 
-	$GLOBALS['lcml']['params'] = $params;
+	$GLOBALS['lcml']['params'] = & $params;
 
 	if (!trim($txt))
 		return rest_return($txt, $saved_params);
 
-	$ch_type = 'lcml-compiled-2';
-	$ch_key = md5($txt);
+	if(empty($params['uri']))
+		$params['uri'] = '';
+
+	$ch_type = "lcml-compiled-2";
+	$ch_key = md5($txt.$params['uri']);
 
 	$ch = new Cache();
-	if($ch->get($ch_type, $ch_key)
-			&& empty ($params['cache_disable']) 
-			&& $GLOBALS['lcml']['level'] < 2
-		)
+	if($ch->get($ch_type, $ch_key, $params['uri'])
+				&& empty ($params['cache_disable']) 
+				&& $GLOBALS['lcml']['level'] < 2
+			)
+	{
+//		echo "<xmp>$txt</xmp>";
 		return rest_return($ch->last(), $saved_params);
-
+	}
 	$page = @ $GLOBALS['cms']['page_path'];
 
-	$hts = new DataBaseHTS();
+	$hts = &new DataBaseHTS();
 
 	$data = $hts->parse_uri($page);
 
