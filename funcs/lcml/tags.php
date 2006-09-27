@@ -17,7 +17,7 @@
             {
 //            	echo "Test *_{$func}";
 
-                if(function_exists("lp_$func"))
+                if(empty($GLOBALS['cms']['config']['disable']["lp_$func"]) && function_exists("lp_$func"))
                 {
                     $opened   = 0; // число открытых тэгов данного типа
                     $cfunc    = "lp_$func";
@@ -65,7 +65,7 @@
                     continue;
                 }
 
-                if(function_exists("lt_$func"))
+                if(empty($GLOBALS['cms']['config']['disable']["lt_$func"]) && function_exists("lt_$func"))
                 {
                     $func = "lt_$func";
 
