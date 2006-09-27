@@ -42,12 +42,15 @@
 		{
 			$source = $hts->get_data($page, 'source');
 			$body 	= $hts->get_data($page, 'body');
+//			exit("2: $page: $body");
 //			$lcml_params = NULL;
 //			if(!empty($data['lcml_params']))
 //				$lcml_params = $data['lcml_params'];
 //			$body = lcml($source, $lcml_params);
+
 			if(!$body)
 				$body = lcml($source, array('html'=>true));
+
 			$action = false;
 		}
 		else
@@ -185,7 +188,6 @@
         $last_modify = gmdate('D, d M Y H:i:s', $modify_time).' GMT';
    	    @header ('Last-Modified: '.$last_modify);
 
-
         if($nocache || !$smarty->is_cached($tpl, $page))
         {
 			$GLOBALS['cms']['cached_copy'] = 0;	
@@ -236,8 +238,8 @@
             }
 
             foreach(split(' ', "access level action body user_id user_name $page_vars") as $key)
-                $smarty->assign("$key", "{$$key}");
-    
+                $smarty->assign($key, $$key);
+
 			$uri = @$GLOBALS['uri'];
 			if(!$uri)
 				$uri = $page;
@@ -326,8 +328,8 @@
 		if($do_print)
 		{
 	        echo $out;
-			if(empty($_GET) && empty($_POST))
-				recompile($page, false);
+//			if(empty($_GET) && empty($_POST))
+//				recompile($page, false);
 		}
 		else
 			return $out;

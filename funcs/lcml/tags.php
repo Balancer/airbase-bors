@@ -174,6 +174,7 @@
         $params['border']  = 1;
         $params['size'] = '';
         $params['nohref'] = false;
+//		$params['page'] = $GLOBALS['lcml'][''];
 
         foreach(preg_split("!\s+!",$in) as $param)
         {

@@ -432,6 +432,7 @@ while ($cur_post = $db->fetch_assoc($result))
 						'forum_base_uri' => 'http://balancer.ru/forums',
 						'sharp_not_comment' => true,
 						'html' => false,
+						'uri' => "user://{$cur_post['poster_id']}/",
 				)));
 			}
 

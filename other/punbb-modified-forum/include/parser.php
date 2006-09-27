@@ -52,7 +52,7 @@ include_once("funcs/lcml.php");
 //
 function parse_message($text, $hide_smilies)
 {
-	global $pun_config, $lang_common, $pun_user;
+	global $pun_config, $lang_common, $pun_user, $cur_post;
 
 	$ch = new Cache();
 	if($ch->get("lcml-compiled-$hide_smilies", $text))
@@ -67,5 +67,6 @@ function parse_message($text, $hide_smilies)
 			'forum_base_uri' => 'http://balancer.ru/forum',
 			'sharp_not_comment' => true,
 			'html' => false,
+			'uri' => "post://{$cur_post['id']}/",
 		)));
 }

@@ -20,5 +20,6 @@
 				'forum_base_uri' => 'http://balancer.ru/forum',
 				'sharp_not_comment' => true,
 				'html' => false,
+				'uri' => "post://{$cur_post['id']}/",
 			)));
 	}

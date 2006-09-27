@@ -160,6 +160,38 @@ function hts_data_prehandler($pattern, $data)
 		hts_data_prehandler_add($pattern, 'create_time', create_function('$uri, $m', 'return time();'));
 }
 
+	function hts_data_posthandler($pattern, $data)
+	{
+		foreach($data as $key => $value)
+		{
+			if($value == 'default')
+				continue;
+
+			if(function_exists($value))
+			{
+				hts_data_posthandler_add($pattern, $key, $value);
+				continue;
+			}
+
+			hts_data_posthandler_add($pattern, $key, create_function('$uri, $m', "return \"".addslashes($value)."\";"));
+		}
+
+		if(empty ($data['parent']))
+			hts_data_posthandler_add($pattern, 'parent', create_function('$uri, $m', 'return array($m[1]);'));
+
+		if(empty ($data['nav_name']))
+			hts_data_posthandler_add($pattern, 'nav_name', create_function('$uri, $m', '$hts = new DataBaseHTS(); return strtolower($hts->get_data($uri, "title"));'));
+
+		if(empty ($data['source']))
+			hts_data_posthandler_add($pattern, 'source', create_function('$uri, $m', 'return NULL;'));
+
+		if(empty ($data['modify_time']))
+			hts_data_posthandler_add($pattern, 'modify_time', create_function('$uri, $m', 'return time();'));
+
+		if(empty ($data['create_time']))
+			hts_data_posthandler_add($pattern, 'create_time', create_function('$uri, $m', 'return time();'));
+	}
+
 	function do_plugin_action_handlers($uri, $match, $path)
 	{
 		$save = $GLOBALS['cms_actions'];

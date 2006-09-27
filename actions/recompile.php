@@ -20,6 +20,7 @@
 			
         $ch = new Cache();
         $ch->clear_by_id($uri);
+        $ch->clear_by_uri($uri);
 
 		if(!empty($GLOBALS['cms']['cache_static']))
 		{
