@@ -256,8 +256,34 @@ class DataBaseHTS
 		return $value ? $value : $default;
 	}
 
-	function get_data_array($uri, $key, $fields = "`value`", $search = "`id`")
+	function get_data_array($uri, $key, $params = array())
 	{
+		if(empty($params['fields']))
+			 $params['fields'] = "`value`";
+
+		if(empty($params['where']))
+			$params['where'] = "`id`";
+	
+		$fields = $params['fields'];
+		$search = $params['where'];
+
+		$order = "";
+		if(!empty($params['order']))
+		{
+			$order = array();
+			foreach(split(',', $params['order']) as $ord)
+			{
+				$ord = trim($ord);
+				if($ord{0} == "+")
+					$ord = substr($ord, 1);
+				if($ord{0} == "-")
+					$ord = substr($ord, 1).' DESC';
+
+				$order[] = $ord;
+			}
+			$order = " ORDER BY ".join(', ', $order);
+		}
+			
 		echolog("Get keys array '$key' for '$uri' (fields=$fields, search=$search)");
 
 		$uri = $this->normalize_uri($uri);
@@ -267,7 +293,7 @@ class DataBaseHTS
 
 		$key_table_name = $this->create_data_table($key);
 
-		$res = $this->dbh->get_array("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."'");
+		$res = $this->dbh->get_array("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."' $order");
 
 		if ($res)
 			return $res;
@@ -961,11 +987,11 @@ class DataBaseHTS
 		}
 		else
 		{
-			if($t[$key]['rf'])
+			if(@$t[$key]['rf'])
 				return $t[$key]['rf']($id);
 		
-			$fields = $t[$key]['r'];
-			$join = $t[$key]['join'];
+			$fields = @$t[$key]['r'];
+			$join = @$t[$key]['join'];
 		}
 		
 		if(!empty($t['db']))

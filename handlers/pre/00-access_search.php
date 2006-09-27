@@ -3,7 +3,7 @@
 
     function handler_check_search_access($uri, $m=array())
 	{
-		if(preg_match("!/job/vacancy!", $uri))
+		if(preg_match("!/job/!", $uri))
 			return false;
 	
 		include_once("funcs/modules/messages.php");

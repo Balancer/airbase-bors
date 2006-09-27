@@ -94,11 +94,11 @@ function do_uri_handlers($uri, $match, $handlers)
 	foreach ($handlers as $uri_pattern => $func)
 	{
 		if (!empty ($_GET['debug']))
-			echo "<tt>Test pattern '$uri_pattern' to '$uri'</tt><br/>\n";
+			echo "<tt>Test pattern '$uri_pattern' to '$uri' by $func()</tt><br />\n";
 		$m = array ();
 		if (preg_match($uri_pattern, $match, $m))
 		{
-			//			echo "ok!";
+//			echo "... ok!";
 			$res = $func ($uri, $m);
 			if ($res === true)
 			{

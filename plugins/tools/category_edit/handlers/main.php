@@ -1,4 +1,6 @@
 <?
+	register_action_handler('category_add', 'plugins_tools_categories_editor_category_add');
+
 	hts_data_prehandler("!^(".$GLOBALS['cms']['plugin_base_uri']."?(.*))$!", array(
 			'body' => 'plugins_tools_categories_editor_body',
 			'title' => 'plugins_tools_categories_editor_title',
@@ -30,7 +32,14 @@
 				'order'		=> $hts->get_data($cat, 'order'),
 			);
 		
+		usort($categories_list, create_function('$a, $b', 'return $a["order"] != $b["order"] ? $a["order"] > $b["order"] : $a["title"] > $b["title"];'));
+		
 		$data['categories_list'] = $categories_list;
+
+		include_once("data/arrays.php");
+		
+		foreach($GLOBALS['icons']['tools'] as $key => $value)
+			$data['icons']['tools'][$key] = $value;
 		
 //		echo "<xmp>"; print_r($data); echo "</xmp>";
 		
@@ -48,7 +57,6 @@
 		return array(preg_replace("!^(.+?)[^/]+/$!", "$1", $uri));
 	}
 
-	register_action_handler('category_add', 'plugins_tools_categories_editor_category_add');
     function plugins_tools_categories_editor_category_add($uri, $action, $match)
 	{
 		include_once('funcs/DataBaseHTS.php');
@@ -90,4 +98,3 @@
 
 		return $title;
 	}
-?>

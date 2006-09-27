@@ -13,6 +13,8 @@
 	{else}
 	<a href="{$categories_list[i].link}?set-default-flag">1</a>
 	{/if}
+</td><td>
+	<a href="{$categories_list[i].link}?category-delete">{$icons.tools.delete}</a>
 </td>
 <td>	
 	<form action="{$categories_list[i].link}?set-order" method="post" style="padding:0; margin:0;">
