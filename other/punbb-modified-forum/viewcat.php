@@ -27,6 +27,7 @@ else
 }
 
 require PUN_ROOT.'include/common.php';
+
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
 

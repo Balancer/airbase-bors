@@ -102,6 +102,7 @@ if(!empty($_GET['showtopic']))
 	exit();
 }
 
+
 //print_r($_GET); exit();
 
 if(@$_GET['action'] == 'recent')
@@ -111,6 +112,7 @@ if(@$_GET['action'] == 'recent')
 	exit();
 }
 
+
 if(@$_GET['action'] == 'unreadreplies')
 {
 	$_GET['action'] = 'show_new';
@@ -118,7 +120,8 @@ if(@$_GET['action'] == 'unreadreplies')
 	exit();
 }
 
-if($_SERVER['HTTP_HOST']!='balancer.ru' || !preg_match("!^/forum!", $_SERVER['REQUEST_URI']))
+
+if($_SERVER['HTTP_HOST'] != 'balancer.ru' || !preg_match("!^/forum!", $_SERVER['REQUEST_URI']))
 {
 	include("viewcat.php");
 	exit();
@@ -139,7 +142,6 @@ else
 		$subforums[$iid] = get_subforums_text(punbb_get_all_subforums($iid));
 	$ich->set(serialize($subforums), 7200);
 }
-
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);

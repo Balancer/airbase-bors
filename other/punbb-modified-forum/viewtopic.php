@@ -34,8 +34,12 @@ if($pid)
 {
 	$id = intval($cms_db->get("SELECT topic_id FROM posts WHERE id=$pid", false));
 	if(!$id)
+	{
+		include_once('funcs/modules/messages.php');
 		message($lang_common['Bad request']);
-
+		exit();
+	}
+	
 	// Determine on what page the post is located (depending on $pun_user['disp_posts'])
 	$posts = $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted", false);
 
