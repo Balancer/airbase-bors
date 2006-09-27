@@ -65,9 +65,9 @@ $result = $db->query('SELECT moderators FROM '.$db->prefix.'forums WHERE id='.$f
 $moderators = $db->result($result);
 $mods_array = ($moderators != '') ? unserialize($moderators) : array();
 
-if ($pun_user['g_id'] != 5 && $pun_user['g_id'] != PUN_ADMIN && ($pun_user['g_id'] != PUN_MOD || !array_key_exists($pun_user['username'], $mods_array)))
+//if ($pun_user['g_id'] != 5 && $pun_user['g_id'] != PUN_ADMIN && ($pun_user['g_id'] != PUN_MOD || !array_key_exists($pun_user['username'], $mods_array)))
+if ($pun_user['g_id'] != 5 && $pun_user['g_id'] != PUN_ADMIN && $pun_user['g_id'] != PUN_MOD)
 	message($lang_common['No permission']);
-
 
 // Load the misc.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/misc.php';
