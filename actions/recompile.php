@@ -18,19 +18,19 @@
 		if(!empty($GLOBALS['cms']['recompiled_uris'][$uri]))
 			return;
 			
-        $ch = new Cache();
+        $ch = &new Cache();
         $ch->clear_by_id($uri);
         $ch->clear_by_uri($uri);
 
 		if(!empty($GLOBALS['cms']['cache_static']))
 		{
-			$sf = new CacheStaticFile($uri);
+			$sf = &new CacheStaticFile($uri);
 			$sf->save(show_page($uri, false));
 		}
 		
 //		exit("Recompiled $uri");
 
-        $hts = new DataBaseHTS;
+        $hts = &new DataBaseHTS;
 
 		$source = $hts->get_data($uri, 'source');
 		$body   = $hts->get_data($uri, 'body');
