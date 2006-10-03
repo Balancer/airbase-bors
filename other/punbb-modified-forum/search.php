@@ -191,11 +191,11 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 								$cur_word_like = ($db_type == 'pgsql') ? 'ILIKE \''.$cur_word.'\'' : 'LIKE \''.$cur_word.'\'';
 
 								if ($search_in > 0)
-									$sql = 'SELECT id FROM '.$db->prefix.'posts WHERE message '.$cur_word_like;
+									$sql = 'SELECT id FROM '.$db->prefix.'messages WHERE message '.$cur_word_like;
 								else if ($search_in < 0)
 									$sql = 'SELECT p.id FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id WHERE t.subject '.$cur_word_like.' GROUP BY p.id, t.id';
 								else
-									$sql = 'SELECT p.id FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id WHERE p.message '.$cur_word_like.' OR t.subject '.$cur_word_like.' GROUP BY p.id, t.id';
+									$sql = 'SELECT p.id FROM '.$db->prefix.'messages AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id WHERE p.message '.$cur_word_like.' OR t.subject '.$cur_word_like.' GROUP BY p.id, t.id';
 							}
 							else
 							{
@@ -482,7 +482,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		if ($show_as == 'posts')
 		{
 			$substr_sql = ($db_type != 'sqlite') ? 'SUBSTRING' : 'SUBSTR';
-			$sql = 'SELECT p.id AS pid, p.poster AS pposter, p.posted AS pposted, p.poster_id, '.$substr_sql.'(p.message, 1, 1000) AS message, t.id AS tid, t.poster, t.subject, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.forum_id FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id WHERE p.id IN('.$search_results.') ORDER BY '.$sort_by_sql;
+			$sql = 'SELECT p.id AS pid, p.poster AS pposter, p.posted AS pposted, p.poster_id, t.id AS tid, t.poster, t.subject, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.forum_id FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id WHERE p.id IN('.$search_results.') ORDER BY '.$sort_by_sql;
 		}
 		else
 		{
@@ -505,7 +505,8 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 
 		$sql .= ' '.$sort_dir.' LIMIT '.$start_from.', '.$per_page;
 
-		$result = $db->query($sql) or error('Unable to fetch search results', __FILE__, __LINE__, $db->error());
+		$result = $db->query($sql) 
+			or error("Unable to fetch search results: '$sql'", __FILE__, __LINE__, $db->error());
 
 		$search_set = array();
 		while ($row = $db->fetch_assoc($result))
@@ -581,6 +582,9 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 						&& (@$pun_user['last_visit'] > 0 || $search_set[$i]['last_post'] > $pun_user['last_visit'])
 					)
 					$icon = '<div class="icon inew"><div class="nosize">'.$lang_common['New icon'].'</div></div>'."\n";
+
+				$pid = intval($cms_db->get("SELECT id FROM posts WHERE topic_id = ".intval($search_set[$i]['tid'])." ORDER BY posted LIMIT 1"));
+				$search_set[$i]['message'] = substr($cms_db->get("SELECT message FROM messages WHERE id = $pid"), 0, 1000);
 
 				if ($pun_config['o_censoring'] == '1')
 					$search_set[$i]['message'] = censor_words($search_set[$i]['message']);

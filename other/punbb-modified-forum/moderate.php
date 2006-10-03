@@ -112,6 +112,7 @@ if (isset($_GET['tid']))
 
 			// Delete the posts
 			$db->query('DELETE FROM '.$db->prefix.'posts WHERE id IN('.$posts.')') or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
+			$db->query('DELETE FROM '.$db->prefix.'messages WHERE id IN('.$posts.')') or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
 
 			require PUN_ROOT.'include/search_idx.php';
 			strip_search_index($posts);
@@ -203,10 +204,12 @@ if (isset($_GET['tid']))
 	$post_count = 0;	// Keep track of post numbers
 
 	// Retrieve the posts (and their respective poster)
-	$result = $db->query('SELECT u.title, u.num_posts, g.g_id, g.g_user_title, p.id, p.poster, p.poster_id, p.message, p.hide_smilies, p.posted, p.edited, p.edited_by FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'users AS u ON u.id=p.poster_id INNER JOIN '.$db->prefix.'groups AS g ON g.g_id=u.group_id WHERE p.topic_id='.$tid.' ORDER BY p.id LIMIT '.$start_from.','.$pun_user['disp_posts'], true) or error('Unable to fetch post info', __FILE__, __LINE__, $db->error());
+	$result = $db->query('SELECT u.title, u.num_posts, g.g_id, g.g_user_title, p.id, p.poster, p.poster_id, p.hide_smilies, p.posted, p.edited, p.edited_by FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'users AS u ON u.id=p.poster_id INNER JOIN '.$db->prefix.'groups AS g ON g.g_id=u.group_id WHERE p.topic_id='.$tid.' ORDER BY p.id LIMIT '.$start_from.','.$pun_user['disp_posts'], true) or error('Unable to fetch post info', __FILE__, __LINE__, $db->error());
 
 	while ($cur_post = $db->fetch_assoc($result))
 	{
+		$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
+		
 		$post_count++;
 
 		// If the poster is a registered user.
@@ -231,6 +234,8 @@ if (isset($_GET['tid']))
 		// Switch the background color for every message.
 		$bg_switch = ($bg_switch) ? $bg_switch = false : $bg_switch = true;
 		$vtbg = ($bg_switch) ? ' roweven' : ' rowodd';
+
+		$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
 
 		// Perform the main parsing of the message (BBCode, smilies, censor words etc)
 		$cur_post['message'] = parse_message($cur_post['message'], $cur_post['hide_smilies']);
@@ -436,8 +441,10 @@ if (isset($_REQUEST['delete_topics']) || isset($_POST['delete_topics_comply']))
 		if ($post_ids != '')
 			strip_search_index($post_ids);
 
-		// Delete posts
+		// Delete posts "
+		$posts = join(",", $cms_db->get_array("SELECT id FROM posts WHERE topic_id IN ($topic_id)"));
 		$db->query('DELETE FROM '.$db->prefix.'posts WHERE topic_id IN('.$topics.')') or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
+		$db->query('DELETE FROM '.$db->prefix.'messages WHERE id IN('.$posts.')') or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
 
 		update_forum($fid);
 

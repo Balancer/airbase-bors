@@ -63,7 +63,7 @@ $temp = serialize($temp);
 $search_id = mt_rand(1, 2147483647);
 //set results 
 $sort_by_sql = 't.last_post';
-$sql = 'SELECT t.id AS tid, t.poster, t.subject, t.posted, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.closed, t.forum_id FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id WHERE t.id IN('.$search_results.') GROUP BY t.id, t.poster, t.subject, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.closed, t.forum_id'.$group_by_sql.' ORDER BY '.$sort_by_sql;
+$sql = 'SELECT p.id, t.id AS tid, t.poster, t.subject, t.posted, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.closed, t.forum_id FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id WHERE t.id IN('.$search_results.') GROUP BY t.id, t.poster, t.subject, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.closed, t.forum_id'.$group_by_sql.' ORDER BY '.$sort_by_sql;
 $result = $db->query($sql) or error('Unable to fetch search results', __FILE__, __LINE__, $db->error());
 $search_set = array();
 while ($row = $db->fetch_assoc($result))
@@ -82,6 +82,8 @@ echo '			<copyright>© '.$title .'</copyright>'."\n";
 echo '			<lastBuildDate>'.date("r").'</lastBuildDate>'."\n";
 //loop through items
 for ($i = 0; $i < count($search_set); ++$i) {
+	$search_set[$i]['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($search_set[$i]['id']));
+
 echo '			<item>'."\n"; 
 echo '			<title> '.$search_set[$i]['subject'].' </title> '."\n";
 				if ($search_set[$i]['question'] == "")

@@ -369,7 +369,11 @@ function delete_topic($topic_id)
 		strip_search_index($post_ids);
 
 		// Delete posts in topic
+		$cms_db = &new DataBase('punbb');
+		$posts = join(",", $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$topic_id"));
 		$db->query('DELETE FROM '.$db->prefix.'posts WHERE topic_id='.$topic_id) or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
+		$db->query("DELETE FROM {$db->prefix}messages WHERE id IN ($posts)") 
+			or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
 	}
 
 	// Delete any subscriptions for this topic
@@ -390,6 +394,7 @@ function delete_post($post_id, $topic_id)
 
 	// Delete the post
 	$db->query('DELETE FROM '.$db->prefix.'posts WHERE id='.$post_id) or error('Unable to delete post', __FILE__, __LINE__, $db->error());
+	$db->query('DELETE FROM '.$db->prefix.'messages WHERE id='.$post_id) or error('Unable to delete post', __FILE__, __LINE__, $db->error());
 
 	strip_search_index($post_id);
 
@@ -472,6 +477,9 @@ function get_title($user)
 		}
 	}
 
+	$cdb = &new DataBase('punbb');
+	$group  = $cdb->get("SELECT * FROM groups WHERE g_id = ".intval($user['group_id']));
+
 	// If the user has a custom title
 	if ($user['title'] != '')
 		$user_title = pun_htmlspecialchars($user['title']);
@@ -479,10 +487,10 @@ function get_title($user)
 	else if (in_array(strtolower($user['username']), $ban_list))
 		$user_title = $lang_common['Banned'];
 	// If the user group has a default user title
-	else if ($user['g_user_title'] != '')
-		$user_title = pun_htmlspecialchars($user['g_user_title']);
+	else if ($group['g_user_title'] != '')
+		$user_title = pun_htmlspecialchars($group['g_user_title']);
 	// If the user is a guest
-	else if ($user['g_id'] == PUN_GUEST)
+	else if ($group['g_id'] == PUN_GUEST)
 		$user_title = $lang_common['Guest'];
 	else
 	{
