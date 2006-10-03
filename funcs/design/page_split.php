@@ -23,7 +23,7 @@
 				
 				$p = $uri;
 				if($i > 1)
-					$p .= "~page$i/";
+					$p .= "page$i/";
 			
 				$pages[] = "<a href=\"$p$q\" class=\"".(($i==$current_page)?'current_page':'select_page')."\">$i</a>";
 			}
@@ -45,4 +45,3 @@
 
 		return false;
 	}
-?>

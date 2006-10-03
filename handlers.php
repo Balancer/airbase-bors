@@ -72,8 +72,16 @@ function hts_data_prehandler_add($regexp, $data_key, $func)
 		echo "<small>Add pre function $func to uri like '$regexp' for key $data_key</small><br />";
 
 	if(!function_exists($func))
-		$func = create_function('$uri, $m', "return \"".addslashes($func)."\";");
-
+	{
+		if(preg_match("!^DB:(.+)$!", $func, $m))
+		{
+			list($db, $table, $id, $field) = split(".", $m[1]);
+			$func = create_function('$uri, $m', "\$db = &new DataBase('$db'); return \$db->get(\"SELECT $field FROM $table WHERE $id='\".addslashes(\$uri).\"'\");");
+		}
+		else
+			$func = create_function('$uri, $m', "return \"".addslashes($func)."\";");
+	}
+	
 	$GLOBALS['cms']['data_prehandler'][$data_key][$regexp] = $func;
 	krsort($GLOBALS['cms']['data_prehandler'][$data_key]);
 }
@@ -145,7 +153,7 @@ function hts_data_prehandler($pattern, $data)
 	}
 
 	if (empty ($data['parent']))
-		hts_data_prehandler_add($pattern, 'parent', create_function('$uri, $m', 'return array($m[1]);'));
+		hts_data_prehandler_add($pattern, 'parent', create_function('$uri, $m', 'return array(empty($m[1]) ? $GLOBALS["cms"]["plugin_parent_uri"] : $m[1]);'));
 
 	if (empty ($data['nav_name']))
 		hts_data_prehandler_add($pattern, 'nav_name', create_function('$uri, $m', '$hts = new DataBaseHTS(); return strtolower($hts->get_data($uri, "title"));'));
