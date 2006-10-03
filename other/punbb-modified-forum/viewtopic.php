@@ -35,9 +35,8 @@ if($pid)
 	$id = intval($cms_db->get("SELECT topic_id FROM posts WHERE id=$pid", false));
 	if(!$id)
 	{
-		include_once('funcs/modules/messages.php');
+		require PUN_ROOT.'include/common.php';
 		message($lang_common['Bad request']);
-		exit();
 	}
 	
 	// Determine on what page the post is located (depending on $pun_user['disp_posts'])
@@ -76,6 +75,7 @@ if ($id < 1 && $pid < 1)
 
 // Load the viewtopic.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/topic.php';
+require PUN_ROOT.'lang/'.$pun_user['language'].'/forum.php';
 
 // If action=new, we redirect to the first new post (if any)
 if ($action == 'new' && !$pun_user['is_guest'])
@@ -142,7 +142,10 @@ $is_coordinator = $is_admmod || $pun_user['g_id'] == 5 || $pun_user['g_id'] == P
 if ($cur_topic['closed'] == '0')
 {
 	if (($cur_topic['post_replies'] == '' && $pun_user['g_post_replies'] == '1') || $cur_topic['post_replies'] == '1' || $is_admmod)
-		$post_link = "<a href=\"{$pun_config['root_uri']}/post.php?tid=$id\">".$lang_topic['Post reply'].'</a>';
+		$post_link = "[
+			<a href=\"{$pun_config['root_uri']}/post.php?tid=$id\">{$lang_topic['Post reply']}</a> |
+			<a href=\"{$pun_config['root_uri']}/post.php?fid={$cur_topic['forum_id']}\">{$lang_forum['Post topic']}</a>
+]";
 	else
 		$post_link = '&nbsp;';
 }
@@ -285,22 +288,37 @@ require PUN_ROOT.'include/parser.php';
 $bg_switch = true;	// Used for switching background color in posts
 $post_count = 0;	// Keep track of post numbers
 
-// Retrieve the posts (and their respective poster/online status)
-//$result = $db->query('SELECT u.email, u.title, u.url, u.location, u.use_avatar, u.signature, u.email_setting, u.num_posts, u.registered, u.admin_note, p.id, p.poster AS username, p.poster_id, p.poster_ip, p.poster_email, p.message, p.hide_smilies, p.posted, p.edited, p.edited_by, g.g_id, g.g_user_title, o.user_id AS is_online FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'users AS u ON u.id=p.poster_id INNER JOIN '.$db->prefix.'groups AS g ON g.g_id=u.group_id LEFT JOIN '.$db->prefix.'online AS o ON (o.user_id=u.id AND o.user_id!=1 AND o.idle=0) WHERE p.topic_id='.$id.' ORDER BY p.id LIMIT '.$start_from.','.$pun_user['disp_posts'], true)
-//	or error('Unable to fetch post info', __FILE__, __LINE__, $db->error());
-$q = 'SELECT u.email, u.title, u.url, u.location, u.use_avatar, u.signature, u.email_setting, u.num_posts, u.registered, u.admin_note, p.id, p.poster AS username, p.poster_id, p.poster_ip, p.poster_email, p.message, p.hide_smilies, p.posted, p.edited, p.edited_by, g.g_id, g.g_user_title, o.user_id AS is_online FROM '.$db->prefix.'posts AS p LEFT JOIN '.$db->prefix.'users AS u ON u.id=p.poster_id LEFT JOIN '.$db->prefix.'groups AS g ON g.g_id=u.group_id LEFT JOIN '.$db->prefix.'online AS o ON (p.poster_id IS NOT NULL AND o.user_id=u.id AND o.user_id!=1 AND o.idle=0) WHERE p.topic_id='.$id.' ORDER BY p.id LIMIT '.$start_from.','.$pun_user['disp_posts'];
-//echo $q;
+// Retrieve the posts
+$q = "
+	SELECT 
+		p.id, 
+		p.poster AS username, 
+		p.poster_id, 
+		p.poster_ip, 
+		p.poster_email, 
+		p.hide_smilies, 
+		p.posted, 
+		p.edited, 
+		p.edited_by
+	FROM {$db->prefix}posts AS p 
+	WHERE p.topic_id=$id 
+	ORDER BY p.id 
+	LIMIT $start_from, {$pun_user['disp_posts']}";
+
 $result   = $db->query($q, false) 
 	or error('Unable to fetch post info', __FILE__, __LINE__, $db->error()); //Attachment Mod, changed the true to false...
 
+$cdb = &new DataBase('punbb');
+
 while ($cur_post = $db->fetch_assoc($result))
 {
+	$poster = $cdb->get("SELECT * FROM users  WHERE id = ".intval($cur_post['poster_id']));
+
 	$post_count++;
 	$user_avatar = '';
 	$user_info = array();
 	$user_contacts = array();
 	$post_actions = array();
-	$is_online = '';
 	$signature = '';
 
 	// If the poster is a registered user.
@@ -308,15 +326,12 @@ while ($cur_post = $db->fetch_assoc($result))
 	{
 		$username = pun_htmlspecialchars($cur_post['username']);
 		$userlink = "<a href=\"{$pun_config['root_uri']}/profile.php?id={$cur_post['poster_id']}\">".$username.'</a>';
-		$user_title = get_title($cur_post);
+		$user_title = get_title($poster);
 
 		if ($pun_config['o_censoring'] == '1')
 			$user_title = censor_words($user_title);
 
-		// Format the online indicator
-		$is_online = ($cur_post['is_online'] == $cur_post['poster_id']) ? '<strong>'.$lang_topic['Online'].'</strong>' : $lang_topic['Offline'];
-
-		if ($pun_config['o_avatars'] == '1' && $cur_post['use_avatar'] == '1' && ($pun_user['show_avatars'] != '0' || $pun_user['id'] <= 1))
+		if ($pun_config['o_avatars'] == '1' && $poster['use_avatar'] == '1' && ($pun_user['show_avatars'] != '0' || $pun_user['id'] <= 1))
 		{
 			if ($img_size = @getimagesize($pun_config['o_avatars_dir'].'/'.$cur_post['poster_id'].'.gif'))
 				$user_avatar = "<img src=\"{$pun_config['root_uri']}/".$pun_config['o_avatars_dir'].'/'.$cur_post['poster_id'].'.gif" '.$img_size[3].' alt="" />';
@@ -331,35 +346,35 @@ while ($cur_post = $db->fetch_assoc($result))
 		// We only show location, register date, post count and the contact links if "Show user info" is enabled
 		if ($pun_config['o_show_user_info'] == '1')
 		{
-			if ($cur_post['location'] != '')
+			if ($poster['location'] != '')
 			{
 				if ($pun_config['o_censoring'] == '1')
-					$cur_post['location'] = censor_words($cur_post['location']);
+					$poster['location'] = censor_words($poster['location']);
 
-				$user_info[] = '<dd>'.$lang_topic['From'].': '.pun_htmlspecialchars($cur_post['location']);
+				$user_info[] = '<dd>'.$lang_topic['From'].': '.pun_htmlspecialchars($poster['location']);
 			}
 
-			$user_info[] = '<dd>'.$lang_common['Registered'].': '.date($pun_config['o_date_format'], $cur_post['registered']);
+			$user_info[] = '<dd>'.$lang_common['Registered'].': '.date($pun_config['o_date_format'], $poster['registered']);
 
 			if ($pun_config['o_show_post_count'] == '1' || $pun_user['g_id'] < PUN_GUEST)
-				$user_info[] = '<dd>'.$lang_common['Posts'].': '.$cur_post['num_posts'];
+				$user_info[] = '<dd>'.$lang_common['Posts'].': '.$poster['num_posts'];
 
 			// Now let's deal with the contact links (E-mail and URL)
-			if (($cur_post['email_setting'] == '0' && !$pun_user['is_guest']) || $pun_user['g_id'] < PUN_GUEST)
-				$user_contacts[] = "<a href=\"mailto:{$cur_post['email']}\">{$lang_common['E-mail']}</a>";
-			else if ($cur_post['email_setting'] == '1' && !$pun_user['is_guest'])
+			if (($poster['email_setting'] == '0' && !$pun_user['is_guest']) || $pun_user['g_id'] < PUN_GUEST)
+				$user_contacts[] = "<a href=\"mailto:{$poster['email']}\">{$lang_common['E-mail']}</a>";
+			else if ($poster['email_setting'] == '1' && !$pun_user['is_guest'])
 				$user_contacts[] = "<a href=\"{$pun_config['root_uri']}/misc.php?email={$cur_post['poster_id']}\">{$lang_common['E-mail']}</a>";
 
-			if ($cur_post['url'] != '' && $cur_post['url'] != 'http://')
-				$user_contacts[] = '<a href="'.pun_htmlspecialchars($cur_post['url']).'">'.$lang_topic['Website'].'</a>';
+			if ($poster['url'] != '' && $poster['url'] != 'http://')
+				$user_contacts[] = '<a href="'.pun_htmlspecialchars($poster['url']).'">'.$lang_topic['Website'].'</a>';
 		}
 
 		if ($pun_user['g_id'] < PUN_GUEST)
 		{
 			$user_info[] = "<dd>IP: <a href=\"{$pun_config['root_uri']}/moderate.php?get_host={$cur_post['id']}\">".$cur_post['poster_ip'].'</a>';
 
-			if ($cur_post['admin_note'] != '')
-				$user_info[] = '<dd>'.$lang_topic['Note'].': <strong>'.pun_htmlspecialchars($cur_post['admin_note']).'</strong>';
+			if ($poster['admin_note'] != '')
+				$user_info[] = '<dd>'.$lang_topic['Note'].': <strong>'.pun_htmlspecialchars($poster['admin_note']).'</strong>';
 		}
 		
 		if($is_coordinator)
@@ -371,7 +386,7 @@ while ($cur_post = $db->fetch_assoc($result))
 	else
 	{
 		$userlink = $username = pun_htmlspecialchars($cur_post['username']);
-		$user_title = get_title($cur_post);
+		$user_title = get_title($poster);
 
 		if ($pun_user['g_id'] < PUN_GUEST)
 			$user_info[] = "<dd>IP: <a href=\"{$pun_config['root_uri']}/moderate.php?get_host={$cur_post['id']}\">".$cur_post['poster_ip'].'</a>';
@@ -408,12 +423,13 @@ while ($cur_post = $db->fetch_assoc($result))
 	$bg_switch = ($bg_switch) ? $bg_switch = false : $bg_switch = true;
 	$vtbg = ($bg_switch) ? ' roweven' : ' rowodd';
 
+	$message = $cdb->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
 
 	// Perform the main parsing of the message (BBCode, smilies, censor words etc)
-	$cur_post['message'] = parse_message($cur_post['message'], $cur_post['hide_smilies']);
+	$cur_post['message'] = parse_message($message, $cur_post['hide_smilies']);
 
 	// Do signature parsing/caching
-	if ($cur_post['signature'] != '' && $pun_user['show_sig'] != '0')
+	if ($poster['signature'] != '' && $pun_user['show_sig'] != '0')
 	{
 		if (isset($signature_cache[$cur_post['poster_id']]))
 			$signature = $signature_cache[$cur_post['poster_id']];
@@ -424,22 +440,22 @@ while ($cur_post = $db->fetch_assoc($result))
 
 			$ch = new Cache();
 			$type = "lcml-compiled";
-			$key = md5($cur_post['signature']);
+			$key = md5($poster['signature']);
 			if(!($signature = $ch->get($type, $key)))
 			{
-				$GLOBALS['cms']['page_path'] = '/fl/p'.@$cur_post['id'];
+				$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = '/forum/post/'.intval(@$cur_post['id'])."/";
 			
-				$signature = $ch->set($type, $key, lcml($cur_post['signature'], 
+				$signature = $ch->set($type, $key, lcml($poster['signature'], 
 					array(
 						'cr_type' => 'save_cr',
 						'forum_type' => 'punbb',
-						'forum_base_uri' => 'http://balancer.ru/forums',
+						'forum_base_uri' => 'http://balancer.ru/forum',
 						'sharp_not_comment' => true,
 						'html_disable' => true,
 				)));
 			}
 
-			$signature_cache[$cur_post['poster_id']] = $signature;
+			$signature_cache[$poster['id']] = $signature;
 		}
 	}
 
@@ -448,25 +464,28 @@ while ($cur_post = $db->fetch_assoc($result))
 	$attach_output = '';
 	$attach_num = 0;
 	// Check if this post has any attachments
-	$result_attach = $db->query('SELECT af.id, af.filename, af.size, af.downloads, af.location  FROM '.$db->prefix.'attach_2_files AS af WHERE af.post_id='.intval($cur_post['id'])) 
-		or error('Unable to fetch if there were any attachments to the post', __FILE__, __LINE__, $db->error());
+	$result_attach = $db->query("
+		SELECT 
+			af.id, 
+			af.filename, 
+			af.size, 
+			af.downloads, 
+			af.location  
+		FROM {$db->prefix}attach_2_files AS af 
+		WHERE af.post_id=".intval($cur_post['id']))
+			or error('Unable to fetch if there were any attachments to the post', __FILE__, __LINE__, $db->error());
+
 	$attach_num = $db->num_rows($result_attach);
-	if($attach_num > 0){
-//		if($pun_user['g_id']==PUN_ADMIN)
-			$attach_allow_download=true;
-//		else{ 		//fetch the rules of the forum, and check so that the user is allowed to download.
-//			$result_attach_two = $db->query('SELECT ar.rules FROM '.$db->prefix.'attach_2_rules AS ar WHERE ar.group_id=\''.intval($pun_user['group_id']).'\' AND ar.forum_id='.intval($cur_topic['forum_id']).' LIMIT 1')
-//				or error('Unable to fetch rules for the attachments', __FILE__, __LINE__, $db->error());
-//			if($db->num_rows($result_attach_two)==1){
-//				list($attach_rules)=$db->fetch_row($result_attach_two);
-//				$attach_allow_download = attach_rules($attach_rules,ATTACH_DOWNLOAD);
-//			}
-//		}
-		if($attach_allow_download){//check if the user is allowed to download it.
+	if($attach_num > 0)
+	{
+		$attach_allow_download=true;
+
+		if($attach_allow_download)
+		{	//check if the user is allowed to download it.
 			$attach_output .= $lang_attach['Attachments:'].' ';
-			while(list($attachment_id, $attachment_filename, $attachment_size, $attachment_downloads, $location)=$db->fetch_row($result_attach)){
+			while(list($attachment_id, $attachment_filename, $attachment_size, $attachment_downloads, $location)=$db->fetch_row($result_attach))
+			{
 				$attachment_extension=attach_get_extension($attachment_filename);
-//				$attach_output .= '<br />'."\n\t\t\t\t\t\t".attach_icon($attachment_extension)." <a href=\"{$pun_config['root_uri']}/attachment.php?item=$attachment_id\">".$attachment_filename.'</a>, '.$lang_attach['Size:'].' '.number_format($attachment_size).' '.$lang_attach['bytes'].', '.$lang_attach['Downloads:'].' '.number_format($attachment_downloads);
 				$attach_output .= "<div class=\"codebox\">".attach_icon($attachment_extension)." <a href=\"{$pun_config['root_uri']}/attachment.php?item=$attachment_id\">$attachment_filename</a>, {$lang_attach['Size:']} ".number_format($attachment_size).' '.$lang_attach['bytes'].', '.$lang_attach['Downloads:'].' '.number_format($attachment_downloads);
 				if(preg_match("!(jpe?g|png|gif)!i", $attachment_extension))
 					$attach_output .= "<br /><a href=\"{$pun_config['root_uri']}/attachment.php?item=$attachment_id\"><img src=\"http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/468x468/$1", $location)."\"></a>";
@@ -475,7 +494,6 @@ while ($cur_post = $db->fetch_assoc($result))
 		}
 	}
 	// Attachment Mod Block End
-
 
 	$user_warn_count	= intval($cms_db->get("SELECT COUNT(*) FROM warnings WHERE user_id = ".intval($cur_post['poster_id'])." AND time > ".(time()-30*86400)));
 	$user_warn = "";
@@ -523,7 +541,6 @@ while ($cur_post = $db->fetch_assoc($result))
 	foreach($user_contacts as $ui)
 		echo "<li>$ui</li>\n";
 ?>
-<? if ($cur_post['poster_id'] > 1) echo "<li><b>$is_online</b></li>\n";?>
 </ul>
 <div style="border-bottom-style: dashed; border-bottom-width: 1px; margin-bottom: 8px;"></div>
 					</div>

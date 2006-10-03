@@ -72,8 +72,10 @@
 						sleep(5);
 					$nnn++;
 				}
+
 				if(!$this->dbh)
-					die (__FILE__.':'.__LINE__." Query failed, error ".mysql_errno().": ".mysql_error()."<BR />");
+					echolog(__FILE__.':'.__LINE__." Query failed, error ".mysql_errno().": ".mysql_error()."<BR />", 1);
+
 				mysql_select_db($base,$this->dbh)
 					or echolog(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />", 1);
 

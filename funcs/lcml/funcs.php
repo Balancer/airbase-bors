@@ -14,13 +14,19 @@
 
     function save_format($txt)
     {
-        $txt = str_replace(array(" ","\n"),array("<!--save_space-->","<!--save_cr-->"),$txt);
+        $txt = str_replace(
+			array(" ","\n","<",">"),
+			array("---save_space---","---save_cr---","---less---","---great---"),
+			$txt);
         return $txt;
     }
 
     function restore_format($txt)
     {
-        $txt = str_replace(array("<!--save_space-->","<!--save_cr-->"), array(" ","\n"), $txt);
+        $txt = str_replace(
+			array("---save_space---","---save_cr---","---less---","---great---"), 
+			array(" ","\n","<",">"), 
+			$txt);
         return $txt;
     }
 

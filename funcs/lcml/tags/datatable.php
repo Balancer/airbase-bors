@@ -25,6 +25,9 @@
 		foreach($params as $p)
 			$p_list[] = "'".addslashes($p)."'";
 				
+		if(!$p_list)
+			return ec("Объект не найден");
+			
 		$p_list = join(",", $p_list);
 
 		$out = "<table class=\"btab\" cellSpacing=\"0\">";

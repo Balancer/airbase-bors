@@ -130,6 +130,8 @@ if($_SERVER['HTTP_HOST'] != 'balancer.ru' || !preg_match("!^/forum!", $_SERVER['
 define('PUN_ROOT', './');
 require PUN_ROOT.'include/common.php';
 
+//print_r($pun_config);
+
 include_once("funcs/Cache.php");
 include_once("include/subforums.php");
 $ich = new Cache();

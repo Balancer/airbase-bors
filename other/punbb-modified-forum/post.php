@@ -81,6 +81,12 @@ if (isset($_POST['form_sent']))
 	if (!$pun_user['is_guest'] && !isset($_POST['preview']) && $pun_user['last_post'] != '' && (time() - $pun_user['last_post']) < $pun_user['g_post_flood'])
 		$errors[] = $lang_post['Flood start'].' '.$pun_user['g_post_flood'].' '.$lang_post['flood end'];
 
+	if(!empty($_POST['as_new_post']) && $tid)
+	{
+		$fid = $cms_db->get("SELECT forum_id FROM topics WHERE id = $tid");
+		$tid = 0;
+	}
+	
 	// If it's a new topic
 	if ($fid)
 	{
@@ -178,7 +184,7 @@ if (isset($_POST['form_sent']))
 			if (!$pun_user['is_guest'])
 			{
 				// Insert the new post
-				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_id, poster_ip, message, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$db->escape($message).'\', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
+				$db->query("INSERT INTO {$db->prefix}posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES('".$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 				$new_pid = $db->insert_id();
 
 				// To subscribe or not to subscribe, that ...
@@ -193,9 +199,11 @@ if (isset($_POST['form_sent']))
 			{
 				// It's a guest. Insert the new post
 				$email_sql = ($pun_config['p_force_guest_email'] == '1' || $email != '') ? '\''.$email.'\'' : 'NULL';
-				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, message, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$db->escape($message).'\', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
+				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 				$new_pid = $db->insert_id();
 			}
+
+			$cms_db->query("INSERT INTO messages (id, message) VALUES ($new_pid, '".addslashes($message)."')");
 
 			// Count number of replies in the topic
 			$result = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'posts WHERE topic_id='.$tid) or error('Unable to fetch post count for topic', __FILE__, __LINE__, $db->error());
@@ -296,15 +304,17 @@ if (isset($_POST['form_sent']))
 					$db->query('INSERT INTO '.$db->prefix.'subscriptions (user_id, topic_id) VALUES('.$pun_user['id'].' ,'.$new_tid.')') or error('Unable to add subscription', __FILE__, __LINE__, $db->error());
 
 				// Create the post ("topic post")
-				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_id, poster_ip, message, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$db->escape($message).'\', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
+				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}
 			else
 			{
 				// Create the post ("topic post")
 				$email_sql = ($pun_config['p_force_guest_email'] == '1' || $email != '') ? '\''.$email.'\'' : 'NULL';
-				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, message, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$db->escape($message).'\', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
+				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}
 			$new_pid = $db->insert_id();
+
+			$cms_db->query("INSERT INTO messages (id, message) VALUES ($new_pid, '".addslashes($message)."')");
 
 			// Update the topic with last_post_id
 			$db->query('UPDATE '.$db->prefix.'topics SET last_post_id='.$new_pid.' WHERE id='.$new_tid) or error('Unable to update topic', __FILE__, __LINE__, $db->error());
@@ -366,11 +376,8 @@ if ($tid)
 		if ($qid < 1)
 			message($lang_common['Bad request']);
 
-		$result = $db->query('SELECT poster, message FROM '.$db->prefix.'posts WHERE id='.$qid.' AND topic_id='.$tid) or error('Unable to fetch quote info', __FILE__, __LINE__, $db->error());
-		if (!$db->num_rows($result))
-			message($lang_common['Bad request']);
-
-		list($q_poster, $q_message) = $db->fetch_row($result);
+		$q_poster  = $cms_db->get("SELECT poster FROM posts WHERE id=$qid");
+		$q_message = $cms_db->get("SELECT message FROM messages WHERE id=$qid");
 
 		$q_message = str_replace('[img]', '[url]', $q_message);
 		$q_message = str_replace('[/img]', '[/url]', $q_message);
@@ -503,16 +510,19 @@ if ($pun_user['is_guest'])
 	$email_label = ($pun_config['p_force_guest_email'] == '1') ? '<strong>'.$lang_common['E-mail'].'</strong>' : $lang_common['E-mail'];
 	$email_form_name = ($pun_config['p_force_guest_email'] == '1') ? 'req_email' : 'email';
 
-?>						<label class="conl"><strong><?php echo $lang_post['Guest name'] ?></strong><br /><input type="text" name="req_username" value="<?php if (isset($_POST['req_username'])) echo pun_htmlspecialchars($username); ?>" size="25" maxlength="25" tabindex="<?php echo $cur_index++ ?>" /><br /></label>
-						<label class="conl"><?php echo $email_label ?><br /><input type="text" name="<?php echo $email_form_name ?>" value="<?php if (isset($_POST[$email_form_name])) echo pun_htmlspecialchars($email); ?>" size="50" maxlength="50" tabindex="<?php echo $cur_index++ ?>" /><br /></label>
+?>						<label class="conl"><strong><?php echo $lang_post['Guest name'] ?></strong><br /><input type="text" name="req_username" value="<?php if (isset($_POST['req_username'])) echo pun_htmlspecialchars($username); /*"*/ ?>" size="25" maxlength="25" tabindex="<?php echo $cur_index++; /*"*/ ?>" /><br /></label>
+						<label class="conl"><?php echo $email_label;/*"*/ ?><br /><input type="text" name="<?php echo $email_form_name ?>" value="<?php if (isset($_POST[$email_form_name])) echo pun_htmlspecialchars($email); ?>" size="50" maxlength="50" tabindex="<?php echo $cur_index++;/*"*/ ?>" /><br /></label>
 						<div class="clearer"></div>
 <?php
 
 }
 
 if ($fid): ?>
-						<label><strong><?php echo $lang_common['Subject'] ?></strong><br /><input class="longinput" type="text" name="req_subject" value="<?php if (isset($_POST['req_subject'])) echo pun_htmlspecialchars($subject); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" /><br /></label>
-<?php endif; ?>						<label><strong><?php echo $lang_common['Message'] ?></strong><br />
+						<label><strong><?php echo $lang_common['Subject'] ?></strong><br /><input class="longinput" type="text" name="req_subject" value="<?php if (isset($_POST['req_subject'])) echo pun_htmlspecialchars($subject); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++;/*"*/ ?>" /><br /></label>
+<? else: ?>
+						<div id="here_subject"></div>
+<?php endif; ?>
+						<label><strong><?php echo $lang_common['Message'] ?></strong><br />
 						<textarea name="req_message" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo isset($_POST['req_message']) ? pun_htmlspecialchars($message) : (isset($quote) ? $quote : ''); ?></textarea><br /></label>
 						<ul class="bblinks">
 							<li><a href="<?echo $pun_config['root_uri'];?>/help.php#bbcode" onclick="window.open(this.href); return false;"><?php echo $lang_common['BBCode'] ?></a>: <?php echo ($pun_config['p_message_bbcode'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
@@ -533,7 +543,7 @@ if($attach_allowed){
 					<div class="infldset">
 						<div class="rbox">
 							<input type="hidden" name="MAX_FILE_SIZE" value="<?php print $attach_size; ?>" /><input type="file" name="attached_file" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
-							<?php echo $lang_attach['Note'] ?>
+							<?php echo $lang_attach['Note'];/*"*/ ?>
 						</div>
 					</div>
 				</fieldset>
@@ -549,6 +559,9 @@ if (!$pun_user['is_guest'])
 
 	if ($pun_config['o_subscriptions'] == '1')
 		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['subscribe']) ? ' checked="checked"' : '').' />'.$lang_post['Subscribe'];
+
+//	$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTMLval = this.checked ? '' : '".addslashes("<label><strong>Заголовок</strong><br /><input class=\"longinput\" type=\"text\" name=\"req_subject\" value=\"\" size=\"80\" maxlength=\"255\" tabindex=\"1\" /><br /></label>")."'\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
+	$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTML = this.checked ? '".addslashes("<label><strong>{$lang_common['Subject']}</strong><br /><input class='longinput' type='text' name='req_subject' value='{$_POST['req_subject']}' size='80' maxlength='255' /><br /></label>")."' : ''\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
 }
 else if ($pun_config['o_smilies'] == '1')
 	$checkboxes[] = '<label><input type="checkbox" name="hide_smilies" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['hide_smilies']) ? ' checked="checked"' : '').' />'.$lang_post['Hide smilies'];
@@ -585,7 +598,7 @@ if ($tid && $pun_config['o_topic_review'] != '0')
 {
 	require_once 'include/parser.php';
 
-	$result = $db->query('SELECT poster, message, hide_smilies, posted FROM '.$db->prefix.'posts WHERE topic_id='.$tid.' ORDER BY id DESC LIMIT '.$pun_config['o_topic_review']) or error('Unable to fetch topic review', __FILE__, __LINE__, $db->error());
+	$result = $db->query('SELECT id, poster, hide_smilies, posted FROM '.$db->prefix.'posts WHERE topic_id='.$tid.' ORDER BY id DESC LIMIT '.$pun_config['o_topic_review']) or error('Unable to fetch topic review', __FILE__, __LINE__, $db->error());
 
 ?>
 
@@ -599,6 +612,8 @@ if ($tid && $pun_config['o_topic_review'] != '0')
 
 	while ($cur_post = $db->fetch_assoc($result))
 	{
+		$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
+
 		// Switch the background color for every message.
 		$bg_switch = ($bg_switch) ? $bg_switch = false : $bg_switch = true;
 		$vtbg = ($bg_switch) ? ' roweven' : ' rowodd';

@@ -10,7 +10,7 @@ $lang_attach = array(
 'Downloads:'			=>	'Скачано:',	// Used in viewtopic to show number of downloads.
 
 //post.php
-'Attachment'			=>	'Прикрепленные файлы',	// Used in post the legend name
+'Attachment'			=>	'Прикрепленные файлы (не более <b>8Мб</b>)',	// Used in post the legend name
 'Note'					=>	'Примечание: при использовании кнопки "Просмотр" путь к файлу не сохраняется, вам придется снова его ввести.',	//Used in post to display a note under the attachment field
 
 //edit.php
@@ -22,6 +22,6 @@ $lang_attach = array(
 
 
 // attach.php
-'Image view - Attachment Mod'	=>	'Прикрепленные файлы',	// Used in attach.php, header on the Image view frame.
-'Download:'						=>	'Скачано:'						// Used in attach.php, where one can click the filename to download.
+'Image view - Attachment Mod'	=>	'',	// Used in attach.php, header on the Image view frame.
+'Download:'						=>	'Скачать:'						// Used in attach.php, where one can click the filename to download.
 );

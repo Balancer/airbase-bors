@@ -15,11 +15,9 @@
 
         $stitle = join(" ", $title);
 
-        $ch->clear_check("forum_titles_like:$limit", $stitle,86400+rand(0,86400));
+//        $ch->clear_check("forum_titles_like:$limit", $stitle,86400+rand(0,86400));
         if($ch->get("forum_titles_like:$limit", $stitle))
-        {
             return $ch->last();
-        }
 
         $out = NULL;
 

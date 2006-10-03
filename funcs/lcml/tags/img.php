@@ -152,7 +152,9 @@
 //				return "__$img_ico_uri:list($width, $height, $type, $attr)__";
 
 				if(!intval($width) || !intval($height))
-					return lcml("Get image [url]{$params['url']}[/url] error [spoiler|details]".
+					return "<a href=\"{$params['url']}\">{$params['url']}</a>";
+					
+					/*lcml("Get image [url]{$params['url']}[/url] error [spoiler|details]".
 "File: ".__FILE__." line: ".__LINE__."[br]\n".
 "uri=_{$uri}_[br]\n".
 "path=_{$path}_[br]\n".
@@ -160,7 +162,7 @@
 "img_ico_uri=_{$img_ico_uri}_[br]\n".
 "path=$path[br]\n".
 ((!empty($response) && PEAR::isError($response))?("responce=".$response->getMessage()."\n"):'').
-"[/spoiler]\n");
+"[/spoiler]\n");*/
 
 				if(!empty($GLOBALS['main_uri']))
 					$hts->nav_link($GLOBALS['main_uri'], $uri);
