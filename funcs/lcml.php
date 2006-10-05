@@ -47,7 +47,7 @@ function lcml($txt, $params = array ())
 	if(empty($params['uri']))
 		$params['uri'] = '';
 
-	$ch_type = "lcml-compiled-2";
+	$ch_type = "lcml-compiled";
 	$ch_key = md5($txt.$params['uri']);
 
 	$ch = new Cache();
