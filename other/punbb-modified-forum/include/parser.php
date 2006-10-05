@@ -55,7 +55,7 @@ function parse_message($text, $hide_smilies)
 	global $pun_config, $lang_common, $pun_user, $cur_post;
 
 	$ch = new Cache();
-	if($ch->get("lcml-compiled-$hide_smilies", $text))
+	if($ch->get("lcml-compiled", $text))
 		return $ch->last();
 
 	$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = '/forum/post/'.intval(@$cur_post['id'])."/";
