@@ -2,6 +2,9 @@
 	function error_message($text, $redir = false, $title="", $timeout = 5)
 	{
 		include_once("funcs/templates/smarty.php");
+
+		if(!$redir)
+			$text .= ec("<br /><br /><br /><center><a href=\"javascript:history.go(-1)\">вернуться на предыдущую страницу</a></center>");
 	
 		$GLOBALS['page_data']['title'] = ec("Ошибка");
 		$GLOBALS['page_data']['source'] = $text;
