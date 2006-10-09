@@ -64,12 +64,12 @@
 
 				$this->dbh = 0;
 				$nnn = 0;
-				while(!$this->dbh && $nnn<10)
+				while(!$this->dbh && $nnn<2)
 				{
 					$this->dbh = @mysql_connect($server, $login, $password);
 //					echo "NNew\[{$base}]".$this->dbh."<br>\n";
 					if(!$this->dbh)
-						sleep(5);
+						sleep(2);
 					$nnn++;
 				}
 
@@ -139,7 +139,7 @@
 					fputs($fh,"Error: ".mysql_error($this->dbh)."\n");
 					fclose($fh);
 				}
-				echolog(mysql_error($this->dbh)." in query '<tt>$query</tt>'", 1);
+				echolog(mysql_error($this->dbh)." for DB='{$this->db_name}' in query '<tt>$query</tt>'", 1);
 			}
 
 			return false;
