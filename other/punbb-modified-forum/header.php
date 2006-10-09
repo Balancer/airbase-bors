@@ -172,10 +172,10 @@ else
 			$tpl_temp .= "\n\t\t\t\t<li class=\"maintenancelink\"><strong><a href=\"{$pun_config['root_uri']}/admin_options.php#maintenance\">Maintenance mode is enabled!</a></strong></li>";
 	}
 
-//	if (in_array(basename($_SERVER['PHP_SELF']), array('index.php', 'search.php')))
-		$tpl_temp .= "\n\t\t\t</ul>\n\t\t\t<ul class=\"conr\">\n\t\t\t\t<li><a href=\"{$pun_config['root_uri']}/search.php?action=show_new\">".$lang_common['Show new posts'].'</a></li>'."\n\t\t\t".'</ul>'."\n\t\t\t".'<div class="clearer"></div>'."\n\t\t".'</div>';
-//	else
-//		$tpl_temp .= "\n\t\t\t".'</ul>'."\n\t\t\t".'<div class="clearer"></div>'."\n\t\t".'</div>';
+	$tpl_temp .= "</ul><ul class=\"conr\"><li>[ 
+		<a href=\"{$pun_config['root_uri']}/search.php?action=show_new\">{$lang_common['Show new posts']}</a> |
+		<a href=\"{$pun_config['root_uri']}/search.php?action=show_user&user_id={$pun_user['id']}\">Показать все темы с Вашим участием</a> ]</li></ul>
+		<div class=\"clearer\"></div>\n\t\t</div>";
 }
 
 $tpl_main = str_replace('<pun_status>', $tpl_temp, $tpl_main);

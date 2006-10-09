@@ -380,6 +380,8 @@ while ($cur_post = $db->fetch_assoc($result))
 		if($is_coordinator)
 			$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warn_add/?ref=".urlencode("{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['id']}#p{$cur_post['id']}")."\" style=\"color: red;\">Выставить штраф</span>";
 
+		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation/post://{$cur_post['id']}/\">Репутация участника</a>";
+
 		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/blog/\">Блог участника</a>";
 	}
 	// If the poster is a guest (or a user that has been deleted)
@@ -497,18 +499,23 @@ while ($cur_post = $db->fetch_assoc($result))
 
 	$user_warn_count	= intval($cms_db->get("SELECT COUNT(*) FROM warnings WHERE user_id = ".intval($cur_post['poster_id'])." AND time > ".(time()-30*86400)));
 	$user_warn = "";
+
 	if($user_warn_count)
 	{
 		$user_warn = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings/\">";
-		$user_warn .= str_repeat("<img src=\"/cms/templates/default/img/system/warn1.gif\" width=\"10\" height=\"12\" border=\"0\">", $user_warn_count);
-		if($user_warn < 10)
-			$user_warn .= str_repeat("<img src=\"/cms/templates/default/img/system/warn0.gif\" width=\"10\" height=\"12\" border=\"0\">", 10-$user_warn_count);
-	
-		if($user_warn_count >= 10)
-			$user_warn .= "<div style=\"font-size: 6pt; color: red;\">R/O до ".strftime("%y-%m-%d", 30*86400+$cms_db->get("SELECT MIN(`time`) FROM warnings WHERE user_id = ".intval($cur_post['poster_id'])." AND time > ".(time()-30*86400)." LIMIT 10"))."</div>";
+		$user_warn .= str_repeat("<img src=\"http://balancer.ru/img/web/cross.gif\" width=\"16\" height=\"16\" border=\"0\">", intval($user_warn_count/2));
 
+		if($user_warn_count % 2)
+			$user_warn .= "<img src=\"http://balancer.ru/img/web/cross-half.gif\" width=\"16\" height=\"16\" border=\"0\">";
+
+		if(intval($user_warn_count/2+0.5) < 5)
+			$user_warn .= str_repeat("<img src=\"http://balancer.ru/coppermine/images/flags/blank.gif\" width=\"16\" height=\"16\" border=\"0\">", 5-intval($user_warn_count/2+0.5));
+	
+		if($user_warn_count >= 5)
+			$user_warn .= "<div style=\"font-size: 6pt; color: red;\">R/O до ".strftime("%y-%m-%d", 30*86400+$db->get("SELECT MIN(`time`) FROM warnings WHERE user_id = user_id AND time > ".(time()-30*86400)." LIMIT 10"))."</div>";
 		$user_warn .= "</a>";
 	}
+
 ?>
 <div id="p<?php echo $cur_post['id'] ?>" class="blockpost<?php echo $vtbg ?><?php if (($post_count + $start_from) == 1) echo ' firstpost'; ?>">
 	<h2><b>
@@ -528,7 +535,10 @@ while ($cur_post = $db->fetch_assoc($result))
 							<? if($user_avatar) echo "<div style=\"width: 100px; height: 100px; text-align: center; vertical-align: middle; overflow: hidden;\" onClick=\"setImageId('post_{$cur_post['id']}_moreimg', toggleVisId('post_{$cur_post['id']}_more') == 1, 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')\">$user_avatar</div>";?>
 							<div style="font-size: x-small; font-weight: 900;"><?echo $userlink;?></div>
 							<div style="font-size: xx-small;"><?echo$user_title;?></div>
-							<?echo $user_warn;?>
+							<center>
+							<script src="http://airbase.ru/js/include/http://balancer.ru/user/<?echo $cur_post['poster_id'];?>/reputation_line/post://<?echo $cur_post['id'];/*"*/?>/"></script>
+							<div><?echo $user_warn;?></div>
+							</center>
 						</div>
 					</div>
 					<div id="post_<?echo $cur_post['id'];?>_more" style="margin: 0; padding: 0; display: none; font-size: 80%;">

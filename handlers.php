@@ -12,7 +12,9 @@ function register_uri_handler($uri_pattern, $func = NULL)
 		$uri_pattern = "!.*!";
 	}
 
-//	echo "Register uri '$uri_pattern' handler: $func<br/>";
+
+	if(!empty ($_GET['debug']))
+		echo "Register uri '$uri_pattern' handler: $func<br/>";
 
 	$GLOBALS['cms_patterns'][$uri_pattern] = $func;
 }
@@ -37,7 +39,8 @@ function register_alias($uri_regexp, $function)
 
 function handlers_load($dir = 'handlers')
 {
-//	echo "<b>Load handlers from $dir</b><br/>";
+	if (!empty ($_GET['debug']))
+		echo "<b>Load handlers from $dir</b><br/>";
 
 	if (!is_dir($dir))
 		return;
@@ -58,18 +61,20 @@ function handlers_load($dir = 'handlers')
 
 	foreach ($files as $file)
 	{
-//		echo "load $file<br>\n";
+		if (!empty ($_GET['debug']))
+			echo "load $file<br>\n";
 
 		if (substr($file, -4) == '.php')
 			include_once ("$dir/$file");
-		elseif (is_dir("$dir/$file") && !preg_match("!(post|pre)$!", $file)) handlers_load("$dir/$file");
+		elseif (is_dir("$dir/$file") && !preg_match("!(post|pre)$!", $file)) 
+			handlers_load("$dir/$file");
 	}
 }
 
 function hts_data_prehandler_add($regexp, $data_key, $func)
 {
-	if (!empty ($_GET['debug']))
-		echo "<small>Add pre function $func to uri like '$regexp' for key $data_key</small><br />";
+//	if (!empty ($_GET['debug']))
+//		echo "<small>Add pre function $func to uri like '$regexp' for key $data_key</small><br />";
 
 	if(!function_exists($func))
 	{
@@ -102,11 +107,12 @@ function do_uri_handlers($uri, $match, $handlers)
 	foreach ($handlers as $uri_pattern => $func)
 	{
 		if (!empty ($_GET['debug']))
-			echo "<tt>Test pattern '$uri_pattern' to '$uri' by $func()</tt><br />\n";
+			echo "<tt>Test pattern '$uri_pattern' to '$match' by $func()</tt><br />\n";
 		$m = array ();
 		if (preg_match($uri_pattern, $match, $m))
 		{
 //			echo "... ok!";
+//			echo "Call $func('$uri')<br />";
 			$res = $func ($uri, $m);
 			if ($res === true)
 			{
@@ -124,15 +130,19 @@ function do_uri_handlers($uri, $match, $handlers)
 
 function do_plugin_uri_handlers($uri, $match, $path)
 {
-	$save = $GLOBALS['cms_patterns'];
-	$GLOBALS['cms_patterns'] = array ();
+	if(!empty($_GET['debug']))
+		echo "*** do_plugin_uri_handlers: $path ***<br />\n";
 
+	$GLOBALS['cms_actions'] = array ();
+	$GLOBALS['cms_patterns'] = array ();
+	
 	handlers_load($path);
 	// match[3] - это путь относительно базы плагинов.
 	// Там формат шаблона (/path/to/plugin/)(plugin_name)(/plugin/sub/path/)
+//	if (!empty ($_GET['debug']))
+//	{	echo __LINE__.":<xmp>"; print_r($GLOBALS['cms_patterns']); echo "</xmp>";}
 	$ret = do_uri_handlers($uri, $match[3], $GLOBALS['cms_patterns']);
 
-	$GLOBALS['cms_patterns'] = $save;
 	return $ret;
 }
 
@@ -202,15 +212,13 @@ function hts_data_prehandler($pattern, $data)
 
 	function do_plugin_action_handlers($uri, $match, $path)
 	{
-		$save = $GLOBALS['cms_actions'];
 		$GLOBALS['cms_actions'] = array ();
-
+		$GLOBALS['cms_patterns'] = array ();
+	
 		handlers_load($path);
 		// match[3] - это путь относительно базы плагинов.
 		// Там формат шаблона (/path/to/plugin/)(plugin_name)(/plugin/sub/path/)
 		$ret = do_action_handlers($uri, $match[3], $GLOBALS['cms_actions']);
-
-		$GLOBALS['cms_actions'] = $save;
 
 		// Если не было локального обработчика - пробуем глобальный.
 		if($ret === false)

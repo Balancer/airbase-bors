@@ -29,7 +29,7 @@
 		$ret = false;
 
 		$path = uri2path($uri);
-	
+
 //		if(!empty($_GET['debug']))
 //			DebugBreak();
 	
@@ -46,6 +46,7 @@
         closedir($dh);
         sort($dirs);
 
+	
         foreach($dirs as $dir) 
         {
 //			echo "Dir: $base_dir/$dir/main.uri<br/>";
@@ -72,18 +73,27 @@
 //						echo "<br/>$base_dir/$dir/config.php<br />";
 						@include_once("$base_dir/$dir/config.php");
 
+						$save = $GLOBALS['cms_actions'];
+						$GLOBALS['cms_actions'] = array ();
+
 						if(!empty($_GET))
 						{
 							$res = do_plugin_action_handlers($uri, $m, "$base_dir/$dir/handlers/");
 		
 							if($res === true)
+							{
+								$GLOBALS['cms_actions'] = $save;
 								return true;
-
+							}
+							
 							if($res !== false)
 								$ret = $uri = $ret;
 						}
 
 						$res = do_plugin_uri_handlers($uri, $m, "$base_dir/$dir/handlers/");
+						
+						$GLOBALS['cms_actions'] = $save;
+						
 						if($res === true)
 							return true;
 						if($res !== false)
