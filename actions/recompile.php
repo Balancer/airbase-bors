@@ -28,12 +28,12 @@
 			$sf->save(show_page($uri, false));
 		}
 		
-//		exit("Recompiled $uri");
-
         $hts = &new DataBaseHTS;
 
 		$source = $hts->get_data($uri, 'source');
 		$body   = $hts->get_data($uri, 'body');
+
+//		exit("<xmp>$body</xmp>");
 
         if($source || $body)
         {

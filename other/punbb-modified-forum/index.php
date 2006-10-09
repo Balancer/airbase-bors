@@ -49,6 +49,12 @@ if(!empty($_GET['topic']) && preg_match("!^(\d+)\.msg(\d+)$!", $_GET['topic'], $
 	go("http://balancer.ru/forum/punbb/viewtopic.php?pid={$m[2]}#p{$m[2]}");
 }
 
+if(!empty($_GET['topic']) && preg_match("!^(\d+)\.msg!", $_GET['topic'], $m))
+{
+	//http://forums.airbase.ru/index.php?topic=27581.msg415049
+	go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}");
+}
+
 if(!empty($_GET['showforum']))
 {
 	//http://forums.airbase.ru/index.php?showforum=40

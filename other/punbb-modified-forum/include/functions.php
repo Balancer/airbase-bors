@@ -461,8 +461,9 @@ function get_title($user)
 	{
 		$ban_list = array();
 
-		foreach ($pun_bans as $cur_ban)
-			$ban_list[] = strtolower($cur_ban['username']);
+		if(!empty($pun_bans))
+			foreach ($pun_bans as $cur_ban)
+				$ban_list[] = strtolower($cur_ban['username']);
 	}
 
 	// If not already loaded in a previous call, load the cached ranks

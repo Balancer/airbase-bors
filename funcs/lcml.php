@@ -32,6 +32,9 @@ function rest_return($ret_val, $saved_params)
 
 function lcml($txt, $params = array ())
 {
+	if(!trim($txt))
+		return "";
+
 	$GLOBALS['lcml']['level'] = intval(@ $GLOBALS['lcml']['level']) + 1;
 
 	$saved_params = empty ($GLOBALS['lcml']['params']) ? array () : $GLOBALS['lcml']['params'];
