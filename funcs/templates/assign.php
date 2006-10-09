@@ -97,6 +97,11 @@
 		}
 
 		$smarty->assign("uri", $uri);
+		$smarty->assign("now", time());
+	
+		$me = &new User();
+		$smarty->assign("me", $me);
+		$smarty->assign("me_id", $me->get('id'));
 
 		if(empty($data['main_uri']))
 			$smarty->assign("main_uri", @$GLOBALS['main_uri']);
