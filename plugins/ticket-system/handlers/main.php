@@ -17,7 +17,10 @@
 		
 		$data['base_uri'] = $GLOBALS['cms']['plugin_base_uri'];
 		
+//		echo "<xmp>"; print_r($GLOBALS['cms']); echo "</xmp>";
+//		echo "=={$GLOBALS['cms']['plugins']['tickets']['db']}==";
 		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
+//		echo ":".$hts->dbh->db_name;
 
 		$tickets = array();
 
@@ -66,8 +69,7 @@
 		
 		$posts[] = array(
 			'message' => lcml($hts->get_data($uri, 'source'), array(
-				'with_html'=>false,
-				'html_disabled' => true,
+				'html' => false,
 				'cache_disable' => true,
 				'cr_type'=>'save_cr')),
 			'author_name' => $hts->get_data($uri, 'author_name'),
@@ -125,10 +127,11 @@
 
 		if(empty($_POST['source']))
 			return error_message(ec("Вы не написали текст сообщения."));
-
-		$new_ticket = $GLOBALS['cms']['plugin_base_uri'].get_new_global_id()."/";
+		
+		$new_ticket = $GLOBALS['cms']['plugin_base_uri'].get_new_global_id(@$GLOBALS['cms']['plugins']['tickets']['db'])."/";
 
 //		print_r($_POST);
+//		echo $GLOBALS['cms']['plugin_base_uri'];
 //		exit($new_ticket);
 
 		$hts->nav_link($GLOBALS['cms']['plugin_base_uri'], $new_ticket);
@@ -181,6 +184,8 @@
 
 		$hts->nav_link($uri, $comment);
 
+		$hts->set_data($uri, 'modify_time', time());
+
 		$hts->set_data($comment, 'title',  @$_POST['title']);
 		$hts->set_data($comment, 'source', $_POST['source']);
 		$hts->set_data($comment, 'create_time', time());
@@ -189,11 +194,11 @@
 		$hts->set_data($comment, 'author_name', $us->data('name'));
 
 		$us->set_data("last_answer", time());
-		$us->set_data("last_post_hash", md5($_POST['text']));
+		$us->set_data("last_post_hash", md5($_POST['source']));
 
 		include_once('actions/recompile.php');
-		recompile($comment);
-		go($uri);
+		recompile($uri);
+		go($GLOBALS['cms']['plugin_base_uri']."?");
 		return true;
 	}
 

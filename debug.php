@@ -17,9 +17,9 @@
             }
             else
             {
-                if($level<3) echo '<font color="red">';
-                echo "<font size=\"1\">".substr($message,0,512)."</font><br>";
-                if($level<3) echo "</font>\n";
+                if($level<3) echo '<span style="color: red;">';
+                echo "<span style=\"font-size: 6pt;\">".substr($message,0,2048).(strlen($message)>2048?"...":"")."</span><br />";
+                if($level<3) echo "</span>\n";
             }
             if($level==1)
             {

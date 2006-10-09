@@ -1,31 +1,4 @@
 <?
-    function send_mail($from, $to, $subject, $text)
-    {
-		include_once('Mail.php');
-
-//		$recipients = 'joe@example.com';
-
-		$headers['From']    = $from;
-		$headers['To']      = $to;
-		$headers['Subject'] = encode_mimeheader($subject, $GLOBALS['cms']['charset']);
-		$headers['Content-Type'] = "text/plain; charset=\"{$GLOBALS['cms']['charset']}\"";
-
-		$params['sendmail_path'] = '/usr/lib/sendmail';
-
-//		$params['host'] = @$GLOBALS['cms']['smtp_host'];
-//		if(!$params['host'])
-//			$params['host'] = '127.0.0.1';
-
-		// Create the mail object using the Mail::factory method
-		$mail_object =& Mail::factory('sendmail', $params);
-//		$mail_object =& Mail::factory('smtp', $params);
-//		$mail_object =& Mail::factory('mail', $params);
-
-		$mail_object->send($to, $headers, $text);
-		
-//		exit();
-    }
-
 	function encode_mimeheader($string, $charset=null, $linefeed="\n") 
 	{
 		if (!$charset)
@@ -62,4 +35,5 @@
 	
 		return $encoded;
 	}
-?>
+
+	include_once("config/mail.php");

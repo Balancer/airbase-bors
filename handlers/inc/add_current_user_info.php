@@ -11,4 +11,3 @@
 		$tpl_vars[] = 'user_last_name';
 		$tpl_vars[] = 'user_name';
 		$tpl_vars[] = 'user_id';
-?>
