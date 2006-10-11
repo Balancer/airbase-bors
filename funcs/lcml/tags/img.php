@@ -9,7 +9,7 @@
 		if(!empty($params['url']))
 		{
 			$path = NULL;
-			$uri = html_entity_decode($params['url'], ENT_COMPAT, 'UTF-8');
+			@$uri = html_entity_decode($params['url'], ENT_COMPAT, 'UTF-8');
 
 			// Заменим ссылку в кеш на полную картинку
 			$uri = secure_path(abs_path_from_relative(preg_replace("!^(.+?)/cache/(.+)/\d*x\d*/(.+?)$!", "$1/$2/$3", $uri), $GLOBALS['lcml']['uri']));
