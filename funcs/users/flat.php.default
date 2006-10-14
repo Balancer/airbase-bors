@@ -129,6 +129,18 @@
 			$this->id = user_data('id', $_login);
 		}
     	
+        function get($key, $default=NULL)
+        {
+            if($ret = $this->data($key, NULL))
+                return $ret;
+											
+            $hts = &new DataBaseHTS('HTS');
+            if($ret = $hts->get_data("user://{$this->id}/", $key))
+            	return $ret;
+																			
+        	return $default;
+		}
+
     	function data($data, $default=NULL)
     	{
     		return user_data($data, $this->id, $default);
