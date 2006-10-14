@@ -25,7 +25,7 @@
 			return;
 		$owner = intval($owner);
 		
-		$db = new DataBase();
+		$db = new DataBase('HTS');
 		$query = "
 			SELECT `record_id`, `time`
 			FROM `hts_logs`
