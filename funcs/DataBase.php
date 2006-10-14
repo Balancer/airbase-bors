@@ -156,14 +156,27 @@
 
 //			print_r($this->row);
 
-			if(is_array($this->row))
-				if(sizeof($this->row)==1)
-					foreach($this->row as $s)
-						$this->row = quote_fix($s);
-				else
-					foreach($this->row as $k => $v)
-						$this->row[$k] = quote_fix($v);
-
+			if(get_magic_quotes_gpc())
+			{
+				if(is_array($this->row))
+					if(sizeof($this->row)==1)
+						foreach($this->row as $s)
+							$this->row = quote_fix($s);
+					else
+						foreach($this->row as $k => $v)
+							$this->row[$k] = quote_fix($v);
+			}
+			else
+			{
+				if(is_array($this->row))
+					if(sizeof($this->row)==1)
+						foreach($this->row as $s)
+							$this->row = $s;
+					else
+						foreach($this->row as $k => $v)
+							$this->row[$k] = $v;
+			}
+			
 			return $this->row;
 		}
 
