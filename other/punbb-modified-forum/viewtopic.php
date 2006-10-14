@@ -511,8 +511,8 @@ while ($cur_post = $db->fetch_assoc($result))
 		if(intval($user_warn_count/2+0.5) < 5)
 			$user_warn .= str_repeat("<img src=\"http://balancer.ru/coppermine/images/flags/blank.gif\" width=\"16\" height=\"16\" border=\"0\">", 5-intval($user_warn_count/2+0.5));
 	
-		if($user_warn_count >= 5)
-			$user_warn .= "<div style=\"font-size: 6pt; color: red;\">R/O до ".strftime("%y-%m-%d", 30*86400+$db->get("SELECT MIN(`time`) FROM warnings WHERE user_id = user_id AND time > ".(time()-30*86400)." LIMIT 10"))."</div>";
+		if($user_warn_count >= 10)
+			$user_warn .= "<div style=\"font-size: 6pt; color: red;\">R/O до ".strftime("%y-%m-%d", 30*86400+$cms_db->get("SELECT MIN(`time`) FROM warnings WHERE user_id = user_id AND time > ".(time()-30*86400)." LIMIT 10"))."</div>";
 		$user_warn .= "</a>";
 	}
 
