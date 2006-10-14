@@ -16,6 +16,7 @@ CREATE TABLE `cache` (
   `type` varchar(255) default NULL,
   `key` varchar(255) default NULL,
   `hmd` varchar(32) NOT NULL default '',
+  `uri` varchar(255) NOT NULL default '',
   `value` text NOT NULL,
   `access_time` int(11) NOT NULL default '0',
   `create_time` int(11) NOT NULL default '0',
@@ -23,6 +24,7 @@ CREATE TABLE `cache` (
   PRIMARY KEY  (`hmd`),
   KEY `type` (`type`),
   KEY `key` (`key`),
+  KEY `uri` (`uri`),
   KEY `access_time` (`access_time`),
   KEY `create_time` (`create_time`),
   KEY `expire_time` (`expire_time`)
