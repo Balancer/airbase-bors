@@ -1,5 +1,5 @@
 <?
-	hts_data_prehandler("!^({$GLOBALS['cms']['plugin_parent_uri']})request+/?$!", array(
+	hts_data_prehandler("request/", array(
 			'body' => 'plugins_mailform_main_body',
 			'title' => ec('Заказ'),
 		));
@@ -10,7 +10,7 @@
         return template_assign_data("form.html");
 	}
 
-    register_action_handler('send-form', 'plugins_mailform_send_form');
+    register_action('send-form', 'plugins_mailform_send_form');
 
     function plugins_mailform_send_form($uri, $action)
 	{
@@ -37,4 +37,3 @@
 		send_mail($_POST['email'], "commerce@1001kran.ru", ec("Заказ"), $message);
 		return message(ec("Заказ отправлен"));
 	}
-?>

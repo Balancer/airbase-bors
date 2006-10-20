@@ -1,5 +1,5 @@
 <?
-    register_action_handler('logout', 'handler_action_logout');
+    register_action('logout', 'handler_action_logout');
 
     function handler_action_logout($uri, $action)
 	{

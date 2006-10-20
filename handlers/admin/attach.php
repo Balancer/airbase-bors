@@ -1,5 +1,5 @@
 <?
-    register_action_handler('attach-upload', 'handler_action_attach_upload');
+    register_action('attach-upload', 'handler_action_attach_upload');
 
     function handler_action_attach_upload($uri, $action)
 	{

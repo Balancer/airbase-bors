@@ -1,5 +1,5 @@
 <?
-    register_action_handler('delete-do', 'handler_action_delete_do');
+    register_action('delete-do', 'handler_action_delete_do');
 
     function handler_action_delete_do($uri, $action)
 	{

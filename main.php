@@ -1,8 +1,6 @@
 <?
 //	ini_set("xdebug.profiler_enable", "1");
 
-//	print_r($_SERVER);
-
     list($usec, $sec) = explode(" ",microtime());
     $GLOBALS['stat']['start_microtime'] = ((float)$usec + (float)$sec);
 
@@ -30,7 +28,7 @@
 //	print_r($_GET);
 
 	require_once("funcs/users.php");
-    require_once("handlers.php");
+    require_once("funcs/handlers.php");
 
 	if(empty($GLOBALS['cms']['only_load']))
 	{
@@ -75,74 +73,28 @@
 	include_once("funcs/logs.php");
 	log_session_update();
 
-	if(isset($_POST['LoginForm']))
-	{
-		include_once("funcs/modules/messages.php");
+	include_once("funcs/handlers.php");
+
+	$GLOBALS['cms_patterns'] = array();
+	$GLOBALS['cms_actions']  = array();
+
+	handlers_load();
+
+	if(!empty($GLOBALS['cms']['only_load']))
+		return;
 		
-		$us = new User();
-
-		$GLOBALS['page_data']['title'] = ec("Вход");
-
-		if($err = $us->do_login($_POST['FLogin'], $_POST['FPassword'], false))
-			return error_messge($err, $uri);
-
-		return message(ec("Вы успешно авторизовались"), $uri);
-	}
-
-
-//	echo "<xmp>".print_r($_POST, true)."</xmp>";	print_r($_GET);	exit();
-
-//	$GLOBALS['cms']['action'] = '';
-
-	foreach(split(' ','handlers/pre handlers handlers/post') as $sub_path)
-	{
-		$GLOBALS['cms_patterns'] = array();
-		$GLOBALS['cms_actions']  = array();
-
-//		echo "Load $sub_path for $uri<br />\n";
-	
-		foreach(array($GLOBALS['cms']['local_dir'],
-					"{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}",
-					$GLOBALS['cms']['base_dir']) as $base_path)
-		{
-//			if(!empty($_GET['dbg']))
-//				DebugBreak();
-
-			handlers_load("$base_path/$sub_path");
-		}
+	$ret = handlers_exec();
 		
-		if(empty($GLOBALS['cms']['only_load']) && (!empty($_GET) || !empty($_POST)))
-		{
-//			echo "=====================================================";
-			$ret = do_action_handlers($uri, $uri, $GLOBALS['cms_actions']);
-//			exit(print_r($_GET, true));
-		
-			if($ret === true)
-				return;
-
-			if($ret !== false)
-				$uri = $ret;
-		}
-
-//		echo "********do_uri_handlers($uri, $uri, ".print_r($GLOBALS['cms_patterns'], true)."**************<br/>";
-		
-		$ret = do_uri_handlers($uri, $uri, $GLOBALS['cms_patterns']);
-		
-		if($ret === true)
-			return;
-
-		if($ret !== false)
-			$uri = $ret;
-	}
-
-	if(@$GLOBALS['cms']['only_load'])
+	if($ret === true)
 		return;
 
-//   echo "<pre>";	print_r($_SERVER);    echo "</pre>";
+	if($ret !== false)
+		$uri = $ret;
+
 	echo "<pre>";
 
 	if(empty($title))
 		$title='';
 		
 	echo ec("Страница '$uri' не найдена. Попробуйте <a href=\"$uri?edit\">создать её</a>");
-?>
+	echo "</pre>";

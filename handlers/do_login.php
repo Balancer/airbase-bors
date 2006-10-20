@@ -1,5 +1,5 @@
 <?
-    register_action_handler('do-login', 'handler_action_do_login');
+    register_action('do-login', 'handler_action_do_login');
 
     function handler_action_do_login($uri, $action)
 	{
