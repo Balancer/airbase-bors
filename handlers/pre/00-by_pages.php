@@ -1,5 +1,5 @@
 <?
-    register_uri_handler('!^(http://[^/]+.*/)~page(\d+)/?$!', 'handler_by_pages');
+    register_handler('!^(http://[^/]+.*/)~page(\d+)/?$!', 'handler_by_pages');
 
     function handler_by_pages($uri, $m=array())
 	{

@@ -1,5 +1,5 @@
 <?
-    register_uri_handler('!/search/!', 'handler_check_search_access');
+    register_handler('!/search/!', 'handler_check_search_access');
 
     function handler_check_search_access($uri, $m=array())
 	{

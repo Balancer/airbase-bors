@@ -1,5 +1,5 @@
 <?
-    register_action_handler('edit-save', 'handler_edit_save');
+    register_action('edit-save', 'handler_edit_save');
 
     function handler_edit_save($uri, $action)
 	{

@@ -1,5 +1,5 @@
 <?
-    register_action_handler('edit', 'handler_edit');
+    register_action('edit', 'handler_edit');
 
     function handler_edit($uri, $action)
 	{

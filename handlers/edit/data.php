@@ -2,8 +2,8 @@
     require_once('funcs/DataBaseHTS.php');
     require_once('funcs/templates/smarty.php');
 
-    register_action_handler('edit-data', 		'handler_edit_data');
-    register_action_handler('edit-data-save', 	'handler_edit_data_save');
+    register_action('edit-data', 		'handler_edit_data');
+    register_action('edit-data-save', 	'handler_edit_data_save');
 
     function handler_edit_data($uri, $action)
 	{

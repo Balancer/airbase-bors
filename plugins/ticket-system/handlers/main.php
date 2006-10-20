@@ -2,7 +2,7 @@
 	if(!empty($_GET['dbg']))
 		DebugBreak();
 
-	hts_data_prehandler("!^(http://[^/]+/)[a-z]+/?$!", array(
+	hts_data_prehandler("", array(
 			'body' => 'plugins_ticket_system_body',
 			'title' => ec('Система тикетов'),
 		));
@@ -43,7 +43,7 @@
         return template_assign_data("tickets-list.htm", $data);
 	}
 
-	hts_data_prehandler("!^(.+/)\d+/?$!", array(
+	hts_data_prehandler("(.+/)\d+/", array(
 			'body'   => 'plugins_ticket_system_ticket_body',
 			'source' => 'default',
 			'modify_time' => 'default',
@@ -91,7 +91,7 @@
         return template_assign_data("ticket.htm", $data);
 	}
 
-	hts_data_prehandler("!^(.+/)new_ticket/?$!", array(
+	hts_data_prehandler("(.+/)new_ticket/", array(
 			'body' => 'plugins_ticket_system_new_ticket_body',
 			'title' => ec('Создание нового тикета'),
 		));
@@ -106,7 +106,7 @@
         return template_assign_data("new_ticket.htm", $data);
 	}
 
-    register_action_handler('new-ticket-post', 'plugins_ticket_system_new_ticket_post');
+    register_action('new-ticket-post', 'plugins_ticket_system_new_ticket_post');
 
     function plugins_ticket_system_new_ticket_post($uri, $action)
 	{
@@ -156,7 +156,7 @@
 		return true;
 	}
 
-    register_action_handler('comment-add', 'plugins_ticket_system_comment_add');
+    register_action('comment-add', 'plugins_ticket_system_comment_add');
 
     function plugins_ticket_system_comment_add($uri, $action)
 	{
@@ -202,7 +202,7 @@
 		return true;
 	}
 
-	register_action_handler('ticket-close', 'plugins_ticket_system_ticket_close');
+	register_action('ticket-close', 'plugins_ticket_system_ticket_close');
     function plugins_ticket_system_ticket_close($uri, $action)
 	{
 		include_once('funcs/mail.php');
@@ -224,7 +224,7 @@
 		return true;
 	}
 
-	register_action_handler('ticket-open', 'plugins_ticket_system_ticket_open');
+	register_action('ticket-open', 'plugins_ticket_system_ticket_open');
     function plugins_ticket_system_ticket_open($uri, $action)
 	{
 		include_once('funcs/mail.php');

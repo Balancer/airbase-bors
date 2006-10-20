@@ -3,7 +3,7 @@
     require_once('funcs/templates/smarty.php');
 
 	if(empty($GLOBALS['cms']['only_load']))
-	    register_uri_handler('!^(http://[^/]+.*)/$!', 'handler_new_page');
+	    register_handler('!^(http://[^/]+.*)/$!', 'handler_new_page');
 
     function handler_new_page($uri, $m=array())
 	{

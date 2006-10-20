@@ -1,5 +1,5 @@
 <?
-	register_action_handler('category_add', 'plugins_tools_categories_editor_category_add');
+	register_action('category_add', 'plugins_tools_categories_editor_category_add');
 
 	hts_data_prehandler("!^(".$GLOBALS['cms']['plugin_base_uri']."?(.*))$!", array(
 			'body' => 'plugins_tools_categories_editor_body',

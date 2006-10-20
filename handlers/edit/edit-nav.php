@@ -1,9 +1,9 @@
 <?
-    register_action_handler('nav_edit', 'handler_edit_nav');
-    register_action_handler('nav_child_add', 'handler_edit_nav_child_add');
-    register_action_handler('nav_child_delete', 'handler_edit_nav_child_delete');
-    register_action_handler('nav_parent_add', 'handler_edit_nav_parent_add');
-    register_action_handler('nav_parent_delete', 'handler_edit_nav_parent_delete');
+    register_action('nav_edit', 'handler_edit_nav');
+    register_action('nav_child_add', 'handler_edit_nav_child_add');
+    register_action('nav_child_delete', 'handler_edit_nav_child_delete');
+    register_action('nav_parent_add', 'handler_edit_nav_parent_add');
+    register_action('nav_parent_delete', 'handler_edit_nav_parent_delete');
 
 	function load_icons()
 	{

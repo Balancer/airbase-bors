@@ -124,14 +124,17 @@ class DataBaseHTS
 			return global_key("uri_data($uri)", $key);
 
 		$m = array ();
-		foreach ($GLOBALS['cms']['data_prehandler'][$key] as $regexp => $func)
+		foreach ($GLOBALS['cms']['data_prehandler'][$key] as $regexp => $data)
+		{
+//			echo "$regexp<br />";
+			
 			if (preg_match($regexp, $uri, $m))
-				if (($res = $func ($uri, $m, $key)) != NULL)
+				if (($res = $data['func'] ($uri, $m, $data['plugin_data'], $key)) != NULL)
 				{
-//					echo "Got pre $func($res) for $key/$uri<br/>";
+//					echo "Pre data ($key, $uri, ".print_r($data, true).") = $res<br/>";
 					return set_global_key("uri_data($uri)", $key, $res);
 				}
-
+		}
 		return false;
 	}
 
@@ -147,13 +150,13 @@ class DataBaseHTS
 			return global_key("uri_data($uri)", $key);
 
 		$m = array ();
-		foreach ($GLOBALS['cms']['data_posthandler'][$key] as $regexp => $func)
+		foreach ($GLOBALS['cms']['data_posthandler'][$key] as $regexp => $data)
 		{
 //			echo "Check post_data_check($uri, $key) for $regexp<br/>\n";
 			if (preg_match($regexp, $uri, $m))
 			{
 //				echo "Got post $res for $key/$uri: $func";
-				if (($res = $func ($uri, $m)) != NULL)
+				if (($res = $data['func'] ($uri, $m, $data['plugin_data'], $key)) != NULL)
 				{
 //					if (!empty ($_GET['debug']))
 //						echo "<small>post_data_check return $res</small><br/>\n";

@@ -1,8 +1,8 @@
 <?
-    register_uri_handler('!/admin/!', 'handler_check_admin_access');
+    register_handler('!/admin/!', 'handler_check_admin_access');
 	if(empty($GLOBALS['cms']['cms_path_enable']))
-	    register_uri_handler('!/cms/!', 'handler_check_admin_access');
-    register_uri_handler('!/inc/!', 'handler_check_admin_access');
+	    register_handler('!/cms/!', 'handler_check_admin_access');
+    register_handler('!/inc/!', 'handler_check_admin_access');
 
     function handler_check_admin_access($uri, $m=array())
 	{

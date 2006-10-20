@@ -1,8 +1,8 @@
 <?
-    register_action_handler('set-default-flag', 'handler_action_set_default_flag');
-    register_action_handler('drop-default-flag', 'handler_action_drop_default_flag');
-    register_action_handler('set-order', 'handler_action_set_order');
-    register_action_handler('category-delete', 'handler_action_category_delete');
+    register_action('set-default-flag', 'handler_action_set_default_flag');
+    register_action('drop-default-flag', 'handler_action_drop_default_flag');
+    register_action('set-order', 'handler_action_set_order');
+    register_action('category-delete', 'handler_action_category_delete');
 
     function handler_action_set_default_flag($uri, $action, $match)
 	{
