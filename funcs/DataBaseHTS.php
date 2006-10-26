@@ -267,6 +267,8 @@ class DataBaseHTS
 		$fields = $params['fields'];
 		$search = $params['where'];
 
+		$ignore_error = !empty($params['ignore_error']);
+
 		$order = "";
 		if(!empty($params['order']))
 		{
@@ -293,7 +295,7 @@ class DataBaseHTS
 
 		$key_table_name = $this->create_data_table($key);
 
-		$res = $this->dbh->get_array("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."' $order");
+		$res = $this->dbh->get_array("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."' $order", $ignore_error);
 
 		if ($res)
 			return $res;
@@ -328,7 +330,7 @@ class DataBaseHTS
 
 	function data_exists($uri, $key, $value)
 	{
-		foreach ($this->get_data_array($uri, $key) as $val)
+		foreach ($this->get_data_array($uri, $key, array('ignore_error'=>true)) as $val)
 		{
 			if ($val == $value)
 				return true;

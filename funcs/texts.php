@@ -69,4 +69,3 @@
 			$text = stripslashes($text);
 		return $text;
 	}
-?>

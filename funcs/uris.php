@@ -3,4 +3,3 @@
     {
         return preg_replace("!http://[^/]+!", "", $uri);
     }
-?>
