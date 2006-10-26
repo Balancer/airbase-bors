@@ -14,13 +14,15 @@
         if(!$text)
             $text = $title;
 
-        $hts = new DataBaseHTS();
+        $hts = &new DataBaseHTS();
 
         $uri = $hts->page_uri_by_value('title', $title);
-        if(!$uri)
-            return "<a href=\"http://airbase.ru/admin/wiki-new.php?title=".urlencode($title)."&ref=".urlencode($GLOBALS['main_uri'])."\" class=\"wiki_none\">$text</a>";
-
+        if($uri)
+	        return "<a href=\"$uri\" class=\"wiki_int\">$text</a>";
+		
+		include_once("funcs/modules/uri.php");
+		$new_uri = $GLOBALS['main_uri'].strtolower(translite_uri_simple($title));
+		
+		$hts->set_data($new_uri, 'title', $title);
         return "<a href=\"$uri\" class=\"wiki_int\">$text</a>";
-        
     }
-?>

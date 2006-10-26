@@ -28,7 +28,7 @@
 
 		$hts = new DataBaseHTS();
 		
-		return $hts->data_exists($user->get_page(), 'subscribe', $hts->normalize_uri($page));
+		return $hts->data_exists($user->get_page(), 'subscribe', $page);
 	}
 
 	function cms_funcs_action_get_all_subscribed($user=NULL)

@@ -129,6 +129,11 @@
 			$this->id = user_data('id', $_login);
 		}
     	
+    	function get($data, $default=NULL)
+    	{
+    		return user_data($data, $this->id, $default);
+    	}
+
     	function data($data, $default=NULL)
     	{
     		return user_data($data, $this->id, $default);
