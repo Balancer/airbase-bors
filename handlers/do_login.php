@@ -3,12 +3,11 @@
 
     function handler_action_do_login($uri, $action)
 	{
-		$us = new User();
+		$me = &new User();
 			
 		include_once("funcs/modules/messages.php");
 
-
-		if($err = $us->do_login(@$_POST['login'], @$_POST['password'], false))
+		if($err = $me->do_login(@$_POST['login'], @$_POST['password'], false))
 			return error_message($err, false);
 
 		include_once("funcs/logs.php");
@@ -16,4 +15,3 @@
 
 		return message(ec("Вы успешно вошли в систему"), "$uri?", "", 2);
 	}
-?>

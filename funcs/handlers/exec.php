@@ -8,7 +8,7 @@
 			$ret = do_action_handlers($uri, $uri, $GLOBALS['cms_actions']);
 		
 			if($ret === true)
-				return;
+				return true;
 
 			if($ret !== false)
 				$uri = $ret;
