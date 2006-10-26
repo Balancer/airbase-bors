@@ -8,7 +8,7 @@
 
     function hts_get($page_uri)
     {
-        $GLOBALS['log_level']=2;
+//        $GLOBALS['log_level']=2;
 
         echolog("Try load hts_data for '$page_uri'",4);
     

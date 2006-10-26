@@ -10,6 +10,12 @@
 		if(!empty ($_GET['debug']))
 			echo "Register uri '$uri_pattern' handler: $func<br/>";
 
+		if(!empty($GLOBALS['cms']['plugin_data']['base_uri']))
+		{
+			$uri_pattern = "!".preg_quote($GLOBALS['cms']['plugin_data']['base_uri'], "!").$uri_pattern.'$!';
+//			echo "--- plugin pre $data_key : $regexp = ".print_r($GLOBALS['cms']['plugin_data'], true)."<br />";
+		}
+
 		$GLOBALS['cms_patterns'][$uri_pattern] = $func;
 	}
 
