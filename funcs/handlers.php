@@ -11,6 +11,7 @@ function do_uri_handlers($uri, $match, $handlers)
 		if (!empty ($_GET['debug']))
 			echo "<tt>Test pattern '$uri_pattern' to '$match' by $func()</tt><br />\n";
 		$m = array ();
+//		echo $uri_pattern."<br/>";
 		if (preg_match($uri_pattern, $match, $m))
 		{
 //			echo "... ok!";
