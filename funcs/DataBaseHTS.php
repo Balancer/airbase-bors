@@ -48,10 +48,8 @@ class DataBaseHTS
 			if (preg_match("!^http://!", $uri))
 				return $this->normalize_uri($uri);
 
-			if ($uri {
-				0 }
-			!= '/')
-			$uri = $base_page.$uri;
+			if ($uri{0} != '/')
+				$uri = $base_page.$uri;
 
 			return $this->normalize_uri("http://{$_SERVER['HTTP_HOST']}$uri");
 		}
@@ -71,10 +69,9 @@ class DataBaseHTS
 			if (preg_match("!^.*/[^\\.\\\\]+?$!", $uri))
 				$uri .= '/';
 
-		if (isset ($GLOBALS['DOCUMENT_ROOT']))
-			$uri = preg_replace("!^{$GLOBALS['DOCUMENT_ROOT']}/+!", "/", $uri);
+		$uri = preg_replace("!^{$GLOBALS['DOCUMENT_ROOT']}/+!", "/", $uri);
 
-		if (substr($uri, 0, 1) == '/')
+		if($uri && $uri{0} == '/')
 			$uri = 'http://'.$_SERVER['HTTP_HOST'].$uri;
 
 		$uri = preg_replace("!/index\.\w+$!", "/", $uri);
@@ -97,12 +94,12 @@ class DataBaseHTS
 			$uri = "http://$host$path$file";
 		}
 
-		while ($alias = $this->dbh->get_value('hts_aliases', 'alias', $uri, 'uri'))
+		if($alias = $this->dbh->get_value('hts_aliases', 'alias', $uri, 'uri'))
 			$uri = $alias;
 
 		$GLOBALS['log_level'] = $save_log_level;
 
-		echolog("Normalize uri '$orig_uri' to '$uri'");
+//		echolog("Normalize uri '$orig_uri' to '$uri'");
 
 		return set_global_key('normalize_uri', $uri, $uri);
 	}

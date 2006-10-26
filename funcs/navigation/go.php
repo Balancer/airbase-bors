@@ -18,6 +18,7 @@
 //        debug("headers already out in $filename:$linenum");
 
         exit();
+		return true;
     }
 
     function go_ref($def = "/")
@@ -30,4 +31,3 @@
 			
 		go($def);
 	}
-?>
