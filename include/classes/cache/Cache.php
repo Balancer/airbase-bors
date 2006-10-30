@@ -1,6 +1,6 @@
 <?
     error_reporting(E_ALL);
-    require_once("funcs/DataBase.php");
+    require_once("DataBase.php");
 
     class Cache
     {
@@ -27,16 +27,14 @@
            		return ($this->last = $default);
 
             $hmd = md5("$type:$key");
-
-			$tab = substr($hmd, 0, 2);
 			
-            $row = $this->dbh->get("SELECT `value`, `expire_time`, 0 as `count` FROM `cache_$tab` WHERE `hmd`='$hmd'");
+            $row = $this->dbh->get("SELECT `value`, `expire_time`, 0 as `count` FROM `cache` WHERE `hmd`='$hmd'");
 			$this->last = $row['value'];
 
 			if($row['expire_time'] <= time())
 			{
 				$this->last = NULL;
-	            $this->dbh->query("DELETE FROM `cache_$tab` WHERE `hmd`='$hmd'");
+	            $this->dbh->query("DELETE FROM `cache` WHERE `hmd`='$hmd'");
 			}
 			
 
@@ -62,10 +60,7 @@
             $hmd = md5("$type:$key");
 //            echo "Set cache $type:$key:{$this->last_uri}<br/>\n";
 //			$GLOBALS['log_level'] = 10;
-
-			$tab = substr($hmd, 0, 2);
-
-            $this->dbh->query("REPLACE `cache_$tab` (`type`,`key`,`hmd`,`uri`,`value`,`access_time`,`create_time`,`expire_time`) VALUES ('".addslashes($type)."','".addslashes($key)."','$hmd','".addslashes($this->last_uri)."','".addslashes($value)."',".time().",".time().",".(time()+$time_to_expire).") ", true);
+            $this->dbh->query("REPLACE `cache` (`type`,`key`,`hmd`,`uri`,`value`,`access_time`,`create_time`,`expire_time`) VALUES ('".addslashes($type)."','".addslashes($key)."','$hmd','".addslashes($this->last_uri)."','".addslashes($value)."',".time().",".time().",".(time()+$time_to_expire).") ", true);
 //			$GLOBALS['log_level'] = 2;
 
             return $this->last = $value;
@@ -78,40 +73,32 @@
 
         function clear_check($type, $time)
         {
-			for($i=0; $i<256;$i++)
-	            $this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `type`='$type' AND `create_time` < ".(time()-$time));
+            $this->dbh->query("DELETE FROM `cache` WHERE `type`='$type' AND `create_time` < ".(time()-$time));
         }
 
         function clear_by_id($key)
         {
-			for($i=0; $i<256;$i++)
-				$this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `key` = '".addslashes($key)."'");
+			$this->dbh->query("DELETE FROM `cache` WHERE `key` = '".addslashes($key)."'");
         }
 
         function clear_by_uri($uri)
         {
-			for($i=0; $i<256;$i++)
-				$this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `uri` = '".addslashes($uri)."'");
+			$this->dbh->query("DELETE FROM `cache` WHERE `uri` = '".addslashes($uri)."'");
         }
 
         function get_array_by_uri($uri)
         {
-			$ret = array();
-			for($i=0; $i<256;$i++)
-				$ret = array_merge($ret, $this->dbh->get_array("SELECT DISTINCT value FROM `cache_".sprintf("%02x", $i)."` WHERE `uri` = '".addslashes($uri)."'"));
-
-			return $ret;
+			return $this->dbh->get_array("SELECT DISTINCT value FROM `cache` WHERE `uri` = '".addslashes($uri)."'");
         }
 
         function clear_by_type($type)
         {
-			for($i=0; $i<256;$i++)
-				$this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `type` LIKE '".addslashes($type)."'");
+			$this->dbh->query("DELETE FROM `cache` WHERE `type` LIKE '".addslashes($type)."'");
         }
 
         function clear($type, $key)
         {
-			for($i=0; $i<256;$i++)
-				$this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `type` = '".addslashes($type)."' AND `key` = '".addslashes($key)."'");
+			$this->dbh->query("DELETE FROM `cache` WHERE `type` = '".addslashes($type)."' AND `key` = '".addslashes($key)."'");
         }
     }
+?>
