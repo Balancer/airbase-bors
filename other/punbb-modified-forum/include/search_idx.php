@@ -48,7 +48,7 @@ function split_words($text)
 
 		$stopwords = (array)@file(PUN_ROOT.'lang/'.$pun_user['language'].'/stopwords.txt');
 		$stopwords = array_map('trim', $stopwords);
-	}
+	} /*'*/
 
 	// Clean up
 	$patterns[] = '#&[\#a-z0-9]+?;#i';
@@ -86,6 +86,11 @@ function split_words($text)
 //
 function update_search_index($mode, $post_id, $message, $subject = null)
 {
+	include_once("funcs/search/index.php");
+	index_body($post_id, $message);
+	if($subject)
+		index_title($post_id, $subject);
+
 	global $db_type, $db;
 
 	// Split old and new post/subject to obtain array of 'words'
@@ -179,8 +184,8 @@ function update_search_index($mode, $post_id, $message, $subject = null)
 	{
 		$subject_match = ($match_in == 'subject') ? 1 : 0;
 
-		if (!empty($wordlist))
-			$db->query('INSERT INTO '.$db->prefix.'search_matches (post_id, word_id, subject_match) SELECT '.$post_id.', id, '.$subject_match.' FROM '.$db->prefix.'search_words WHERE word IN('.implode(',', preg_replace('#^(.*)$#', '\'\1\'', $wordlist)).')') or error('Unable to insert search index word matches', __FILE__, __LINE__, $db->error());
+//		if (!empty($wordlist))
+//			$db->query('INSERT INTO '.$db->prefix.'search_matches (post_id, word_id, subject_match) SELECT '.$post_id.', id, '.$subject_match.' FROM '.$db->prefix.'search_words WHERE word IN('.implode(',', preg_replace('#^(.*)$#', '\'\1\'', $wordlist)).')') or error('Unable to insert search index word matches', __FILE__, __LINE__, $db->error());
 	}
 
 	unset($words);

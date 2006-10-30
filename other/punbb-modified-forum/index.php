@@ -138,18 +138,6 @@ require PUN_ROOT.'include/common.php';
 
 //print_r($pun_config);
 
-include_once("funcs/Cache.php");
-include_once("include/subforums.php");
-$ich = new Cache();
-if($ich->get("subforums-text", "all"))
-	$subforums = unserialize($ich->last());
-else
-{
-	$cms_db = new DataBase('punbb');
-	foreach($cms_db->get_array("SELECT id FROM forums") as $iid)
-		$subforums[$iid] = get_subforums_text(punbb_get_all_subforums($iid));
-	$ich->set(serialize($subforums), 7200);
-}
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
@@ -162,9 +150,23 @@ $page_title = pun_htmlspecialchars($pun_config['o_board_title']);
 define('PUN_ALLOW_INDEX', 1);
 require PUN_ROOT.'header.php';
 
+include_once("funcs/Cache.php");
+include_once("include/subforums.php");
+$ich = new Cache();
+if($ich->get("subforums-text-1", "all"))
+	$subforums = unserialize($ich->last());
+else
+{
+	$cms_db = new DataBase('punbb');
+	foreach($cms_db->get_array("SELECT id FROM forums") as $iid)
+		$subforums[$iid] = get_subforums_text(punbb_get_all_subforums($iid));
+	$ich->set(serialize($subforums), 7200);
+}
+
 // Print the categories and forums
 $result = $db->query("SELECT c.id AS cid, 
 		c.cat_name, 
+		c.base_uri as cat_base_uri,
 		f.id AS fid, 
 		f.forum_name, 
 		f.forum_desc, 
@@ -198,7 +200,7 @@ while ($cur_forum = $db->fetch_assoc($result))
 
 ?>
 <div id="idx<?php echo $cat_count;/*"*/?>" class="blocktable">
-	<h2><span><?php echo pun_htmlspecialchars($cur_forum['cat_name']) ?></span></h2>
+	<h2><span><a href="<?echo pun_htmlspecialchars($cur_forum['cat_base_uri'])?>"><?php echo pun_htmlspecialchars($cur_forum['cat_name']) ?></a></span></h2>
 	<div class="box">
 		<div class="inbox">
 			<table cellspacing="0">

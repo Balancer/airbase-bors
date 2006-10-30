@@ -129,11 +129,16 @@
 			hts_data_posthandler_add($pattern, $key, create_function('$uri, $m', "return \"".addslashes($value)."\";"));
 		}
 
-		if(empty ($data['parent']))
-			hts_data_posthandler_add($pattern, 'parent', create_function('$uri, $m', 'return array($m[1]);'));
+		if (empty ($data['parent']))
+		{
+			if ($pattern)
+				hts_data_prehandler_add($pattern, 'parent', create_function('$uri, $m, $plugin_data', 'return array($plugin_data["base_uri"].@$m[1]);'));
+			else
+				hts_data_prehandler_add($pattern, 'parent', create_function('$uri, $m, $plugin_data', 'return array($plugin_data["parent_uri"]);'));
+		}
 
 		if(empty ($data['nav_name']))
-			hts_data_posthandler_add($pattern, 'nav_name', create_function('$uri, $m', '$hts = new DataBaseHTS(); return strtolower($hts->get_data($uri, "title"));'));
+			hts_data_posthandler_add($pattern, 'nav_name', create_function('$uri, $m', '$hts = &new DataBaseHTS(); return strtolower($hts->get_data($uri, "title"));'));
 
 		if(empty ($data['source']))
 			hts_data_posthandler_add($pattern, 'source', create_function('$uri, $m', 'return NULL;'));

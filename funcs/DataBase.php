@@ -349,6 +349,11 @@
 			return mysql_insert_id($this->dbh);
 		}
 
+		function last_id()
+		{
+			return mysql_insert_id($this->dbh);
+		}
+
 		function get_field_list()
 		{
 			return $this->get_array("SELECT * FROM `hts_keys`");
