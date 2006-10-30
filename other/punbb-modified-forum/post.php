@@ -178,6 +178,13 @@ if (isset($_POST['form_sent']))
 	// Did everything go according to plan?
 	if (empty($errors) && !isset($_POST['preview']))
 	{
+		$me = &new User();
+		$md = md5($message);
+		if($me->get('last_message_md') == $md)
+			message("Вы уже отправили это сообщение");
+		
+		$me->set_data('last_message_md', $md);
+	
 		// If it's a reply
 		if ($tid)
 		{

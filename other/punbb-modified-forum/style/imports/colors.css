@@ -38,7 +38,7 @@ DIV.postmsg P.postedit {FONT-SIZE: xx-small; text-align: right;}
 #brdtitle H1 {FONT-SIZE: 1.4em}
 
 /* 2.4 Larger text for particular items */
-DIV.postmsg P {LINE-HEIGHT: 1.4}
+DIV.postmsg P {LINE-HEIGHT: 1.4em}
 DIV.postleft DT {FONT-SIZE: 1.1em}
 .pun PRE {FONT-SIZE: 1.2em}
 
@@ -253,3 +253,14 @@ margin creates space for the post status indicator */
 TD DIV.tclcon {MARGIN-LEFT: 2.3em}
 
 .reportlink { color: red;}
+
+
+tt.code {
+	white-space: nowrap;
+	border-top: 1px solid #6699ff;
+	border-bottom: 1px solid #6699ff;
+	padding: 1px 0.5ex 1px 0.5ex;
+	margin: 1px 0 1px 0;
+	background-color: #e0f0ff;
+	LINE-HEIGHT: 125%;
+}

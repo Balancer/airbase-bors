@@ -31,7 +31,7 @@ include_once("funcs/Cache.php");
 if(!empty($_POST))
 {
 	$ich = new Cache();
-	$ich->get("subforums-text", "all");
+	$ich->get("subforums-text-1", "all");
 	$ich->set(NULL);
 }
 

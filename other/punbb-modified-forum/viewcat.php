@@ -4,9 +4,22 @@ define('PUN_ROOT', './');
 
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 include_once("funcs/Cache.php");
+
+require PUN_ROOT.'include/common.php';
+
+if ($pun_user['g_read_board'] == '0')
+	message($lang_common['No view']);
+
+// Load the index.php language file
+require PUN_ROOT.'lang/'.$pun_user['language'].'/index.php';
+
+$page_title = pun_htmlspecialchars($pun_config['o_board_title']);
+define('PUN_ALLOW_INDEX', 1);
+require PUN_ROOT.'header.php';
+
 include_once("include/subforums.php");
 $ich = new Cache();
-if($ich->get("subforums-text", "all"))
+if($ich->get("subforums-text-1", "all"))
 	$subforums = unserialize($ich->last());
 else
 {
@@ -25,18 +38,6 @@ else
 		$cat_names[$cat['id']] = $cat['cat_name'];
 	$ich->set(serialize($cat_names), 7200);
 }
-
-require PUN_ROOT.'include/common.php';
-
-if ($pun_user['g_read_board'] == '0')
-	message($lang_common['No view']);
-
-// Load the index.php language file
-require PUN_ROOT.'lang/'.$pun_user['language'].'/index.php';
-
-$page_title = pun_htmlspecialchars($pun_config['o_board_title']);
-define('PUN_ALLOW_INDEX', 1);
-require PUN_ROOT.'header.php';
 
 $cms_db = new DataBase('punbb');
 
