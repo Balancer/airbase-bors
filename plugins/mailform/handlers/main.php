@@ -2,6 +2,7 @@
 	hts_data_prehandler("request/", array(
 			'body' => 'plugins_mailform_main_body',
 			'title' => ec('Заказ'),
+			'template' => 'popup',
 		));
 
 	function plugins_mailform_main_body($uri, $m)
@@ -14,6 +15,8 @@
 
     function plugins_mailform_send_form($uri, $action)
 	{
+		$GLOBALS['cms']['template_override'] = '/cms/templates/popup/';
+	
 		include_once('funcs/mail.php');
 		require_once('funcs/modules/messages.php');
 
@@ -35,5 +38,5 @@
 		}
 
 		send_mail($_POST['email'], "commerce@1001kran.ru", ec("Заказ"), $message);
-		return message(ec("Заказ отправлен"));
+		return message(ec("<b>Заказ отправлен</b>"));
 	}

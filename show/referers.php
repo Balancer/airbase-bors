@@ -20,7 +20,7 @@
         if(!$uri)
             $uri=$GLOBALS['PHP_SELF'];
 
-        $dbh = new DataBase('HTS');
+        $dbh = new DataBase();
         $hts = new DataBaseHTS();
         $id  = $hts->page_id_by_uri($uri);
         $ref = $hts->page_id_by_uri($_SERVER['HTTP_REFERER']);
@@ -44,7 +44,7 @@
             return;
         }
 
-        $dbh = new DataBase('HTS');
+        $dbh = new DataBase();
         $hts = new DataBaseHTS();
         $out = NULL;
 

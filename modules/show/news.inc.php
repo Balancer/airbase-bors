@@ -56,6 +56,9 @@
 		if(preg_match('!^\d+!', $height))	$height .= "px";
 
 		include_once("funcs/templates/assign.php");
-		return template_assign_data("xfile:".dirname(__FILE__)."/news.htm", array('records'=>$records, 'width'=>$width, 'height'=>$height));
+		return template_assign_data("news.htm", array(
+			'records'=>$records, 
+			'width'=>$width, 
+			'height'=>$height));
 	}
 ?>
