@@ -2,20 +2,29 @@
 	if(!empty($_GET['dbg']))
 		DebugBreak();
 
+    register_action('new-ticket-post', 'plugins_ticket_system_new_ticket_post');
+
 	hts_data_prehandler("", array(
 			'body' => 'plugins_ticket_system_body',
 			'title' => ec('Система тикетов'),
 		));
 
+	hts_data_prehandler("\d+/", array(
+			'body'   => 'plugins_ticket_system_ticket_body',
+			'source' => 'default',
+			'modify_time' => 'default',
+			'create_time' => 'default',
+		));
+
 	include_once("include/funcs.php");
 
-	function plugins_ticket_system_body($uri, $m)
+	function plugins_ticket_system_body($uri, $m, $plugin_data)
 	{
 		include_once("funcs/datetime.php");
 	
 		$data = array();
 		
-		$data['base_uri'] = $GLOBALS['cms']['plugin_base_uri'];
+		$data['base_uri'] = $plugin_data['base_uri'];
 		
 //		echo "<xmp>"; print_r($GLOBALS['cms']); echo "</xmp>";
 //		echo "=={$GLOBALS['cms']['plugins']['tickets']['db']}==";
@@ -43,22 +52,15 @@
         return template_assign_data("tickets-list.htm", $data);
 	}
 
-	hts_data_prehandler("(.+/)\d+/", array(
-			'body'   => 'plugins_ticket_system_ticket_body',
-			'source' => 'default',
-			'modify_time' => 'default',
-			'create_time' => 'default',
-		));
-
-	function plugins_ticket_system_ticket_body($uri, $m)
+	function plugins_ticket_system_ticket_body($uri, $m, $plugin_data)
 	{
 		include_once("funcs/datetime.php");
 	
 		$data = array();
 		
-		$data['base_uri'] = $GLOBALS['cms']['plugin_base_uri'];
+		$data['base_uri'] = $plugin_data['base_uri'];
 		
-		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
+		$hts = &new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
 
 //		print_r($hts->get_data_array($data['base_uri'], 'child'));
 
@@ -96,19 +98,18 @@
 			'title' => ec('Создание нового тикета'),
 		));
 
-	function plugins_ticket_system_new_ticket_body($uri, $m)
+	function plugins_ticket_system_new_ticket_body($uri, $m, $plugin_data)
 	{
 		$data = array();
 		
-		$data['base_uri'] = $GLOBALS['cms']['plugin_base_uri'];
+		$data['base_uri'] = $plugin_data['base_uri'];
 
         include_once("funcs/templates/assign.php");
         return template_assign_data("new_ticket.htm", $data);
 	}
 
-    register_action('new-ticket-post', 'plugins_ticket_system_new_ticket_post');
 
-    function plugins_ticket_system_new_ticket_post($uri, $action)
+    function plugins_ticket_system_new_ticket_post($uri, $action, $plugin_data)
 	{
 		include_once('funcs/mail.php');
 		include_once('funcs/DataBaseHTS.php');
@@ -128,13 +129,13 @@
 		if(empty($_POST['source']))
 			return error_message(ec("Вы не написали текст сообщения."));
 		
-		$new_ticket = $GLOBALS['cms']['plugin_base_uri'].get_new_global_id(@$GLOBALS['cms']['plugins']['tickets']['db'])."/";
+		$new_ticket = $plugin_data['base_uri'].get_new_global_id(@$GLOBALS['cms']['plugins']['tickets']['db'])."/";
 
 //		print_r($_POST);
 //		echo $GLOBALS['cms']['plugin_base_uri'];
 //		exit($new_ticket);
 
-		$hts->nav_link($GLOBALS['cms']['plugin_base_uri'], $new_ticket);
+		$hts->nav_link($plugin_data['base_uri'], $new_ticket);
 
 		$hts->set_data($new_ticket, 'title',  $_POST['title']);
 		$hts->set_data($new_ticket, 'source', $_POST['source']);
@@ -158,7 +159,7 @@
 
     register_action('comment-add', 'plugins_ticket_system_comment_add');
 
-    function plugins_ticket_system_comment_add($uri, $action)
+    function plugins_ticket_system_comment_add($uri, $action, $match, $plugin_data)
 	{
 		include_once('funcs/mail.php');
 		include_once('funcs/DataBaseHTS.php');
@@ -175,10 +176,7 @@
 		if(empty($_POST['source']))
 			return error_message(ec("Вы не написали текст сообщения."));
 
-//		echo $GLOBALS['cms']['plugin_base_path'];
-//		exit();
-
-		$comment = $GLOBALS['cms']['plugin_base_uri']."comment".get_new_global_id()."/";
+		$comment = $plugin_data['base_uri']."comment".get_new_global_id()."/";
 
 //		exit($comment);
 
@@ -198,12 +196,12 @@
 
 		include_once('actions/recompile.php');
 		recompile($uri);
-		go($GLOBALS['cms']['plugin_base_uri']."?");
+		go(@$plugin_data['base_uri']."?");
 		return true;
 	}
 
 	register_action('ticket-close', 'plugins_ticket_system_ticket_close');
-    function plugins_ticket_system_ticket_close($uri, $action)
+    function plugins_ticket_system_ticket_close($uri, $action, $match, $plugin_data)
 	{
 		include_once('funcs/mail.php');
 		include_once('funcs/DataBaseHTS.php');
@@ -220,7 +218,7 @@
 		$hts->set_flag($uri, 'closed');
 
 		recompile($uri);
-		go($GLOBALS['cms']['plugin_base_uri']);
+		go(@$plugin_data['base_uri']);
 		return true;
 	}
 
@@ -245,4 +243,3 @@
 		go($uri);
 		return true;
 	}
-?>

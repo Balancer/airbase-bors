@@ -165,7 +165,8 @@
 		
 //		echo "<br/>base={$GLOBALS['cms']['base_uri']}; tpl='$tpl' Using template $template";	exit();
 
-        $hts->viewses_inc($page);
+		if(empty($GLOBALS['cms']['autoinc_views_disabled']))
+	        $hts->viewses_inc($page);
 
 		$GLOBALS['cms']['cache_copy'] = $hts->get_data($page, 'cache_create_time');
 
@@ -307,7 +308,8 @@
 			foreach($GLOBALS['cms']['smarty'] as $key => $val)
 				$smarty->assign($key, $val);
 
-	    error_reporting(E_ALL & ~E_NOTICE);
+		$errrep_save = error_reporting();
+	    error_reporting($errrep_save & ~E_NOTICE);
 
 //		echo ":$tpl:".$hts->get_data(str_replace('hts:', '', $tpl), 'source')."<br/>\n";
 
@@ -321,7 +323,7 @@
 		}
 		
 		$out = $smarty->fetch($tpl, $page);
-	    error_reporting(E_ALL);
+	    error_reporting($errrep_save);
 
 		$out = preg_replace('!<\?php(.+?)\?>!es', "do_php(stripslashes('$1'))", $out_save = $out);
 		

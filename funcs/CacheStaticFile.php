@@ -1,5 +1,4 @@
 <?
-    error_reporting(E_ALL);
     require_once("DataBase.php");
     require_once("DataBaseHTS.php");
 
@@ -104,4 +103,3 @@
 			return $db->get("SELECT file FROM cached_files WHERE original_uri = '".addslashes($uri)."' ORDER BY last_compile DESC LIMIT 1");
 		}
     }
-?>

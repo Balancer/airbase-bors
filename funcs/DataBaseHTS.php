@@ -1,6 +1,4 @@
 <?
-error_reporting(E_ALL);
-
 require_once ("DataBase.php");
 require_once ("global-data.php");
 

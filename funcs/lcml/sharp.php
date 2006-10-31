@@ -1,6 +1,4 @@
 <?
-//    error_reporting(E_ALL);
-
     include_once("extentions.php");
     ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/sharp');
 
@@ -141,4 +139,3 @@
         }
         return $params;
     }
-?>

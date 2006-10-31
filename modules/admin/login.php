@@ -1,7 +1,6 @@
 <?
     ini_set('include_path', ini_get('include_path') . ":/www/docs/www1001kran/www/cms");
 
-    error_reporting(E_ALL);
     ini_set('display_errors', 'On');
     ini_set('log_errors', 'On');
 
@@ -76,4 +75,3 @@
 	}
 
 	do_login();
-?>

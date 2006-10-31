@@ -2,34 +2,37 @@
 	require_once("handlers/load.php");
 	require_once("handlers/exec.php");
 
-function do_uri_handlers($uri, $match, $handlers)
-{
-	$ret = false;
-
-	foreach ($handlers as $uri_pattern => $func)
+	function do_uri_handlers($uri, $match, $handlers)
 	{
-		if (!empty ($_GET['debug']))
-			echo "<tt>Test pattern '$uri_pattern' to '$match' by $func()</tt><br />\n";
-		$m = array ();
-//		echo $uri_pattern."<br/>";
-		if (preg_match($uri_pattern, $match, $m))
-		{
-//			echo "... ok!";
-//			echo "Call $func('$uri')<br />";
-			$res = $func ($uri, $m);
-			if ($res === true)
-			{
-				if (isset ($_GET['debug']))
-					echo "Loaded by pattern $uri_pattern=>$func<br/>";
-				return true;
-			}
-			if ($res !== false)
-				$ret = $uri = $res;
-		}
-	}
+		$ret = false;
 
-	return $ret;
-}
+		foreach ($handlers as $uri_pattern => $row)
+		{
+			$func = $row['func'];
+			$plugin_data = @$row['plugin_data'];
+		
+			if (!empty ($_GET['debug']))
+				echo "<tt>Test pattern '$uri_pattern' to '$match' by $func()</tt><br />\n";
+			$m = array ();
+//			echo $uri_pattern."<br/>";
+			if (preg_match($uri_pattern, $match, $m))
+			{
+//				echo "... ok!";
+//				echo "Call $func('$uri')<br />";
+				$res = $func ($uri, $m, $plugin_data);
+				if ($res === true)
+				{
+					if (isset ($_GET['debug']))
+						echo "Loaded by pattern $uri_pattern=>$func<br/>";
+					return true;
+				}
+				if ($res !== false)
+					$ret = $uri = $res;
+			}
+		}
+
+		return $ret;
+	}
 
 
 	function do_plugin_action_handlers($uri, $match, $path)
@@ -59,11 +62,16 @@ function do_uri_handlers($uri, $match, $handlers)
 			{
 //			echo "*<br/>";
 				$GLOBALS['cms']['action'] = $action;
-				foreach($reg as $regexp => $func)
+				foreach($reg as $regexp => $row)
 				{
+					$func = $row['func'];
+					$plugin_data = @$row['plugin_data'];
+
 					if(!preg_match($regexp, $match, $m))
 						continue;
-					$res = $func($uri, $action, $m);
+
+					$res = $func($uri, $action, $m, $plugin_data);
+
     	    		if($res === true)
 	   	    	    	return true;
    			    	if($res !== false)
