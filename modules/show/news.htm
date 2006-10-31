@@ -1,12 +1,10 @@
 {section name=i loop=$records}
-<dl class="box"{if $width || $height} style="{if $width}width: {$width};{/if}{if $height}height: {$height};{/if}"{/if}>
-<dt><a href="{$records[i].uri}">{$records[i].date}. {$records[i].title}</a></dt>
-<dd>{if $records[i].description}{$records[i].description}{else}{$records[i].body}{/if}
+<center><b><a href="{$records[i].uri}">{$records[i].date}. {$records[i].title}</a></b></center>
+{if $records[i].description}{$records[i].description}{else}{$records[i].body}{/if}
 {if $records[i].description!="" && $records[i].body!=""}
-<div align="right"><a href="{$records[i].uri}">Подробнее &#187;&#187;&#187;&nbsp;&nbsp;&nbsp;</a></div>
+<br /><a href="{$records[i].uri}">Подробнее &#187;&#187;&#187;&nbsp;&nbsp;&nbsp;</a>
 {/if}
 <!--uri={$records[i].uri}-->
-</dd>
-</dl>
+<br /><br />
 {/section}
 

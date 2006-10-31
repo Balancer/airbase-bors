@@ -11,7 +11,7 @@
 	
 		include_once("funcs/templates/assign.php");
 
-		$hts = new DataBaseHTS('HTS');
+		$hts = new DataBaseHTS();
 
 		$children = $hts->get_data_array($uri, 'child');
 
@@ -63,7 +63,7 @@
 
 		$list = array();
 		
-		$hts = new DataBaseHTS('HTS');
+		$hts = new DataBaseHTS();
 
 //		-----------------------------------
 //		Собираем информацию о братьях:
