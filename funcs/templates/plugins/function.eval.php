@@ -31,12 +31,13 @@ function smarty_function_eval($params, &$smarty)
 
     $smarty->_compile_source('evaluated template', $params['var'], $_var_compiled);
 
-    error_reporting(E_ALL  & ~E_NOTICE);
+	$errep_save = error_reporting();
+    error_reporting($errep_save & ~E_NOTICE);
     ob_start();
     $smarty->_eval('?>' . $_var_compiled);
     $_contents = ob_get_contents();
     ob_end_clean();
-    error_reporting(E_ALL);
+    error_reporting($errep_save);
 
     if (!empty($params['assign'])) {
         $smarty->assign($params['assign'], $_contents);

@@ -1,5 +1,4 @@
 <?
-    error_reporting(E_ALL);
     require_once("funcs/DataBase.php");
 
     class Cache

@@ -13,13 +13,11 @@
 {section name=t loop=$tickets}
 <tr{$tickets[t].color}>
  <td>{$tickets[t].category}: <a title="Перейти к тикету" href="{$tickets[t].uri}">
- {if $tickets[t].closed}<s>{/if}
  {$tickets[t].title|htmlspecialchars}
- {if $tickets[t].closed}</s>{/if}
  </a>&nbsp;
  <td>{$tickets[t].priority}</td>
- <td class="updated">{if $tickets[t].closed}<s>{/if}{$tickets[t].create_date}{if $tickets[t].closed}</s>{/if}</td>
- <td class="updated">{if $tickets[t].closed}<s>{/if}{$tickets[t].date}{if $tickets[t].closed}</s>{/if}</td>
+ <td class="updated">{$tickets[t].create_date}</td>
+ <td class="updated">{$tickets[t].date}</td>
 </tr>
 {/section}
 

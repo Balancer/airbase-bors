@@ -1,13 +1,13 @@
 <?
 	register_action('category_add', 'plugins_tools_categories_editor_category_add');
 
-	hts_data_prehandler("!^(".$GLOBALS['cms']['plugin_base_uri']."?(.*))$!", array(
+	hts_data_prehandler("()(.+)^", array(
 			'body' => 'plugins_tools_categories_editor_body',
 			'title' => 'plugins_tools_categories_editor_title',
 			'parent' => 'plugins_tools_categories_editor_parent',
 		));
 
-	function plugins_tools_categories_editor_body($uri, $match)
+	function plugins_tools_categories_editor_body($uri, $match, $plugin_data)
 	{
 		include_once("funcs/datetime.php");
 		
@@ -15,7 +15,7 @@
 	
 		$data = array();
 		
-		$data['base_uri'] = $GLOBALS['cms']['plugin_base_uri'];
+		$data['base_uri'] = $plugin_data['base_uri'];
 		
 		$hts = new DataBaseHTS;
 	
@@ -27,7 +27,7 @@
 		foreach($hts->get_data_array($category, 'child') as $cat)
 			$categories_list[] = array(
 				'title'		=> $hts->get_data($cat, 'title'), 
-				'link'		=> $GLOBALS['cms']['plugin_base_uri'].preg_replace('!category://[^/]+/!', '', $cat),
+				'link'		=> $plugin_data['base_uri'].preg_replace('!category://[^/]+/!', '', $cat),
 				'default'	=> $hts->is_flag($cat, 'default'),
 				'order'		=> $hts->get_data($cat, 'order'),
 			);
@@ -88,12 +88,12 @@
 		return true;
 	}
 	
-	function plugins_tools_categories_editor_title($uri, $match)
+	function plugins_tools_categories_editor_title($uri, $match, $plugin_data)
 	{
-		$cat = "category://{$_SERVER['HTTP_HOST']}/".str_replace("{$GLOBALS['cms']['plugin_base_uri']}", "", $uri);
+		$cat = "category://{$_SERVER['HTTP_HOST']}/".str_replace("{$plugin_data['base_uri']}", "", $uri);
 		$hts = new DataBaseHTS;
 		$title = $hts->get_data($cat, 'title');
-		if(!$title || $uri == $GLOBALS['cms']['plugin_base_uri'])
+		if(!$title || $uri == $plugin_data['base_uri'])
 			$title = ec('Редактор категорий');
 
 		return $title;

@@ -97,4 +97,3 @@
     }
 
     $txt = lcml_urls($txt);
-?>

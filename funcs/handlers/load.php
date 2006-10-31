@@ -127,8 +127,8 @@
 						$data['base_uri']	= $data['parent_uri'].$m[2]."/";
 						$data['base_pattern_uri']	= "({$data['parent_uri']})({$m[2]})/";
 
-						$GLOBALS['cms']['templates']['data']['plugin_base_uri'] = $data['base_uri'];
-						$GLOBALS['cms']['templates']['data']['plugin_base_path'] = $data['base_path'];
+						$GLOBALS['cms']['templates']['data']['plugin']['base_uri'] = $data['base_uri'];
+						$GLOBALS['cms']['templates']['data']['plugin']['base_path'] = $data['base_path'];
 
 //						echo "<br/>$base_dir/$dir/config.php<br />";
 						@include_once("$base_dir/$dir/config.php");

@@ -16,7 +16,9 @@
 //			echo "--- plugin pre $data_key : $regexp = ".print_r($GLOBALS['cms']['plugin_data'], true)."<br />";
 		}
 
-		$GLOBALS['cms_patterns'][$uri_pattern] = $func;
+		$GLOBALS['cms_patterns'][$uri_pattern]['func'] = $func;
+		if(!empty($GLOBALS['cms']['plugin_data']))
+			$GLOBALS['cms_patterns'][$uri_pattern]['plugin_data'] = $GLOBALS['cms']['plugin_data'];
 	}
 
 	function register_action($regexp, $action_type, $func = NULL)
@@ -29,7 +31,11 @@
 		}
 
 		if (empty ($GLOBALS['cms_actions'][$action_type][$regexp]))
-			$GLOBALS['cms_actions'][$action_type][$regexp] = $func;
+		{
+			$GLOBALS['cms_actions'][$action_type][$regexp]['func'] = $func;
+			if(!empty($GLOBALS['cms']['plugin_data']))
+				$GLOBALS['cms_actions'][$action_type][$regexp]['plugin_data'] = $GLOBALS['cms']['plugin_data'];
+		}
 	}
 
 	function register_alias($uri_regexp, $function)

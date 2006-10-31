@@ -1,6 +1,5 @@
 <?
-    error_reporting(E_ALL);
-    require_once("DataBase.php");
+    require_once("funcs/DataBase.php");
 
     class Cache
     {
@@ -101,4 +100,3 @@
 			$this->dbh->query("DELETE FROM `cache` WHERE `type` = '".addslashes($type)."' AND `key` = '".addslashes($key)."'");
         }
     }
-?>

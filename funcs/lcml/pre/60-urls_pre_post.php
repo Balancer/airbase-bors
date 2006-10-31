@@ -1,6 +1,4 @@
 <?
-    error_reporting(E_ALL);
-
     function lcml_urls_pre_post($txt)
     {
         $n=1000;
@@ -13,4 +11,3 @@
 
         return $txt;
     }
-?>
