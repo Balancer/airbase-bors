@@ -1,0 +1,13 @@
+<div style="width: 100px; margin: 0; padding: 0;">
+{if $user_avatar}
+	<div style="width: 100px; height: 100px; text-align: center; vertical-align: middle; overflow: hidden;" onClick="setImageId('post_{$post_id}_moreimg', toggleVisId('post_{$post_id}_more') == 1, 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')">{$user_avatar}</div>
+{/if}
+<div style="font-size: x-small; font-weight: 900; text-align: center;">{$userlink}</div>
+<div style="font-size: xx-small; text-align: center;">{$user_title}</div>
+<center><script src="http://airbase.ru/js/include/http://balancer.ru/user/{$user_id}/reputation_line/"></script></center>
+<center><a 
+		href="http://balancer.ru/user/{$user_id}/warnings/"
+		title="Штрафы участника. Нажмите для побробного просмотра."
+		class="hoverable_link"
+		>{$user_warn}</center>
+</div>
