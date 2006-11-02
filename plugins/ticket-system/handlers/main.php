@@ -28,7 +28,7 @@
 		
 //		echo "<xmp>"; print_r($GLOBALS['cms']); echo "</xmp>";
 //		echo "=={$GLOBALS['cms']['plugins']['tickets']['db']}==";
-		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
+		$hts = &new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
 //		echo ":".$hts->dbh->db_name;
 
 		$tickets = array();
@@ -93,7 +93,7 @@
         return template_assign_data("ticket.htm", $data);
 	}
 
-	hts_data_prehandler("(.+/)new_ticket/", array(
+	hts_data_prehandler("new_ticket/", array(
 			'body' => 'plugins_ticket_system_new_ticket_body',
 			'title' => ec('Создание нового тикета'),
 		));
@@ -117,8 +117,8 @@
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
 
-		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
-		$us = new User;
+		$hts = &new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
+		$us = &new User;
 
 		if(!$us->data('id'))
 			return error_message(ec("Вы не вошли в систему"));
@@ -167,8 +167,8 @@
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
 
-		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
-		$us = new User;
+		$hts = &new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
+		$us = &new User;
 
 		if(!$us->data('id') || !$us->data('name'))
 			return error_message(ec("Вы не вошли в систему"));
@@ -209,8 +209,8 @@
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
 
-		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
-		$us = new User;
+		$hts = &new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
+		$us = &new User;
 
 		if(!$us->data('id') || !$us->data('name'))
 			return error_message(ec("Вы не вошли в систему"));
@@ -231,8 +231,8 @@
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
 
-		$hts = new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
-		$us = new User;
+		$hts = &new DataBaseHTS(@$GLOBALS['cms']['plugins']['tickets']['db']);
+		$us = &new User;
 
 		if(!$us->data('id') || !$us->data('name'))
 			return error_message(ec("Вы не вошли в систему"));

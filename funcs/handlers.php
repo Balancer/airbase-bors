@@ -17,17 +17,19 @@
 //			echo $uri_pattern."<br/>";
 			if (preg_match($uri_pattern, $match, $m))
 			{
-//				echo "... ok!";
+				if (!empty ($_GET['debug']))
+					echo "----------------> ok!";
 //				echo "Call $func('$uri')<br />";
 				$res = $func ($uri, $m, $plugin_data);
 				if ($res === true)
 				{
 					if (isset ($_GET['debug']))
 						echo "Loaded by pattern $uri_pattern=>$func<br/>";
+
 					return true;
 				}
 				if ($res !== false)
-					$ret = $uri = $res;
+					$ret = $uri = $match = $res;
 			}
 		}
 
