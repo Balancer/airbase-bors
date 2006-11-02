@@ -8,6 +8,7 @@
     ini_set('display_errors', 'On');
     ini_set('log_errors', 'On');
     require_once("config.php");
+	require_once('funcs/modules/messages.php');
 
     header("Content-Type: text/html; charset={$GLOBALS['cms']['charset']}");
     header('Content-Language: ru');
