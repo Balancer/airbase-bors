@@ -4,16 +4,17 @@
 //		echo "uri=$uri";
 	
 		include_once("funcs/Cache.php");
-		$ch = new Cache();
+		$ch = &new Cache();
 		
 		if($ch->get('modules-design-navleft-4', $uri))
 			return $ch->last;
 	
 		include_once("funcs/templates/assign.php");
 
-		$hts = new DataBaseHTS();
+		$hts = &new DataBaseHTS();
 
-		$children = $hts->get_data_array($uri, 'child');
+//		$children = $hts->get_data_array($uri, 'child');
+		$children = $hts->get_children_array_ex($uri, array('order' => 'order asc'));
 
 		$data = array();
 	
@@ -63,7 +64,7 @@
 
 		$list = array();
 		
-		$hts = new DataBaseHTS();
+		$hts = &new DataBaseHTS();
 
 //		-----------------------------------
 //		Собираем информацию о братьях:
@@ -86,7 +87,7 @@
 //			echo "<span style=\"font-size: 6pt;\">&nbsp;p: $parent</span><br/>\n";
 
 // 			Цикл по нашим братьям
-			foreach($hts->get_data_array($parent, 'child') as $child)
+			foreach($hts->get_children_array_ex($parent, array('order' => 'order asc')) as $child)
 			{
 //				echo "<span style=\"font-size: 6pt;\">&nbsp;&nbsp;c: $child</span><br/>\n";
 				if(!$hts->get_data($child, 'nav_name'))
@@ -106,7 +107,6 @@
 					$children = false;
 				}
 			}
-		
 		}
 
 		if($children !== false)
@@ -126,5 +126,3 @@
 			
 		return $children;
 	}
-
-?>

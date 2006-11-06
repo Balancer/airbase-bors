@@ -25,7 +25,7 @@
 	$source = $hts->get_data($uri, 'source');
 
 ?>
-<form method="post" action="<?echo $uri?>" ENCTYPE="multipart/form-data">
+<form method="post" action="<?echo $uri?>?create-page" ENCTYPE="multipart/form-data">
 <h1><?echo $title?$title:ec('Новая страница');?></h1>
 <table class="btab" cellSpacing="0">
 <?
