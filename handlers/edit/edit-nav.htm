@@ -20,3 +20,10 @@
 {/section}
 <form method="post" action="?nav_child_add"><tr><td><input name="link"></td><td><input type="image" src="http://www.aviaport.ru/images/tools/b_insrow.png" title="Добавить" alt="add"></td></tr></form>
 </table>
+
+<table class="btab" cellSpacing="0" style="width: auto;">
+<caption>Menu order</caption>
+<form method="post" action="?order_set">
+<tr><td><input name="order" value="{$order}"></td>
+<td><input type="submit" value="Set"></td></tr></form>
+</table>

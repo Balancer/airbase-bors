@@ -46,13 +46,14 @@
 	require_once("funcs.php");
 	function hts_data_prehandler_add($regexp, $data_key, $func)
 	{
-//	if (!empty ($_GET['debug']))
-//		echo "<small>Add pre function $func to uri like '$regexp' for key $data_key</small><br />";
+//		if (!empty ($_GET['debug']))
+//			echo "<small>Add pre function $func to uri like '$regexp' for key $data_key</small><br />";
 
 		if(!empty($GLOBALS['cms']['plugin_data']['base_uri']))
 		{
 			$regexp = "!".preg_quote($GLOBALS['cms']['plugin_data']['base_uri'], "!").$regexp.'$!';
-//			echo "--- plugin pre $data_key : $regexp = ".print_r($GLOBALS['cms']['plugin_data'], true)."<br />";
+//			if (!empty ($_GET['debug']))
+//				echo "--- plugin pre $data_key : $regexp = ".print_r($GLOBALS['cms']['plugin_data'], true)."<br />";
 		}
 		
 //		echo "$data_key: $regexp <br />";

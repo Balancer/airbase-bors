@@ -43,7 +43,7 @@
 		if(!file_exists($smarty->cache_dir))
 			mkdir($smarty->cache_dir, 0775, true);
 
-		$smarty->caching = empty($data['caching']) ? !$GLOBALS['cms']['templates_cache_disabled'] : $data['caching'];
+		$smarty->caching = empty($data['caching']) ? empty($GLOBALS['cms']['templates_cache_disabled']) : $data['caching'];
 		$smarty->compile_check = true; 
 		$smarty->php_handling = SMARTY_PHP_QUOTE; //SMARTY_PHP_PASSTHRU;
 		$smarty->security = false;

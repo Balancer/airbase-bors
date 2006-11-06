@@ -1,5 +1,5 @@
 <?
-	hts_data_prehandler("request/", array(
+	hts_data_prehandler("", array(
 			'body' => 'plugins_mailform_main_body',
 			'title' => ec('Заказ'),
 			'template' => 'popup',

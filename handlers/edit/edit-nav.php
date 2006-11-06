@@ -5,6 +5,8 @@
     register_action('nav_parent_add', 'handler_edit_nav_parent_add');
     register_action('nav_parent_delete', 'handler_edit_nav_parent_delete');
 
+    register_action('order_set', 'handler_edit_order_set');
+
 	function load_icons()
 	{
 		$tools = array('delete' => '<img src="http://www.aviaport.ru/images/tools/b_drop.png" width="16" height="16" border="0" alt="del" title="'.ec("Удалить").'">');
@@ -54,12 +56,14 @@
 		$data['icons'] = load_icons('tools');
 
 //		print_r($data);
+		$data['order'] = $hts->get_data($uri, 'order');
 
 		include_once("funcs/templates/assign.php");
 		$data = array(
 			'body'  =>  template_assign_data("xfile:".dirname(__FILE__)."/edit-nav.htm", $data),
 			'title' => ec("Редактирование навигации страницы ").$hts->get_data($uri, 'title'),
 			);
+
 		include_once("funcs/templates/show.php");
 		template_assign_and_show($uri, $data);
 		return true;
@@ -128,4 +132,17 @@
         recompile($uri);
 		go("$uri?nav_edit");
 	}
-?>
+
+    function handler_edit_order_set($uri, $action)
+	{
+		require_once("funcs/check/access.php");
+
+		if(!check_action_access(3, $uri))
+			return true;
+
+		$hts = &new DataBaseHTS();
+		
+		$hts->set_data($uri, 'order', intval($_POST['order']));
+
+		go("$uri?nav_edit");
+	}
