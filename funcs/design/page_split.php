@@ -2,6 +2,7 @@
 	function pages_select($uri, $current_page, $total_pages)
 	{
 		$pages = array();
+		$total_pages = intval($total_pages);
 
 		$q = "";
 		if(!empty($_GET))

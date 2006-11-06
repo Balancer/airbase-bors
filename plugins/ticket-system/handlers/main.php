@@ -20,6 +20,8 @@
 
 	function plugins_ticket_system_body($uri, $m, $plugin_data)
 	{
+		$items_per_page = 50;
+	
 		include_once("funcs/datetime.php");
 	
 		$data = array();
@@ -33,8 +35,20 @@
 
 		$tickets = array();
 
+        $total = $hts->get_children_array_ex_size($data['base_uri'], array('closed' => 'no', 'range' => -1));
+
+		include_once('funcs/design/page_split.php');
+																		
+		$page = max(intval($GLOBALS['cms']['page_number']), 1);
+
+		$pages = join(" ", pages_select($uri, $page, ($total-1)/$items_per_page+1));
+																						
+		$data['pages'] = $pages;
+		$start = ($page-1)*$items_per_page;
+		$limit = $items_per_page;
+
 //		$GLOBALS['log_level'] = 10;
-		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'no', 'range' => -1)) as $ticket)
+		foreach($hts->get_children_array_ex($data['base_uri'], array('closed' => 'no', 'range' => -1, 'start' => $start, 'limit' => $limit)) as $ticket)
 			$tickets[] = array(
 				'uri'    => $ticket,
 				'title'  => $hts->get_data($ticket, 'title'),
@@ -128,6 +142,12 @@
 
 		if(empty($_POST['source']))
 			return error_message(ec("Вы не написали текст сообщения."));
+
+		if(empty($_POST['category']))
+			return error_message(ec("Вы не указали блок."));
+
+		if(empty($_POST['proirity']))
+			return error_message(ec("Вы не указали приоритет."));
 		
 		$new_ticket = $plugin_data['base_uri'].get_new_global_id(@$GLOBALS['cms']['plugins']['tickets']['db'])."/";
 
