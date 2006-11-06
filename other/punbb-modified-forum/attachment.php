@@ -1,4 +1,9 @@
 <?php
+
+	include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
+	require_once("funcs/tools/ip_check.php");
+	agava_ip_check();
+
 /*
 
 also it is possible to make your php script resume downloads, to do this you need to check $_SERVER['HTTP_RANGE'] which may contain something like this
