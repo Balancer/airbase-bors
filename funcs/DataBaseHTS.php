@@ -829,6 +829,7 @@ class DataBaseHTS
 
 	function get_children_array_ex($parent, $params = array ())
 	{
+		$start = intval(empty ($params['start']) ? 0 : $params['start']);
 		$limit = intval(empty ($params['limit']) ? 20 : $params['limit']);
 		$range = intval(empty ($params['range']) ? 86400 : $params['range']);
 
@@ -880,11 +881,57 @@ class DataBaseHTS
 		AND mt.value <	$stop_time
 		$cond
 	$order
-	LIMIT $limit;";
+	LIMIT $start, $limit;";
 
-		$ret = $this->dbh->get_array($query);
+		return $this->dbh->get_array($query);
+	}
 
-		return $ret;
+	function get_children_array_ex_size($parent, $params = array ())
+	{
+		$range = intval(empty ($params['range']) ? 86400 : $params['range']);
+
+		$stop_time = time();
+		$start_time = $range > 0 ? $stop_time - $range : 0;
+
+		$join = $cond = "";
+
+		$tab = 1;
+
+		if(!empty ($params['closed']))
+		{
+			$not = $params['closed'] == 'yes' ? "NOT" : "";
+		
+			$join .= " LEFT JOIN hts_data_flags fc ON (c.value = fc.id AND fc.value='closed')";
+			$cond .= " AND fc.id IS $not NULL";
+		}
+		
+		if(empty ($params['hidden']) || $params['hidden'] == 'only')
+		{
+			$not = @$params['hidden'] == 'only' ? "NOT" : "";
+		
+			$join .= " LEFT JOIN hts_data_flags fh ON (c.value = fh.id AND fh.value='hidden')";
+			$cond .= " AND fh.id IS $not NULL";
+		}
+
+		if (empty ($params['deleted']) || $params['deleted'] == 'only')
+		{
+			$not = @$params['deleted'] == 'only' ? "NOT" : "";
+			
+			$join .= " LEFT JOIN hts_data_flags fd ON (c.value = fd.id AND fd.value='deleted')";
+			$cond .= " AND fd.id IS $not NULL";
+		}
+
+		$query = "
+		SELECT COUNT(*) FROM hts_data_child c
+			LEFT JOIN hts_data_modify_time mt ON (c.value = mt.id)
+			$join
+		WHERE c.id = '".addslashes($parent)."'
+			AND mt.value >= $start_time
+			AND mt.value <	$stop_time
+			$cond
+		";
+
+		return $this->dbh->get($query);
 	}
 
 	function get_array_ex($regexp, $table, $params = array ())
