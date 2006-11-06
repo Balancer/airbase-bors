@@ -425,17 +425,9 @@ else
 
 //Attachment Mod Block Start
 //Fetch some stuff so we know if the user is allowed to attach files to the post ... oh and preview won't work... I'm not going to add shitload of stuff to get some temporary upload area ;)
-$attach_allowed = false;
-$attach_result = $db->query("SELECT rules,size FROM {$db->prefix}attach_2_rules WHERE group_id=".intval($pun_user['g_id'])." AND (forum_id=".intval($cur_posting['id'])." OR forum_id=0) ORDER BY forum_id DESC LIMIT 1")
-	or error('Unable to fetch attachment rules',__FILE__,__LINE__,$db->error());	
-if($db->num_rows($attach_result)){
-	list($attach_rules,$attach_size)=$db->fetch_row($attach_result);
-	if(attach_rules($attach_rules,ATTACH_UPLOAD))
-		$attach_allowed=true;
-}elseif($pun_user['g_id']==PUN_ADMIN){
-	$attach_allowed=true;
-	$attach_size=$pun_config['attach_max_size'];	
-}
+
+$attach_allowed = $pun_user['g_id'] != PUN_GUEST;
+
 //Attachment Mod Block End
 
 require PUN_ROOT.'header.php';
@@ -549,7 +541,7 @@ if($attach_allowed){
 					<legend><?php echo $lang_attach['Attachment'] ?></legend>
 					<div class="infldset">
 						<div class="rbox">
-							<input type="hidden" name="MAX_FILE_SIZE" value="<?php print $attach_size; ?>" /><input type="file" name="attached_file" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
+							<input type="hidden" name="MAX_FILE_SIZE" value="8192000" /><input type="file" name="attached_file" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
 							<?php echo $lang_attach['Note'];/*"*/ ?>
 						</div>
 					</div>

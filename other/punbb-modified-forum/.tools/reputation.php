@@ -14,10 +14,10 @@
 		$dbu2 = new DataBase('USERS');
 		
 		$grw = array(
-				1 => 4, // admin
-				2 => 4, // moder
+				1 => 8, // admin
+				2 => 6, // moder
 				3 => 0, // guest
-				5 => 3, // coordin
+				5 => 4, // coordin
 				6 => 2, // старожилы
 			);
 
@@ -34,7 +34,7 @@
 					$weight = 1;
 
 				if($v['id'] == 10000)
-					$weight = 6;
+					$weight = 10;
 					
 				if($dbf->get("SELECT num_posts FROM users WHERE id={$v['id']}") < 50)
 					$weight = 0;

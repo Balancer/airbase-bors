@@ -31,7 +31,7 @@ function attach_allow_upload($rules=0,$max_size=0,$file_ext='',$upload_size=10,$
 	$attach_allowed = false;
 	
 	//check so that the user is allowed to upload
-	if(attach_rules($rules,ATTACH_UPLOAD)||$pun_user['g_id']==PUN_ADMIN)
+	if(attach_rules($rules,ATTACH_UPLOAD)||$pun_user['g_id']!=PUN_GUEST)
 		$attach_allowed=true;
 	else 
 		$attach_allowed=false;

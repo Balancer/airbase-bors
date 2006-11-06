@@ -55,6 +55,15 @@ if(!empty($_GET['topic']) && preg_match("!^(\d+)\.msg!", $_GET['topic'], $m))
 	go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}");
 }
 
+if(!empty($_SERVER['REQUEST_URI']) && preg_match("!topic,(\d+).(\d+)\.html$!", $_SERVER['REQUEST_URI'], $m))
+{
+	//http://forums.airbase.ru/index.php/topic,2760.0.html
+	if(empty($m[2]))
+		go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}");
+	else
+		go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}&p=".intval($m[2]+1));
+}
+
 if(!empty($_GET['showforum']))
 {
 	//http://forums.airbase.ru/index.php?showforum=40
