@@ -1,0 +1,40 @@
+<b>Общая репутация:</b> {$reputation_abs_value}<br />
+<b>Положительных голосов:</b> {$plus}<br />
+<b>Негативных голосов:</b> {$minus}<br />
+
+<p><i><b>Внимание!</b> Репутацию может выставить только участник, имеющий более 50 сообщений на форуме.</i></p>
+
+<table width="100%"><tr>
+<td width="90%">
+<form method="post" action="{$main_uri}?reputation_add_do">
+<div style="background-color: #cfc;"><input type="radio" id="s1" name="score" value="+1">&nbsp;увеличить репутацию</a></div>
+<div style="background-color: #fcc;"><input type="radio" id="s2" name="score" value="-1">&nbsp;уменьшить репутацию</a></div>
+<textarea name="comment" style="width: 98%;" rows="5"></textarea>
+Ссылка (опционально):</span>&nbsp;<input name="uri" value="{$ref}" style="width: 60%;"><br />
+<input type="hidden" name="user_id" value="{$user_id}">
+<input type="hidden" name="ref" value="{$ref}">
+<input type="submit" value="Отправить" onClick="{literal}if(!getElementById('s1').checked && !getElementById('s2').checked){ alert('Выберите оценку!'); return false;} else return true;{/literal}">
+</form>
+</td>
+<td>
+<div class="userinfo" style="width: 100px; float: right; margin: 0px 0px 8px 16px; display: inline; border: 1px solid; background-color: white;">
+	<script src="http://airbase.ru/js/include/http://balancer.ru/user/{$user_id}/avatarblock/"></script>
+</div>
+</td>
+</tr></table>
+
+{if $list}
+<table cellSpacing="0" class="btab">
+<tr><th>Дата</th><th>Вид</th><th>От кого</th><th>Комментарий</th></tr>
+{section loop=$list name=l}
+{assign var=i value=$list[l]}
+<tr>
+	<td style="background-color: #{if $i.score>0}cfc{else}fcc{/if}; font-size: 8pt;">{$i.time|full_time}</td>
+	<td style="background-color: #{if $i.score>0}cfc{else}fcc{/if}; font-size: 8pt;">{if $i.score > 0}+{/if}{$i.score}</td>
+	<td style="background-color: #{if $i.score>0}cfc{else}fcc{/if}; font-size: 8pt;"><a href="http://balancer.ru/user/{$i.voter_id}/reputation/">{$i.voter_id|user_data:"name"}</a><br /><script src="http://airbase.ru/js/include/http://balancer.ru/user/{$i.voter_id}/reputation_line/"></script></td>
+	<td style="background-color: #{if $i.score>0}cfc{else}fcc{/if}; font-size: 8pt;">{$i.comment|pun_lcml}{if $i.uri}<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За: {$i.uri|pun_lcml}</div>{/if}	
+	</td>
+</tr>
+{/section}
+</table>
+{/if}
