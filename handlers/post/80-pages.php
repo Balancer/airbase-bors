@@ -9,10 +9,18 @@
 	{
 //		echo "<tt>try show page '$uri'</tt><br/>";
 	
-	    $hts  = new DataBaseHTS;
+	    $hts  = &new DataBaseHTS();
 	    require_once('funcs/templates/smarty.php');
+
 		if($hts->get_data($uri, 'source') || $hts->get_data($uri, 'body'))
 		{
+			if(!empty($GLOBALS['cms']['cache_static']))
+			{
+				$sf = &new CacheStaticFile($uri);
+				echo $sf->save(show_page($uri, false));
+				return true;
+			}
+
 			show_page($uri);
 			return true;
 		}
@@ -45,4 +53,3 @@ RewriteRule ^(.*)\?(.*?)$ cms/smarty/smarty.php?args=$2
 RewriteRule ^(.*)/$ cms/smarty/smarty.php
 RewriteRule ^$ cms/smarty/smarty.php
 */
-?>

@@ -131,7 +131,11 @@
 						$GLOBALS['cms']['templates']['data']['plugin']['base_path'] = $data['base_path'];
 
 //						echo "<br/>$base_dir/$dir/config.php<br />";
-						@include_once("$base_dir/$dir/config.php");
+
+						$errrep_save = error_reporting();
+						error_reporting($errrep_save & ~ (E_NOTICE | E_WARNING));
+						include_once("$base_dir/$dir/config.php");
+						error_reporting($errrep_save);
 
 						$GLOBALS['cms']['plugin_data'] = $data;
 						handlers_load_dir("$base_dir/$dir/handlers/");

@@ -35,5 +35,3 @@
 
 		return round($size/1024,2).ec("МБ");
 	}
-
-?>
