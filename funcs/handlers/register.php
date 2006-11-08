@@ -13,7 +13,7 @@
 		if(!empty($GLOBALS['cms']['plugin_data']['base_uri']))
 		{
 			$uri_pattern = "!".preg_quote($GLOBALS['cms']['plugin_data']['base_uri'], "!").$uri_pattern.'$!';
-//			echo "--- plugin pre $data_key : $regexp = ".print_r($GLOBALS['cms']['plugin_data'], true)."<br />";
+//			echo "--- plugin pre for $uri_pattern<br />";
 		}
 
 		$GLOBALS['cms_patterns'][$uri_pattern]['func'] = $func;

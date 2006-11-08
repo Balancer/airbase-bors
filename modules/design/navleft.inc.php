@@ -2,6 +2,8 @@
 	function modules_design_navleft_get($uri)
 	{
 //		echo "uri=$uri";
+
+//		DebugBreak();
 	
 		include_once("funcs/Cache.php");
 		$ch = &new Cache();
@@ -27,6 +29,7 @@
 			'here' => true,
 		);
 
+
 //		Явные дети нашей страницы
 		foreach($children as $child)
 			if($hts->get_data($child, 'nav_name'))
@@ -38,6 +41,8 @@
 				);
 
 		$data = modules_design_navleft_get_parent($uri, $data, 1);
+
+		echo "<xmp>"; print_r($data); echo "</xmp>";
 
 		$max = 0;
 

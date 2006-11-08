@@ -49,7 +49,7 @@
 			if($uri{strlen($uri)-1}=='/')
 			{
 				include_once('funcs/modules/uri.php');
-	            $hts   = new DataBaseHTS();
+	            $hts   = &new DataBaseHTS();
 				$title = $hts->get_data($uri, 'title');
 				if(!$title)
 					$title = "index.html";
@@ -61,7 +61,7 @@
 //			echo "'$uri'";
 		}
 
-		function save($content)
+		function save(&$content)
 		{
 //			echo "save file '{$this->file}'";
 			require_once("funcs/filesystem_ext.php");
@@ -79,7 +79,7 @@
 			
 			@chmod($this->file, 0664);
 			
-            $db = new DataBase($GLOBALS['cms']['mysql_cache_database']);
+            $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
 			
 			$db->store('cached_files', "file = '".addslashes($this->file)."'", array(
 					'file'			=> $this->file,
@@ -87,18 +87,20 @@
 					'original_uri'	=> $this->original_uri,
 					'last_compile'	=> time(),
 			));
+			
+			return $content;
 		}
 		
 		function get_name($uri)
 		{
-            $db = new DataBase($GLOBALS['cms']['mysql_cache_database']);
+            $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
 			
 			return $db->get("SELECT uri FROM cached_files WHERE original_uri = '".addslashes($uri)."' ORDER BY last_compile DESC LIMIT 1");
 		}
 
 		function get_file($uri)
 		{
-            $db = new DataBase($GLOBALS['cms']['mysql_cache_database']);
+            $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
 			
 			return $db->get("SELECT file FROM cached_files WHERE original_uri = '".addslashes($uri)."' ORDER BY last_compile DESC LIMIT 1");
 		}

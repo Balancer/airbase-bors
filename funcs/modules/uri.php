@@ -83,24 +83,25 @@
         $uri = to_translit($uri);
 
         $uri = strtr($uri, array(
-        ' ' => '_', 
+        ' ' => '-', 
         '"' => "'", 
-        '#' => '$', 
-        '&' => '$_', 
-        '+' => '_',
+        '#' => '-N',
+        '&' => '-and-',
+        '+' => '-plus-',
         '`' => "'",
         '/' => '-',
-        '<' => '_',
-        '=' => '-',
-        '>' => '_',
-        '?' => '$', 
+        '<' => '-less-',
+        '=' => '-eq-',
+        '>' => '-great-',
+        '?' => '-', 
         "\\" => '-',
         '|'=> '!', 
         ));
 
 //        $uri = rawurlencode($uri);
 //        $uri = str_replace('%','_',$uri);
+        $uri = preg_replace("!^\-+!",'', $uri);
+        $uri = preg_replace("!\-+$!",'', $uri);
+        $uri = preg_replace("!\-{2,}!",'-', $uri);
         return $uri;        
     }
-
-?>
