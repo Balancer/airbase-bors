@@ -1,7 +1,7 @@
 <?
 //	print_r($GLOBALS['cms']['plugin_data']);
 
-    register_handler(".*", 'cms_plugins_forum_user_avatar');
+    register_handler("()av\.(png|jpg|gif)", 'cms_plugins_forum_user_avatar');
 
     function cms_plugins_forum_user_avatar($uri, $m, $plugin_data)
 	{
