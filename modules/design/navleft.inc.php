@@ -42,7 +42,7 @@
 
 		$data = modules_design_navleft_get_parent($uri, $data, 1);
 
-		echo "<xmp>"; print_r($data); echo "</xmp>";
+//		echo "<xmp>"; print_r($data); echo "</xmp>";
 
 		$max = 0;
 

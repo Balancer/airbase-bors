@@ -21,7 +21,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = new DataBaseHTS;
+		$hts = &new DataBaseHTS;
 		$uri = $hts->normalize_uri($uri);
 
 		$data     = array();
@@ -58,7 +58,24 @@
 //		print_r($data);
 		$data['order'] = $hts->get_data($uri, 'order');
 
+		$me = &new User();
+
+		$GLOBALS['cms']['templates_cache_disabled'] = true;
+
+		$data += array(
+				'title' => $hts->get_data($uri, 'title'),
+				'description' => $hts->get_data($uri, 'description'),
+				'cr_type' => $hts->get_data($uri, 'cr_type'),
+				'template' => $hts->get_data($uri, 'template'),
+				'nav_name' => $hts->get_data($uri, 'nav_name'),
+				'create_time' => $hts->get_data($uri, 'create_time'),
+				'level' => $me->data('level'),
+				'caching' => false,
+			);
+
+
 		include_once("funcs/templates/assign.php");
+
 		$data = array(
 			'body'  =>  template_assign_data("xfile:".dirname(__FILE__)."/edit-nav.htm", $data),
 			'title' => ec("Редактирование навигации страницы ").$hts->get_data($uri, 'title'),
@@ -76,7 +93,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = new DataBaseHTS;
+		$hts = &new DataBaseHTS;
 		
 		if(isset($_POST['link']))
 			$hts->add_child($uri, $_POST['link']);
@@ -92,7 +109,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = new DataBaseHTS;
+		$hts = &new DataBaseHTS;
 		
 		if(isset($_GET['link']))
 			$hts->child_remove($uri, $_GET['link']);
@@ -108,7 +125,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = new DataBaseHTS;
+		$hts = &new DataBaseHTS;
 		
 		if(isset($_POST['link']))
 			$hts->parent_add($uri, $_POST['link']);
@@ -124,7 +141,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = new DataBaseHTS;
+		$hts = &new DataBaseHTS;
 		
 		if(isset($_GET['link']))
 			$hts->parent_remove($uri, $_GET['link']);

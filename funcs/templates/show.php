@@ -19,7 +19,7 @@
 	
 	function template_assign($uri, $template, $data=NULL)
 	{
-		$hts = new DataBaseHTS();
+		$hts = &new DataBaseHTS();
 	
 		if(is_null($data))
 		{
@@ -30,7 +30,7 @@
 		}
 		
 		require_once('Smarty/Smarty.class.php');
-		$smarty = new Smarty;
+		$smarty = &new Smarty;
 		require('mysql-smarty.php');
 		require('smarty-register.php');
 
@@ -62,13 +62,11 @@
 
 		$cct = @$data['cache_create_time'];
 
-		if($uri && ($action || $modify_time > $cct))
-			$smarty->clear_cache("hts:{$template}", $uri);
 
 		$smarty->template_dir = dirname(preg_replace("!^xfile:!", "", $template));
 		
 		$data['access'] = access_allowed($uri) ? 1 : 0;
-		$us = new User();
+		$us = &new User();
 		$data['level'] = intval($us->data('level'));
 		$data['user_id'] = $us->data('id');
 		$data['user_name'] = $us->data('name');
@@ -104,8 +102,6 @@
 			$smarty->assign("page_template", $template);
 			$smarty->assign("time", time());
 
-			$smarty->clear_cache("hts:{$template}", $uri);
-			
 			header("X-Recompile: Yes");
 		}
 		else
@@ -181,7 +177,7 @@
 	{
 		require_once('Smarty/Smarty.class.php');
 
-		$smarty = new Smarty;
+		$smarty = &new Smarty;
 
 		require('mysql-smarty.php');
 
@@ -209,7 +205,7 @@
 	function get_parsed_page($uri, $data = array())
 	{
 
-		$hts = new DataBaseHTS();
+		$hts = &new DataBaseHTS();
 
 		if($template = $hts->get_data($uri, 'template'))
 		{
@@ -250,11 +246,8 @@
 
 		$source = $hts->get_data($uri, 'source');
 
-//		if($uri && ($action || $modify_time > $cct))
-//			$smarty->clear_cache("hts:{$template}", $uri);
-		
 		$access = access_allowed($uri) ? 1 : 0;
-		$us = new User();
+		$us = &new User();
 		$level = $us->data('level');
 		$user_id = $us->data('id');
 		$user_name = $us->data('name');
@@ -283,7 +276,6 @@
 			$smarty->assign("page_template", $template);
 			$smarty->assign("time", time());
 
-			$smarty->clear_cache("hts:{$template}", $uri);
 			
 			header("X-Recompiled: Yes");
 		}
@@ -339,7 +331,10 @@
 			else
 				$tpl = "hts:http://{$_SERVER['HTTP_HOST']}$tpl";
 
-		$out = $smarty->fetch("$tpl", $uri);
+		if($uri && ($action || $modify_time > $cct))
+			$smarty->clear_cache($tpl, $uri);
+
+		$out = $smarty->fetch($tpl, $uri);
 
 		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
 
@@ -352,5 +347,3 @@
 //</html>
 		return $out;
 	}
-
-?>
