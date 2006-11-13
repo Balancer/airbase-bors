@@ -23,7 +23,7 @@
 
     function show_page($uri, $do_print = true)
     {
-        $hts  = new DataBaseHTS();
+        $hts  = &new DataBaseHTS();
 
         $page = $hts->normalize_uri($uri);
 
@@ -78,7 +78,7 @@
             }
         }
         
-        $smarty = new Smarty;
+        $smarty = &new Smarty;
         require("mysql-smarty.php");
         require('smarty-register.php');
 		
@@ -90,7 +90,7 @@
 		    @mkdir($smarty->compile_dir, 0775, true);
 		if(!file_exists($smarty->cache_dir))
 			@mkdir($smarty->cache_dir, 0775, true);
-//		echo $GLOBALS['cms']['templates_cache_disabled'];
+//		echo ".".$GLOBALS['cms']['templates_cache_disabled'];
         $smarty->caching = $action ? false : @$GLOBALS['cms']['templates_cache_disabled'] != true;
         $smarty->compile_check = true; 
         $smarty->php_handling = SMARTY_PHP_QUOTE; //SMARTY_PHP_PASSTHRU;
@@ -172,13 +172,11 @@
 
 		$nocache = $action || @$GLOBALS['cms']['templates_cache_disabled'];
 		$modify_time = max($hts->get_data($page, 'modify_time'), $hts->get_data($page, 'compile_time'));
-		$nocache |= $modify_time > $hts->get_data($page, 'cache_create_time');
-
-		if($nocache)
-			$smarty->clear_cache($tpl, $page);
+		$hts->get_data($page, 'cache_create_time');
+		$nocache = $nocache || ($modify_time > $hts->get_data($page, 'cache_create_time'));
 
 		$access = access_allowed($page, $hts) ? 1 : 0;
-		$us = new User();
+		$us = &new User();
 		$level = $us->data('level');
 		$user_id = $us->data('id');
 		$user_name = $us->data('name');
@@ -266,8 +264,6 @@
 			
 			$hts->set_data($page, 'cache_create_time', time());
 
-	        $smarty->clear_cache($tpl, $page);
-			
 		    @header("X-Recompile: Yes");
         }
         else
@@ -323,6 +319,9 @@
 				$tpl = "hts:http://{$_SERVER['HTTP_HOST']}$tpl";
 		}
 		
+		if($nocache)
+			$smarty->clear_cache($tpl, $page);
+		
 		$out = $smarty->fetch($tpl, $page);
 	    error_reporting($errrep_save);
 
@@ -337,4 +336,3 @@
 		else
 			return $out;
     }
-?>

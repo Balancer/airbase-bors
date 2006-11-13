@@ -1,7 +1,7 @@
 <?
 	$GLOBALS['log_level'] = 2;
 
-    ini_set('include_path', ini_get('include_path') . ":{$_SERVER['DOCUMENT_ROOT']}/cms:{$_SERVER['DOCUMENT_ROOT']}/cms-local:{$_SERVER['DOCUMENT_ROOT']}/include:{$_SERVER['DOCUMENT_ROOT']}/cms/PEAR");
+    ini_set('include_path', ini_get('include_path') . ":{$_SERVER['DOCUMENT_ROOT']}/cms-local:{$_SERVER['DOCUMENT_ROOT']}/cms:{$_SERVER['DOCUMENT_ROOT']}/include:{$_SERVER['DOCUMENT_ROOT']}/cms/PEAR");
 
     $GLOBALS['cms'] = array(
 		'sites_store_path' => "{$_SERVER['DOCUMENT_ROOT']}/sites",

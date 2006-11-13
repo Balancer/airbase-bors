@@ -5,7 +5,7 @@
 //		print_r($data);
 
 		require_once('Smarty/Smarty.class.php');
-		$smarty = new Smarty;
+		$smarty = &new Smarty;
 		require('mysql-smarty.php');
 		require('smarty-register.php');
 
@@ -59,13 +59,10 @@
 		$modify_time = empty($data['modify_time']) ? time() : $data['modify_time'];
 		$modify_time = max(@$data['compile_time'], $modify_time);
 
-		if(!$caching)
-			$smarty->clear_cache($template_uri, $uri);
-
 		if(!isset($data['access']))
 			$data['access'] = access_allowed($uri) ? 1 : 0;
 
-		$me = new User();
+		$me = &new User();
 
 		if(!isset($data['level']))
 			$data['level'] = $me->get('level');
@@ -91,8 +88,6 @@
 			$smarty->assign("template_dirname", $dirname);
 			$smarty->assign("time", time());
 
-			$smarty->clear_cache($template_uri, $uri);
-			
 			@header("X-Recompile: Yes");
 		}
 
@@ -117,10 +112,12 @@
 			else
 				$template_uri = "hts:http://{$_SERVER['HTTP_HOST']}$template_uri";
 
+		if(!$caching)
+			$smarty->clear_cache($template_uri, $uri);
+
 		$out = $smarty->fetch($template_uri, $uri);
 
 		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
 
 		return $out;
 	}
-?>

@@ -3,10 +3,9 @@
 
     function balancer_plugins_user_reputation_line_handler($uri, $m)
 	{
-		
 		$user_id = intval($m[1]);
 		if(!$user_id)
-			return "";
+			return false;
 
 		$ch = &new Cache();
 		if($ch->get('reputation-line-2', $user_id))

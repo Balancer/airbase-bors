@@ -536,7 +536,10 @@ while ($cur_post = $db->fetch_assoc($result))
 							<div style="font-size: x-small; font-weight: 900;"><?echo $userlink;?></div>
 							<div style="font-size: xx-small;"><?echo$user_title;?></div>
 							<center>
-							<script src="http://airbase.ru/js/include/http://balancer.ru/user/<?echo $cur_post['poster_id'];?>/reputation_line/post://<?echo $cur_post['id'];/*"*/?>/"></script>
+							<?
+								if($poster['reputation'])
+									echo "<img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/rep.gif\" width=\"100\" height=\"16\" />\n";
+							?>
 							<div><?echo $user_warn;?></div>
 							</center>
 						</div>

@@ -28,7 +28,7 @@
 
 
 define('PUN_ROOT', './');
-require PUN_ROOT.'include/common.php';
+require_once PUN_ROOT.'include/common.php';
 
 // Load the search.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/search.php';

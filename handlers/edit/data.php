@@ -7,6 +7,7 @@
 
     function handler_edit_data($uri, $action)
 	{
+		
 		require_once("funcs/check/access.php");
 
 		if(!check_action_access(3, $uri))
@@ -15,8 +16,8 @@
 		include_once("funcs/templates/assign.php");
 		
 
-		$hts = new DataBaseHTS();
-		$user = new User();
+		$hts = &new DataBaseHTS();
+		$user = &new User();
 		$title = $hts->get_data($uri, 'title');
 
 		$data = $hts->parse_uri($uri);
@@ -27,6 +28,8 @@
 			if(file_exists($data['local_path'].$f))
 				$icon = $uri.$f;
 
+		$GLOBALS['cms']['templates_cache_disabled'] = true;
+
 		$data = array(
 				'title' => $title,
 				'description' => $hts->get_data($uri, 'description'),
@@ -36,6 +39,7 @@
 				'create_time' => $hts->get_data($uri, 'create_time'),
 				'level' => $user->data('level'),
 				'page_icon' => $icon,
+				'caching' => false,
 			);
 							
 		$data = array(
@@ -66,7 +70,7 @@
 
 //	    echo "Page = $edit_uri, action=$action"; exit();
 
-        $hts = new DataBaseHTS();
+        $hts = &new DataBaseHTS();
 
     	if(isset($flags) && $flags)
 
@@ -127,7 +131,7 @@
 		
 //		echo "***$type for $edit_uri***"; exit();
 
-        $ch = new Cache();
+        $ch = &new Cache();
 
         foreach(split("\n", @$parents) as $p)
    	    {
@@ -170,5 +174,3 @@
 		echo "Can't save data for ".$uri;
 		return false;
 	}
-
-?>
