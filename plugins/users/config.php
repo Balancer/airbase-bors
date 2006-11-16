@@ -7,4 +7,3 @@
 	$GLOBALS['cms']['mysql']['punbb']['prefix']   = '';
     $GLOBALS['cms']['cache_disabled'] = false;
     $GLOBALS['cms']['templates_cache_disabled'] = true;
-?>
