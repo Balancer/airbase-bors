@@ -17,4 +17,3 @@
 		
 		return $hts->data_exists($favor, 'child', $uri);
 	}
-?>

@@ -1,11 +1,11 @@
 <form id="message-form" method="post" action="{$base_uri}?new-ticket-post" ENCTYPE="multipart/form-data">
-<h3>Зарегистрировать тикет</h3>
+<h3>Зарегистрировать задачу</h3>
 
 <b>Заголовок:&nbsp;</b><input name="title" size="50" class="text" value="">
 <textarea name="source" rows="7" cols="50"></textarea>
 <br />
 Блок:&nbsp;<select name="category">
-<option value="">Выберите</options>
+<option value="-1">Выберите</options>
 <option value="news">Новости</options>
 <option value="conferences">Конференция</options>
 <option value="help">Помощь</options>
@@ -18,7 +18,7 @@
 </select>&nbsp;
 
 Приоритет:&nbsp;<select name="priority">
-<option value="">Выберите</options>
+<option value="-1">Выберите</options>
 <option value="critical">Критическая ошибка</options>
 <option value="error">Ошибка</options>
 <option value="fix">Исправление</options>

@@ -1,9 +1,9 @@
 <h1>{$title}</h1>
 
 {if $closed}
-<form id="message-form" method="post" action="?ticket-open"><input class="add" type="submit" value="Открыть тикет"></form>
+<form id="message-form" method="post" action="?ticket-open"><input class="add" type="submit" value="Открыть задачу"></form>
 {else}
-<form id="message-form" method="post" action="?ticket-close"><input class="add" type="submit" value="Закрыть тикет"></form>
+<form id="message-form" method="post" action="?ticket-close"><input class="add" type="submit" value="Закрыть задачу"></form>
 {/if}
 
 {section name=i loop=$posts}

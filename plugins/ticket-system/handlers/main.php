@@ -6,7 +6,8 @@
 
 	hts_data_prehandler("", array(
 			'body' => 'plugins_ticket_system_body',
-			'title' => ec('Система тикетов'),
+			'title' => ec('Система задач'),
+			'nav_name' => ec('Система задач'),
 		));
 
 	hts_data_prehandler("\d+/", array(
@@ -61,6 +62,7 @@
 			);
 
 		$data['tickets'] = $tickets;
+		$data['plugin'] = $plugin_data;
 		
         include_once("funcs/templates/assign.php");
         return template_assign_data("tickets-list.htm", $data);
@@ -102,6 +104,7 @@
 			);
 
 		$data['posts'] = $posts;
+		$data['plugin'] = $plugin_data;
 
         include_once("funcs/templates/assign.php");
         return template_assign_data("ticket.htm", $data);
@@ -109,7 +112,7 @@
 
 	hts_data_prehandler("new_ticket/", array(
 			'body' => 'plugins_ticket_system_new_ticket_body',
-			'title' => ec('Создание нового тикета'),
+			'title' => ec('Создание новой задачи'),
 		));
 
 	function plugins_ticket_system_new_ticket_body($uri, $m, $plugin_data)
@@ -117,13 +120,14 @@
 		$data = array();
 		
 		$data['base_uri'] = $plugin_data['base_uri'];
+		$data['plugin'] = $plugin_data;
 
         include_once("funcs/templates/assign.php");
         return template_assign_data("new_ticket.htm", $data);
 	}
 
 
-    function plugins_ticket_system_new_ticket_post($uri, $action, $plugin_data)
+    function plugins_ticket_system_new_ticket_post($uri, $action, $m, $plugin_data)
 	{
 		include_once('funcs/mail.php');
 		include_once('funcs/DataBaseHTS.php');
@@ -143,10 +147,10 @@
 		if(empty($_POST['source']))
 			return error_message(ec("Вы не написали текст сообщения."));
 
-		if(empty($_POST['category']))
+		if(@$_POST['category'] == -1)
 			return error_message(ec("Вы не указали блок."));
 
-		if(empty($_POST['proirity']))
+		if(@$_POST['priority'] == -1)
 			return error_message(ec("Вы не указали приоритет."));
 		
 		$new_ticket = $plugin_data['base_uri'].get_new_global_id(@$GLOBALS['cms']['plugins']['tickets']['db'])."/";

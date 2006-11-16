@@ -1,5 +1,5 @@
 <ul>
-<li><a href="new_ticket/">Добавить тикет</a></li>
+<li><a href="{$plugin.base_uri}new_ticket/">Добавить задачу</a></li>
 </ul>
 
 <center>{$pages}</center><br />
@@ -14,7 +14,7 @@
 
 {section name=t loop=$tickets}
 <tr{$tickets[t].color}>
- <td>{$tickets[t].category}: <a title="Перейти к тикету" href="{$tickets[t].uri}">
+ <td>{$tickets[t].category}: <a title="Перейти к задаче" href="{$tickets[t].uri}">
  {$tickets[t].title|htmlspecialchars}
  </a>&nbsp;
  <td>{$tickets[t].priority}</td>

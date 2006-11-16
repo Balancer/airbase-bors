@@ -8,11 +8,10 @@
 
 	function ec($txt)
 	{
-		return iconv('utf-8', "{$GLOBALS['cms']['charset']}", $txt);
+		return iconv('utf-8', "{$GLOBALS['cms']['charset']}//translit", $txt);
 	}
 
 	function dc($txt)
 	{
 		return iconv("{$GLOBALS['cms']['charset']}", 'utf-8', $txt);
 	}
-?>
