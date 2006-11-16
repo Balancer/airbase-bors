@@ -44,3 +44,6 @@
 	if(get_magic_quotes_gpc())
 		foreach($_POST as $key => $val)
 			 $_POST[$key] = stripslashes($val);
+
+	global $hts;
+	$hts = &new DataBaseHTS();

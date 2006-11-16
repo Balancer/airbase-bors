@@ -123,6 +123,7 @@
 						
 						$data['base_path']	= $m[1].$m[2]."/";
 						$data['pattern']	= $pattern;
+						
 						$data['parent_uri']	= preg_replace("!$pattern!", $m[1], $uri);
 						$data['base_uri']	= $data['parent_uri'].$m[2]."/";
 						$data['base_pattern_uri']	= "({$data['parent_uri']})({$m[2]})/";

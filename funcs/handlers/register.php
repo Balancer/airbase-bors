@@ -108,7 +108,7 @@
 		}
 		
 		if (empty ($data['nav_name']))
-			hts_data_prehandler_add($pattern, 'nav_name', create_function('$uri, $m', '$hts = new DataBaseHTS(); return strtolower($hts->get_data($uri, "title"));'));
+			hts_data_prehandler_add($pattern, 'nav_name', create_function('$uri, $m', '$hts = &new DataBaseHTS(); return strtolower($hts->get_data($uri, "title"));'));
 
 		if (empty ($data['source']))
 			hts_data_prehandler_add($pattern, 'source', create_function('$uri, $m', 'return NULL;'));
