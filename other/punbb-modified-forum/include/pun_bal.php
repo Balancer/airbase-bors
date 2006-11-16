@@ -19,7 +19,7 @@
 				'forum_type' => 'punbb',
 				'forum_base_uri' => 'http://balancer.ru/forum',
 				'sharp_not_comment' => true,
-				'html' => false,
+				'html_disable' => true,
 				'uri' => "post://{$cur_post['id']}/",
 			)));
 	}

@@ -1,5 +1,5 @@
 <?
-    register_handler("\.gif", 'cms_plugins_forum_user_reputation_line');
+    register_handler("rep\.gif", 'cms_plugins_forum_user_reputation_line');
 
     function cms_plugins_forum_user_reputation_line($uri, $m, $plugin_data)
 	{
@@ -51,7 +51,7 @@
 				imagecopy($img, $star, 10+$i*$sx, 0, 0, 0, imagesx($star), imagesy($star));
 
 			if($reputation_abs != intval($reputation_abs))
-				imagecopy($img, $bstar, 10+intval($reputation_abs)*$sx, 0, 0, 0, imagesx($star), imagesy($star));
+				imagecopy($img, $star_half, 10+intval($reputation_abs)*$sx, 0, 0, 0, imagesx($star), imagesy($star));
 		}
 
 		header("Content-type: " . image_type_to_mime_type(IMAGETYPE_GIF));

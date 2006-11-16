@@ -43,6 +43,9 @@ function lcml($txt, $params = array ())
 			$params[$key] = $val;
 
 	$GLOBALS['lcml']['params'] = & $params;
+	
+	if($GLOBALS['lcml']['level'] > 1)
+		$GLOBALS['lcml']['params']['html_disable'] = false;
 
 	if (!trim($txt))
 		return rest_return($txt, $saved_params);
