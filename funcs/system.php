@@ -23,6 +23,7 @@
 		if(!is_object($db))
 			$db = &new DataBase($db);
 
-		$db->insert('global_ids', array('engine' => $engine));
+//		$db->insert('global_ids', array('engine' => $engine));
+		$db->query("INSERT INTO `global_ids` SET `engine` = '".addslashes($engine)."'");
 		return $db->last_id();
 	}
