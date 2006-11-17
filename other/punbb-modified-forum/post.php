@@ -70,6 +70,7 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/post.php';
 // Start with a clean slate
 $errors = array();
 
+include_once("funcs/system.php");
 
 // Did someone just hit "Submit" or "Preview"?
 if (isset($_POST['form_sent']))
@@ -184,6 +185,8 @@ if (isset($_POST['form_sent']))
 			message("Вы уже отправили это сообщение");
 		
 		$me->set_data('last_message_md', $md);
+
+		$new_pid = new_id('post');
 	
 		// If it's a reply
 		if ($tid)
@@ -191,8 +194,16 @@ if (isset($_POST['form_sent']))
 			if (!$pun_user['is_guest'])
 			{
 				// Insert the new post
-				$db->query("INSERT INTO {$db->prefix}posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES('".$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
-				$new_pid = $db->insert_id();
+				$cms_db->insert('posts', array(
+					'id' => $new_pid,
+					'poster' => $username,
+					'poster_id' => $pun_user['id'], 
+					'poster_ip' => get_remote_address(), 
+					'hide_smilies' => $hide_smilies, 
+					'posted' => $now, 
+					'topic_id' => $tid,
+				));
+//				$db->query("INSERT INTO {$db->prefix}posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES('".$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 
 				// To subscribe or not to subscribe, that ...
 				if ($pun_config['o_subscriptions'] == '1' && $subscribe)
@@ -205,9 +216,16 @@ if (isset($_POST['form_sent']))
 			else
 			{
 				// It's a guest. Insert the new post
-				$email_sql = ($pun_config['p_force_guest_email'] == '1' || $email != '') ? '\''.$email.'\'' : 'NULL';
-				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
-				$new_pid = $db->insert_id();
+				$cms_db->insert('posts', array(
+					'id' => $new_pod,
+					'poster' => $username, 
+					'poster_ip' => get_remote_address(), 
+					'poster_email' => ($pun_config['p_force_guest_email'] == '1' || $email != '') ? $email : '', 
+					'hide_smilies' => $hide_smilies, 
+					'posted' => $now, 
+					'topic_id' => $tid,
+				));
+//				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}
 
 			$cms_db->query("INSERT INTO messages (id, message) VALUES ($new_pid, '".addslashes($message)."')");
@@ -304,6 +322,8 @@ if (isset($_POST['form_sent']))
 			$db->query('INSERT INTO '.$db->prefix.'topics (poster, subject, posted, last_post, last_poster, forum_id) VALUES(\''.$db->escape($username).'\', \''.$db->escape($subject).'\', '.$now.', '.$now.', \''.$db->escape($username).'\', '.$fid.')') or error('Unable to create topic', __FILE__, __LINE__, $db->error());
 			$new_tid = $db->insert_id();
 
+			$new_pid = new_id('post');
+			
 			if (!$pun_user['is_guest'])
 			{
 				// To subscribe or not to subscribe, that ...
@@ -311,15 +331,31 @@ if (isset($_POST['form_sent']))
 					$db->query('INSERT INTO '.$db->prefix.'subscriptions (user_id, topic_id) VALUES('.$pun_user['id'].' ,'.$new_tid.')') or error('Unable to add subscription', __FILE__, __LINE__, $db->error());
 
 				// Create the post ("topic post")
-				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
+//				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
+				$cms_db->insert('posts', array(
+					'id' => $new_pid,
+					'poster' => $username, 
+					'poster_id' => $pun_user['id'], 
+					'poster_ip' => get_remote_address(), 
+					'hide_smilies' => $hide_smilies, 
+					'posted' => $now, 
+					'topic_id' => $new_tid,
+				));
 			}
 			else
 			{
 				// Create the post ("topic post")
-				$email_sql = ($pun_config['p_force_guest_email'] == '1' || $email != '') ? '\''.$email.'\'' : 'NULL';
-				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
+				$cms_db->insert('posts', array(
+					'id' => $new_pid,
+					'poster' => $username, 
+					'poster_ip' => get_remote_address(), 
+					'poster_email' => ($pun_config['p_force_guest_email'] == '1' || $email != '') ? $email : '',
+					'hide_smilies' => $hide_smilies, 
+					'posted' => $now, 
+					'topic_id' => $new_tid,
+				));
+//				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}
-			$new_pid = $db->insert_id();
 
 			$cms_db->query("INSERT INTO messages (id, message) VALUES ($new_pid, '".addslashes($message)."')");
 

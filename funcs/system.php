@@ -17,3 +17,12 @@
 		$db->query("UPDATE hts_ext_system_data SET `value`=`value`+1 WHERE `key`='global_id';", false);
 		return $db->get("SELECT `value` FROM hts_ext_system_data WHERE `key`='global_id';", false);
 	}
+
+	function new_id($engine, $db = NULL)
+	{
+		if(!is_object($db))
+			$db = &new DataBase($db);
+
+		$db->insert('global_ids', array('engine' => $engine));
+		return $db->last_id();
+	}
