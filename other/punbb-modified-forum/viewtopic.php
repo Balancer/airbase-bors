@@ -29,6 +29,8 @@ include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 include_once("funcs/DataBase.php");
 $cms_db = new DataBase('punbb');
 
+define('PUN_ROOT', './');
+
 // If a post ID is specified we determine topic ID and page number so we can redirect to the correct message
 if($pid)
 {
@@ -59,7 +61,6 @@ include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 include_once("funcs/Cache.php");
 $GLOBALS['global_cache'] = new Cache();
 
-define('PUN_ROOT', './');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
 
