@@ -1,0 +1,102 @@
+<?
+	echo module_local_db_mob();
+	function module_local_db_mob()
+	{
+		$mob_id = intval(@$_GET['id']);
+
+		if(!$mob_id)
+			return "Не указан NPC";
+		
+		$db = new DataBase('l2jdb', 'la2', 'la2kkk');
+		$para = $db->get("SELECT * FROM `npc` WHERE `id`=$mob_id", false);
+
+		if(!$para['name'])
+			return "Неизвестный NPC $mob_id";
+
+		$out = "<h2>{$para['name']}</h2>";
+
+		list($w, $h, $r) = @getimagesize("http://la2.balancer.ru/z/mob_images/$mob_id.jpg");
+
+		if($w && $h)
+			$out .= "<img width=\"$w\" height=\"$h\" src=\"http://la2.balancer.ru/z/mob_images/$mob_id.jpg\" style=\"padding: 10px;\">";
+		else
+			`echo $mob_id >>  /var/www/la2.balancer.ru/htdocs/cms-local/modules/db/non-images-mobs.txt`;
+
+		$agro = $para['aggro'] ? $para['aggro'] : "нет";
+		$faction = $para['faction_id'] && $para['faction_range'] ? $para['faction_range'] : "нет";
+
+		$drop = $db->get_array("SELECT d.itemId as item_id, d.sweep, d.chance, d.min, d.max, p.name FROM `droplist` d LEFT JOIN prices p ON (d.itemId = p.item_id) WHERE `mobId` = $mob_id ORDER BY p.name;");
+
+		if(sizeof($drop)>0)
+		{
+			$drop_data="<table>\n";
+			foreach($drop as $d)
+			{
+				$drop_data .= "<tr><td style=\"text-align: right;\">";
+				if($d['min']!=$d['max'] || $d['min'] > 1)
+					$drop_data .= ($d['min']==$d['max'] ? $d['min'] : $d['min'].'-'.$d['max'])." x";
+				else
+					$drop_data .= "&nbsp;";
+					
+				$drop_data .= "</td><td>";
+				if($sf = $d['sweep'])
+					$drop_data .= "<b>";
+				$drop_data .= "<a href=\"http://la2.balancer.ru/db/items/?name={$d['name']}\" style=\"color: orange\" title=\"item_id={$d['item_id']}\">";
+				$drop_data .= str_replace(' ','&nbsp;',preg_replace('!^\d+\s*!','',trim($d['name'])));
+				$drop_data .= "</a>";
+				if($sf) 
+					$drop_data .= "</b>";
+				$drop_data .= "<small>,&nbsp;".($d['chance']/10000)."%</small>";
+				$drop_data .= "</td></tr>\n";
+			}
+			$drop_data .= "</table>\n";
+		}
+		else
+			$drop_data="Дропа нет";
+
+		$out .=<<<__EOT__
+<table class="btab" cellSpacing="0" width="100%">
+<tr><th>Уровень</th><td>{$para['level']}</td></tr>
+<tr><th>Тип</th><td>{$para['type']}</td></tr>
+<tr><th>Дистанция атаки</th><td>{$para['attackrange']}</td></tr>
+<tr><th>Здоровье</th><td>{$para['hp']}</td></tr>
+<tr><th>Мана</th><td>{$para['mp']}</td></tr>
+<tr><th>Сила, STR</th><td>{$para['str']}</td></tr>
+<tr><th>Конституция, CON</th><td>{$para['con']}</td></tr>
+<tr><th>Ловкость, DEX</th><td>{$para['dex']}</td></tr>
+<tr><th>Интеллект, INT</th><td>{$para['int']}</td></tr>
+<tr><th>Магические способности, WIT</th><td>{$para['wit']}</td></tr>
+<tr><th>Опыт (Exp)</th><td>{$para['exp']}</td></tr>
+<tr><th>Очки умений (SP)</th><td>{$para['sp']}</td></tr>
+<tr><th>Физическая атака</th><td>{$para['patk']}</td></tr>
+<tr><th>Физическая защита</th><td>{$para['pdef']}</td></tr>
+<tr><th>Скорость физической атаки</th><td>{$para['atkspd']}</td></tr>
+<tr><th>Магическая атака</th><td>{$para['matk']}</td></tr>
+<tr><th>Магическая защита</th><td>{$para['mdef']}</td></tr>
+<tr><th>Скорость магической атаки</th><td>{$para['matkspd']}</td></tr>
+<tr><th>Скорость бега</th><td>{$para['runspd']}</td></tr>
+<tr><th>Дистанция агрессивности</th><td>$agro</td></tr>
+<tr><th>Дистанция помощи</th><td>$faction</td></tr>
+</table>
+
+
+<h3>Данные дропа</h3>
+$drop_data
+<ul>
+<li>Жирным выделен sweep-дроп.</li>
+</ul>
+__EOT__;
+
+		$out .= "<h3>Данные спавна</h3><ul>";
+
+		$count = $db->get("SELECT sum(`count`) FROM `spawnlist` WHERE npc_templateid = $mob_id;");
+		if($count)
+			$out .= "<li>На сервере: $count</li>";
+		else
+			$out .= "<li>На сервере отсутствует</li>";
+		
+		$out .= "</ul>";
+	
+		return $out;
+	}
+?>
