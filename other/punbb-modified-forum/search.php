@@ -42,7 +42,7 @@ else if ($pun_user['g_search'] == '0')
 // Detect two byte character sets
 $multibyte = (isset($lang_common['lang_multibyte']) && $lang_common['lang_multibyte']) ? true : false;
 
-$cms_db = new DataBase('punbb');
+$cms_db = &new DataBase('punbb');
 foreach($cms_db->get_array("SELECT forum_id, last_visit FROM forum_visits WHERE user_id=".intval($pun_user['id'])) as $row)
 	$visits[$row['forum_id']] = $row['last_visit'];
 

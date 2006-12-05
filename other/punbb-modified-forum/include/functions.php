@@ -282,7 +282,7 @@ function generate_navlinks()
 	$ret = '<ul>'."\n\t\t\t\t".implode($lang_common['Link separator'].'</li>'."\n\t\t\t\t", $links).'</li>'."\n\t\t\t".'</ul>';
 	$ret .= "<ul><li><b>Группы форумов:</b></li>";
 	$ret .= "<li><a href=\"http://balancer.ru/forum/\">Все вместе</a></li>";
-	$db = new DataBase('punbb');
+	$db = &new DataBase('punbb');
 	foreach($db->get_array("SELECT * FROM categories WHERE base_uri != '' ORDER BY disp_position") as $c)
 		$ret .= "<li><a href=\"{$c['base_uri']}\">{$c['cat_name']}</a></li>";
 	return "$ret</ul>";

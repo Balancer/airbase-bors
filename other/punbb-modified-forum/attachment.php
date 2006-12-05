@@ -2,8 +2,8 @@
 
 	include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 	require_once("funcs/tools/ip_check.php");
-	agava_ip_check();
-
+//	agava_ip_check();
+	
 /*
 
 also it is possible to make your php script resume downloads, to do this you need to check $_SERVER['HTTP_RANGE'] which may contain something like this
@@ -49,6 +49,55 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 
 	$attach_item = intval($_GET['item']);	// make it a bit more secure
 
+
+	include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
+	require_once("funcs/tools/ip_check.php");
+	
+	if($ret = is_foreign_network())
+	{
+		$anon = "<br /><br />Вы можете попробовать получить доступ к этой странице через любой русский прокси или анонимайзер по адресу: http://www.anonymizer.ru/cgi-bin/webprox?session=demo&form=header&url=".urlencode("http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?{$_SERVER['QUERY_STRING']}");
+	
+		if($pun_user['is_guest'] || $pun_user['id'] <= 2)
+			message($ret.$anon);
+
+		if(!preg_match("!^(\d+)\.(\d+)\.(\d+)\.(\d+)$!", $_SERVER["REMOTE_ADDR"]))
+			exit("Извините, неопознанный формат Вашего IP: {$_SERVER['REMOTE_ADDR']}!");
+
+		if($_SERVER['REMOTE_ADDR'] == '217.145.160.136'
+			|| $_SERVER['REMOTE_ADDR'] == '89.138.104.246'
+			|| $_SERVER['REMOTE_ADDR'] == '208.65.71.66'
+			|| $_SERVER['REMOTE_ADDR'] == '217.21.40.1'
+		)
+			message("Ваш IP заблокирован в аттачах за создание очень высокого зарубежного трафика. Подробнее - http://balancer.ru/forum/punbb/viewtopic.php?pid=967737#p967737 ".$anon);
+		
+	
+		require_once "HTTP/Request.php";
+
+		$req = &new HTTP_Request("http://control.renter.ru/ipstat/");
+		$req->setMethod(HTTP_REQUEST_METHOD_POST);
+		$req->addHeader("Accept-Charset", 'UTF-8');
+		$req->addHeader("Accept-Encoding", 'none');
+		$req->addPostData("user", "uka");
+		$req->addPostData("pass", "imi0Ngash");
+		$req->addPostData("from", "1/".strftime("%m/%y"));
+		$req->addPostData("to", strftime("%d/%m/%y"));
+		$req->addPostData("ip", "ALL");
+		
+		$resp = $req->sendRequest();
+		
+		if (!PEAR::isError($resp))
+     		$resp = $req->getResponseBody();
+	 	else 
+	    	$resp = $resp->getMessage();
+		
+		if(!preg_match("!Российский.+Исходящий:</td><td>([\d\.]+) Мб.+Зарубежный.+Исходящий:</td><td>([\d\.]+) Мб!us", $resp, $m))
+			exit("Ошибка: Не могу получить данные о трафике! - $resp");
+		
+		if(($diff = $m[2] - $m[1] + 5000) >= 0)
+			message($ret."<br /><br />Дефицит трафика на данный момент составляет $diff Мб. При отсутствии дефицита доступ к аттачам зарегистрированным зарубежным пользователям разрешён!".$anon);
+	}
+	
+
 	//check that there is such an item
 	$result = $db->query("SELECT post_id, filename, extension, mime, location, size FROM {$db->prefix}attach_2_files WHERE id={$attach_item} LIMIT 1")
 		or error('Unable to search for specified attachment',__FILE__,__LINE__,$db->error());
@@ -74,7 +123,7 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 	{ // show the imageview page
 		$page_title = htmlspecialchars($pun_config['o_board_title']).' / Image view - '.$attach_filename.' - ';
 		require 'header.php';
-		$cdb = new DataBase('punbb');
+		$cdb = &new DataBase('punbb');
 		if($attach_post_id == "".intval($attach_post_id))
 		{
 			$topic_id = $cdb->get("SELECT topic_id FROM posts WHERE id = $attach_post_id");
@@ -82,7 +131,7 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 		}
 		else
 		{
-			$hts = new DataBaseHTS();
+			$hts = &new DataBaseHTS();
 			$title = $hts->get($attach_post_id, 'title');
 		}
 	?>

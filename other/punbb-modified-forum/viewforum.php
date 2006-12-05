@@ -38,7 +38,7 @@ if ($id < 1)
 // Load the viewforum.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/forum.php';
 
-$cms_db = new DataBase('punbb');
+$cms_db = &new DataBase('punbb');
 $count = intval($cms_db->get("SELECT count FROM forum_visits WHERE user_id=".intval($pun_user['id'])." AND forum_id=".intval($id))) + 1;
 $data = array(
 		'forum_id' => $id,

@@ -21,7 +21,7 @@ li.document{margin-bottom: 2px; list-style-image: URL("/img/design/icons/documen
             return;
         }
 
-        $hts = new DataBaseHTS();
+        $hts = &new DataBaseHTS();
         $out = NULL;
 
         $children = get_children($uri, $limit*3, $depth, true);
@@ -42,7 +42,7 @@ li.document{margin-bottom: 2px; list-style-image: URL("/img/design/icons/documen
 
     function get_children($uri, $limit, $depth, $child_image_show=false)
     {
-        $hts = new DataBaseHTS();
+        $hts = &new DataBaseHTS();
 
         $limit = max(intval($limit/3),3);
 

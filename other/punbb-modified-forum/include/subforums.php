@@ -7,7 +7,7 @@
 	
 		global $pun_user, $pun_config;
 		
-		$db = new DataBase('punbb');
+		$db = &new DataBase('punbb');
 
 		if($db->get("SELECT COUNT(*) FROM {$db->prefix}forums WHERE parent = $forum") == 0)
 			return "";
@@ -140,7 +140,7 @@
 	
 		global $pun_user, $pun_config, $lang_index;
 		
-		$db = new DataBase('punbb');
+		$db = &new DataBase('punbb');
 
 		$subforums = array();
 		foreach($forums as $fid)

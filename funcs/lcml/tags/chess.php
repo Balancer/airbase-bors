@@ -10,6 +10,9 @@
 		$ret = Wikitex::chess($text, array());
 		error_reporting($errrep_save);
 		ini_set('include_path', $incs);
-		return $ret;
+
+		if(preg_match("/^!/m", $ret))
+			return "<span style=\"font-size: 8pt;\">".save_format($ret)."</span>";
+		else
+			return save_format($ret);
 	}
-?>

@@ -999,7 +999,7 @@ class HTTP_Response
             if ($chunked) {
                 $data = $this->_readChunked();
             } else {
-                $data = $this->_sock->read(4096);
+                $data = $this->_sock->read(8192);
             }
             if ('' != $data) {
                 $hasBody = true;

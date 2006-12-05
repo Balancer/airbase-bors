@@ -185,8 +185,6 @@ if (isset($_POST['form_sent']))
 			message("Вы уже отправили это сообщение");
 		
 		$me->set_data('last_message_md', $md);
-
-		$new_pid = new_id('post');
 	
 		// If it's a reply
 		if ($tid)
@@ -194,8 +192,9 @@ if (isset($_POST['form_sent']))
 			if (!$pun_user['is_guest'])
 			{
 				// Insert the new post
-				$cms_db->insert('posts', array(
-					'id' => $new_pid,
+				$tdb = &new DataBase('punbb');
+				$tdb->insert('posts', array(
+					'id' => $new_pid = new_id('post'),
 					'poster' => $username,
 					'poster_id' => $pun_user['id'], 
 					'poster_ip' => get_remote_address(), 
@@ -216,8 +215,9 @@ if (isset($_POST['form_sent']))
 			else
 			{
 				// It's a guest. Insert the new post
-				$cms_db->insert('posts', array(
-					'id' => $new_pid,
+				$tdb = &new DataBase('punbb');
+				$tdb->insert('posts', array(
+					'id' => $new_pid = new_id('post'),
 					'poster' => $username, 
 					'poster_ip' => get_remote_address(), 
 					'poster_email' => ($pun_config['p_force_guest_email'] == '1' || $email != '') ? $email : '', 
@@ -232,11 +232,20 @@ if (isset($_POST['form_sent']))
 			$cms_db->insert('messages', array('id' => $new_pid, 'message' => $message));
 
 			// Count number of replies in the topic
-			$result = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'posts WHERE topic_id='.$tid) or error('Unable to fetch post count for topic', __FILE__, __LINE__, $db->error());
+			$result = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'posts WHERE topic_id='.$tid) 
+				or error('Unable to fetch post count for topic', __FILE__, __LINE__, $db->error());
+
 			$num_replies = $db->result($result, 0) - 1;
 
 			// Update topic
-			$db->query('UPDATE '.$db->prefix.'topics SET num_replies='.$num_replies.', last_post='.$now.', last_post_id='.$new_pid.', last_poster=\''.$db->escape($username).'\' WHERE id='.$tid) or error('Unable to update topic', __FILE__, __LINE__, $db->error());
+			if(!$new_pid)
+			{
+				echo 1/0;
+				message("Ошибка получения new id");
+			}
+			
+			$db->query('UPDATE '.$db->prefix.'topics SET num_replies='.$num_replies.', last_post='.$now.', last_post_id='.$new_pid.', last_poster=\''.$db->escape($username).'\' WHERE id='.$tid) 
+				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
 			update_search_index('post', $new_pid, $message);
 
@@ -325,14 +334,11 @@ if (isset($_POST['form_sent']))
 
 			if (!$pun_user['is_guest'])
 			{
-				// To subscribe or not to subscribe, that ...
-				if ($pun_config['o_subscriptions'] == '1' && (isset($_POST['subscribe']) && $_POST['subscribe'] == '1'))
-					$db->query('INSERT INTO '.$db->prefix.'subscriptions (user_id, topic_id) VALUES('.$pun_user['id'].' ,'.$new_tid.')') or error('Unable to add subscription', __FILE__, __LINE__, $db->error());
-
 				// Create the post ("topic post")
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
-				$cms_db->insert('posts', array(
-					'id' => $new_pid,
+				$tdb = &new DataBase('punbb');
+				$tdb->insert('posts', array(
+					'id' => $new_pid = new_id('post'),
 					'poster' => $username, 
 					'poster_id' => $pun_user['id'], 
 					'poster_ip' => get_remote_address(), 
@@ -340,12 +346,17 @@ if (isset($_POST['form_sent']))
 					'posted' => $now, 
 					'topic_id' => $new_tid,
 				));
+
+				// To subscribe or not to subscribe, that ...
+				if ($pun_config['o_subscriptions'] == '1' && (isset($_POST['subscribe']) && $_POST['subscribe'] == '1'))
+					$db->query('INSERT INTO '.$db->prefix.'subscriptions (user_id, topic_id) VALUES('.$pun_user['id'].' ,'.$new_tid.')') or error('Unable to add subscription', __FILE__, __LINE__, $db->error());
 			}
 			else
 			{
 				// Create the post ("topic post")
-				$cms_db->insert('posts', array(
-					'id' => $new_pid,
+				$tdb = &new DataBase('punbb');
+				$tdb->insert('posts', array(
+					'id' => $new_pid = new_id('post'),
 					'poster' => $username, 
 					'poster_ip' => get_remote_address(), 
 					'poster_email' => ($pun_config['p_force_guest_email'] == '1' || $email != '') ? $email : '',
@@ -356,10 +367,18 @@ if (isset($_POST['form_sent']))
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}
 
-			$cms_db->query("INSERT INTO messages (id, message) VALUES ($new_pid, '".addslashes($message)."')");
+			$cms_db->insert('messages', array('id' => $new_pid, 'message' => $message));
 
 			// Update the topic with last_post_id
-			$db->query('UPDATE '.$db->prefix.'topics SET last_post_id='.$new_pid.' WHERE id='.$new_tid) or error('Unable to update topic', __FILE__, __LINE__, $db->error());
+
+			if(!$new_pid)
+			{
+				echo 1/0;
+				message("Ошибка получения new id");
+			}
+
+			$db->query('UPDATE '.$db->prefix.'topics SET last_post_id='.$new_pid.' WHERE id='.$new_tid) 
+				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
 			update_search_index('post', $new_pid, $message, $subject);
 
