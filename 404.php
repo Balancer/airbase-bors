@@ -227,7 +227,7 @@
     // Ключевые слова
 
     require_once('funcs/DataBaseHTS.php');
-    $hts = new DataBaseHTS();
+    $hts = &new DataBaseHTS();
 
     $_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
     $full_uri = empty($page) ? "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" : $page;

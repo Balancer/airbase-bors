@@ -12,4 +12,3 @@
 		ini_set('include_path', $incs);
 		return $ret;
 	}
-?>

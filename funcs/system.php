@@ -18,12 +18,16 @@
 		return $db->get("SELECT `value` FROM hts_ext_system_data WHERE `key`='global_id';", false);
 	}
 
-	function new_id($engine, $db = NULL)
+	function new_id($engine)
 	{
-		if(!is_object($db))
-			$db = &new DataBase($db);
+		$db = &new DataBase('HTS');
 
 //		$db->insert('global_ids', array('engine' => $engine));
 		$db->query("INSERT INTO `global_ids` SET `engine` = '".addslashes($engine)."'");
-		return $db->last_id();
+		$new_id = intval($db->last_id());
+		
+		if(!$new_id)
+			exit("Ошибка получения global id");
+			
+		return $new_id;
 	}

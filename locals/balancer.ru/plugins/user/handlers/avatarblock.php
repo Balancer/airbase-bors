@@ -3,7 +3,7 @@
 
     function balancer_plugins_user_avatar_block_handler($uri, $m)
 	{
-		$db = new DataBase('punbb');
+		$db = &new DataBase('punbb');
 		
 		$user_id = intval($m[1]);
 		$pun_config['root_uri'] = "http://balancer.ru/forum/punbb";

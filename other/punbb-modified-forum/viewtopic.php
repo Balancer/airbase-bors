@@ -27,7 +27,7 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $pid = isset($_GET['pid']) ? intval($_GET['pid']) : 0;
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 include_once("funcs/DataBase.php");
-$cms_db = new DataBase('punbb');
+$cms_db = &new DataBase('punbb');
 
 define('PUN_ROOT', './');
 
@@ -65,7 +65,7 @@ require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
 
 //print_r($GLOBALS['cms']);
-$hts = new DataBaseHTS();
+$hts = &new DataBaseHTS();
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);

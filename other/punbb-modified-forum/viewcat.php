@@ -23,7 +23,7 @@ if($ich->get("subforums-text-1", "all"))
 	$subforums = unserialize($ich->last());
 else
 {
-	$cms_db = new DataBase('punbb');
+	$cms_db = &new DataBase('punbb');
 	foreach($cms_db->get_array("SELECT id FROM forums") as $iid)
 		$subforums[$iid] = get_subforums_text(punbb_get_all_subforums($iid));
 	$ich->set(serialize($subforums), 7200);
@@ -33,13 +33,13 @@ if($ich->get("cat_names", "all"))
 	$cat_names = unserialize($ich->last());
 else
 {
-	$cms_db = new DataBase('punbb');
+	$cms_db = &new DataBase('punbb');
 	foreach($cms_db->get_array("SELECT id, cat_name, base_uri FROM categories") as $cat)
 		$cat_names[$cat['id']] = $cat['cat_name'];
 	$ich->set(serialize($cat_names), 7200);
 }
 
-$cms_db = new DataBase('punbb');
+$cms_db = &new DataBase('punbb');
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
