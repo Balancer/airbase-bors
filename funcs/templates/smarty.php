@@ -310,6 +310,8 @@
 
 //		echo ":$tpl:".$hts->get_data(str_replace('hts:', '', $tpl), 'source')."<br/>\n";
 
+//		print_r($GLOBALS['cms']['plugin_data']);
+
 		if($tpl{0} == '/')
 		{
 //			echo $tpl;

@@ -67,6 +67,10 @@
 		if(!isset($data['level']))
 			$data['level'] = $me->get('level');
 		
+		if(is_array(@$GLOBALS['cms']['smarty']))
+			foreach($GLOBALS['cms']['smarty'] as $key => $val)
+				$smarty->assign($key, $val);
+		
 		if(!$caching || !$smarty->is_cached($template_uri, $uri))
 		{
 			foreach($data as $key => $val)
