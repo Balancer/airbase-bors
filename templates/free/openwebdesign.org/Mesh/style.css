@@ -1,0 +1,93 @@
+body { 
+  font: .9em "Trebuchet MS", Arial, Sans-Serif; 
+  color:#000;
+  background:url("img/bg.jpg") repeat-x;  
+}
+
+h1 { 
+  font-size: 29px; 
+}
+
+h2 { 
+  font-size: 20px;  
+}
+
+.header {
+  background:transparent;
+}
+
+.header a { 
+  text-decoration:none;
+  color:#eee; 
+}
+
+.wrapper {
+ width: 75%;
+ margin:auto; 
+ margin-top:-20px; 
+ color:#000; 
+}
+
+.nav {
+  float:left; 
+  width:15%;
+  background:#eee;
+  border:1px solid #ddd;
+  padding:10px;
+}
+
+.nav ul, .nav li {
+  list-style-type:none; 
+  margin-left:-15px; 
+  line-height:20px;
+}
+
+.nav a {
+  text-decoration:none; 
+  color:#036DA7; 
+}
+
+.nav a:hover {
+ color:#036DA7; 
+}
+
+.main h1 {
+  border-bottom:2px solid #fc0; 
+}
+
+.main a {
+  text-decoration:none; color:#000; 
+}
+
+.main a:hover {
+  color:#444; 
+}
+
+.small {
+  font-size:x-small; 
+  text-align:right; 
+  clear:left; 
+}
+
+.first { 
+  font-size:30pt; 
+  float:left; 
+  padding:7px 7px 0px 0px; 
+  margin-top:-7px; 
+}
+
+.main { 
+  float:right; 
+  width:73%;   
+}
+
+.footer {  
+  float:left; 
+  font-size:9pt;
+  clear:both; 
+  text-align:right;
+  width:100%; 
+  margin-top:15px;
+  border-top:1px solid #eee;
+  color:#333; 
+}
