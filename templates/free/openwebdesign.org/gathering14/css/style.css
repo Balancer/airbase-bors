@@ -1,0 +1,157 @@
+body
+{
+	margin: 0;
+	padding: 0;
+	background: #2E2E2E;
+	font-family: georgia, arial, verdana, tahoma, times new roman;
+}
+
+sup
+{
+	color: #FFC671;
+}
+
+a
+{
+	text-decoration: none;
+	color: #F90;
+}
+
+a:hover
+{
+	text-decoration: none;
+	color: #FFC671;
+}
+
+#outercontainer
+{
+	margin: 0 auto;
+	width: 800px;
+	background: #2E2E2E url('../images/oc-background.jpg') repeat-y;
+}
+
+#container
+{
+	margin: 0 auto;
+	width: 760px;
+	background: #FFF;
+}
+
+#header
+{
+	width: auto;
+	height: 100px;
+	background: #FFF url('../images/header-background.jpg') repeat-x;
+}
+
+#header h1
+{
+	margin: 0;
+	padding: 20px 0 0 25px;
+	font-size: 220%;
+	letter-spacing: -2px;
+	font-weight: normal;
+	color: #F90;
+	font-family: georgia;
+}
+
+#menu
+{
+	width: auto;
+	height: 75px;
+	background: #444 url('../images/menu-background.jpg') repeat-x;
+}
+
+#maincontent
+{
+	width: auto;
+	background: #FFF url('../images/maincontent-background.jpg') repeat-x;
+	padding: 25px;
+	font-size: 90%;
+	margin-right: 200px;
+	line-height: 150%;
+}
+
+#maincontent span
+{
+	float: right;
+}
+
+#maincontent p
+{
+	margin: 0;
+	padding: 0 0 10px 0;
+}
+
+#maincontentright
+{
+	float: right;
+	width: 150px;
+	padding: 25px;
+	background: #FFF url('../images/maincontent-background.jpg') repeat-x;
+	line-height: 150%;
+	color: #666;
+}
+
+#maincontentright p
+{
+	margin: 0;
+	padding: 0 0 10px 0;
+}
+
+#maincontent h1, #maincontent h2, #maincontent h3, #maincontent h4
+{
+	margin: 0 0 15px 0;
+	padding: 0;
+	font-weight: normal;
+	letter-spacing: -2px;
+	font-size: 175%;
+	color: #888;
+}
+
+#footer
+{
+	clear: both;
+	width: auto;
+	font-size: 80%;
+	background: #111 url('../images/footer-background.jpg') repeat-x;
+	color: #888;
+	font-family: arial;
+	letter-spacing: -1px;
+}
+
+#footer h1
+{
+	margin: 0;
+	padding:  25px 25px 10px 25px;
+	font-weight: normal;
+	letter-spacing: -1px;
+	font-size: 140%;
+	color: #999;
+}
+
+#footer p
+{
+	margin: 0;
+	padding:  0 25px 10px 25px;
+}
+
+#footerleft
+{
+	float: left;
+	width: 380px;
+}
+
+#footerright
+{
+	float: right;
+	width: 380px;
+}
+
+#bottom
+{
+	clear: both;
+	width: auto;
+	text-align: right;
+	padding: 15px 10px;
+}
