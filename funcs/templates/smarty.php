@@ -119,6 +119,8 @@
 			foreach(array(
 				$template,
 				"{$page}template$tpl2/",
+				"{$GLOBALS['cms']['local_dir']}/templates{$tpl2}index.html",
+				"{$GLOBALS['cms']['base_dir']}/templates{$tpl2}index.html",
 				"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
 				"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
 				$GLOBALS['cms']['default_template'],

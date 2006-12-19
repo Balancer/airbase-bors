@@ -8,9 +8,13 @@
 
         include_once("funcs/modules/colorer.php");
 
-        $txt = str_replace("<!--lcml_left_bracket-->", "[", $txt);
+//		echo $txt;
 
-        $txt = colorer($txt, $params['orig']);
+        $txt = str_replace("lcml_save_left_bracket", "[", $txt);
+        $txt = str_replace("lcml_save_lt", "<", $txt);
+        $txt = str_replace("lcml_save_gt", ">", $txt);
+
+       	$txt = colorer($txt, $params['orig']);
 
 /*        $txt = preg_replace( "#&lt;#"   , "&#60;", $txt );
         $txt = preg_replace( "#&gt;#"   , "&#62;", $txt );
@@ -37,20 +41,21 @@
         $txt=split("\n",trim($txt));
         foreach($txt as $s)
             $s=" $s";
-        if(!empty($GLOBALS['lcml']['cr_type']) && $GLOBALS['lcml']['cr_type'] == 'empty_as_para')
+        
+//		if(!empty($GLOBALS['lcml']['cr_type']) && $GLOBALS['lcml']['cr_type'] == 'empty_as_para')
             $txt=join("<br />\n",$txt);
-        else
-            $txt=join("\n",$txt);
+//        else
+//            $txt=join("\n",$txt);
+
 
         $txt = "<table border='0' align='center' width='95%' cellpadding='3' cellspacing='1'><tr><td class='code' id='CODE'><tt>$txt</tt>";
         if(isset($m[2]))
             $txt.="<div style=\"font-size: xx-small; text-align: right;\">code, type '<b>$m[2]</b>'</div>";
 		$txt .= "</td></tr></table>";
         
-        $txt=preg_replace("!( {2,})!em","str_repeat('&nbsp;',strlen('$1'))",$txt);
+        $txt = preg_replace("!( {2,})!em","str_repeat('&nbsp;',strlen('$1'))",$txt);
 //        $txt=str_replace(" ", "&nbsp", $txt);
-        $txt=str_replace("[","&#91;",$txt);
+        $txt = str_replace("[","&#91;",$txt);
 
-        return $txt;
+        return save_format($txt);
     }
-?>

@@ -143,7 +143,7 @@
 		$smarty->assign("main_uri", @$GLOBALS['main_uri']);
 //		$smarty->assign("action", $GLOBALS['cms']['action']);
 
-		debug("fetch(\"hts:{$template}\", $uri)");
+//		debug("fetch(\"hts:{$template}\", $uri)");
 
 		if(preg_match('!^http://!',$template))
 			$template = "hts:".$template;
@@ -158,6 +158,8 @@
 			$template = $GLOBALS['cms']['default_template'];
 		if(!$smarty->template_exists($template))
 			$template = $GLOBALS['cms']['default_template_file'];
+
+//		echo $template;
 
 		$out = $smarty->fetch($template, $uri);
 

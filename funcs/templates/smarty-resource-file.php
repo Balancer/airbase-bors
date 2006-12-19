@@ -23,25 +23,27 @@
     
     function smarty_resource_file_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty)
     {
-		if(!empty($GLOBALS['cms']['templates_cache_disabled']))
-		{
-			$tpl_timestamp = time();
-			return true;
-		}
-
+		$found = false;
+	
 		if(file_exists($tpl_name))
 		{
 			$tpl_timestamp = filemtime($tpl_name);
-			return true;
+			$found = true;
 		}
 
 		if(file_exists($smarty->template_dir."/".$tpl_name))
 		{
 			$tpl_timestamp = filemtime($smarty->template_dir."/".$tpl_name);
-			return true;
+			$found = true;
 		}
 
-        return false;
+		if(!$found)
+			return false;
+
+		if(!empty($GLOBALS['cms']['templates_cache_disabled']))
+			$tpl_timestamp = time();
+
+        return true;
     }
 
     function smarty_resource_file_get_secure($tpl_name, &$smarty_obj)
