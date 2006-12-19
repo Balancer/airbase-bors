@@ -15,8 +15,8 @@
     function save_format($txt)
     {
         $txt = str_replace(
-			array(" ","\n","<",">"),
-			array("---save_space---","---save_cr---","---less---","---great---"),
+			array(" ","\n","<",">","&"),
+			array("---save_space---","---save_cr---","---less---","---great---","---ampersand---"),
 			$txt);
         return $txt;
     }
@@ -24,8 +24,8 @@
     function restore_format($txt)
     {
         $txt = str_replace(
-			array("---save_space---","---save_cr---","---less---","---great---"), 
-			array(" ","\n","<",">"), 
+			array("---save_space---","---save_cr---","---less---","---great---","---ampersand---"), 
+			array(" ","\n","<",">","&"), 
 			$txt);
         return $txt;
     }
@@ -35,4 +35,3 @@
         $txt = preg_replace(array("!\s+!","!\n!"),array(" "," "),$txt);
         return $txt;
     }
-?>

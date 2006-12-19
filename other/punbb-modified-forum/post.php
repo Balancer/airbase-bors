@@ -22,6 +22,8 @@
 
 ************************************************************************/
 
+$GLOBALS['cms']['cache_disabled'] = true;
+
 define('PUN_ROOT', './');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file

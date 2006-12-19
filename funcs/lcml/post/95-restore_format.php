@@ -4,4 +4,3 @@
     {
         return restore_format($txt);
     }
-?>

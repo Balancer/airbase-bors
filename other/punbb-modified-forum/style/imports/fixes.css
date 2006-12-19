@@ -1,7 +1,7 @@
 DIV.postmsg { 
 	font-size: small; 
 	text-align: justify;
-	overflow: hidden;
+/*	overflow: hidden; */
 }
 
 .pun TEXTAREA {

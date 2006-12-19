@@ -31,26 +31,37 @@
 		$smarty->cache_lifetime = 86400*7;
 //		print_r($smarty->secure_dir); exit();
 
+		$hts = &new DataBaseHTS();
+
 		$caller = array_shift(debug_backtrace());
 		$caller_path = dirname($caller['file']);
+		$caller_local_tpln = "xfile:{$GLOBALS['cms']['local_dir']}".preg_replace("!^.+?/cms/!", "/templates/".$hts->get($GLOBALS['main_uri'], 'template')."/", $caller_path)."/";
+		$caller_local_main = "xfile:{$GLOBALS['cms']['local_dir']}".preg_replace("!^.+?/cms/!", "/templates/", $caller_path)."/";
 		
 //		if($uri == NULL)
 //			$uri = "$caller_path/$assign_template";
 	
-		if(preg_match("!^[\w\-]+\.[\w\-]+$!", $assign_template))
-			$assign_template = "xfile:$caller_path/$assign_template";
-
+/*		if(preg_match("!^[\w\-]+\.[\w\-]+$!", $assign_template))
+		{
+			$assign_template_local = "xfile:{$GLOBALS['cms']['local_dir']}/templates/modules/".$assign_template;
+			$assign_template_base = "xfile:$caller_path/$assign_template";
+		}
+*/		
 		$smarty->template_dir = $caller_path;
 		if(!empty($data['template_dir']) && $data['template_dir'] != 'caller')
 			$smarty->template_dir = $data['template_dir'];
 		
 		$smarty->secure_dir += array($caller_path);
 
-		$template_uri = $assign_template;
+		$template_uri = $caller_local_tpln.$assign_template;
+		if(!$smarty->template_exists($template_uri))
+			$template_uri = $caller_local_main.$assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = "xfile:$caller_path/".$assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = "xfile:".$assign_template;
+		if(!$smarty->template_exists($template_uri))
+			$template_uri = $assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = $GLOBALS['cms']['default_template'];
 
