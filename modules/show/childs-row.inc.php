@@ -1,7 +1,7 @@
 <?
     function module_show_childs_row($parent_uri)
     {
-		$hts = new DataBaseHTS();
+		$hts = &new DataBaseHTS();
 		$parent_uri = $hts->normalize_uri($parent_uri);
 		$data = array();
 		$links = array();
@@ -18,8 +18,9 @@
 			$links[] = $link;
 
 		$data['links'] = $links;
+	
+		$hts->Destroy();
 
 		include_once("funcs/templates/assign.php");
 		return template_assign_data("xfile:".dirname(__FILE__)."/childs-row.htm", $data);
     }
-?>
