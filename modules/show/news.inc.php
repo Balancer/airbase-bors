@@ -2,7 +2,7 @@
     function module_show_news($uri, $limit)
     {
 //		echo "msn=$uri. limit=$limit<br/>";
-		$hts = new DataBaseHTS();
+		$hts = &new DataBaseHTS();
 //		$GLOBALS['log_level']=10;
 
 		$uri = $hts->normalize_uri($uri);
@@ -55,10 +55,10 @@
 		if(preg_match('!^\d+!', $width))	$width  .= "px";
 		if(preg_match('!^\d+!', $height))	$height .= "px";
 
+		$hts->Destroy();
 		include_once("funcs/templates/assign.php");
 		return template_assign_data("news.htm", array(
 			'records'=>$records, 
 			'width'=>$width, 
 			'height'=>$height));
 	}
-?>
