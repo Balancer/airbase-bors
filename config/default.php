@@ -1,7 +1,16 @@
 <?
 	$GLOBALS['log_level'] = 2;
 
-    ini_set('include_path', ini_get('include_path') . ":{$_SERVER['DOCUMENT_ROOT']}/cms-local:{$_SERVER['DOCUMENT_ROOT']}/cms:{$_SERVER['DOCUMENT_ROOT']}/include:{$_SERVER['DOCUMENT_ROOT']}/cms/PEAR");
+	$includes = array(
+		"{$_SERVER['DOCUMENT_ROOT']}/cms-local",
+		"{$_SERVER['DOCUMENT_ROOT']}/cms",
+		"{$_SERVER['DOCUMENT_ROOT']}/include",
+		"{$_SERVER['DOCUMENT_ROOT']}/cms/PEAR"
+	);
+
+	$delim = empty($_ENV['windir']) ? ":" : ";";
+
+    ini_set('include_path', ini_get('include_path') . $delim . join($delim, $includes));
 
     $GLOBALS['cms'] = array(
 		'sites_store_path' => "{$_SERVER['DOCUMENT_ROOT']}/sites",
@@ -44,6 +53,3 @@
 	if(get_magic_quotes_gpc())
 		foreach($_POST as $key => $val)
 			 $_POST[$key] = stripslashes($val);
-
-	global $hts;
-	$hts = &new DataBaseHTS();
