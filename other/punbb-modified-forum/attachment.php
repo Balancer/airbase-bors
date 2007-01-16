@@ -60,6 +60,9 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 		if($pun_user['is_guest'] || $pun_user['id'] <= 2)
 			message($ret.$anon);
 
+		if($pun_user['num_posts'] < 50)
+			message($ret."<br/><br/>Также у вас менее 50 постингов на форуме, что блокирует возможность скачивания незавивисо от состояния соотношения трафика.".$anon);
+
 		if(!preg_match("!^(\d+)\.(\d+)\.(\d+)\.(\d+)$!", $_SERVER["REMOTE_ADDR"]))
 			exit("Извините, неопознанный формат Вашего IP: {$_SERVER['REMOTE_ADDR']}!");
 
@@ -67,6 +70,7 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 			|| $_SERVER['REMOTE_ADDR'] == '89.138.104.246'
 			|| $_SERVER['REMOTE_ADDR'] == '208.65.71.66'
 			|| $_SERVER['REMOTE_ADDR'] == '217.21.40.1'
+			|| $_SERVER['REMOTE_ADDR'] == '84.54.186.11'
 		)
 			message("Ваш IP заблокирован в аттачах за создание очень высокого зарубежного трафика. Подробнее - http://balancer.ru/forum/punbb/viewtopic.php?pid=967737#p967737 ".$anon);
 		
@@ -92,8 +96,9 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 		
 		if(!preg_match("!Российский.+Исходящий:</td><td>([\d\.]+) Мб.+Зарубежный.+Исходящий:</td><td>([\d\.]+) Мб!us", $resp, $m))
 			exit("Ошибка: Не могу получить данные о трафике! - $resp");
-		
-		if(($diff = $m[2] - $m[1] + 5000) >= 0)
+
+	
+		if(($diff = $m[2] - $m[1] + 3000) >= 0)
 			message($ret."<br /><br />Дефицит трафика на данный момент составляет $diff Мб. При отсутствии дефицита доступ к аттачам зарегистрированным зарубежным пользователям разрешён!".$anon);
 	}
 	

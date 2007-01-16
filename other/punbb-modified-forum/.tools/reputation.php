@@ -19,6 +19,7 @@
 				3 => 0, // guest
 				5 => 4, // coordin
 				6 => 2, // старожилы
+				21 => 4, // координатор-литератор
 			);
 
 		foreach($dbu1->get_array("SELECT DISTINCT user_id FROM `reputation_votes`") as $user)
