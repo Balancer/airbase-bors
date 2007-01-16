@@ -7,6 +7,7 @@
 <meta name="author" content="Balancer / Design by Andreas Viklund - http://andreasviklund.com/" />
 <link rel="stylesheet" type="text/css" href="/cms/templates/free/andreasviklund.com/1024px/1024px.css" title="1024px style" media="screen,projection" />
 <title>{$title}</title>
+<script src="/cms/include/user_data.js.php"></script>
 </head>
 
 <body>
@@ -59,8 +60,23 @@ New template designed: 1024px v1.0!</p>
 </div>
 
 <div id="footer">
-<p><a href="#">Contact us</a> | <a href="#">Privacy policy</a> | <a href="#">Sitemap</a> | <a href="#">RSS</a> | <a href="#header">Back to top</a><br />
-&copy; 2006 Balancer | Thanks to <a href="http://www.active-sandals.com/womreefsan.html">Reef Sandals</a> | Design by <a href="http://andreasviklund.com/">Andreas Viklund</a></p>
+<p>
+	<script>document.write(admin_menu)</script>
+<noscript>
+	Редактировать: <a href="{$main_uri}?edit">страницу</a>
+	| <a href="{$main_uri}?edit-data">параметры</a>
+	| <a href="{$main_uri}?nav_edit">навигацию</a>
+</noscript>
+<br />
+	<a href="#">Contact us</a> 
+	| <a href="#">Privacy policy</a> 
+	| <a href="#">Sitemap</a> 
+	| <a href="#">RSS</a> 
+	| <a href="#header">Back to top</a>
+<br />
+&copy; 1998 .. 2007 Balancer 
+	| Thanks to <a href="http://www.active-sandals.com/womreefsan.html">Reef Sandals</a> 
+	| Design by <a href="http://andreasviklund.com/">Andreas Viklund</a></p>
 </div>
 
 </div>
