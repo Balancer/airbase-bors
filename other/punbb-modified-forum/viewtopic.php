@@ -137,7 +137,7 @@ $cur_topic = $db->fetch_assoc($result);
 // Sort out who the moderators are and if we are currently a moderator (or an admin)
 $mods_array = ($cur_topic['moderators'] != '') ? unserialize($cur_topic['moderators']) : array();
 $is_admmod = ($pun_user['g_id'] == PUN_ADMIN || ($pun_user['g_id'] == PUN_MOD && array_key_exists($pun_user['username'], $mods_array))) ? true : false;
-$is_coordinator = $is_admmod || $pun_user['g_id'] == 5 || $pun_user['g_id'] == PUN_MOD;
+$is_coordinator = $is_admmod || $pun_user['g_id'] == 5 || $pun_user['g_id'] == PUN_MOD || $pun_user['g_id'] == 21;
 
 // Can we or can we not post replies?
 if ($cur_topic['closed'] == '0')
@@ -539,7 +539,7 @@ while ($cur_post = $db->fetch_assoc($result))
 							<center>
 							<?
 								if($poster['reputation'])
-									echo "<img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/rep.gif\" width=\"100\" height=\"16\" />\n";
+									echo "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation/post://{$cur_post['id']}/\"><img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/rep.gif\" width=\"100\" height=\"16\" border=\"0\" /></a>\n";
 							?>
 							<div><?echo $user_warn;?></div>
 							</center>

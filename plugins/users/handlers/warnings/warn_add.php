@@ -15,7 +15,7 @@
 			return ec("Не задан ID пользователя.");
 
 		$me = new User();
-		if(!in_array($me->data('group'), array(1,2,5)))
+		if(!in_array($me->data('group'), array(1,2,5,21)))
 			return ec("У Вас недостаточно прав доступа");
 			
 		$us = new User($uid);
@@ -53,7 +53,7 @@
 			return error_message(ec("Не задан ID пользователя."));
 
 		$me = new User();
-		if(!in_array($me->data('group'), array(1,2,5)))
+		if(!in_array($me->data('group'), array(1,2,5,21)))
 			return error_message(ec("У Вас недостаточно прав доступа"));
 			
 		$db = new DataBase('punbb');
@@ -77,4 +77,3 @@
 		
 		return message(ec("Штраф выставлен"));
 	}
-?>
