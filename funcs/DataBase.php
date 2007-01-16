@@ -23,7 +23,7 @@
 				$base = $GLOBALS['cms']['mysql_database'];
 			
 			$this->db_name = $base;
-			if(is_global_key("DataBaseHandler",$base))
+			if(0 && is_global_key("DataBaseHandler",$base))
 			{
 				if(!isset($GLOBALS['global_db_resume_connections']))
 					$GLOBALS['global_db_resume_connections'] = 0;
