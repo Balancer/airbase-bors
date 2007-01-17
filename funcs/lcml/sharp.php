@@ -12,8 +12,7 @@
         $in_pair=0;
         $changed=0;
         $start=-1;
-        $tag="";
-
+		$tag="";
 
 //		$out = "";
 
@@ -49,7 +48,7 @@
                 {
                     $func = "lst_$m[1]";
                     $array[$i] = $func(trim($m[3]));
-					$array_mask[$i] = str_repeat('X', strlen($array[$i]));
+					$mask_array[$i] = str_repeat('X', strlen($array[$i]));
                     $changed = 1;
                     continue;
                 }
