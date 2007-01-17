@@ -9,7 +9,7 @@
             if($pos === false)
                 break;
 
-//			echo "Got '$tag'; next: '".substr($txt, $end, 20)."'\n";
+//			echo "Got '$tag'; next: '".substr($txt, $end, 60)."'\n";
 
             // Если нашли тэг и он не закрывающийся
             if($pos !== false && $end && substr($txt, $pos+1, 1) != '/')
@@ -93,48 +93,72 @@
 
     function find_next_open_tag($txt, $pos)
     {
-//		echo "Find tag in ".substr($txt, $pos, 10)."\n";
+//		echo "Find tag in\n".str_repeat('X',$pos).substr($txt, $pos, 60)."\n";
 
         while($pos < strlen($txt) 
-				&& ($pos = strpos($txt, '[', $pos)) !== false
+				&& ($pos = next_open_brace($txt, $pos)) !== false
 			)
         {
-            $pos_open  = $pos;
-            $pos_close = $pos;
+//			echopos($pos, 'pos');
+			
+            $pos_open  = next_open_brace ($txt, $pos+1); // Следующий открывающийся тэг
+            $pos_close = next_close_brace($txt, $pos+1); // Ближайший закрывающий знак
             $in = 0;
-
-            $pos_open = strpos($txt, '[', $pos_open + 1); // Следующий открывающийся тэг
             $end = 0;
-            $pos_close = strpos($txt, ']', $pos_close + 1); // Ближайший закрывающий знак
+
+//			echo "0:\n"; echopos($pos_open, 'pos_open'); echopos($pos_close, 'pos_close');
 
             while($pos_close !== false && $pos_open !== false)
             {
-//                echo "test: $pos_open / $pos_close $in ".strlen($txt)."\n";
                 //  Закрывающий находится ближе открывающего
                 //  никаких особых случаев
+				//  xxx [b]...[/b]
+				//      ^ ------- pos
+				//            ^ - pos_open
+				//        ^ ----- pos_close
+				//        ^ ----- new end
                 if($pos_open > $pos_close && $in==0)
                 {
                     $end = $pos_close;
+//					echo "1: end=$end\n";
                     break;
                 }
 
+				
                 // Закрывающийся имеется ближе открывающегося, но
                 // мы уже внутри другого открытого.
                 // закрываем его и считаем дальше
-                if($pos_open > $pos_close && $in!=0)
+				// xxx [url ...|[b]...[/b]] yyy
+				//     ^ ------------------- pos
+				//                    ^ ---------- pos_open
+				//                       ^ -- pos_close
+				//                        ^ -- new pos_close
+                if($pos_open > $pos_close && $in !=0)
                 {
                     $in--;
-                    $pos_close = strpos($txt, ']', $pos_close + 1);
+                    $pos_close = next_close_brace($txt, $pos_close + 1);
+//					echo "2: new pos_close=$pos_close; in=$in\n";
+					continue;
                 }
 
                 // Новый тэг открывается раньше, чем закрывается наш
                 // Начинаем учёт вложений
+				// xxx [url ...|[b]...[/b]] yyy
+				//     ^ ------------------- pos
+				//              ^ ---------- pos_open
+				//                ^ -- pos_close
+				//                    ^ - new pos_open
+				//                       ^ -- new pos_close
                 if($pos_open < $pos_close)
                 {
-                    $pos_open = strpos($txt, '[', $pos_open+1);
-                    $pos_close = strpos($txt, ']', $pos_close+1);
+                    $pos_open  = next_open_brace ($txt, $pos_open +1);
+                    $pos_close = next_close_brace($txt, $pos_close+1);
+//					$in++;
+//					echo "3: new in=$in\n"; echopos($pos_open, 'pos_open'); echopos($pos_close, 'pos_close');
                 }
             }
+
+//			echo "result: pos_open=$pos_open, pos_close=$pos_close, end=$end\n";
 
             if(!$end)
                 $end = $pos_close;
@@ -144,6 +168,7 @@
 
             // Вырезаем целиком найденный тэг, без квадратных скобок
             $tag = substr($txt, $pos+1, $end-$pos-1);
+//			echo "cut '$tag'\n";
 
             preg_match("!^([^\s\|]*)\s*(.*?)$!s",$tag,$m); // func, params
             return array($pos, $end+1, $tag, isset($m[1]) ? $m[1] : "" , isset($m[2]) ? $m[2] : "");
@@ -151,6 +176,38 @@
 
         return array(false, false, '', '', '');
     }
+
+//	function echopos($pos, $name)
+//	{
+//		echo str_repeat(' ', $pos)."^ --- $name\n";
+//	}
+
+	function next_open_brace($txt, $pos)
+	{
+		$pos = strpos($txt, '[', $pos);
+		if($pos === false)
+			return false;
+		
+		if($pos == strlen($txt)-1)
+			return false;
+		
+		if(preg_match("!\w|/!", substr($txt, $pos+1, 1)))
+			return $pos;
+			
+		return next_open_brace($txt, $pos+1);
+	}
+
+	function next_close_brace($txt, $pos)
+	{
+		$pos = strpos($txt, ']', $pos);
+		if($pos === false)
+			return false;
+		
+		if($pos == 0)
+			return false;
+		
+		return $pos;
+	}
     
     function params($in)
     {
