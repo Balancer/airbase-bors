@@ -9,7 +9,7 @@
         
         function Cache()
         {
-            $this->dbh = new DataBase('CACHE');
+            $this->dbh = &new DataBase('CACHE');
 //            echo "Created cache".$this->dbh->dbh."<br>\n";
         }
 

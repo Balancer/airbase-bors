@@ -20,8 +20,8 @@
         if(!$uri)
             $uri=$GLOBALS['PHP_SELF'];
 
-        $dbh = new DataBase();
-        $hts = new DataBaseHTS();
+        $dbh = new &DataBase();
+        $hts = new &DataBaseHTS();
         $id  = $hts->page_id_by_uri($uri);
         $ref = $hts->page_id_by_uri($_SERVER['HTTP_REFERER']);
 

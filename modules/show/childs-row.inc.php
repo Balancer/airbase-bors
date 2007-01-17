@@ -19,8 +19,6 @@
 
 		$data['links'] = $links;
 	
-		$hts->Destroy();
-
 		include_once("funcs/templates/assign.php");
 		return template_assign_data("xfile:".dirname(__FILE__)."/childs-row.htm", $data);
     }

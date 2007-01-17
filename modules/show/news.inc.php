@@ -55,7 +55,6 @@
 		if(preg_match('!^\d+!', $width))	$width  .= "px";
 		if(preg_match('!^\d+!', $height))	$height .= "px";
 
-		$hts->Destroy();
 		include_once("funcs/templates/assign.php");
 		return template_assign_data("news.htm", array(
 			'records'=>$records, 

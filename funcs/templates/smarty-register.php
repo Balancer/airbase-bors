@@ -5,4 +5,3 @@
                                        "smarty_resource_file_get_timestamp",
                                        "smarty_resource_file_get_secure",
                                        "smarty_resource_file_get_trusted"));
-?>
