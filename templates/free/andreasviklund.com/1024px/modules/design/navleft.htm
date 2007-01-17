@@ -1,0 +1,10 @@
+{assign var=indent value=0}
+{section name=i loop=$links}
+{assign var=x value=$links[i]}
+{if $x.indent > 4}{assign var="x.indent" value=4}{/if}
+{if $x.indent > $indent}{""|indent:$x.indent-$indent:"<ul>"}{assign var=indent value=$x.indent}{/if}
+{if $x.indent < $indent}{""|indent:$indent-$x.indent:"</ul>"}{assign var=indent value=$x.indent}{/if}
+{assign var=strl value=23-$x.indent}
+<li><nobr><a href="{$x.uri}" title="{$x.title}">{$x.title|truncate:$strl}</a></nobr></li>
+{/section}
+{if $indent > 0}{""|indent:$indent:"</ul>"}{/if}
