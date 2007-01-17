@@ -35,8 +35,12 @@
 
 		$caller = array_shift(debug_backtrace());
 		$caller_path = dirname($caller['file']);
+		$module_relative_path = preg_replace("!^.+?/cms/!", "", $caller_path)."/";
+//		print_r($GLOBALS['cms']);
+
 		$caller_local_tpln = "xfile:{$GLOBALS['cms']['local_dir']}".preg_replace("!^.+?/cms/!", "/templates/".$hts->get_data($GLOBALS['main_uri'], 'template', '', true)."/", $caller_path)."/";
 		$caller_local_main = "xfile:{$GLOBALS['cms']['local_dir']}".preg_replace("!^.+?/cms/!", "/templates/", $caller_path)."/";
+		$caller_default_template = dirname($GLOBALS['cms']['default_template'])."/".$module_relative_path;
 		
 //		if($uri == NULL)
 //			$uri = "$caller_path/$assign_template";
@@ -51,15 +55,19 @@
 		if(!empty($data['template_dir']) && $data['template_dir'] != 'caller')
 			$smarty->template_dir = $data['template_dir'];
 		
-		$smarty->secure_dir += array($caller_path);
+		$smarty->secure_dir += array($caller_path, $caller_default_template);
 
 		$template_uri = $caller_local_tpln.$assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = $caller_local_main.$assign_template;
 		if(!$smarty->template_exists($template_uri))
+			$template_uri = "xfile:".$caller_default_template.$assign_template;
+		if(!$smarty->template_exists($template_uri))
 			$template_uri = "xfile:$caller_path/".$assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = "xfile:".$assign_template;
+
+			
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = $assign_template;
 		if(!$smarty->template_exists($template_uri))
