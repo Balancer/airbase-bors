@@ -323,6 +323,8 @@
 			foreach($GLOBALS['cms']['smarty'] as $key => $val)
 				$smarty->assign($key, $val);
 			
+		foreach(split(' ', 'host_name main_host_uri') as $key)
+			$smarty->assign($key, @$GLOBALS['cms'][$key]);
 //		$smarty->assign("action", $GLOBALS['cms']['action']);
 
 //		echo("fetch(\"$tpl\", $uri)");

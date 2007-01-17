@@ -127,6 +127,9 @@
 		if(preg_match('!^http://!',$template_uri))
 			$template_uri = "hts:".$template_uri;
 
+		foreach(split(' ', 'host_name main_host_uri') as $key)
+			$smarty->assign($key, @$GLOBALS['cms'][$key]);
+
 //		echo $template_uri;
 
 		if($template_uri{0}=='/')

@@ -1,8 +1,8 @@
 <?
     function print_top_navs($uri=NULL)
     {
-        $ch = new Cache();
-        if(0 && $ch->get('top_navs', $uri))
+        $ch = &new Cache();
+        if($ch->get('top_navs', $uri))
         {
             echo $ch->last();
             return;
@@ -13,82 +13,71 @@
     
 	    $out = '';
 
-        $hts = new DataBaseHTS();
+        $hts = &new DataBaseHTS();
 
         $GLOBALS['visited_pairs'] = array();
 
         $parents = link_line($uri);
+
+		include_once("funcs/templates/assign.php");
+		$tpl = "top-navs.html";
+		if(!empty($GLOBALS['module_data']['template']))
+			$tpl = $GLOBALS['module_data']['template'];
         
-//		echo $uri;
-		
+		$data = array();
         if(!is_array($parents) || sizeof($parents)==0)
 		{
-			echo $hts->get_data($uri, 'nav_name');
-            return;
+			$data[] = array(array('uri'=>$uri, 'title'=>$hts->get($uri, 'nav_name')));
+		}
+		else
+		{
+	        sort($parents);
+		
+    	    foreach($parents as $nav)
+			{
+				$link_line = array();
+				foreach(split("\|#\|", $nav) as $link)
+				{
+					$link_line[] = array(
+						'uri' => $link, 
+						'title' => $hts->get($link, 'nav_name'),
+					);
+				}
+				
+				$data[] = $link_line;
+			}
 		}
 		
-        sort($parents);
-		
-//		print_r($parents);
-//		echo sizeof($parents);
-
-        foreach($parents as $nav)
-        {
-            $links=split("#",$nav);
-            $sum=array();
-            foreach($links as $link)
-            {   
-                $name = $hts->get_data($link,'nav_name');
-				
-				if(strlen($name)>50)
-					$name=substr($name,0,50)."...";
-				
-                if(!$name) 
-					$name=$hts->get_data($link,'title', $link);
-			
-                $sum[] = $link != $uri ? "<a href=\"$link\">$name</a>" : $name;
-            }
-//            $sum=join(" &#187; ",$sum);
-//            $out .= "&nbsp;&#183;&nbsp;$sum<br>";
-            $out  = join(" / ",$sum);
-        }
-
-        echo $out;
-        $ch->set('top_navs',$uri,$out);
+		echo $ch->set(template_assign_data($tpl, array('links'=>$data)), 7200);
+		return;
     }
 
     function link_line($uri)
     {
-        $hts = new DataBaseHTS();
-
-//        echo "get links for '$uri'<br />";
+        $hts = &new DataBaseHTS();
 
         $parents = $hts->get_data_array($uri,'parent');
-//        print_r($parents); echo " for $uri<br />";
         $links = array();
 
         foreach($parents as $parent)
         {
 			$parent = $hts->normalize_uri($parent);
+
 			if($parent == $uri)
 				continue;
-//			echo "get recursive links for $parent-$uri<br>";
-            if(!isset($GLOBALS['visited_pairs']["$parent#$uri"]))
+
+            if(!isset($GLOBALS['visited_pairs']["$parent|#|$uri"]))
             {
-                $GLOBALS['visited_pairs']["$parent#$uri"]=1;
+                $GLOBALS['visited_pairs']["$parent|#|$uri"]=1;
                 if($ret_parents = link_line($parent))
                 {
                     foreach($ret_parents as $ret_parent)
-                    {
-                        $links[] = "$ret_parent#$uri";
-//                        echo "pair = $pair<br>";
-                    }
+                        $links[] = "$ret_parent|#|$uri";
                 }
                 else
-                    $links[] = "$parent#$uri";
+                    $links[] = "$parent|#|$uri";
             }
         }
 
         return $links;
     }
-?>
