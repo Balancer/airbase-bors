@@ -9,7 +9,9 @@
 			if(!preg_match("!^\w+://!",$url))
 				$params['url']="http://$url";
 
-		$hts = class_exists('DataBaseHTS') ? new DataBaseHTS : NULL;
+		$hts = NULL;
+		if(class_exists('DataBaseHTS'))
+			$hts = &new DataBaseHTS();
 
 		if(!preg_match("!^\w+://!",$url) && !preg_match("!^/!",$url))
 			$url = @$GLOBALS['main_uri'].$url;
@@ -38,4 +40,3 @@
 		
 		return "<a href=\"$url\"$external>{$params['description']}</a>";
 	}
-?>
