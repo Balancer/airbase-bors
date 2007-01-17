@@ -50,7 +50,7 @@
         }
 
         require_once('HTTP/Request.php');
-        $req =& new HTTP_Request($url);
+        $req = &new HTTP_Request($url);
         $req->addHeader('Content-Encoding', 'gzip');
         $req->addHeader('Range','bytes=0-4095');
         $req->addHeader('Accept-Charset',$GLOBALS['lcml_request_charset_default']);
@@ -64,7 +64,7 @@
             'timeout' => 2,
             ));
 
-        if(!empty($response) && PEAR::isError($response)) 
+        if(!empty($response) && PEAR::isError($response))
             return lcml_strip_url($url);
 
 /*        foreach ($req->getResponseHeader() as $name => $value) 
