@@ -20,7 +20,9 @@
         if(!mkpath($pStrPath, $mode)) 
             return false;
 
-        return mkdir($strPath, $mode);
+  		$err = mkdir($strPath, $mode);
+		chmod($strPath, $mode);
+		return $err;
     }
 
 	function smart_size($size)

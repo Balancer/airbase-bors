@@ -12,7 +12,7 @@
         switch($cr_type)
         {
             case 'empty_as_para':
-                $txt = split("\n\n", $txt);
+                $txt = preg_split("!\n\n+!", $txt);
 				if(sizeof($txt) > 1)
 					$txt = "<p>".join("</p>\n\n<p>", $txt)."</p>";
 				else
@@ -27,7 +27,7 @@
                 $txt = preg_replace("!\n!", " ", $txt);
                 break;
             case 'save_cr':
-                $txt = preg_replace("!\n!", "<br /> ", $txt);
+                $txt = preg_replace("!\n!", "<br />\n", $txt);
                 break;
         }
 

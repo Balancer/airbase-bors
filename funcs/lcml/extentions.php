@@ -1,5 +1,5 @@
 <?
-    function ext_load($dir,$txt=NULL)
+    function ext_load($dir, $txt=NULL, $mask=false)
     {
 //        echo "ext load dir $dir<br>\n";
 //		return "Load dir: '$dir'; $txt";
@@ -11,38 +11,85 @@
         if($dh = opendir($dir)) 
         {
             while(($file = readdir($dh)) !== false)
-                if(substr($file,0,1)!='.')
+                if($file{0} != '.')
                     array_push($files, $file);
         }
         closedir($dh);
         
         sort($files);
 
+		$functions = array();
+
         foreach($files as $file) 
         {
 //            echo "load $file<br>\n";
 
-            if(substr($file,-4)=='.php')
+            if(substr($file, -4) == '.php')
             {
-                $time_start = time();
                 include_once("$dir/$file");
 
-                $fn = "lcml_".substr($file,3,-4);
+                $fn = "lcml_".substr($file, 3, -4);
                 
                 if(function_exists($fn))
-                    $txt = $fn($txt);
-
-                if($time_start<time())
-                {
-                    $fh=@fopen("{$_SERVER['DOCUMENT_ROOT']}/logs/lcml-profiling.log","at");
-                    @fwrite($fh,strftime("%Y-%m-%d %H:%M:%S")."|$dir/$file|");
-                    @fwrite($fh,(time()-$time_start)."\n");
-                    @fclose($fh);
-                }
+					$functions[] = $fn;
             }
 //            else
 //                ext_load("$dir/$file");
+
         }
 
-        return $txt;
+		if(!$mask)
+			return lcml_functions_do($functions, $txt);
+
+//		echo "Use mask post:\n$txt\n$mask\n\n";
+		
+		$result = "";
+		$start = 0;
+		$can_modif = true;
+			
+		for($i=0, $stop=strlen($txt); $i<$stop; $i++)
+		{
+			if($mask{$i} == 'X')
+			{
+				if($can_modif)
+				{
+					if($start != $i)
+						$result .= lcml_functions_do($functions, substr($txt, $start, $i-$start));
+						
+					$start = $i;
+					$can_modif = false;
+				}
+			}
+			else
+			{
+				if(!$can_modif)
+				{
+//					echo "Skip for '".substr($txt, $start, $i-$start)."'\n";
+					$result .= substr($txt, $start, $i-$start);
+					$start = $i;
+					$can_modif = true;
+				}
+			}
+		}
+
+
+		if($start < strlen($txt))
+		{
+//			echo "Rest= $start, ".strlen($txt).", '$result:$txt'='".substr($txt, $start, strlen($txt) - $start)."'\n";
+			if($can_modif)
+				$result .= lcml_functions_do($functions, substr($txt, $start, strlen($txt) - $start));
+			else				
+				$result .= substr($txt, $start, strlen($txt) - $start);
+		}
+			
+        return $result;
     }
+
+	function lcml_functions_do($functions, $txt)
+	{
+//		echo "Apply funcs for '$txt'\n";
+		foreach($functions as $fn)
+			$txt = $fn($txt);
+
+		return $txt;
+	}
