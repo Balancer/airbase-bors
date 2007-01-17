@@ -23,7 +23,7 @@
         
 		$txt=join("\n",$txt);
 
-		$txt = htmlspecialchars($txt);//save_format($txt);
+//		$txt = htmlspecialchars($txt);//save_format($txt);
 		$txt = str_replace("\n", "<br />\n", $txt);
 
         $txt = "<table border='0' align='center' width='95%' cellpadding='3' cellspacing='1'><tr><td class='code' id='CODE'><tt>$txt</tt>";

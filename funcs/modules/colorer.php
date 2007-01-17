@@ -48,21 +48,23 @@
 //            fwrite($fh,html_entity_decode($txt, ENT_COMPAT, 'UTF-8'));
             fwrite($fh, $txt);
             fclose($fh);
-            $q = "/usr/bin/colorer ".escapeshellcmd($color)." -h -dh -ei utf-8 -t ".escapeshellcmd($type)." -c /usr/local/share/colorer/catalog.xml ".escapeshellcmd($tmp_file)." 2> /dev/null";
+            $q = "/usr/bin/colorer ".escapeshellcmd($color)." -h -dh -ei utf-8 -t ".escapeshellcmd($type)." -c /usr/share/colorer/catalog.xml ".escapeshellcmd($tmp_file)." 2> /dev/null";
 
             $txt_in = trim(substr(`$q`,1));
 
             if($txt_in)
-                $txt=$txt_in;
+                $txt = $txt_in;
 
-            $txt=strtr($txt,array(
+/*            $txt=strtr($txt,array(
                 "!"=>"&#33;",
 //              "'"=>"&#39;",
                 "\$"=>"&#036;",
                 "\\"=>"&#092;",
                 "|"=>"&#124;",
-                ));
+                ));*/
+				
             unlink($tmp_file);
         }
+		
         return $txt;
     }
