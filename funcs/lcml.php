@@ -32,8 +32,13 @@ function rest_return($ret_val, $saved_params)
 
 function lcml($txt, $params = array ())
 {
+	$txt = preg_replace("!^\n+!", "", $txt);
+	$txt = preg_replace("!\n+$!", "\n", $txt);
+
 	if(!trim($txt))
 		return "";
+
+//	echo "lcml('$txt')\n";
 
 	$GLOBALS['lcml']['level'] = intval(@ $GLOBALS['lcml']['level']) + 1;
 
@@ -42,7 +47,7 @@ function lcml($txt, $params = array ())
 		if (!isset ($params[$key]))
 			$params[$key] = $val;
 
-	$GLOBALS['lcml']['params'] = & $params;
+	$GLOBALS['lcml']['params'] = &$params;
 	
 	if($GLOBALS['lcml']['level'] > 1)
 		$GLOBALS['lcml']['params']['html_disable'] = false;
@@ -56,15 +61,14 @@ function lcml($txt, $params = array ())
 	$ch_type = "lcml-compiled";
 	$ch_key = md5($txt.$params['uri']);
 
-	$ch = new Cache();
+	$ch = &new Cache();
+
 	if($ch->get($ch_type, $ch_key, $params['uri'])
 				&& empty ($params['cache_disable']) 
 				&& $GLOBALS['lcml']['level'] < 2
 			)
-	{
-//		echo "<xmp>$txt</xmp>";
 		return rest_return($ch->last(), $saved_params);
-	}
+
 	$page = @ $GLOBALS['cms']['page_path'];
 
 	$hts = &new DataBaseHTS();
@@ -100,13 +104,8 @@ function lcml($txt, $params = array ())
 		debug(__FILE__.__LINE__." Unknown parameter '$params'");
 	}
 
-	if (empty ($GLOBALS['lcml']['cr_type']))
-	{
-		if (empty ($GLOBALS['ibforums']))
-			$GLOBALS['lcml']['cr_type'] = 'empty_as_para';
-		else
-			$GLOBALS['lcml']['cr_type'] = 'ignore_cr';
-	}
+	if(empty ($GLOBALS['lcml']['cr_type']))
+		$GLOBALS['lcml']['cr_type'] = 'empty_as_para';
 
 	if ($GLOBALS['lcml']['cr_type'] == 'plain_text')
 		return rest_return($ch->set($ch_type, $ch_key, "<xmp>$txt</xmp>"), $saved_params);
@@ -133,7 +132,7 @@ function lcml($txt, $params = array ())
 	include_once ("lcml/tags.php");
 	$txt = lcml_tags($txt, $mask);
 
-	$txt = ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/post', $txt);
+	$txt = ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/post', $txt, $mask);
 
 	if ($outfile)
 	{
@@ -153,8 +152,5 @@ function lcml($txt, $params = array ())
 
 	//		echo "<xmp>Out: '$txt'</xmp>";
 
-	return rest_return($ch->set($ch_type, $ch_key, $txt, 1209600), $saved_params);
+	return rest_return($ch->set($ch_type, $ch_key, $txt, 86400*60), $saved_params);
 }
-
-//    function lp_code($txt,$params) { include_once("tags/code.php"); return lp_code_($txt,$params);}
-?>

@@ -1,23 +1,21 @@
 <?
     function lcml_tags($txt, &$mask)
     {
-		$mask = str_repeat('X', strlen($txt));
-
-        $end = -1;
+        $end = 0;
 		$next_end = -1;
         do
         {
-//            echo "text: $txt\n";
             list($pos, $end, $tag, $func, $params) = find_next_open_tag($txt, $end);
             if($pos === false)
                 break;
 
+//			echo "Got '$tag'; next: '".substr($txt, $end, 20)."'\n";
+
             // Если нашли тэг и он не закрывающийся
             if($pos !== false && $end && substr($txt, $pos+1, 1) != '/')
             {
-//            	echo "Test *_{$func}";
-
-                if(empty($GLOBALS['cms']['config']['disable']["lp_$func"]) && function_exists("lp_$func"))
+                if(empty($GLOBALS['cms']['config']['disable']["lp_$func"]) 
+					&& function_exists("lp_$func"))
                 {
                     $opened   = 0; // число открытых тэгов данного типа
                     $cfunc    = "lp_$func";
@@ -25,7 +23,7 @@
                     do
                     {
                         // Ищем следующий открывающийся тэг
-                        list($next_pos,$next_end,$next_tag,$next_func)=find_next_open_tag($txt,$next_end);
+                        list($next_pos, $next_end, $next_tag, $next_func)=find_next_open_tag($txt, $next_end);
                         // Если он такой же, как наш, то увеличиваем счётчик вложений
                         if(strtolower($next_func)==strtolower($func))
                             $opened++;
@@ -40,19 +38,11 @@
                             // иначе - вычисляем тэг, заменяя его на новое содержимое
                             else
                             {
-
-                                if(!empty($outfile))
-                                {
-                                    $fh=fopen($GLOBALS['cms']['base_dir']."/funcs/lcml.log","at");
-                                    fwrite($fh,"$cfunc('".substr($txt,$end+1,$next_pos-$end-1).",".print_r(params($params), true)."\n----------------\n");
-                                    fclose($fh);
-                                }
-                                
                                 $part1 = substr($txt, 0, $pos);
-								$part2 = substr($txt, $end+1, $next_pos-$end-1);
-//								echo "call '$cfunc' for '$part2'";
+								$part2 = substr($txt, $end, $next_pos-$end);
+                                $part3 = substr($txt, $next_end);
+//								echo "call '$cfunc' for part1='$part1', part2='$part2', part3=$part3\n";
                                 $part2 = $cfunc($part2, params($params));
-                                $part3 = substr($txt, $next_end+1);
                                 $txt = $part1.$part2.$part3;
 								$mask = substr($mask, 0, $pos).str_repeat('X',strlen($part2)).substr($mask, $next_end+1);
 // 				                echo "<xmp>tag=$func,p1='$part1'\np2='$part2'\np3='$part3'\n,end=$end,nextpos=$next_pos</xmp>";
@@ -65,7 +55,8 @@
                     continue;
                 }
 
-                if(empty($GLOBALS['cms']['config']['disable']["lt_$func"]) && function_exists("lt_$func"))
+                if(empty($GLOBALS['cms']['config']['disable']["lt_$func"]) 
+					&& function_exists("lt_$func"))
                 {
                     $func = "lt_$func";
 
@@ -76,45 +67,46 @@
                         fclose($fh);
                     }
 
-                    $part1 = substr($txt,0,$pos);
+                    $part1 = substr($txt, 0, $pos);
                     $part2 = $func(params($params));
-                    $part3 = substr($txt,$end+1);
+                    $part3 = substr($txt, $end);
                     $txt  = $part1.$part2.$part3;
 					$mask = substr($mask, 0, $pos).str_repeat('X',strlen($part2)).substr($mask, $next_end+1);
-//                    echo "<xmp>tag=$func,p1='$part1'\np2='$part2'\np3='$part3'</xmp>";
                     $end  = strlen($part1.$part2)-1; // В другой раз проверяем с конца изменённого фрагмента
                     continue;
                 }
 
-//                $txt=substr($txt,0,$pos)."&#91;".substr($txt,$pos+1,$end-$pos-1).($end<strlen($txt)?"&#93;":"").substr($txt,$end+1);
                 // Неопределённый тэг - пропускаем
                 if($pos !== false)
-                    $end = $pos;
+                    $end = $pos+1;
                 else
                     $end = false;
-//                echo "$pos($func):====$txt\n====";
             }
 
         } while($end !== false); //  && $loops++ < 10
 
+//		echo "Res-tags:\n".str_replace("\n","|",$txt)."\n$mask\n\n";
+
         return $txt;
     }
 
-    function find_next_open_tag($txt,$pos)
+    function find_next_open_tag($txt, $pos)
     {
-//        echo ". '$txt':$pos\n";
+//		echo "Find tag in ".substr($txt, $pos, 10)."\n";
 
-        while($pos+1 < strlen($txt) && ($pos = strpos($txt, '[', $pos+1)) !== false)
+        while($pos < strlen($txt) 
+				&& ($pos = strpos($txt, '[', $pos)) !== false
+			)
         {
             $pos_open  = $pos;
             $pos_close = $pos;
-            $in=0;
+            $in = 0;
 
-            $pos_open=strpos($txt,'[',$pos_open+1); // Следующий открывающийся тэг
-            $end=0;
-            $pos_close=strpos($txt,']',$pos_close+1); // Ближайший закрывающий знак
+            $pos_open = strpos($txt, '[', $pos_open + 1); // Следующий открывающийся тэг
+            $end = 0;
+            $pos_close = strpos($txt, ']', $pos_close + 1); // Ближайший закрывающий знак
 
-            while($pos_close!==false && $pos_open!==false)
+            while($pos_close !== false && $pos_open !== false)
             {
 //                echo "test: $pos_open / $pos_close $in ".strlen($txt)."\n";
                 //  Закрывающий находится ближе открывающего
@@ -124,33 +116,38 @@
                     $end = $pos_close;
                     break;
                 }
+
                 // Закрывающийся имеется ближе открывающегося, но
                 // мы уже внутри другого открытого.
                 // закрываем его и считаем дальше
-                if($pos_open>$pos_close && $in!=0)
+                if($pos_open > $pos_close && $in!=0)
                 {
                     $in--;
-                    $pos_close=strpos($txt,']',$pos_close+1);
+                    $pos_close = strpos($txt, ']', $pos_close + 1);
                 }
+
                 // Новый тэг открывается раньше, чем закрывается наш
                 // Начинаем учёт вложений
-                if($pos_open<$pos_close)
+                if($pos_open < $pos_close)
                 {
-                    $pos_open=strpos($txt,'[',$pos_open+1);
-                    $pos_close=strpos($txt,']',$pos_close+1);
+                    $pos_open = strpos($txt, '[', $pos_open+1);
+                    $pos_close = strpos($txt, ']', $pos_close+1);
                 }
             }
+
             if(!$end)
                 $end = $pos_close;
+
             if(!$end)
                 $end = strlen($txt);
 
             // Вырезаем целиком найденный тэг, без квадратных скобок
-            $tag = substr($txt,$pos+1,$end-$pos-1);
+            $tag = substr($txt, $pos+1, $end-$pos-1);
 
             preg_match("!^([^\s\|]*)\s*(.*?)$!s",$tag,$m); // func, params
-            return array($pos, $end, $tag, isset($m[1])?$m[1]:"",isset($m[2])?$m[2]:"");
+            return array($pos, $end+1, $tag, isset($m[1]) ? $m[1] : "" , isset($m[2]) ? $m[2] : "");
         }
+
         return array(false, false, '', '', '');
     }
     
@@ -254,7 +251,3 @@
 
         return $params;
     }
-
-//    function lp_code($txt,$params) { include_once("tags/code.php"); return lp_code_($txt,$params);}
-
-?>

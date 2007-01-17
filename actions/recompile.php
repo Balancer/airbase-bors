@@ -1,7 +1,7 @@
 <?
     require_once("funcs/DataBaseHTS.php");
     require_once("funcs/Cache.php");
-    require_once("funcs/CacheStaticFile.php");
+    require_once("include/classes/cache/CacheStaticFile.php");
     require_once("funcs/lcml.php");
     require_once("funcs/templates/smarty.php");
 

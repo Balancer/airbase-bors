@@ -1,16 +1,17 @@
 <?
-    require_once("DataBase.php");
-    require_once("DataBaseHTS.php");
+    require_once("funcs/DataBase.php");
+    require_once("funcs/DataBaseHTS.php");
 
     class CacheStaticFile
     {
 		var $file;
 		var $uri;
+		var $page;
 		var $original_uri;
 	
-        function CacheStaticFile($uri = NULL)
+        function CacheStaticFile($uri=NULL, $page=1)
         {
-			$this->set_name($uri);
+			$this->set_name($uri, $page);
         }
 
 /*        function get_static_uri($uri)
@@ -35,10 +36,11 @@
 			return $path."/".$file;
 		}
 */		
-		function set_name($uri)
+		function set_name($uri, $page=1)
 		{
 //			echo "Set name '$uri'";
 			$this->uri  = $uri;
+			$this->page  = $page;
 			$this->original_uri  = $uri;
 			
 			$this->file = $_SERVER['DOCUMENT_ROOT'].preg_replace('!http://[^/]+!', '', $uri);
@@ -48,13 +50,12 @@
 			
 			if($uri{strlen($uri)-1}=='/')
 			{
-				include_once('funcs/modules/uri.php');
-	            $hts   = &new DataBaseHTS();
-				$title = $hts->get_data($uri, 'title');
-				if(!$title)
-					$title = "index.html";
+
+				if($this->page > 1)
+					$title = "index-$page.html";
 				else
-					$title = translite_uri_simple($title).".html";
+					$title = "index.html";
+
 				$this->file .= $title;
 				$this->uri  .= $title;
 			}

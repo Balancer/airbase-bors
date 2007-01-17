@@ -47,7 +47,7 @@
 
 		if ($dh = opendir($dir))
 			while (($file = readdir($dh)) !== false)
-				if (substr($file, 0, 1) != '.')
+				if ($file{0} != '.')
 					array_push($files, $file);
 
 		closedir($dh);

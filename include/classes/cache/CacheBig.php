@@ -83,8 +83,9 @@
 
         function clear_by_id($key)
         {
+			$key = addslashes($key);
 			for($i=0; $i<256;$i++)
-				$this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `key` = '".addslashes($key)."'");
+				$this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `key` = '$key'");
         }
 
         function clear_by_uri($uri)
