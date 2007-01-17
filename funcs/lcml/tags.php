@@ -41,10 +41,9 @@
                                 $part1 = substr($txt, 0, $pos);
 								$part2 = substr($txt, $end, $next_pos-$end);
                                 $part3 = substr($txt, $next_end);
-//								echo "call '$cfunc' for part1='$part1', part2='$part2', part3=$part3\n";
                                 $part2 = $cfunc($part2, params($params));
                                 $txt = $part1.$part2.$part3;
-								$mask = substr($mask, 0, $pos).str_repeat('X',strlen($part2)).substr($mask, $next_end+1);
+								$mask = substr($mask, 0, $pos).str_repeat('X',strlen($part2)).substr($mask, $next_end);
 // 				                echo "<xmp>tag=$func,p1='$part1'\np2='$part2'\np3='$part3'\n,end=$end,nextpos=$next_pos</xmp>";
                                 $next_pos = false;
                                 $pos = strlen($part1.$part2); //с конца изменённого фрагмента
@@ -67,11 +66,13 @@
                         fclose($fh);
                     }
 
+//					echo "LT Mask=\n".str_replace("\n","|",$txt)."\n$mask\n\n";
                     $part1 = substr($txt, 0, $pos);
                     $part2 = $func(params($params));
                     $part3 = substr($txt, $end);
+//					echo "call LT '$func' for part1='$part1', part2='$part2', part3='$part3'; end=$end, nex_end=$next_end, pos=$pos\n";
                     $txt  = $part1.$part2.$part3;
-					$mask = substr($mask, 0, $pos).str_repeat('X',strlen($part2)).substr($mask, $next_end+1);
+					$mask = substr($mask, 0, $pos).str_repeat('X',strlen($part2)).substr($mask, $end);
                     $end  = strlen($part1.$part2)-1; // В другой раз проверяем с конца изменённого фрагмента
                     continue;
                 }
