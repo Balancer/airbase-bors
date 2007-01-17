@@ -3,6 +3,7 @@
     {
         $end = 0;
 		$next_end = -1;
+		$start = time();
         do
         {
             list($pos, $end, $tag, $func, $params) = find_next_open_tag($txt, $end);
@@ -84,7 +85,7 @@
                     $end = false;
             }
 
-        } while($end !== false); //  && $loops++ < 10
+        } while($end !== false && time()-$start<20);
 
 //		echo "Res-tags:\n".str_replace("\n","|",$txt)."\n$mask\n\n";
 
@@ -219,7 +220,7 @@
             $params['description']=$m[2];
         }
 
-        $params['orig']    = $in;
+        $params['orig']    = trim($in);
         $params['width']   = '';//"100%";
         $params['height']   = '';
         $params['_width']  = '';
