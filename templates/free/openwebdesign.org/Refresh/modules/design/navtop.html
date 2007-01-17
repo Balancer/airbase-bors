@@ -1,0 +1,6 @@
+<ul>
+{section name=i loop=$links}
+{assign var=x value=$links[i]}
+	<li{if $main_uri == $x.uri} id="current"{/if}><a href="{$x.uri}" title="{$x.title}">{$x.title}</a></li>
+{/section}
+</ul>

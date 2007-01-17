@@ -307,6 +307,9 @@
 			foreach($GLOBALS['cms']['smarty'] as $key => $val)
 				$smarty->assign($key, $val);
 
+		foreach(split(' ', 'host_name main_host_uri') as $key)
+			$smarty->assign($key, @$GLOBALS['cms'][$key]);
+
 		$errrep_save = error_reporting();
 	    error_reporting($errrep_save & ~E_NOTICE);
 

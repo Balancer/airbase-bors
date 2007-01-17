@@ -1,0 +1,7 @@
+{foreach from=$links item=linkline}
+<ul>
+{foreach from=$linkline item=link}
+<li{if $main_uri == $link.uri} id="current"{/if}><a href="{$link.uri}" title="{$link.title}">{$link.title}</a></li>
+{/foreach}
+</ul>
+{/foreach}

@@ -23,14 +23,15 @@
 		$data = array();
 	
 //		Явные дети нашей страницы
-		foreach($children as $child)
-			if($hts->get_data($child, 'nav_name'))
-				$data[$child] = array(
-					'uri' => $child,
-					'title' => $hts->get_data($child, 'nav_name'),
-					'children' => $hts->get_data_array_size($child, 'child'),
-					'indent' => 0,
-				);
+		if(!isset($GLOBALS['module_data']['downlevel']) || $GLOBALS['module_data']['downlevel'] > 0)
+			foreach($children as $child)
+				if($hts->get_data($child, 'nav_name'))
+					$data[$child] = array(
+						'uri' => $child,
+						'title' => $hts->get_data($child, 'nav_name'),
+						'children' => $hts->get_data_array_size($child, 'child'),
+						'indent' => 0,
+					);
 
 		$data = modules_design_navleft_get_parent($uri, $data, 1);
 
@@ -42,13 +43,19 @@
 			if($d['indent'] > $max)
 				$max = $d['indent'];
 
+		$data2 = array();
+
 		foreach($data as $d)
 		{
 			$d['indent'] = $max - $d['indent'];
 			$data2[] = $d;
 		}
 		
-		return $ch->set(template_assign_data("navleft.htm", array('links'=>$data2)), 86400*7);
+		$tpl = "navleft.htm";
+		if(!empty($GLOBALS['module_data']['template']))
+			$tpl = $GLOBALS['module_data']['template'];
+
+		return $ch->set(template_assign_data($tpl, array('links'=>$data2)), 86400*7);
 	}
 	
 
@@ -56,7 +63,7 @@
 	{
 //		echo "<span style=\"font-size: 6pt;\">$indent: $uri</span><br/>\n";
 
-		if($indent > 10)
+		if($indent > 10 || (isset($GLOBALS['module_data']['uplevel']) && $GLOBALS['module_data']['uplevel'] + 1 < $indent))
 			return $children;
 
 		$list = array();
@@ -64,7 +71,10 @@
 		$hts = &new DataBaseHTS();
 
 		$we = array();
-		$we[$uri] = modules_design_navleft_fill($uri, $indent);
+
+		if(empty($GLOBALS['module_data']['self_hide']))
+			$we[$uri] = modules_design_navleft_fill($uri, $indent);
+	
 		if($children)
 			$we = array_merge($we, $children);
 
@@ -86,15 +96,16 @@
 			$children_list = array();
 
 // 			Цикл по нашим братьям
-			foreach($hts->get_children_array_ex($parent, array('order' => 'order asc', 'range' => -1)) as $child)
+			foreach($hts->get_children_array_ex($parent, array('order' => 'order asc', 'range' => -1)) as $brother)
 			{
 //				echo "<span style=\"font-size: 6pt;\">-- $indent: $child</span><br/>\n";
-				if(!$hts->get_data($child, 'nav_name'))
+				if(!$hts->get_data($brother, 'nav_name'))
 					continue;
 
-				$children_list[$child] = modules_design_navleft_fill($child, $indent);
+				if(empty($GLOBALS['module_data']['self_hide']) || $brother != $uri)
+					$children_list[$brother] = modules_design_navleft_fill($brother, $indent);
 				
-				if($child == $uri && $we)
+				if($brother == $uri && $we)
 				{
 					// Если это наша страница - добавляем подготовленный заранее блок детей.
 					$children_list = array_merge($children_list, $we);

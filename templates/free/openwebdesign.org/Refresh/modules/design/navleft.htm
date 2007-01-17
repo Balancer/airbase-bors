@@ -1,0 +1,6 @@
+<ul class="sidemenu">				
+{section name=i loop=$links}
+{assign var=x value=$links[i]}
+<li><a href="{$x.uri}" title="{$x.title}">{$x.title}</a></li>
+{/section}
+</ul>	
