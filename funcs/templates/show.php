@@ -19,11 +19,11 @@
 	
 	function template_assign($uri, $template, $data=NULL)
 	{
-		$hts = &new DataBaseHTS();
 	
 		if(is_null($data))
 		{
 			$data = $template;
+			$hts = &new DataBaseHTS();
 			$template = $hts->get_data($uri, 'template');
 			if(!$template)
 				$template = $GLOBALS['cms']['default_template'];

@@ -32,6 +32,8 @@ define('PUN_DEBUG', 1);
 if (!defined('PUN_ROOT'))
 	exit('The constant PUN_ROOT must be defined and point to a valid PunBB installation root directory.');
 
+ini_set('include_path', ini_get('include_path') . ":/var/www/balancer.ru/htdocs/forum/punbb");
+
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 $GLOBALS['cms']['only_load'] = true;
 include_once("main.php");
@@ -90,11 +92,12 @@ require PUN_ROOT.'include/dblayer/common_db.php';
 $db->start_transaction();
 
 // Load cached config
-@include PUN_ROOT.'cache/cache_config.php';
+include PUN_ROOT.'cache/cache_config.php';
 $dir = dirname($_SERVER['PHP_SELF']);
 if($dir == "/")
 	$dir = "";
 $pun_config['root_uri'] = $pun_config['o_base_url'] = "http://{$_SERVER['HTTP_HOST']}$dir";
+$pun_config['root_dir'] = $_SERVER['DOCUMENT_ROOT']."$dir";
 
 if (!defined('PUN_CONFIG_LOADED'))
 {

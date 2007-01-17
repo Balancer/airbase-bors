@@ -34,11 +34,6 @@ class DataBaseHTS
 			exit (__FILE__.__LINE." Can't create DataBase class");
 	}
 
-	function Destroy()
-	{
-		$this->dbh->Destroy();
-	}
-
 	function normalize_uri($uri, $base_page = '')
 	{
 		if ($base_page)

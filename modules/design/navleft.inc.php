@@ -16,7 +16,9 @@
 		$hts = &new DataBaseHTS();
 
 //		$children = $hts->get_data_array($uri, 'child');
-		$children = $hts->get_children_array_ex($uri, array('order' => 'order asc'));
+		$GLOBALS['loglevel'] = 10;
+		$children = $hts->get_children_array_ex($uri, array('order' => 'order asc', 'range' => -1));
+		$GLOBALS['loglevel'] = 2;
 
 		$data = array();
 	
@@ -84,7 +86,7 @@
 			$children_list = array();
 
 // 			Цикл по нашим братьям
-			foreach($hts->get_children_array_ex($parent, array('order' => 'order asc')) as $child)
+			foreach($hts->get_children_array_ex($parent, array('order' => 'order asc', 'range' => -1)) as $child)
 			{
 //				echo "<span style=\"font-size: 6pt;\">-- $indent: $child</span><br/>\n";
 				if(!$hts->get_data($child, 'nav_name'))

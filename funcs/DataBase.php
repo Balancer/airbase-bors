@@ -23,7 +23,7 @@
 				$base = $GLOBALS['cms']['mysql_database'];
 			
 			$this->db_name = $base;
-			if(0 && is_global_key("DataBaseHandler",$base))
+			if($base && is_global_key("DataBaseHandler", $base))
 			{
 				if(!isset($GLOBALS['global_db_resume_connections']))
 					$GLOBALS['global_db_resume_connections'] = 0;
@@ -232,7 +232,7 @@
 		{
 //			echo "==<pre>$query</pre>==";
 			$res=array();
-			$this->query($query,$ignore_error);
+			$this->query($query, $ignore_error);
 			
 			while($this->fetch()!==false)
 				$res[]=$this->row;

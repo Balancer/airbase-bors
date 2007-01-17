@@ -35,7 +35,7 @@
 
 		$caller = array_shift(debug_backtrace());
 		$caller_path = dirname($caller['file']);
-		$caller_local_tpln = "xfile:{$GLOBALS['cms']['local_dir']}".preg_replace("!^.+?/cms/!", "/templates/".$hts->get($GLOBALS['main_uri'], 'template')."/", $caller_path)."/";
+		$caller_local_tpln = "xfile:{$GLOBALS['cms']['local_dir']}".preg_replace("!^.+?/cms/!", "/templates/".$hts->get_data($GLOBALS['main_uri'], 'template', '', true)."/", $caller_path)."/";
 		$caller_local_main = "xfile:{$GLOBALS['cms']['local_dir']}".preg_replace("!^.+?/cms/!", "/templates/", $caller_path)."/";
 		
 //		if($uri == NULL)

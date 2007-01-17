@@ -7,7 +7,7 @@
     {
         // do database call here to fetch your template,
         // populating $tpl_source
-        $hts = new DataBaseHTS;
+        $hts = &new DataBaseHTS;
 		debug($tpl_name);
 //        $tpl = $hts->get_data($tpl_name, 'title');
 //		if(!$tpl)
@@ -31,7 +31,7 @@
 	
         global $page;
         // do database call here to populate $tpl_timestamp.
-        $hts  = new DataBaseHTS;
+        $hts  = &new DataBaseHTS;
 		debug($tpl_name);
         $time = $hts->get_data($tpl_name, 'modify_time');
 
@@ -63,4 +63,3 @@
     }
 
     // register the resource name "db"
-?>
