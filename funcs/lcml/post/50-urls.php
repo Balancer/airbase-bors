@@ -15,6 +15,7 @@
     // 09.09.04 0.1.7 + внешние ссылки - класс external. Внутренние - по имени
     // 11.01.05 0.1.8 * обработка редиректов перенесена на модуль HTTP_Request. Введены таймауты.
     // 12.01.05 0.1.9 + Введена кодировка по умолчанию и её запрос у сервера.
+    // 17.01.07 0.1.10 * Исправление нового формата HTTP_Request
 
     // Константы
 
@@ -50,28 +51,23 @@
         }
 
         require_once('HTTP/Request.php');
-        $req = &new HTTP_Request($url);
+        $req = &new HTTP_Request($url, array(
+            'allowRedirects' => true,
+            'maxRedirects' => 5,
+            'timeout' => 2,
+		));
+		
         $req->addHeader('Content-Encoding', 'gzip');
         $req->addHeader('Range','bytes=0-4095');
         $req->addHeader('Accept-Charset',$GLOBALS['lcml_request_charset_default']);
         
         if(preg_match("!lenta\.ru!",$url))
-            $req->setProxy('ap.airfleet.ru', 3128);
+            $req->setProxy('home.airbase.ru', 3128);
 
-        $response = $req->sendRequest(array(
-            'allowRedirects' => true,
-            'maxRedirects' => 5,
-            'timeout' => 2,
-            ));
+        $response = $req->sendRequest();
 
         if(!empty($response) && PEAR::isError($response))
             return lcml_strip_url($url);
-
-/*        foreach ($req->getResponseHeader() as $name => $value) 
-        {
-            echo $name . " = " . $value . "<br>\n";
-        }
-*/
 
         $data = $req->getResponseBody();
 
