@@ -35,7 +35,12 @@
 			if(!file_exists($path) || filesize($path)==0)
 			{
 				require_once('HTTP/Request.php');
-				$req =& new HTTP_Request($image);
+				$req =& new HTTP_Request($image, array(
+					'allowRedirects' => true,
+					'maxRedirects' => 3,
+					'timeout' => 10,
+				));
+				
 				$req->addHeader('Referer', $image);
 
 //				if(preg_match("!(lenta\.ru|pisem\.net|biorobot\.net|compulenta\.ru|ferra\.ru)!", $image))
@@ -43,11 +48,7 @@
 
 //				return "=$path=<br />\n";
 					
-				$response = $req->sendRequest(array(
-					'allowRedirects' => true,
-					'maxRedirects' => 3,
-					'timeout' => 10,
-				));
+				$response = $req->sendRequest();
 
 				if(!empty($response) && PEAR::isError($response)) 
 					return "Download image =$image= error: ".$response->getMessage();

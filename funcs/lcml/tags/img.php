@@ -72,7 +72,12 @@
 				if(!file_exists($path) || filesize($path)==0)
 				{
 					require_once('HTTP/Request.php');
-					$req =& new HTTP_Request($params['url']);
+					$req =& new HTTP_Request($params['url'], array(
+						'allowRedirects' => true,
+						'maxRedirects' => 2,
+						'timeout' => 5,
+					));
+						
 					$req->addHeader('Content-Encoding', 'gzip');
 					$req->addHeader('Referer', $params['url']);
 
@@ -80,13 +85,8 @@
 //						$req->setProxy('82.138.33.157', 3128);
 
 //					return "=$path=<br />\n";
-					
 
-					$response = $req->sendRequest(array(
-						'allowRedirects' => true,
-						'maxRedirects' => 2,
-						'timeout' => 5,
-						));
+					$response = $req->sendRequest();
 
 					if(!empty($response) && PEAR::isError($response)) 
 						return "Download image =$uri= error: ".$response->getMessage();
@@ -140,8 +140,8 @@
 //				return "_$local_uri<br />_$img_ico_uri<br />";
 				
 				require_once('HTTP/Request.php');
-				$req =& new HTTP_Request($img_ico_uri);
-				$response = $req->sendRequest(array('allowRedirects' => true,'maxRedirects' => 2,'timeout' => 4));
+				$req =& new HTTP_Request($img_ico_uri, array('allowRedirects' => true,'maxRedirects' => 2,'timeout' => 4));
+				$response = $req->sendRequest();
 				if(!empty($response) && PEAR::isError($response))
 				{
 					sleep(5);
