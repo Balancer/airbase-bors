@@ -116,24 +116,45 @@
 		
 		if(empty($GLOBALS['cms']['template_override']))
 		{
+			$found = false;
 			foreach(array(
 				$template,
 				"{$page}template$tpl2/",
-				"{$GLOBALS['cms']['local_dir']}/templates{$tpl2}index.html",
-				"{$GLOBALS['cms']['base_dir']}/templates{$tpl2}index.html",
-				"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
-				"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
-				$GLOBALS['cms']['default_template'],
 			) as $tpl)
 			{
 //				echo "Check '$tpl'<br />";
 				if($tpl && $smarty->template_exists($tpl))
+				{
+					$found = true;
 					break;
+				}
 				if($tpl && $hts->get_data($tpl, 'source'))
+				{
+					$found = true;
 					break;
+				}
 				if(!empty($tpl) && $tpl{0}=='/' && file_exists($tpl))
+				{
+					$found = true;
 					break;
+				}
 			}
+
+			if(!$found)
+				foreach(array(
+					"{$GLOBALS['cms']['local_dir']}/templates{$tpl2}index.html",
+					"{$GLOBALS['cms']['base_dir']}/templates{$tpl2}index.html",
+					"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
+					"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
+					$GLOBALS['cms']['default_template'],
+				) as $tpl)
+				{
+//				echo "Check '$tpl'<br />";
+					if($tpl && $smarty->template_exists($tpl))
+						break;
+					if(!empty($tpl) && $tpl{0}=='/' && file_exists($tpl))
+						break;
+				}
 
 //			echo $hts->get_data($tpl, 'source');
 
