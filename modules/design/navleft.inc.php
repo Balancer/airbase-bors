@@ -8,12 +8,12 @@
 		include_once("funcs/Cache.php");
 		$ch = &new Cache();
 		
-//		if($ch->get('modules-design-navleft-4', $uri))
-//			return $ch->last;
+		if($ch->get('modules-design-navleft-v7', $uri))
+			return $ch->last;
 	
 		include_once("funcs/templates/assign.php");
 
-		$hts = &new DataBaseHTS();
+		$hts = &new DataBaseHTS('HTS');
 
 //		$children = $hts->get_data_array($uri, 'child');
 		$GLOBALS['loglevel'] = 10;
@@ -68,7 +68,7 @@
 
 		$list = array();
 		
-		$hts = &new DataBaseHTS();
+		$hts = &new DataBaseHTS('HTS');
 
 		$we = array();
 
@@ -121,7 +121,7 @@
 
 	function modules_design_navleft_fill($uri, $indent)
 	{
-		global $hts;
+		$hts = &new DataBaseHTS('HTS');
 	
 		return array(
 				'uri' => $uri,

@@ -44,4 +44,3 @@
 
 		echo "<center>$pages</center>";
 	}
-?>

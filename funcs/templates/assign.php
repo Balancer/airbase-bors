@@ -31,7 +31,7 @@
 		$smarty->cache_lifetime = 86400*7;
 //		print_r($smarty->secure_dir); exit();
 
-		$hts = &new DataBaseHTS();
+		$hts = &new DataBaseHTS('HTS');
 
 		$caller = array_shift(debug_backtrace());
 		$caller_path = dirname($caller['file']);
