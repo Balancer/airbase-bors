@@ -12,7 +12,7 @@ class DataBaseHTS
 		if(is_array($data))
 		{
 			$this->uri = @$data['uri'];
-			$this->dbh = new DataBase(@$data['db']);
+			$this->dbh = &new DataBase(@$data['db']);
 		}
 		else
 		{
@@ -26,7 +26,7 @@ class DataBaseHTS
 				$this->uri = NULL;
 				if(!$data)
 					$data = $GLOBALS['cms']['mysql_database'];
-				$this->dbh = new DataBase($data);
+				$this->dbh = &new DataBase($data);
 			}
 		}
 		

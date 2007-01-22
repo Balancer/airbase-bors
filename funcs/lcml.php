@@ -134,6 +134,9 @@ function lcml($txt, $params = array ())
 
 	$txt = ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/post', $txt, $mask);
 
+	if($GLOBALS['lcml']['level'] == 1)
+		$txt = ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/post-whole', $txt);
+
 	if ($outfile)
 	{
 		$fh = fopen($GLOBALS['cms']['base_dir']."/funcs/lcml.log", "at");

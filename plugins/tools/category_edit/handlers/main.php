@@ -1,7 +1,7 @@
 <?
 	register_action('category_add', 'plugins_tools_categories_editor_category_add');
 
-	hts_data_prehandler("()(.+)^", array(
+	hts_data_prehandler("()(.*)/?", array(
 			'body' => 'plugins_tools_categories_editor_body',
 			'title' => 'plugins_tools_categories_editor_title',
 			'parent' => 'plugins_tools_categories_editor_parent',
@@ -17,7 +17,7 @@
 		
 		$data['base_uri'] = $plugin_data['base_uri'];
 		
-		$hts = new DataBaseHTS;
+		$hts = &new DataBaseHTS;
 	
         include_once("funcs/templates/assign.php");
 
@@ -57,15 +57,15 @@
 		return array(preg_replace("!^(.+?)[^/]+/$!", "$1", $uri));
 	}
 
-    function plugins_tools_categories_editor_category_add($uri, $action, $match)
+    function plugins_tools_categories_editor_category_add($uri, $action, $match, $plugin_data)
 	{
 		include_once('funcs/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
 
-		$hts = new DataBaseHTS;
-		$us = new User;
+		$hts = &new DataBaseHTS;
+		$us = &new User;
 
 		if(!$us->data('id') || !$us->data('name'))
 			return error_message(ec("Вы не вошли в систему"));
@@ -76,7 +76,7 @@
 		if(!isset($_POST['title']) || !isset($_POST['title_latin']))
 			return error_message(ec("Не указано название категории"));
 
-		$category = "category://{$_SERVER['HTTP_HOST']}".@$match[0];
+		$category = "category://{$_SERVER['HTTP_HOST']}/".str_replace($plugin_data['base_uri'], "", $uri);
 		$new      = $category.$_POST['title_latin']."/";
 		
 		$hts->set_data($new, 'title', $_POST['title']);
@@ -91,7 +91,7 @@
 	function plugins_tools_categories_editor_title($uri, $match, $plugin_data)
 	{
 		$cat = "category://{$_SERVER['HTTP_HOST']}/".str_replace("{$plugin_data['base_uri']}", "", $uri);
-		$hts = new DataBaseHTS;
+		$hts = &new DataBaseHTS;
 		$title = $hts->get_data($cat, 'title');
 		if(!$title || $uri == $plugin_data['base_uri'])
 			$title = ec('Редактор категорий');

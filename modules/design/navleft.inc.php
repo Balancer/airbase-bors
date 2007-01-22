@@ -13,7 +13,7 @@
 	
 		include_once("funcs/templates/assign.php");
 
-		$hts = &new DataBaseHTS('HTS');
+		$hts = &new DataBaseHTS();
 
 //		$children = $hts->get_data_array($uri, 'child');
 		$GLOBALS['loglevel'] = 10;
@@ -68,7 +68,7 @@
 
 		$list = array();
 		
-		$hts = &new DataBaseHTS('HTS');
+		$hts = &new DataBaseHTS();
 
 		$we = array();
 
@@ -121,7 +121,7 @@
 
 	function modules_design_navleft_fill($uri, $indent)
 	{
-		$hts = &new DataBaseHTS('HTS');
+		$hts = &new DataBaseHTS();
 	
 		return array(
 				'uri' => $uri,

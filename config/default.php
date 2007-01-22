@@ -3,6 +3,7 @@
 
 	$includes = array(
 		"{$_SERVER['DOCUMENT_ROOT']}/cms-local",
+		"{$_SERVER['DOCUMENT_ROOT']}/cms/vhosts/{$_SERVER['HTTP_HOST']}",
 		"{$_SERVER['DOCUMENT_ROOT']}/cms",
 		"{$_SERVER['DOCUMENT_ROOT']}/include",
 		"{$_SERVER['DOCUMENT_ROOT']}/cms/PEAR"
