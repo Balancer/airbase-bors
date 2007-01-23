@@ -262,7 +262,7 @@
             foreach(split(' ', "access level action body user_id user_name $page_vars") as $key)
                 $smarty->assign($key, $$key);
 
-			$uri = @$GLOBALS['uri'];
+			$uri = @$GLOBALS['main_uri'];
 			if(!$uri)
 				$uri = $page;
 

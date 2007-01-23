@@ -38,7 +38,7 @@
 			else
 			{
 				$GLOBALS['page_data']['source'] = ec("Доступ запрещён. Требуется $level при наличии ".$us->data('level'));
-				show_page($GLOBALS['uri']);
+				show_page($GLOBALS['main_uri']);
 			}
 			
 			return false;

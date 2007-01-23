@@ -1,7 +1,6 @@
 <?
     include_once('funcs/DataBaseHTS.php');
     include_once('funcs/Cache.php');
-    error_reporting(E_ALL);
 
     // URLs processing
     // Global vars: none

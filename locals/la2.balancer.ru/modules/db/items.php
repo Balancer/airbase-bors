@@ -21,7 +21,7 @@
 		include_once('funcs/design/page_split.php');
 	
 		$page = max(intval($GLOBALS['cms']['page_number']),1);
-		$pages = join(" ",pages_select($GLOBALS['uri'], $page, ($total-1)/$items_per_page+1));
+		$pages = join(" ",pages_select($GLOBALS['main_uri'], $page, ($total-1)/$items_per_page+1));
 		
 		echo "<center>";
 		echo "<p>$pages</p>";
