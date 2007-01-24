@@ -25,9 +25,16 @@
                     {
                         // Ищем следующий открывающийся тэг
                         list($next_pos, $next_end, $next_tag, $next_func)=find_next_open_tag($txt, $next_end);
+						if(!$next_tag)
+						{
+							$pos++;
+							break;
+						}
+
                         // Если он такой же, как наш, то увеличиваем счётчик вложений
                         if(strtolower($next_func)==strtolower($func))
                             $opened++;
+
                         // Если он закрывающийся нашего типа, то...
                         if(strtolower($next_func)==strtolower("/$func"))
                         {
@@ -185,7 +192,7 @@
 
 	function next_open_brace($txt, $pos)
 	{
-		$pos = strpos($txt, '[', $pos);
+		$pos = @strpos($txt, '[', $pos);
 		if($pos === false)
 			return false;
 		
