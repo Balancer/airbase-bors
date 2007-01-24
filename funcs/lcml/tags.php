@@ -10,8 +10,6 @@
             if($pos === false)
                 break;
 
-//			echo "Got '$tag'; next: '".substr($txt, $end, 60)."'\n";
-
             // Если нашли тэг и он не закрывающийся
             if($pos !== false && $end && substr($txt, $pos+1, 1) != '/')
             {
@@ -74,14 +72,12 @@
                         fclose($fh);
                     }
 
-//					echo "LT Mask=\n".str_replace("\n","|",$txt)."\n$mask\n\n";
                     $part1 = substr($txt, 0, $pos);
                     $part2 = $func(params($params));
                     $part3 = substr($txt, $end);
-//					echo "call LT '$func' for part1='$part1', part2='$part2', part3='$part3'; end=$end, nex_end=$next_end, pos=$pos\n";
                     $txt  = $part1.$part2.$part3;
 					$mask = substr($mask, 0, $pos).str_repeat('X',strlen($part2)).substr($mask, $end);
-                    $end  = strlen($part1.$part2)-1; // В другой раз проверяем с конца изменённого фрагмента
+                    $end  = strlen($part1.$part2); // В другой раз проверяем с конца изменённого фрагмента
                     continue;
                 }
 
@@ -94,27 +90,19 @@
 
         } while($end !== false && time()-$start<20);
 
-//		echo "Res-tags:\n".str_replace("\n","|",$txt)."\n$mask\n\n";
-
         return $txt;
     }
 
     function find_next_open_tag($txt, $pos)
     {
-//		echo "Find tag in\n".str_repeat('X',$pos).substr($txt, $pos, 60)."\n";
-
         while($pos < strlen($txt) 
 				&& ($pos = next_open_brace($txt, $pos)) !== false
 			)
         {
-//			echopos($pos, 'pos');
-			
             $pos_open  = next_open_brace ($txt, $pos+1); // Следующий открывающийся тэг
             $pos_close = next_close_brace($txt, $pos+1); // Ближайший закрывающий знак
             $in = 0;
             $end = 0;
-
-//			echo "0:\n"; echopos($pos_open, 'pos_open'); echopos($pos_close, 'pos_close');
 
             while($pos_close !== false && $pos_open !== false)
             {
@@ -128,7 +116,6 @@
                 if($pos_open > $pos_close && $in==0)
                 {
                     $end = $pos_close;
-//					echo "1: end=$end\n";
                     break;
                 }
 
@@ -166,8 +153,6 @@
                 }
             }
 
-//			echo "result: pos_open=$pos_open, pos_close=$pos_close, end=$end\n";
-
             if(!$end)
                 $end = $pos_close;
 
@@ -176,7 +161,6 @@
 
             // Вырезаем целиком найденный тэг, без квадратных скобок
             $tag = substr($txt, $pos+1, $end-$pos-1);
-//			echo "cut '$tag'\n";
 
             preg_match("!^([^\s\|]*)\s*(.*?)$!s",$tag,$m); // func, params
             return array($pos, $end+1, $tag, isset($m[1]) ? $m[1] : "" , isset($m[2]) ? $m[2] : "");
@@ -184,11 +168,6 @@
 
         return array(false, false, '', '', '');
     }
-
-//	function echopos($pos, $name)
-//	{
-//		echo str_repeat(' ', $pos)."^ --- $name\n";
-//	}
 
 	function next_open_brace($txt, $pos)
 	{
