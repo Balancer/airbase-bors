@@ -10,8 +10,6 @@
     function do_php($code)
     {
         ob_start();
-//		if(user_data('level') > 10)
-//			echo "do code<xmp>$code</xmp>";
         eval($code);
         $out = ob_get_contents();
         ob_clean();
@@ -90,7 +88,7 @@
 		    @mkdir($smarty->compile_dir, 0775, true);
 		if(!file_exists($smarty->cache_dir))
 			@mkdir($smarty->cache_dir, 0775, true);
-//		echo ".".$GLOBALS['cms']['templates_cache_disabled'];
+
         $smarty->caching = $action ? false : @$GLOBALS['cms']['templates_cache_disabled'] != true;
         $smarty->compile_check = true; 
         $smarty->php_handling = SMARTY_PHP_QUOTE; //SMARTY_PHP_PASSTHRU;
@@ -113,7 +111,7 @@
 			$tpl1 = "/default/";
 			$tpl2 = "";
 		}
-		
+
 		if(empty($GLOBALS['cms']['template_override']))
 		{
 			$found = false;
@@ -176,8 +174,12 @@
 
 		}
 		else
+		{
 			$tpl = $GLOBALS['cms']['template_override'];
 
+			if($tpl{0} == "/")
+				$tpl = "xfile:$tpl";
+		}
 //		echo $tpl;
 //		echo $smarty->template_dir;
 //		if(empty($smarty->template_dir))
