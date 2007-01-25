@@ -1,7 +1,7 @@
 <?  
 	function template_assign_data($assign_template, $data=array(), $uri=NULL)
 	{
-//		echo "tpl=$assign_template";
+//		echo "tpl=$assign_template<br />";
 //		print_r($data);
 
 		require_once('Smarty/Smarty.class.php');
@@ -34,12 +34,14 @@
 		$hts = &new DataBaseHTS();
 
 		$caller = array_shift(debug_backtrace());
+//		echo $caller['file']."<br />";
 		$caller_path = dirname($caller['file']);
 		$module_relative_path = preg_replace("!^.+?/cms/!", "", $caller_path)."/";
 //		print_r($GLOBALS['cms']);
 
 		$caller_local_tpln = "xfile:{$GLOBALS['cms']['local_dir']}".preg_replace("!^.+?/cms/!", "/templates/".$hts->get_data($GLOBALS['main_uri'], 'template', '', true)."/", $caller_path)."/";
 		$caller_local_main = "xfile:{$GLOBALS['cms']['local_dir']}".preg_replace("!^.+?/cms/!", "/templates/", $caller_path)."/";
+		$caller_cms_main   = "xfile:{$GLOBALS['cms']['base_dir']}".preg_replace("!^.+?/cms/!", "/", $caller_path)."/";
 		$caller_default_template = dirname($GLOBALS['cms']['default_template'])."/".$module_relative_path;
 		
 //		if($uri == NULL)
@@ -61,19 +63,21 @@
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = $caller_local_main.$assign_template;
 		if(!$smarty->template_exists($template_uri))
+			$template_uri = $caller_cms_main.$assign_template;
+		if(!$smarty->template_exists($template_uri))
 			$template_uri = "xfile:".$caller_default_template.$assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = "xfile:$caller_path/".$assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = "xfile:".$assign_template;
 
+//		echo "==$template_uri==";
 			
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = $assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = $GLOBALS['cms']['default_template'];
 
-//		echo $template_uri;
 
 		$modify_time = empty($data['modify_time']) ? time() : $data['modify_time'];
 		$modify_time = max(@$data['compile_time'], $modify_time);

@@ -9,7 +9,7 @@
 		$ch = &new Cache();
 		
 		if($ch->get('modules-design-navleft-v7', $uri))
-			return $ch->last;
+			return $ch->last();
 	
 		include_once("funcs/templates/assign.php");
 
@@ -55,6 +55,7 @@
 		if(!empty($GLOBALS['module_data']['template']))
 			$tpl = $GLOBALS['module_data']['template'];
 
+		unset($GLOBALS['module_data']);
 		return $ch->set(template_assign_data($tpl, array('links'=>$data2)), 86400*7);
 	}
 	
@@ -63,7 +64,7 @@
 	{
 //		echo "<span style=\"font-size: 6pt;\">$indent: $uri</span><br/>\n";
 
-		if($indent > 10 || (isset($GLOBALS['module_data']['uplevel']) && $GLOBALS['module_data']['uplevel'] + 1 < $indent))
+		if($indent > 10)
 			return $children;
 
 		$list = array();
@@ -85,7 +86,10 @@
 //		дети первого родителя - наши братья
 //		-----------------------------------
 
-		$parents = $hts->get_data_array($uri, 'parent');
+		if(isset($GLOBALS['module_data']['uplevel']) && $GLOBALS['module_data']['uplevel'] + 1 > $indent)
+			$parents = $hts->get_data_array($uri, 'parent');
+		else
+			$parents = array();
 
 		foreach($parents as $parent)
 		{
