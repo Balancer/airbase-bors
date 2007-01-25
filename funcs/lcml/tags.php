@@ -245,6 +245,8 @@
         if(empty($params['uri']))
 			$params['uri'] = @$params['url'];
 
+//		echo "tag uri = {$params['uri']}<br />";
+
         if(empty($params['uri']))
 			$params['uri'] = @$params['cms']['main_uri'];
 

@@ -23,6 +23,7 @@
 		$tpl = "top-navs.html";
 		if(!empty($GLOBALS['module_data']['template']))
 			$tpl = $GLOBALS['module_data']['template'];
+
         
 		$data = array();
         if(!is_array($parents) || sizeof($parents)==0)
@@ -48,6 +49,7 @@
 			}
 		}
 		
+		unset($GLOBALS['module_data']);
 		echo $ch->set(template_assign_data($tpl, array('links'=>$data)), 7200);
 		return;
     }

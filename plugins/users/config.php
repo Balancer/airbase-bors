@@ -1,5 +1,5 @@
 <?
-    $GLOBALS['cms']['template_override'] = "{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/index.html";
+#    $GLOBALS['cms']['template_override'] = "{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/index.html";
 
 	$GLOBALS['cms']['plugins']['punbb']['db']          = 'punbb';
 	$GLOBALS['cms']['mysql']['punbb']['login']	= 'punbb';
