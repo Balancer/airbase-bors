@@ -63,6 +63,8 @@
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = $caller_local_main.$assign_template;
 		if(!$smarty->template_exists($template_uri))
+			$template_uri = "xfile:{$GLOBALS['cms']['base_dir']}/templates/$module_relative_path/$assign_template";
+		if(!$smarty->template_exists($template_uri))
 			$template_uri = $caller_cms_main.$assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = "xfile:".$caller_default_template.$assign_template;

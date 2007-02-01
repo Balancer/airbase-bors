@@ -23,13 +23,13 @@
 				$base = $GLOBALS['cms']['mysql_database'];
 			
 			$this->db_name = $base;
-			if($base && is_global_key("DataBaseHandler", $base))
+			if($base && is_global_key("DataBaseHandler:$server", $base))
 			{
 				if(!isset($GLOBALS['global_db_resume_connections']))
 					$GLOBALS['global_db_resume_connections'] = 0;
 				$GLOBALS['global_db_resume_connections']++;
 
-				$this->dbh = global_key("DataBaseHandler",$base);
+				$this->dbh = global_key("DataBaseHandler:$server",$base);
 //				echo "cont\[{$base}]=".$this->dbh."<br>\n";
 				mysql_select_db($base, $this->dbh) or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
 
@@ -66,6 +66,7 @@
 				$nnn = 0;
 				while(!$this->dbh && $nnn<2)
 				{
+//					echo "mysql_connect($server, $login, $password);\n";
 					$this->dbh = @mysql_connect($server, $login, $password);
 //					echo "NNew\[{$base}]".$this->dbh."<br>\n";
 					if(!$this->dbh)
@@ -87,7 +88,7 @@
 					mysql_query("SET NAMES {$GLOBALS['cms']['mysql_set_names_charset']};",$this->dbh)
 						 or die(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
 			
-				set_global_key("DataBaseHandler",$base,$this->dbh);
+				set_global_key("DataBaseHandler:$server",$base,$this->dbh);
 //				echo "new\[{$base}]=".$this->dbh."<br>\n";
 			}
 		}
