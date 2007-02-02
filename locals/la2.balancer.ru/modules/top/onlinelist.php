@@ -1,12 +1,12 @@
 <?
     function modules_top_onlinelist_main($title, $database)
     {
-		$ch = new Cache();
+		$ch = &new Cache();
 		if($ch->get('la2', "onlinelist-$database"))
 			return $ch->last;
 	
         include_once('funcs/DataBase.php');
-        $hts = new DataBase($database,'la2', 'la2kkk');
+        $hts = &new DataBase($database,'la2', 'la2kkk');
         $list = $hts->get_array("SELECT cl.clan_name, ch.* FROM `characters` `ch` LEFT JOIN `clan_data` `cl` ON (cl.clan_id = ch.clanid) WHERE `online` > ".(0*(time()-1000))." ORDER BY `onlinetime` DESC, `char_name`;");
 
 		$res = "";
@@ -23,7 +23,7 @@
 //			print_r($classes);
 			
 			$span = sizeof($classes);
-			$span = $span > 1 ? " rowSpan=$span" : "";
+			$span = $span > 1 ? " rowSpan=\"$span\"" : "";
 
 			if($i['karma'] > 200)
 			{
@@ -44,6 +44,9 @@
 			else
             	$res .= "<img src=\"http://la2.balancer.ru/images/man.gif\" width=\"11\" height=\"11\" valign=\"middle\">";
 			$res .= ($i['accesslevel']>10 ? " <span style=\"7pt;\">(GM)</span>":"")."</th>";
+
+			$subs = array();
+			$iter = 0;
 			
 			foreach($classes as $subclass)
 			{
@@ -51,14 +54,26 @@
 	            $cs = $hts->get("SELECT * FROM `class_list` WHERE `id` = ".$subclass['class_id']);
 //            $GLOBALS['log_level'] = 2;
 				
-    	        $res .= "<td>{$subclass['level']}</td>";
+				$add = "<td>{$subclass['level']}</td>";
+				
         	    list($r, $class) = split("_", $cs['class_name']);
         	    $race = array('H'=>'Human', 'E'=>'Elven', 'DE'=>'Dark Elven', 'O'=>'Orc', 'D'=>'Dwarven');
-	            $res .= "<td><nobr>{$race[$r]} $class</nobr></td>";
+	            $add .= "<td><nobr>{$race[$r]} $class</nobr></td>";
+				if($iter)
+					$subs[] = $add;
+				else
+					$res .= $add;
+					
+				$iter++;
 			}
+
    	        $res .= $i['clan_name'] ? "<td$span><a href=\"/clans/?clan_id=".urlencode($i['clan_name'])."\">{$i['clan_name']}</a></td>" : "<td$span>&nbsp;</td>";
             $res .= "<td$span>$bc{$i['karma']}$ec</td>";
             $res .= "</tr>\n";
+			
+			foreach($subs as $sub)
+				$res .= "<tr>$sub</tr>\n";
+			
             $n++;
         }
 

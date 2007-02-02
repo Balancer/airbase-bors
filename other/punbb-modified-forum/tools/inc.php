@@ -8,8 +8,7 @@
 		
 		$fids[] = $forum_id;
 				
-		include("db_config.php");
-		$db = new DataBase();
+		$db = &new DataBase('punbb');
 		do
 		{
 			$append = false;
@@ -39,8 +38,7 @@
 		
 		$cids[] = $cat_id;
 				
-		include("db_config.php");
-		$db = new DataBase();
+		$db = &new DataBase('punbb');
 		do
 		{
 			$append = false;

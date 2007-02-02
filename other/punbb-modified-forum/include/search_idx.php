@@ -86,12 +86,13 @@ function split_words($text)
 //
 function update_search_index($mode, $post_id, $message, $subject = null)
 {
-	return;
 
 	include_once("funcs/search/index.php");
 	index_body($post_id, $message);
 	if($subject)
 		index_title($post_id, $subject);
+
+	return;
 
 	global $db_type, $db;
 

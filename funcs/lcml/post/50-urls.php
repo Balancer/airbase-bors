@@ -30,8 +30,8 @@
     {
         if(class_exists('Cache'))
         {
-            $cache = new Cache();
-            if($cache->get('url_titles',$url))
+            $cache = &new Cache();
+            if($cache->get('url_titles-v2', $url))
                 return $cache->last();
             else
                 return $cache->set('url_titles', $url, lcml_urls_title_nocache($url));
@@ -42,10 +42,10 @@
 
     function lcml_urls_title_nocache($url)
     {
-        if(class_exists('DataBaseHTS'))
+		if(strpos($url, '?') === false && class_exists('DataBaseHTS'))
         {
-            $hts = new DataBaseHTS;
-            if($title = $hts->get_data($url, 'title'))
+            $hts = &new DataBaseHTS($url);
+            if($title = $hts->get('title'))
                 return "<a href=\"$url\">$title</a>";
         }
 
@@ -61,14 +61,14 @@
         $req->addHeader('Accept-Charset',$GLOBALS['lcml_request_charset_default']);
         
         if(preg_match("!lenta\.ru!",$url))
-            $req->setProxy('home.airbase.ru', 3128);
+            $req->setProxy('home.balancer.ru', 3128);
 
         $response = $req->sendRequest();
 
         if(!empty($response) && PEAR::isError($response))
             return lcml_strip_url($url);
 
-        $data = $req->getResponseBody();
+		$data = $req->getResponseBody();
 
         $content_type = $req->getResponseHeader('Content-Type');
         if(preg_match("!charset=(\S+)!i",$content_type,$m))
@@ -113,4 +113,3 @@
     }
 
 //    echo lcml_urls("http://lenta.ru/economy/2005/01/11/ibm/");
-?>

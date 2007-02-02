@@ -1,6 +1,7 @@
 <?
 	function modules_design_navleft_get($uri)
 	{
+//		return $uri;
 //		echo "uri=$uri";
 
 //		DebugBreak();
