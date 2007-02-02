@@ -35,8 +35,7 @@
 		}
 		
 		$topics = array();
-		include("db_config.php");
-		$db = new DataBase();
+		$db = &new DataBase('punbb');
 		foreach($db->get_array("SELECT id as topic_id, subject as title,  id mod 1000 as sub FROM topics WHERE last_post > ".(time()-90*86400)." AND forum_id IN($forums) ORDER BY last_post DESC LIMIT $limit") as $t)
 			$topics[] = $t;
 
@@ -45,4 +44,3 @@
         include_once("funcs/templates/assign.php");
         return template_assign_data("forum-updates-make.htm", $data);
 	}
-?>

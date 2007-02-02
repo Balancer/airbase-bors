@@ -3,6 +3,8 @@
     {
         include_once("funcs/modules/colorer.php");
 
+		$txt = html_entity_decode($txt, ENT_NOQUOTES);
+
         $txt = str_replace("lcml_save_left_bracket", "[", $txt);
         $txt = str_replace("lcml_save_lt", "<", $txt);
         $txt = str_replace("lcml_save_gt", ">", $txt);

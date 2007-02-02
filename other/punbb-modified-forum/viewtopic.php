@@ -59,7 +59,7 @@ $GLOBALS['main_uri'] = "http://{$_SERVER[HTTP_HOST]}{$_SERVER['REQUEST_URI']}";
 
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 include_once("funcs/Cache.php");
-$GLOBALS['global_cache'] = new Cache();
+$GLOBALS['global_cache'] = &new Cache();
 
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
@@ -241,10 +241,10 @@ $cms_db->store(
 
 $ret = $cms_db->get("SELECT last_post, last_edit FROM topics WHERE id=".intval($id));
 $last = max($ret['last_post'], $ret['last_edit']);
-if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun_user['id']}-{$pun_user['style']}-20", "$id:$last:$p"))
+if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun_user['id']}-{$pun_user['style']}-v21", "$id:$last:$p"))
 {
 //	exit("Cached");
-	echo $GLOBALS['global_cache']->last;
+	echo $GLOBALS['global_cache']->last();
 	$GLOBALS['global_cache'] = NULL;
 
 	// Increment "num_views" for topic
@@ -256,7 +256,6 @@ if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun
 	require PUN_ROOT.'footer.php';
 	return;
 }
-
 ?>
 <script type="text/javascript" src="<? echo $pun_config['root_uri'];?>/js/common.js"></script>
 
@@ -441,14 +440,12 @@ while ($cur_post = $db->fetch_assoc($result))
 			include_once($_SERVER['DOCUMENT_ROOT']."/cms/config.php");
 			include_once("funcs/lcml.php");
 
-			$ch = new Cache();
-			$type = "lcml-compiled";
-			$key = md5($poster['signature']);
-			if(!($signature = $ch->get($type, $key)))
+			$ch = &new Cache();
+			if(!($signature = $ch->get("lcml-compiled", md5($poster['signature']))))
 			{
 				$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = '/forum/post/'.intval(@$cur_post['id'])."/";
 			
-				$signature = $ch->set($type, $key, lcml($poster['signature'], 
+				$signature = $ch->set(lcml($poster['signature'], 
 					array(
 						'cr_type' => 'save_cr',
 						'forum_type' => 'punbb',
