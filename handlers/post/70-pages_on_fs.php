@@ -12,6 +12,10 @@
 
 		if(!file_exists($parse['local_path']."source.txt"))
 			return false;
+
+		$file = $parse['local_path']."config.php";
+		if(file_exists($file))
+			include($file);
 		
 		foreach(split(' ', 'source title nav_name template cr_type') as $key)
 		{
@@ -29,6 +33,7 @@
 			if(file_exists($file))
 				hts_data_prehandler_add("!".preg_quote($uri)."!", $key, create_function('$uri, $m', "return file('$file');"));
 		}
+
 
 		return false;
 	}

@@ -53,16 +53,27 @@ function is_today($time)
 	return false;
 }
 
-function news_time($time)
-{
-	if(is_today($time))
-		return strftime("%H:%M:%S",$time);
+	function news_time($time)
+	{
+		if(is_today($time))
+			return strftime("%H:%M",$time);
 	
-	if(time() - $time < 2*86400 && strftime("%d",$time) == strftime("%d",time()-86400))
-		return ec("Вчера, ").strftime("%H:%M:%S",$time);
+		if(time() - $time < 2*86400 && strftime("%d",$time) == strftime("%d",time()-86400))
+			return ec("Вчера, ").strftime("%H:%M",$time);
 		
-	return strftime("%d.%m.%Y %H:%M:%S",$time);
-}
+		return strftime("%d.%m.%Y %H:%M",$time);
+	}
+
+	function news_short_time($time)
+	{
+		if(is_today($time))
+			return strftime("%H:%M",$time);
+	
+		if(time() - $time < 2*86400 && strftime("%d",$time) == strftime("%d",time()-86400))
+			return ec("Вчера");
+		
+		return strftime("%d.%m.%Y",$time);
+	}
 
 function month_name($m)
 {
@@ -101,5 +112,3 @@ function month_name_rp($m)
 			
 		return $mms[intval($m)];
 }
-
-?>

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 DB="WWW"
-HOST="localhost"
+HOST="www.avias.local"
 
-MASK="^category://bal.aviaport.ru/"
+MASK="^http://news.aviaport.ru/"
 
 for tab in `mysql -B -u $MSU -p$MSP $DB -e 'SHOW TABLES;'`; do
 	res=`mysqldump -h $HOST -n -t -f --skip-opt --compact -u $MSU -p$MSP $DB $tab --where="id RLIKE '$MASK' OR value RLIKE '$MASK'"` 2>/dev/null
