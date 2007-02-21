@@ -32,7 +32,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 // by all moderators and admins.
 if (isset($_GET['get_host']))
 {
-	if ($pun_user['g_id'] > PUN_MOD && $pun_user['g_id'] != 5)
+	if ($pun_user['g_id'] > PUN_MOD && $pun_user['g_id'] != 5 && $pun_user['g_id'] != 21)
 		message($lang_common['No permission']);
 
 	// Is get_host an IP address or a post ID?
@@ -66,7 +66,7 @@ $moderators = $db->result($result);
 $mods_array = ($moderators != '') ? unserialize($moderators) : array();
 
 //if ($pun_user['g_id'] != 5 && $pun_user['g_id'] != PUN_ADMIN && ($pun_user['g_id'] != PUN_MOD || !array_key_exists($pun_user['username'], $mods_array)))
-if ($pun_user['g_id'] != 5 && $pun_user['g_id'] != PUN_ADMIN && $pun_user['g_id'] != PUN_MOD)
+if ($pun_user['g_id'] != 5 && $pun_user['g_id'] != 21 && $pun_user['g_id'] != PUN_ADMIN && $pun_user['g_id'] != PUN_MOD)
 	message($lang_common['No permission']);
 
 // Load the misc.php language file
@@ -80,7 +80,7 @@ if (isset($_GET['tid']))
 	if ($tid < 1)
 		message($lang_common['Bad request']);
 
-	if ($pun_user['g_id'] > PUN_MOD)
+	if ($pun_user['g_id'] > PUN_MOD && $pun_user['g_id'] != 5 && $pun_user['g_id'] != 21)
 		message($lang_common['No permission']);
 
 	// Fetch some info about the topic

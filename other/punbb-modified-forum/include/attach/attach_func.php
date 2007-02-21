@@ -31,13 +31,13 @@ function attach_allow_upload($rules=0,$max_size=0,$file_ext='',$upload_size=10,$
 	$attach_allowed = false;
 	
 	//check so that the user is allowed to upload
-	if(attach_rules($rules,ATTACH_UPLOAD)||$pun_user['g_id']!=PUN_GUEST)
+	if(attach_rules($rules,ATTACH_UPLOAD) || $pun_user['g_id'] != PUN_GUEST)
 		$attach_allowed=true;
 	else 
 		$attach_allowed=false;
 
 	// check for file extension
-	if(($attach_allowed && attach_check_extension($upload_name,$file_ext))||$pun_user['g_id']==PUN_ADMIN)
+	if(($attach_allowed && attach_check_extension($upload_name,$file_ext)) || $pun_user['g_id']==PUN_ADMIN)
 		$attach_allowed=true;
 	else 
 		$attach_allowed=false;
@@ -133,7 +133,7 @@ function attach_create_attachment($name='', $mime='', $size=0, $tmp_name='', $po
 function attach_create_subfolder($newfolder=''){
 	global $db,$pun_config,$pun_user;
 	
-	if(strlen($newfolder)==0||$pun_user['g_id']!=PUN_ADMIN)
+	if(strlen($newfolder)==0 || $pun_user['g_id']!=PUN_ADMIN)
 		return false;
 		
 	// check to see if that folder is there already, then just update the config ...
