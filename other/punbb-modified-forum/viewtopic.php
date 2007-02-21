@@ -310,6 +310,8 @@ $result   = $db->query($q, false)
 
 $cdb = &new DataBase('punbb');
 
+include_once('funcs/users/geoip/get_flag.php');
+
 while ($cur_post = $db->fetch_assoc($result))
 {
 	$poster = $cdb->get("SELECT * FROM users  WHERE id = ".intval($cur_post['poster_id']));
@@ -325,7 +327,11 @@ while ($cur_post = $db->fetch_assoc($result))
 	if ($cur_post['poster_id'] > 1)
 	{
 		$username = pun_htmlspecialchars($cur_post['username']);
-		$userlink = "<a href=\"{$pun_config['root_uri']}/profile.php?id={$cur_post['poster_id']}\">".$username.'</a>';
+
+		$size = max(6, 12 - intval(strlen($username)/3));
+
+		$userlink = "<a href=\"{$pun_config['root_uri']}/profile.php?id={$cur_post['poster_id']}\" style=\"font-size: {$size}pt;\">".$username.'</a>';
+
 		$user_title = get_title($poster);
 
 		if ($pun_config['o_censoring'] == '1')
@@ -519,9 +525,10 @@ while ($cur_post = $db->fetch_assoc($result))
 	<h2><b>
 		<span onClick="setImageId('post_<?echo $cur_post['id'];?>_moreimg', toggleVisId('post_<?echo $cur_post['id'];?>_more') == 1, 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')">
 			<img id="post_<?echo $cur_post['id'];?>_moreimg" src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif" alt="*" />
-			<?echo $username;?>
-		</span>
-	</b>, <a href="<? echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']); /*"*/ ?>
+			<?echo $username;?></span></b>,
+	<?
+		echo get_flag($cur_post['poster_ip']);
+	?> <a href="<? echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']); /*"*/ ?>
 	<span class="conr">#<?php echo ($start_from + $post_count) ?>&nbsp;</span></a>
 	</h2>
 	<div class="box">
