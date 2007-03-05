@@ -37,3 +37,6 @@
 
 		return round($size/1024,2).ec("МБ");
 	}
+
+	if(!function_exists("scandir"))
+		require_once("include/php4/scandir.php");
