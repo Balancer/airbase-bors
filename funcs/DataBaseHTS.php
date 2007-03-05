@@ -110,6 +110,8 @@ class DataBaseHTS
 		if (empty ($GLOBALS['cms']['data_prehandler'][$key]))
 			return false;
 
+
+
 		if(is_global_key("uri_data($uri)", $key)) 
 			return global_key("uri_data($uri)", $key);
 
@@ -122,6 +124,8 @@ class DataBaseHTS
 				if (($res = $data['func'] ($uri, $m, $data['plugin_data'], $key)) != NULL)
 				{
 //					echo "Pre data ($key, $uri, ".print_r($data, true).") = $res<br/>";
+//					if($key == 'create_time')
+//						echo "=$key=$regexp={$data['func']}=<br />\n";
 					return set_global_key("uri_data($uri)", $key, $res);
 				}
 		}
@@ -168,7 +172,8 @@ class DataBaseHTS
 	function get_data($uri, $key, $default = NULL, $inherit = false, $skip = false, $fields = '`value`', $search = '`id`')
 	{
 //		if(!empty($_GET['debug']))
-//		echo("<small><tt>Get key '$key' for '$uri'</tt></small><br />");
+//		if($key == 'create_time')
+//			echo("<small><tt>Get key '$key' for '$uri'</tt></small><br />");
 		global $transmap;
 
 //		print_r($transmap);
@@ -198,6 +203,7 @@ class DataBaseHTS
 		if (!$fields && !$search && !$skip && is_global_key("uri_data($uri)", $key)) // && global_key("uri_data($uri,$inherit,$skip_save)",$key)) 
 			return global_key("uri_data($uri)", $key);
 
+
 		if (!$raw && ($res = $this->pre_data_check($uri, $key)) !== false)
 			return $res;
 
@@ -208,6 +214,7 @@ class DataBaseHTS
 
 		$loops = 0;
 
+	
 		do
 		{
 			if (!$skip && $val = $this->dbh->get("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."'", true))
