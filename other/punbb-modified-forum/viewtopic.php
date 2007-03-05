@@ -34,7 +34,7 @@ define('PUN_ROOT', './');
 // If a post ID is specified we determine topic ID and page number so we can redirect to the correct message
 if($pid)
 {
-	$id = intval($cms_db->get("SELECT topic_id FROM posts WHERE id=$pid", false));
+	$id = intval($cms_db->get("SELECT topic_id FROM posts WHERE id=$pid", false, 3600));
 	if(!$id)
 	{
 		require PUN_ROOT.'include/common.php';
@@ -108,7 +108,7 @@ else if ($action == 'last')
 			exit;
 		}
 
-		$id = intval($cms_db->get("SELECT moved_to FROM topics WHERE id=$id"));
+		$id = intval($cms_db->get("SELECT moved_to FROM topics WHERE id=$id", true, 86400));
 	}
 }
 
@@ -501,7 +501,7 @@ while ($cur_post = $db->fetch_assoc($result))
 	}
 	// Attachment Mod Block End
 
-	$user_warn_count	= intval($cms_db->get("SELECT COUNT(*) FROM warnings WHERE user_id = ".intval($cur_post['poster_id'])." AND time > ".(time()-30*86400)));
+	$user_warn_count	= intval($cms_db->get("SELECT COUNT(*) FROM warnings WHERE user_id = ".intval($cur_post['poster_id'])." AND time > ".(time()-30*86400), true, 720));
 	$user_warn = "";
 
 	if($user_warn_count)
@@ -516,7 +516,7 @@ while ($cur_post = $db->fetch_assoc($result))
 			$user_warn .= str_repeat("<img src=\"http://balancer.ru/coppermine/images/flags/blank.gif\" width=\"16\" height=\"16\" border=\"0\">", 5-intval($user_warn_count/2+0.5));
 	
 		if($user_warn_count >= 10)
-			$user_warn .= "<div style=\"font-size: 6pt; color: red;\">R/O до ".strftime("%y-%m-%d", 30*86400+$cms_db->get("SELECT MIN(`time`) FROM warnings WHERE user_id = user_id AND time > ".(time()-30*86400)." LIMIT 10"))."</div>";
+			$user_warn .= "<div style=\"font-size: 6pt; color: red;\">R/O до ".strftime("%y-%m-%d", 30*86400+$cms_db->get("SELECT MIN(`time`) FROM warnings WHERE user_id = user_id AND time > ".(time()-30*86400)." LIMIT 10", true, 3600))."</div>";
 		$user_warn .= "</a>";
 	}
 

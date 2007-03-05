@@ -3,6 +3,7 @@
 
 	function lt_img($params) 
 	{ 
+
 		if(empty($params['size']))
 			$params['size'] = '468x468';
 
@@ -14,11 +15,13 @@
 			// Заменим ссылку в кеш на полную картинку
 			$uri = secure_path(abs_path_from_relative(preg_replace("!^(.+?)/cache/(.+)/\d*x\d*/(.+?)$!", "$1/$2/$3", $uri), $GLOBALS['lcml']['uri']));
 
-			$hts = new DataBaseHTS();
+			$hts = &new DataBaseHTS();
 			$data = $hts->parse_uri($uri);
 //			echo $GLOBALS['lcml']['level'];
 //			exit(print_r($GLOBALS['lcml']['uri'],true));
 //			exit(print_r($data,true));
+
+
 
 		   	$fp = preg_replace("!^(.*?)/([^/]+)$!", "$1/img/$2", $data['local_path']);
 			if(file_exists($fp))
@@ -53,7 +56,7 @@
 			if(!$data['local'])
 			{
 				$path = $GLOBALS['cms']['sites_store_path']."/{$data['host']}{$data['path']}";
-				
+			
 				if(preg_match("!/$!",$path))
 					$path .= "index";
 
@@ -68,7 +71,6 @@
 						$path .= "index";
 				}
 
-
 				if(!file_exists($path) || filesize($path)==0)
 				{
 					require_once('HTTP/Request.php');
@@ -82,7 +84,7 @@
 					$req->addHeader('Referer', $params['url']);
 
 //					if(preg_match("!(lenta\.ru|pisem\.net|biorobot\.net|compulenta\.ru|ferra\.ru)!",$uri))
-//						$req->setProxy('82.138.33.157', 3128);
+//						$req->setProxy('home.balancer.ru', 3128);
 
 //					return "=$path=<br />\n";
 
@@ -123,6 +125,7 @@
 
 			$need_upload = false;
 
+
 			if($data['local'])
 			{
 				if(!file_exists($path))
@@ -138,7 +141,7 @@
 //				return "_$path, _$uri, _$img_ico_uri<br />\n";
 				$img_page_uri = preg_replace("!^(http://.+?)(\.[^\.]+)$!", "$1.htm", $uri);
 //				return "_$local_uri<br />_$img_ico_uri<br />";
-				
+
 				require_once('HTTP/Request.php');
 				$req =& new HTTP_Request($img_ico_uri, array('allowRedirects' => true,'maxRedirects' => 2,'timeout' => 4));
 				$response = $req->sendRequest();

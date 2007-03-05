@@ -79,19 +79,22 @@ function check_cookie(&$pun_user)
 		if ($pun_user['save_pass'] == '0')
 			$expire = 0;
 
+		list($os, $browser) = get_browser_info();
+
 		// Define this if you want this visit to affect the online list and the users last visit data
 		if (!defined('PUN_QUIET_VISIT'))
 		{
 			// Update the online list
 			if (!$pun_user['logged'])
-				$db->query("INSERT INTO {$db->prefix}online (user_id, ident, logged) VALUES ('{$pun_user['id']}', '".$db->escape($pun_user['username'])."', '$now')")
+				$db->query("INSERT INTO {$db->prefix}online (user_id, ident, logged, useragent, os, browser) VALUES ('{$pun_user['id']}', '".$db->escape($pun_user['username'])."', '$now', '".addslashes($_SERVER['HTTP_USER_AGENT'])."', '$os', '$browser')")
 					or error('Unable to insert into online list [77]: '.$pun_user['id'], __FILE__, __LINE__, $db->error());
 			else
 			{
 				// Special case: We've timed out, but no other user has browsed the forums since we timed out
 				if ($pun_user['logged'] < ($now-$pun_config['o_timeout_visit']))
 				{
-					$db->query('UPDATE '.$db->prefix.'users SET last_visit='.$pun_user['logged'].' WHERE id='.$pun_user['id']) or error('Unable to update user visit data', __FILE__, __LINE__, $db->error());
+					$db->query('UPDATE '.$db->prefix.'users SET last_visit='.$pun_user['logged'].' WHERE id='.$pun_user['id']) 
+						or error('Unable to update user visit data', __FILE__, __LINE__, $db->error());
 					$pun_user['last_visit'] = $pun_user['logged'];
 				}
 
@@ -123,9 +126,12 @@ function set_default_user()
 
 	$pun_user = $db->fetch_assoc($result);
 
+	list($os, $browser) = get_browser_info();
+
 	// Update online list
 	if (!$pun_user['logged'])
-		$db->query('INSERT INTO '.$db->prefix.'online (user_id, ident, logged) VALUES(1, \''.$db->escape($remote_addr).'\', '.time().')') or error('Unable to insert into online list [117]', __FILE__, __LINE__, $db->error());
+		$db->query('INSERT INTO '.$db->prefix.'online (user_id, ident, logged, os, browser, useragent) VALUES(1, \''.$db->escape($remote_addr).'\', '.time().", '$os', '$browser', '".addslashes($_SERVER['HTTP_USER_AGENT'])."')")
+			or error('Unable to insert into online list [117]', __FILE__, __LINE__, $db->error());
 	else
 		$db->query('UPDATE '.$db->prefix.'online SET logged='.time().' WHERE ident=\''.$db->escape($remote_addr).'\'') or error('Unable to update online list', __FILE__, __LINE__, $db->error());
 
@@ -1098,3 +1104,102 @@ function dump()
 	echo '</pre>';
 	exit;
 }
+
+	function get_browser_info()
+	{
+		$os = "";
+		if(preg_match("!Linux!", $_SERVER['HTTP_USER_AGENT']))
+			$os = "Linux";
+		elseif(preg_match("!Windows CE; PPC!", $_SERVER['HTTP_USER_AGENT']))
+			$os = "PocketPC";
+		elseif(preg_match("!J2ME!", $_SERVER['HTTP_USER_AGENT']))
+			$os = "J2ME";
+		elseif(preg_match("!Windows NT 6.0!", $_SERVER['HTTP_USER_AGENT']))
+			$os = "WindowsVista";
+		elseif(preg_match("!Windows NT 5.(1|2)!", $_SERVER['HTTP_USER_AGENT']))
+			$os = "WindowsXP";
+		elseif(preg_match("!Windows NT 5.0!", $_SERVER['HTTP_USER_AGENT']))
+			$os = "Windows2000";
+		elseif(preg_match("!Windows 98!", $_SERVER['HTTP_USER_AGENT']))
+			$os = "Windows98";
+		elseif(preg_match("!Win98!", $_SERVER['HTTP_USER_AGENT']))
+			$os = "Windows98";
+		elseif(preg_match("!Windows!i", $_SERVER['HTTP_USER_AGENT']))
+			$os = "Windows";
+
+		$browser="";
+		if(preg_match("!Opera!", $_SERVER['HTTP_USER_AGENT']))
+			$browser="Opera";
+		if(preg_match("!Konqueror!", $_SERVER['HTTP_USER_AGENT']))
+			$browser="Konqueror";
+		elseif(preg_match("!SeaMonkey!", $_SERVER['HTTP_USER_AGENT']))
+			$browser = "SeaMonkey";
+		elseif(preg_match("!Firefox!", $_SERVER['HTTP_USER_AGENT']))
+			$browser = "Firefox";
+		elseif(preg_match("!Gecko!", $_SERVER['HTTP_USER_AGENT']))
+			$browser = "Gecko";
+		elseif(preg_match("!MSIE!", $_SERVER['HTTP_USER_AGENT']))
+			$browser = "MSIE";
+
+		if(preg_match("!Akregator!", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$browser = "Akregator";
+			$os = "Linux";
+		}
+
+		if(preg_match("!Yahoo!", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$browser = "YahooBot";
+			$os = "YahooBot";
+		}
+
+		if(preg_match("!Rambler!", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$browser = "RamblerBot";
+			$os = "RamblerBot";
+		}
+
+		if(preg_match("!Googlebot!", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$browser = "GoogleBot";
+			$os = "GoogleBot";
+		}
+
+		if(preg_match("!msnbot!", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$browser = "MSNBot";
+			$os = "MSNBot";
+		}
+
+		if(preg_match("!WebAlta!", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$browser = "WebAltaBot";
+			$os = "WebAltaBot";
+		}
+
+		if(preg_match("!Anonymouse.org!", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$browser = "Anonymouse.org";
+			$os = "Anonymouse.org";
+		}
+
+		if(preg_match("!libwww-perl!", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$browser = "libwww-perl";
+			$os = "libwww-perl";
+		}
+
+		if(preg_match("!Download Master!", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$browser = "Download Master";
+			$os = "Windows";
+		}
+
+		if(preg_match("!Yandex!", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$browser = "YandexBot";
+			$os = "YandexBot";
+		}
+
+		return array($os, $browser);
+	}
