@@ -281,6 +281,9 @@
             $smarty->assign("ref", @$_SERVER['HTTP_REFERER']);
             $smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
             $smarty->assign("queries", $GLOBALS['global_db_queries']);
+
+            $smarty->assign("me", $us);
+
 			if(!empty($GLOBALS['stat']['start_microtime']))
 			{
 			    list($usec, $sec) = explode(" ",microtime());

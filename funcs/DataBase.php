@@ -118,12 +118,20 @@
 
 			if($GLOBALS['log_level'] > 5)
 			{
-				$fh = fopen("{$_SERVER['DOCUMENT_ROOT']}/hts-queries.log",'at');
-				fputs($fh,"$query\n");
-				fclose($fh);
+				$fh = @fopen("{$_SERVER['DOCUMENT_ROOT']}/hts-queries.log", 'at');
+				@fputs($fh,"$query\n");
+				@fclose($fh);
 			}
 
-			echolog("<xmp>result=|".print_r($this->result,true)."|</xmp>",5);
+/*			if(!empty($GLOBALS['log']['mysql_queries']))
+			{
+				$fh = fopen("{$GLOBALS['log']['mysql_queries']}.log", 'at');
+				$qn = str_replace("\n", '\n', $query);
+				fputs($fh,"$qtime: $qn\n");
+				fclose($fh);
+			}
+*/
+			echolog("<xmp>result=|".print_r($this->result, true)."|</xmp>",5);
 
 			//   @mysql_num_rows(), ..	SELECT!
 			if($this->result)
@@ -207,8 +215,16 @@
 			return $this->row;
 		}
 
-		function get($query, $ignore_error=false)
+		function get($query, $ignore_error=false, $cached=false)
 		{
+			$ch = NULL;
+			if($cached !== false)
+			{
+				$ch = &new Cache();
+				if($ch->get("DataBaseQuery:{$this->db_name}", $query))
+					return unserialize($ch->last());
+			}
+			
 //			if(is_global_key("db_get",$query)) 
 //				return global_key("db_get",$query);
 
@@ -216,7 +232,10 @@
 			$this->fetch();
 			$this->free();
 
-			return set_global_key("db_get",$query, $this->row);
+			if($ch)
+				$ch->set(serialize($this->row), $cached);
+				
+			return set_global_key("db_get", $query, $this->row);
 		}
 
 		function loop($func, $query)
@@ -229,9 +248,17 @@
 			$this->free();
 		}
 
-		function get_array($query, $ignore_error=false)
+		function get_array($query, $ignore_error=false, $cached=false)
 		{
 //			echo "==<pre>$query</pre>==";
+			$ch = NULL;
+			if($cached !== false)
+			{
+				$ch = &new Cache();
+				if($ch->get("DataBaseQuery:{$this->db_name}", $query))
+					return unserialize($ch->last());
+			}
+
 			$res=array();
 			$this->query($query, $ignore_error);
 			
@@ -239,6 +266,9 @@
 				$res[]=$this->row;
 
 			$this->free();
+
+			if($ch)
+				$ch->set(serialize($res), $cached);
 
 			return $res;
 		}
