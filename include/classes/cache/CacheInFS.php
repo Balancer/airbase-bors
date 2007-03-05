@@ -1,6 +1,8 @@
 <?
 	$GLOBALS['bors']['config']['cache_in_fs_path'] = $_SERVER['DOCUMENT_ROOT']."/cache/fs/";
 
+	include_once("funcs/filesystem_ext.php");
+
     class Cache
     {
         var $dbh;
@@ -25,23 +27,29 @@
            		return ($this->last = $default);
 
 			$hmd = md5("$type:$key");
-			$file = get_file_name($hmd);
+			$file = $this->get_file_name($hmd);
 			
 			if(@filemtime($file) > time())
+			{
+//				echo "*";
 				return $this->last = file_get_contents($file);
+			}
 			
-			unlink($file);
+//			if(@filemtime($file) == 0)
+//				echo "nc:$type,$key,$uri";
+			
+			@unlink($file);
 
 			if($uri)
 			{
-				$dir = get_dir_name(md5($uri)).".d";
+				$dir = $this->get_dir_name(md5($uri)).".d";
 				@unlink("$dir/$hmd.cfs");
 				@unlink($dir);
 			}
 			
 			if($key)
 			{
-				$dir = get_dir_name(md5($key)).".d";
+				$dir = $this->get_dir_name(md5($key)).".d";
 				@unlink("$dir/$hmd.cfs");
 				@unlink($dir);
 			}
@@ -72,20 +80,20 @@
 		
             $hmd = md5("$type:$key");
 			
-			$file = get_file_name($hmd);
+			$file = $this->get_file_name($hmd);
 			
 			file_put_contents($file, $value);
 			touch($file, time() + $time_to_expire);
 			if($uri)
 			{
-				$dir = get_dir_name(md5($uri));
+				$dir = $this->get_dir_name(md5($uri));
 				symlink($file, "$dir/$hmd.cfs");
 				touch("$dir/$hmd.cfs", time() + $time_to_expire);
 			}
 
 			if($key)
 			{
-				$dir = get_dir_name(md5($uri));
+				$dir = $this->get_dir_name(md5($key));
 				symlink($file, "$dir/$hmd.cfs");
 				touch("$dir/$hmd.cfs", time() + $time_to_expire);
 			}
@@ -102,20 +110,27 @@
         {
 			if($key)
 			{
-				$dir = get_dir_name(md5($key));
+				$dir = $this->get_dir_name(md5($key));
 				foreach(scandir($dir) as $f)
-					unlink(readlink("$dir/$f"));
+					@unlink(@readlink("$dir/$f"));
 			}
+
+			$key = addslashes($key);
+			for($i=0; $i<256;$i++)
+				$this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `key` = '$key'");
         }
 
         function clear_by_uri($uri)
         {
 			if($uri)
 			{
-				$dir = get_dir_name(md5($uri));
+				$dir = $this->get_dir_name(md5($uri));
 				foreach(scandir($dir) as $f)
-					unlink(readlink("$dir/$f"));
+					@unlink(@readlink("$dir/$f"));
 			}
+
+			for($i=0; $i<256;$i++)
+				$this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `uri` = '".addslashes($uri)."'");
         }
 
 		function get_file_name($id)
@@ -129,7 +144,7 @@
 
 		function get_dir_name($id)
 		{
-			$dir = get_file_name($id).".d";
+			$dir = $this->get_file_name($id).".d";
 			@mkdir($dir, 0777);
 			return $dir;
 		}

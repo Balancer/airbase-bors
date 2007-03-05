@@ -22,7 +22,7 @@
 				21 => 4, // координатор-литератор
 			);
 
-		foreach($dbu1->get_array("SELECT DISTINCT user_id FROM `reputation_votes`") as $user)
+		foreach($dbu1->get_array("SELECT DISTINCT user_id FROM `reputation_votes`", true, 720) as $user)
 		{
 			$total = 0;
 			foreach($dbu1->get_array("SELECT voter_id as id, SUM(score) as sum FROM `reputation_votes` WHERE user_id = $user GROUP BY voter_id") as $v)

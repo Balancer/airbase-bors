@@ -353,6 +353,36 @@ if ($pun_config['o_users_online'] == '1')
 	else
 		echo "\t\t\t".'<div class="clearer"></div>'."\n";
 
+	$os = array();
+	foreach($cms_db->get_array("SELECT os, count(*) as cnt FROM online GROUP BY os ORDER BY cnt DESC, os") as $row)
+	{
+		if(!$row['os'])
+			$row['os'] = "Неизвестно";
+			
+		$perc = sprintf("%02.1f", 100*$row['cnt']/($num_users+$num_guests)+0.5);
+		
+		$os[] = "<span style=\"color: blue;\">{$row['os']}</span> ({$row['cnt']})";
+	}
+
+	$os = join(", ", $os);
+	
+	echo "<dl id=\"onlinelist\" class= \"clearb\"><dt><b>Операционные системы: </dt><dd>$os</dd></dl>";
+
+	$browsers = array();
+	foreach($cms_db->get_array("SELECT browser, count(*) as cnt FROM online GROUP BY browser ORDER BY cnt DESC, browser") as $row)
+	{
+		if(!$row['browser'])
+			$row['browser'] = "Неизвестно";
+			
+		$perc = sprintf("%02.1f", 100*$row['cnt']/($num_users+$num_guests)+0.5);
+		
+		$browsers[] = "<span style=\"color: blue;\">{$row['browser']}</span> ({$row['cnt']})";
+	}
+
+	$browsers = join(", ", $browsers);
+	
+	echo "<dl id=\"onlinelist\" class= \"clearb\"><dt><b>Браузеры: </dt><dd>$browsers</dd></dl>";
+
 }
 else
 	echo "\t\t".'</dl>'."\n\t\t\t".'<div class="clearer"></div>'."\n";

@@ -217,6 +217,7 @@
 
 		function get($query, $ignore_error=false, $cached=false)
 		{
+			include_once("funcs/Cache.php");
 			$ch = NULL;
 			if($cached !== false)
 			{
@@ -251,6 +252,7 @@
 		function get_array($query, $ignore_error=false, $cached=false)
 		{
 //			echo "==<pre>$query</pre>==";
+			include_once("funcs/Cache.php");
 			$ch = NULL;
 			if($cached !== false)
 			{

@@ -16,7 +16,7 @@ include("geoipcity.inc");
 
 $gi = geoip_open("/var/www/balancer.ru/htdocs/cms/3part/geoip/GeoIPCity.dat", GEOIP_STANDARD);
 
-$record = geoip_record_by_addr($gi,"192.168.0.1");
+$record = geoip_record_by_addr($gi,"72.95.134.104");
 print $record->country_code . " " . $record->country_code3 . " " . $record->country_name . "\n";
 print $record->region . "\n";
 print $record->city . "\n";

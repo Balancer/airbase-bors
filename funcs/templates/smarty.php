@@ -141,6 +141,7 @@
 			if(!$found)
 				foreach(array(
 					"{$GLOBALS['cms']['local_dir']}/templates{$tpl2}index.html",
+					"{$GLOBALS['cms']['local_dir']}/templates/default/index.html",
 					"{$GLOBALS['cms']['base_dir']}/templates{$tpl2}index.html",
 					"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
 					"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",

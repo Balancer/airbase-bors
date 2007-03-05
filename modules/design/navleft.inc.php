@@ -87,7 +87,7 @@
 //		дети первого родителя - наши братья
 //		-----------------------------------
 
-		if(isset($GLOBALS['module_data']['uplevel']) && $GLOBALS['module_data']['uplevel'] + 1 > $indent)
+		if(!isset($GLOBALS['module_data']['uplevel']) || (isset($GLOBALS['module_data']['uplevel']) && $GLOBALS['module_data']['uplevel'] + 1 > $indent))
 			$parents = $hts->get_data_array($uri, 'parent');
 		else
 			$parents = array();

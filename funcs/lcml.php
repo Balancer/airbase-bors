@@ -42,6 +42,9 @@ function lcml($txt, $params = array ())
 
 	$GLOBALS['lcml']['level'] = intval(@ $GLOBALS['lcml']['level']) + 1;
 
+	if($GLOBALS['lcml']['level'] > 30)
+		return $txt;
+
 	$saved_params = empty ($GLOBALS['lcml']['params']) ? array () : $GLOBALS['lcml']['params'];
 	foreach ($saved_params as $key => $val)
 		if (!isset ($params[$key]))
