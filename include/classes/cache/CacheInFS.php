@@ -5,8 +5,6 @@
 
     class Cache
     {
-        var $dbh;
-
         var $last;
 		var $last_type;
 		var $last_key;
@@ -14,7 +12,6 @@
         
         function Cache()
         {
-            $this->dbh = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
         }
 
         function get($type, $key, $uri='', $default=NULL)
@@ -54,17 +51,7 @@
 				@unlink($dir);
 			}
 
-			$tab = substr($hmd, 0, 2);
-            $row = $this->dbh->get("SELECT `value`, `expire_time`, 0 as `count` FROM `cache_$tab` WHERE `hmd`='$hmd'");
-			$this->last = $row['value'];
-
-			if($row['expire_time'] <= time())
-			{
-				$this->last = NULL;
-	            $this->dbh->query("DELETE FROM `cache_$tab` WHERE `hmd`='$hmd'");
-			}
-			
-            return ($this->last ? $this->last : $default);
+            return $this->last = $default;
         }
 
         function set($type, $key = NULL, $value = NULL, $time_to_expire = 604800)
@@ -84,17 +71,17 @@
 			
 			file_put_contents($file, $value);
 			touch($file, time() + $time_to_expire);
-			if($uri)
+			if($this->last_uri)
 			{
-				$dir = $this->get_dir_name(md5($uri));
-				symlink($file, "$dir/$hmd.cfs");
+				$dir = $this->get_dir_name(md5($this->last_uri));
+				@symlink($file, "$dir/$hmd.cfs");
 				touch("$dir/$hmd.cfs", time() + $time_to_expire);
 			}
 
 			if($key)
 			{
 				$dir = $this->get_dir_name(md5($key));
-				symlink($file, "$dir/$hmd.cfs");
+				@symlink($file, "$dir/$hmd.cfs");
 				touch("$dir/$hmd.cfs", time() + $time_to_expire);
 			}
 
@@ -114,10 +101,6 @@
 				foreach(scandir($dir) as $f)
 					@unlink(@readlink("$dir/$f"));
 			}
-
-			$key = addslashes($key);
-			for($i=0; $i<256;$i++)
-				$this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `key` = '$key'");
         }
 
         function clear_by_uri($uri)
@@ -128,9 +111,6 @@
 				foreach(scandir($dir) as $f)
 					@unlink(@readlink("$dir/$f"));
 			}
-
-			for($i=0; $i<256;$i++)
-				$this->dbh->query("DELETE FROM `cache_".sprintf("%02x", $i)."` WHERE `uri` = '".addslashes($uri)."'");
         }
 
 		function get_file_name($id)

@@ -74,6 +74,20 @@ $errors = array();
 
 include_once("funcs/system.php");
 
+$qid = 0;
+if(isset($_GET['qid']))
+{
+	$qid = intval($_GET['qid']);
+	if ($qid < 1)
+		message($lang_common['Bad request']);
+}
+if(isset($_POST['qid']))
+{
+	$qid = intval($_POST['qid']);
+	if ($qid < 1)
+		message($lang_common['Bad request']);
+}
+
 // Did someone just hit "Submit" or "Preview"?
 if (isset($_POST['form_sent']))
 {
@@ -203,6 +217,7 @@ if (isset($_POST['form_sent']))
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $tid,
+					'answer_to' => $qid,
 				));
 //				$db->query("INSERT INTO {$db->prefix}posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES('".$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 
@@ -226,6 +241,7 @@ if (isset($_POST['form_sent']))
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $tid,
+					'answer_to' => $qid,
 				));
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) 
 //VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
@@ -347,6 +363,7 @@ if (isset($_POST['form_sent']))
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $new_tid,
+					'answer_to' => $qid,
 				));
 
 				// To subscribe or not to subscribe, that ...
@@ -365,6 +382,7 @@ if (isset($_POST['form_sent']))
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $new_tid,
+					'answer_to' => $qid,
 				));
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}
@@ -433,12 +451,8 @@ if ($tid)
 	$form = '<form id="post" method="post" enctype="multipart/form-data" action="post.php?action=post&amp;tid='.$tid.'" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">'; //Attachment Mod has added enctype="multipart/form-data"
 
 	// If a quote-id was specified in the url.
-	if (isset($_GET['qid']))
+	if($qid)
 	{
-		$qid = intval($_GET['qid']);
-		if ($qid < 1)
-			message($lang_common['Bad request']);
-
 		$q_poster  = $cms_db->get("SELECT poster FROM posts WHERE id=$qid");
 		$q_message = $cms_db->get("SELECT message FROM messages WHERE id=$qid");
 
@@ -639,8 +653,8 @@ if (!empty($checkboxes))
 
 }
 
-?>
-			</div>
+if($qid) echo "<input type=\"hidden\" name=\"qid\" value=\"$qid\">\n";
+?>			</div>
 			<p><input type="submit" name="submit" value="<?php echo $lang_common['Submit'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="s" /><input type="submit" name="preview" value="<?php echo $lang_post['Preview'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="p" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
 		</form>
 	</div>

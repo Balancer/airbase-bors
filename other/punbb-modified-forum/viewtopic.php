@@ -299,7 +299,8 @@ $q = "
 		p.hide_smilies, 
 		p.posted, 
 		p.edited, 
-		p.edited_by
+		p.edited_by,
+		p.answer_to
 	FROM {$db->prefix}posts AS p 
 	WHERE p.topic_id=$id 
 	ORDER BY p.id 
@@ -529,7 +530,13 @@ while ($cur_post = $db->fetch_assoc($result))
 	<?
 		echo get_flag($cur_post['poster_ip']);
 	?> <a href="<? echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']); /*"*/ ?>
-	<span class="conr">#<?php echo ($start_from + $post_count) ?>&nbsp;</span></a>
+	<span class="conr">#<?php echo ($start_from + $post_count) ?>&nbsp;</span></a><?
+	if($cur_post['answer_to'])
+	{
+		$uplink = $cms_db->get("SELECT poster, posted FROM posts WHERE id = ".intval($cur_post['answer_to']), true, 86400*30);
+		echo "; Ответ на <a href=\"{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['answer_to']}#p{$cur_post['answer_to']}\">{$uplink['poster']} (". format_time($uplink['posted']) . ")</a>";
+	}
+?>
 	</h2>
 	<div class="box">
 		<div class="inbox">
