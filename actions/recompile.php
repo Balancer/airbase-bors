@@ -37,7 +37,7 @@
 
         if($source || $body)
         {
-			$ch->clear('lcml-compiled', md5($source));
+			$ch->clear_by_id(md5($source));
 
             $hts->set_data($uri, 'compile_time', time());
 
