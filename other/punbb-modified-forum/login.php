@@ -51,7 +51,7 @@ if (isset($_POST['form_sent']) && $action == 'in')
 	{
 	
 		include_once("funcs/users.php");
-		$us = new User();
+		$us = &new User();
 		$errno = $us->do_login($form_username, $form_password, false);
 		$authorized = !$errno;
 
@@ -124,7 +124,7 @@ else if ($action == 'out')
 	if (isset($pun_user['logged']))
 		$db->query('UPDATE '.$db->prefix.'users SET last_visit='.$pun_user['logged'].' WHERE id='.$pun_user['id']) or error('Unable to update user visit data', __FILE__, __LINE__, $db->error());
 
-	$me = new User($pun_user['id']);
+	$me = &new User($pun_user['id']);
 	$me->do_logout();
 
 	redirect('index.php', $lang_login['Logout redirect']);

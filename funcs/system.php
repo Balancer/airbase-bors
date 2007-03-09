@@ -18,14 +18,14 @@
 		return $db->get("SELECT `value` FROM hts_ext_system_data WHERE `key`='global_id';", false);
 	}
 
-	function new_id($engine, $origin_id = NULL, $uri = NULL)
+	function new_id($engine, $local_id = NULL, $uri = NULL)
 	{
 		$db = &new DataBase('HTS');
 
-		$origin_id	= $origin_id	? ", origin_id = ".intval($origin_id) : "";
+		$local_id	= $local_id	? ", local_id = ".intval($local_id) : "";
 		$uri		= $uri 			? ", uri = ".addslashes($uri) : "";
 
-		$db->query("INSERT INTO `global_ids` SET `engine` = '".addslashes($engine)."'$origin_id$uri");
+		$db->query("INSERT INTO `global_ids` SET `engine` = '".addslashes($engine)."'$local_id$uri");
 		$new_id = intval($db->last_id());
 		
 		if(!$new_id)
@@ -39,4 +39,24 @@
 		$db = &new DataBase('HTS');
 
 		return $db->get("SELECT uri FROM global_ids WHERE id = ".intval($id));
+	}
+
+	function global_id($engine, $local_id, $register=true)
+	{
+		$db = &new DataBase('HTS');
+
+		$id = $db->get("SELECT id FROM global_ids WHERE engine='".addslashes($engine)."' AND local_id = ".intval($local_id));
+
+		if($id || !$register)
+			return $id;
+
+		return new_id($engine, $local_id);
+	}
+
+	function engine_id_by_global($id)
+	{
+		$db = &new DataBase('HTS');
+
+		$res = $db->get("SELECT engine, local_id FROM global_ids WHERE id = ".intval($id));
+		return array($res['engine'], $res['local_id']);
 	}

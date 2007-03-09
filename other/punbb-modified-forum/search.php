@@ -482,14 +482,83 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		if ($show_as == 'posts')
 		{
 			$substr_sql = ($db_type != 'sqlite') ? 'SUBSTRING' : 'SUBSTR';
-			$sql = 'SELECT p.id AS pid, p.poster AS pposter, p.posted AS pposted, p.poster_id, t.id AS tid, t.poster, t.subject, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.forum_id FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id WHERE p.id IN('.$search_results.') ORDER BY '.$sort_by_sql;
+			$sql = "
+				SELECT 
+					p.id AS pid, 
+					p.poster AS pposter, 
+					p.posted AS pposted, 
+					p.poster_id, 
+					t.id AS tid, 
+					t.poster, 
+					t.subject, 
+					t.last_post, 
+					t.last_post_id, 
+					t.last_poster, 
+					t.num_replies, 
+					t.forum_id,
+					tv.last_visit
+				FROM {$db->prefix}posts AS p 
+					INNER JOIN {$db->prefix}topics AS t ON t.id=p.topic_id
+					LEFT JOIN {$db->prefix}topic_visits tv ON (tv.user_id=".intval($pun_user['id'])." AND tv.topic_id=t.id)
+				WHERE p.id IN($search_results) 
+				ORDER BY $sort_by_sql";
 		}
 		else
 		{
 			if(preg_match("!p\.!", $sort_by_sql) || preg_match("!p\.!", $group_by_sql) )
-				$sql = 'SELECT t.id AS tid, t.poster, t.subject, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.closed, t.forum_id FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id WHERE t.id IN('.$search_results.') GROUP BY t.id, t.poster, t.subject, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.closed, t.forum_id'.$group_by_sql.' ORDER BY '.$sort_by_sql;
+				$sql = "
+					SELECT 
+						t.id AS tid, 
+						t.poster, 
+						t.subject, 
+						t.last_post, 
+						t.last_post_id, 
+						t.last_poster, 
+						t.num_replies, 
+						t.closed, 
+						t.forum_id, 
+						tv.last_visit
+					FROM {$db->prefix}posts AS p 
+						INNER JOIN {$db->prefix}topics AS t ON t.id=p.topic_id 
+						LEFT JOIN {$db->prefix}topic_visits tv ON (tv.user_id=".intval($pun_user['id'])." AND tv.topic_id=t.id)
+					WHERE t.id IN($search_results) 
+					GROUP BY t.id, 
+						t.poster, 
+						t.subject, 
+						t.last_post, 
+						t.last_post_id, 
+						t.last_poster, 
+						t.num_replies, 
+						t.closed, 
+						t.forum_id$group_by_sql
+					ORDER BY $sort_by_sql";
 			else		
-				$sql = 'SELECT t.id AS tid, t.poster, t.subject, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.closed, t.forum_id FROM '.$db->prefix.'topics AS t WHERE t.id IN('.$search_results.') GROUP BY t.id, t.poster, t.subject, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.closed, t.forum_id'.$group_by_sql.' ORDER BY '.$sort_by_sql;
+				$sql = "
+					SELECT 
+						t.id AS tid, 
+						t.poster, 
+						t.subject, 
+						t.last_post, 
+						t.last_post_id, 
+						t.last_poster, 
+						t.num_replies, 
+						t.closed, 
+						t.forum_id,
+						tv.last_visit
+					FROM {$db->prefix}topics AS t 
+						LEFT JOIN {$db->prefix}topic_visits tv ON (tv.user_id=".intval($pun_user['id'])." AND tv.topic_id=t.id)
+					WHERE t.id IN($search_results) 
+					GROUP BY 
+						t.id, 
+						t.poster, 
+						t.subject, 
+						t.last_post, 
+						t.last_post_id, 
+						t.last_poster, 
+						t.num_replies, 
+						t.closed, 
+						t.forum_id$group_by_sql
+					ORDER BY $sort_by_sql";
 		}
 
 		// Determine the topic or post offset (based on $_GET['p'])
@@ -647,7 +716,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 					$item_status = 'iclosed';
 				}
 
-				$last_visit = intval($cms_db->get("SELECT last_visit FROM topic_visits WHERE user_id=".intval($pun_user['id'])." AND topic_id=".intval($search_set[$i]['tid'])));
+				$last_visit = $search_set[$i]['last_visit'];
 				if (!$pun_user['is_guest'] 
 						&& $search_set[$i]['last_post'] > $last_visit
 						&& ($last_visit > 0 || $search_set[$i]['last_post'] > $pun_user['last_visit'])

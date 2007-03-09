@@ -1,13 +1,12 @@
 <?
     function echolog($message,$level=3)
     {
-        if(!isset($GLOBALS['log_level']))
-            $GLOBALS['log_level']=0;
-
-        if(!$GLOBALS['log_level'])
+		$log_level = max(@$GLOBALS['log_level'], @$_GET['log_level']);
+	
+        if(!$log_level)
             return;
 
-        if($GLOBALS['log_level']>=$level)
+        if($log_level >= $level)
         {
             if(!empty($GLOBALS['echofile']))
             {

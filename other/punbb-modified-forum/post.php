@@ -73,6 +73,7 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/post.php';
 $errors = array();
 
 include_once("funcs/system.php");
+include_once("funcs/search/index.php");
 
 $qid = 0;
 if(isset($_GET['qid']))
@@ -265,7 +266,7 @@ if (isset($_POST['form_sent']))
 			$db->query('UPDATE '.$db->prefix.'topics SET num_replies='.$num_replies.', last_post='.$now.', last_post_id='.$new_pid.', last_poster=\''.$db->escape($username).'\' WHERE id='.$tid) 
 				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
-			update_search_index('post', $new_pid, $message);
+			index_body($new_pid, $message);
 
 			update_forum($cur_posting['id']);
 
@@ -400,7 +401,9 @@ if (isset($_POST['form_sent']))
 			$db->query('UPDATE '.$db->prefix.'topics SET last_post_id='.$new_pid.' WHERE id='.$new_tid) 
 				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
-			update_search_index('post', $new_pid, $message, $subject);
+			$global_id = global_id('topic', $new_tid);
+			index_title($global_id, $subject);
+			index_body($new_pid, $message);
 
 			update_forum($fid);
 		}

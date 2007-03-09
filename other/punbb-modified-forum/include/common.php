@@ -146,7 +146,7 @@ if (!defined('PUN_BANS_LOADED'))
 check_bans();
 
 $cms_db = &new DataBase('punbb');
-$warn_count	= intval($cms_db->get("SELECT COUNT(*) FROM warnings WHERE user_id = ".intval($pun_user['id'])." AND time > ".(time()-30*86400)));
+$warn_count	= intval($pun_user['warnings']);
 if($is_banned	= ($warn_count >= 10))
 	$ban_expire	= $cms_db->get("SELECT MIN(`time`) FROM warnings WHERE user_id = ".intval($pun_user['id'])." AND time > ".(time()-30*86400)." LIMIT 10");
 else
