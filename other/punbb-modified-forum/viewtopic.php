@@ -202,7 +202,8 @@ require PUN_ROOT.'header.php';
 
 // Increment "num_views" for topic
 $low_prio = ($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
-$db->query('UPDATE '.$low_prio.$db->prefix.'topics SET num_views=num_views+1 WHERE id='.$id) or error('Unable to update topic', __FILE__, __LINE__, $db->error());
+$db->query("UPDATE $low_prio {$db->prefix}topics SET num_views=num_views+1 WHERE id=$id") 
+	or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 $count = intval($cms_db->get("SELECT count FROM topic_visits WHERE user_id=".intval($pun_user['id'])." AND topic_id=".intval($id))) + 1;
 $data = array(
 		'topic_id' => $id,

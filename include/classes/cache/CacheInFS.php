@@ -1,5 +1,6 @@
 <?
-	$GLOBALS['bors']['config']['cache_in_fs_path'] = $_SERVER['DOCUMENT_ROOT']."/cache/fs/";
+	$GLOBALS['bors']['config']['cache_in_fs_path'] = '/var/cache/fs-cache/';
+	// $_SERVER['DOCUMENT_ROOT']."/cache/fs/";
 
 	include_once("funcs/filesystem_ext.php");
 
@@ -26,6 +27,8 @@
 			$hmd = md5("$type:$key");
 			$file = $this->get_file_name($hmd);
 			
+//			echo "mod = ".strftime("%Y-%m-%d %H:%M:%S\n", filemtime($file));
+
 			if(@filemtime($file) > time())
 			{
 //				echo "*";

@@ -29,25 +29,25 @@
 
 			$tab = substr($hmd, 0, 2);
 			
-            $row = $this->dbh->get("SELECT `value`, `expire_time`, 0 as `count` FROM `cache_$tab` WHERE `hmd`='$hmd'");
+            $row = $this->dbh->get("SELECT `value`, `expire_time`, 0 as `count` FROM `cache_$tab` WHERE `hmd`=0x$hmd");
 			$this->last = $row['value'];
 
 			if($row['expire_time'] <= time())
 			{
 				$this->last = NULL;
-	            $this->dbh->query("DELETE FROM `cache_$tab` WHERE `hmd`='$hmd'");
+	            $this->dbh->query("DELETE FROM `cache_$tab` WHERE `hmd`=0x$hmd");
 			}
 			
 
 //            if($this->last)
-//                $this->dbh->query("UPDATE `cache` SET `access_time` = ".time().", `count`=".(intval($row['count'])+1)." WHERE `hmd`='$hmd'");
+//                $this->dbh->query("UPDATE `cache` SET `access_time` = ".time().", `count`=".(intval($row['count'])+1)." WHERE `hmd`=0x$hmd");
 
             return ($this->last ? $this->last : $default);
         }
 
-        function set($type, $key = NULL, $value = NULL, $time_to_expire = 604800)
+        function set($type, $key = NULL, $value = NULL, $time_to_expire = 86401)
         {
-			if($value == NULL && $time_to_expire == 604800)
+			if($value == NULL && $time_to_expire == 86401)
 			{
 				$value = $type;
 				if($key != NULL)
@@ -64,7 +64,7 @@
 
 			$tab = substr($hmd, 0, 2);
 
-            $this->dbh->query("REPLACE `cache_$tab` (`type`,`key`,`hmd`,`uri`,`value`,`access_time`,`create_time`,`expire_time`) VALUES ('".addslashes($type)."','".addslashes($key)."','$hmd','".addslashes($this->last_uri)."','".addslashes($value)."',".time().",".time().",".(time()+$time_to_expire).") ", true);
+            $this->dbh->query("REPLACE `cache_$tab` (`type`,`key`,`hmd`,`uri`,`value`,`access_time`,`create_time`,`expire_time`) VALUES ('".addslashes($type)."','".addslashes($key)."',0x$hmd,'".addslashes($this->last_uri)."','".addslashes($value)."',".time().",".time().",".(time()+$time_to_expire).") ", true);
 //			$GLOBALS['log_level'] = 2;
 
             return $this->last = $value;

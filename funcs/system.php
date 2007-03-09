@@ -18,16 +18,25 @@
 		return $db->get("SELECT `value` FROM hts_ext_system_data WHERE `key`='global_id';", false);
 	}
 
-	function new_id($engine)
+	function new_id($engine, $origin_id = NULL, $uri = NULL)
 	{
 		$db = &new DataBase('HTS');
 
-//		$db->insert('global_ids', array('engine' => $engine));
-		$db->query("INSERT INTO `global_ids` SET `engine` = '".addslashes($engine)."'");
+		$origin_id	= $origin_id	? ", origin_id = ".intval($origin_id) : "";
+		$uri		= $uri 			? ", uri = ".addslashes($uri) : "";
+
+		$db->query("INSERT INTO `global_ids` SET `engine` = '".addslashes($engine)."'$origin_id$uri");
 		$new_id = intval($db->last_id());
 		
 		if(!$new_id)
 			exit("Ошибка получения global id");
 			
 		return $new_id;
+	}
+
+	function uri_by_global_id($id)
+	{
+		$db = &new DataBase('HTS');
+
+		return $db->get("SELECT uri FROM global_ids WHERE id = ".intval($id));
 	}

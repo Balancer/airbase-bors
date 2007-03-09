@@ -111,7 +111,7 @@ function lcml($txt, $params = array ())
 		$GLOBALS['lcml']['cr_type'] = 'empty_as_para';
 
 	if ($GLOBALS['lcml']['cr_type'] == 'plain_text')
-		return rest_return($ch->set($ch_type, $ch_key, "<xmp>$txt</xmp>"), $saved_params);
+		return rest_return($ch->set("<xmp>$txt</xmp>", 86400*3), $saved_params);
 
 	if (empty ($page))
 		$page = '';
@@ -158,5 +158,5 @@ function lcml($txt, $params = array ())
 
 	//		echo "<xmp>Out: '$txt'</xmp>";
 
-	return rest_return($ch->set($ch_type, $ch_key, $txt, 86400*60), $saved_params);
+	return rest_return($ch->set($txt, 86400*3), $saved_params);
 }
