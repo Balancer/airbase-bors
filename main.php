@@ -75,9 +75,12 @@
 
 	$GLOBALS['ref'] = @$_SERVER['HTTP_REFERER'];
 
-	include_once("funcs/logs.php");
-	log_session_update();
-
+	if(empty($GLOBALS['cms']['disable']['log_session']))
+	{
+		include_once("funcs/logs.php");
+		log_session_update();
+	}
+	
 	include_once("funcs/handlers.php");
 
 	$GLOBALS['cms_patterns'] = array();

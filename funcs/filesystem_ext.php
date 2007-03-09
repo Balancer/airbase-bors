@@ -20,8 +20,8 @@
         if(!mkpath($pStrPath, $mode)) 
             return false;
 
-  		$err = mkdir($strPath, $mode);
-		chmod($strPath, $mode);
+  		$err = @mkdir($strPath, $mode);
+		@chmod($strPath, $mode);
 		return $err;
     }
 

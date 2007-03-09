@@ -9,6 +9,7 @@
 	function plugins_users_reputation_show_body($uri, $m)
 	{
 		require_once('funcs/modules/messages.php');
+		$GLOBALS['cms']['cache_static'] = false;
 
 		$uid = $data['user_id']	= intval($m[2]);
 		if(!$uid)
