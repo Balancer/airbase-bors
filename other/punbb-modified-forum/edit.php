@@ -110,6 +110,8 @@ if (isset($_POST['form_sent']))
 	$hide_smilies = isset($_POST['hide_smilies']) ? intval($_POST['hide_smilies']) : 0;
 	if ($hide_smilies != '1') $hide_smilies = '0';
 
+	include_once("funcs/search/index.php");
+
 	// Did everything go according to plan?
 	if (empty($errors) && !isset($_POST['preview']))
 	{
@@ -117,22 +119,22 @@ if (isset($_POST['form_sent']))
 
 		require PUN_ROOT.'include/search_idx.php';
 
+		index_body($id, $message);
 		if ($can_edit_subject)
 		{
 			// Update the topic and any redirect topics
-			$db->query('UPDATE '.$db->prefix.'topics SET subject=\''.$db->escape($subject).'\' WHERE id='.$cur_post['tid'].' OR moved_to='.$cur_post['tid']) or error('Unable to update topic', __FILE__, __LINE__, $db->error());
+			$db->query('UPDATE '.$db->prefix.'topics SET subject=\''.$db->escape($subject).'\' WHERE id='.$cur_post['tid'].' OR moved_to='.$cur_post['tid'])
+				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
 			// We changed the subject, so we need to take that into account when we update the search words
-			update_search_index('edit', $id, $message, $subject);
+			index_title($cur_post['tid'], $subject);
 		}
-		else
-			update_search_index('edit', $id, $message);
 
 		// Update the post
 		$db->query("UPDATE {$db->prefix}topics SET last_edit=".time()." WHERE id={$cur_post['tid']}")
 			or error('Unable to update post', __FILE__, __LINE__, $db->error());
 		$db->query('UPDATE '.$db->prefix.'posts SET hide_smilies=\''.$hide_smilies.'\''.$edited_sql.' WHERE id='.$id) or error('Unable to update post', __FILE__, __LINE__, $db->error());
-		$db->query("UPDATE {$db->prefix}messages SET message='".$db->escape($message)."' WHERE id=$id") 
+		$db->query("UPDATE {$db->prefix}messages SET message='".$db->escape($message)."', `html` = NULL WHERE id=$id") 
 			or error('Unable to update post', __FILE__, __LINE__, $db->error());
 
 		//Attachment Mod 2.0 Block Start

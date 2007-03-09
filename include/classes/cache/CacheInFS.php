@@ -78,14 +78,14 @@
 			{
 				$dir = $this->get_dir_name(md5($this->last_uri));
 				@symlink($file, "$dir/$hmd.cfs");
-				touch("$dir/$hmd.cfs", time() + $time_to_expire);
+				@touch("$dir/$hmd.cfs", time() + $time_to_expire);
 			}
 
 			if($key)
 			{
 				$dir = $this->get_dir_name(md5($key));
 				@symlink($file, "$dir/$hmd.cfs");
-				touch("$dir/$hmd.cfs", time() + $time_to_expire);
+				@touch("$dir/$hmd.cfs", time() + $time_to_expire);
 			}
 
             return $this->last = $value;

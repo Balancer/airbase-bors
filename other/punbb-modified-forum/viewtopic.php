@@ -34,7 +34,7 @@ define('PUN_ROOT', './');
 // If a post ID is specified we determine topic ID and page number so we can redirect to the correct message
 if($pid)
 {
-	$id = intval($cms_db->get("SELECT topic_id FROM posts WHERE id=$pid", false, 3600));
+	$id = intval($cms_db->get("SELECT topic_id FROM posts WHERE id=$pid"));
 	if(!$id)
 	{
 		require PUN_ROOT.'include/common.php';
@@ -42,7 +42,7 @@ if($pid)
 	}
 	
 	// Determine on what page the post is located (depending on $pun_user['disp_posts'])
-	$posts = $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted", false);
+	$posts = $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
 
 	for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
 		if ($posts[$i] == $pid)
@@ -279,7 +279,10 @@ if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun
 <table border="0" cellSpacing="0" cellPadding="0" class="noborder">
 	<tr>
 		<td class="topic_left_column" valign="top" style="border-style: none;">
-<?include("design/left.php");?>
+<?
+	if(!$pun_user['is_guest'])
+		include("design/left.php");
+?>
 		</td>
 		<td class="topic_middle_column" valign="top" style="border-style: none;">		
 <?php
@@ -301,8 +304,16 @@ $q = "
 		p.posted, 
 		p.edited, 
 		p.edited_by,
-		p.answer_to
-	FROM {$db->prefix}posts AS p 
+		p.answer_to,
+		up.posted as up_posted,
+		up.poster as up_poster,
+		m.message,
+		m.html,
+		cf.flag
+	FROM {$db->prefix}posts AS p
+		LEFT JOIN {$db->prefix}posts AS up ON (p.answer_to = up.id)
+		LEFT JOIN {$db->prefix}posts_cached_fields AS cf ON (p.id = cf.post_id)
+		LEFT JOIN {$db->prefix}messages AS m ON (p.id = m.id)
 	WHERE p.topic_id=$id 
 	ORDER BY p.id 
 	LIMIT $start_from, {$pun_user['disp_posts']}";
@@ -312,12 +323,28 @@ $result   = $db->query($q, false)
 
 $cdb = &new DataBase('punbb');
 
-include_once('funcs/users/geoip/get_flag.php');
+include_once($_SERVER['DOCUMENT_ROOT']."/cms/config.php");
+include_once("funcs/lcml.php");
 
 while ($cur_post = $db->fetch_assoc($result))
 {
-	$poster = $cdb->get("SELECT * FROM users  WHERE id = ".intval($cur_post['poster_id']));
+	if(empty($GLOBALS['bors']['cache']['punbb_user'][$cur_post['poster_id']]))
+	{
+		$poster = $cdb->get("SELECT * FROM users  WHERE id = ".intval($cur_post['poster_id']));
+		$GLOBALS['bors']['cache']['punbb_user'][$cur_post['poster_id']] = serialize($poster);
+	}
+	else
+		$poster = unserialize($GLOBALS['bors']['cache']['punbb_user'][$cur_post['poster_id']]);
 
+	if(empty($cur_post['flag']))
+	{
+		include_once('funcs/users/geoip/get_flag.php');
+		$cdb->insert_ignore('posts_cached_fields', array(
+			'post_id'	=> $cur_post['id'],
+			'flag'		=> $cur_post['flag'] = "".get_flag($cur_post['poster_ip']),
+		));
+	}
+	
 	$post_count++;
 	$user_avatar = '';
 	$user_info = array();
@@ -332,6 +359,9 @@ while ($cur_post = $db->fetch_assoc($result))
 
 		$size = max(6, 12 - intval(strlen($username)/3));
 
+		if(strlen($username) > 10)
+			$username = substr($username, 0, 10).' '.substr($username, 10);
+		
 		$userlink = "<a href=\"{$pun_config['root_uri']}/profile.php?id={$cur_post['poster_id']}\" style=\"font-size: {$size}pt;\">".$username.'</a>';
 
 		$user_title = get_title($poster);
@@ -433,38 +463,34 @@ while ($cur_post = $db->fetch_assoc($result))
 	$bg_switch = ($bg_switch) ? $bg_switch = false : $bg_switch = true;
 	$vtbg = ($bg_switch) ? ' roweven' : ' rowodd';
 
-	$message = $cdb->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
-
 	// Perform the main parsing of the message (BBCode, smilies, censor words etc)
-	$cur_post['message'] = parse_message($message, $cur_post['hide_smilies']);
+	if(empty($cur_post['html']))
+	{
+		$cur_post['message'] = parse_message($cur_post['message'], $cur_post['hide_smilies']);
+		$cdb->update('messages', "id = {$cur_post['id']}", array('html' => $cur_post['message']));
+	}
+	else
+		$cur_post['message'] = $cur_post['html'];
 
 	// Do signature parsing/caching
 	if ($poster['signature'] != '' && $pun_user['show_sig'] != '0')
 	{
-		if (isset($signature_cache[$cur_post['poster_id']]))
-			$signature = $signature_cache[$cur_post['poster_id']];
-		else
+		if(empty($poster['signature_html']))
 		{
-			include_once($_SERVER['DOCUMENT_ROOT']."/cms/config.php");
-			include_once("funcs/lcml.php");
 
-			$ch = &new Cache();
-			if(!($signature = $ch->get("lcml-compiled", md5($poster['signature']))))
-			{
-				$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = '/forum/post/'.intval(@$cur_post['id'])."/";
-			
-				$signature = $ch->set(lcml($poster['signature'], 
+			$signature = lcml($poster['signature'], 
 					array(
 						'cr_type' => 'save_cr',
 						'forum_type' => 'punbb',
 						'forum_base_uri' => 'http://balancer.ru/forum',
 						'sharp_not_comment' => true,
 						'html_disable' => true,
-				)));
-			}
+				));
 
-			$signature_cache[$poster['id']] = $signature;
+			$cdb->update('users', "id = {$poster['id']}", array('signature_html' => $signature));
 		}
+		else
+			$signature = $poster['signature_html'];
 	}
 
 	// Attachment Mod Block Start
@@ -503,7 +529,7 @@ while ($cur_post = $db->fetch_assoc($result))
 	}
 	// Attachment Mod Block End
 
-	$user_warn_count	= intval($cms_db->get("SELECT COUNT(*) FROM warnings WHERE user_id = ".intval($cur_post['poster_id'])." AND time > ".(time()-30*86400), true, 720));
+	$user_warn_count	= intval($poster['warnings']);
 	$user_warn = "";
 
 	if($user_warn_count)
@@ -529,14 +555,11 @@ while ($cur_post = $db->fetch_assoc($result))
 			<img id="post_<?echo $cur_post['id'];?>_moreimg" src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif" alt="*" />
 			<?echo $username;?></span></b>,
 	<?
-		echo get_flag($cur_post['poster_ip']);
+		echo $cur_post['flag'];
 	?> <a href="<? echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']); /*"*/ ?>
 	<span class="conr">#<?php echo ($start_from + $post_count) ?>&nbsp;</span></a><?
 	if($cur_post['answer_to'])
-	{
-		$uplink = $cms_db->get("SELECT poster, posted FROM posts WHERE id = ".intval($cur_post['answer_to']), true, 86400*30);
-		echo "; Ответ на <a href=\"{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['answer_to']}#p{$cur_post['answer_to']}\">{$uplink['poster']} (". format_time($uplink['posted']) . ")</a>";
-	}
+		echo "; Ответ на <a href=\"{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['answer_to']}#p{$cur_post['answer_to']}\">{$cur_post['up_poster']} (". format_time($cur_post['up_posted']) . ")</a>";
 ?>
 	</h2>
 	<div class="box">

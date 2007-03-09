@@ -233,7 +233,7 @@
 			$this->fetch();
 			$this->free();
 
-			if($ch)
+			if($ch && $this->row!== false)
 				$ch->set(serialize($this->row), $cached);
 				
 			return set_global_key("db_get", $query, $this->row);
@@ -269,7 +269,7 @@
 
 			$this->free();
 
-			if($ch)
+			if($ch && $res)
 				$ch->set(serialize($res), $cached);
 
 			return $res;
@@ -319,6 +319,11 @@
 			$this->query("INSERT INTO $table ".$this->make_string_values($fields));
 		}
 
+		function insert_ignore($table, $fields)
+		{
+			$this->query("INSERT IGNORE $table ".$this->make_string_values($fields));
+		}
+
 		function replace($table, $fields)
 		{
 			$this->query("REPLACE $table ".$this->make_string_values($fields));
@@ -346,6 +351,11 @@
 		function update($table, $where, $fields)
 		{
 			$res = $this->query("UPDATE `".addslashes($table)."` ".$this->make_string_set($fields)." WHERE $where");
+		}
+
+		function update_low_priority($table, $where, $fields)
+		{
+			$res = $this->query("UPDATE LOW_PRIORITY `".addslashes($table)."` ".$this->make_string_set($fields)." WHERE $where");
 		}
 
 		//TODO: Change 'where' to array-type
