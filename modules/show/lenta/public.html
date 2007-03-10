@@ -1,24 +1,24 @@
-{section name=i loop=$topics}
+{foreach from=$topics item=t}
 <table class="btab" cellSpacing="0" style="width: 98%;">
 
-<caption><a href="{$topics[i].uri}" style="color: white; font-size: 80%;">{$topics[i].subject}</a></caption>
-<tr><td><strong>{$topics[i].poster}, {$topics[i].posted|strftime:"%Y-%m-%d %H:%M"}</strong>, <i><a href="http://balancer.ru/forum/{$topics[i].forum.id}/">{$topics[i].forum.forum_name}</a></i>.
+<caption><a href="http://balancer.ru/forum/punbb/viewtopic.php?id={$t.id}" style="color: white; font-size: 80%;">{$t.subject}</a></caption>
+<tr><td><strong>{$t.poster}, {$t.posted|strftime:"%Y-%m-%d %H:%M"}</strong>, <i><a href="http://balancer.ru/forum/{$t.forum_id}/">{$t.forum_name}</a></i>.
 <div style="width: 100px; float: right; margin: 0px 0px 8px 16px; display: inline; border: 1px solid; background-color: white;">
 	<div align="center">
-	{if $topics[i].user.avatar}<div style="width: 100px; height: 100px; text-align: center; vertical-align: middle; overflow: hidden;">{$topics[i].user.avatar}</div>{/if}
-	<div style="font-size: x-small; font-weight: 900;">{$topics[i].user.username}</div>
-	{if $topics[i].user.title}<div style="font-size: xx-small;">{$topics[i].user.title}</div>{/if}
+	{if $t.use_avatar}<div style="width: 100px; height: 100px; text-align: center; vertical-align: middle; overflow: hidden;"><img src="http://balancer.ru/forum/punbb/img/avatars/{$t.use_avatar}" width="{$t.avatar_width}" height="$t.avatar_height" alt="" /></div>{/if}
+	<div style="font-size: 9pt; font-weight: 900;">{$t.poster}</div>
+	{if $t.u_title}<div style="font-size: 8pt;">{$t.u_title}</div>{else}{if $t.g_user_title}<div style="font-size: 8pt;">{$t.g_user_title}</div>{/if}{/if}
 	</div>
 </div>
 <br/>
 <br/>
 
-{$topics[i].message}
-{if $topics[i].more}<div align="right"><i><a href="{$topics[i].uri}">Дальше &#187;&#187;&#187;</a></i></div>{/if}
+{$t.message}
+{if $t.more}<div align="right"><i><a href="http://balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">Дальше &#187;&#187;&#187;</a></i></div>{/if}
 <div style="font-size: xx-small; border-top: 1px solid; margin-top: 16px;">
-<a href="{$topics[i].uri}">Ссылка - </a>
-{$topics[i].num_replies} {$topics[i].num_replies|sklon:"комментарий":"комментария":"комментариев"},
-{$topics[i].num_views} {$topics[i].num_views|sklon:"просмотр":"просмотра":"просмотров"}.
+<a href="http://balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">Ссылка</a> -
+{$t.num_replies} {$topics[i].num_replies|sklon:"комментарий":"комментария":"комментариев"},
+{$t.num_views} {$topics[i].num_views|sklon:"просмотр":"просмотра":"просмотров"}.
 </div>
 </td></tr></table>
-{/section}
+{/foreach}
