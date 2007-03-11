@@ -64,6 +64,18 @@ function is_today($time)
 		return strftime("%d.%m.%Y %H:%M",$time);
 	}
 
+
+	function airbase_time($time)
+	{
+		if(is_today($time))
+			return strftime("сегодня, %H:%M",$time);
+	
+		if(time() - $time < 2*86400 && strftime("%d",$time) == strftime("%d",time()-86400))
+			return ec("вчера, ").strftime("%H:%M",$time);
+		
+		return strftime("%Y-%m-%d",$time);
+	}
+
 	function news_short_time($time)
 	{
 		if(is_today($time))

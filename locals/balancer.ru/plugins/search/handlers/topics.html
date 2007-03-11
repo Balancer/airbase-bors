@@ -1,0 +1,35 @@
+<form method="get" action="{$main_uri}">
+<input type="text" name="q" value="{$q|addslashes}" />
+сортировать по: <select name="order">
+<option value="ud">дате крайнего ответа, убыв.</option>
+<option value="cd">дате создания, убыв.</option>
+<option value="ca">дате создания, возр.</option>
+<option value="rd">числу ответов, убыв.</option>
+<option value="vd">числу просмотров, убыв.</option>
+</select>
+<input type="submit" value="искать" />
+</form>
+{if $topics !== false}
+<table class="btab" cellSpacing="0">
+<tr>
+	<th>форум</th>
+	<th>тема</th>
+	<th>ответов</th>
+	<th>просмотров</th>
+	<th>создана</th>
+	<th>крайний ответ</th>
+</tr>
+{foreach from=$topics item=t}
+<tr>
+	<td style="font-size: 8pt;"><a href="http://balancer.ru/forum/punbb/viewforum.php?id={$t.forum_id}">{$t.forum_name}</a></td>
+	<td style="font-size: 8pt;"><a href="http://balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">{$t.subject}</a></td>
+	<td style="font-size: 8pt;">{$t.num_replies}</td>
+	<td style="font-size: 8pt;">{$t.num_views}</td>
+	<td style="font-size: 8pt;">{$t.posted|airbase_time}</td>
+	<td style="font-size: 8pt;">{$t.last_post|airbase_time}</td>
+</tr>
+{foreachelse}
+<li>Не найдено</li>
+{/foreach}
+</table>
+{/if}
