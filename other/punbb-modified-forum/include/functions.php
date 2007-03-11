@@ -248,7 +248,7 @@ function generate_navlinks()
 	if ($pun_user['is_guest'])
 	{
 		if ($pun_user['g_search'] == '1')
-			$links[] = "<li id=\"navsearch\"><a href=\"{$pun_config['root_uri']}/search.php\">".$lang_common['Search'].'</a>';
+			$links[] = "<li id=\"navsearch\"><a href=\"http://balancer.ru/search/topic_titles/\">".$lang_common['Search'].'</a>';
 
 		$links[] = "<li id=\"navregister\"><a href=\"{$pun_config['root_uri']}/register.php\">".$lang_common['Register'].'</a>';
 		$links[] = "<li id=\"navlogin\"><a href=\"{$pun_config['root_uri']}/login.php\">".$lang_common['Login'].'</a>';
@@ -260,14 +260,14 @@ function generate_navlinks()
 		if ($pun_user['g_id'] > PUN_MOD)
 		{
 			if ($pun_user['g_search'] == '1')
-				$links[] = "<li id=\"navsearch\"><a href=\"{$pun_config['root_uri']}/search.php\">".$lang_common['Search'].'</a>';
+				$links[] = "<li id=\"navsearch\"><a href=\"http://balancer.ru/search/topic_titles/\">".$lang_common['Search'].'</a>';
 
 			$links[] = "<li id=\"navprofile\"><a href=\"{$pun_config['root_uri']}/profile.php?id={$pun_user['id']}\">".$lang_common['Profile'].'</a>';
 			$links[] = "<li id=\"navlogout\"><a href=\"{$pun_config['root_uri']}/login.php?action=out&amp;id={$pun_user['id']}\">".$lang_common['Logout'].'</a>';
 		}
 		else
 		{
-			$links[] = "<li id=\"navsearch\"><a href=\"{$pun_config['root_uri']}/search.php\">".$lang_common['Search'].'</a>';
+			$links[] = "<li id=\"navsearch\"><a href=\"http://balancer.ru/search/topic_titles/\">".$lang_common['Search'].'</a>';
 			$links[] = "<li id=\"navprofile\"><a href=\"{$pun_config['root_uri']}/profile.php?id={$pun_user['id']}\">".$lang_common['Profile'].'</a>';
 			$links[] = "<li id=\"navadmin\"><a href=\"{$pun_config['root_uri']}/admin_index.php\">".$lang_common['Admin'].'</a>';
 			$links[] = "<li id=\"navlogout\"><a href=\"{$pun_config['root_uri']}/login.php?action=out&amp;id={$pun_user['id']}\">".$lang_common['Logout'].'</a>';

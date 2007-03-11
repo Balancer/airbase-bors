@@ -201,7 +201,7 @@ require PUN_ROOT.'header.php';
 //exit("***");
 
 // Increment "num_views" for topic
-$low_prio = ($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
+$low_prio = '';//($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
 $db->query("UPDATE $low_prio {$db->prefix}topics SET num_views=num_views+1 WHERE id=$id") 
 	or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 $count = intval($cms_db->get("SELECT count FROM topic_visits WHERE user_id=".intval($pun_user['id'])." AND topic_id=".intval($id))) + 1;
@@ -249,7 +249,7 @@ if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun
 	$GLOBALS['global_cache'] = NULL;
 
 	// Increment "num_views" for topic
-	$low_prio = ($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
+	$low_prio = '';//($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
 	$db->query('UPDATE '.$low_prio.$db->prefix.'topics SET num_views=num_views+1 WHERE id='.$id) or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
 	$forum_id = $cur_topic['forum_id'];
@@ -360,7 +360,24 @@ while ($cur_post = $db->fetch_assoc($result))
 		$size = max(6, 12 - intval(strlen($username)/3));
 
 		if(strlen($username) > 10)
-			$username = substr($username, 0, 10).' '.substr($username, 10);
+		{
+			$username = str_replace('_', '_ ', $username);
+		
+			$count = 0;
+			for($i=0; $i<strlen($username); $i++)
+			{
+				if(!preg_match("!\s|\-!", $username{$i}))
+					$count++;
+				else
+					$count = 0;
+				
+				if($count >= 12)
+				{
+					$username = substr($username, 0, $i).' '.substr($username, $i);
+					$count = 0;
+				}	
+			}
+		}
 		
 		$userlink = "<a href=\"{$pun_config['root_uri']}/profile.php?id={$cur_post['poster_id']}\" style=\"font-size: {$size}pt;\">".$username.'</a>';
 
@@ -369,15 +386,8 @@ while ($cur_post = $db->fetch_assoc($result))
 		if ($pun_config['o_censoring'] == '1')
 			$user_title = censor_words($user_title);
 
-		if ($pun_config['o_avatars'] == '1' && $poster['use_avatar'] == '1' && ($pun_user['show_avatars'] != '0' || $pun_user['id'] <= 1))
-		{
-			if ($img_size = @getimagesize($pun_config['o_avatars_dir'].'/'.$cur_post['poster_id'].'.gif'))
-				$user_avatar = "<img src=\"{$pun_config['root_uri']}/".$pun_config['o_avatars_dir'].'/'.$cur_post['poster_id'].'.gif" '.$img_size[3].' alt="" />';
-			else if ($img_size = @getimagesize($pun_config['o_avatars_dir'].'/'.$cur_post['poster_id'].'.jpg'))
-				$user_avatar = "<img src=\"{$pun_config['root_uri']}/".$pun_config['o_avatars_dir'].'/'.$cur_post['poster_id'].'.jpg" '.$img_size[3].' alt="" />';
-			else if ($img_size = @getimagesize($pun_config['o_avatars_dir'].'/'.$cur_post['poster_id'].'.png'))
-				$user_avatar = "<img src=\"{$pun_config['root_uri']}/".$pun_config['o_avatars_dir'].'/'.$cur_post['poster_id'].'.png" '.$img_size[3].' alt="" />';
-		}
+		if ($pun_config['o_avatars'] == '1' && $poster['use_avatar'] && ($pun_user['show_avatars'] != '0' || $pun_user['id'] <= 1))
+			$user_avatar = "<img src=\"{$pun_config['root_uri']}/{$pun_config['o_avatars_dir']}/{$poster['use_avatar']}\" width=\"{$poster['avatar_width']}\" height=\"{$poster['avatar_height']}\" alt=\"\" />";
 		else
 			$user_avatar = '';
 

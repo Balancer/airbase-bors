@@ -71,6 +71,11 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 			|| $_SERVER['REMOTE_ADDR'] == '208.65.71.66'
 			|| $_SERVER['REMOTE_ADDR'] == '217.21.40.1'
 			|| $_SERVER['REMOTE_ADDR'] == '84.54.186.11'
+			|| $_SERVER['REMOTE_ADDR'] == '80.94.160.207'
+			|| $_SERVER['REMOTE_ADDR'] == '91.76.20.211'
+			|| $_SERVER['REMOTE_ADDR'] == '88.204.203.250'
+			|| $_SERVER['REMOTE_ADDR'] == '217.14.97.163'
+			|| $_SERVER['REMOTE_ADDR'] == '91.145.222.44'
 		)
 			message("Ваш IP заблокирован в аттачах за создание очень высокого зарубежного трафика. Подробнее - http://balancer.ru/forum/punbb/viewtopic.php?pid=967737#p967737 ".$anon);
 		

@@ -275,7 +275,7 @@ else if ($action == 'change_email')
 <div class="blockform">
 	<h2><span><?php echo $lang_profile['Change e-mail'] ?></span></h2>
 	<div class="box">
-		<form id="change_email" method="post" action="profile.php?action=change_email&amp;id=<?php echo $id ?>" id="change_email" onsubmit="return process_form(this)">
+		<form id="change_email" method="post" action="profile.php?action=change_email&amp;id=<?php echo $id; /*"*/?>" id="change_email" onsubmit="return process_form(this)">
 			<div class="inform">
 				<fieldset>
 					<legend><?php echo $lang_profile['E-mail legend'] ?></legend>
@@ -287,7 +287,7 @@ else if ($action == 'change_email')
 					</div>
 				</fieldset>
 			</div>
-			<p><input type="submit" name="new_email" value="<?php echo $lang_common['Submit'] ?>" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
+			<p><input type="submit" name="new_email" value="<?php echo $lang_common['Submit']; /*"*/ ?>" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
 		</form>
 	</div>
 </div>
@@ -388,8 +388,18 @@ else if ($action == 'upload_avatar' || $action == 'upload_avatar2')
 		else
 			message($lang_profile['Unknown failure']);
 
+		$avatars_dir = '/var/www/balancer.ru/htdocs/forum/punbb/img/avatars';
+		
+		if($img_size = @getimagesize("$avatars_dir/$uid.gif"))
+			$user_avatar = "$uid.gif";
+		elseif($img_size = @getimagesize("$avatars_dir/$uid.png"))
+			$user_avatar = "$uid.png";
+		elseif($img_size = @getimagesize("$avatars_dir/$uid.jpg"))
+			$user_avatar = "$uid.jpg";
+
 		// Enable use_avatar (seems sane since the user just uploaded an avatar)
-		$db->query('UPDATE '.$db->prefix.'users SET use_avatar=1 WHERE id='.$id) or error('Unable to update avatar state', __FILE__, __LINE__, $db->error());
+		$db->query("UPDATE {$db->prefix}users SET use_avatar='".addslashes($user_avatar)."' avatar_width={$img_size[0]}, avatar_height={$img_size[0]} WHERE id=$id")
+			or error('Unable to update avatar state', __FILE__, __LINE__, $db->error());
 
 		redirect('profile.php?section=personality&amp;id='.$id, $lang_profile['Avatar upload redirect']);
 	}
@@ -437,7 +447,7 @@ else if ($action == 'delete_avatar')
 	@unlink($pun_config['o_avatars_dir'].'/'.$id.'.gif');
 
 	// Disable use_avatar
-	$db->query('UPDATE '.$db->prefix.'users SET use_avatar=0 WHERE id='.$id) or error('Unable to update avatar state', __FILE__, __LINE__, $db->error());
+	$db->query('UPDATE '.$db->prefix.'users SET use_avatar='' WHERE id='.$id) or error('Unable to update avatar state', __FILE__, __LINE__, $db->error());
 
 	redirect('profile.php?section=personality&amp;id='.$id, $lang_profile['Avatar deleted redirect']);
 }
@@ -791,7 +801,7 @@ else if (isset($_POST['form_sent']))
 				$form['signature'] = preparse_bbcode($form['signature'], $foo, true);
 			}
 
-			if (!isset($form['use_avatar']) || $form['use_avatar'] != '1') $form['use_avatar'] = '0';
+			if (!isset($form['use_avatar']) || !$form['use_avatar']) $form['use_avatar'] = '';
 
 			break;
 		}
@@ -891,7 +901,7 @@ else if (isset($_POST['form_sent']))
 }
 
 
-$result = $db->query('SELECT u.username, u.email, u.title, u.realname, u.url, u.jabber, u.icq, u.msn, u.aim, u.yahoo, u.location, u.use_avatar, u.signature, u.disp_topics, u.disp_posts, u.email_setting, u.save_pass, u.notify_with_post, u.show_smilies, u.show_img, u.show_img_sig, u.show_avatars, u.show_sig, u.timezone, u.language, u.style, u.num_posts, u.last_post, u.last_visit, u.registered, u.registration_ip, u.admin_note, g.g_id, g.g_user_title FROM '.$db->prefix.'users AS u LEFT JOIN '.$db->prefix.'groups AS g ON g.g_id=u.group_id WHERE u.id='.$id) or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());
+$result = $db->query('SELECT u.username, u.email, u.title, u.realname, u.url, u.jabber, u.icq, u.msn, u.aim, u.yahoo, u.location, u.use_avatar, u.avatar_height, u.avatar_width, u.signature, u.disp_topics, u.disp_posts, u.email_setting, u.save_pass, u.notify_with_post, u.show_smilies, u.show_img, u.show_img_sig, u.show_avatars, u.show_sig, u.timezone, u.language, u.style, u.num_posts, u.last_post, u.last_visit, u.registered, u.registration_ip, u.admin_note, g.g_id, g.g_user_title FROM '.$db->prefix.'users AS u LEFT JOIN '.$db->prefix.'groups AS g ON g.g_id=u.group_id WHERE u.id='.$id) or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());
 if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
 
@@ -936,17 +946,8 @@ if ($pun_user['id'] != $id &&
 
 	if ($pun_config['o_avatars'] == '1')
 	{
-		if ($user['use_avatar'] == '1')
-		{
-			if ($img_size = @getimagesize($pun_config['o_avatars_dir'].'/'.$id.'.gif'))
-				$avatar_field = "<img src=\"{$pun_config['root_uri']}/".$pun_config['o_avatars_dir'].'/'.$id.'.gif" '.$img_size[3].' alt="" />';
-			else if ($img_size = @getimagesize($pun_config['o_avatars_dir'].'/'.$id.'.jpg'))
-				$avatar_field = "<img src=\"{$pun_config['root_uri']}/".$pun_config['o_avatars_dir'].'/'.$id.'.jpg" '.$img_size[3].' alt="" />';
-			else if ($img_size = @getimagesize($pun_config['o_avatars_dir'].'/'.$id.'.png'))
-				$avatar_field = "<img src=\"{$pun_config['root_uri']}/".$pun_config['o_avatars_dir'].'/'.$id.'.png" '.$img_size[3].' alt="" />';
-			else
-				$avatar_field = $lang_profile['No avatar'];
-		}
+		if ($user['use_avatar'])
+			$avatar_field = "<img src=\"{$pun_config['root_uri']}/{$pun_config['o_avatars_dir']}/{$user['use_avatar']}\" width=\"{$user['avatar_width']}\" height=\"{$user['avatar_height']}\" alt=\"\" />";
 		else
 			$avatar_field = $lang_profile['No avatar'];
 	}
@@ -1317,7 +1318,7 @@ else
 <?php if (isset($avatar_format)): ?>					<img src="<?echo $pun_config['root_uri'];?>/<?php echo $pun_config['o_avatars_dir'].'/'.$id.'.'.$avatar_format;/*"*/?>" <?php echo $img_size[3] ?> alt="" />
 <?php endif; ?>					<p><?php echo $lang_profile['Avatar info'] ?></p>
 							<div class="rbox">
-								<label><input type="checkbox" name="form[use_avatar]" value="1"<?php if ($user['use_avatar'] == '1') echo ' checked="checked"' ?> /><?php echo $lang_profile['Use avatar'] ?><br /></label>
+								<label><input type="checkbox" name="form[use_avatar]" value="1"<?php if ($user['use_avatar']) echo ' checked="checked"' ?> /><?php echo $lang_profile['Use avatar'] ?><br /></label>
 							</div>
 							<p class="clearb"><?php echo $avatar_field ?></p>
 						</div>

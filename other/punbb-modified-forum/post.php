@@ -389,6 +389,10 @@ if (isset($_POST['form_sent']))
 			}
 
 			$cms_db->insert('messages', array('id' => $new_pid, 'message' => $message));
+			$cms_db->update('topics', "id=$new_tid", array(
+				'first_pid' => $new_pid,
+				'poster_id' => $pun_user['id'],
+			));
 
 			// Update the topic with last_post_id
 
@@ -411,7 +415,7 @@ if (isset($_POST['form_sent']))
 		// If the posting user is logged in, increment his/her post count
 		if (!$pun_user['is_guest'])
 		{
-			$low_prio = ($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
+			$low_prio = '';//($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
 			$db->query('UPDATE '.$low_prio.$db->prefix.'users SET num_posts=num_posts+1, last_post='.$now.' WHERE id='.$pun_user['id']) or error('Unable to update user', __FILE__, __LINE__, $db->error());
 		}
 
