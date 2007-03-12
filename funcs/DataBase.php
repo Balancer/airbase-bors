@@ -165,7 +165,7 @@
 
 //			print_r($this->row);
 
-			if(get_magic_quotes_gpc())
+			if($GLOBALS['bors']['config']['gpc'])
 			{
 				if(is_array($this->row))
 					if(sizeof($this->row)==1)
@@ -222,8 +222,11 @@
 			if($cached !== false)
 			{
 				$ch = &new Cache();
-				if($ch->get("DataBaseQuery:{$this->db_name}", $query))
+				if($ch->get("DataBaseQuery:{$this->db_name}", $query) !== NULL)
+				{
+//					echo "*****get*****$query******************";
 					return unserialize($ch->last());
+				}
 			}
 			
 //			if(is_global_key("db_get",$query)) 
@@ -233,10 +236,12 @@
 			$this->fetch();
 			$this->free();
 
-			if($ch && $this->row!== false)
+//			echo "res = {$this->row}";
+
+			if($ch/* && $this->row !== false*/)
 				$ch->set(serialize($this->row), $cached);
 				
-			return set_global_key("db_get", $query, $this->row);
+			return $this->row;//  set_global_key("db_get", $query, $this->row);
 		}
 
 		function loop($func, $query)
@@ -258,18 +263,28 @@
 			{
 				$ch = &new Cache();
 				if($ch->get("DataBaseQuery:{$this->db_name}", $query))
+				{
+//					echo "*****arr*****$query******************";
 					return unserialize($ch->last());
+				}
 			}
 
 			$res=array();
+//			$found = false;
+			
 			$this->query($query, $ignore_error);
 			
 			while($this->fetch()!==false)
+			{
+//				$found = true;
 				$res[]=$this->row;
+			}
 
 			$this->free();
 
-			if($ch && $res)
+//			echo "res = ".print_r($res,true).", ch=".($ch!=NULL).",$cached";
+
+			if($ch/* && $found*/)
 				$ch->set(serialize($res), $cached);
 
 			return $res;
