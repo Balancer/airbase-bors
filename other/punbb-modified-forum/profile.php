@@ -413,19 +413,19 @@ else if ($action == 'upload_avatar' || $action == 'upload_avatar2')
 <div class="blockform">
 	<h2><span><?php echo $lang_profile['Upload avatar'] ?></span></h2>
 	<div class="box">
-		<form id="upload_avatar" method="post" enctype="multipart/form-data" action="profile.php?action=upload_avatar2&amp;id=<?php echo $id ?>" onsubmit="return process_form(this)">
+		<form id="upload_avatar" method="post" enctype="multipart/form-data" action="profile.php?action=upload_avatar2&amp;id=<?php echo $id; /*"*/ ?>" onsubmit="return process_form(this)">
 			<div class="inform">
 				<fieldset>
 					<legend><?php echo $lang_profile['Upload avatar legend'] ?></legend>
 					<div class="infldset">
 						<input type="hidden" name="form_sent" value="1" />
-						<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $pun_config['o_avatars_size'] ?>" />
+						<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $pun_config['o_avatars_size'];/*"*/ ?>" />
 						<label><strong><?php echo $lang_profile['File'] ?></strong><br /><input name="req_file" type="file" size="40" /><br /></label>
 						<p><?php echo $lang_profile['Avatar desc'].' '.$pun_config['o_avatars_width'].' x '.$pun_config['o_avatars_height'].' '.$lang_profile['pixels'].' '.$lang_common['and'].' '.$pun_config['o_avatars_size'].' '.$lang_profile['bytes'].' ('.ceil($pun_config['o_avatars_size'] / 1024) ?> KB).</p>
 					</div>
 				</fieldset>
 			</div>
-			<p><input type="submit" name="upload" value="<?php echo $lang_profile['Upload'] ?>" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
+			<p><input type="submit" name="upload" value="<?php echo $lang_profile['Upload'];/*"*/ ?>" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
 		</form>
 	</div>
 </div>
@@ -447,7 +447,8 @@ else if ($action == 'delete_avatar')
 	@unlink($pun_config['o_avatars_dir'].'/'.$id.'.gif');
 
 	// Disable use_avatar
-	$db->query('UPDATE '.$db->prefix.'users SET use_avatar='' WHERE id='.$id) or error('Unable to update avatar state', __FILE__, __LINE__, $db->error());
+	$db->query("UPDATE {$db->prefix}users SET use_avatar='' WHERE id=$id")
+		or error('Unable to update avatar state', __FILE__, __LINE__, $db->error());
 
 	redirect('profile.php?section=personality&amp;id='.$id, $lang_profile['Avatar deleted redirect']);
 }
