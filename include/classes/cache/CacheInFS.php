@@ -1,5 +1,5 @@
 <?
-	$GLOBALS['bors']['config']['cache_in_fs_path'] = '/var/cache/fs-cache/';
+	$GLOBALS['bors']['config']['cache_in_fs_path'] = '/var/tmp/fs-cache/';
 	// $_SERVER['DOCUMENT_ROOT']."/cache/fs/";
 
 	include_once("funcs/filesystem_ext.php");
@@ -29,9 +29,9 @@
 			
 //			echo "mod = ".strftime("%Y-%m-%d %H:%M:%S\n", filemtime($file));
 
+//			echo "*($key,cd={$GLOBALS['cms']['cache_disabled']},f=$file,mt=".strftime("%Y-%m-%d %H:%M", @filemtime($file)).")<br />";
 			if(@filemtime($file) > time())
 			{
-//				echo "*";
 				return $this->last = file_get_contents($file);
 			}
 			
@@ -70,7 +70,10 @@
 		
             $hmd = md5("$type:$key");
 			
+
 			$file = $this->get_file_name($hmd);
+			
+//			echo "wr($key)=$file:$value:ttl=$time_to_expire<br />";
 			
 			file_put_contents($file, $value);
 			touch($file, time() + $time_to_expire);
