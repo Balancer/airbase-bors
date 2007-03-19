@@ -39,23 +39,29 @@ if ($id < 1)
 require PUN_ROOT.'lang/'.$pun_user['language'].'/forum.php';
 
 $cms_db = &new DataBase('punbb');
-$count = intval($cms_db->get("SELECT count FROM forum_visits WHERE user_id=".intval($pun_user['id'])." AND forum_id=".intval($id))) + 1;
-$data = array(
-		'forum_id' => $id,
-		'user_id' => $pun_user['id'],
-		'count' => $count,
-		'last_visit' => time(),
-	);
-if($count == 1)
-	$data['first_visit'] = time();
 
-$cms_db->store(
-	"{$db->prefix}forum_visits", 
-	"user_id=".intval($pun_user['id'])." AND forum_id=".intval($id),
-	$data,
-	false,
-	array('priority' => 'low')
-);
+if($pun_user['id'] > 1)
+{
+	$count = intval($cms_db->get("SELECT count FROM forum_visits WHERE user_id=".intval($pun_user['id'])." AND forum_id=".intval($id))) + 1;
+
+	$data = array(
+			'forum_id' => $id,
+			'user_id' => $pun_user['id'],
+			'count' => $count,
+			'last_visit' => time(),
+	);
+
+	if($count == 1)
+		$data['first_visit'] = time();
+
+	$cms_db->store(
+		"{$db->prefix}forum_visits", 
+		"user_id=".intval($pun_user['id'])." AND forum_id=".intval($id),
+		$data,
+		false,
+		array('priority' => 'low')
+	);
+}
 
 if(empty($pun_user['g_id']))
 	$pun_user['g_id'] = 3;
@@ -157,8 +163,9 @@ else
 	}
 }
 
-foreach($cms_db->get_array("SELECT topic_id, last_visit FROM topic_visits WHERE user_id=".intval($pun_user['id'])) as $row)
-	$visits[$row['topic_id']] = $row['last_visit'];
+if($pun_user['id'] > 1)
+	foreach($cms_db->get_array("SELECT topic_id, last_visit FROM topic_visits WHERE user_id=".intval($pun_user['id'])) as $row)
+		$visits[$row['topic_id']] = $row['last_visit'];
 
 $result = $db->query($sql) or error('Unable to fetch topic list', __FILE__, __LINE__, $db->error());
 

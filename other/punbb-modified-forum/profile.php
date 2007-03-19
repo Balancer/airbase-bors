@@ -383,22 +383,24 @@ else if ($action == 'upload_avatar' || $action == 'upload_avatar2')
 			@unlink($pun_config['o_avatars_dir'].'/'.$id.$extensions[1]);
 			@unlink($pun_config['o_avatars_dir'].'/'.$id.$extensions[2]);
 			@rename($pun_config['o_avatars_dir'].'/'.$id.'.tmp', $pun_config['o_avatars_dir'].'/'.$id.$extensions[0]);
-			@chmod($pun_config['o_avatars_dir'].'/'.$id.$extensions[0], 0644);
+			@chmod($pun_config['o_avatars_dir'].'/'.$id.$extensions[0], 0666);
 		}
 		else
 			message($lang_profile['Unknown failure']);
 
 		$avatars_dir = '/var/www/balancer.ru/htdocs/forum/punbb/img/avatars';
 		
-		if($img_size = @getimagesize("$avatars_dir/$uid.gif"))
-			$user_avatar = "$uid.gif";
-		elseif($img_size = @getimagesize("$avatars_dir/$uid.png"))
-			$user_avatar = "$uid.png";
-		elseif($img_size = @getimagesize("$avatars_dir/$uid.jpg"))
-			$user_avatar = "$uid.jpg";
+		$user_avatar = "";
+		
+		if($img_size = @getimagesize("$avatars_dir/$id.gif"))
+			$user_avatar = "$id.gif";
+		elseif($img_size = @getimagesize("$avatars_dir/$id.png"))
+			$user_avatar = "$id.png";
+		elseif($img_size = @getimagesize("$avatars_dir/$id.jpg"))
+			$user_avatar = "$id.jpg";
 
 		// Enable use_avatar (seems sane since the user just uploaded an avatar)
-		$db->query("UPDATE {$db->prefix}users SET use_avatar='".addslashes($user_avatar)."' avatar_width={$img_size[0]}, avatar_height={$img_size[0]} WHERE id=$id")
+		$db->query("UPDATE {$db->prefix}users SET use_avatar='".addslashes($user_avatar)."', avatar_width={$img_size[0]}, avatar_height={$img_size[0]} WHERE id=$id")
 			or error('Unable to update avatar state', __FILE__, __LINE__, $db->error());
 
 		redirect('profile.php?section=personality&amp;id='.$id, $lang_profile['Avatar upload redirect']);
@@ -779,7 +781,7 @@ else if (isset($_POST['form_sent']))
 
 			break;
 		}
-
+/*"*/
 		case 'personality':
 		{
 			$form = extract_elements(array('use_avatar'));
@@ -852,6 +854,7 @@ else if (isset($_POST['form_sent']))
 
 	// Singlequotes around non-empty values and NULL for empty values
 	$temp = array();
+	$form['signature_html'] = '';
 	while (list($key, $input) = @each($form))
 	{
 		$value = ($input !== '') ? '\''.$db->escape($input).'\'' : 'NULL';
@@ -1319,7 +1322,7 @@ else
 <?php if (isset($avatar_format)): ?>					<img src="<?echo $pun_config['root_uri'];?>/<?php echo $pun_config['o_avatars_dir'].'/'.$id.'.'.$avatar_format;/*"*/?>" <?php echo $img_size[3] ?> alt="" />
 <?php endif; ?>					<p><?php echo $lang_profile['Avatar info'] ?></p>
 							<div class="rbox">
-								<label><input type="checkbox" name="form[use_avatar]" value="1"<?php if ($user['use_avatar']) echo ' checked="checked"' ?> /><?php echo $lang_profile['Use avatar'] ?><br /></label>
+								<label><input type="checkbox" name="form[use_avatar]" value="<?echo $user['use_avatar'];/*"*/?>"<?php if ($user['use_avatar']) echo ' checked="checked"' ?> /><?php echo $lang_profile['Use avatar'] ?><br /></label>
 							</div>
 							<p class="clearb"><?php echo $avatar_field ?></p>
 						</div>

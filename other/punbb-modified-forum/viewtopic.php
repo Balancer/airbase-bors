@@ -29,12 +29,17 @@ include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 include_once("funcs/DataBase.php");
 $cms_db = &new DataBase('punbb');
 
+$archive_loaded = false;
+
 define('PUN_ROOT', './');
 
 // If a post ID is specified we determine topic ID and page number so we can redirect to the correct message
 if($pid)
 {
 	$id = intval($cms_db->get("SELECT topic_id FROM posts WHERE id=$pid"));
+	if(!$id)
+		$id = intval($cms_db->get("SELECT topic_id FROM posts_archive WHERE id=$pid"));
+	
 	if(!$id)
 	{
 		require PUN_ROOT.'include/common.php';
@@ -43,6 +48,12 @@ if($pid)
 	
 	// Determine on what page the post is located (depending on $pun_user['disp_posts'])
 	$posts = $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
+	if(sizeof($posts) == 0)
+	{
+		$cms_db->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = $id");
+		$archive_loaded = true;
+		$posts = $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
+	}
 
 	for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
 		if ($posts[$i] == $pid)
@@ -81,10 +92,10 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/forum.php';
 // If action=new, we redirect to the first new post (if any)
 if ($action == 'new' && !$pun_user['is_guest'])
 {
-	$last_visit = intval($cms_db->get("SELECT last_visit FROM topic_visits WHERE user_id=".intval($pun_user['id'])." AND topic_id=".intval($id)));
-	$result = $db->query("SELECT MIN(id) FROM {$db->prefix}posts WHERE topic_id=".intval($id)." AND posted>$last_visit")
-		or error('Unable to fetch post info', __FILE__, __LINE__, $db->error());
-	$first_new_post_id = $db->result($result);
+	$last_visit = intval($cms_db->get("SELECT last_visit FROM topic_visits WHERE user_id=".intval($pun_user['id'])." AND topic_id=$id"));
+	$first_new_post_id = intval($cms_db->get("SELECT MIN(id) FROM {$db->prefix}posts WHERE topic_id=$id AND posted>$last_visit"));
+	if(!$first_new_post_id)
+		$first_new_post_id = $cms_db->get("SELECT MIN(id) FROM {$db->prefix}posts_archive WHERE topic_id=$id AND posted>$last_visit");
 
 	if ($first_new_post_id)
 		header("Location: {$pun_config['root_uri']}/viewtopic.php?pid=$first_new_post_id#p$first_new_post_id");
@@ -99,8 +110,9 @@ else if ($action == 'last')
 {
 	for($ii=0; $ii<2; $ii++)
 	{
-		$result = $db->query('SELECT MAX(id) FROM '.$db->prefix.'posts WHERE topic_id='.$id) or error('Unable to fetch post info', __FILE__, __LINE__, $db->error());
-		$last_post_id = $db->result($result);
+		$last_post_id = $cms_db->get("SELECT MAX(id) FROM {$db->prefix}posts WHERE topic_id=$id");
+		if(!$last_post_id)
+			$last_post_id = $cms_db->get("SELECT MAX(id) FROM {$db->prefix}posts_archive WHERE topic_id=$id");
 
 		if ($last_post_id)
 		{
@@ -202,43 +214,31 @@ require PUN_ROOT.'header.php';
 
 // Increment "num_views" for topic
 $low_prio = '';//($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
-$db->query("UPDATE $low_prio {$db->prefix}topics SET num_views=num_views+1 WHERE id=$id") 
+$db->query("UPDATE $low_prio {$db->prefix}topics SET num_views=num_views+1, last_access = ".time()." WHERE id=$id") 
 	or error('Unable to update topic', __FILE__, __LINE__, $db->error());
-$count = intval($cms_db->get("SELECT count FROM topic_visits WHERE user_id=".intval($pun_user['id'])." AND topic_id=".intval($id))) + 1;
-$data = array(
-		'topic_id' => $id,
-		'user_id' => $pun_user['id'],
-		'count' => $count,
-		'last_visit' => time(),
+
+if($pun_user['id'] > 1)
+{
+	$count = intval($cms_db->get("SELECT count FROM topic_visits WHERE user_id=".intval($pun_user['id'])." AND topic_id=".intval($id))) + 1;
+
+	$data = array(
+			'topic_id' => $id,
+			'user_id' => $pun_user['id'],
+			'count' => $count,
+			'last_visit' => time(),
+		);
+
+	if($count == 1)
+		$data['first_visit'] = time();
+
+	$cms_db->store(
+		"{$db->prefix}topic_visits", 
+		"user_id=".intval($pun_user['id'])." AND topic_id=".intval($id),
+		$data,
+		false,
+		array('priority' => 'low')
 	);
-if($count == 1)
-	$data['first_visit'] = time();
-
-$cms_db->store(
-	"{$db->prefix}topic_visits", 
-	"user_id=".intval($pun_user['id'])." AND topic_id=".intval($id),
-	$data,
-	false,
-	array('priority' => 'low')
-);
-
-$count = intval($cms_db->get("SELECT count FROM forum_visits WHERE user_id=".intval($pun_user['id'])." AND forum_id=".intval($cur_topic['forum_id']))) + 1;
-$data = array(
-		'forum_id' => $cur_topic['forum_id'],
-		'user_id' => $pun_user['id'],
-		'count' => $count,
-		'last_visit' => time(),
-	);
-if($count == 1)
-	$data['first_visit'] = time();
-
-$cms_db->store(
-	"{$db->prefix}forum_visits", 
-	"user_id=".intval($pun_user['id'])." AND forum_id=".intval($cur_topic['forum_id']),
-	$data,
-	false,
-	array('priority' => 'low')
-);
+}
 
 $ret = $cms_db->get("SELECT last_post, last_edit FROM topics WHERE id=".intval($id));
 $last = max($ret['last_post'], $ret['last_edit']);
@@ -250,7 +250,8 @@ if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun
 
 	// Increment "num_views" for topic
 	$low_prio = '';//($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
-	$db->query('UPDATE '.$low_prio.$db->prefix.'topics SET num_views=num_views+1 WHERE id='.$id) or error('Unable to update topic', __FILE__, __LINE__, $db->error());
+	$db->query('UPDATE '.$low_prio.$db->prefix.'topics SET num_views=num_views+1, last_access='.time().' WHERE id='.$id) 
+		or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
 	$forum_id = $cur_topic['forum_id'];
 	$footer_style = 'viewtopic';
@@ -292,6 +293,10 @@ require PUN_ROOT.'include/parser.php';
 $bg_switch = true;	// Used for switching background color in posts
 $post_count = 0;	// Keep track of post numbers
 
+$cdb = &new DataBase('punbb');
+if(!$archive_loaded && !$cdb->get("SELECT COUNT(*) FROM posts WHERE topic_id = $id"))
+	$cdb->query("REPLACE INTO posts SELECT * FROM posts_archive WHERE topic_id = $id");
+
 // Retrieve the posts
 $q = "
 	SELECT 
@@ -321,7 +326,6 @@ $q = "
 $result   = $db->query($q, false) 
 	or error('Unable to fetch post info', __FILE__, __LINE__, $db->error()); //Attachment Mod, changed the true to false...
 
-$cdb = &new DataBase('punbb');
 
 include_once($_SERVER['DOCUMENT_ROOT']."/cms/config.php");
 include_once("funcs/lcml.php");
