@@ -366,7 +366,7 @@ if ($pun_config['o_users_online'] == '1')
 
 	$os = join(", ", $os);
 	
-	echo "<dl id=\"onlinelist\" class= \"clearb\"><dt><b>Операционные системы: </dt><dd>$os</dd></dl>";
+	echo "<dl id=\"onlinelist\" class= \"clearb\"><dt><b>Операционные системы:</b> </dt><dd>$os</dd></dl>";
 
 	$browsers = array();
 	foreach($cms_db->get_array("SELECT browser, count(*) as cnt FROM online GROUP BY browser ORDER BY cnt DESC, browser") as $row)

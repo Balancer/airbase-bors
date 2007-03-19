@@ -4,16 +4,14 @@
 
 	function pun_lcml($text)
 	{
-		$ch = new Cache();
-		$type = "lcml-compiled";
-		$key = md5($text);
-		if($val = $ch->get($type, $key))
-			return $val;
+		$ch = &new Cache();
+		if($ch->get('lcml-compiled', $text))
+			return $ch->last();
 
 		global $cur_post;
 		$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = '/forum/post'.@$cur_post['id'];
 			
-		return $ch->set($type, $key, lcml($text, 
+		return $ch->set(lcml($text, 
 			array(
 				'cr_type' => 'save_cr',
 				'forum_type' => 'punbb',
@@ -21,5 +19,5 @@
 				'sharp_not_comment' => true,
 				'html_disable' => true,
 				'uri' => "post://{$cur_post['id']}/",
-			)));
+			)), 7*86400);
 	}
