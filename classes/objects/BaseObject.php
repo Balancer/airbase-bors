@@ -5,6 +5,7 @@
 	{
 		var $id = NULL;
 		var $initial_id = NULL;
+		var $methods_added = false;
 		function id() { return $this->id; }
 		function set_id($id) { $this->id = $id; }
 
@@ -13,6 +14,24 @@
 			// Если не указан ID, но нет признака отсутствия загрузки, то создаётся новый объект в БД.
 
 			$this->id = $this->initial_id = $id;
+	
+			if(!$this->methods_added)
+			{
+				foreach(get_object_vars($this) as $field => $value)
+				{
+					if(substr($field, 0, 4) != 'stb_')
+						continue;
+					
+					$name = substr($field, 4);
+					
+					if(method_exists($this->$name))
+						continue;
+
+					$this->addMethod("function $name() { return \$this->$field; }");
+					$this->addMethod("function set_$name(\$value, \$db_update = true) { \$this-set(\"\$value\", \$value, \$db_update); }");
+				}
+			}
+			
 			if($noload)
 				return;
 			
@@ -81,5 +100,12 @@
 			global $bors;
 			
 			$bors->config()->storage()->save($this);
+		}
+
+		function addMethod(  $code ) 
+		{
+			$cname = uniqid("class");
+			eval( "class ${cname} { ${code} }" );        
+			aggregate_methods( $this , $cname );
 		}
 	}
