@@ -13,6 +13,7 @@
 		function field_create_time_storage() { return 'punbb.topics.posted(id)'; }
 		function field_modify_time_storage() { return 'punbb.topics.last_post(id)'; }
 
+		function BorsClassTopic
 		BorsBaseObject::storage_register('last_author', 'punbb.topics.last_poster(id)');
 		
         function parents()
