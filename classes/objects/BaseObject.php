@@ -1,7 +1,7 @@
 <?
 	require_once('Bors.php');
 
-	class BaseObject
+	class BorsBaseObject
 	{
 		var $id = NULL;
 		var $initial_id = NULL;
@@ -9,7 +9,7 @@
 		function id() { return $this->id; }
 		function set_id($id) { $this->id = $id; }
 
-		function BaseObject($id = NULL, $noload = false)
+		function BorsBaseObject($id = NULL, $noload = false)
 		{
 			// Если не указан ID, но нет признака отсутствия загрузки, то создаётся новый объект в БД.
 
@@ -24,7 +24,7 @@
 					
 					$name = substr($field, 4);
 					
-					if(method_exists($this->$name))
+					if(method_exists($this, $name))
 						continue;
 
 					$this->addMethod("function $name() { return \$this->$field; }");
@@ -107,5 +107,18 @@
 			$cname = uniqid("class");
 			eval( "class ${cname} { ${code} }" );        
 			aggregate_methods( $this , $cname );
+		}
+
+		function addField($name) 
+		{
+			$cname = uniqid("class");
+			eval( "class ${cname} { var \$$name; }" );        
+			aggregate_properties( $this , $cname );
+		}
+		
+		function storage_register($var_name, $sql_field)
+		{
+			$this->addField("stb_$var_name");
+			$this->addMethods("function field_$name_storage() { return '$sql_field'; }");
 		}
 	}

@@ -1,6 +1,6 @@
 <?
-	require_once('BaseObject.php');
-	class BorsClassTopic extends BaseObject
+	require_once('BorsBaseObject.php');
+	class BorsClassTopic extends BorsBaseObject
 	{
 		function type() { return 'topic'; }
 
@@ -12,6 +12,8 @@
 		function field_title_storage() { return 'punbb.topics.subject(id)'; }
 		function field_create_time_storage() { return 'punbb.topics.posted(id)'; }
 		function field_modify_time_storage() { return 'punbb.topics.last_post(id)'; }
+
+		BorsBaseObject::storage_register('last_author', 'punbb.topics.last_poster(id)');
 		
         function parents()
 		{

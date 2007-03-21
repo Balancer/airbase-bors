@@ -1,6 +1,6 @@
 <?
-	require_once('BaseObject.php');
-	class BorsClassCategory extends BaseObject
+	require_once('BorsBaseObject.php');
+	class BorsClassCategory extends BorsBaseObject
 	{
 		function type() { return 'category'; }
 

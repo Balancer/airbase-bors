@@ -1,6 +1,6 @@
 <?
-	require_once('BaseObject.php');
-	class BorsClassPost extends BaseObject
+	require_once('BorsBaseObject.php');
+	class BorsClassPost extends BorsBaseObject
 	{
 		function type() { return 'post'; }
 
