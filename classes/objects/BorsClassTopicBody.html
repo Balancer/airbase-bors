@@ -1,0 +1,6 @@
+{foreach from=$posts item=p}
+<dl class="forum_posting">
+<dt>{$p->flag()} {$p->author_name()}, {$p->create_time()|full_time}</dt>
+<dl>{$p->body()}</dl>
+</dt>
+{/foreach}
