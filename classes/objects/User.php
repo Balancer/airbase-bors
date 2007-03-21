@@ -1,6 +1,6 @@
 <?
-	require_once('BaseObject.php');
-	class AP_User extends BaseObject
+	require_once('BorsBaseObject.php');
+	class AP_User extends BorsBaseObject
 	{
 		var $stb_email = '';
 		

@@ -1,5 +1,5 @@
 <?
-	require_once('BaseObject.php');
-	class Page extends BaseObject
+	require_once('BorsBaseObject.php');
+	class Page extends BorsBaseObject
 	{
 	}
