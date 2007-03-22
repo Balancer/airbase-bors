@@ -12,7 +12,7 @@
 //        $tpl = $hts->get_data($tpl_name, 'title');
 //		if(!$tpl)
         $tpl = $hts->get_data($tpl_name, 'source');
-
+		
         if($tpl) 
         {
             $tpl_source = $tpl;

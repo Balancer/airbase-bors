@@ -92,7 +92,12 @@
 	{
 //		echo "Apply funcs for '$txt'\n";
 		foreach($functions as $fn)
+		{
+			$out = $txt;
 			$txt = $fn($txt);
+			if(!$txt && $out)
+				echo "Drop on $fn convert '$out' to '$txt'";
+		}
 
 		return $txt;
 	}

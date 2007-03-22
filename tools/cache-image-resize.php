@@ -13,9 +13,9 @@
 		
 	$need_width  = @$m[1];
 	$need_height = @$m[2];
-
 	
-	$source_image = preg_replace("!/cache(.+)/\d*x\d*/([^/]+\.(jpg|png|gif))$!", "$1/$2", $_SERVER['REQUEST_URI']);
+	$source_image = preg_replace("!/cache(.+)/\d*x\d*/([^/]+\.(jpe?g|png|gif))$!i", "$1/$2", $_SERVER['REQUEST_URI']);
+	$source_image_url = preg_replace("!/cache(.+)/\d*x\d*/([^/]+\.(jpe?g|png|gif))$!i", "http://{$_SERVER['HTTP_HOST']}$1/$2", $_SERVER['REQUEST_URI']);
 
 	$source_file = $_SERVER['DOCUMENT_ROOT'].$source_image;
 	$target_file = $dir."/".basename($_SERVER['REQUEST_URI']);
@@ -50,7 +50,15 @@
 	$size = $need_width."x".$need_height;
 
 	if($resize)
-		echo system("{$GLOBALS['cms']['convert_cmd']} -geometry $size ".escapeshellarg($source_file)." ".escapeshellarg($target_file));
+	{
+		if(!empty($GLOBALS['cms']['convert_cmd']))
+			echo system("{$GLOBALS['cms']['convert_cmd']} -geometry $size ".escapeshellarg($source_file)." ".escapeshellarg($target_file));
+		else
+		{
+			echo $img = file_get_contents("http://airbase.ru/inc/tools/imageresize.phtml?url=$source_image_url&w=$need_width&h=$need_height");
+			file_put_contents($target_file, $img);
+		}
+	}
 	else
 		copy($source_file, $target_file);
 

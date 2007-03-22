@@ -13,6 +13,9 @@
 
     ini_set('include_path', ini_get('include_path') . $delim . join($delim, $includes));
 
+	if(!function_exists('file_put_contents'))
+		include_once('include/php4/file_put_contents.php');
+
     $GLOBALS['cms'] = array(
 		'sites_store_path' => "{$_SERVER['DOCUMENT_ROOT']}/sites",
 		'sites_store_uri' => "http://{$_SERVER['HTTP_HOST']}/sites",
