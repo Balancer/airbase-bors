@@ -165,7 +165,7 @@
 
 //			print_r($this->row);
 
-			if($GLOBALS['bors']['config']['gpc'])
+			if(!empty($GLOBALS['bors_data']['config']['gpc']))
 			{
 				if(is_array($this->row))
 					if(sizeof($this->row)==1)
