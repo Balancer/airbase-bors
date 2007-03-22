@@ -18,7 +18,7 @@
 		if(!file_exists($smarty->cache_dir))
 			mkdir($smarty->cache_dir, 0775, true);
 
-		$caching = !is_null($uri)
+		echo $caching = !is_null($uri)
 				&& @$data['caching'] !== false
 				&& @$GLOBALS['cms']['templates_cache_disabled'] !== true
 			;
@@ -126,6 +126,8 @@
 		$me = &new User();
 		$smarty->assign("me", $me);
 		$smarty->assign("me_id", $me->get('id'));
+
+		$smarty->assign("cms", $GLOBALS['cms']);
 
 		if(empty($data['main_uri']))
 			$smarty->assign("main_uri", @$GLOBALS['main_uri']);

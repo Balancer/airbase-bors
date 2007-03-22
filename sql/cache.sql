@@ -12,6 +12,7 @@
 -- Table structure for table `cache`
 --
 
+DROP TABLE IF EXISTS `cache`;
 CREATE TABLE `cache` (
   `type` varchar(255) default NULL,
   `key` varchar(255) default NULL,

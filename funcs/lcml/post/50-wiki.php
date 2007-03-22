@@ -19,11 +19,14 @@
 		$uri = $hts->page_uri_by_value('title', $title);
 
         if($uri && strlen($uri) > 0)
-	        return "<a href=\"$uri\" class=\"wiki_int\">$text</a>";
+		{
+			$exists = $hts->get($uri, 'source') ? "" : "_non_exists";
+	        return "<a href=\"$uri\" class=\"wiki_int$exists\">$text</a>";
+		}
 		
 		include_once("funcs/modules/uri.php");
-		$new_uri = $GLOBALS['main_uri'].strtolower(translite_uri_simple($title));
+		$new_uri = $GLOBALS['main_uri'].strtolower(translite_uri_simple($title)).'/';
 		
 		$hts->set_data($new_uri, 'title', $title);
-        return "<a href=\"$new_uri\" class=\"wiki_int\">$text</a>";
+        return "<a href=\"$new_uri\" class=\"wiki_int_non_exists\">$text</a>";
     }

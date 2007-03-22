@@ -5,7 +5,6 @@
 
     function handler_create_page($uri, $action)
 	{
-//		exit("Try create $_uri");
 		require_once("funcs/check/access.php");
 
 		if(!check_action_access(10))
@@ -18,4 +17,3 @@
 
 		return true;
 	}
-?>

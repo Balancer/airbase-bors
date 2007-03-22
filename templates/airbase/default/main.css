@@ -1,0 +1,80 @@
+h1 { font: bold x-large Verdana, sans-serif; border-bottom: 2px solid #003366; margin: 0px; padding: 0px;}
+h2 { font: bold large Verdana, sans-serif; border-bottom: 1px solid #003366; margin: 8px 0px 4px 0px; padding: 0px;}
+h3 { font: bold normal Verdana, sans-serif; margin: 0px; padding: 0px;}
+h4 { font: bold xx-small Verdana, sans-serif; margin: 0px; padding: 0px;}
+h5 { font: bold smaller Verdana, sans-serif; margin: 0px; padding: 0px;}
+h6 { font: bold 8pt Verdana, sans-serif; margin: 0px; padding: 0px;}
+td {font: smaller Verdana, sans-serif; text-align: justify;}
+.nav { border-bottom: 1px solid #003366; width: auto; font-size: x-small;}
+body {margin: 0px; padding: 0px 0px 32px 4px;}
+dl.box {border: 1px solid #0066cc; margin: 0px 4px 4px 4px; padding: 0px; background-color: #e8f0fc;}
+dl.box dt, dl.box dt a a{margin: 0px; color: #ffffff; background-color: #0066cc; padding: 1px; font-size: 8pt; font-weight: bold; font-family: Verdana, sans-serif;}
+dl.box dd {margin: 2px; font-size: xx-small;}
+dl.box dt a {color: #ffffd0;}
+
+.box {border: 1px solid #0066cc; margin: 0px 4px 4px 4px; padding: 2px;  background-color: #e8f0fc;}
+
+div.tabs {
+    background: transparent;
+    border-collapse: collapse;
+    border-bottom-color: #0066cc;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    padding: 0.5em 0 0 2em;
+    margin: 0;
+    white-space: nowrap;
+}
+
+div.tabs a {
+    background: transparent; /*#e8f0fc*/;
+    border-color: #0066cc;
+    border-width: 1px; 
+    border-style: solid solid none solid;
+    color: #436976;
+    font-weight: normal;
+    font-size: smaller;
+    height: 1.2em;
+    margin: 0;
+    margin-right: 0.5em;
+    padding: 0 1em;
+    text-decoration: none;
+}
+
+div.tabs a.selected {
+    background: #F0F4F8;
+    border: 1px solid #0066cc;
+    border-bottom: #F0F4F8 1px solid;
+    color: #436976;
+    font-weight: bold;
+}
+
+div.tabs a:hover {
+    background: #F0F4F8;
+    border-color: #0066cc;
+    border-bottom: #F0F4F8 1px solid;
+    color: #436976;
+    text-decoration: none;
+}
+
+a.external {
+    background: url(http://airbase.ru/img/design/system/external.png) center right no-repeat;
+    padding-right: 13px;
+}
+
+.imperceptible {font-size: xx-small; color: #c0c0c0;}
+
+.code{ 
+	background: #FAFCFE; 
+	border: 1px solid #000; 
+	color: #465584; 
+	font-size: 10pt; 
+	padding: 2px; 
+	white-space: normal;
+	font-family: monospace;
+}
+
+dl.forumposting {border: 1px solid #0066cc; margin: 10px 4px 4px 4px; padding: 0px; background-color: #e8f0fc;}
+dl.forumposting dt, dl.forumposting dt a {margin: 0px; color: #ffffff; background-color: #0066cc; padding: 1px; font-size: 10pt; font-weight: bold; font-family: Verdana, sans-serif;}
+dl.forumposting dd {font-size: 10pt; text-align: justify; padding: 2px;}
+dl.forumposting dt a {color: #ffffd0;}
+

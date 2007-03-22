@@ -1,0 +1,27 @@
+<form method="post" action="{$main_uri}?create-page" enctype="multipart/form-data">
+<table class="btab" cellSpacing="0">
+{if !$me_id}
+	<tr><td>Логин: <input name="login"></td><td>Пароль: <input name="password" type="password"></td></tr>
+{/if}
+{if !$title}
+	<tr><th><b>Название:</b></th><td><input name="title" value="" size="50" maxlen="255" /></td></tr>
+{else}
+	<input type="hidden" name="title" 	value="{$title|htmlspecialchars}">
+{/if}
+<tr><td><b>Название для навигации:</b><br />
+	<input name="nav_name" size="50" maxlen="255" value="{$title|strtolower|htmlspecialchars}" />
+</td></tr>
+<tr><td colspan="2"><b>Краткое описание:<br />
+	<textarea name="description" cols="64" rows="3" /></textarea>
+</td></tr>
+<tr><td colSpan="2">
+	<textarea cols="64" rows="25" name="source">{$source|htmlspecialchars}</textarea>
+</td></tr>
+<tr><td>&nbsp;</td><td>
+<input type="submit" value="Создать"></td></tr>
+<input type="hidden" name="referer" value="{$cms.referer|addslashes}" />
+<input type="hidden" name="uri" value="{$main_uri|addslashes}" />
+</table>
+<input type="hidden" name="create-page" value="1">
+</form>
+<center><i>Уровень доступа: {$me->get('level', 1)}</i></center>

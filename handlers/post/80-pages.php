@@ -9,10 +9,10 @@
 	{
 //		echo "<tt>try show page '$uri'</tt><br/>";
 	
-	    $hts  = &new DataBaseHTS();
+	    $hts  = &new DataBaseHTS($uri);
 	    require_once('funcs/templates/smarty.php');
 
-		if($hts->get_data($uri, 'source') || $hts->get_data($uri, 'body'))
+		if($hts->get('source') || $hts->get('body'))
 		{
 			if(!empty($GLOBALS['cms']['cache_static']))
 			{
@@ -30,8 +30,6 @@
 		$hts_file = preg_replace("!^{$GLOBALS['cms_host_url']}!", "", $uri);
 		$hts_file = $GLOBALS['doc_root'].$hts_file."index.hts";
 
-//		echo $hts;
-		
 		if(!file_exists($hts_file))
 			return false;
 		
@@ -40,9 +38,9 @@
 		hts_store($uri, $data);
 //		echo $GLOBALS['body'];
 
-		if($hts->get_data($uri, 'source') || $hts->get_data($uri, 'body'))
+		if($hts->get('source') || $hts->get('body'))
 		{
-			show_page($uri);
+			show_page($uri, array('children_count' => $hts->get_children_array_ex_size($uri, array('range' => -1))));
 			return true;
 		}
 

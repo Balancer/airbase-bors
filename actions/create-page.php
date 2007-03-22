@@ -18,42 +18,35 @@
 			exit();
 		}
 		
-    	foreach(split(' ','description nav_name page ref title uri') as $p)
+    	foreach(split(' ','description nav_name page referer title uri') as $p)
         	$$p = @$_POST[$p];
+
+		if(sizeof($referer)>1 && $referer{strlen($referer)} == '?')
+			$referer = substr($referer, 0, strlen($referer)-1);
 
     	if(empty($title) && !empty($htitle))
         	$title = $htitle;
 
-		$user = new User();
+		$me = &new User();
 
-    	$hts = new DataBaseHTS();
+    	$hts = &new DataBaseHTS();
 	    $uri = $hts->normalize_uri($uri);
 
-//		echo $hts->normalize_uri($ref);
+	    if(empty($referer))
+    	    $referer = @$_SERVER['HTTP_REFERER'];
 
-//		echo "<xmp>$_uri, $title";
-//		print_r($_POST);
-//		exit();
-//		exit($uri);
-
-	    if(empty($ref))
-    	    $ref = @$_SERVER['HTTP_REFERER'];
-
-//		echo $ref;
-//		exit();
-
-	    if(preg_match("!/admin/!", $ref))
-    	    $ref = ''; //"http://airbase.ru/not_ref_pages/";
+	    if(preg_match("!/admin/!", $referer))
+    	    $ref = '';
 
    		if(!empty($_POST['login']) && !empty($_POST['password']))
    		{
-			if(!$user->do_login($_POST['login'], $_POST['password']))
+			if(!$me->do_login($_POST['login'], $_POST['password']))
  				return;
 	   	}
         
         //TODO: Потенциальная уязвимость в безопасности - пользователь может создать новую страницу,
    	    // используя права доступа произвольной страницы. На редактирование - не влияет.
-        check_access(empty($new_page) ? $uri : $ref, $hts);
+        check_access(empty($new_page) ? $uri : $referer, $hts);
 
         $log_action = 'new_page';
 
@@ -68,28 +61,23 @@
        if(empty($nav_name))
 			$nav_name = strtolower($title);
 
- 	    $hts->set_data($uri,'title',$title);
-        $hts->set_data($uri,'nav_name',$nav_name);
-        $hts->set_data($uri,'copyright',user_data('nick'));
+ 	    $hts->set_data($uri,'title', $title);
+        $hts->set_data($uri,'nav_name', $nav_name);
+        $hts->set_data($uri,'copyright', $me->get('nick'));
   	    $hts->set_data($uri,'create_time', time());
         $hts->set_data($uri,'description_source', $description);
 
-        if($ref)
-   	        $hts->nav_link($ref, $uri, true);
+        if($referer)
+   	        $hts->nav_link($referer, $uri, true);
 
         $hts->set_data($uri, 'version', 1);
-
-//        $hts->get_data($uri,'source');
 
         $hts->set_data($uri, 'source', $source);
    	    $hts->set_data($uri, 'modify_time', time());
 
 //        append_log($uri, $log_action, $version);
 
-//		exit("Created page $uri");
-
         recompile($uri);
 
-        go("$uri?"); ///cgi-bin/tools/compile/compile.cgi?page=
+        go("$uri?");
 	}
-?>

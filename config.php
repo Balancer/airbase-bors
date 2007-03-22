@@ -1,7 +1,7 @@
 <?
-	include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config/default.php");
-	@include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config/local.php");
-	@include_once("{$_SERVER['DOCUMENT_ROOT']}/cms-local/config.php");
+	include_once(CMS_INCLUDE.'config/default.php');
+	@include_once(CMS_INCLUDE.'config/local.php');
+	@include_once(CMS_INCLUDE_LOCAL.'config.php');
 	@include_once(@BORS_LOCAL_PATH . "/config.php");
     require_once("debug.php");
     require_once("localization/main.php");

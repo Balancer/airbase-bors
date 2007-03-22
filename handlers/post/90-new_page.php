@@ -7,16 +7,25 @@
 
     function handler_new_page($uri, $m=array())
 	{
-		if(user_data('level') < 3)
-		{
-			$GLOBALS['page_data']['source'] = ec("Извините, страница не найдена или находится в стадии разработки.");
-			show_page($uri);
-			return true;
-		}
+		require_once("funcs/check/access.php");
 
-		$GLOBALS['page_data']['source'] = '[module admin/create-page]';
-		$GLOBALS['cms']['action'] = 'create-page';
-    
-		show_page($uri);
+		if(!check_action_access(3, $uri))
+			return true;
+
+        $hts  = &new DataBaseHTS($uri);
+
+		$data = array(
+			'source' => $hts->get('source'),
+			'title'  => $title = $hts->get('title'),
+		);
+
+		include_once("funcs/templates/assign.php");
+		$data = array(
+			'body' => template_assign_data("new-page.html", $data),
+			'title' => $title ? $title : ec('Создание новой страницы'),
+		);
+
+		show_page($uri, $data);
+
 		return true;
 	}

@@ -19,8 +19,18 @@
         return $out;
     }
 
-    function show_page($uri, $do_print = true)
+    function show_page($uri, $data = true)
     {
+		if(is_array($data))
+		{
+			$do_print = empty($data['no_print']);
+		}
+		else
+		{
+			$do_print = $data;
+			$data = array();
+		}
+		
         $hts  = &new DataBaseHTS();
 
         $page = $hts->normalize_uri($uri);
@@ -28,36 +38,29 @@
         if($page != $uri && empty($GLOBALS['title']))
             go($page);
 
-//        if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
-//            echo __FILE__.__LINE__." ".$GLOBALS['title']."<br />\n";
+		foreach(split(' ', 'source body title') as $key)
+			if(empty($data[$key]))
+				$$key = @$GLOBALS['page_data'][$key];
+			else
+				$$key = $data[$key];
 
+		$action = @$GLOBALS['cms']['action'];
 
-//        echo "************".$hts->get_data($page, 'modify_time');
-	
-//		exit($GLOBALS['page_data']['source']);
-
-		if(empty($GLOBALS['page_data']['source']))
+		if(!$source && !$body)
 		{
 			$source = $hts->get_data($page, 'source');
 			$body 	= $hts->get_data($page, 'body');
-//			exit("2: $page: $body");
-//			$lcml_params = NULL;
-//			if(!empty($data['lcml_params']))
-//				$lcml_params = $data['lcml_params'];
-//			$body = lcml($source, $lcml_params);
 
 			if(!$body)
-				$body = lcml($source, array('html'=>true));
+				$body = lcml($source, array('html' => true));
 
 			$action = false;
 		}
 		else
 		{
-			$source = $GLOBALS['page_data']['source'];
-			$action = @$GLOBALS['cms']['action'];
-			$body = lcml($source, array('html'=>true));
+			if(!$body)
+				$body = lcml($source, array('html'=>true));
 			$GLOBALS['cms']['templates_cache_disabled'] = true;
-//			exit("<xmp>".$body."</xmp>");
 		}
 
         if(!$source && !$body)
