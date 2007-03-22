@@ -5,7 +5,9 @@
 	{
 		var $id = NULL;
 		var $initial_id = NULL;
-		var $methods_added = false;
+		var $changed_fields = array();
+//		var $methods_added = false;
+
 		function id() { return $this->id; }
 		function set_id($id) { $this->id = $id; }
 
@@ -38,13 +40,17 @@
 			$this->load();
 		}
 
-		var $changed_fields = array();
 		function set($field, $value, $db_update = true)
 		{
+			global $bors;
+			
 			$field_name = "stb_$field";
 
 			if($db_update && $this->$field_name != $value)
-				$changed_fields[$field] = $field_name;
+			{
+				$this->changed_fields[$field] = $field_name;
+				$bors->add_changed_object($this);
+			}
 
 			$this->$field_name = $value;
 		}
@@ -78,10 +84,15 @@
 		function page() { return $this->stb_page; }
 		function set_page($page) { $this->set("page", $page, false); }
 
-		function uri() 
+		function uri($page = 1)
 		{ 
 			require_once("funcs/modules/uri.php");
-			return strftime("/%Y/%m/%d/", $this->modify_time()).$this->type()."-".$this->id()."/".translite_uri_simple($this->title()).".html"; 
+			$uri = strftime("/%Y/%m/%d/", $this->modify_time());
+			$uri .= $this->type()."-".$this->id();
+			if($page > 1)
+				$uri .= ",$page";
+			$uri .= "/".translite_uri_simple($this->title()).".html"; 
+			return $uri;
 		}
 
 		function parents() { return array(); }

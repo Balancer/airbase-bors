@@ -22,8 +22,20 @@
 		function body()
 		{
 			if(empty($this->stb_body))
-				$this->set_body(parse_message($this->source(), $this->hide_smilies()));
-			
+			{
+				$body = lcml($this->source(), 
+					array(
+						'cr_type' => 'save_cr',
+						'forum_type' => 'punbb',
+						'forum_base_uri' => 'http://balancer.ru/forum',
+						'sharp_not_comment' => true,
+						'html_disable' => true,
+						'uri' => "post://{$this->id()}/",
+					)
+				);
+	
+				$this->set_body($body);
+			}
 			return $this->stb_body; 
 		}
 

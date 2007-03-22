@@ -102,21 +102,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 	{
 		$ident = ($pun_user['is_guest']) ? get_remote_address() : $pun_user['username'];
 
-		$result = $db->query('SELECT search_data FROM '.$db->prefix.'search_cache WHERE id='.$search_id.' AND ident=\''.$db->escape($ident).'\'') or error('Unable to fetch search results', __FILE__, __LINE__, $db->error());
-		if ($row = $db->fetch_assoc($result))
-		{
-			$temp = unserialize($row['search_data']);
-
-			$search_results = $temp['search_results'];
-			$num_hits = $temp['num_hits'];
-			$sort_by = $temp['sort_by'];
-			$sort_dir = $temp['sort_dir'];
-			$show_as = $temp['show_as'];
-
-			unset($temp);
-		}
-		else
-			message($lang_search['No hits']);
+		message($lang_search['No hits']);
 	}
 	else
 	{
@@ -414,8 +400,6 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		{
 			while ($row = $db->fetch_row($result))
 				$old_searches[] = '\''.$db->escape($row[0]).'\'';
-
-			$db->query('DELETE FROM '.$db->prefix.'search_cache WHERE ident NOT IN('.implode(',', $old_searches).')') or error('Unable to delete search results', __FILE__, __LINE__, $db->error());
 		}
 
 		// Final search results
@@ -431,8 +415,6 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		$search_id = mt_rand(1, 2147483647);
 
 		$ident = ($pun_user['is_guest']) ? get_remote_address() : $pun_user['username'];
-
-		$db->query('INSERT INTO '.$db->prefix.'search_cache (id, ident, search_data) VALUES('.$search_id.', \''.$db->escape($ident).'\', \''.$db->escape($temp).'\')') or error('Unable to insert search results', __FILE__, __LINE__, $db->error());
 
 		if ($action != 'show_new' && $action != 'show_24h')
 		{
