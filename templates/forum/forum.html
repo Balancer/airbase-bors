@@ -1,0 +1,187 @@
+<html>
+<head>
+	<title>{$title}</title>
+<link rel="stylesheet" type="text/css" href="http://airbase.ru/inc/css/style.phtml">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="SHORTCUT ICON" href="/favicon.ico" />
+<style>
+{literal}
+h1 { font: bold x-large Verdana, sans-serif; border-bottom: 2px solid #003366; margin: 0px; padding: 0px;}
+h2 { font: bold large Verdana, sans-serif; border-bottom: 1px solid #003366; margin: 8px 0px 4px 0px; padding: 0px;}
+h3 { font: bold normal Verdana, sans-serif; margin: 0px; padding: 0px;}
+h4 { font: bold xx-small Verdana, sans-serif; margin: 0px; padding: 0px;}
+h5 { font: bold smaller Verdana, sans-serif; margin: 0px; padding: 0px;}
+h6 { font: bold 8pt Verdana, sans-serif; margin: 0px; padding: 0px;}
+td {font: smaller Verdana, sans-serif; text-align: left;}
+.nav { border-bottom: 1px solid #003366; width: auto; font-size: x-small;}
+body {margin: 0px; padding: 0px 0px 32px 4px;}
+dl.box {border: 1px solid #0066cc; margin: 0px 4px 4px 4px; padding: 0px; background-color: #e8f0fc;}
+dl.box dt, dl.box dt a {margin: 0px; color: #ffffff; background-color: #0066cc; padding: 1px; font-size: 8pt; font-weight: bold; font-family: Verdana, sans-serif;}
+dl.box dd {margin: 2px; font-size: xx-small;}
+dl.box dt a {color: #ffffd0;}
+
+.box {border: 1px solid #0066cc; margin: 0px 4px 4px 4px; padding: 2px;  background-color: #e8f0fc;}
+
+div.tabs {
+    background: transparent;
+    border-collapse: collapse;
+    border-bottom-color: #0066cc;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    padding: 0.5em 0 0 2em;
+    margin: 0;
+    white-space: nowrap;
+}
+								
+div.tabs a {
+    background: transparent; /*#e8f0fc*/;
+    border-color: #0066cc;
+    border-width: 1px; 
+    border-style: solid solid none solid;
+    color: #436976;
+    font-weight: normal;
+    font-size: smaller;
+    height: 1.2em;
+    margin: 0;
+    margin-right: 0.5em;
+    padding: 0 1em;
+    text-decoration: none;
+}
+																			
+div.tabs a.selected {
+    background: #F0F4F8;
+    border: 1px solid #0066cc;
+    border-bottom: #F0F4F8 1px solid;
+	color: #436976;
+    font-weight: bold;
+}
+																									
+div.tabs a:hover {
+    background: #F0F4F8;
+	border-color: #0066cc;
+    border-bottom: #F0F4F8 1px solid;
+	color: #436976;
+    text-decoration: none;
+}
+																														
+a.external {
+    background: url(http://airbase.ru/img/design/system/external.png) center right no-repeat;
+    padding-right: 13px;
+}
+
+.imperceptible {font-size: xx-small; color: #c0c0c0;}
+
+.code { 
+	background: #FAFCFE; 
+	border: 1px solid #000; 
+	color: #465584; 
+	font-size: 10pt; 
+	padding: 2px; 
+	white-space: normal;
+	font-family: "Courier New", Courier, monospace;
+}
+
+small { font-size: 8pt; }
+
+dl.forumposting {border: 1px solid #0066cc; margin: 10px 4px 4px 4px; padding: 0px; background-color: #e8f0fc;}
+dl.forumposting dt, dl.forumposting dt a {margin: 0px; color: #ffffff; background-color: #0066cc; padding: 1px; font-size: 10pt; font-weight: bold; font-family: Verdana, sans-serif;}
+dl.forumposting dd {font-size: 10pt; text-align: justify; padding: 4px; margin: 0px;}
+dl.forumposting dt a {color: #ffffd0;}
+
+
+{/literal}
+</style>
+</head>
+
+<body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg">
+  <table width="100%" border="0" cellPadding="0" cellSpacing="0">
+   <tr><td colSpan="4" style="padding: 0px; margin: 0px;">
+    <noindex>
+	<table cellPadding="0" cellSpacing="0" width="100%">
+      <tr><td><a href="http://airbase.ru/"><img src="http://airbase.ru/images/web/top-rus-airbase.gif" border="0" alt="Авиабаза =KRoN=" title="Логотип"></a></td>
+	      <td align="right">
+            <FORM METHOD="GET" ACTION="http://airbase.ru/cgi-bin/search.cgi">
+            <table class="box" callPagging="0" cellSpacing="0">
+            <tr>
+              <td align="right">
+                Искать:
+				<INPUT TYPE="text" NAME="q" SIZE=50 VALUE="Су-27">
+				<INPUT TYPE="submit" NAME="cmd" VALUE="Go!">
+				<INPUT TYPE="hidden" NAME="wm" VALUE="wrd">
+				<INPUT TYPE="hidden" NAME="wm" VALUE="wrd">
+				<INPUT TYPE="hidden" NAME="m" VALUE="all">
+				<INPUT TYPE="hidden" NAME="sp" VALUE="1">
+				<INPUT TYPE="hidden" NAME="sy" VALUE="1">
+				<INPUT TYPE="hidden" NAME="wf" VALUE="2361">
+				<INPUT TYPE="hidden" NAME="GroupBySite" VALUE="no">
+				<br />
+				<small>[ <a href="http://airbase.ru/cgi-bin/search.cgi?form=extended">Расширенная форма</a> | <a href="http://airbase.ru/tools/search/">помощь</a> ]</small>
+              </td>
+			</tr>
+		    </table></noindex>
+			</form>
+          </td>
+      </tr>
+	</table>
+  </td></tr>
+  <tr><td>&nbsp;</td>
+      <td colSpan="3">
+	    <noindex>
+		  <div class="tabs">
+		    <a href="{$uri}" class="{if not $action}selected{else}plain{/if}" title="Просмотр страницы"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/view-refresh.png" width="16" height="16" alt="*" border="0">просмотр</a>
+		  <!--    <a href="#" class="plain">обсуждение</a> -->
+            <a href="{$uri}?edit" class="{if $action == "edit"}selected{else}plain{/if}" title="Редактировать страницу"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/apps/kedit.png" width="16" height="16" alt="*" border="0">редактор</a>
+			<a href="{$uri}?edit-data" class="{if $action=="edit-data"}selected{else}plain{/if}" title="Параметры страницы"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/categories/gnome-system.png" width="16" height="16" alt="*" border="0">параметры</a>
+			<a href="{$uri}?nav_edit" class="{if $action=="nav_edit"}selected{else}plain{/if}" title="Навигация страницы"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/forward.png" width="16" height="16" alt="*" border="0">навигация</a>
+          </div>
+		</noindex>
+      </td>
+  </tr>
+  <tr>
+    <td width="150" rowSpan="2" vAlign="top" style="border-right: 1px solid #0066cc;">
+      <noindex>
+        <dl class="box">
+		  <dt>Навигация</dt>
+   		  <dd>{call func=module name="design/navleft" skip="http://balancer.ru/ http://airbase.ru"}</dd>
+	    </dl>
+        {load_data page="/cms/modules/left-main-menu/" key="body"}
+        {load_data page="/cms/modules/counters/hidden/" key="source"}
+      </noindex>
+    </td>
+    <td colSpan="3" height="10" vAlign="top" bgColor="#F0F4F8" style="padding: 8px 4px 0px 0px;">
+      <noindex>
+	    <table class="nav">
+		  <tr>
+		    <td>
+			  {call func=module param="top-navs.php"}
+			</td>
+		  </tr>
+		</table>
+	  </noindex>
+	  <small><i>{$description}</i></small>
+	  <h1>{$title}</h1>
+	</td>
+  </tr>
+  <tr>
+    <td vAlign="top" bgColor="#F0F4F8" style="border-bottom: 1px solid #0066cc; padding: 0px 4px 4px 8px;">
+      <script src="http://airbase.ru/inc/js/width.js"></script>
+	  <script>if(width>650) width=650;</script>
+{$body}
+	  <div align="right" style="border-top: 1px solid; margin: 16px 0px 0px 0px;">
+        Copyright &copy; Balancer 1997..2006<br/>
+	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
+		{if $views}{* {$views}-е посещение с {$views_first|strftime:"%d.%m.%Y"}<br/> *}{/if}
+		{if $views_average}В среднем посещений в день: {$views_average}<br/>{/if}
+		{if $queries}Запросов к БД: {$queries}<br/>{/if}
+		{if $queries_time}Время запросов БД: {$queries_time}<br/>{/if}
+		{if $make_time}Время генерации страницы: {$make_time}<br/>{/if}
+	  </div>
+	</td>
+	<td vAlign="top" bgColor="#F0F4F8" style="border-bottom: 1px solid #0066cc;">
+	  &nbsp;
+	</td>
+  </tr>
+</table>
+
+</body>
+</html>
