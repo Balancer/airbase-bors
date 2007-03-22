@@ -2,11 +2,11 @@
 	$GLOBALS['log_level'] = 2;
 
 	$includes = array(
-		"{$_SERVER['DOCUMENT_ROOT']}/cms-local",
-		"{$_SERVER['DOCUMENT_ROOT']}/cms/vhosts/{$_SERVER['HTTP_HOST']}",
-		"{$_SERVER['DOCUMENT_ROOT']}/cms",
+		CMS_INCLUDE_LOCAL.'cms-local',
+		CMS_INCLUDE."vhosts/{$_SERVER['HTTP_HOST']}",
+		CMS_INCLUDE,
 		"{$_SERVER['DOCUMENT_ROOT']}/include",
-		"{$_SERVER['DOCUMENT_ROOT']}/cms/PEAR"
+		CMS_INCLUDE.'PEAR'
 	);
 
 	$delim = empty($_ENV['windir']) ? ":" : ";";
@@ -20,8 +20,8 @@
 		'sites_store_path' => "{$_SERVER['DOCUMENT_ROOT']}/sites",
 		'sites_store_uri' => "http://{$_SERVER['HTTP_HOST']}/sites",
 		'cache_dir' => "{$_SERVER['DOCUMENT_ROOT']}/cache/system",
-		'base_dir' => "{$_SERVER['DOCUMENT_ROOT']}/cms",
-		'local_dir' => "{$_SERVER['DOCUMENT_ROOT']}/cms-local",
+		'base_dir' => CMS_INCLUDE,
+		'local_dir' => CMS_INCLUDE_LOCAL,
 		'base_uri' => "http://{$_SERVER['HTTP_HOST']}/cms",
 		'default_template' => "xfile:{$_SERVER['DOCUMENT_ROOT']}/cms/templates/default/index.html",
 
@@ -37,6 +37,8 @@
         'cache_static'  => false,
 		'templates_cache_disabled' => true,
 		'cache_engine' => 'Cache',
+
+		'referer' => @$_SERVER['HTTP_REFERER'],
 	);
 
 	// Вторичные переменные, которые могут задаваться заданными ранее.

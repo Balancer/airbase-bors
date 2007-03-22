@@ -3,8 +3,6 @@
 
     function handler_edit_save($uri, $action)
 	{
-//		echo "Test edit_save handler";
-
 		foreach($_POST as $var=>$value)
 			$$var = $value;
 		
