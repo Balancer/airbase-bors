@@ -128,6 +128,7 @@
 				}
 				if($tpl && $hts->get_data($tpl, 'source'))
 				{
+//					echo "HTS: for $tpl = <xmp>".$hts->get_data($tpl, 'source')."</xmp>";
 					$found = true;
 					break;
 				}
@@ -137,6 +138,8 @@
 					break;
 				}
 			}
+
+//			echo "found = $found<br />";
 
 			if(!$found)
 				foreach(array(

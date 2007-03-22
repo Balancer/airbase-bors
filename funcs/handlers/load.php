@@ -57,7 +57,7 @@
 		foreach ($files as $file)
 		{
 			if (!empty ($_GET['debug']))
-				echo "load $file<br>\n";
+				echo "load $dir$file<br>\n";
 
 			if (substr($file, -4) == '.php')
 				include_once("$dir/$file");
@@ -123,13 +123,26 @@
 
 						$data = array();
 						
-						$data['base_path']	= $m[1].$m[2]."/";
-						$data['pattern']	= $pattern;
 						
-						$data['parent_uri']	= preg_replace("!$pattern!", $m[1], $uri);
-						$data['base_uri']	= $data['parent_uri'].$m[2]."/";
-						$data['base_pattern_uri']	= "({$data['parent_uri']})({$m[2]})/";
+						if($path != '/')
+						{
+							$data['base_path']	= $m[1].$m[2]."/";
+							$data['pattern']	= $pattern;
 						$data['matches'] = $m;
+
+							$data['parent_uri']	= preg_replace("!$pattern!", $m[1], $uri);
+							$data['base_uri']	= $data['parent_uri'].$m[2]."/";
+							$data['base_pattern_uri']	= "({$data['parent_uri']})({$m[2]})/";
+						}
+						else
+						{
+							$data['base_path']	= '/';
+							$data['pattern']	= $pattern;
+							
+							$data['parent_uri']	= $uri;
+							$data['base_uri']	= $uri;
+							$data['base_pattern_uri']	= $uri;
+						}
 
 						$GLOBALS['cms']['templates']['data']['plugin']['base_uri'] = $data['base_uri'];
 						$GLOBALS['cms']['templates']['data']['plugin']['base_path'] = $data['base_path'];
@@ -142,6 +155,7 @@
 						error_reporting($errrep_save);
 
 						$GLOBALS['cms']['plugin_data'] = $data;
+//						echo ("$base_dir/$dir/handlers/");
 						handlers_load_dir("$base_dir/$dir/handlers/");
 						$GLOBALS['cms']['plugin_data'] = false;
 					}

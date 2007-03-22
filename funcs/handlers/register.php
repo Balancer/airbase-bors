@@ -68,7 +68,7 @@
 	function hts_data_posthandler_add($regexp, $data_key, $func)
 	{
 //		if (!empty ($_GET['debug']))
-//			echo "<small>Add post function $function to uri like '$regexp' for key $data_key</small><br />";
+//			echo "<small>Add post function to uri like '$regexp' for key $data_key</small><br />";
 
 		if(!empty($GLOBALS['cms']['plugin_data']))
 		{
