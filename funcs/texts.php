@@ -65,7 +65,7 @@
 
 	function quote_fix($text)
 	{
-		if($GLOBALS['bors']['config']['gpc'])
+		if(!empty($GLOBALS['bors_data']['config']['gpc']))
 			$text = stripslashes($text);
 		return $text;
 	}
