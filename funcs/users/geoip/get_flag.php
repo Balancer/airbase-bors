@@ -8,7 +8,7 @@
 		include_once("funcs/Cache.php");
 		
 		$ch = &new Cache();
-		if($ch->get("country_flag-v4", $ip))
+		if($ch->get("country_flag-v7", $ip))
 			return $ch->last();
 
 		$gi = geoip_open("/var/www/balancer.ru/htdocs/cms/3part/geoip/GeoIPCity.dat", GEOIP_STANDARD);
@@ -37,7 +37,7 @@
 			$file = strtolower($cc).".gif";
 			if(!file_exists("/var/www/balancer.ru/htdocs/img/flags/$file"))
 				$file = "-.gif";
-			$res = '<img src="http://balancer.ru/img/flags/'.$file.'" width="20" height="12" border="0" valign="absmiddle" title="'.addslashes($alt).'" alt="'.$cc.'"/>';
+			$res = '<img src="http://balancer.ru/img/flags/'.$file.'" width="20" height="12" border="0" align="absmiddle" title="'.addslashes($alt).'" alt="'.$cc.'"/>';
 		}
 		else
 			$res = "";

@@ -110,8 +110,6 @@ class DataBaseHTS
 		if (empty ($GLOBALS['cms']['data_prehandler'][$key]))
 			return false;
 
-
-
 		if(is_global_key("uri_data($uri)", $key)) 
 			return global_key("uri_data($uri)", $key);
 
@@ -124,8 +122,8 @@ class DataBaseHTS
 				if (($res = $data['func'] ($uri, $m, $data['plugin_data'], $key)) != NULL)
 				{
 //					echo "Pre data ($key, $uri, ".print_r($data, true).") = $res<br/>";
-//					if($key == 'create_time')
-//						echo "=$key=$regexp={$data['func']}=<br />\n";
+//					if($key == 'nav_name')
+//						echo "=$key($uri)=$regexp={$data['func']}= -> $res<br />\n";
 					return set_global_key("uri_data($uri)", $key, $res);
 				}
 		}

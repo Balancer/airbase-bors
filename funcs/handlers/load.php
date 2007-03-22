@@ -129,6 +129,7 @@
 						$data['parent_uri']	= preg_replace("!$pattern!", $m[1], $uri);
 						$data['base_uri']	= $data['parent_uri'].$m[2]."/";
 						$data['base_pattern_uri']	= "({$data['parent_uri']})({$m[2]})/";
+						$data['matches'] = $m;
 
 						$GLOBALS['cms']['templates']['data']['plugin']['base_uri'] = $data['base_uri'];
 						$GLOBALS['cms']['templates']['data']['plugin']['base_path'] = $data['base_path'];

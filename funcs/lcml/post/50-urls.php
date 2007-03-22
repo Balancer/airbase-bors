@@ -34,7 +34,7 @@
             if($cache->get('url_titles-v2', $url))
                 return $cache->last();
             else
-                return $cache->set('url_titles', $url, lcml_urls_title_nocache($url));
+                return $cache->set(lcml_urls_title_nocache($url), 7*86400);
         }
         else
             return lcml_urls_title_nocache($url);

@@ -14,8 +14,8 @@
 			// Если не указан ID, но нет признака отсутствия загрузки, то создаётся новый объект в БД.
 
 			$this->id = $this->initial_id = $id;
-	
-			if(!$this->methods_added)
+
+/*			if(!$this->methods_added)
 			{
 				foreach(get_object_vars($this) as $field => $value)
 				{
@@ -31,7 +31,7 @@
 					$this->addMethod("function set_$name(\$value, \$db_update = true) { \$this-set(\"\$value\", \$value, \$db_update); }");
 				}
 			}
-			
+*/			
 			if($noload)
 				return;
 			
@@ -101,24 +101,26 @@
 			
 			$bors->config()->storage()->save($this);
 		}
-
-		function addMethod(  $code ) 
+/*
+		function addMethod($code)
 		{
 			$cname = uniqid("class");
-			eval( "class ${cname} { ${code} }" );        
-			aggregate_methods( $this , $cname );
+			eval("class ${cname} { ${code} }");
+			aggregate_methods($this, $cname);
 		}
 
 		function addField($name) 
 		{
 			$cname = uniqid("class");
-			eval( "class ${cname} { var \$$name; }" );        
-			aggregate_properties( $this , $cname );
+			eval("class ${cname} { var \$$name; }");
+			aggregate_methods($this, $cname);
 		}
 		
 		function storage_register($var_name, $sql_field)
 		{
-			$this->addField("stb_$var_name");
-			$this->addMethods("function field_$name_storage() { return '$sql_field'; }");
+			print_r($this);
+//			$this->addField("stb_$var_name");
+			$this->addMethod("function field_{$var_name}_storage() { return '$sql_field'; }");
 		}
+*/
 	}

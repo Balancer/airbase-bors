@@ -53,21 +53,52 @@
 			{
 				$dbh = &new DataBase($db_name);
 				
+				$tab_count = 0;
+				$select = array();
+				$from = "";
+				$where = "";
+				$first_name = "";
+				$added = array();
+				
 				foreach($tables as $table_name => $ids)
 				{
-					foreach($ids as $id_field => $fields)
+					foreach($ids as $id_field => $field_list)
 					{
-						$result = $dbh->get("
-							SELECT `".join("`,`", array_keys($fields))."` 
-								FROM `$table_name` 
-								WHERE `$id_field` = '$oid'", false);
-					
-						foreach($fields as $field => $name)
+						if(empty($added["$table_name($id_field)"]))
 						{
-							$set_method = "set_".$name;
-							$object->$set_method(sizeof($fields) > 1 ? $result[$field] : $result, false);
+							$current_tab = "`t".($tab_count++)."`";
+							if(empty($from))
+							{
+								$from = "FROM `$table_name` AS $current_tab";
+								$where = "WHERE $current_tab.`$id_field` = '$oid'";
+							}
+							else
+								$from .= " LEFT JOIN `$table_name` AS $current_tab ON ($current_tab.`$id_field` = '$oid')";
+						}
+
+						foreach($field_list as $field => $name)
+						{
+							$select[] = $current_tab.".`$field` AS `$name`";
+							$first_name = $name;
 						}
 					}
+					
+					$result = $dbh->get("SELECT ".join(",", $select)." $from $where", false);
+					
+					if(is_array($result))
+					{
+						foreach($result as $name => $value)
+						{
+							$set_method = "set_".$name;
+							$object->$set_method($value, false);
+						}
+					}
+					else
+					{
+						$set_method = "set_".$first_name;
+						$object->$set_method($result, false);
+					}
+					
 				}
 			}
 			

@@ -292,41 +292,73 @@
 
 		function make_string_values($array)
 		{
-			$keys="";
-			$values="";
-			$first=1;
+			$keys=array();
+			$values=array();
 			foreach($array as $k => $v)
 			{
-				if($first)
+				if(strpos($k, ' ') === false)
 				{
-					$first=0;
+					$keys[] = "`$k`";
+					$values[] = "'".addslashes($v)."'"; // mysql_real_escape_string
 				}
 				else
 				{
-					$keys.=",";
-					$values.=",";
+					list($type, $k) = split(' ', $k);
+					$keys[] = "`$k`";
+					switch($type)
+					{
+						case 'int':
+							if(preg_match('!^0x[\da-fA-F]+$!', $v))
+								$values[] = $v;
+							else
+								$values[] = intval($v);
+							break;
+						case 'float':
+							$values[] = str_replace(',', '.', floatval($v)); break;
+						default:
+							$values[] = "'".addslashes($v)."'";
+					}
 				}
-
-				$keys.="`$k`";
-				$values.="'".addslashes($v)."'"; // mysql_real_escape_string
 			}
-			return " ($keys) VALUES ($values) ";
+			
+			return " (".join(",", $keys).") VALUES (".join(",", $values).") ";
 		}
 
 		function make_string_set($array)
 		{
-			$first=1;
-			$set='';
+			$set = array();
 
 			foreach($array as $k => $v)
 			{
-				if($first)
-					$first=0;
-				else
-					$set.=",";
-				$set.="`$k`='".addslashes($v)."'"; // mysql_real_escape_string
+				$this->normkeyval($k, $v);
+				$set[] = "$k = $v"; 
 			}
-			return " SET $set ";
+			return " SET ".join(",", $set)." ";
+		}
+
+		function normkeyval(&$key, &$value)
+		{
+			@list($type, $key) = split('\s+', trim($key));
+			if(empty($key))
+			{
+				$key = $type;
+				$type = 'default';
+			}
+
+			switch($type)
+			{
+				case 'int':
+					if(!preg_match('!^0x[\da-fA-F]+$!', $value))
+						$value = intval($value);
+					break;
+				case 'float':
+					$value = str_replace(',', '.', floatval($value)); 
+					break;
+				default:
+					$value = "'".addslashes($value)."'"; // mysql_real_escape_string
+			}
+			
+			$key = "`$key`";
 		}
 
 		function insert($table, $fields)
