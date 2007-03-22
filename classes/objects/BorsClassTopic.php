@@ -13,9 +13,7 @@
 		function field_create_time_storage() { return 'punbb.topics.posted(id)'; }
 		function field_modify_time_storage() { return 'punbb.topics.last_post(id)'; }
 
-		function BorsClassTopic
-		BorsBaseObject::storage_register('last_author', 'punbb.topics.last_poster(id)');
-		
+
         function parents()
 		{
 			return array(array('forum', $this->forum_id() ));
@@ -47,5 +45,10 @@
 
 			return template_assign_data("BorsClassTopicBody.html", $data);
 		}
+
+		var $stb_last_poster;
+		function last_poster() { return $this->stb_last_poster; }
+		function set_last_poster($last_poster, $db_update = false) { $this->set("last_poster", $last_poster); }
+		function field_last_poster_storage() { return 'punbb.topics.last_poster(id)'; }
 	}
 	

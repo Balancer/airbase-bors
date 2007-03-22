@@ -20,4 +20,3 @@
 		show_page($uri);
 		return true;
 	}
-?>

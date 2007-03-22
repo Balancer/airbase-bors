@@ -294,8 +294,12 @@ $bg_switch = true;	// Used for switching background color in posts
 $post_count = 0;	// Keep track of post numbers
 
 $cdb = &new DataBase('punbb');
-if(!$archive_loaded && !$cdb->get("SELECT COUNT(*) FROM posts WHERE topic_id = $id"))
-	$cdb->query("REPLACE INTO posts SELECT * FROM posts_archive WHERE topic_id = $id");
+if(!$archive_loaded)
+{
+	$cnt = $cdb->get("SELECT COUNT(*) FROM posts WHERE topic_id = $id");
+	if(!$cnt || $cnt != $cdb->get("SELECT COUNT(*) FROM posts_archive WHERE topic_id = $id"))
+		$cdb->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = $id");
+}
 
 // Retrieve the posts
 $q = "
@@ -332,13 +336,13 @@ include_once("funcs/lcml.php");
 
 while ($cur_post = $db->fetch_assoc($result))
 {
-	if(empty($GLOBALS['bors']['cache']['punbb_user'][$cur_post['poster_id']]))
+	if(empty($GLOBALS['bors_data']['cache']['punbb_user'][$cur_post['poster_id']]))
 	{
 		$poster = $cdb->get("SELECT * FROM users  WHERE id = ".intval($cur_post['poster_id']));
-		$GLOBALS['bors']['cache']['punbb_user'][$cur_post['poster_id']] = serialize($poster);
+		$GLOBALS['bors_data']['cache']['punbb_user'][$cur_post['poster_id']] = serialize($poster);
 	}
 	else
-		$poster = unserialize($GLOBALS['bors']['cache']['punbb_user'][$cur_post['poster_id']]);
+		$poster = unserialize($GLOBALS['bors_data']['cache']['punbb_user'][$cur_post['poster_id']]);
 
 	if(empty($cur_post['flag']))
 	{
@@ -403,13 +407,13 @@ while ($cur_post = $db->fetch_assoc($result))
 				if ($pun_config['o_censoring'] == '1')
 					$poster['location'] = censor_words($poster['location']);
 
-				$user_info[] = '<dd>'.$lang_topic['From'].': '.pun_htmlspecialchars($poster['location']);
+				$user_info[] = $lang_topic['From'].': '.pun_htmlspecialchars($poster['location']);
 			}
 
-			$user_info[] = '<dd>'.$lang_common['Registered'].': '.date($pun_config['o_date_format'], $poster['registered']);
+			$user_info[] = $lang_common['Registered'].': '.date($pun_config['o_date_format'], $poster['registered']);
 
 			if ($pun_config['o_show_post_count'] == '1' || $pun_user['g_id'] < PUN_GUEST)
-				$user_info[] = '<dd>'.$lang_common['Posts'].': '.$poster['num_posts'];
+				$user_info[] = $lang_common['Posts'].': '.$poster['num_posts'];
 
 			// Now let's deal with the contact links (E-mail and URL)
 			if (($poster['email_setting'] == '0' && !$pun_user['is_guest']) || $pun_user['g_id'] < PUN_GUEST)
@@ -423,14 +427,14 @@ while ($cur_post = $db->fetch_assoc($result))
 
 		if ($pun_user['g_id'] < PUN_GUEST)
 		{
-			$user_info[] = "<dd>IP: <a href=\"{$pun_config['root_uri']}/moderate.php?get_host={$cur_post['id']}\">".$cur_post['poster_ip'].'</a>';
+			$user_info[] = "IP: <a href=\"{$pun_config['root_uri']}/moderate.php?get_host={$cur_post['id']}\">".$cur_post['poster_ip'].'</a>';
 
 			if ($poster['admin_note'] != '')
-				$user_info[] = '<dd>'.$lang_topic['Note'].': <strong>'.pun_htmlspecialchars($poster['admin_note']).'</strong>';
+				$user_info[] = $lang_topic['Note'].': <strong>'.pun_htmlspecialchars($poster['admin_note']).'</strong>';
 		}
 		
 		if($is_coordinator)
-			$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warn_add/?ref=".urlencode("{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['id']}#p{$cur_post['id']}")."\" style=\"color: red;\">Выставить штраф</span>";
+			$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warn_add/?ref=".urlencode("{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['id']}#p{$cur_post['id']}")."\" style=\"color: red;\">Выставить штраф</a>";
 
 		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation/post://{$cur_post['id']}/\">Репутация участника</a>";
 
@@ -443,7 +447,7 @@ while ($cur_post = $db->fetch_assoc($result))
 		$user_title = get_title($poster);
 
 		if ($pun_user['g_id'] < PUN_GUEST)
-			$user_info[] = "<dd>IP: <a href=\"{$pun_config['root_uri']}/moderate.php?get_host={$cur_post['id']}\">".$cur_post['poster_ip'].'</a>';
+			$user_info[] = "IP: <a href=\"{$pun_config['root_uri']}/moderate.php?get_host={$cur_post['id']}\">".$cur_post['poster_ip'].'</a>';
 
 		if ($pun_config['o_show_user_info'] == '1' && $cur_post['poster_email'] != '' && !$pun_user['is_guest'])
 			$user_contacts[] = '<a href="mailto:'.$cur_post['poster_email'].'">'.$lang_common['E-mail'].'</a>';
@@ -549,13 +553,13 @@ while ($cur_post = $db->fetch_assoc($result))
 	if($user_warn_count)
 	{
 		$user_warn = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings/\">";
-		$user_warn .= str_repeat("<img src=\"http://balancer.ru/img/web/cross.gif\" width=\"16\" height=\"16\" border=\"0\">", intval($user_warn_count/2));
+		$user_warn .= str_repeat("<img src=\"http://balancer.ru/img/web/cross.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"+\" />", intval($user_warn_count/2));
 
 		if($user_warn_count % 2)
-			$user_warn .= "<img src=\"http://balancer.ru/img/web/cross-half.gif\" width=\"16\" height=\"16\" border=\"0\">";
+			$user_warn .= "<img src=\"http://balancer.ru/img/web/cross-half.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"-\" />";
 
 		if(intval($user_warn_count/2+0.5) < 5)
-			$user_warn .= str_repeat("<img src=\"http://balancer.ru/coppermine/images/flags/blank.gif\" width=\"16\" height=\"16\" border=\"0\">", 5-intval($user_warn_count/2+0.5));
+			$user_warn .= str_repeat("<img src=\"http://balancer.ru/coppermine/images/flags/blank.gif\" width=\"16\" height=\"16\" border=\"0\" alt =\"\" />", 5-intval($user_warn_count/2+0.5));
 	
 		if($user_warn_count >= 10)
 			$user_warn .= "<div style=\"font-size: 6pt; color: red;\">R/O до ".strftime("%y-%m-%d", 30*86400+$cms_db->get("SELECT MIN(`time`) FROM warnings WHERE user_id = user_id AND time > ".(time()-30*86400)." LIMIT 10", true, 3600))."</div>";
@@ -588,7 +592,7 @@ while ($cur_post = $db->fetch_assoc($result))
 							<center>
 							<?
 								if($poster['reputation'])
-									echo "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation/post://{$cur_post['id']}/\"><img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/rep.gif\" width=\"100\" height=\"16\" border=\"0\" /></a>\n";
+									echo "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation/post://{$cur_post['id']}/\"><img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/rep.gif\" width=\"100\" height=\"16\" border=\"0\" alt=\"*\" /></a>\n";
 							?>
 							<div><?echo $user_warn;?></div>
 							</center>

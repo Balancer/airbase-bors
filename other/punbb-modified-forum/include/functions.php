@@ -484,14 +484,14 @@ function get_title($user)
 		}
 	}
 
-	if(empty($GLOBALS['bors']['cache']['punbb_group'][$user['group_id']]))
+	if(empty($GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']]))
 	{
 		$cdb = &new DataBase('punbb');
 		$group  = $cdb->get("SELECT * FROM groups WHERE g_id = ".intval($user['group_id']));
-		$GLOBALS['bors']['cache']['punbb_group'][$user['group_id']] = serialize($group);
+		$GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']] = serialize($group);
 	}
 	else
-		$group = unserialize($GLOBALS['bors']['cache']['punbb_group'][$user['group_id']]);
+		$group = unserialize($GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']]);
 	// If the user has a custom title
 	if ($user['title'] != '')
 		$user_title = pun_htmlspecialchars($user['title']);

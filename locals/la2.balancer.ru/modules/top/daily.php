@@ -4,7 +4,7 @@
         include_once('funcs/DataBase.php');
         include_once('funcs/Cache.php');
 		
-		$ch = new Cache();
+		$ch = &new Cache();
 
 		if($ch->get('l2j-top-daily', $days))
 		{
@@ -12,14 +12,14 @@
 			return;
 		}
 		
-        $hts = new DataBase('l2jdb','la2', 'la2kkk');
-        $max = $hts->get("select max(count) from online;");
+        $db = &new DataBase('l2jdb');
+        $max = $db->get("select max(count) from online;");
 
 		$d = array();
 		$m = array();
 		$c = array();
 
-        foreach($hts->get_array("select * from online where date > ".(time()-$days*86400)." order by date desc") as $r)
+        foreach($db->get_array("select * from online where date > ".(time()-$days*86400)." order by date desc") as $r)
 		{
 			$dd = strftime("%Y-%m-%d, %a",$r['date']);
 			@$d[$dd] += $r['count'];
@@ -43,9 +43,7 @@
 		}
         $ret .= "</table>\n";
 
-		echo $ch->set('l2j-top-daily', $days, $ret, 86400);
+		echo $ch->set($ret, 86400);
     }
 
     modules_top_daily_main(150);
-?>
-

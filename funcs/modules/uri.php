@@ -84,6 +84,7 @@
 
         $uri = strtr($uri, array(
         ' ' => '-', 
+		':' => '-',
         '"' => "'", 
         '#' => '-N',
         '&' => '-and-',
@@ -103,5 +104,6 @@
         $uri = preg_replace("!^\-+!",'', $uri);
         $uri = preg_replace("!\-+$!",'', $uri);
         $uri = preg_replace("!\-{2,}!",'-', $uri);
+        $uri = preg_replace("!(,|\.)-!",'$1', $uri);
         return $uri;        
     }

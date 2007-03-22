@@ -17,8 +17,8 @@
 {if $t.more}<div align="right"><i><a href="http://balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">Дальше &#187;&#187;&#187;</a></i></div>{/if}
 <div style="font-size: xx-small; border-top: 1px solid; margin-top: 16px;">
 <a href="http://balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">Ссылка</a> -
-{$t.num_replies} {$topics[i].num_replies|sklon:"комментарий":"комментария":"комментариев"},
-{$t.num_views} {$topics[i].num_views|sklon:"просмотр":"просмотра":"просмотров"}.
+{$t.num_replies} {$t.num_replies|sklon:"комментарий":"комментария":"комментариев"},
+{$t.num_views} {$t.num_views|sklon:"просмотр":"просмотра":"просмотров"}.
 </div>
 </td></tr></table>
 {/foreach}
