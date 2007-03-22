@@ -6,7 +6,7 @@
     {
 //		print_r($params);
 	
-        $hts = new DataBaseHTS;
+        $hts = &new DataBaseHTS;
 		
 		$add = "";
 		

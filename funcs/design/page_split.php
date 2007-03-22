@@ -1,5 +1,5 @@
 <?
-	function pages_select($uri, $current_page, $total_pages)
+	function pages_select($page, $current_page, $total_pages)
 	{
 		$pages = array();
 		$total_pages = intval($total_pages);
@@ -22,10 +22,15 @@
 				
 				$last = $i;
 				
-				$p = $uri;
-				if($i > 1)
-					$p .= "page$i/";
-			
+				if(is_object($page))
+					$p = $page->uri($i);
+				else
+				{
+					$p = $page;
+					if($i > 1)
+						$p .= "page$i/";
+				}
+				
 				$pages[] = "<a href=\"$p$q\" class=\"".(($i==$current_page)?'current_page':'select_page')."\">$i</a>";
 			}
 		}

@@ -1,6 +1,10 @@
+{if $pagelist}<center>{$pagelist}</center>{/if}
+
 {foreach from=$posts item=p}
 <dl class="forumposting">
 <dt>{$p->flag()} {$p->author_name()}, {$p->create_time()|full_time}</dt>
 <dd>{$p->body()}</dd>
 </dl>
 {/foreach}
+
+{if $pagelist}<center>{$pagelist}</center>{/if}

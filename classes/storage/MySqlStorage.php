@@ -70,10 +70,10 @@
 							if(empty($from))
 							{
 								$from = "FROM `$table_name` AS $current_tab";
-								$where = "WHERE $current_tab.`$id_field` = '$oid'";
+								$where = "WHERE ".make_id_field($current_tab, $id_field, $object->id());
 							}
 							else
-								$from .= " LEFT JOIN `$table_name` AS $current_tab ON ($current_tab.`$id_field` = '$oid')";
+								$from .= " LEFT JOIN `$table_name` AS $current_tab ON (".make_id_field($current_tab, $id_field, $object->id()).")";
 						}
 
 						foreach($field_list as $field => $name)
@@ -107,8 +107,6 @@
 
 		function save($object)
 		{
-			return;
-		
 			if(!$object->id())
 				return;
 		
@@ -127,15 +125,12 @@
 				
 				list($dummy, $db, $table, $db_field, $id_field) = $m;
 		
-				if($loaded)
-				{
-					$value = $this->dbh->update("$db.$table","$id_field = '".addslashes($object->id())."'",
-						array($db_field => $object->$field));
-				}
-				else // Если загрузки не было, то это новый объект.
-				{
-					
-				}
+				$dbh = &new DataBase($db);
+				$dbh->store($table, make_id_field($table, $id_field, $object->id()),
+						array(
+							$id_field => $object->id(),
+							$db_field => $object->$field,
+						));
 			}
 
 			$object->changed_fields = array();
@@ -151,4 +146,12 @@
 	{
 		global $mysq_map;
 		$mysql_map[$key] = $map;
+	}
+
+	function make_id_field($table, $id_field, $oid)
+	{
+		if(strpos($id_field, '=') === false)
+			return "$table.$id_field = '".addslashes($oid)."'";
+		$out =  preg_replace("!(\w+)=(\w+)!g", "$table.$1=$2", $id_field);
+		return  preg_replace("!(\w+)='(\w+)'!g", "$table.$1='$2'", $out);
 	}

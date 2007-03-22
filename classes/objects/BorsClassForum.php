@@ -8,12 +8,12 @@
 
 		var $stb_parent_forum_id = '';
 		function parent_forum_id() { return $this->stb_parent_forum_id; }
-		function set_parent_forum_id($parent_forum_id, $db_update = false) { $this->set("parent_forum_id", $parent_forum_id); }
+		function set_parent_forum_id($parent_forum_id, $db_update = false) { $this->set("parent_forum_id", $parent_forum_id, $db_update); }
 		function field_parent_forum_id_storage() { return 'punbb.forums.parent(id)'; }
 
 		var $stb_category_id = '';
 		function category_id() { return $this->stb_category_id; }
-		function set_category_id($category_id, $db_update = false) { $this->set("category_id", $category_id); }
+		function set_category_id($category_id, $db_update = false) { $this->set("category_id", $category_id, $db_update); }
 		function field_category_id_storage() { return 'punbb.forums.cat_id(id)'; }
 
         function parents()
@@ -42,5 +42,11 @@
 				$data['topics'][] = class_load('topic', $tid);
 
 			return template_assign_data("BorsClassForumBody.html", $data);
+		}
+
+		function is_public_access()
+		{
+			$access = class_load('forum/forumAccess', "{$this->forum_id}:3");
+			return $access->is_access();
 		}
 	}

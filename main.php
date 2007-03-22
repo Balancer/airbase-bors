@@ -92,12 +92,17 @@
 		return;
 		
 	$ret = handlers_exec();
+
+	global $bors;
+	if(!empty($bors))
+		$bors->changed_save();
 	
 	if($ret === true)
 		return;
 
 	if($ret !== false)
 		$uri = $ret;
+
 
 	echo "<pre>";
 
