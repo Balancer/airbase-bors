@@ -1,6 +1,6 @@
 <?
-	require_once('BorsBaseObject.php');
-	class BorsClassForum extends BorsBaseObject
+	require_once('BorsBaseForumObject.php');
+	class BorsClassForum extends BorsBaseForumObject
 	{
 		function type() { return 'forum'; }
 
@@ -21,7 +21,7 @@
 			if($this->parent_forum_id())
 				return array(array('forum', $this->parent_forum_id() ));
 			else
-				return array(array('category', $this->category_id() ));
+				return array(array('forumCategory', $this->category_id() ));
 		}
 
         function body()
@@ -34,8 +34,8 @@
 			if(!$this->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
-			if($this->is_public_access())
-				$GLOBALS['cms']['cache_static'] = true;
+//			if($this->is_public_access())
+//				$GLOBALS['cms']['cache_static'] = true;
 
 			include_once("funcs/templates/assign.php");
 
@@ -55,7 +55,7 @@
 			foreach($topics as $tid)
 				$data['topics'][] = class_load('topic', $tid);
 
-			return template_assign_data("BorsClassForumBody.html", $data);
+			return template_assign_data("templates/BorsClassForumBody.html", $data);
 		}
 
 		function is_public_access()
@@ -77,7 +77,7 @@
 				$parent_caches[] = class_load('forum', $this->parent_forum_id());
 
 			if($this->category_id())
-				$parent_caches[] = class_load('category', $this->category_id());
+				$parent_caches[] = class_load('forumCategory', $this->category_id());
 			
 			return $parent_caches;
 		}

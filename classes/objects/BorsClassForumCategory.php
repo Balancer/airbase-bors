@@ -1,8 +1,8 @@
 <?
-	require_once('BorsBaseObject.php');
-	class BorsClassCategory extends BorsBaseObject
+	require_once('BorsBaseForumObject.php');
+	class BorsClassForumCategory extends BorsBaseForumObject
 	{
-		function type() { return 'category'; }
+		function type() { return 'forumCategory'; }
 
 		function field_title_storage() { return 'punbb.categories.cat_name(id)'; }
 
@@ -18,8 +18,10 @@
 
 		function parents()
 		{
+//			echo "Get parents for cat ".$this->id();
+		
 			if($this->parent_category_id())
-				return array(array('category', $this->parent_category_id()));
+				return array(array('forumCategory', $this->parent_category_id()));
 
 			return array(array('page', $this->base_uri()));
 		}

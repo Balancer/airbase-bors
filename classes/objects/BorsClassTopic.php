@@ -1,6 +1,6 @@
 <?
-	require_once('BorsBaseObject.php');
-	class BorsClassTopic extends BorsBaseObject
+	require_once('BorsBaseForumObject.php');
+	class BorsClassTopic extends BorsBaseForumObject
 	{
 		function type() { return 'topic'; }
 
@@ -12,6 +12,7 @@
 		function field_title_storage() { return 'punbb.topics.subject(id)'; }
 		function field_create_time_storage() { return 'punbb.topics.posted(id)'; }
 		function field_modify_time_storage() { return 'punbb.topics.last_post(id)'; }
+		function field_owner_id_storage() { return 'punbb.topics.poster_id(id)'; }
 
 
         function parents()
@@ -30,8 +31,8 @@
 			if(!$forum->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
-			if($forum->is_public_access())
-				$GLOBALS['cms']['cache_static'] = true;
+//			if($forum->is_public_access())
+//				$GLOBALS['cms']['cache_static'] = true;
 
 			$bors->config()->set_cache_uri($this->internal_uri());
 
@@ -64,13 +65,22 @@
 				$data['pagelist'] = join(" ", pages_select($this, $this->page(), ($total-1)/$posts_per_page+1));
 			}
 			
-			return template_assign_data("BorsClassTopicBody.html", $data);
+			return template_assign_data("templates/BorsClassTopicBody.html", $data);
 		}
 
-		var $stb_last_poster;
-		function last_poster() { return $this->stb_last_poster; }
-		function set_last_poster($last_poster, $db_update = false) { $this->set("last_poster", $last_poster, $db_update); }
-		function field_last_poster_storage() { return 'punbb.topics.last_poster(id)'; }
+		var $stb_last_poster_name;
+		function last_poster_name() { return $this->stb_last_poster_name; }
+		function set_last_poster_name($last_poster_name, $db_update = false) { $this->set("last_poster_name", $last_poster_name, $db_update); }
+		function field_last_poster_name_storage() { return 'punbb.topics.last_poster(id)'; }
 
 		function cache_parents() { return array(class_load('forum', $this->forum_id()));}
+
+		function template() { return "xfile://{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/forum.html"; }
+
+		function forum() { return class_load('forum', $this->forum_id()); }
+
+		var $stb_author_name = '';
+		function set_author_name($author_name, $db_update = false) { $this->set("author_name", $author_name, $db_update); }
+		function field_author_name_storage() { return 'punbb.topics.poster(id)'; }
+		function author_name() { return $this->stb_author_name; }
 	}

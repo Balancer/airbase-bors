@@ -37,6 +37,19 @@
 		{
 			echo $this->get_html($object);
 		}
+
+		var $_main_obj = NULL;
+		function main_obj() { return $this->_main_obj; }
+		function set_main_obj($obj) { if($this->_main_obj) exit("Main obj ".$obj->interal_uri()." set error. Exists object ".$this->_main_obj->internal_uri()); $this->_main_obj = $obj; }
+
+		function real_uri($uri)
+		{
+			if(!preg_match("!^(\w+)://(.*[^/])/?$!", $uri, $m))
+				return "";
+			if($m[1] == 'http')
+				return $uri;
+			return class_load($m[1], $m[2])->uri();
+		}
 	}
 	
 	$GLOBALS['bors'] = &new Bors();
