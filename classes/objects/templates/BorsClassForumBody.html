@@ -1,0 +1,20 @@
+<table class="btab small" cellSpacing="0">
+<tr>
+	<th>&nbsp;</th>
+	<th>Тема</th>
+	<th>Форум</th>
+	<th>Обновлено</th>
+	<th>Создано</th>
+</tr>
+{foreach from=$topics item=t}
+{assign var=f value=$t->forum()}
+{assign var=o value=$t->owner()}
+<tr>
+	<td><div class="visited_topic" id="vtl_{$t->id()}">&nbsp;</div></td>
+	<td id="vtt_{$t->id()}"><a href="{$t->uri()}">{$t->title()}</a></td>
+	<td><a href="{$f->uri()}">{$f->title()}</a></td>
+	<td>{$t->last_poster_name()}, {$t->modify_time()|airbase_time}</td>
+	<td><a href="{$o->uri()}">{$o->title()}</a>, {$t->create_time()|airbase_time}</td>
+</tr>
+{/foreach}
+</table>

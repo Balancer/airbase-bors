@@ -206,4 +206,8 @@
 		var $stb_cr_type = NULL;
 		function set_cr_type($cr_type, $db_update=true) { $this->set("cr_type", $cr_type, $db_update); }
 		function cr_type() { return $this->stb_cr_type; }
+
+		var $stb_level = NULL;
+		function set_level($level, $db_update=true) { $this->set("level", $level, $db_update); }
+		function level() { return $this->stb_level; }
 	}

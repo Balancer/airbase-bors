@@ -19,11 +19,10 @@
 		function parents()
 		{
 //			echo "Get parents for cat ".$this->id();
-		
 			if($this->parent_category_id())
 				return array(array('forumCategory', $this->parent_category_id()));
 
-			return array(array('page', $this->base_uri()));
+			return array(array('page', 'http://balancer.ru/'));
 		}
 
         function body()

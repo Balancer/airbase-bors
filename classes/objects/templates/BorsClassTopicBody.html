@@ -1,0 +1,13 @@
+{if $pagelist}<div class="pages_select">{$pagelist}</div>{/if}
+
+{foreach from=$posts item=p}
+<dl class="forumposting blockpost" id="post{$p->id()}" style="clear: both;">
+<dt>{$p->flag()} {$p->author_name()}, {$p->create_time()|full_time}</dt>
+<dd>
+<div class="avatar_block">{include file="xfile:templates/post-avatar.html"}</div>
+{$p->body()}
+</dd>
+</dl>
+{/foreach}
+
+{if $pagelist}<div class="pages_select">{$pagelist}</div>{/if}
