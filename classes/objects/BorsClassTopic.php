@@ -21,6 +21,20 @@
 
         function body()
 		{
+			$this->cache_clean_self();
+		
+			global $bors;
+			
+			$forum = class_load('forum', $this->forum_id());
+		
+			if(!$forum->can_read())
+				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
+
+			if($forum->is_public_access())
+				$GLOBALS['cms']['cache_static'] = true;
+
+			$bors->config()->set_cache_uri($this->internal_uri());
+
 			include_once("funcs/templates/assign.php");
 			$data = array();
 
@@ -57,4 +71,6 @@
 		function last_poster() { return $this->stb_last_poster; }
 		function set_last_poster($last_poster, $db_update = false) { $this->set("last_poster", $last_poster, $db_update); }
 		function field_last_poster_storage() { return 'punbb.topics.last_poster(id)'; }
+
+		function cache_parents() { return array(class_load('forum', $this->forum_id()));}
 	}

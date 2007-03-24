@@ -13,6 +13,8 @@
 
 		function BorsBaseObject($id = NULL, $noload = false)
 		{
+//			echo "BorsBaseObject($id)<br />";
+
 			// Если не указан ID, но нет признака отсутствия загрузки, то создаётся новый объект в БД.
 
 			$this->id = $this->initial_id = $id;
@@ -95,6 +97,8 @@
 			return $uri;
 		}
 
+		function internal_uri() { return  $this->type().'://'.$this->id().'/'; }
+
 		function parents() { return array(); }
 
 		var $loaded = false;
@@ -134,4 +138,24 @@
 			$this->addMethod("function field_{$var_name}_storage() { return '$sql_field'; }");
 		}
 */
+
+		function cache_parents() { return array(); }
+
+		function cache_clean()
+		{
+			$this->cache_clean_self();
+			foreach($this->cache_parents() as $parent_cache)
+				$parent_cache->cache_clean();
+		}
+
+		function cache_clean_self()
+		{
+			include_once('include/classes/cache/CacheStaticFile.php');
+			CacheStaticFile::clean($this->internal_uri());
+		}
+
+		function template_vars()
+		{
+			return 'body create_time description modify_time nav_name source title';
+		}
 	}

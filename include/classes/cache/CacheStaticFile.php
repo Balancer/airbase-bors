@@ -42,6 +42,8 @@
 			$this->uri  = $uri;
 			$this->page  = $page;
 			$this->original_uri  = $uri;
+			if(!empty($GLOBALS['bors']) && $GLOBALS['bors']->config()->cache_uri())
+				$this->original_uri = $GLOBALS['bors']->config()->cache_uri();
 			
 			$this->file = $_SERVER['DOCUMENT_ROOT'].preg_replace('!http://[^/]+!', '', $uri);
 			
@@ -104,5 +106,19 @@
             $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
 			
 			return $db->get("SELECT file FROM cached_files WHERE original_uri = '".addslashes($uri)."' ORDER BY last_compile DESC LIMIT 1");
+		}
+		
+		function clean($original_uri)
+		{
+            $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
+			
+			$files = $db->get_array("SELECT file FROM cached_files WHERE original_uri = '".addslashes($original_uri)."'");
+			$db->query("DELETE FROM cached_files WHERE original_uri = '".addslashes($original_uri)."'");
+			foreach($files as $file)
+			{
+				@unlink($file);
+				@rmdir(dirname($file));
+			}
+			
 		}
     }

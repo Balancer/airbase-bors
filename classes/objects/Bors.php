@@ -26,16 +26,30 @@
 			foreach($this->changed_objects as $name => $obj)
 				$this->config()->storage()->save($obj);
 		}
+		
+		function get_html($object)
+		{
+			require_once('funcs/templates/bors.php');
+			return template_assign_bors_object($object);
+		}
+		
+		function show($object)
+		{
+			echo $this->get_html($object);
+		}
 	}
-
+	
 	$GLOBALS['bors'] = &new Bors();
 
-	function class_load($class, $id, $page=1)
+	function class_load($class, $id=NULL, $page=1)
 	{
+		if($id == NULL)
+			list($class, $id) = split("-", $class);
+	
 		if(empty($GLOBALS['bors_data']['classes'][$class][$id]))
 		{
 			$path = "";
-			if(preg_match("!(.+/)[^/]+!", $class, $m))
+			if(preg_match("!(.+/)([^/]+)!", $class, $m))
 			{
 				$path = $m[1];
 				$class = $m[2];
