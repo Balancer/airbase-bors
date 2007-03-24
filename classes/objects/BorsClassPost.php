@@ -68,4 +68,11 @@
 		function set_author_name($author_name, $db_update = false) { $this->set("author_name", $author_name, $db_update); }
 		function field_author_name_storage() { return 'punbb.posts.poster(id)'; }
 		function author_name() { return $this->stb_author_name; }
+
+		var $stb_owner_id;
+		function set_owner_id($owner_id, $db_update = false) { $this->set("owner_id", $owner_id, $db_update); }
+		function field_owner_id_storage() { return 'punbb.posts.poster_id(id)'; }
+		function owner_id() { return $this->stb_owner_id; }
+
+		function owner() { return class_load('user', $this->owner_id()); }
 	}

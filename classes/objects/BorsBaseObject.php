@@ -79,7 +79,7 @@
 		}
 
 		var $stb_title = '';
-		function title() { return $this->stb_title; }
+		function title() { return $this->stb_title ? $this->stb_title : $this->internal_uri(); }
 		function set_title($new_title, $db_update=true) { $this->set("title", $new_title, $db_update); }
 
 		var $page = '';
@@ -88,18 +88,38 @@
 
 		function uri($page = 1)
 		{ 
+			if(preg_match("!^http://!", $this->id()))
+				return $this->id();
+				
 			require_once("funcs/modules/uri.php");
 			$uri = strftime("/%Y/%m/%d/", $this->modify_time());
 			$uri .= $this->type()."-".$this->id();
 			if($page > 1)
 				$uri .= ",$page";
-			$uri .= "/".translite_uri_simple($this->title()).".html"; 
+			$uri .= "--".translite_uri_simple($this->title()).".html"; 
 			return $uri;
 		}
 
-		function internal_uri() { return  $this->type().'://'.$this->id().'/'; }
+		function internal_uri()
+		{
+			if(preg_match("!^http://!", $this->id()))
+				return $this->id();
+
+			return  $this->type().'://'.$this->id().'/'; 
+		}
 
 		function parents() { return array(); }
+		function parent()
+		{
+//			echo "Parent for ".$this->internal_uri()." is ";
+			$res = array();
+			foreach($this->parents() as $x)
+			{
+				$res[] = class_load($x[0], $x[1])->internal_uri();
+//				print_r($x);
+			}
+			return $res;
+		}
 
 		var $loaded = false;
 		function load()
@@ -158,4 +178,32 @@
 		{
 			return 'body create_time description modify_time nav_name source title';
 		}
+		
+		function is_cache_disabled() { return true; }
+
+		var $stb_description = NULL;
+		function set_description($description, $db_update=true) { $this->set("description", $description, $db_update); }
+		function description() { return $this->stb_description; }
+
+		var $stb_nav_name = NULL;
+		function set_nav_name($nav_name, $db_update=true) { $this->set("nav_name", $nav_name, $db_update); }
+		function nav_name() { return $this->stb_nav_name ? $this->stb_nav_name : $this->title(); }
+
+		var $stb_source = NULL;
+		function set_source($source, $db_update=true) { $this->set("source", $source, $db_update); }
+		function source() { return $this->stb_source; }
+
+		var $stb_template = NULL;
+		function set_template($template, $db_update=true) { $this->set("template", $template, $db_update); }
+		function template() { return $this->stb_template; }
+
+		var $stb_owner_id = NULL;
+		function set_owner_id($owner_id, $db_update=true) { $this->set("owner_id", $owner_id, $db_update); }
+		function owner_id() { return $this->stb_owner_id; }
+
+		function owner() { return class_load('user', $this->owner_id()); }
+
+		var $stb_cr_type = NULL;
+		function set_cr_type($cr_type, $db_update=true) { $this->set("cr_type", $cr_type, $db_update); }
+		function cr_type() { return $this->stb_cr_type; }
 	}
