@@ -1,12 +1,12 @@
 {if $pagelist}<div class="pages_select">{$pagelist}</div>{/if}
 
 {foreach from=$posts item=p}
-<dl class="forumposting blockpost" id="post{$p->id()}" style="clear: both;">
+<dl class="forumposting posted_by_{$p->owner_id()}"">
 <dt>{$p->flag()} {$p->author_name()}, {$p->create_time()|full_time}</dt>
-<dd>
+<dd><table width="100%"><tr><td class="post">
 <div class="avatar_block">{include file="xfile:templates/post-avatar.html"}</div>
 {$p->body()}
-</dd>
+</td></tr></table></dd>
 </dl>
 {/foreach}
 

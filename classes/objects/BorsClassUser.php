@@ -50,6 +50,8 @@
 			if($this->_title = $this->group()->user_title())
 				return $this->_title;
 
+			$this->_title = $this->rank();
+
 			return $this->_title;
 		}
 
@@ -67,4 +69,15 @@
 		function avatar_height() { return $this->stb_avatar_height; }
 		function set_avatar_height($avatar_height, $db_update = false) { $this->set("avatar_height", $avatar_height, $db_update); }
 		function field_avatar_height_storage() { return 'punbb.users.avatar_height(id)'; }
+
+		var $stb_num_posts;
+		function num_posts() { return $this->stb_num_posts; }
+		function set_num_posts($num_posts, $db_update = false) { $this->set("num_posts", $num_posts, $db_update); }
+		function field_num_posts_storage() { return 'punbb.users.num_posts(id)'; }
+
+		function rank()
+		{
+			$db = &new DataBase('punbb');
+			return $db->get("SELECT rank FROM ranks WHERE min_posts < ".intval($this->num_posts())." ORDER BY min_posts DESC LIMIT 1");
+		}
 	}

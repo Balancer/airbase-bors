@@ -5,4 +5,3 @@
 		$txt = preg_replace("!\[quote=(.+?)\]!i","[quote|$1:]", $txt);
         return $txt;
     }
-?>

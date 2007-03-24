@@ -39,8 +39,8 @@
 		}
 
 		var $_main_obj = NULL;
-		function main_obj() { return $this->_main_obj; }
-		function set_main_obj($obj) { if($this->_main_obj) exit("Main obj ".$obj->interal_uri()." set error. Exists object ".$this->_main_obj->internal_uri()); $this->_main_obj = $obj; }
+		function main_object() { return $this->_main_obj; }
+		function set_main_object($obj) { if($this->_main_obj) exit("Main obj ".$obj->interal_uri()." set error. Exists object ".$this->_main_obj->internal_uri()); $this->_main_obj = $obj; }
 
 		function real_uri($uri)
 		{

@@ -22,7 +22,7 @@
 
         function body()
 		{
-			$this->cache_clean_self();
+//			$this->cache_clean_self();
 		
 			global $bors;
 			
@@ -31,10 +31,13 @@
 			if(!$forum->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
-//			if($forum->is_public_access())
-//				$GLOBALS['cms']['cache_static'] = true;
+			if($forum->is_public_access())
+				$GLOBALS['cms']['cache_static'] = true;
 
 			$bors->config()->set_cache_uri($this->internal_uri());
+			
+//			if($this->id() == 32510)
+//				$GLOBALS['bors_data']['lcml_cache_disabled'] = true;
 
 			include_once("funcs/templates/assign.php");
 			$data = array();

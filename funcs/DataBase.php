@@ -6,9 +6,9 @@
 	require_once("funcs/global-data.php");
 	require_once("funcs/texts.php");
 
-	$global_db_new_connections=0;
-	$global_db_resume_connections=0;
-	$global_db_queries=0;
+//	$global_db_new_connections=0;
+//	$global_db_resume_connections=0;
+//	$global_db_queries=0;
 
 	class DataBase
 	{

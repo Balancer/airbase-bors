@@ -28,15 +28,8 @@
 		include_once("/var/www/balancer.ru/htdocs/forum/punbb/include/functions.php");
 		$user_title = get_title($ud);
 
-		if($ud['use_avatar'] == '1')
-		{
-			foreach(split(' ','gif jpg png') as $ext)
-				if($img_size = @getimagesize("{$pun_config['o_avatars_dir']}$user_id.$ext"))
-				{
-					$user_avatar = "<img src=\"{$pun_config['o_avatars_uri']}$user_id.$ext\" {$img_size[3]} alt=\"\" />";
-					break;
-				}
-		}
+		if($ud['use_avatar'])
+			$user_avatar = "<img src=\"{$pun_config['o_avatars_uri']}{$ud['use_avatar']}\" width=\"{$ud['avatar_width']}\" height=\"{$ud['avatar_height']}\" alt=\"\" />";
 		else
 			$user_avatar = '';
 
