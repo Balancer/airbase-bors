@@ -30,6 +30,7 @@
 					continue;
 					
 				$name = substr($field, 4);
+//				echo "--- load $name<br />";
 
 				$field_storage_method_name = "field_{$name}_storage";
 				if(method_exists($object, $field_storage_method_name))
@@ -37,17 +38,17 @@
 				else
 					$map = @$mysql_map[$name];
 
-				if(!preg_match("!^(\w+)\.(\w+).(\w+)\((\w+)\)$!", $map, $m))
+				if(!preg_match("!^(\w+)\.(\w+).(\w+)\(([^\(\)]+)\)$!", $map, $m))
 					continue;
 				
 				list($dummy, $db, $table, $field, $id_field) = $m;
 
 				$data[$db][$table][$id_field][$field] = $name;
-		
-//				echo "Load $name = $value\n";
 			}
 
 			$oid = addslashes($object->id());
+
+//			print_r($data); echo "<br />";
 
 			foreach($data as $db_name => $tables)
 			{
@@ -152,6 +153,7 @@
 	{
 		if(strpos($id_field, '=') === false)
 			return "$table.$id_field = '".addslashes($oid)."'";
-		$out =  preg_replace("!(\w+)=(\w+)!g", "$table.$1=$2", $id_field);
-		return  preg_replace("!(\w+)='(\w+)'!g", "$table.$1='$2'", $out);
+		$out =  preg_replace("!(\w+)=(\w+)!", "$table.$1=$2", $id_field);
+		$out =  preg_replace("!(\w+)='(\w+)'!", "$table.$1='$2'", $out);
+		return $out;
 	}

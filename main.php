@@ -94,7 +94,7 @@
 	$ret = handlers_exec();
 
 	global $bors;
-	if(!empty($bors))
+	if(!empty($bors) && is_object($bors))
 		$bors->changed_save();
 	
 	if($ret === true)

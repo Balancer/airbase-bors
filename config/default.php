@@ -60,6 +60,6 @@
 		foreach($_POST as $key => $val)
 			 $_POST[$key] = stripslashes($val);
 
-	$GLOBALS['bors']['config'] = array(
+	$GLOBALS['bors_data']['config'] = array(
 		'gpc' => get_magic_quotes_gpc(),
 	);

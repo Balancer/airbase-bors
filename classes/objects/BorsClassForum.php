@@ -26,7 +26,21 @@
 
         function body()
 		{
+			$this->cache_clean_self();
+		
+			global $bors;
+
+			
+			if(!$this->can_read())
+				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
+
+			if($this->is_public_access())
+				$GLOBALS['cms']['cache_static'] = true;
+
 			include_once("funcs/templates/assign.php");
+
+			$bors->config()->set_cache_uri($this->internal_uri());
+			
 			$data = array();
 
 			$db = &new DataBase('punbb');
@@ -46,7 +60,25 @@
 
 		function is_public_access()
 		{
-			$access = class_load('forum/forumAccess', "{$this->forum_id}:3");
-			return $access->is_access();
+			$access = class_load('forum/forumAccess', "{$this->id()}:3");
+			return $access->can_read();
+		}
+
+		function can_read()
+		{
+			$access = class_load('forum/forumAccess', "{$this->id()}:" . class_load('user', -1)->group_id());
+			return $access->can_read();
+		}
+
+		function cache_parents()
+		{ 
+			$parent_caches = array();
+			if($this->parent_forum_id())
+				$parent_caches[] = class_load('forum', $this->parent_forum_id());
+
+			if($this->category_id())
+				$parent_caches[] = class_load('category', $this->category_id());
+			
+			return $parent_caches;
 		}
 	}

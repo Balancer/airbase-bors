@@ -140,6 +140,9 @@ if (isset($_POST['form_sent']))
 		$db->query("UPDATE {$db->prefix}messages SET message='".$db->escape($message)."', `html` = NULL WHERE id=$id") 
 			or error('Unable to update post', __FILE__, __LINE__, $db->error());
 
+		include_once("classes/objects/Bors.php");
+		class_load('topic', $cur_post['tid'])->cache_clean();
+
 		//Attachment Mod 2.0 Block Start
 		//First check if there are any files to delete, the postvariables should be named 'attach_delete_'.$i , if it's set you're going to delete the value of this (the 0 =< $i < attachments, just to get some order in there...)
 		if(isset($_POST['attach_num_attachments'])){
