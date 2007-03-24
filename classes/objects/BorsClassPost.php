@@ -21,7 +21,7 @@
 		function field_body_storage() { return 'punbb.messages.html(id)'; }
 		function body()
 		{
-			if(empty($this->stb_body))
+			if(empty($this->stb_body) || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
 			{
 				$body = lcml($this->source(), 
 					array(

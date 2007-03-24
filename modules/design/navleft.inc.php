@@ -1,6 +1,7 @@
 <?
 	function modules_design_navleft_get($uri)
 	{
+		require_once("classes/objects/Bors.php");
 		include_once("funcs/Cache.php");
 		$ch = &new Cache();
 		
@@ -115,16 +116,24 @@
 				}
 			}
 
+//			if($we)
+//			{
+//				$list = array_merge($list, $we);
+//				$we = false;
+//			}
+
 //			echo "<xmp>"; print_r($list); echo "</xmp>";
 			$list = array_merge($list, modules_design_navleft_get_parent($parent, $children_list, $indent + 1));
 		}
 
 //		echo "<xmp>"; print_r($list); echo "</xmp>";
+		return $we ? $we : $list;
 		return $we ? array_merge($list, $we) : $list;
 	}
 
 	function modules_design_navleft_fill($uri, $indent)
 	{
+		require_once("classes/objects/Bors.php");
 		$hts = &new DataBaseHTS();
 	
 		return array(

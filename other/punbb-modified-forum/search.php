@@ -551,7 +551,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		$start_from = $per_page * ($p - 1);
 
 		// Generate paging links
-		$paging_links = $lang_common['Pages'].': '.paginate($num_pages, $p, 'search.php?search_id='.$search_id);
+		$paging_links = $lang_common['Pages'].': '.paginate($num_pages, $p, 'search.php?action='.$_GET['action']);
 
 
 		$sql .= ' '.$sort_dir.' LIMIT '.$start_from.', '.$per_page;

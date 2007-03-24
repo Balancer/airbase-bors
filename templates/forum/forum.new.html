@@ -1,0 +1,85 @@
+<html>
+<head>
+	<title>{$title}</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="SHORTCUT ICON" href="/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/old.css" />
+	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/main.css" />
+</head>
+
+<body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg">
+  <table width="100%" border="0" cellPadding="0" cellSpacing="0">
+   <tr><td colSpan="4" style="padding: 0px; margin: 0px;">
+    <noindex>
+	<table cellPadding="0" cellSpacing="0" width="100%">
+      <tr><td><a href="http://airbase.ru/"><img src="http://airbase.ru/images/web/top-rus-airbase.gif" border="0" alt="Авиабаза =KRoN=" title="Логотип"></a></td>
+	      <td align="right">
+<form method="get" action="http://balancer.ru/search/topic_titles/">
+<input type="text" name="q" value="Су-27" />
+<input type="submit" value="искать" />
+</form>
+          </td>
+      </tr>
+	</table>
+  </td></tr>
+  <tr><td>&nbsp;</td>
+      <td colSpan="3">
+	    <noindex>
+		  <div class="tabs">
+		    <a href="{$uri}" class="{if not $action}selected{else}plain{/if}" title="Просмотр страницы"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/view-refresh.png" width="16" height="16" alt="*" border="0">просмотр</a>
+			<a href="#" class="plain">обсуждение</a>
+            <a href="{$uri}?edit" class="{if $action == "edit"}selected{else}plain{/if}" title="Редактировать страницу"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/apps/kedit.png" width="16" height="16" alt="*" border="0">редактор</a>
+			<a href="{$uri}?edit-data" class="{if $action=="edit-data"}selected{else}plain{/if}" title="Параметры страницы"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/categories/gnome-system.png" width="16" height="16" alt="*" border="0">параметры</a>
+			<a href="{$uri}?nav_edit" class="{if $action=="nav_edit"}selected{else}plain{/if}" title="Навигация страницы"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/forward.png" width="16" height="16" alt="*" border="0">навигация</a>
+          </div>
+		</noindex>
+      </td>
+  </tr>
+  <tr>
+    <td width="150" rowSpan="2" vAlign="top" style="border-right: 1px solid #0066cc;">
+      <noindex>
+        <dl class="box">
+		  <dt>Навигация</dt>
+   		  <dd class="navleft">{module name="design/parents"}</dd>
+	    </dl>
+        {load_data page="/cms/modules/left-main-menu/" key="body"}
+        {load_data page="/cms/modules/counters/hidden/" key="source"}
+      </noindex>
+    </td>
+    <td colSpan="3" height="10" vAlign="top" bgColor="#F0F4F8" style="padding: 8px 4px 0px 0px;">
+      <noindex>
+	    <table class="nav">
+		  <tr>
+		    <td>
+			  {call func=module param="top-navs.php"}
+			</td>
+		  </tr>
+		</table>
+	  </noindex>
+	  <small><i>{$description}</i></small>
+	  <h1>{$title}</h1>
+	</td>
+  </tr>
+  <tr>
+    <td vAlign="top" bgColor="#F0F4F8" style="border-bottom: 1px solid #0066cc; padding: 0px 4px 4px 8px;">
+      <script src="http://airbase.ru/inc/js/width.js"></script>
+	  <script>if(width>650) width=650;</script>
+{$body}
+	  <div align="right" style="border-top: 1px solid; margin: 16px 0px 0px 0px;">
+        Copyright &copy; Balancer 1997..2006<br/>
+	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
+		{if $views}{* {$views}-е посещение с {$views_first|strftime:"%d.%m.%Y"}<br/> *}{/if}
+		{if $views_average}В среднем посещений в день: {$views_average}<br/>{/if}
+		{if $queries}Запросов к БД: {$queries}<br/>{/if}
+		{if $queries_time}Время запросов БД: {$queries_time}<br/>{/if}
+		{if $make_time}Время генерации страницы: {$make_time}<br/>{/if}
+	  </div>
+	</td>
+	<td vAlign="top" bgColor="#F0F4F8" style="border-bottom: 1px solid #0066cc;">
+	  &nbsp;
+	</td>
+  </tr>
+</table>
+
+</body>
+</html>

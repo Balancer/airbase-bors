@@ -87,7 +87,10 @@
 		function set_page($page) { $this->set("page", $page, false); }
 
 		function uri($page = 1)
-		{ 
+		{
+			if($page < 1)
+				$page = $this->page();
+		
 			if(preg_match("!^http://!", $this->id()))
 				return $this->id();
 				

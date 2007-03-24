@@ -1,6 +1,7 @@
 <?
     function print_top_navs($uri=NULL)
     {
+		require_once("classes/objects/Bors.php");
 //		echo "Get nav for $uri<br />";
 	
 	    require_once("funcs/Cache.php");
