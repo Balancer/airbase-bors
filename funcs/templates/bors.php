@@ -25,10 +25,18 @@
 		$smarty->cache_modified_check = true;
 		$smarty->cache_lifetime = 86400*7;
 
+//		$smarty->assign("views_average", sprintf("%.1f",86400*$views/($views_last-$views_first+1)));
+		$smarty->assign("main_uri", @$GLOBALS['main_uri']);
+		$smarty->assign("now", time());
+		$smarty->assign("ref", @$_SERVER['HTTP_REFERER']);
+		$smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
+		$smarty->assign("queries", $GLOBALS['global_db_queries']);
+
 		foreach(split(' ', $obj->template_vars()) as $var)
 			$smarty->assign($var, $obj->$var());
 		
 		$template = smarty_template($obj->template());
+		$smarty->assign("page_template", $template);
 		
 		if(!empty($GLOBALS['cms']['templates']['data']))
             foreach($GLOBALS['cms']['templates']['data'] as $key => $value)
@@ -37,9 +45,23 @@
 		if(!$caching)
 			$smarty->clear_cache($template, $obj->uri());
 
+		if(!empty($GLOBALS['stat']['start_microtime']))
+		{
+		    list($usec, $sec) = explode(" ",microtime());
+   	        $smarty->assign("make_time", sprintf("%.3f", ((float)$usec + (float)$sec) - $GLOBALS['stat']['start_microtime']));
+		}
+
 		$out = $smarty->fetch($template, $obj->uri());
 
-//		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
+/*		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out); */
 
 		return $out;
+	}
+
+	function smarty_template($template_name)
+	{
+		if(substr($template_name, 0, 8) == 'xfile://')
+			return $template_name;
+		
+		return $GLOBALS['cms']['default_template'];
 	}

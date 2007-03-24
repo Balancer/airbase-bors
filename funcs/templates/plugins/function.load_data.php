@@ -43,4 +43,3 @@
 
         return /*"=$add|{$params['key']}=".*/ $src;
     }
-?>

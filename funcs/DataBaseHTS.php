@@ -175,9 +175,10 @@ class DataBaseHTS
 		global $transmap;
 
 //		print_r($transmap);
+//		echo "$uri($key)<br/>";
 
 		if(!preg_match('!^http://!', $uri))
-			if(preg_match('!^(\w+)://(.+)/?$!', $uri, $m) && !empty($transmap[@$m[1]]))
+			if(preg_match('!^(\w+)://(.*[^/])/?$!', $uri, $m) && (!empty($transmap[@$m[1]]) || !empty($GLOBALS['bors'])) )
 				return $this->get_proto($m[1], $m[2], $key);
 		
 		$m = array ();
@@ -256,6 +257,15 @@ class DataBaseHTS
 
 	function get_data_array($uri, $key, $params = array())
 	{
+		if(substr($uri, 0, 7) != 'http://')
+		{
+			if(!preg_match("!^(\w+)://(.*[^/])/?$!", $uri, $m))
+				return array();
+
+			$obj = class_load($m[1], $m[2]);
+			return $obj->$key();
+		}
+	
 		if(empty($params['fields']))
 			 $params['fields'] = "`value`";
 
@@ -348,7 +358,7 @@ class DataBaseHTS
 		global $transmap;
 
 		if(!preg_match('!^http://!', $uri))
-			if(preg_match('!^(\w+)://(.+)$!', $uri, $m) && !empty($transmap[$m[1]]))
+			if(preg_match('!^(\w+)://(.+[^/])$!', $uri, $m) && !empty($transmap[$m[1]]))
 				return $this->set_proto($m[1], $m[2], $key, $value);
 		
 		if (!is_null($value) && is_global_key("uri_data($uri)", $key) && global_key("uri_data($uri)", $key) == $value)
@@ -771,7 +781,7 @@ class DataBaseHTS
 		global $transmap;
 
 		if(!preg_match('!^http://!', $uri))
-			if(preg_match('!^(\w+)://(.+)/?$!', $uri, $m) && !empty($transmap[@$m[1]]))
+			if(preg_match('!^(\w+)://(.*[^/])/?$!', $uri, $m) && !empty($transmap[@$m[1]]))
 				return $this->set_proto($m[1], $m[2], $flag, 1);
 
 		$this->append_data($uri, 'flags', $flag);
@@ -782,7 +792,7 @@ class DataBaseHTS
 		global $transmap;
 
 		if(!preg_match('!^http://!', $uri))
-			if(preg_match('!^(\w+)://(.+)/?$!', $uri, $m) && !empty($transmap[@$m[1]]))
+			if(preg_match('!^(\w+)://(.*[^/])/?$!', $uri, $m) && !empty($transmap[@$m[1]]))
 				return $this->set_proto($m[1], $m[2], $flag, NULL);
 
 		$this->remove_data($uri, 'flags', $flag);
@@ -793,7 +803,7 @@ class DataBaseHTS
 		global $transmap;
 
 		if(!preg_match('!^http://!', $uri))
-			if(preg_match('!^(\w+)://(.+)/?$!', $uri, $m) && !empty($transmap[@$m[1]]))
+			if(preg_match('!^(\w+)://(.*[^/])/?$!', $uri, $m) && !empty($transmap[@$m[1]]))
 				return $this->get_proto($m[1], $m[2], $flag) ? true : false;
 
 		return $this->data_exists($uri, 'flags', $flag);
@@ -1012,6 +1022,10 @@ class DataBaseHTS
 
 	function get_proto($proto, $id, $key)
 	{
+//		echo "Get proto $proto://$id/ -> $key()<br />";
+		if($obj = class_load($proto, $id))
+			return $obj->$key();
+	
 		global $transmap;
 		$t = &$transmap[$proto];
 

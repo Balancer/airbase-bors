@@ -1,96 +1,9 @@
 <html>
 <head>
 	<title>{$title}</title>
-<link rel="stylesheet" type="text/css" href="http://airbase.ru/inc/css/style.phtml">
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="SHORTCUT ICON" href="/favicon.ico" />
-<style>
-{literal}
-h1 { font: bold 14pt Verdana, sans-serif; border-bottom: 2px solid #003366; margin: 0px; padding: 0px;}
-h2 { font: bold 12pt Verdana, sans-serif; border-bottom: 1px solid #003366; margin: 8px 0px 4px 0px; padding: 0px;}
-h3 { font: bold 10pt Verdana, sans-serif; margin: 0px; padding: 0px;}
-h4 { font: bold 9pt Verdana, sans-serif; margin: 0px; padding: 0px;}
-h5 { font: bold 8pt Verdana, sans-serif; margin: 0px; padding: 0px;}
-h6 { font: bold 7pt Verdana, sans-serif; margin: 0px; padding: 0px;}
-td {font: smaller Verdana, sans-serif; text-align: left;}
-.nav { border-bottom: 1px solid #003366; width: auto; font-size: x-small;}
-body {margin: 0px; padding: 0px 0px 32px 4px;}
-dl.box {border: 1px solid #0066cc; margin: 0px 4px 4px 4px; padding: 0px; background-color: #e8f0fc;}
-dl.box dt, dl.box dt a {margin: 0px; color: #ffffff; background-color: #0066cc; padding: 1px; font-size: 8pt; font-weight: bold; font-family: Verdana, sans-serif;}
-dl.box dd {margin: 2px; font-size: xx-small;}
-dl.box dt a {color: #ffffd0;}
-
-.box {border: 1px solid #0066cc; margin: 0px 4px 4px 4px; padding: 2px;  background-color: #e8f0fc;}
-
-div.tabs {
-    background: transparent;
-    border-collapse: collapse;
-    border-bottom-color: #0066cc;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    padding: 0.5em 0 0 2em;
-    margin: 0;
-    white-space: nowrap;
-}
-								
-div.tabs a {
-    background: transparent; /*#e8f0fc*/;
-    border-color: #0066cc;
-    border-width: 1px; 
-    border-style: solid solid none solid;
-    color: #436976;
-    font-weight: normal;
-    font-size: smaller;
-    height: 1.2em;
-    margin: 0;
-    margin-right: 0.5em;
-    padding: 0 1em;
-    text-decoration: none;
-}
-																			
-div.tabs a.selected {
-    background: #F0F4F8;
-    border: 1px solid #0066cc;
-    border-bottom: #F0F4F8 1px solid;
-	color: #436976;
-    font-weight: bold;
-}
-																									
-div.tabs a:hover {
-    background: #F0F4F8;
-	border-color: #0066cc;
-    border-bottom: #F0F4F8 1px solid;
-	color: #436976;
-    text-decoration: none;
-}
-																														
-a.external {
-    background: url(http://airbase.ru/img/design/system/external.png) center right no-repeat;
-    padding-right: 13px;
-}
-
-.imperceptible {font-size: xx-small; color: #c0c0c0;}
-
-.code { 
-	background: #FAFCFE; 
-	border: 1px solid #000; 
-	color: #465584; 
-	font-size: 10pt; 
-	padding: 2px; 
-	white-space: normal;
-	font-family: "Courier New", Courier, monospace;
-}
-
-small { font-size: 8pt; }
-
-dl.forumposting {border: 1px solid #0066cc; margin: 10px 4px 4px 4px; padding: 0px; background-color: #e8f0fc;}
-dl.forumposting dt, dl.forumposting dt a {margin: 0px; color: #ffffff; background-color: #0066cc; padding: 1px; font-size: 10pt; font-weight: bold; font-family: Verdana, sans-serif;}
-dl.forumposting dd {font-size: 10pt; text-align: justify; padding: 4px; margin: 0px;}
-dl.forumposting dt a {color: #ffffd0;}
-
-
-{/literal}
-</style>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="SHORTCUT ICON" href="/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/main.css" />
 </head>
 
 <body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg">
@@ -113,7 +26,7 @@ dl.forumposting dt a {color: #ffffd0;}
 	    <noindex>
 		  <div class="tabs">
 		    <a href="{$uri}" class="{if not $action}selected{else}plain{/if}" title="Просмотр страницы"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/view-refresh.png" width="16" height="16" alt="*" border="0">просмотр</a>
-		  <!--    <a href="#" class="plain">обсуждение</a> -->
+			<a href="#" class="plain">обсуждение</a>
             <a href="{$uri}?edit" class="{if $action == "edit"}selected{else}plain{/if}" title="Редактировать страницу"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/apps/kedit.png" width="16" height="16" alt="*" border="0">редактор</a>
 			<a href="{$uri}?edit-data" class="{if $action=="edit-data"}selected{else}plain{/if}" title="Параметры страницы"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/categories/gnome-system.png" width="16" height="16" alt="*" border="0">параметры</a>
 			<a href="{$uri}?nav_edit" class="{if $action=="nav_edit"}selected{else}plain{/if}" title="Навигация страницы"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/forward.png" width="16" height="16" alt="*" border="0">навигация</a>
