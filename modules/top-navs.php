@@ -1,4 +1,9 @@
 <?
 	include_once("top-navs.inc.php");
-    print_top_navs(empty($GLOBALS['main_uri']) ? "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" : $GLOBALS['main_uri']);
-?>
+
+	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+
+	if(!empty($GLOBALS['main_uri']))
+		$uri = $GLOBALS['main_uri'];
+
+    print_top_navs($uri);

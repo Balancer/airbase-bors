@@ -1,5 +1,5 @@
 <?
-	include_once("localization/russian-{$GLOBALS['cms']['charset_u']}.php");
+	@include_once("localization/russian-{$GLOBALS['cms']['charset_u']}.php");
 
 	function tr($txt)
 	{

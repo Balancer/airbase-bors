@@ -1,11 +1,6 @@
 <?
 	function modules_design_navleft_get($uri)
 	{
-//		return $uri;
-//		echo "uri=$uri";
-
-//		DebugBreak();
-	
 		include_once("funcs/Cache.php");
 		$ch = &new Cache();
 		
@@ -17,9 +12,9 @@
 		$hts = &new DataBaseHTS();
 
 //		$children = $hts->get_data_array($uri, 'child');
-		$GLOBALS['loglevel'] = 10;
+//		$GLOBALS['loglevel'] = 10;
 		$children = $hts->get_children_array_ex($uri, array('order' => 'order asc', 'range' => -1));
-		$GLOBALS['loglevel'] = 2;
+//		$GLOBALS['loglevel'] = 2;
 
 		$data = array();
 	
@@ -28,7 +23,7 @@
 			foreach($children as $child)
 				if($hts->get_data($child, 'nav_name'))
 					$data[$child] = array(
-						'uri' => $child,
+						'uri' => Bors::real_uri($child),
 						'title' => $hts->get_data($child, 'nav_name'),
 						'children' => $hts->get_data_array_size($child, 'child'),
 						'indent' => 0,
@@ -49,6 +44,8 @@
 		foreach($data as $d)
 		{
 			$d['indent'] = $max - $d['indent'];
+			if(is_object($d['uri']))
+				$d['uri'] = $d['uri']->uri();
 			$data2[] = $d;
 		}
 		
@@ -118,10 +115,12 @@
 				}
 			}
 
+//			echo "<xmp>"; print_r($list); echo "</xmp>";
 			$list = array_merge($list, modules_design_navleft_get_parent($parent, $children_list, $indent + 1));
 		}
 
-		return $we ? $we : $list;
+//		echo "<xmp>"; print_r($list); echo "</xmp>";
+		return $we ? array_merge($list, $we) : $list;
 	}
 
 	function modules_design_navleft_fill($uri, $indent)
@@ -129,7 +128,7 @@
 		$hts = &new DataBaseHTS();
 	
 		return array(
-				'uri' => $uri,
+				'uri' => Bors::real_uri($uri),
 				'title' => $hts->get_data($uri, 'nav_name'),
 				'indent' => $indent,
 				'children' => $hts->get_data_array_size($uri, 'child'),

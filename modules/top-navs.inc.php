@@ -1,15 +1,17 @@
 <?
     function print_top_navs($uri=NULL)
     {
+//		echo "Get nav for $uri<br />";
+	
+	    require_once("funcs/Cache.php");
         $ch = &new Cache();
-        if($ch->get('top_navs', $uri))
+        if($ch->get('top_navs-v2', $uri))
         {
             echo $ch->last();
             return;
         }
 
 	    require_once("funcs/DataBaseHTS.php");
-	    require_once("funcs/Cache.php");
     
 	    $out = '';
 
@@ -23,7 +25,6 @@
 		$tpl = "top-navs.html";
 		if(!empty($GLOBALS['module_data']['template']))
 			$tpl = $GLOBALS['module_data']['template'];
-
         
 		$data = array();
         if(!is_array($parents) || sizeof($parents)==0)
@@ -36,13 +37,16 @@
 		
     	    foreach($parents as $nav)
 			{
+//				echo "$nav <br />";
 				$link_line = array();
 				foreach(split("\|#\|", $nav) as $link)
-				{
+				{	
+//					echo "$link";
 					$link_line[] = array(
-						'uri' => $link, 
+						'uri' => Bors::real_uri($link),
 						'title' => $hts->get($link, 'nav_name'),
 					);
+//					print_r($link_line);
 				}
 				
 				$data[] = $link_line;
@@ -58,12 +62,15 @@
     {
         $hts = &new DataBaseHTS();
 
-        $parents = $hts->get_data_array($uri,'parent');
+        $parents = $hts->get_data_array($uri, 'parent');
+//		echo "parents for $uri = ".print_r($parents, true)."<br/>";
         $links = array();
 
         foreach($parents as $parent)
         {
+//			echo "Normalize $parent to ";
 			$parent = $hts->normalize_uri($parent);
+//			echo "$parent<br />";
 
 			if($parent == $uri)
 				continue;
@@ -81,5 +88,6 @@
             }
         }
 
+//		print_r($links); echo "<br /><br />";
         return $links;
     }

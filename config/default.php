@@ -1,12 +1,18 @@
 <?
 	$GLOBALS['log_level'] = 2;
 
+	if(!defined("BORS_INCLUDE"))
+		define("BORS_INCLUDE", "{$_SERVER['DOCUMENT_ROOT']}/cms/");
+
+	if(!defined("BORS_INCLUDE_LOCAL"))
+		define("BORS_INCLUDE_LOCAL", "{$_SERVER['DOCUMENT_ROOT']}/cms-local/");
+
 	$includes = array(
-		CMS_INCLUDE_LOCAL.'cms-local',
-		CMS_INCLUDE."vhosts/{$_SERVER['HTTP_HOST']}",
-		CMS_INCLUDE,
+		BORS_INCLUDE_LOCAL,
+		BORS_INCLUDE."vhosts/{$_SERVER['HTTP_HOST']}",
+		BORS_INCLUDE,
 		"{$_SERVER['DOCUMENT_ROOT']}/include",
-		CMS_INCLUDE.'PEAR'
+		BORS_INCLUDE.'PEAR'
 	);
 
 	$delim = empty($_ENV['windir']) ? ":" : ";";
@@ -20,8 +26,8 @@
 		'sites_store_path' => "{$_SERVER['DOCUMENT_ROOT']}/sites",
 		'sites_store_uri' => "http://{$_SERVER['HTTP_HOST']}/sites",
 		'cache_dir' => "{$_SERVER['DOCUMENT_ROOT']}/cache/system",
-		'base_dir' => CMS_INCLUDE,
-		'local_dir' => CMS_INCLUDE_LOCAL,
+		'base_dir' => BORS_INCLUDE,
+		'local_dir' => @BORS_INCLUDE_LOCAL,
 		'base_uri' => "http://{$_SERVER['HTTP_HOST']}/cms",
 		'default_template' => "xfile:{$_SERVER['DOCUMENT_ROOT']}/cms/templates/default/index.html",
 
