@@ -1,0 +1,291 @@
+body {
+	font-size: 10pt;
+	font-family: Verdana;
+}
+
+h1, h2, h3, h4, h5, h6 { 
+	font-weight: 900; 
+	margin: 0;
+	padding: 0;
+}
+
+h1 { font-size: 2.0em; margin: 4px 0px 10px 0px;}
+h2 { font-size: 1.7em; margin: 8px 0px 4px 0px;}
+h3 { font-size: 1.2em;}
+h4 { font-size: 1.0em;}
+h5 { font-size: 0.9em;}
+h6 { font-size: 0.7em;}
+
+.nav { font-size: 0.8em;}
+
+body {margin: 0px; padding: 0px 0px 32px 4px;}
+dl.box {
+	border: 1px solid #06c; 
+	margin: 0px 4px 4px 4px; 
+	padding: 0px; 
+	background-color: #e8f0fc;
+}
+dl.box dt, dl.box dt a {
+	margin: 0px; 
+	color: white; 
+	background-color: #06c; 
+	padding: 1px; 
+	font-size: 0.9em; 
+	font-weight: bold; 
+}
+dl.box dd {margin: 2px; font-size: xx-small; padding: 2px; }
+dl.box dt a {color: #ffffd0;}
+
+.box {border: 1px solid #0066cc; margin: 0px 4px 4px 4px; padding: 2px;  background-color: #e8f0fc;}
+
+div.tabs {
+    background: transparent;
+    border-collapse: collapse;
+    border-bottom-color: #0066cc;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    padding: 0.5em 0 0 2em;
+    margin: 0;
+    white-space: nowrap;
+}
+								
+div.tabs a {
+    background: transparent; /*#e8f0fc*/;
+    border-color: #0066cc;
+    border-width: 1px; 
+    border-style: solid solid none solid;
+    color: #436976;
+    font-weight: normal;
+    font-size: smaller;
+    height: 1.2em;
+    margin: 0;
+    margin-right: 0.5em;
+    padding: 0 1em;
+    text-decoration: none;
+}
+																			
+div.tabs a.selected {
+    background: #F0F4F8;
+    border: 1px solid #0066cc;
+    border-bottom: #F0F4F8 1px solid;
+	color: #436976;
+    font-weight: bold;
+}
+																									
+div.tabs a:hover {
+    background: #F0F4F8;
+	border-color: #0066cc;
+    border-bottom: #F0F4F8 1px solid;
+	color: #436976;
+    text-decoration: none;
+}
+																														
+a.external {
+    background: url(http://airbase.ru/img/design/system/external.png) center right no-repeat;
+    padding-right: 13px;
+}
+
+.imperceptible {font-size: xx-small; color: #c0c0c0;}
+
+.code { 
+	background: #FAFCFE; 
+	border: 1px solid #000; 
+	color: #465584; 
+	font-size: 10pt; 
+	padding: 2px; 
+	white-space: normal;
+	font-family: "Courier New", Courier, monospace;
+}
+
+small { font-size: 0.8em; }
+
+dl.forumposting {
+	border: 1px solid #0066cc; 
+	margin: 10px 4px 4px 4px; 
+	padding: 0px; 
+	background-color: #e8f0fc;
+	clear: both;
+}
+
+dl.forumposting dt, dl.forumposting dt a {
+	margin: 0px; 
+	color: #ffffff; 
+	background-color: #0066cc; 
+	padding: 1px; 
+	font-size: 1.1em;
+	font-weight: bold; 
+}
+
+dl.forumposting dd {
+	text-align: justify; 
+	padding: 4px; 
+	margin: 0px;
+}
+
+dl.forumposting dt a {
+	color: #ffffd0;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.forumposting dt {
+	font-size: 1.2em;
+	font-weight: 900;
+}
+
+a.current_page, a.select_page {
+	padding: 1px 3px;
+	margin: 8px 2px;
+	border: 1px solid blue;
+}
+
+a.current_page {
+	font-weight: 900;
+	background-color: #06c;
+	color: white;
+}
+
+a.select_page {
+	background-color: white;
+	color: #06c;
+}
+
+a.select_page:hover {
+	background-color: #06c;
+	color: white;
+}
+
+.pages_select {
+	padding: 2px;
+	margin: 8px;
+	text-align: center;
+	font-size: 1.0em;
+}
+
+.avatar_block {
+	width: 100px; 
+	float: right; 
+	margin: 0px 0px 8px 16px; 
+	display: inline; 
+	border: 1px solid #0066cc;
+	background-color: white;
+	text-align: center;
+}
+
+.nav, .navleft {
+	font-size: 0.8em;
+}
+
+
+BLOCKQUOTE, .code {
+	BACKGROUND-COLOR: #F0F4F8;
+	BORDER-COLOR: #ACA899 #FFF #FFF #ACA899;
+	BORDER-STYLE: solid;
+	BORDER-WIDTH: 1px;
+	font-size: 90%;
+	background-color: #e0e2e6;
+	margin: 2px 5px;
+	padding: 3px;
+}
+
+.code>tt {
+	font-family: monospace;
+}
+
+.code_type {
+	font-size: 0.8em;
+	text-align: right;
+}
+
+span.q {
+	font-size: 80%;
+	color: #888;
+}
+
+table.small td {
+	font-size: 8pt;
+	padding: 2px;
+}
+
+.copyright {
+/*	border-top: 1px solid #06c; */
+	margin: 24px 0px 0px 0px;
+	text-align: right;
+	font-size: 0.8em;
+}
+
+td.post {
+	font-size: 1.0em;
+}
+
+div.columns {
+}
+
+div.main_column {
+	position: absolute;
+	margin: 0 0 0 220px;
+}
+
+div.left_column {
+	position: absolute;
+	margin: 24px 0 0;
+}
+
+.w200 { width: 200px; }
+
+.btab th { 
+	background-color: #06c;
+	color: white;
+}
+
+dl.box input {
+	border: 1px solid #06c;
+    margin: 1px 3px;
+}
+
+input.text {
+	font-weight: bold; 
+	border: 1px solid #ccc; 
+    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
+}
+
+dl.box input.text {
+	width: 180px;
+}
+
+input.submit {
+	font-weight: bold; 
+	border: 1px solid #06c; 
+	background-color: #036;
+	color: white;
+}
+
+ul.postfooter {
+	text-align: right;
+	clear: both;
+	margin: 0;
+	padding: 0;
+	width: auto;
+}
+
+ul.postfooter li {
+    list-style-image:URL(http://airbase.ru/img/web/li/arrow_blue.gif);
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+
+ul.postfooter li a {
+	border-top: 1px solid #36c;
+	padding: 0 2px;
+	margin: 0;
+	font-size: 0.7em;
+}
+
+.answer { font-size: 0.8em; margin-left: 24px;}

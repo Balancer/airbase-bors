@@ -1,0 +1,55 @@
+<html>
+<head>
+	<title>{$title}</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="SHORTCUT ICON" href="/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/old.css" />
+	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/main.css" />
+	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/sans.css" />
+	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/10pt.css" />
+	<script src="/cms/templates/forum/tune.js"></script>
+{if $type == 'topic' and $id}
+<script>
+var readed = readCookie('readedTopics', "").split(' ')
+if(!inArray(readed, {$id}) && readed.length < 40) readed.push({$id})
+createCookie('readedTopics', readed.join(' '), 3)
+</script>
+{/if}
+</head>
+
+<body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg" id="body" onLoad="onLoad(this)">
+
+<div class="columns">
+	<div class="main_column">
+	    <div class="nav">{module name="top-navs"}</div>
+		<h1>{$title}</h1>
+		{$body}
+	</div>
+	<div class="left_column">
+
+		<dl class="box w200">
+		<dt>Поиск</dt>
+		<dd>
+			<form method="get" action="http://balancer.ru/search/topic_titles/">
+			<input type="text" class="text" name="q" value="Су-27" />
+			<input type="submit" class="submit" value="искать" />
+			</form>
+		</dd>
+		</dl>
+		
+		<dl class="box w200">
+		<dt>Настройки</dt>
+		<dd>
+			<script>
+				createSelect("Шрифт", "fontFamily", "Verdana Georgia sans-serif serif monospace")
+				createSelect("Размер", "fontSize", "10pt 8pt 12pt 14pt 16pt 20pt")
+			</script>
+			<noscript>Не работает без JavaScript</noscript>
+		</dd>
+		</dl>
+
+	</div>
+</div>
+
+</body>
+</html>

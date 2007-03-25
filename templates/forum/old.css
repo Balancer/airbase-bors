@@ -1,0 +1,282 @@
+/**/
+
+#head
+{
+    text-align: center;
+    padding: 2px;
+    margin: 4px 0 4px 0;
+}
+
+#admin{text-align:center;}
+
+#banner {text-align: center; margin: 4px;}
+
+body{
+    padding: 0 16px 8px 16px;
+    margin: 0;
+}
+
+.body
+{
+    border-width: 1px;
+    border-style: solid;
+}
+
+.body500
+{
+    width:500px;
+    text-align:justify; 
+    border:1px solid; 
+    padding:4px;
+}
+
+.menu, #menu{
+    padding: 0;
+    margin: -4px -4px -4px -4px;
+}
+
+#nav{
+    padding: 0 0 1px 16px;
+    margin: 0 0 1px 0;
+}
+
+.menu a:hover, #menu a:hover{text-decoration: none;}
+
+form {
+    padding: 0px;
+    margin: 4px;
+}
+
+#tr
+{
+    vertical-align: top;
+}
+
+
+caption{
+    text-align: left;
+    padding: 0 0 0 32px;
+	margin: 8px 0 0 0;
+}
+
+
+ul{
+    margin: 0 0 0 0;
+    padding: 0 0 0 3ex;
+}
+
+small.ul{ margin: 0 0 0 16px; padding: 0px;}
+
+ul, li {text-align: left;}
+
+p {
+    margin-top: 1.5ex;
+    text-align: justify;
+}
+
+#box, #rbox
+{
+    margin: 4px;
+    padding: 4px;
+}
+
+#addurl, #addinfo, #tnews, #xref
+{
+    margin: 4px 0px 4px 32px;
+}
+
+#addurl, #addinfo, #tnews, #xref
+{
+    width: 92%;
+}
+
+/**/
+#box{width: 100%;}
+/**/
+
+/**/
+
+#rbox{width: 150px;}
+#rbox h2{
+    padding: 0;
+    text-align: center;
+}
+
+#dtab
+{
+    width: 92%;
+    margin: 4px 0 4px 32px;
+    padding:0;
+}
+
+#dtab td{
+    padding:2px;
+    margin:0;
+}
+
+#dtab th{
+    padding:2px;
+    margin:0;
+}
+
+/**/
+
+td, th
+{
+/*    padding: 2px;
+    margin: 0px;*/
+    vertical-align: top;
+}
+
+#btab, .btab
+{
+    margin: 8px 0px 4px 0px;
+}
+textarea{
+    font-size: 10pt;
+	font-family: Courier New, monospace;
+}
+
+/* Font sizes */
+
+body,td,th{font-size: smaller;}
+
+pre, caption,big,#head h3,h2,#rbox h2
+{
+    font-size: larger;
+}
+
+/* Font weight & decoration */
+a:link {font-weight: normal;}
+a:visited{font-weight: normal;}
+a{text-decoration: none;}
+a:hover{text-decoration: underline;}
+
+#head,th,caption{font-weight: bold;}
+
+xmp, pre, tt{font-size: 10pt; font-family: Courier, monospace;}
+
+.stanza{font-weight: 900; font-size: xx-small;}
+
+.td_border{background: #0066CC;}
+
+li{
+    list-style-image:URL(http://airbase.ru/img/web/li/arrow_blue.gif);
+}
+
+#li_g{
+    list-style-image:URL(http://airbase.ru//images/web/gb.gif);
+}
+
+body{
+    color: #003366;
+    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
+}
+
+.td_border_in, .body500
+{
+    border-color: #0066cc;
+    background: #F0F4F8;
+}
+
+A{color: #0066CC}
+A:active{color: Red;}
+
+.menu, #menu, #nav{
+    color: #FFFFFF;
+}
+
+.menu a, #menu a, #nav a{color: #FFFFFF;}
+.menu a:hover, #menu a:hover {background: #ffffff;   color: #0066cc;}
+
+.menu, #nav, #menu, caption{background: #0066CC;}
+
+#tr
+{
+    color: #000066;
+}
+
+#tr1 td{background: #F8E8FF;}
+#tr2 td{background: #E4E4FF;}
+
+caption{
+    color: #D0D0F0;
+}
+
+td{
+    color: #000066;
+}
+
+th{
+    color: #000066;
+    background-color: #66ccff;
+}
+
+#box, #rbox
+{
+    background: #F0F4F8;
+}
+
+#addurl, #addinfo, #tnews, #xref
+{
+    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
+}
+
+#dtab td{
+    color: #000066;
+}
+
+#dtab th{
+    color: White;
+    background: #0066CC;
+}
+
+#btab td, .btab td{
+    background: #e8f0fc; /*#D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);*/
+}
+
+hr{
+    color: #0066cc;
+    height: 1px;
+}
+
+/**/
+
+/**/
+#dtab, #addurl, #addinfo, #tnew, #box, #rbox {border: 1 solid #0066cc;}
+#dtab td {border: 1px solid #0066cc;}
+
+#btab, .btab{
+        border-left: 1px solid #0066cc;
+        border-top: 1px solid #0066cc;
+        padding: 0;
+}
+
+#btab td, #btab caption, #btab th, .btab td, .btab caption, .btab th {
+        border-right: 1px solid #0066cc;
+        border-bottom: 1px solid #0066cc;
+        padding: 2;
+        margin: 0;
+}
+
+
+#btab caption, .btab caption{
+        color: #d0d0f0;
+        background: #0066cc;
+}
+
+#btab th, .btab th{
+    color: #000066;
+    background-color: #66ccff;
+}
+/**/
+
+/* Opera */
+
+acronym
+{
+    cursor: help;
+    border-bottom: 1px dashed #0066CC;
+}
+
+/*color=, font=, style=Array, browser=*/
