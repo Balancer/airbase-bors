@@ -1,13 +1,24 @@
-{if $pagelist}<div class="pages_select">{$pagelist}</div>{/if}
+{if $pagelist}<div class="pages_select">Страницы: {$pagelist}</div>{/if}
 
 {foreach from=$posts item=p}
 <dl class="forumposting posted_by_{$p->owner_id()}"">
-<dt>{$p->flag()} {$p->author_name()}, {$p->create_time()|full_time}</dt>
-<dd><table width="100%"><tr><td class="post">
+<dt>{$p->flag()} {$p->author_name()}, <a href="{$p->uri()}">{$p->create_time()|full_time}</a>
+{if $p->answer_to_id()}
+{assign var=a value=$p->answer_to()}
+<span class="answer">(ответ на {$a->author_name()}, <a href="{$a->uri()}">{$a->create_time()|full_time}</a>)</span>
+{/if}
+</dt>
+<dd>
 <div class="avatar_block">{include file="xfile:templates/post-avatar.html"}</div>
 {$p->body()}
-</td></tr></table></dd>
+<ul class="postfooter">
+<li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
+<li class="postdelete"><a href="http://balancer.ru/forum/punbb/delete.php?id={$p->id()}">Удалить</a></li>
+<li class="postedit"><a href="http://balancer.ru/forum/punbb/edit.php?id={$p->id()}">Редактировать</a></li>
+<li class="postquote"><a href="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}">Цитировать</a></li>
+</ul>
+</dd>
 </dl>
 {/foreach}
 
-{if $pagelist}<div class="pages_select">{$pagelist}</div>{/if}
+{if $pagelist}<div class="pages_select">Страницы: {$pagelist}</div>{/if}
