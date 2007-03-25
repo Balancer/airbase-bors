@@ -58,13 +58,15 @@
 		}
 
 		var $stb_create_time = NULL;
-		function set_create_time($unix_time, $db_update=true) { $this->set("create_time", $unix_time, $db_update); }
+		function set_create_time($unix_time, $db_update=false) { $this->set("create_time", $unix_time, $db_update); }
 		function create_time()
 		{
 			if($this->stb_create_time)
 				return $this->stb_create_time;
+
 			if($this->stb_modify_time)
 				return $this->stb_modify_time;
+
 			return time(); 
 		}
 
@@ -179,7 +181,7 @@
 
 		function template_vars()
 		{
-			return 'body create_time description modify_time nav_name source title';
+			return 'body create_time description id modify_time nav_name source title type';
 		}
 		
 		function is_cache_disabled() { return true; }
