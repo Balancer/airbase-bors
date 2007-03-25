@@ -31,8 +31,8 @@
 			if(!$forum->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
-			if($forum->is_public_access())
-				$GLOBALS['cms']['cache_static'] = true;
+//			if($forum->is_public_access())
+//				$GLOBALS['cms']['cache_static'] = true;
 
 			$bors->config()->set_cache_uri($this->internal_uri());
 			
@@ -77,8 +77,6 @@
 		function field_last_poster_name_storage() { return 'punbb.topics.last_poster(id)'; }
 
 		function cache_parents() { return array(class_load('forum', $this->forum_id()));}
-
-		function template() { return "xfile://{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/forum.html"; }
 
 		function forum() { return class_load('forum', $this->forum_id()); }
 

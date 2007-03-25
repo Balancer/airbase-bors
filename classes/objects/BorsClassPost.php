@@ -50,7 +50,7 @@
 		function field_flag_storage() { return 'punbb.posts_cached_fields.flag(post_id)'; }
 		function flag()
 		{
-			if(empty($this->stb_flag))
+			if(empty($this->stb_flag) || substr($this->stb_flag, -1) != '>')
 			{
 				include_once('funcs/users/geoip/get_flag.php');
 				$this->set_flag(get_flag($this->poster_ip()));
@@ -75,4 +75,17 @@
 		function owner_id() { return $this->stb_owner_id; }
 
 		function owner() { return class_load('user', $this->owner_id()); }
+
+		var $stb_answer_to_id = '';
+		function set_answer_to_id($answer_to_id, $db_update = false) { $this->set("answer_to_id", $answer_to_id, $db_update); }
+		function field_answer_to_id_storage() { return 'punbb.posts.answer_to(id)'; }
+		function answer_to_id() { return $this->stb_answer_to_id; }
+		
+		function answer_to()
+		{
+			if($id = $this->answer_to_id())
+				return class_load('post', $id);
+
+			return false;
+		}
 	}

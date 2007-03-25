@@ -5,6 +5,9 @@
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/old.css" />
 	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/main.css" />
+{if $type=='topic'}
+<script></script>
+{/if}
 </head>
 
 <body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg">
@@ -65,14 +68,11 @@
       <script src="http://airbase.ru/inc/js/width.js"></script>
 	  <script>if(width>650) width=650;</script>
 {$body}
-	  <div align="right" style="border-top: 1px solid; margin: 16px 0px 0px 0px;">
-        Copyright &copy; Balancer 1997..2006<br/>
+	  <div class="copyright">
+        Copyright &copy; Balancer 1997..{0|strftime:"%Y"}<br/>
 	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
 		{if $views}{* {$views}-е посещение с {$views_first|strftime:"%d.%m.%Y"}<br/> *}{/if}
 		{if $views_average}В среднем посещений в день: {$views_average}<br/>{/if}
-		{if $queries}Запросов к БД: {$queries}<br/>{/if}
-		{if $queries_time}Время запросов БД: {$queries_time}<br/>{/if}
-		{if $make_time}Время генерации страницы: {$make_time}<br/>{/if}
 	  </div>
 	</td>
 	<td vAlign="top" bgColor="#F0F4F8" style="border-bottom: 1px solid #0066cc;">

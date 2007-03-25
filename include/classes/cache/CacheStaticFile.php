@@ -64,7 +64,7 @@
 //			echo "'$uri'";
 		}
 
-		function save(&$content)
+		function save(&$content, $mtime = 0)
 		{
 //			echo "save file '{$this->file}'";
 			require_once("funcs/filesystem_ext.php");
@@ -81,6 +81,10 @@
 			fclose($fh);
 			
 			@chmod($this->file, 0664);
+
+//			echo "mtime = ".strftime("%d.%m.%Y %H:%M<br />", $mtime);
+			if($mtime)
+				touch($this->file, $mtime);
 			
             $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
 			
