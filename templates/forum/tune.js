@@ -1,7 +1,26 @@
-function css_load(elem, value)
+function css_load(elem, value, id, def)
 {
-	document.getElementById("body").style[elem] = value
-	createCookie(elem, value, 3)
+	if(!id)
+	{
+		if(elem.indexOf('.') == -1)
+			id = "body"
+		else
+		{
+			elem = elem.split('.')
+			id = elem[0]
+			elem = elem[1]
+		}
+	}
+
+	if(elem.indexOf(".") == -1)
+		document.getElementById(id).style[elem] = value
+	else
+		eval("document.getElementById('"+id+"').style."+elem+" = "+value)
+
+	if(def != value)
+		createCookie(id+"."+elem, value, 3)
+	else
+		eraseCookie(id+"."+elem)
 }
 
 function createCookie(name,value,days)
@@ -35,21 +54,45 @@ function eraseCookie(name)
 	createCookie(name,"",-1);
 }
 
-function createSelect(title, element, values)
+function createSelect(title, element, values, def)
 {
 	id = "\"id_select_"+element+"\""
-	cookie = readCookie(element);
 	document.write("<label class=\"tune\" for="+id+">"+title+"</label> ")
-	document.write("<select id="+id+" onChange=\"css_load('"+element+"', this.value)\">")
-	values = values.split(" ")
+	var id = null
+	if(element.indexOf('.') >= 0)
+	{
+		element = element.split('.')
+		id = element[0];
+		element = element[1];
+	}
+	else
+		id = 'body'
+	cookie = readCookie(id+"."+element);
+	if(!cookie)
+		cookie = def
+	document.write("<select id="+id+" onChange=\"css_load('"+element+"', this.value"+(id ? ", '"+id+"'" : "")+", '"+def+"')\">")
+	values = values.split(";")
 	for(var i in values)
-		document.write("<option value=\""+values[i]+"\""+(cookie == values[i] ? " selected=\"true\"" : "")+">"+values[i]+"</option>")
+	{
+		var value = values[i]
+		if(value.indexOf(":") == -1)
+			name = value
+		else
+		{
+			value = value.split(":")
+			name = value[0]
+			value = value[1]
+		}
+			
+		document.write("<option value=\""+value+"\""+(cookie == value ? " selected=\"true\"" : "")+">"+name+"</option>")
+	}
+	
 	document.write("</select><br />")
 }
 
 function onLoad()
 {
-	cookie_vars = "fontSize fontFamily".split(" ");
+	cookie_vars = "body.fontSize body.fontFamily main_column.width".split(" ");
 	for(var i in cookie_vars)
 	{
 		name = cookie_vars[i]
@@ -66,4 +109,28 @@ function inArray(array, value)
 			 return true
 
     return false
+}
+
+function process_form(the_form)
+{
+	var element_names = new Object()
+	element_names["req_message"] = "Сообщение"
+		
+	if (document.all || document.getElementById)
+	{
+		for (i = 0; i < the_form.length; ++i)
+		{
+			var elem = the_form.elements[i]
+			if (elem.name && elem.name.substring(0, 4) == "req_")
+			{
+				if (elem.type && (elem.type=="text" || elem.type=="textarea" || elem.type=="password" || elem.type=="file") && elem.value=='')
+				{
+					alert("\"" + element_names[elem.name] + "\" это поле обязательно для заполнения в этой форме.")
+					elem.focus()
+					return false
+				}
+			}
+		}
+	}
+	return true
 }

@@ -80,4 +80,33 @@
 			$db = &new DataBase('punbb');
 			return $db->get("SELECT rank FROM ranks WHERE min_posts < ".intval($this->num_posts())." ORDER BY min_posts DESC LIMIT 1");
 		}
+
+		var $stb_signature;
+		function signature() { return $this->stb_signature; }
+		function set_signature($signature, $db_update = false) { $this->set("signature", $signature, $db_update); }
+		function field_signature_storage() { return 'punbb.users.signature(id)'; }
+
+		var $stb_signature_html;
+		function signature_html()
+		{
+			if(empty($this->stb_signature_html) || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
+			{
+				$body = lcml($this->signature(), 
+					array(
+						'cr_type' => 'save_cr',
+						'forum_type' => 'punbb',
+						'forum_base_uri' => 'http://balancer.ru/forum',
+						'sharp_not_comment' => true,
+						'html_disable' => true,
+					)
+				);
+	
+				$this->set_signature_html($body, true);
+			}				
+				
+			return $this->stb_signature_html; 
+		}
+
+		function set_signature_html($signature_html, $db_update = false) { $this->set("signature_html", $signature_html, $db_update); }
+		function field_signature_html_storage() { return 'punbb.users.signature_html(id)'; }
 	}

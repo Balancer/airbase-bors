@@ -21,12 +21,13 @@
 			if($this->parent_forum_id())
 				return array(array('forum', $this->parent_forum_id() ));
 			else
-				return array(array('forumCategory', $this->category_id() ));
+				return array(array('page', 'http://balancer.ru/forum/'));
+//				return array(array('forumCategory', $this->category_id() ));
 		}
 
         function body()
 		{
-			$this->cache_clean_self();
+//			$this->cache_clean_self();
 		
 			global $bors;
 
@@ -34,8 +35,8 @@
 			if(!$this->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
-//			if($this->is_public_access())
-//				$GLOBALS['cms']['cache_static'] = true;
+			if($this->is_public_access())
+				$GLOBALS['cms']['cache_static'] = true;
 
 			include_once("funcs/templates/assign.php");
 
@@ -54,6 +55,8 @@
 
 			foreach($topics as $tid)
 				$data['topics'][] = class_load('topic', $tid);
+
+			$data['this'] = $this;
 
 			return template_assign_data("templates/BorsClassForumBody.html", $data);
 		}
@@ -81,4 +84,54 @@
 			
 			return $parent_caches;
 		}
+		
+/*		function subforums_html()
+		{
+			include_once('other/punbb-modified-forum/include/subforums.php');
+			global $pun_user;
+			$pun_user['g_id'] = 1;
+		}
+*/	
+		function direct_subforums_ids()
+		{
+			// Получаем одни forum_id для дочерних форумов первого уровня
+			$db = &new DataBase('punbb');
+			
+			return $db->get_array("SELECT id FROM forums WHERE parent = {$this->id()}");
+		}
+
+		function direct_subforums()
+		{
+			$subforums = array();
+			foreach($this->direct_subforums_ids() as $forum_id)
+				$subforums[] = class_load('forum', $forum_id);
+			return $subforums;
+		}
+		
+		function all_subforums(&$processed = array())
+		{
+			$forums = array();
+			
+			foreach($this->direct_subforums_ids() as $forum_id)
+			{
+				if(in_array($forum_id, $processed))
+					continue;
+
+				$processed[] = $forum_id;
+				$subforum = $forums[] = class_load('forum', $forum_id);
+				$forums = array_merge($forums, $subforum->all_subforums(&$processed));
+			}
+			
+			return $forums;
+		}
+
+		var $stb_num_topics = '';
+		function num_topics() { return $this->stb_num_topics; }
+		function set_num_topics($num_topics, $db_update = false) { $this->set("num_topics", $num_topics, $db_update); }
+		function field_num_topics_storage() { return 'punbb.forums.num_topics(id)'; }
+
+		var $stb_num_posts = '';
+		function num_posts() { return $this->stb_num_posts; }
+		function set_num_posts($num_posts, $db_update = false) { $this->set("num_posts", $num_posts, $db_update); }
+		function field_num_posts_storage() { return 'punbb.forums.num_posts(id)'; }
 	}

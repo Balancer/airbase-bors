@@ -85,7 +85,8 @@
 
 	function plugins_load($uri, $base_dir)
     {
-//		echo "<b>Load plugins from $base_dir</b><br/>\n";
+		if(!empty($_GET['handler_trace']))
+			echo "<b>Load plugins from $base_dir</b><br/>\n";
 
 		$path = uri2path($uri);
 

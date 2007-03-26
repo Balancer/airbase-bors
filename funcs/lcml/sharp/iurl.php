@@ -25,7 +25,7 @@ $lal
 <table border="0" cellPadding="0" cellSpacing="0" bgColor="#0066cc">
 <tr><td align="center">
 <table border="0" cellPadding="2" cellSpacing="1" bgColor="#0066cc">
-<tr><td align="center" bgColor="#f0f4f8"$w$h>$url<img src="$img"$w$h border="0"></a></th></tr>
+<tr><td align="center" bgColor="#f0f4f8"$w$h>$url<img src="$img"$w$h border="0" /></a></th></tr>
 XXX;
         if($description) $hts.="<tr><td bgColor=\"White\"$w align=\"center\"> $description </td></tr>";
         if($copyright)   $hts.="<tr><td$w align=\"center\" bgColor=\"#F0F0FF\">$copyright</td></tr>";

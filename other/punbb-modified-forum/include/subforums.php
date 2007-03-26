@@ -9,7 +9,7 @@
 		
 		$db = &new DataBase('punbb');
 
-		if($db->get("SELECT COUNT(*) FROM {$db->prefix}forums WHERE parent = $forum") == 0)
+		if($db->get("SELECT COUNT(*) FROM forums WHERE parent = $forum") == 0)
 			return "";
 ?>
 <div class="blocktable">

@@ -215,4 +215,6 @@
 		var $stb_level = NULL;
 		function set_level($level, $db_update=true) { $this->set("level", $level, $db_update); }
 		function level() { return $this->stb_level; }
+
+		function preShowProcess() {	return false; }
 	}

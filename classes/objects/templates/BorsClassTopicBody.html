@@ -1,7 +1,8 @@
 {if $pagelist}<div class="pages_select">Страницы: {$pagelist}</div>{/if}
 
 {foreach from=$posts item=p}
-<dl class="forumposting posted_by_{$p->owner_id()}"">
+<a name="p{$p->id()}"></a>
+<dl class="forumposting posted_by_{$p->owner_id()}">
 <dt>{$p->flag()} {$p->author_name()}, <a href="{$p->uri()}">{$p->create_time()|full_time}</a>
 {if $p->answer_to_id()}
 {assign var=a value=$p->answer_to()}
@@ -9,8 +10,10 @@
 {/if}
 </dt>
 <dd>
+{assign var="owner" value=$p->owner()}
 <div class="avatar_block">{include file="xfile:templates/post-avatar.html"}</div>
 {$p->body()}
+{if $owner->signature()}<div class="postsignature">{$owner->signature_html()}</div>{/if}
 <ul class="postfooter">
 <li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
 <li class="postdelete"><a href="http://balancer.ru/forum/punbb/delete.php?id={$p->id()}">Удалить</a></li>
@@ -21,4 +24,28 @@
 </dl>
 {/foreach}
 
+
 {if $pagelist}<div class="pages_select">Страницы: {$pagelist}</div>{/if}
+
+<dl class="forumposting quickform">
+<dt>Форма быстрого ответа</dt>
+<dd>
+<form method="post" action="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}" onsubmit="{literal}this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}{/literal}">
+	<div class="inform">
+	<fieldset>
+		<legend>Напишите ваше сообщение и нажмите отправить</legend>
+		<div class="infldset txtarea">
+			<input type="hidden" name="form_sent" value="1" />
+			<label><textarea class="quickreply" name="req_message" rows="7" cols="60" tabindex="1"></textarea></label>
+			<ul class="postfooter">
+				<li><a href="http://balancer.ru/forum/punbb/help.php#bbcode" onclick="window.open(this.href); return false;">BBCode</a>: включён</li>
+				<li><a href="http://balancer.ru/forum/punbb/help.php#img" onclick="window.open(this.href); return false;">[img] тег</a>: включён</li>
+				<li><a href="http://balancer.ru/forum/punbb/help.php#smilies" onclick="window.open(this.href); return false;">Смайлики</a>: включён</li>
+			</ul>
+		</div>
+	</fieldset>
+	</div>
+	<p><input type="submit" name="submit" tabindex="2" value="Отправить" accesskey="s" /></p>
+</form>
+</dd>
+</dl>

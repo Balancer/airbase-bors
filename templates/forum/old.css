@@ -11,25 +11,6 @@
 
 #banner {text-align: center; margin: 4px;}
 
-body{
-    padding: 0 16px 8px 16px;
-    margin: 0;
-}
-
-.body
-{
-    border-width: 1px;
-    border-style: solid;
-}
-
-.body500
-{
-    width:500px;
-    text-align:justify; 
-    border:1px solid; 
-    padding:4px;
-}
-
 .menu, #menu{
     padding: 0;
     margin: -4px -4px -4px -4px;
@@ -139,8 +120,6 @@ textarea{
 
 /* Font sizes */
 
-body,td,th{font-size: smaller;}
-
 pre, caption,big,#head h3,h2,#rbox h2
 {
     font-size: larger;
@@ -171,12 +150,6 @@ li{
 body{
     color: #003366;
     background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
-}
-
-.td_border_in, .body500
-{
-    border-color: #0066cc;
-    background: #F0F4F8;
 }
 
 A{color: #0066CC}
