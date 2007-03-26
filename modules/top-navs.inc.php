@@ -6,10 +6,10 @@
 	
 	    require_once("funcs/Cache.php");
         $ch = &new Cache();
-        if($ch->get('top_navs-v2', $uri))
+        if($ch->get('top_navs-v3', $uri))
         {
-            echo $ch->last();
-            return;
+			echo $ch->last();
+			return;
         }
 
 	    require_once("funcs/DataBaseHTS.php");

@@ -18,13 +18,51 @@ h6 { font-size: 0.7em;}
 
 .nav { font-size: 0.8em;}
 
-body {margin: 0px; padding: 0px 0px 32px 4px;}
+body {
+	margin: 0px; 
+	padding: 0px 0px 32px 4px;
+	clear: both;
+}
+
+td { 
+	vertical-align: top; 
+	text-align: left;
+}
+
+table.btab { 
+	margin: 8px 0px 4px 0px; 
+	border-left: 1px solid #06c;
+	border-top: 1px solid #06c;
+	padding: 0;
+}
+
+table.btab td { background: white; }
+
+.btab td, .btab caption, .btab th 
+{
+	border-right: 1px solid #06c;
+	border-bottom: 1px solid #06c;
+	padding: 2;
+	margin: 0;
+}
+
+.btab caption {
+	color: #d0d0f0;
+	background: #0066cc;
+}
+
+.btab th {
+	color: #006;
+	background-color: #6cf;
+}
+
 dl.box {
 	border: 1px solid #06c; 
-	margin: 0px 4px 4px 4px; 
+	margin: 10px 0px 4px 0px; 
 	padding: 0px; 
-	background-color: #e8f0fc;
+	background-color: white;
 }
+
 dl.box dt, dl.box dt a {
 	margin: 0px; 
 	color: white; 
@@ -33,53 +71,12 @@ dl.box dt, dl.box dt a {
 	font-size: 0.9em; 
 	font-weight: bold; 
 }
+
 dl.box dd {margin: 2px; font-size: xx-small; padding: 2px; }
 dl.box dt a {color: #ffffd0;}
 
-.box {border: 1px solid #0066cc; margin: 0px 4px 4px 4px; padding: 2px;  background-color: #e8f0fc;}
+.box {border: 1px solid #06c; margin: 0px 4px 4px 4px; padding: 2px;  background-color: white;}
 
-div.tabs {
-    background: transparent;
-    border-collapse: collapse;
-    border-bottom-color: #0066cc;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    padding: 0.5em 0 0 2em;
-    margin: 0;
-    white-space: nowrap;
-}
-								
-div.tabs a {
-    background: transparent; /*#e8f0fc*/;
-    border-color: #0066cc;
-    border-width: 1px; 
-    border-style: solid solid none solid;
-    color: #436976;
-    font-weight: normal;
-    font-size: smaller;
-    height: 1.2em;
-    margin: 0;
-    margin-right: 0.5em;
-    padding: 0 1em;
-    text-decoration: none;
-}
-																			
-div.tabs a.selected {
-    background: #F0F4F8;
-    border: 1px solid #0066cc;
-    border-bottom: #F0F4F8 1px solid;
-	color: #436976;
-    font-weight: bold;
-}
-																									
-div.tabs a:hover {
-    background: #F0F4F8;
-	border-color: #0066cc;
-    border-bottom: #F0F4F8 1px solid;
-	color: #436976;
-    text-decoration: none;
-}
-																														
 a.external {
     background: url(http://airbase.ru/img/design/system/external.png) center right no-repeat;
     padding-right: 13px;
@@ -100,20 +97,21 @@ a.external {
 small { font-size: 0.8em; }
 
 dl.forumposting {
-	border: 1px solid #0066cc; 
-	margin: 10px 4px 4px 4px; 
+	border: 1px solid #06c;
+	margin: 10px 0px 4px 0px; 
 	padding: 0px; 
-	background-color: #e8f0fc;
 	clear: both;
+ 	background-color: white;
 }
 
 dl.forumposting dt, dl.forumposting dt a {
 	margin: 0px; 
 	color: #ffffff; 
-	background-color: #0066cc; 
+	background-color: #06c; 
 	padding: 1px; 
-	font-size: 1.1em;
-	font-weight: bold; 
+	font-weight: 900;
+	font-size: 1.0em;
+	text-align: left;
 }
 
 dl.forumposting dd {
@@ -128,15 +126,15 @@ dl.forumposting dt a {
 
 a {
 	text-decoration: none;
+	color: #09f;
+}
+
+a:visited {
+	color: #06c;
 }
 
 a:hover {
 	text-decoration: underline;
-}
-
-.forumposting dt {
-	font-size: 1.2em;
-	font-weight: 900;
 }
 
 a.current_page, a.select_page {
@@ -173,7 +171,7 @@ a.select_page:hover {
 	float: right; 
 	margin: 0px 0px 8px 16px; 
 	display: inline; 
-	border: 1px solid #0066cc;
+	border: 1px solid #06c;
 	background-color: white;
 	text-align: center;
 }
@@ -191,7 +189,7 @@ BLOCKQUOTE, .code {
 	font-size: 90%;
 	background-color: #e0e2e6;
 	margin: 2px 5px;
-	padding: 3px;
+	padding: 2px;
 }
 
 .code>tt {
@@ -209,12 +207,16 @@ span.q {
 }
 
 table.small td {
-	font-size: 8pt;
+	font-size: 0.9em;
+	padding: 2px;
+}
+
+table.small td.small {
+	font-size: 0.8em;
 	padding: 2px;
 }
 
 .copyright {
-/*	border-top: 1px solid #06c; */
 	margin: 24px 0px 0px 0px;
 	text-align: right;
 	font-size: 0.8em;
@@ -224,20 +226,61 @@ td.post {
 	font-size: 1.0em;
 }
 
-div.columns {
+
+.clear { clear: both; }
+.alignright { text-align: right; }
+.aligncenter { text-align: center; }
+.to-right { float: right; }
+.to-left { float: left; }
+.outer {
+	margin-left: 200px;  /* L */
+}
+.center {
+	float: right;
+	width: 100%;
+	margin-left: -1px;
 }
 
-div.main_column {
-	position: absolute;
-	margin: 0 0 0 220px;
+.incenter {
+	padding: 0 8px;
 }
 
-div.left_column {
-	position: absolute;
-	margin: 24px 0 0;
+.left {
+	float: left;
+	position: relative;
+	width: 200px;  /* L */
+	margin-left: -201px;  /* -L-1 */
+	margin-right: 2px;
+}
+.minwidth {
+	min-width: 404px;
 }
 
-.w200 { width: 200px; }
+/* previene allargamento floats (hidden) \*//*/
+.inleft, .incenter {
+	width: 100%;
+	overflow: hidden;
+}
+.center {
+	margin-left: 0;
+}
+.left {
+	margin-right: 1px;
+}
+.minwidth {
+	border-left: 404px solid #fff;
+}
+.wrapper {
+	margin-left: -404px;
+}
+/**/
+
+.outer {
+	word-wrap: break-word;
+}
+
+
+.w200 { width: 198px; }
 
 .btab th { 
 	background-color: #06c;
@@ -249,10 +292,15 @@ dl.box input {
     margin: 1px 3px;
 }
 
+
+
+input, textarea, select, option {
+	border: 1px solid #06c; 
+	background: #def;
+}
+
 input.text {
 	font-weight: bold; 
-	border: 1px solid #ccc; 
-    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
 }
 
 dl.box input.text {
@@ -261,8 +309,8 @@ dl.box input.text {
 
 input.submit {
 	font-weight: bold; 
-	border: 1px solid #06c; 
-	background-color: #036;
+/*	border: 1px solid #06c; */
+	background-color: #06c;
 	color: white;
 }
 
@@ -282,10 +330,46 @@ ul.postfooter li {
 }
 
 ul.postfooter li a {
-	border-top: 1px solid #36c;
+/*	border-top: 1px solid #36c; */
 	padding: 0 2px;
 	margin: 0;
 	font-size: 0.7em;
 }
 
-.answer { font-size: 0.8em; margin-left: 24px;}
+.answer { font-size: 0.7em; }
+
+
+.topic_pages_links { font-size: 0.8em; }
+
+.w100p { width: 100%; }
+.center { text-align: center; }
+.right { text-align: right; }
+
+.subsubforums { 
+	font-size: 0.8em; 
+	font-style: italic; 
+	padding-left: 3ex; 
+}
+
+textarea.quickreply {
+	width: 100%;
+}
+
+DIV.postsignature {
+	text-align: right;
+	color: #bbc;
+	font-size: 0.8em;
+	margin-top: 10px;
+	clear: both;
+}
+
+
+
+body {
+	margin: 10px;
+	padding: 0;
+	color: #000;
+	background-color: #fff;
+	font-family: Georgia, serif;
+	font-size: 100%;
+}

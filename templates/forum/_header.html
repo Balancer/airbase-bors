@@ -1,31 +1,67 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>{$title}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
-	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/old.css" />
-	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/main.css" />
-	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/sans.css" />
-	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/10pt.css" />
-	<script src="/cms/templates/forum/tune.js"></script>
+	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/main3.css" />
+	<script  type="text/javascript" src="/cms/templates/forum/tune.js"></script>
 {if $type == 'topic' and $id}
-<script>
+<script type="text/javascript">
 var readed = readCookie('readedTopics', "").split(' ')
 if(!inArray(readed, {$id}) && readed.length < 40) readed.push({$id})
 createCookie('readedTopics', readed.join(' '), 3)
 </script>
 {/if}
+{literal}
+<!--[if IE]><style>
+.outer, .wide, h2, .wrapper, .minwidth {
+	height: 0;
+	height: auto;
+	zoom: 1;
+}
+</style><![endif]-->
+<!--[if lt IE 7]><style>
+.minwidth {
+	border-left: 404px solid #fff;
+}
+.wrapper {
+	margin-left: -404px;
+	position: relative;
+}
+</style><![endif]-->
+{/literal}
 </head>
 
 <body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg" id="body" onLoad="onLoad(this)">
 
-<div class="columns">
-	<div class="main_column">
-	    <div class="nav">{module name="top-navs"}</div>
-		<h1>{$title}</h1>
+<div class="minwidth"><div class="wrapper">
+
+<div class="wide top">
+&nbsp;
+</div>
+
+<div class="outer">
+
+	<div class="center"><div class="incenter" id="incenter">
+
+		<dl class="forumposting">
+		<dt><div class="nav">{module name="top-navs"}</div></dt>
+		<dd><h1>{$title}</h1></dd>
+		</dl>
 		{$body}
-	</div>
-	<div class="left_column">
+
+	  <div class="copyright">
+        Copyright &copy; Balancer 1997..{0|strftime:"%Y"}<br/>
+	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
+		{if $views}{* {$views}-е посещение с {$views_first|strftime:"%d.%m.%Y"}<br/> *}{/if}
+		{if $views_average}В среднем посещений в день: {$views_average}<br/>{/if}
+	  </div>
+
+
+	</div></div> <!-- end center div -->
+
+	<div class="left"><div class="inleft">
 
 		<dl class="box w200">
 		<dt>Поиск</dt>
@@ -40,16 +76,27 @@ createCookie('readedTopics', readed.join(' '), 3)
 		<dl class="box w200">
 		<dt>Настройки</dt>
 		<dd>
-			<script>
-				createSelect("Шрифт", "fontFamily", "Verdana Georgia sans-serif serif monospace")
-				createSelect("Размер", "fontSize", "10pt 8pt 12pt 14pt 16pt 20pt")
+			<script type="text/javascript" encoding="UTF-8">
+				createSelect("Шрифт", "fontFamily", "default(Verdana):Verdana;Georgia;sans-serif;serif;monospace", "Verdana")
+				createSelect("Размер", "fontSize", "8pt;default(10pt):10pt;12pt;14pt;16pt;20pt;24pt", "10pt")
+				createSelect("Расстояние до монитора", "incenter.width", "auto;30cm:14cm;45cm:20cm;70cm:30cm", "auto")
 			</script>
 			<noscript>Не работает без JavaScript</noscript>
 		</dd>
 		</dl>
 
-	</div>
+
+	</div></div> <!-- end left div -->
+
+	<br class="clear" />
+</div> <!-- end outer div -->
+
+<div class="wide bottom">
+&nbsp;
 </div>
+
+</div></div>
+
 
 </body>
 </html>

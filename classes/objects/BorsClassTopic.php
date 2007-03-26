@@ -31,8 +31,8 @@
 			if(!$forum->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
-//			if($forum->is_public_access())
-//				$GLOBALS['cms']['cache_static'] = true;
+			if($forum->is_public_access())
+				$GLOBALS['cms']['cache_static'] = true;
 
 			$bors->config()->set_cache_uri($this->internal_uri());
 			
@@ -61,7 +61,7 @@
 			foreach($posts as $pid)
 				$data['posts'][] = class_load('post', $pid);
 
-			$total = $db->get("SELECT COUNT(*) FROM posts WHERE topic_id = {$this->id()}");
+			$total = $this->num_replies()+1;
 			if($total > $posts_per_page)
 			{
 				include_once('funcs/design/page_split.php');
@@ -69,6 +69,21 @@
 			}
 			
 			return template_assign_data("templates/BorsClassTopicBody.html", $data);
+		}
+
+		function total_pages()
+		{
+			$posts_per_page = 25;
+			return intval($this->num_replies() / $posts_per_page) + 1;
+		}
+
+		function pages_links()
+		{
+			if($this->total_pages() < 2)
+				return "";
+
+			include_once('funcs/design/page_split.php');
+			return join(" ", pages_show($this, $this->total_pages(), 5));
 		}
 
 		var $stb_last_poster_name;
@@ -84,4 +99,15 @@
 		function set_author_name($author_name, $db_update = false) { $this->set("author_name", $author_name, $db_update); }
 		function field_author_name_storage() { return 'punbb.topics.poster(id)'; }
 		function author_name() { return $this->stb_author_name; }
+
+		var $stb_num_replies = '';
+		function set_num_replies($num_replies, $db_update = false) { $this->set("num_replies", $num_replies, $db_update); }
+		function field_num_replies_storage() { return 'punbb.topics.num_replies(id)'; }
+		function num_replies() { return $this->stb_num_replies; }
+
+		function get_all_posts_id()
+		{
+			$db = &new DataBase('punbb');
+			return $db->get_array("SELECT id FROM posts WHERE topic_id={$this->id} ORDER BY posted");
+		}
 	}

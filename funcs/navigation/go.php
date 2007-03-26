@@ -1,13 +1,17 @@
 <?
 //    require_once('debug.php');
 
-    function go($uri, $permament = true, $time = 0, $text = true)
+    function go($uri, $permament = false, $time = 0, $exit = true)
     {
         if(!headers_sent($filename, $linenum) && $time==0) 
         {
-            header("Status: 302 Moved temporary");
+			if($permanent)
+	            header("Status: 301 Moved Permanently");
+			else
+	            header("Status: 302 Moved Temporarily");
             header("Location: $uri");
-            exit();
+			if($exit)
+	            exit();
         }
 
 //		if($text)
@@ -17,7 +21,8 @@
 
 //        debug("headers already out in $filename:$linenum");
 
-        exit();
+		if($exit)
+	        exit();
 		return true;
     }
 

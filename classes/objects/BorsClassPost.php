@@ -88,4 +88,32 @@
 
 			return false;
 		}
+
+		function preShowProcess()
+		{
+			$tid = $this->topic_id();
+			$pid = $this->id();
+
+			if(!$tid)
+			{
+				$this->set_body(ec("Указанный Вами топик не найден"), false);
+				return false;
+			}
+	
+			$topic = class_load('topic', $tid);
+	
+			$posts = $topic->get_all_posts_id();
+
+			$page = 1;
+
+			for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
+				if ($posts[$i] == $pid)
+				{
+					$page = intval( $i / 25) + 1;
+					break;
+				}
+			
+			require_once('funcs/navigation/go.php');
+			return go($topic->uri($page)."#p".$pid, true, 0, false);
+		}
 	}

@@ -38,6 +38,44 @@
 		return $pages;
 	}
 
+	function pages_show($obj, $total_pages, $limit)
+	{
+		$pages = array();
+		$total_pages = intval($total_pages);
+
+		if($total_pages > 1)
+		{
+			$pages[] = get_page_link($obj, 1);
+			
+			if($total_pages > $limit)
+			{
+				$pages[] = "...";
+				$limit--;
+			}
+			
+			for($i = max(2, $total_pages - $limit + 2); $i <= $total_pages; $i++)
+				$pages[] = get_page_link($obj, $i);
+		}
+		
+//		print_r($pages);
+		
+		return $pages;
+	}
+
+	function get_page_link($obj, $page_num, $class="", $q = "")
+	{
+		if(is_object($obj))
+			$p = $obj->uri($page_num);
+		else
+		{
+			$p = $obj;
+			if($page_num > 1)
+				$p .= "page$page_num/";
+		}
+				
+		return "<a href=\"$p$q\"".($class? " class=\"$class\"" : "" ).">$page_num</a>";
+	}
+
 	function check_page($p, $current_page, $total_pages)
 	{
 		if($p < 3)					return true;
