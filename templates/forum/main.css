@@ -42,7 +42,7 @@ table.btab td { background: white; }
 {
 	border-right: 1px solid #06c;
 	border-bottom: 1px solid #06c;
-	padding: 2;
+	padding: 2px;
 	margin: 0;
 }
 
@@ -276,7 +276,7 @@ td.post {
 /**/
 
 .outer {
-	word-wrap: break-word;
+/*	word-wrap: break-word; */
 }
 
 
