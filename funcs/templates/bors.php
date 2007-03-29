@@ -36,6 +36,7 @@
 			$smarty->assign($var, $obj->$var());
 		
 		$template = smarty_template($obj->template());
+		$smarty->template_dir = dirname(preg_replace("!^xfile:!", "", $template));
 		$smarty->assign("page_template", $template);
 		
 		if(!empty($GLOBALS['cms']['templates']['data']))
@@ -62,6 +63,9 @@
 	{
 		if(substr($template_name, 0, 8) == 'xfile://')
 			return $template_name;
+		
+		if($template_name{0} == '/')
+			return "xfile:".$template_name;
 		
 		return $GLOBALS['cms']['default_template'];
 	}

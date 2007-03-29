@@ -1,5 +1,5 @@
 <?  
-	function template_assign_data($assign_template, $data=array(), $uri=NULL)
+	function template_assign_data($assign_template, $data=array(), $uri=NULL, $caller=NULL)
 	{
 //		echo "tpl=$assign_template<br />";
 //		print_r($data);
@@ -18,7 +18,7 @@
 		if(!file_exists($smarty->cache_dir))
 			mkdir($smarty->cache_dir, 0775, true);
 
-		echo $caching = !is_null($uri)
+		$caching = !is_null($uri)
 				&& @$data['caching'] !== false
 				&& @$GLOBALS['cms']['templates_cache_disabled'] !== true
 			;
@@ -33,8 +33,9 @@
 
 		$hts = &new DataBaseHTS();
 
-		$caller = array_shift(debug_backtrace());
-//		echo $caller['file']."<br />";
+//		echo "<xmp>"; print_r(debug_backtrace()); echo "</xmp>";
+		$caller  = array_shift(debug_backtrace());
+//		echo $caller2['file']."<br />";
 		$caller_path = dirname($caller['file']);
 		$module_relative_path = preg_replace("!^.+?/cms/!", "", $caller_path)."/";
 //		print_r($GLOBALS['cms']);

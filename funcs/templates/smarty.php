@@ -336,6 +336,11 @@
 	        $smarty->clear_cache($tpl, $page);
 		}
 
+		// Присваиваем перегружаемые параметры для шаблонов. Например, из файлов .[smarty].txt
+		foreach($hts->get_array($page, 'smarty', array('ignore_error'=>true)) as $row)
+			if(preg_match("!^(.+?)=(.+)$!", $row, $match))
+				$smarty->assign(trim($match[1]), trim($match[2]));
+		
 		if(is_array(@$GLOBALS['cms']['smarty']))
 			foreach($GLOBALS['cms']['smarty'] as $key => $val)
 				$smarty->assign($key, $val);

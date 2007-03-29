@@ -18,11 +18,6 @@
 			return array();
 		}
 
-        function body()
-		{
-			return ec("Страница");
-		}
-		
         function title()
 		{
 			return $this->hts->get('title');

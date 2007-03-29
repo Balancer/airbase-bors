@@ -1,3 +1,4 @@
+DROP TABLE cache;
 CREATE TABLE IF NOT EXISTS `cache` (
   `type` bigint(20) unsigned default NULL,
   `key` bigint(20) unsigned default NULL,
