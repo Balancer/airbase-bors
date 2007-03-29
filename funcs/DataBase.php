@@ -296,29 +296,9 @@
 			$values=array();
 			foreach($array as $k => $v)
 			{
-				if(strpos($k, ' ') === false)
-				{
-					$keys[] = "`$k`";
-					$values[] = "'".addslashes($v)."'"; // mysql_real_escape_string
-				}
-				else
-				{
-					list($type, $k) = split(' ', $k);
-					$keys[] = "`$k`";
-					switch($type)
-					{
-						case 'int':
-							if(preg_match('!^0x[\da-fA-F]+$!', $v))
-								$values[] = $v;
-							else
-								$values[] = intval($v);
-							break;
-						case 'float':
-							$values[] = str_replace(',', '.', floatval($v)); break;
-						default:
-							$values[] = "'".addslashes($v)."'";
-					}
-				}
+				$this->normkeyval($k, $v);
+				$keys[] = $k;
+				$values[] = $v;
 			}
 			
 			return " (".join(",", $keys).") VALUES (".join(",", $values).") ";
@@ -338,7 +318,7 @@
 
 		function normkeyval(&$key, &$value)
 		{
-			@list($type, $key) = split('\s+', trim($key));
+			@list($type, $key) = split(' ', trim($key));
 			if(empty($key))
 			{
 				$key = $type;
@@ -448,5 +428,9 @@
 		{
 			return $this->get_array("SELECT * FROM `hts_keys`");
 		}
+
+		function instance($db = NULL)
+		{
+			return new DataBase($db);
+		}
 	}
-?>

@@ -1,5 +1,5 @@
 <?
-	require_once('Config.php');
+	require_once('classes/objects/Config.php');
 
 	class Bors
 	{
@@ -13,6 +13,7 @@
 
 		function Bors()
 		{
+			require_once('classes/objects/Config.php');
 			$this->config = &new Config();
 		}
 		
@@ -48,7 +49,7 @@
 				return "";
 			if($m[1] == 'http')
 				return $uri;
-			return class_load($m[1], $m[2])->uri();
+			return class_load($m[1], $m[2].'/')->uri();
 		}
 	}
 	
@@ -56,6 +57,9 @@
 
 	function class_load($class, $id=NULL, $page=1)
 	{
+		if(preg_match("!^borspage!", $class, $m))
+			return borsclass_uri_load($id, $page);
+	
 		if($id == NULL)
 			list($class, $id) = split("-", $class);
 	
@@ -69,14 +73,58 @@
 			}
 			
 			$class_name = "BorsClass".ucfirst($class);
-			require_once("classes/objects/$path$class_name.php");
-			$GLOBALS['bors_data']['classes'][$class][$id] = &new $class_name($id);
+			@include_once("classes/objects/$path$class_name.php");
+			if(class_exists($class_name))
+				$GLOBALS['bors_data']['classes'][$class][$id] = &new $class_name($id);
+			else
+			{			
+				@include_once("classes/bors/$path$class.php");
+				if(class_exists($class))
+					$GLOBALS['bors_data']['classes'][$class][$id] = &new $class($id);
+			}
 		}
 
 		if(!$page)
 			$page = 1;
 
-		$GLOBALS['bors_data']['classes'][$class][$id]->set_page($page);
+		if(!empty($GLOBALS['bors_data']['classes'][$class][$id]))
+			$GLOBALS['bors_data']['classes'][$class][$id]->set_page($page);
+	
+		return @$GLOBALS['bors_data']['classes'][$class][$id];
+	}
 
-		return $GLOBALS['bors_data']['classes'][$class][$id];
+	function borsclass_uri_load($uri, $page=1)
+	{
+//		echo "borsclass_uri_load($uri)<br />";
+	
+		if(empty($GLOBALS['bors_data']['borsclasses'][$uri]))
+		{
+			foreach($GLOBALS['bors_map'] as $uri_pattern => $class)
+			{
+//				echo "Check $uri_pattern to $uri <br />";
+				if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$uri_pattern$!", $uri, $match))
+				{
+//					echo "<b>true to $class</b><br />";
+//					$errrep_save = error_reporting();
+//					error_reporting($errrep_save & ~E_NOTICE);
+					include_once("classes/bors/$class.php");
+//					error_reporting($errrep_save);
+					if(class_exists($class))
+					{
+						$GLOBALS['bors_data']['borsclasses'][$uri] = &new $class($uri, $match);
+						break;
+					}
+				}
+			}
+		}
+
+		if(empty($GLOBALS['bors_data']['borsclasses'][$uri]))
+			return NULL;
+
+		if($page < 2)
+			$page = 1;
+
+		$GLOBALS['bors_data']['borsclasses'][$uri]->set_page($page);
+
+		return $GLOBALS['bors_data']['borsclasses'][$uri];
 	}

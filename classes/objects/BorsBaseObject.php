@@ -120,7 +120,8 @@
 			$res = array();
 			foreach($this->parents() as $x)
 			{
-				$res[] = class_load($x[0], $x[1])->internal_uri();
+				if($obj = class_load($x[0], $x[1]))
+					$res[] = $obj->internal_uri();
 //				print_r($x);
 			}
 			return $res;
@@ -217,4 +218,34 @@
 		function level() { return $this->stb_level; }
 
 		function preShowProcess() {	return false; }
+
+		function cache_life_time() { return 0; }
+
+		function cache_groups() { return ""; }
+
+		function body()
+		{
+			if(!$this->cache_life_time())
+				return $this->cacheable_body();
+			
+			$ch = &new Cache();
+			if($ch->get('bors-cached-body', $this->internal_uri()))
+				return $ch->last();
+
+			$content = $ch->set($this->cacheable_body(), $this->cache_life_time());
+
+			// Зарегистрируем сохранённый кеш в группах кеша, чтобы можно было чистить
+			// при обновлении данных, от которых зависит наш контент
+			
+			foreach(split(' ', $this->cache_groups()) as $group)
+				if($group)
+					$ch->group_register($group);
+
+			return $content;
+		}
+		
+		function cacheable_body()
+		{
+			return ec("Страница не определена");
+		}
 	}
