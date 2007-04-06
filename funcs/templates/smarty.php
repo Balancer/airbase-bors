@@ -370,7 +370,7 @@
 		$out = $smarty->fetch($tpl, $page);
 	    error_reporting($errrep_save);
 
-		$out = preg_replace('!<\?php(.+?)\?>!es', "do_php(stripslashes('$1'))", $out_save = $out);
+//		$out = preg_replace('!<\?php(.+?)\?'.'>!es', "do_php(stripslashes('$1'))", $out_save = $out);
 		
 		if($do_print)
 		{
