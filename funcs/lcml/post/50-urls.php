@@ -93,6 +93,8 @@
 
     function lcml_urls($txt)
     {
+		if(!empty($GLOBALS['cms']['config']['disable']['post_urls']))
+			return $txt;
 
         $txt=preg_replace("!\[(http://[^\s\|\]]+?)\]!ie","lcml_urls_title('$1')",$txt);
         $txt=preg_replace("!\[(www\.[^\s\|\]]+?)\]!ie","lcml_urls_title('http://$1')",$txt);

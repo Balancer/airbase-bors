@@ -57,7 +57,7 @@
 		foreach ($files as $file)
 		{
 			if (!empty ($_GET['debug']))
-				echo "load $dir$file<br>\n";
+				echo "load $dir/$file<br>\n";
 
 			if (substr($file, -4) == '.php')
 				include_once("$dir/$file");
