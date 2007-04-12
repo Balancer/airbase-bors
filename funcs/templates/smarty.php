@@ -345,6 +345,10 @@
 			foreach($GLOBALS['cms']['smarty'] as $key => $val)
 				$smarty->assign($key, $val);
 
+		if(!empty($GLOBALS['cms']['templates']['data']))
+            foreach($GLOBALS['cms']['templates']['data'] as $key => $value)
+       	        $smarty->assign($key, $value);
+
 		foreach(split(' ', 'host_name main_host_uri') as $key)
 			$smarty->assign($key, @$GLOBALS['cms'][$key]);
 

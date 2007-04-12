@@ -4,6 +4,8 @@
 //		echo "tpl=$assign_template<br />";
 //		print_r($data);
 
+		unset($GLOBALS['module_data']);
+
 		require_once('Smarty/Smarty.class.php');
 		$smarty = &new Smarty;
 		require('mysql-smarty.php');

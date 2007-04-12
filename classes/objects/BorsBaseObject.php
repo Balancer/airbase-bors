@@ -10,6 +10,8 @@
 
 		function id() { return $this->id; }
 		function set_id($id) { $this->id = $id; }
+		function main_db_storage(){ return ''; }
+		function main_table_storage(){ return ''; }
 
 		function BorsBaseObject($id = NULL, $noload = false)
 		{
@@ -248,4 +250,8 @@
 		{
 			return ec("Страница не определена");
 		}
+
+		var $stb_type_id;
+		function type_id() { return $this->stb_type_id; }
+		function set_type_id($type_id, $db_update = false) { $this->set("type_id", $type_id, $db_update); }
 	}
