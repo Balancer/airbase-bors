@@ -38,20 +38,81 @@
 				else
 					$map = @$mysql_map[$name];
 
-				if(!preg_match("!^(\w+)\.(\w+).(\w+)\(([^\(\)]+)\)$!", $map, $m))
-					continue;
+//				echo "=== got $map ===</br>";
+
+				// Выделяем имя функции постобработки, передаваемом в виде
+				// 'WWW.News.Header(ID)|html_entity_decode($str)'
+				// --------------------^^^^^^^^^^^^^^^^^^^^^^^^^-
+				$pfunc = "";
+				if(preg_match("!^(.+)\|(.+)$!", $map, $m))
+				{
+					$map	= $m[1];
+					$pfunc	= $m[2];
+				}
+
+//				echo "=== p: $map ===</br>";
+
+				// Выделяем имя SQL-функции, передаваемом в виде
+				// 'UNIX_TIMESTAMP(WWW.News.Date(ID))
+				// -^^^^^^^^^^^^^^^-----------------^
+				$sfunc = "";
+				if(preg_match("!^(\w+)\((.+\(.+\))\)$!", $map, $m))
+				{
+					$map	= $m[2];
+					$sfunc	= $m[1];
+				}
+
+//				echo "=== s: $map ===</br>";
 				
-				list($dummy, $db, $table, $field, $id_field) = $m;
+				$db		= '';
+				$def_db = $object->main_db_storage();
+				$table	= '';
+				$def_table = $object->main_table_storage();
+//				echo "$map </br>";
+				if(preg_match("!^(\w+)\.(\w+)\.((\w+)\(([^\(\)]+)\))$!", $map, $m))
+				{
+					$db		= $m[1];
+					$table	= $m[2];
+					$map	= $m[3];
+				}
+
+				if(preg_match("!^(\w+)\.((\w+)\(([^\(\)]+)\))$!", $map, $m))
+				{
+					$table	= $m[1];
+					$map	= $m[2];
+				}
+
+//				echo $map."</br>";
+
+				if(!preg_match("!^(\w+)\(([^\(\)]+)\)$!", $map, $m))
+					continue;
+					
+				list($dummy, $field, $id_field) = $m;
+
+				if($pfunc)
+					$name = "$name|$pfunc";
+
+				if($sfunc)
+					$field = "$sfunc($field)";
+
+				if($db == $def_db) $db = '';
+				if($table == $def_table) $table = '';
 
 				$data[$db][$table][$id_field][$field] = $name;
 			}
 
 			$oid = addslashes($object->id());
 
-//			print_r($data); echo "<br />";
-
+			ksort($data);
+//			echo "<xmp>"; print_r($data); echo "</xmp>";
+			
 			foreach($data as $db_name => $tables)
 			{
+				if(!$db_name)
+					$db_name = $def_db;
+					
+				ksort($tables);
+//				echo "<xmp>"; print_r($tables); echo "</xmp>";
 				$dbh = &new DataBase($db_name);
 				
 				$tab_count = 0;
@@ -63,6 +124,9 @@
 				
 				foreach($tables as $table_name => $ids)
 				{
+					if(!$table_name)
+						$table_name = $def_table;
+						
 					foreach($ids as $id_field => $field_list)
 					{
 						if(empty($added["$table_name($id_field)"]))
@@ -79,31 +143,65 @@
 
 						foreach($field_list as $field => $name)
 						{
-							$select[] = $current_tab.".`$field` AS `$name`";
+							if(preg_match("!^(\w+)\((\w+)\)$!", $field, $m))
+								$select[] = "{$m[1]}($current_tab.{$m[2]}) AS `$name`";
+							else
+								$select[] = $current_tab.".$field AS `$name`";
+
 							$first_name = $name;
 						}
 					}
+				}
+
+//				$GLOBALS['log_level'] = 10;
+				$result = $dbh->get("SELECT ".join(",", $select)." $from $where", false);
+//				$GLOBALS['log_level'] = 2;
+//				echo "res = "; print_r($result); echo "<br />";
 					
-					$result = $dbh->get("SELECT ".join(",", $select)." $from $where", false);
-					
-					if(is_array($result))
+				if(is_array($result))
+				{
+					foreach($result as $name => $value)
 					{
-						foreach($result as $name => $value)
+						$pfunc = "";
+						if(preg_match("!^(.+)\|(.+)$!", $name, $m))
 						{
-							$set_method = "set_".$name;
-							$object->$set_method($value, false);
+							$pfunc	= $m[2];
+							$name	= $m[1];
+							$value = $this->do_func($pfunc, $value);
 						}
+						$set_method = "set_".$name;
+						$object->$set_method($value, false);
 					}
-					else
+				}
+				else
+				{
+					$pfunc = "";
+					if(preg_match("!^(.+)\|(.+)$!", $first_name, $m))
 					{
-						$set_method = "set_".$first_name;
-						$object->$set_method($result, false);
+						$pfunc	= $m[2];
+						$first_name	= $m[1];
+						$result = $this->do_func($pfunc, $result);
 					}
-					
+					$set_method = "set_".$first_name;
+					$object->$set_method($result, false);
 				}
 			}
 			
 //			$GLOBALS['log_level'] = 2;
+		}
+
+		function do_func($func, $str)
+		{
+//			echo "Do $func('$str')";
+			if(!$func)
+				return $str;
+		
+			if(function_exists($func))
+				return $func($str);
+			
+			$func = str_replace('$$$', '$str');
+			eval("\$value = $func;");
+			return $value;
 		}
 
 		function save($object)
