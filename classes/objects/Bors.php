@@ -97,7 +97,7 @@
 	{
 //		echo "borsclass_uri_load($uri)<br />";
 	
-		if(empty($GLOBALS['bors_data']['borsclasses'][$uri]))
+		if(empty($GLOBALS['bors_data']['borsclasses'][$uri]) && !empty($GLOBALS['bors_map']))
 		{
 			foreach($GLOBALS['bors_map'] as $uri_pattern => $class)
 			{

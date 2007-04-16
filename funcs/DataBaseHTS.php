@@ -287,7 +287,10 @@ class DataBaseHTS
 				return array();
 				
 			$obj = class_load($m[1], $m[2]."/");
-			return $obj->$key();
+			if(method_exists($obj, $key))
+				return $obj->$key();
+			else
+				return array();
 		}
 	
 		if(empty($params['fields']))
@@ -763,7 +766,7 @@ class DataBaseHTS
 		if (is_global_key('base_value', $key))
 			return global_key('base_value', $key);
 
-		$val = $this->dbh->get("SELECT `$key` FROM `hts_hosts` WHERE `host` LIKE '{$_SERVER['HTTP_HOST']}'");
+		$val = $this->dbh->get("SELECT `$key` FROM `hts_hosts` WHERE `host` LIKE '{$_SERVER['HTTP_HOST']}'", true);
 
 		return set_global_key('base_value', $key, $val ? $val : $def);
 	}
@@ -1046,14 +1049,14 @@ class DataBaseHTS
 
 	function get_proto($proto, $id, $key)
 	{
-//		echo "Get proto $proto://$id/ -> $key()<br />";
-		if($obj = class_load($proto, $id))
+//		echo "Get proto $proto://$id -> $key()<br />";
+		if(($obj = class_load($proto, $id)) && method_exists($obj, $key))
 			return $obj->$key();
 	
 		global $transmap;
 		$t = &$transmap[$proto];
 
-		if(preg_match('!^http://!', $id))
+		if(preg_match('!^http://!', $id) && $t['uri>id'])
 			$id = $t['uri>id']['rf']($id);
 		
 		if(is_array($key))

@@ -8,7 +8,7 @@
 		var $match;
 		function BorsBasePage($uri, $match)
 		{
-			$this->db = &new DataBase('WWW');
+			$this->db = &new DataBase($GLOBALS['cms']['mysql_database']);
 			$this->match = $match;
 			parent::BorsClassPage($uri);
 		}

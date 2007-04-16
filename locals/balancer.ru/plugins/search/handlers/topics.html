@@ -7,9 +7,14 @@
 <option value="rd">числу ответов, убыв.</option>
 <option value="vd">числу просмотров, убыв.</option>
 </select>
+искать в: <select name="type">
+<option value="t">заголовках</option>
+<option value="m">сообщениях</option>
+</select>
 <input type="submit" value="искать" />
 </form>
 {if $topics !== false}
+{if $type == 'm'}<span style="color: red;"><center><b>Результат не полный, переиндексация сообщений форума ещё не завершена</b></center></span>{/if}
 <table class="btab" cellSpacing="0">
 <tr>
 	<th>форум</th>

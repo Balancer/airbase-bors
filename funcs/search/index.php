@@ -37,11 +37,11 @@
 
 			$sub = $id%10;
 			
-			$count = intval($db->get("SELECT count FROM body_$sub WHERE id = $id AND page_id = $page_id"));
+			$count = intval($db->get("SELECT count FROM body_$sub WHERE word_id = $id AND page_id = $page_id"));
 			if(!$count)
-				$db->replace("body_$sub", array('id'=>$id, 'page_id'=>$page_id, 'count'=>1));
+				$db->replace("body_$sub", array('word_id'=>$id, 'page_id'=>$page_id, 'count'=>1));
 			else
-				$db->update("body_$sub", "id = $id AND page_id = $page_id", array('count' => $count+1));
+				$db->update("body_$sub", "word_id = $id AND page_id = $page_id", array('count' => $count+1));
 		}
 	}
 
@@ -273,3 +273,56 @@
 
         return $ch->set($out, 86400+rand(0,86400));
     }
+
+	function find_in_posts($query)
+	{
+		// +word -word word
+		
+		$words = preg_split("!\s+!u", trim($query));
+		
+		if(!$words)
+			return array();
+
+		include_once("include/classes/text/Stem_ru.php");
+			
+		$db = &new DataBase('punbb');
+
+		$Stemmer = &new Lingua_Stem_Ru();
+				
+		$must = array();
+		$none = array();
+		$maybe= array();
+		foreach($words as $word)
+//			if($word{0} == '+')
+//				$must[] = get_word_id(substr($word, 1));
+			if($word{0} == '-')
+				$none[] = get_word_id(substr($word, 1));
+			else
+				$maybe[] = get_word_id($word);
+	
+		$cross = array();
+		if($maybe)
+		{
+			$first = true;
+			foreach($maybe as $w)
+			{
+				$res = $db->get_array("SELECT DISTINCT p.topic_id 
+					FROM SEARCH.body_".substr($w,-1)." b
+						INNER JOIN punbb.posts p ON p.id = b.page_id
+					WHERE b.word_id = $w");
+				if($first)
+					$cross = $res;
+				else
+					$cross = array_intersect($cross, $res);
+
+				$first = false;
+			}
+		}
+
+		if($none)
+			$corss = array_diff($cross, $db->get_array("SELECT DISTINCT p.topic_id 
+				FROM SEARCH.body_".substr($w,-1)." b
+					INNER JOIN punbb.posts p ON p.id = b.page_id
+				WHERE b.word_id IN (".join(",", $none).")"));
+		return $cross;
+	}
