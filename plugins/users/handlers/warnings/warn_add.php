@@ -19,8 +19,8 @@
 			return ec("У Вас недостаточно прав доступа");
 			
 		$us = new User($uid);
-		if(in_array($us->data('group'), array(1,2)))
-			return ec("Эта группа пользователей защищена от штрафования");
+//		if(in_array($us->data('group'), array(1,2)))
+//			return ec("Эта группа пользователей защищена от штрафования");
 		
 		$db = new DataBase('punbb');
 		$count = $db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $uid AND moderator_id = ".intval($me->data('id'))." AND time > ".(time()-86400));

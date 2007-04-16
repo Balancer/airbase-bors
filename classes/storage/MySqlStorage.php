@@ -66,6 +66,9 @@
 				
 				$db		= '';
 				$def_db = $object->main_db_storage();
+				if(!$def_db)
+					$def_db = $GLOBALS['cms']['mysql_database'];
+								   
 				$table	= '';
 				$def_table = $object->main_table_storage();
 //				echo "$map </br>";
@@ -238,8 +241,8 @@
 
 	$mysql_map = array();
 	
-	$mysql_map['create_time']	= 'WWW.hts_data_create_time.value(id)';
-	$mysql_map['name'] 			= 'WWW.hts_data_title.value(id)';
+	$mysql_map['create_time']	= 'hts_data_create_time.value(id)';
+	$mysql_map['name'] 			= 'hts_data_title.value(id)';
 
 	function mysql_storage_map($class, $key, $map)
 	{

@@ -214,7 +214,7 @@
 		var $stb_cr_type = NULL;
 		function set_cr_type($cr_type, $db_update=true) { $this->set("cr_type", $cr_type, $db_update); }
 		function cr_type() { return $this->stb_cr_type; }
-
+	
 		var $stb_level = NULL;
 		function set_level($level, $db_update=true) { $this->set("level", $level, $db_update); }
 		function level() { return $this->stb_level; }
@@ -227,6 +227,14 @@
 
 		function body()
 		{
+			global $me;
+		
+			if($this->need_access_level() > $me->get("level"))
+			{
+				require_once("funcs/modules/messages.php");
+				return error_message(ec("У Вас недостаточный уровень доступа для этой страницы. Ваш уровень ").$me->get("level").ec(", требуется ").$this->need_access_level());
+			}
+			
 			if(!$this->cache_life_time())
 				return $this->cacheable_body();
 			
@@ -254,4 +262,7 @@
 		var $stb_type_id;
 		function type_id() { return $this->stb_type_id; }
 		function set_type_id($type_id, $db_update = false) { $this->set("type_id", $type_id, $db_update); }
+
+		function need_access_level() { return 1; }
+	     
 	}

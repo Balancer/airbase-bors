@@ -28,8 +28,13 @@
 			}
 		
 			$db = &new DataBase('punbb');
-			$topics = find_in_topics($query);
-		
+//			$GLOBALS['log_level'] = 10;
+			if($_GET['type'] == 'm')
+				$topics = find_in_posts($query);
+			else
+				$topics = find_in_topics($query);
+//			$GLOBALS['log_level'] = 2;
+			
 			if($topics)
 				$topics = $db->get_array("
 					SELECT t.*, f.forum_name
@@ -40,7 +45,7 @@
 		}
 		
         include_once("funcs/templates/assign.php");
-		return template_assign_data("topics.html", array('topics'=>$topics, 'q'=>$query));
+		return template_assign_data("topics.html", array('topics'=>$topics, 'q'=>$query, 'type' => @$_GET['type']));
 	}
 
     function balancer_plugins_search_topic_titles_title($uri, $m)

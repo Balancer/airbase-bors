@@ -17,7 +17,6 @@
 	{
 		if(!$obj)
 			return false;
-
 	
 		if($obj->preShowProcess())
 			return true;
