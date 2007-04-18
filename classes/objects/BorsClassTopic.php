@@ -34,6 +34,8 @@
 			if($forum->is_public_access())
 				$GLOBALS['cms']['cache_static'] = true;
 
+			$GLOBALS['cms']['cache_disabled'] = true;
+
 			$bors->config()->set_cache_uri($this->internal_uri());
 			
 //			if($this->id() == 32510)

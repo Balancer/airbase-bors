@@ -45,11 +45,12 @@
 
 		function real_uri($uri)
 		{
-			if(!preg_match("!^(\w+)://(.*[^/])/?$!", $uri, $m))
+			if(!preg_match("!^(\w+)://(.*[^/])(/?)$!", $uri, $m))
 				return "";
 			if($m[1] == 'http')
 				return $uri;
-			return class_load($m[1], $m[2].'/')->uri();
+				
+			return class_load($m[1], $m[2].(intval($m[2]) == $m[2] ? '' : '/'))->uri();
 		}
 	}
 	
@@ -57,6 +58,8 @@
 
 	function class_load($class, $id=NULL, $page=1)
 	{
+//		echo "class_load('$class', '$id')<br />";
+	
 		if(preg_match("!^borspage!", $class, $m))
 			return borsclass_uri_load($id, $page);
 	

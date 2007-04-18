@@ -101,8 +101,10 @@
 			require_once("funcs/modules/uri.php");
 			$uri = strftime("/%Y/%m/%d/", $this->modify_time());
 			$uri .= $this->type()."-".$this->id();
+
 			if($page > 1)
 				$uri .= ",$page";
+
 			$uri .= "--".translite_uri_simple($this->title()).".html"; 
 			return $uri;
 		}
@@ -126,6 +128,7 @@
 					$res[] = $obj->internal_uri();
 //				print_r($x);
 			}
+			
 			return $res;
 		}
 

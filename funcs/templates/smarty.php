@@ -146,17 +146,23 @@
 
 			if(!$found)
 				foreach(array(
-					"{$GLOBALS['cms']['local_dir']}/templates{$tpl2}index.html",
-					"{$GLOBALS['cms']['local_dir']}/templates/default/index.html",
+					"{$GLOBALS['cms']['local_dir']}templates/{$tpl2}index.html",
+					"{$GLOBALS['cms']['local_dir']}templates/default/index.html",
 					"{$GLOBALS['cms']['base_dir']}/templates{$tpl2}index.html",
 					"{$GLOBALS['cms']['base_uri']}/templates$tpl1",
 					"{$GLOBALS['cms']['base_uri']}/templates$tpl2/body",
 					$GLOBALS['cms']['default_template'],
 				) as $tpl)
 				{
-//				echo "Check '$tpl'<br />";
-					if($tpl && $smarty->template_exists($tpl))
-						break;
+//					echo "Check '$tpl'<br />";
+					if($tpl)
+					{
+						if($hts->get($tpl, 'body'))
+							break;
+						if($smarty->template_exists($tpl) /*|| $smarty->template_exists('hts:'.$tpl)*/)
+							break;
+					}
+					
 					if(!empty($tpl) && $tpl{0}=='/' && file_exists($tpl))
 						break;
 				}
