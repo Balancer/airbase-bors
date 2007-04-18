@@ -1,7 +1,7 @@
 <?
 //    require_once('debug.php');
 
-    function go($uri, $permament = false, $time = 0, $exit = true)
+    function go($uri, $permanent = false, $time = 0, $exit = true)
     {
         if(!headers_sent($filename, $linenum) && $time==0) 
         {

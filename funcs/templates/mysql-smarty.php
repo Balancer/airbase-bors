@@ -5,4 +5,3 @@
                                        "db_get_timestamp",
                                        "db_get_secure",
                                        "db_get_trusted"));
-?>
