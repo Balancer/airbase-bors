@@ -157,8 +157,9 @@
 //					echo "Check '$tpl'<br />";
 					if($tpl)
 					{
-						if($hts->get($tpl, 'body'))
+						if($tpl{0} != '/' && $hts->get($tpl, 'body'))
 							break;
+							
 						if($smarty->template_exists($tpl) /*|| $smarty->template_exists('hts:'.$tpl)*/)
 							break;
 					}
@@ -365,9 +366,9 @@
 
 //		print_r($GLOBALS['cms']['plugin_data']);
 
+//		echo $tpl;
 		if($tpl{0} == '/')
 		{
-//			echo $tpl;
 			if(file_exists($tpl))
 				$tpl = "xfile:".$tpl;
 			else

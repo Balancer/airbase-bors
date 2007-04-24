@@ -27,7 +27,7 @@
 
     function check_action_access($level=3, $redir=false)
 	{
-		$us = new User();
+		$us = &new User();
 
 		if($us->data('level') < $level)
 		{
@@ -46,5 +46,3 @@
 
 		return true;
     }
-
-?>

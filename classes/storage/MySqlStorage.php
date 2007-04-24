@@ -15,10 +15,16 @@
 
 		function load($object)
 		{
+			static $total = 0;
+			static $stb_total = 0;
+		
 			if(!$object->id())
 				return;
 		
 			global $mysql_map;
+
+			$total += sizeof(get_object_vars($object));
+//			echo "MySqlStorage.load: {$object->internal_uri()}, size=".sizeof(get_object_vars($object)).", total=$total/$stb_total<br />";
 
 //			$GLOBALS['log_level'] = 10;
 
@@ -26,11 +32,13 @@
 		
 			foreach(get_object_vars($object) as $field => $value)
 			{
-				if(substr($field, 0, 4) != 'stb_')
+				if($field{0} != 's' || substr($field, 0, 4) != 'stb_')
 					continue;
 					
 				$name = substr($field, 4);
 //				echo "--- load $name<br />";
+
+				$stb_total++;
 
 				$field_storage_method_name = "field_{$name}_storage";
 				if(method_exists($object, $field_storage_method_name))

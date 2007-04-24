@@ -64,7 +64,15 @@
 
 	if(get_magic_quotes_gpc())
 		foreach($_POST as $key => $val)
-			 $_POST[$key] = stripslashes($val);
+			if(is_array($val))
+			{
+				$res = array();
+				foreach($val as $v)
+					$res[] = stripslashes($v);
+				$_POST[$key] = $res;
+			}
+			else
+				$_POST[$key] = stripslashes($val);
 
 	$GLOBALS['bors_data']['config'] = array(
 		'gpc' => get_magic_quotes_gpc(),

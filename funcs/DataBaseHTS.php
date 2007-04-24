@@ -1,11 +1,13 @@
 <?
-require_once ("DataBase.php");
-require_once ("global-data.php");
+	require_once ("DataBase.php");
+	require_once ("global-data.php");
+
+	define('DBHPROTOMASK', '!^([\w/]+)://(.*[^/])/?$!');
 
 class DataBaseHTS
 {
-	var $dbh;
-	var $uri;
+		var $dbh;
+		var $uri;
 
 		function instance($uri)
 		{
@@ -109,8 +111,8 @@ class DataBaseHTS
 
 	function pre_data_check($uri, $key)
 	{
-		if (!empty ($_GET['debug']))
-			echo "<small>pre_data_check('$uri', '$key')</small><br/>\n";
+//		if (!empty ($_GET['debug']))
+//			echo "<small>pre_data_check('$uri', '$key')</small><br/>\n";
 
 		if (empty ($GLOBALS['cms']['data_prehandler'][$key]))
 			return false;
@@ -155,17 +157,22 @@ class DataBaseHTS
 			return global_key("uri_data($uri)", $key);
 
 		$m = array ();
-		foreach ($GLOBALS['cms']['data_posthandler'][$idx] as $regexp => $data)
+//		print_r($GLOBALS['cms']['data_posthandler'][$idx]);
+		foreach ($GLOBALS['cms']['data_posthandler'][$idx] as $regexp => $array)
 		{
-//			echo "Check post_data_check($uri, $key) for $regexp<br/>\n";
-			if (preg_match($regexp, $uri, $m))
+			foreach($array as $data)
 			{
-//				echo "Got post $res for $key/$uri: $func";
-				if (($res = $data['func'] ($uri, $m, $data['plugin_data'], $key)) !== NULL)
+//				echo "<xmp>"; print_r($data); echo "</xmp>";
+//			echo "Check post_data_check($uri, $key) for $regexp<br/>\n";
+				if (preg_match($regexp, $uri, $m))
 				{
-//					if (!empty ($_GET['debug']))
-//						echo "<small>post_data_check return $res</small><br/>\n";
-					return set_global_key("uri_data($uri)", $key, $res);
+//					echo "Match for $key/$uri: {$data['func']}<br />";
+					if (($res = $data['func'] ($uri, $m, $data['plugin_data'], $key)) !== NULL)
+					{
+//						if (!empty ($_GET['debug']))
+//							echo "<small>post_data_check return $res</small><br/>\n";
+						return set_global_key("uri_data($uri)", $key, $res);
+					}
 				}
 			}
 		}
@@ -191,9 +198,14 @@ class DataBaseHTS
 //		echo "$uri($key)<br/>";
 
 		if(!preg_match('!^http://!', $uri))
-			if(preg_match('!^(\w+)://(.*[^/])/?$!', $uri, $m) && (!empty($transmap[@$m[1]]) || !empty($GLOBALS['bors'])) )
-				return $this->get_proto($m[1], $m[2]."/", $key);
-		
+			if(preg_match(DBHPROTOMASK, $uri, $m) && (!empty($transmap[@$m[1]]) || !empty($GLOBALS['bors'])) )
+			{
+//				echo "transmap for {$m[1]} = {$transmap[@$m[1]]}<br />";
+				$ret = $this->get_proto($m[1], $m[2]."/", $key);
+				if($ret !== NULL)
+					return $ret;
+			}
+			
 		$m = array ();
 		if (preg_match("!^raw:(.+)$!", $key, $m))
 		{
@@ -254,6 +266,8 @@ class DataBaseHTS
 		}
 		while ($uri && $uri != "http://{$_SERVER['HTTP_HOST']}");
 
+		
+//		echo "post $uri($key)<br/>";
 		if (!$raw && ($res = $this->post_data_check($uri, $key)) !== false)
 			return set_global_key("uri_data($uri)", $key, $res);
 
@@ -280,8 +294,10 @@ class DataBaseHTS
 	{
 		if(substr($uri, 0, 7) != 'http://')
 		{
-			if(!preg_match("!^(\w+)://(.*[^/])/?$!", $uri, $m))
+		
+			if(!preg_match(DBHPROTOMASK, $uri, $m))
 				return array();
+
 
 			if(!function_exists('class_load'))
 				return array();
@@ -321,7 +337,7 @@ class DataBaseHTS
 			$order = " ORDER BY ".join(', ', $order);
 		}
 			
-		echolog("Get keys array '$key' for '$uri' (fields=$fields, search=$search)");
+//		echolog("Get keys array '$key' for '$uri' (fields=$fields, search=$search)");
 
 		$uri = $this->normalize_uri($uri);
 
@@ -808,7 +824,7 @@ class DataBaseHTS
 		global $transmap;
 
 		if(!preg_match('!^http://!', $uri))
-			if(preg_match('!^(\w+)://(.*[^/])/?$!', $uri, $m) && !empty($transmap[@$m[1]]))
+			if(preg_match(DBHPROTOMASK, $uri, $m) && !empty($transmap[@$m[1]]))
 				return $this->set_proto($m[1], $m[2]."/", $flag, 1);
 
 		$this->append_data($uri, 'flags', $flag);
@@ -819,7 +835,7 @@ class DataBaseHTS
 		global $transmap;
 
 		if(!preg_match('!^http://!', $uri))
-			if(preg_match('!^(\w+)://(.*[^/])/?$!', $uri, $m) && !empty($transmap[@$m[1]]))
+			if(preg_match(DBHPROTOMASK, $uri, $m) && !empty($transmap[@$m[1]]))
 				return $this->set_proto($m[1], $m[2]."/", $flag, NULL);
 
 		$this->remove_data($uri, 'flags', $flag);
@@ -830,7 +846,7 @@ class DataBaseHTS
 		global $transmap;
 
 		if(!preg_match('!^http://!', $uri))
-			if(preg_match('!^(\w+)://(.*[^/])/?$!', $uri, $m) && !empty($transmap[@$m[1]]))
+			if(preg_match(DBHPROTOMASK, $uri, $m) && !empty($transmap[@$m[1]]))
 				return $this->get_proto($m[1], $m[2]."/", $flag) ? true : false;
 
 		return $this->data_exists($uri, 'flags', $flag);
@@ -1050,7 +1066,7 @@ class DataBaseHTS
 	function get_proto($proto, $id, $key)
 	{
 //		echo "Get proto $proto://$id -> $key()<br />";
-		if(($obj = class_load($proto, $id)) && method_exists($obj, $key))
+		if(function_exists('class_load') && ($obj = class_load($proto, $id)) && method_exists($obj, $key))
 			return $obj->$key();
 	
 		global $transmap;

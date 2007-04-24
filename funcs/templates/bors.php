@@ -34,6 +34,9 @@
 
 		foreach(split(' ', $obj->template_vars()) as $var)
 			$smarty->assign($var, $obj->$var());
+
+		foreach(split(' ', $obj->template_local_vars()) as $var)
+			$smarty->assign($var, $obj->$var());
 		
 		$template = smarty_template($obj->template());
 		$smarty->template_dir = dirname(preg_replace("!^xfile:!", "", $template));
@@ -41,7 +44,10 @@
 		
 		if(!empty($GLOBALS['cms']['templates']['data']))
             foreach($GLOBALS['cms']['templates']['data'] as $key => $value)
+			{
+//				echo "assign data $key to $value<br />";
        	        $smarty->assign($key, $value);
+			}
 
 		if(!$caching)
 			$smarty->clear_cache($template, $obj->uri());
