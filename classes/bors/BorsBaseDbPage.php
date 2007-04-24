@@ -31,15 +31,36 @@
 						$cache	= $m[2];
 					}
 					
-					if(preg_match("!^GLOBAL:(.+)$!", $qname, $m))
-						$GLOBALS['cms']['templates']['data'][$m[1]] = $this->db->get_array($q, false, $cache);
-					else
-						$data[$qname] = $this->db->get_array($q, false, $cache);
+					$data[$qname] = $this->db->get_array($q, false, $cache);
 				}
 
 			$data['template_dir'] = $this->_body_template_dir();
 
 			return template_assign_data($this->_body_template(), $data);
+		}
+
+		function BorsBaseDbPage($id, $match = false)
+		{
+			parent::BorsBasePage($id, $match);
+
+			if(!($qlist = $this->_global_queries()))
+				return;
+				
+			foreach($qlist as $qname => $q)
+			{
+				if(isset($GLOBALS['cms']['templates']['data'][$qname]))
+					continue;
+			
+				$cache = NULL;
+				if(preg_match("!^(.+)\|(\d+)$!", $q, $m))
+				{
+					$q		= $m[1];
+					$cache	= $m[2];
+				}
+					
+				$GLOBALS['cms']['templates']['data'][$qname] = $this->db->get_array($q, false, $cache);
+			}
+
 		}
 		
 		function _body_template()

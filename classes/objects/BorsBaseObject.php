@@ -187,7 +187,12 @@
 
 		function template_vars()
 		{
-			return 'body create_time description id modify_time nav_name source title type';
+			return 'body source';
+		}
+
+		function template_local_vars()
+		{
+			return 'create_time description id modify_time nav_name title type';
 		}
 		
 		function is_cache_disabled() { return true; }
@@ -252,7 +257,7 @@
 			
 			foreach(split(' ', $this->cache_groups()) as $group)
 				if($group)
-					$ch->group_register($group);
+					$ch->group_register($group, $this);
 
 			return $content;
 		}
@@ -266,6 +271,6 @@
 		function type_id() { return $this->stb_type_id; }
 		function set_type_id($type_id, $db_update = false) { $this->set("type_id", $type_id, $db_update); }
 
-		function need_access_level() { return 1; }
+		function need_access_level() { return 0; }
 	     
 	}

@@ -76,7 +76,7 @@
 //			echo "plugin $data_key : $regexp = ".print_r($GLOBALS['cms']['plugin_data'], true)."<br />";
 		}
 
-		$GLOBALS['cms']['data_posthandler'][$data_key][$regexp] = array(
+		$GLOBALS['cms']['data_posthandler'][$data_key][$regexp][] = array(
 			'func' => make_func($func),
 			'plugin_data' => @$GLOBALS['cms']['plugin_data'],
 		);

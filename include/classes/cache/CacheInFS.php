@@ -1,5 +1,6 @@
 <?
-	$GLOBALS['bors_data']['config']['cache_in_fs_path'] = '/fs-cache/';
+	$GLOBALS['bors']['config']['cache_in_fs_path'] = '/xxwww/sites/aviaport/tmp/fs-cache/';
+
 	// $_SERVER['DOCUMENT_ROOT']."/cache/fs/";
 
 	include_once("funcs/filesystem_ext.php");

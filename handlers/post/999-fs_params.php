@@ -4,6 +4,10 @@
 	{	
 		$is_array = false;
 		$file = preg_replace("!^http://".preg_quote($_SERVER['HTTP_HOST'])."!", $_SERVER['DOCUMENT_ROOT'], $uri).".$key.txt";
+		
+		if(preg_match("!^\w+://!", $file))
+			return NULL;
+		
 		if(!file_exists($file))
 		{
 			$file = preg_replace("!^http://".preg_quote($_SERVER['HTTP_HOST'])."!", $_SERVER['DOCUMENT_ROOT'], $uri).".[$key].txt";

@@ -24,6 +24,8 @@
 
 		function group_register($group, $obj = NULL)
 		{
+//			echo "Register {$obj->internal_uri()} to $group";
+		
 			$ch = &new Cache();
 			$ch->init("cache_group-$group", $this->last_cache_id());
 			$ch->set($this->last_cache_id(), 86400*365.25, true);
@@ -38,12 +40,24 @@
 
 		function group_clean($group)
 		{
+			require_once("classes/objects/Bors.php");
+			require_once("handlers/pre/borspage.php");
+		
 			$ch = &new Cache();
 			foreach($ch->get_array_by_type("cache_group_obj-$group") as $uri)
-				class_uri_load($uri)->cache_clean_self();
+			{
+				echo "$uri<br />";
+				$cls = class_load($uri);
+				if(method_exists($cls, cache_clean_self))
+					$cls->cache_clean_self();
+				else
+					echo "Can't load $uri<br />";
+			}
 
 			foreach($ch->get_array_by_type("cache_group-$group") as $cache_id)
 				$ch->clear_by_cache_id($cache_id);
+				
+			$this->clear_by_type("cache_group_obj-$group");
 		}
 
         function last()

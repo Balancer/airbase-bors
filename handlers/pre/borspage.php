@@ -18,5 +18,4 @@
 		}
 	}
 
-
 	borspage_load();

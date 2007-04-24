@@ -23,10 +23,10 @@
 	if(!file_exists($source_file))
 		exit("Ошибка! Отсутствует изображение $source_image");
 
-	if(filesize($source_file) == 0)
+	if(!empty($GLOBALS['cms']['convert_cmd']) && @filesize($source_file) == 0)
 		exit("Ошибка! Нулевой размер файла $source_image");
 	
-	$imd = getimagesize($source_file);
+	$imd = getimagesize(empty($GLOBALS['cms']['convert_cmd']) ? $source_image_url : $source_file);
 
 //	echo "<xmp>"; print_r($imd); echo "</xmp>";
 
@@ -52,11 +52,14 @@
 	if($resize)
 	{
 		if(!empty($GLOBALS['cms']['convert_cmd']))
-			echo system("{$GLOBALS['cms']['convert_cmd']} -geometry $size ".escapeshellarg($source_file)." ".escapeshellarg($target_file));
+			system("{$GLOBALS['cms']['convert_cmd']} -geometry $size ".escapeshellarg($source_file)." ".escapeshellarg($target_file));
 		else
 		{
-			echo $img = file_get_contents("http://airbase.ru/inc/tools/imageresize.phtml?url=$source_image_url&w=$need_width&h=$need_height");
-			file_put_contents($target_file, $img);
+			$img = file_get_contents("http://airbase.ru/inc/tools/imageresize.phtml?url=$source_image_url&w=$need_width&h=$need_height");
+			if(!$img)
+				$img = file_get_contents("http://airbase.ru/inc/tools/imageresize.phtml?url=$source_image_url&w=$need_width&h=$need_height");
+			if($img)
+				file_put_contents($target_file, $img);
 		}
 	}
 	else

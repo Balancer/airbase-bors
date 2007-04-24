@@ -7,7 +7,11 @@
 		function BorsClassPage($uri)
 		{
 //			echo "page '$uri'<br />";
-			$this->hts = &new DataBaseHTS($uri);
+			if(preg_match("!^\w+://!", $uri))
+				$this->hts = &new DataBaseHTS($uri);
+			else
+				$this->hts = false;
+				
 			$this->BorsBaseObject($uri);
 		}
 	
@@ -20,6 +24,6 @@
 
         function title()
 		{
-			return $this->hts->get('title');
+			return $this->hts ? $this->hts->get('title') : parent::title();
 		}
 	}

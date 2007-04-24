@@ -42,7 +42,7 @@
 				$link_line = array();
 				foreach(split("\|#\|", $nav) as $link)
 				{	
-//					echo "$link";
+//					echo "$link<br />";
 					$link_line[] = array(
 						'uri' => Bors::real_uri($link),
 						'title' => $hts->get($link, 'nav_name'),

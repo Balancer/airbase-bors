@@ -45,12 +45,17 @@
 
 		function real_uri($uri)
 		{
-			if(!preg_match("!^(\w+)://(.*[^/])(/?)$!", $uri, $m))
+			if(!preg_match("!^([\w/]+)://(.*[^/])(/?)$!", $uri, $m))
 				return "";
 			if($m[1] == 'http')
 				return $uri;
 				
-			return class_load($m[1], $m[2].(intval($m[2]) == $m[2] ? '' : '/'))->uri();
+			$cls = class_load($m[1], $m[2].(preg_match("!^\d+$!", $m[2]) ? '' : '/'));
+			
+			if(method_exists($cls, 'uri'))
+				return $cls->uri();
+			else
+				return $uri;
 		}
 	}
 	
@@ -62,7 +67,16 @@
 	
 		if(preg_match("!^borspage!", $class, $m))
 			return borsclass_uri_load($id, $page);
-	
+
+		if(preg_match("!^http://!", $class, $m))
+			return borsclass_uri_load($class, $page);
+
+		if(preg_match("!^([\w/]+)://(.*[^/])(/?)$!", $class, $m))
+		{
+			$class = $m[1];
+			$id = $m[2];
+		}
+
 		if($id == NULL)
 			list($class, $id) = split("-", $class);
 	
@@ -100,21 +114,29 @@
 	{
 //		echo "borsclass_uri_load($uri)<br />";
 	
+//		print_r($GLOBALS['bors_map']);
+
 		if(empty($GLOBALS['bors_data']['borsclasses'][$uri]) && !empty($GLOBALS['bors_map']))
 		{
-			foreach($GLOBALS['bors_map'] as $uri_pattern => $class)
+			foreach($GLOBALS['bors_map'] as $uri_pattern => $class_path)
 			{
 //				echo "Check $uri_pattern to $uri <br />";
 				if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$uri_pattern$!", $uri, $match))
 				{
-//					echo "<b>true to $class</b><br />";
+					if(preg_match("!^(.+)/([^/]+)$!", $class_path, $m))
+						$class = $m[2];
+					else
+						$class = $class_path;
+//					echo "<b>true to $class (in $class_path)</b><br />";
 //					$errrep_save = error_reporting();
 //					error_reporting($errrep_save & ~E_NOTICE);
-					include_once("classes/bors/$class.php");
+					include_once("classes/bors/$class_path.php");
 //					error_reporting($errrep_save);
 					if(class_exists($class))
 					{
+//						echo "<b>Yes!</b><br />";
 						$GLOBALS['bors_data']['borsclasses'][$uri] = &new $class($uri, $match);
+//						echo "::".$GLOBALS['bors_data']['borsclasses'][$uri]->title()." -> ".$GLOBALS['bors_data']['borsclasses'][$uri]->uri()."<br />";
 						break;
 					}
 				}

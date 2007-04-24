@@ -141,6 +141,16 @@
 		foreach(split(' ', 'host_name main_host_uri') as $key)
 			$smarty->assign($key, @$GLOBALS['cms'][$key]);
 
+		global $bors;
+		if(!empty($bors) && ($obj = $bors->main_object()))
+		{
+			foreach(split(' ', $obj->template_local_vars()) as $var)
+			{
+//				echo "Assign $var to {$obj->$var()}<br />";
+				$smarty->assign($var, $obj->$var());
+			}
+		}
+		
 //		echo $template_uri;
 
 		if($template_uri{0}=='/')
