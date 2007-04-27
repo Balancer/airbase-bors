@@ -149,6 +149,8 @@
 //				echo "Assign $var to {$obj->$var()}<br />";
 				$smarty->assign($var, $obj->$var());
 			}
+
+			$smarty->assign("this", $obj);
 		}
 		
 //		echo $template_uri;
