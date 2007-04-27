@@ -262,7 +262,15 @@
 	{
 		if(strpos($id_field, '=') === false)
 			return "$table.$id_field = '".addslashes($oid)."'";
-		$out =  preg_replace("!(\w+)=(\w+)!", "$table.$1=$2", $id_field);
-		$out =  preg_replace("!(\w+)='(\w+)'!", "$table.$1='$2'", $out);
+		if(strpos($id_field, ' ') === false)
+		{
+			$out =  preg_replace("!(\w+)=(\w+)!", "$table.$1=$2", $id_field);
+			$out =  preg_replace("!(\w+)='(\w+)'!", "$table.$1='$2'", $out);
+		}
+		else
+		{
+			$out =  preg_replace("!%TABLE%!", $table, $id_field);
+			$out =  preg_replace("!%ID%!", $oid, $out);
+		}
 		return $out;
 	}

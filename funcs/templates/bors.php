@@ -31,6 +31,7 @@
 		$smarty->assign("ref", @$_SERVER['HTTP_REFERER']);
 		$smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
 		$smarty->assign("queries", $GLOBALS['global_db_queries']);
+		$smarty->assign("this", $obj);
 
 		foreach(split(' ', $obj->template_vars()) as $var)
 			$smarty->assign($var, $obj->$var());
