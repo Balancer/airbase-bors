@@ -41,7 +41,7 @@
 			return false;
 
 		if(!empty($GLOBALS['cms']['templates_cache_disabled']))
-			$tpl_timestamp = time();
+			$tpl_timestamp = $GLOBALS['now'];
 
         return true;
     }

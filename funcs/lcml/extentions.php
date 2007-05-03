@@ -14,8 +14,8 @@
         if($dh = opendir($dir)) 
         {
             while(($file = readdir($dh)) !== false)
-                if($file{0} != '.')
-                    array_push($files, $file);
+                if(!preg_match("!^\.!", $file))
+                    $files[] = $file;
         }
         closedir($dh);
         
@@ -27,7 +27,7 @@
         {
 //            echo "load $file<br>\n";
 
-            if(substr($file, -4) == '.php')
+            if(preg_match("!(.+)\.php$!", $file, $m))
             {
                 include_once("$dir/$file");
 

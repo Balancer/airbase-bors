@@ -48,7 +48,7 @@
 		if ($dh = opendir($dir))
 			while (($file = readdir($dh)) !== false)
 				if ($file{0} != '.')
-					array_push($files, $file);
+					$files[] = $file;
 
 		closedir($dh);
 
@@ -59,7 +59,8 @@
 			if (!empty ($_GET['debug']))
 				echo "load $dir/$file<br>\n";
 
-			if (substr($file, -4) == '.php')
+//TODO: ?			if (substr($file, -4) == '.php')
+			if (preg_match("!\.php$!", $file))
 				include_once("$dir/$file");
 			elseif (is_dir("$dir/$file") && !preg_match("!(post|pre)$!", $file)) 
 				handlers_load_dir("$dir/$file");

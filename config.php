@@ -1,4 +1,6 @@
 <?
+	$GLOBALS['now'] = time();
+
 	if(!defined("BORS_INCLUDE"))
 		define("BORS_INCLUDE", $_SERVER['DOCUMENT_ROOT']."/cms/");
 

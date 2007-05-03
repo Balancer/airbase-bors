@@ -32,11 +32,12 @@
 		
 			foreach(get_object_vars($object) as $field => $value)
 			{
-				if($field{0} != 's' || substr($field, 0, 4) != 'stb_')
+//				echo "--- load $field<br />";
+//TODO:?				if($field{0} != 's' || substr($field, 0, 4) != 'stb_')
+				if(!preg_match('!^stb_(.+)$!', $field, $m))
 					continue;
 					
-				$name = substr($field, 4);
-//				echo "--- load $name<br />";
+				$name = $m[1];
 
 				$stb_total++;
 
@@ -169,7 +170,8 @@
 //				$GLOBALS['log_level'] = 2;
 //				echo "res = "; print_r($result); echo "<br />";
 					
-				if(is_array($result))
+//				if(is_array($result))
+				if(count($result) > 1)
 				{
 					foreach($result as $name => $value)
 					{

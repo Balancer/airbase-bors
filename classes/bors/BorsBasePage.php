@@ -5,7 +5,7 @@
 	{
 		function type() 
 		{
-			if(substr($this->id(), 0, 7) == 'http://')
+			if(preg_match('!^http://!', $this->id()))
 				return get_class($this);
 			else
 				return get_class($this);
@@ -21,7 +21,7 @@
 		
 		function internal_uri() 
 		{
-			if(substr($this->id(), 0, 7) == 'http://')
+			if(preg_match('!^http://!', $this->id()))
 				return $this->id(); 
 			else
 				return $this->type()."://".$this->id()."/";

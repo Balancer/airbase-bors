@@ -28,10 +28,10 @@
 		
 			foreach(get_object_vars($object) as $field => $value)
 			{
-				if(substr($field, 0, 4) != 'stb_')
+				if(preg_match('!^stb_(.+)$!', $field, $m))
 					continue;
 					
-				$name = substr($field, 4);
+				$name = $m[1];
 
 				$field_storage_method_name = "field_{$name}_storage";
 				if(method_exists($object, $field_storage_method_name))
