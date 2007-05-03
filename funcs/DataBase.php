@@ -161,57 +161,57 @@
 
 		function fetch()
 		{
-			$this->row = $this->result ? mysql_fetch_assoc($this->result) : false;
+			if(!$this->result)
+				return $this->row = false;
+		
+			$this->row = mysql_fetch_assoc($this->result);
 
-//			print_r($this->row);
+			if(!$this->row)
+				return false;
 
-			if(!empty($GLOBALS['bors_data']['config']['gpc']))
+			if(empty($GLOBALS['bors_data']['config']['gpc']))
 			{
-				if(is_array($this->row))
-					if(sizeof($this->row)==1)
-						foreach($this->row as $s)
-							$this->row = quote_fix($s);
-					else
-						foreach($this->row as $k => $v)
-							$this->row[$k] = quote_fix($v);
-			}
-			else
-			{
-				if(is_array($this->row))
-					if(sizeof($this->row)==1)
-						foreach($this->row as $s)
-							$this->row = $s;
-					else
-						foreach($this->row as $k => $v)
-							$this->row[$k] = $v;
-			}
-			
-			return $this->row;
-		}
+				if(sizeof($this->row)==1)
+					foreach($this->row as $s)
+						$this->row = $s;
+				else
+					foreach($this->row as $k => $v)
+						$this->row[$k] = $v;
 
-		function fetch0()
-		{
-			$this->row = $this->result ? mysql_fetch_assoc($this->result) : false;
+				return $this->row;
+			}
 
-			if(is_array($this->row) && sizeof($this->row)==1)
+			if(sizeof($this->row)==1)
 				foreach($this->row as $s)
 					$this->row = quote_fix($s);
-
+			else
+				foreach($this->row as $k => $v)
+					$this->row[$k] = quote_fix($v);
+			
 			return $this->row;
 		}
 
 		function fetch1()
 		{
-			$this->row = $this->result ? mysql_fetch_assoc($this->result) : false;
+			if(!$this->result)
+				return $this->row = false;
+		
+			$this->row = mysql_fetch_assoc($this->result);
 
- 			echo("fetch:<xmp>".print_r($this->row,true)."</xmp>");
+			if(!$this->row)
+				return false;
 
-			if(is_array($this->row))
-				foreach($this->row as $k => $v)
-					$this->row[$k] = quote_fix($v);
+			if(empty($GLOBALS['bors_data']['config']['gpc']))
+			{
+				foreach($this->row as $s)
+					$this->row = $s;
 
- 			echo("fetch:<xmp>".print_r($this->row,true)."</xmp>");
+				return $this->row;
+			}
 
+			foreach($this->row as $s)
+				$this->row = quote_fix($s);
+			
 			return $this->row;
 		}
 
@@ -244,11 +244,29 @@
 			return $this->row;//  set_global_key("db_get", $query, $this->row);
 		}
 
+		function get1($query, $ignore_error=false)
+		{
+			$this->query($query, $ignore_error);
+			$this->fetch1();
+			$this->free();
+
+			return $this->row;
+		}
+
+		function get_value($table, $key_search, $value, $key_res)
+		{
+			if(is_global_key("get_value($table,$key_search,$value)",$key_res)) 
+				return global_key("get_value($table,$key_search,$value)",$key_res);
+
+			return set_global_key("get_value($table,$key_search,$value)",$key_res, 
+				$this->get("SELECT `$key_res` FROM `$table` WHERE `$key_search`='".addslashes($value)."'"));
+		}
+
 		function loop($func, $query)
 		{
 			$this->query($query);
 			
-			while($this->fetch()!==false)
+			while($this->fetch() !== false)
 				$func($this->row);
 
 			$this->free();
@@ -403,15 +421,6 @@
 				if($res === false)
 					die(__FILE__.':'.__LINE__." Invalid query '$q': " . mysql_error($this->dbh));
 			}
-		}
-
-		function get_value($table,$key_search,$value,$key_res)
-		{
-			if(is_global_key("get_value($table,$key_search,$value)",$key_res)) 
-				return global_key("get_value($table,$key_search,$value)",$key_res);
-
-			return set_global_key("get_value($table,$key_search,$value)",$key_res, 
-				$this->get("SELECT `".addslashes($key_res)."` FROM `".addslashes($table)."` WHERE `".addslashes($key_search)."`='".addslashes($value)."'"));
 		}
 
 		function get_last_id()

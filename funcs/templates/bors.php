@@ -33,6 +33,13 @@
 		$smarty->assign("queries", $GLOBALS['global_db_queries']);
 		$smarty->assign("this", $obj);
 
+		//TODO: убрать user_id и user_nameв старых шаблонах.
+		$me = &new User();
+		$smarty->assign("me", $me);
+		$smarty->assign("me_id", $me->get('id'));
+		$smarty->assign("user_id", $me->get('id'));
+		$smarty->assign("user_name", $me->get('name'));
+
 		foreach(split(' ', $obj->template_vars()) as $var)
 			$smarty->assign($var, $obj->$var());
 

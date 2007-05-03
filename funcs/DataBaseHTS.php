@@ -65,13 +65,13 @@ class DataBaseHTS
 		$uri = preg_replace("!([^:])//+!", "$1/", $uri);
 
 		// Если последний символ не '/' и оканчивается не на имя файла
-		if (substr($uri, -1) != '/')
+		if (!preg_match("!/$!", $uri))
 			if (preg_match("!^.*/[^\\.\\\\]+?$!", $uri))
 				$uri .= '/';
 
 		$uri = preg_replace("!^{$GLOBALS['DOCUMENT_ROOT']}/+!", "/", $uri);
 
-		if($uri && $uri{0} == '/')
+		if(preg_match("!/$!", $uri))
 			$uri = 'http://'.$_SERVER['HTTP_HOST'].$uri;
 
 		$uri = preg_replace("!/index\.\w+$!", "/", $uri);

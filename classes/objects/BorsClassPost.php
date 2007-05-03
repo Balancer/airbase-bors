@@ -50,7 +50,8 @@
 		function field_flag_storage() { return 'punbb.posts_cached_fields.flag(post_id)'; }
 		function flag()
 		{
-			if(empty($this->stb_flag) || substr($this->stb_flag, -1) != '>')
+			// Вторая часть условия - проверка на баг обрезания строки.
+			if(empty($this->stb_flag) || !preg_match("!>$!", $this->stb_flag))
 			{
 				include_once('funcs/users/geoip/get_flag.php');
 				$this->set_flag(get_flag($this->poster_ip()));

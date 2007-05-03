@@ -147,7 +147,7 @@ EOT;
         $forums=array();
         $f=split(",",$list);
 
-        for($i=0;$i<sizeof($f);$i++)
+        for($i=0, $count = count($f); $f<$count; $i++)
         {
             if(strpos($f[$i],'-')===false)
             {

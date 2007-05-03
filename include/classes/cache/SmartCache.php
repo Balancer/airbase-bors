@@ -5,6 +5,8 @@
     class Cache extends BaseCache
     {
         var $dbh;
+		var $create_time;
+		var $expire_time;
         
         function Cache()
         {
@@ -21,16 +23,21 @@
             $row = $this->dbh->get("SELECT `value`, `expire_time`, `count`, `saved_time`, `create_time` FROM `cache` WHERE `hmd`={$this->last_hmd}");
 			$this->last = $row['value'];
 
-			$now = time();
+			$now = $GLOBALS['now'];
 
 			if($row['expire_time'] <= $now)
 			{
 				$this->last = NULL;
 	            $this->dbh->query("DELETE FROM `cache` WHERE `hmd`={$this->last_hmd}");
 			}
+			else
+			{
+				$this->create_time = $row['create_time'];
+				$this->expire_time = $row['expire_time'];
+			}
 
 			$new_count = intval($row['count']) + 1;
-			$rate = $row['saved_time'] * $new_count / ($now - $row['create_time'] + 1);
+			$rate = $row['saved_time'] * $new_count / (max($now - $row['create_time'], 1));
 
 			if($this->last)
 				$this->dbh->update('cache', "`hmd`={$this->last_hmd}", array (

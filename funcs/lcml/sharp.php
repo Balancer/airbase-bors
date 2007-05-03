@@ -16,7 +16,7 @@
 
 //		$out = "";
 
-        for($i=0; $i<sizeof($array); $i++)
+        for($i=0, $count = count($array); $i < $count; $i++)
         {
 		
 		

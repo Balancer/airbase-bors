@@ -18,7 +18,9 @@
 			return true;
 
 		$GLOBALS['bors']->set_main_object($obj);
-		$GLOBALS['main_uri'] = $obj->internal_uri();
+
+		if(empty($GLOBALS['main_uri']))
+			$GLOBALS['main_uri'] = $obj->uri();
 	
 	    require_once('funcs/templates/bors.php');
 		$content = template_assign_bors_object($obj);

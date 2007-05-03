@@ -41,7 +41,7 @@
 
 	    $close_tags=split(" ","a i b u s font div span td tr tt table blockquote pre xmp");
 
-    	for($i=0; $i<sizeof($close_tags); $i++)
+    	for($i=0, $count = count($close_tags); $i<$count; $i++)
 	    {
 			$tag = $close_tags[$i];
         	$n = preg_match_all("!<$tag(\s|>)!i", $text, $m) - preg_match_all("!</$tag(\s|>)!i", $text, $m);

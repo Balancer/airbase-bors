@@ -7,7 +7,7 @@
 			$text .= ec("<br /><br /><br /><center><a href=\"javascript:history.go(-1)\">вернуться на предыдущую страницу</a></center>");
 		elseif($redir !== true)
 			$text .= "<br /><br /><br /><center><a href=\"$redir\">".ec("дальше")."</a></center>";
-	
+
 		$GLOBALS['page_data']['title'] = ec("Ошибка");
 		$GLOBALS['page_data']['source'] = $text;
 
