@@ -25,7 +25,7 @@
 
 	if(!empty($GLOBALS['cms']['convert_cmd']) && @filesize($source_file) == 0)
 		exit("Ошибка! Нулевой размер файла $source_image");
-	
+
 	$imd = getimagesize(empty($GLOBALS['cms']['convert_cmd']) ? $source_image_url : $source_file);
 
 //	echo "<xmp>"; print_r($imd); echo "</xmp>";

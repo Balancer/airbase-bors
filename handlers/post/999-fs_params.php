@@ -4,7 +4,6 @@
 	{	
 		$is_array = false;
 		$file = preg_replace("!^http://".preg_quote($_SERVER['HTTP_HOST'])."!", $_SERVER['DOCUMENT_ROOT'], $uri).".$key.txt";
-		
 		if(preg_match("!^\w+://!", $file))
 			return NULL;
 		
@@ -14,7 +13,7 @@
 			$is_array = true;
 		}
 		
-		if(!file_exists($file))
+		if(!@file_exists($file))
 			return NULL;
 		
 		return $is_array ? file($file) : ec(file_get_contents($file));

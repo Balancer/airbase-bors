@@ -7,11 +7,11 @@
     	    $text=preg_replace("#^(.*)<!\-\-QuoteBegin.*?\-\->.+?<!\-\-QuoteEEnd\-\->#is","$1",$text);
 
     // 
-	    $text=preg_replace("!(^|<p>|<br>)+(<font[^>]+>)(<p>)?[^\s<]*>.+?(<br>|<p>|$)+!i","",$text);
-    	$text=preg_replace("!(^|<p>|<br>)+(<font[^>]+>)(<a [^>]+>)?[^\s<]*</a>>.+?(<br>|<p>|$)+!i","",$text);
+	    $text=preg_replace("!(^|<p>|<br>|<br />)+(<font[^>]+>)(<p>)?[^\s<]*>.+?(<br />|<br>|<p>|$)+!i","",$text);
+    	$text=preg_replace("!(^|<p>|<br>|<br />)+(<font[^>]+>)(<a [^>]+>)?[^\s<]*</a>>.+?(<br />|<br>|<p>|$)+!i","",$text);
 	    $text=preg_replace("!<font size=\-2 color=#\d\d\d\d\d\d><b>.+?</b>>.+?</font>(<br>)+!is","",$text);
 
-    	$text=preg_replace("!(<br>)+!i","<br>",$text);
+    	$text=preg_replace("!(<br>|<br />)+!i","<br />",$text);
 
 //    $text=preg_replace("!</?(table|tr|td|h\d|br|p)[^>]*>!i"," ",$text);
 	    $text=str_replace("\n"," ",$text);
@@ -56,7 +56,7 @@
 	function to_one_string($s)
 	{
 	    if(sizeof($s)>1) $s=join("\n",$s);
-    	$s=str_replace("\n","<br>",$s);
+    	$s=str_replace("\n","<br />",$s);
 	    $s=str_replace("\|","&#124;",$s);
     	$s=str_replace("\r","",$s);
 

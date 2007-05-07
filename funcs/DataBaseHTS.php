@@ -48,7 +48,7 @@ class DataBaseHTS
 			if (preg_match("!^http://!", $uri))
 				return $this->normalize_uri($uri);
 
-			if ($uri{0} != '/')
+			if (!preg_match("!^/!", $uri))
 				$uri = $base_page.$uri;
 
 			return $this->normalize_uri("http://{$_SERVER['HTTP_HOST']}$uri");
@@ -71,7 +71,8 @@ class DataBaseHTS
 
 		$uri = preg_replace("!^{$GLOBALS['DOCUMENT_ROOT']}/+!", "/", $uri);
 
-		if(preg_match("!/$!", $uri))
+
+		if(preg_match("!^/!", $uri))
 			$uri = 'http://'.$_SERVER['HTTP_HOST'].$uri;
 
 		$uri = preg_replace("!/index\.\w+$!", "/", $uri);
@@ -190,7 +191,7 @@ class DataBaseHTS
 	function get_data($uri, $key, $default = NULL, $inherit = false, $skip = false, $fields = '`value`', $search = '`id`')
 	{
 //		if(!empty($_GET['debug']))
-//		if($key == 'create_time')
+//		if($key == 'source')
 //			echo("<small><tt>Get key '$key' for '$uri'</tt></small><br />");
 		global $transmap;
 
@@ -237,7 +238,6 @@ class DataBaseHTS
 		$key_table_name = $this->create_data_table($key);
 
 		$loops = 0;
-
 	
 		do
 		{

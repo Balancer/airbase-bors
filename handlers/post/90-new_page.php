@@ -7,6 +7,7 @@
 
     function handler_new_page($uri, $m=array())
 	{
+		exit("New");
 		require_once("funcs/check/access.php");
 
 		if(!check_action_access(3, $uri))
