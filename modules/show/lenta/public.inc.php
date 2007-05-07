@@ -17,7 +17,8 @@
 				u.avatar_width, 
 				u.avatar_height, 
 				u.title as u_title, 
-				g.g_user_title
+				g.g_user_title,
+				u.id as owner_id
 			FROM `topics` t 
 				LEFT JOIN `messages` m ON (m.id = t.first_pid) 
 				LEFT JOIN `forums` f ON (t.forum_id = f.id) 
@@ -33,8 +34,8 @@
 					'html' => $t['message'] = pun_lcml($db->get("SELECT message FROM messages WHERE id = {$t['first_pid']}"))
 				));
 
-			if($t['more'] = strlen($t['message']) > 1024)
-				$t['message'] = strip_text($t['message'], 1024);
+//			if($t['more'] = strlen($t['message']) > 1024)
+//				$t['message'] = strip_text($t['message'], 1024);
 
 			$topics[] = $t;
 		}

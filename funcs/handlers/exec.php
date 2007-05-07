@@ -13,6 +13,6 @@
 			if($ret !== false)
 				$uri = $ret;
 		}
-		
+
 		return do_uri_handlers($uri, $uri, $GLOBALS['cms_patterns']);
 	}

@@ -47,7 +47,7 @@ li.document{margin-bottom: 2px; list-style-image: URL("/img/design/icons/documen
         $limit = max(intval($limit/3),3);
 
         $child_name=$hts->get_data($uri,'nav_name');
-//        echo "get children for $child_name ($id)<br>";
+//        echo "get children for $child_name ($id)<br />";
 
 //        $GLOBALS['log_level']=9;
         $children=$hts->get_data_array($uri,'child');
@@ -84,7 +84,7 @@ li.document{margin-bottom: 2px; list-style-image: URL("/img/design/icons/documen
             }
 
 //            echo "id for '$child_id' = ";
-//            echo "$child_id<br>";
+//            echo "$child_id<br />";
 
             if($links_number<$limit && !isset($GLOBALS['linked_child'][$child]))
             {
@@ -133,7 +133,7 @@ li.document{margin-bottom: 2px; list-style-image: URL("/img/design/icons/documen
     if(empty($depth))
         $depth=1;
 
-//    echo "page=$page<br>$xpage<br>";
+//    echo "page=$page<br>$xpage<br />";
 
     print_child_pages($xpage,$limit,$depth);
     unset($xpage, $limit);

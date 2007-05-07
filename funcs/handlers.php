@@ -20,6 +20,7 @@
 				if (!empty ($_GET['debug']))
 					echo "----------------> ok!";
 //				echo "Call $func('$uri')<br />";
+//				header("X-Bors: Call $func('$uri')");
 				$res = $func ($uri, $m, $plugin_data);
 				if ($res === true)
 				{
