@@ -41,3 +41,29 @@
 
 		return $ret;
 	}
+
+	function get_countries()
+	{
+		$hts = new DataBaseHTS('WWW');
+		$countries = array();
+		foreach($hts->get_data_array("category://{$_SERVER['HTTP_HOST']}/personal/country/", 'child') as $country)
+			$countries[] = array(
+				'category'=>$country,
+				'title'=>$hts->get_data($country, 'title'),
+			);
+			
+		return $countries;
+	}
+
+	function get_cities()
+	{
+		$hts = new DataBaseHTS('WWW');
+		$cities = array();
+		foreach($hts->get_data_array("category://{$_SERVER['HTTP_HOST']}/personal/city/", 'child') as $city)
+			$cities[] = array(
+				'category'	=> $city,
+				'title'		=> $hts->get_data($city, 'title'),
+			);
+			
+		return $cities;
+	}
