@@ -77,7 +77,7 @@
 				{
 					$value = $this->dbh->update(
 						"$db.$table","$id_field = '".addslashes($object->id())."'",
-						$db_field => $object->$field);
+						array($db_field => $object->$field));
 				}
 				else // Если загрузки не было, то это новый объект.
 				{

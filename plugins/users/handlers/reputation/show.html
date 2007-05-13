@@ -7,10 +7,10 @@
 <table width="100%"><tr>
 <td width="90%">
 <form method="post" action="{$main_uri}?reputation_add_do">
-<div style="background-color: #cfc;"><input type="radio" id="s1" name="score" value="+1">&nbsp;увеличить репутацию</a></div>
-<div style="background-color: #fcc;"><input type="radio" id="s2" name="score" value="-1">&nbsp;уменьшить репутацию</a></div>
+<div style="background-color: #cfc;"><input type="radio" id="s1" name="score" value="+1">&nbsp;увеличить репутацию</div>
+<div style="background-color: #fcc;"><input type="radio" id="s2" name="score" value="-1">&nbsp;уменьшить репутацию</div>
 <textarea name="comment" style="width: 98%;" rows="5"></textarea>
-Ссылка (опционально):</span>&nbsp;<input name="uri" value="{$ref}" style="width: 60%;"><br />
+Ссылка (опционально):&nbsp;<input name="uri" value="{$ref}" style="width: 60%;"><br />
 <input type="hidden" name="user_id" value="{$user_id}">
 <input type="hidden" name="ref" value="{$ref}">
 <input type="submit" value="Отправить" onClick="{literal}if(!getElementById('s1').checked && !getElementById('s2').checked){ alert('Выберите оценку!'); return false;} else return true;{/literal}">

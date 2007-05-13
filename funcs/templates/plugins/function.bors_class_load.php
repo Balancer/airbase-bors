@@ -3,7 +3,7 @@
 	{
     	extract($params);
 
-	    if(empty($var)) 
+	    if(empty($var))
 		{
     	    $smarty->trigger_error("bors_class_load: missing 'var' parameter");
         	return;
