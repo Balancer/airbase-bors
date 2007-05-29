@@ -18,6 +18,7 @@
 		if(!$obj)
 			return false;
 	
+		exit("XXX");
 		if($obj->preShowProcess())
 			return true;
 
@@ -31,6 +32,7 @@
 
 		if(!empty($GLOBALS['cms']['cache_static']))
 		{
+			$page = $obj->page();
 			$sf = &new CacheStaticFile($obj->uri($page));
 			$sf->save($content, $obj->modify_time());
 
