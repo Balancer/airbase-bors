@@ -12,11 +12,17 @@
 		{
 			if(!$uri)
 				$uri = $key;
-		
+/*		
 			$this->last_type = $type = "0x".substr(md5($type), -16);
 			$this->last_key  = $key  = "0x".substr(md5($key), -16);
 			$this->last_uri  = $uri  = "0x".substr(md5($uri), -16);
             $this->last_hmd  = $hmd  = "0x".substr(md5("$type:$key"), -16);
+*/
+
+			$this->last_type = $type = "0x".md5($type);
+			$this->last_key  = $key  = "0x".md5($key);
+			$this->last_uri  = $uri  = "0x".md5($uri);
+            $this->last_hmd  = $hmd  = "0x".md5("$type:$key");
 
 			list($usec, $sec) = explode(" ",microtime());
 			$this->start_time = (float)$usec + (float)$sec;

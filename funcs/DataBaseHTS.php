@@ -1,5 +1,6 @@
 <?
 	require_once ("DataBase.php");
+	require_once ("classes/objects/Bors.php");
 	require_once ("global-data.php");
 
 	define('DBHPROTOMASK', '!^([\w/]+)://(.*[^/])/?$!');
@@ -16,7 +17,7 @@ class DataBaseHTS
 
 	function DataBaseHTS($data = NULL)
 	{
-		if(is_array($data))
+		if($data && is_array($data))
 		{
 			$this->uri = @$data['uri'];
 			$this->dbh = &new DataBase(@$data['db']);
@@ -188,8 +189,33 @@ class DataBaseHTS
 			return $this->get_data($uri, $key);
 	}
 
+	function check_uri_handler($uri)
+	{
+		if(empty($GLOBALS['bors_data']['hts_uri_bors_handlers']))
+			return false;
+	
+		foreach($GLOBALS['bors_data']['hts_uri_bors_handlers'] as $regexp => $class_name)
+			if(preg_match($regexp, $uri))
+				return class_uri_load($class_name, $uri);
+		
+		return false;
+	}
+
 	function get_data($uri, $key, $default = NULL, $inherit = false, $skip = false, $fields = '`value`', $search = '`id`')
 	{
+		if($obj = $this->check_uri_handler($uri))
+			if(method_exists($obj, $key))
+				return $obj->$key();
+
+		if($key == 'template')
+		{
+			if($fields == '`value`' && $search == '`id`' && !$skip && is_global_key("uri_data($uri)", $key))
+			{
+//				echo "*";
+				return global_key("uri_data($uri)", $key);
+			}
+		}
+			
 //		if(!empty($_GET['debug']))
 //		if($key == 'source')
 //			echo("<small><tt>Get key '$key' for '$uri'</tt></small><br />");
@@ -206,7 +232,7 @@ class DataBaseHTS
 				if($ret !== NULL)
 					return $ret;
 			}
-			
+
 		$m = array ();
 		if (preg_match("!^raw:(.+)$!", $key, $m))
 		{
@@ -239,6 +265,10 @@ class DataBaseHTS
 
 		$loops = 0;
 	
+		$host = '/';
+		if(preg_match("!^(http://[^/]+)!", $uri, $m))
+			$host = $m[1].'/';
+					
 		do
 		{
 			if (!$skip && $val = $this->dbh->get("SELECT $fields FROM `$key_table_name` WHERE $search='".addslashes($uri)."'", true))
@@ -249,22 +279,25 @@ class DataBaseHTS
 				$skip = false;
 
 				if ($loops ++ > 10)
-					$uri = 'http://airbase.ru';
-				if ($uri == 'http://airbase.ru')
+					$uri = $host;
+
+				if ($uri == $host)
 					break;
+
 				$res = $this->get_data_array($uri, 'parent');
+
 				if ($res)
 				{
 					sort($res);
 					$uri = $res[0];
 				}
 				else
-					$uri = 'http://airbase.ru';
+					$uri = $host;
 			}
 			else
 				break;
 		}
-		while ($uri && $uri != "http://{$_SERVER['HTTP_HOST']}");
+		while ($uri && $uri != $host && $loops < 10);
 
 		
 //		echo "post $uri($key)<br/>";
@@ -397,7 +430,13 @@ class DataBaseHTS
 
 	function set_data($uri, $key, $value, $params = array (), $append = false)
 	{
-		echolog("Set for '$uri' as '$key'='$value'");
+		if($obj = $this->check_uri_handler($uri))
+		{
+			$method = "set_$key";
+			if(method_exists($obj, $method))
+				return $obj->$method($value);
+		}
+		
 		global $transmap;
 
 		if(!preg_match('!^http://!', $uri))
@@ -1280,7 +1319,7 @@ class DataBaseHTS
 			
 			if(!preg_match('!^(.+)\|(.+)$!', $value, $m))
 			{
-				if(preg_match("!^(\S+)\.(\S+?)\s+(\S+)=(\S+)$!", trim($value), $m))
+				if(preg_match("!^(\S+)\.(\S+?)\s+(\S+)=(\S+)$!", $value, $m))
 				{
 					$value = "{$m[1]}.`{$m[2]}`";
 					$t[$key]['k'] = $value;
@@ -1319,4 +1358,9 @@ class DataBaseHTS
 			}
 		}
 
+	}
+
+	function register_hts_uri_bors_handler($regexp, $class)
+	{
+		$GLOBALS['bors_data']['hts_uri_bors_handlers'][$regexp] = $class;
 	}

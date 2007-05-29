@@ -7,6 +7,7 @@
     error_reporting(E_ALL);
     ini_set('display_errors', 'On');
     ini_set('log_errors', 'On');
+
     require_once("config.php");
 //	require_once('funcs/modules/messages.php');
 
@@ -28,6 +29,7 @@
 
 //	print_r($_GET);
 
+	require_once("funcs/templates/global.php");
 	require_once("funcs/users.php");
     require_once("funcs/handlers.php");
 
