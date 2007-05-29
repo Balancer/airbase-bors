@@ -1,8 +1,8 @@
 <?
-	require_once('BorsBaseObject.php');
+	require_once('classes/objects/BorsBaseObject.php');
 	class BorsClassUser extends BorsBaseObject
 	{
-		function type() { return 'user'; }
+		function class_name() { return 'User'; }
 
 		function BorsClassUser($id)
 		{
