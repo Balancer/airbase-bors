@@ -70,7 +70,7 @@
 
 		function can_read()
 		{
-			$access = class_load('forum/forumAccess', "{$this->id()}:" . class_load('BORS_User', -1)->group_id());
+			$access = class_load('forum/borsForumAccess', "{$this->id()}:" . class_load('borsUser', -1)->group_id());
 			return $access->can_read();
 		}
 
