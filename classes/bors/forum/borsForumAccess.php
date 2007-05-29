@@ -18,7 +18,7 @@
 			if($this->stb_can_read !== NULL)
 				return $this->stb_can_read;
 			
-			return class_load('group', $this->group_id)->can_read();
+			return class_load('forum/borsForumGroup', $this->group_id)->can_read();
 		}
 		
 		function set_can_read($can_read, $db_update = false) { $this->set("can_read", $can_read, $db_update); }

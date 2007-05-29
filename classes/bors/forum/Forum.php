@@ -55,7 +55,7 @@
 			$data['topics'] = array();
 
 			foreach($topics as $tid)
-				$data['topics'][] = class_load('topic', $tid);
+				$data['topics'][] = class_load('forum/Topic', $tid);
 
 			$data['this'] = $this;
 
@@ -64,7 +64,7 @@
 
 		function is_public_access()
 		{
-			$access = class_load('forum/forumAccess', "{$this->id()}:3");
+			$access = class_load('forum/borsForumAccess', "{$this->id()}:3");
 			return $access->can_read();
 		}
 
@@ -78,10 +78,10 @@
 		{ 
 			$parent_caches = array();
 			if($this->parent_forum_id())
-				$parent_caches[] = class_load('forum', $this->parent_forum_id());
+				$parent_caches[] = class_load('forum/Forum', $this->parent_forum_id());
 
 			if($this->category_id())
-				$parent_caches[] = class_load('forumCategory', $this->category_id());
+				$parent_caches[] = class_load('forum/borsForumCategory', $this->category_id());
 			
 			return $parent_caches;
 		}
@@ -105,7 +105,7 @@
 		{
 			$subforums = array();
 			foreach($this->direct_subforums_ids() as $forum_id)
-				$subforums[] = class_load('forum', $forum_id);
+				$subforums[] = class_load('forum/Forum', $forum_id);
 			return $subforums;
 		}
 		
@@ -119,7 +119,7 @@
 					continue;
 
 				$processed[] = $forum_id;
-				$subforum = $forums[] = class_load('forum', $forum_id);
+				$subforum = $forums[] = class_load('forum/Forum', $forum_id);
 				$forums = array_merge($forums, $subforum->all_subforums(&$processed));
 			}
 			

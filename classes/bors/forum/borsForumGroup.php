@@ -1,6 +1,6 @@
 <?
-	require_once('BorsBaseObject.php');
-	class BorsClassGroup extends BorsBaseObject
+	require_once('classes/objects/BorsBaseObject.php');
+	class borsForumGroup extends BorsBaseObject
 	{
 		function type() { return 'group'; }
 
