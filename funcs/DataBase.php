@@ -101,7 +101,7 @@
 				$GLOBALS['global_db_queries'] = 0;
 			$GLOBALS['global_db_queries']++;
 
-			echolog("<xmp>query=|$query|</xmp>", 4);
+			echolog("<small>query {$GLOBALS['global_db_queries']}=|".htmlspecialchars($query)."|</small>", 5);
 
 			list($usec, $sec) = explode(" ",microtime());
 			$qstart = ((float)$usec + (float)$sec);
@@ -115,6 +115,9 @@
 				$GLOBALS['stat']['queries_time'] = 0;
 				
 			$GLOBALS['stat']['queries_time'] += $qtime;
+
+			if(@$_GET['log_level'] == 4 && $qtime > @$_GET['qtime'])
+				echolog("<small>query {$GLOBALS['global_db_queries']}($qtime)=|".htmlspecialchars($query)."|</small>", 4);
 
 			if($GLOBALS['log_level'] > 5)
 			{
@@ -131,7 +134,7 @@
 				fclose($fh);
 			}
 */
-			echolog("<xmp>result=|".print_r($this->result, true)."|</xmp>",5);
+			echolog("<xmp>result=|".print_r($this->result, true)."|</xmp>",6);
 
 			//   @mysql_num_rows(), ..	SELECT!
 			if($this->result)
@@ -336,25 +339,35 @@
 
 		function normkeyval(&$key, &$value)
 		{
-			@list($type, $key) = split(' ', trim($key));
+			if(preg_match("!^\s+(.+)$!", $key, $m))
+				$key = $m[1];
+
+			if(preg_match("!^(.+)\s+$!", $key, $m))
+				$key = $m[1];
+				
+			@list($type, $key) = split(' ', $key);
 			if(empty($key))
 			{
 				$key = $type;
 				$type = 'default';
 			}
 
-			switch($type)
-			{
-				case 'int':
-					if(!preg_match('!^0x[\da-fA-F]+$!', $value))
-						$value = intval($value);
-					break;
-				case 'float':
-					$value = str_replace(',', '.', floatval($value)); 
-					break;
-				default:
-					$value = "'".addslashes($value)."'"; // mysql_real_escape_string
-			}
+			if($value === NULL)
+				$value = "NULL";
+			else
+				switch($type)
+				{
+					case 'int':
+						if(!preg_match('!^0x[\da-fA-F]+$!', $value))
+							if(!preg_match('!^\d+$!', $value))
+								$value = intval($value);
+						break;
+					case 'float':
+						$value = str_replace(',', '.', floatval($value)); 
+						break;
+					default:
+						$value = "'".addslashes($value)."'"; // mysql_real_escape_string
+				}
 			
 			$key = "`$key`";
 		}

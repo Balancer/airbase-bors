@@ -211,8 +211,7 @@
 
 		$nocache = $action || @$GLOBALS['cms']['templates_cache_disabled'];
 		$modify_time = max($hts->get_data($page, 'modify_time'), $hts->get_data($page, 'compile_time'));
-		$hts->get_data($page, 'cache_create_time');
-		$nocache = $nocache || ($modify_time > $hts->get_data($page, 'cache_create_time'));
+		$nocache = $nocache || ($modify_time > $GLOBALS['cms']['cache_copy']);
 
 		$access = access_allowed($page, $hts) ? 1 : 0;
 		$us = &new User();

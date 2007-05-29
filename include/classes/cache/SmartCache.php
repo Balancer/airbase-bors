@@ -72,7 +72,8 @@
 
         function clear_by_id($key)
         {
-			$key = "0x".substr(md5($key), -16);
+//			$key = "0x".substr(md5($key), -16);
+			$key = "0x".md5($key);
 			$this->dbh->query("DELETE FROM `cache` WHERE `key` = $key");
         }
 
@@ -83,25 +84,29 @@
 
         function clear_by_uri($uri)
         {
-			$uri = "0x".substr(md5($uri), -16);
+//			$uri = "0x".substr(md5($uri), -16);
+			$uri = "0x".md5($uri);
 			$this->dbh->query("DELETE FROM `cache` WHERE `uri` = $uri");
         }
 
         function clear_by_type($type)
         {
-			$type = "0x".substr(md5($type), -16);
+//			$type = "0x".substr(md5($type), -16);
+			$type = "0x".md5($type);
 			$this->dbh->query("DELETE FROM `cache` WHERE `type` = $type");
         }
 
         function get_array_by_uri($uri)
         {
-			$uri = "0x".substr(md5($uri), -16);
+//			$uri = "0x".substr(md5($uri), -16);
+			$uri = "0x".md5($uri);
 			return $this->dbh->get_array("SELECT DISTINCT value FROM `cache` WHERE `uri` = $uri");
         }
 
         function get_array_by_type($type)
         {
-			$type = "0x".substr(md5($type), -16);
+//			$type = "0x".substr(md5($type), -16);
+			$type = "0x".md5($type);
 			return $this->dbh->get_array("SELECT DISTINCT value FROM `cache` WHERE `type` = $type");
         }
     }

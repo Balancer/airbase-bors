@@ -38,7 +38,7 @@
 				}
 			}
 */			
-			if($noload)
+			if($noload || !$this->id)
 				return;
 			
 			$this->load();

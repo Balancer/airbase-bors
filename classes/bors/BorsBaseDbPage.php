@@ -32,7 +32,7 @@
 					continue;
 			
 				$cache = NULL;
-				if(preg_match("!^(.+)\|(\d+)$!", $q, $m))
+				if(preg_match("!^(.+)\|(\d+)$!s", $q, $m))
 				{
 					$q		= $m[1];
 					$cache	= $m[2];

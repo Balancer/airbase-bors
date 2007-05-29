@@ -61,6 +61,50 @@
 	
 	$GLOBALS['bors'] = &new Bors();
 
+	function class_include($class_full_name)
+	{
+		if($class_name = @$GLOBALS['bors_data']['class_included'][$class_full_name])
+			return $class_name;
+	
+		$class_path = "";
+		$class_name = $class_full_name;
+
+		if(preg_match("!^(.+/)([^/]+)$!", $class_full_name, $m))
+		{
+			$class_path = $m[1];
+			$class_name = $m[2];
+		}
+
+		foreach(array(BORS_INCLUDE_LOCAL, BORS_INCLUDE.'/vhosts/'.$_SERVER['HTTP_HOST'], BORS_INCLUDE) as $dir)
+			if(file_exists($file_name = "$dir/classes/bors/$class_path$class_name.php"))
+			{
+				include_once($file_name);
+				return $GLOBALS['bors_data']['class_included'][$class_full_name] = $class_name;
+			}
+
+		return false;
+	}
+
+	function class_uri_load($class_full_name, $uri)
+	{
+		$class_name = class_include($class_full_name);
+		
+		if(!$class_name)
+			return NULL;
+
+		$id = call_user_func(array($class_name, 'uri_to_id'), $uri);
+		
+		$cls = @$GLOBALS['bors_data']['classes'][$class_full_name][$id];
+
+		if(!$cls)
+			$cls = &new $class_name($id);
+			
+		$GLOBALS['bors_data']['classes'][$class_full_name][$id] = $cls;
+		$GLOBALS['bors_data']['borsclasses'][$cls->internal_uri()] = $cls;
+		$GLOBALS['bors_data']['borsclasses'][$cls->uri()] = $cls;
+		return $cls;
+	}
+
 	function class_load($class, $id=NULL, $page=1)
 	{
 		if(preg_match("!^(\d+)/$!", $id, $m))
