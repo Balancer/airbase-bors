@@ -1,9 +1,9 @@
 <?
-	require_once('bc_forum_abstract.php');
-	class BorsClassForum extends ForumObject
+	require_once('ForumAbstract.php');
+	class Forum extends ForumAbstract
 	{
-		function type() { return 'forum'; }
-		function name() { return 'forum/Forum'; }
+		function uri_name() { return 'forum'; }
+		function class_name() { return 'forum/Forum'; }
 
 		function field_title_storage() { return 'punbb.forums.forum_name(id)'; }
 
@@ -59,7 +59,7 @@
 
 			$data['this'] = $this;
 
-			return template_assign_data("templates/BorsClassForumBody.html", $data);
+			return template_assign_data("templates/ForumBody.html", $data);
 		}
 
 		function is_public_access()
@@ -70,7 +70,7 @@
 
 		function can_read()
 		{
-			$access = class_load('forum/forumAccess', "{$this->id()}:" . class_load('user', -1)->group_id());
+			$access = class_load('forum/forumAccess', "{$this->id()}:" . class_load('User', -1)->group_id());
 			return $access->can_read();
 		}
 

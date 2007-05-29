@@ -1,9 +1,9 @@
 <?
-	require_once('bc_forum_abstract.php');
-	class Topic extends bc_forum_abstract
+	require_once('ForumAbstract.php');
+	class Topic extends ForumAbstract
 	{
-		function name() { return 'forum/Topic'; }
-		function type() { return 'topic'; }
+		function class_name() { return 'forum/Topic'; }
+		function uri_name() { return 'topic'; }
 
 		var $stb_forum_id = '';
 		function forum_id() { return $this->stb_forum_id; }
