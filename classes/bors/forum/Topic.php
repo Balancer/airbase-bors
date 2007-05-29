@@ -1,7 +1,8 @@
 <?
-	require_once('BorsBaseForumObject.php');
-	class BorsClassTopic extends BorsBaseForumObject
+	require_once('bc_forum_abstract.php');
+	class Topic extends bc_forum_abstract
 	{
+		function name() { return 'forum/Topic'; }
 		function type() { return 'topic'; }
 
 		var $stb_forum_id = '';
@@ -17,7 +18,7 @@
 
         function parents()
 		{
-			return array(array('forum', $this->forum_id() ));
+			return array(array('forum/Forum', $this->forum_id() ));
 		}
 
         function body()
@@ -25,8 +26,8 @@
 //			$this->cache_clean_self();
 		
 			global $bors;
-			
-			$forum = class_load('forum', $this->forum_id());
+
+			$forum = class_load('forum/Forum', $this->forum_id());
 		
 			if(!$forum->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
@@ -70,7 +71,7 @@
 				$data['pagelist'] = join(" ", pages_select($this, $this->page(), ($total-1)/$posts_per_page+1));
 			}
 			
-			return template_assign_data("templates/BorsClassTopicBody.html", $data);
+			return template_assign_data("templates/TopicBody.html", $data);
 		}
 
 		function total_pages()

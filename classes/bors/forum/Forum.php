@@ -1,8 +1,9 @@
 <?
-	require_once('BorsBaseForumObject.php');
-	class BorsClassForum extends BorsBaseForumObject
+	require_once('bc_forum_abstract.php');
+	class BorsClassForum extends ForumObject
 	{
 		function type() { return 'forum'; }
+		function name() { return 'forum/Forum'; }
 
 		function field_title_storage() { return 'punbb.forums.forum_name(id)'; }
 

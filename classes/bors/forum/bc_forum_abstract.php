@@ -1,6 +1,6 @@
 <?
-	require_once('BorsBaseObject.php');
-	class BorsBaseForumObject extends BorsBaseObject
+	require_once('classes/objects/BorsBaseObject.php');
+	class bc_forum_abstract extends BorsBaseObject
 	{
 		function template()
 		{ 
