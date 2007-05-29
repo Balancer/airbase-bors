@@ -1,5 +1,5 @@
 <?
-	require_once('ForumAbstract.php');
+	require_once('borsForumAbstract.php');
 	class Topic extends ForumAbstract
 	{
 		function class_name() { return 'forum/Topic'; }
@@ -18,7 +18,7 @@
 
         function parents()
 		{
-			return array(array('forum/Forum', $this->forum_id() ));
+			return array(array('forum/borsForum', $this->forum_id() ));
 		}
 
         function body()
@@ -27,7 +27,7 @@
 		
 			global $bors;
 
-			$forum = class_load('forum/Forum', $this->forum_id());
+			$forum = class_load('forum/borsForum', $this->forum_id());
 		
 			if(!$forum->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
@@ -62,7 +62,7 @@
 			$data['posts'] = array();
 
 			foreach($posts as $pid)
-				$data['posts'][] = class_load('post', $pid);
+				$data['posts'][] = class_load('forum/borsForumPost', $pid);
 
 			$total = $this->num_replies()+1;
 			if($total > $posts_per_page)
@@ -94,9 +94,9 @@
 		function set_last_poster_name($last_poster_name, $db_update = false) { $this->set("last_poster_name", $last_poster_name, $db_update); }
 		function field_last_poster_name_storage() { return 'punbb.topics.last_poster(id)'; }
 
-		function cache_parents() { return array(class_load('forum', $this->forum_id()));}
+		function cache_parents() { return array(class_load('forum/borsForum', $this->forum_id()));}
 
-		function forum() { return class_load('forum', $this->forum_id()); }
+		function forum() { return class_load('forum/borsForum', $this->forum_id()); }
 
 		var $stb_author_name = '';
 		function set_author_name($author_name, $db_update = false) { $this->set("author_name", $author_name, $db_update); }

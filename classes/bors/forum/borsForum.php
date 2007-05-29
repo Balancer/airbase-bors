@@ -1,9 +1,9 @@
 <?
-	require_once('ForumAbstract.php');
-	class Forum extends ForumAbstract
+	require_once('borsForumAbstract.php');
+	class borsForum extends ForumAbstract
 	{
 		function uri_name() { return 'forum'; }
-		function class_name() { return 'forum/Forum'; }
+		function class_name() { return 'forum/borsForum'; }
 
 		function field_title_storage() { return 'punbb.forums.forum_name(id)'; }
 
@@ -78,7 +78,7 @@
 		{ 
 			$parent_caches = array();
 			if($this->parent_forum_id())
-				$parent_caches[] = class_load('forum/Forum', $this->parent_forum_id());
+				$parent_caches[] = class_load('forum/borsForum', $this->parent_forum_id());
 
 			if($this->category_id())
 				$parent_caches[] = class_load('forum/borsForumCategory', $this->category_id());
@@ -105,7 +105,7 @@
 		{
 			$subforums = array();
 			foreach($this->direct_subforums_ids() as $forum_id)
-				$subforums[] = class_load('forum/Forum', $forum_id);
+				$subforums[] = class_load('forum/borsForum', $forum_id);
 			return $subforums;
 		}
 		
@@ -119,7 +119,7 @@
 					continue;
 
 				$processed[] = $forum_id;
-				$subforum = $forums[] = class_load('forum/Forum', $forum_id);
+				$subforum = $forums[] = class_load('forum/borsForum', $forum_id);
 				$forums = array_merge($forums, $subforum->all_subforums(&$processed));
 			}
 			
