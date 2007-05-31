@@ -48,6 +48,11 @@
 			return template_assign_data($this->_body_template(), $data);
 		}
 
+		function add_template_data($var_name, $value)
+		{
+			$GLOBALS['cms']['templates']['data'][$var_name] = $value;
+		}
+
 		function _body_template()
 		{
 			$cf = $this->_class_file();

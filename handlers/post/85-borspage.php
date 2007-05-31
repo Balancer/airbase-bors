@@ -18,7 +18,6 @@
 		if(!$obj)
 			return false;
 	
-		exit("XXX");
 		if($obj->preShowProcess())
 			return true;
 
