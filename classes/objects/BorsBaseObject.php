@@ -247,7 +247,10 @@
 				return $this->cacheable_body();
 			
 			$ch = &new Cache();
-			if($ch->get('bors-cached-body-v17', $this->internal_uri()))
+			
+			$drop_cache = $this->cache_life_time() || !empty($_GET['drop_cache']);
+			
+			if($ch->get('bors-cached-body-v17', $this->internal_uri()) && !$drop_cache)
 			{
 				$add = "\n<!-- cached; create=".strftime("%d.%m.%Y %H:%M", $ch->create_time)."; expire=".strftime("%d.%m.%Y %H:%M", $ch->expire_time)." -->";
 				return $ch->last().$add;
