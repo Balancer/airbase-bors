@@ -1,4 +1,7 @@
 <?
+	if($_SERVER['REMOTE_ADDR']=="85.141.131.23")
+		exit();
+		
 //	ini_set("xdebug.profiler_enable", "1");
 
     list($usec, $sec) = explode(" ",microtime());
