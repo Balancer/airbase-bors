@@ -65,7 +65,7 @@
 	else
 		copy($source_file, $target_file);
 
-	chmod($target_file, 0666);
+	@chmod($target_file, 0666);
 		
 	header("Status: 200 OK");
 	header("Content-Length: ".filesize($target_file));

@@ -1,6 +1,6 @@
 <?
 	require_once('borsForumAbstract.php');
-	class borsForum extends ForumAbstract
+	class borsForum extends borsForumAbstract
 	{
 		function uri_name() { return 'forum'; }
 		function class_name() { return 'forum/borsForum'; }
@@ -20,9 +20,9 @@
         function parents()
 		{
 			if($this->parent_forum_id())
-				return array(array('forum', $this->parent_forum_id() ));
+				return array(array('forum/borsForum', $this->parent_forum_id() ));
 			else
-				return array(array('page', 'http://balancer.ru/forum/'));
+				return array(array('borsPage', 'http://balancer.ru/forum-new/'));
 //				return array(array('forumCategory', $this->category_id() ));
 		}
 
@@ -49,13 +49,11 @@
 
 			$topics_per_page = 50;
 			$start_from = ($this->page() - 1) * $topics_per_page;
+			
+			$data['topics'] = $db->get_array("SELECT id FROM topics WHERE forum_id={$this->id()} ORDER BY last_post DESC LIMIT $start_from, $topics_per_page");
 
-			$topics = $db->get_array("SELECT id FROM topics WHERE forum_id={$this->id()} ORDER BY last_post DESC LIMIT $start_from, $topics_per_page");
-
-			$data['topics'] = array();
-
-			foreach($topics as $tid)
-				$data['topics'][] = class_load('forum/Topic', $tid);
+//			foreach($topics as $tid)
+//				$data['topics'][] = class_load('forum/borsForumTopic', $tid);
 
 			$data['this'] = $this;
 

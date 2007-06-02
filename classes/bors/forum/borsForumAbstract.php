@@ -1,6 +1,6 @@
 <?
 	require_once('classes/objects/BorsBaseObject.php');
-	class ForumAbstract extends BorsBaseObject
+	class borsForumAbstract extends BorsBaseObject
 	{
 		function template()
 		{ 
@@ -9,4 +9,10 @@
 //			else
 //				return "xfile://{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/forum.new.html"; 
 		}
+		
+        function cache_life_time()
+        {
+            $GLOBALS['cms']['cache_disabled'] = true;
+            return -1;
+        }
 	}

@@ -97,7 +97,7 @@ if ($footer_style == 'viewforum' || $footer_style == 'viewtopic')
 		if ($pun_config['o_subscriptions'] == '1')
 			echo "\t\t\t\t<dd><a href=\"{$pun_config['root_uri']}/search.php?action=show_subscriptions\">".$lang_common['Show subscriptions'].'</a></dd>'."\n";
 
-		echo "\t\t\t\t<dd><a href=\"{$pun_config['root_uri']}/search.php?action=show_user&amp;user_id={$pun_user['id']}\">".$lang_common['Show your posts'].'</a></dd>'."\n\t\t\t".'</dl>'."\n";
+		echo "\t\t\t\t<dd><a href=\"http://balancer.ru/user/{$pun_user['id']}/use-topics.html\">".$lang_common['Show your posts'].'</a></dd>'."\n\t\t\t".'</dl>'."\n";
 	}
 	else
 	{

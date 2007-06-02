@@ -14,7 +14,7 @@
 			if(borsclass_uri_load($uri))
 				return array(array('borspage', $uri));
 			else
-				return array(array('page', $uri));
+				return array(array('borsPage', $uri));
 		}
 	
 		function BorsBaseDbPage($id, $match = false)

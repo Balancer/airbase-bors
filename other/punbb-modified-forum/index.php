@@ -162,7 +162,7 @@ require PUN_ROOT.'header.php';
 include_once("funcs/Cache.php");
 include_once("include/subforums.php");
 $ich = new Cache();
-if($ich->get("subforums-text-1", "all"))
+if($ich->get("subforums-text-v2", $pun_config['root_uri']))
 	$subforums = unserialize($ich->last());
 else
 {

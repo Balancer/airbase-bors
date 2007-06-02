@@ -175,7 +175,7 @@ else
 
 	$tpl_temp .= "</ul><ul class=\"conr\"><li>[ 
 		<a href=\"{$pun_config['root_uri']}/search.php?action=show_new\">{$lang_common['Show new posts']}</a> |
-		<a href=\"{$pun_config['root_uri']}/search.php?action=show_user&amp;user_id={$pun_user['id']}\">Показать все темы с Вашим участием</a> ]</li></ul>
+		<a href=\"http://balancer.ru/user/{$pun_user['id']}/use-topics.html\">Показать все темы с Вашим участием</a> ]</li></ul>
 		<div class=\"clearer\"></div>\n\t\t</div>";
 }
 

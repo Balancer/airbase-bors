@@ -1,6 +1,6 @@
 <?
-	require_once('BorsBaseObject.php');
-	class BorsClassPage extends BorsBaseObject
+	require_once('classes/objects/BorsBaseObject.php');
+	class borsPage extends BorsBaseObject
 	{
 		var $hts;
 		
@@ -15,8 +15,6 @@
 			$this->BorsBaseObject($uri);
 		}
 	
-		function type() { return 'page'; }
-		
 		function parents()
 		{
 			return array();

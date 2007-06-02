@@ -350,7 +350,7 @@ if (isset($_POST['form_sent']))
 			}
 
 			include_once("classes/objects/Bors.php");
-			class_load('topic', $tid)->cache_clean();
+			class_load('forum/borsForumTopic', $tid)->cache_clean();
 		}
 		// If it's a new topic
 		else if ($fid)

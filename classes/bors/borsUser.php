@@ -1,12 +1,12 @@
 <?
-	require_once('BorsBaseObject.php');
-	class BorsClassUser extends BorsBaseObject
+	require_once('classes/objects/BorsBaseObject.php');
+	class borsUser extends BorsBaseObject
 	{
-		function type() { return 'user'; }
+		function class_name() { return 'borsUser'; }
 
-		function BorsClassUser($id)
+		function borsUser($id)
 		{
-//			echo "BorsClassUser($id)<br />";
+//			echo "borsUser($id)<br />";
 			if($id == -1)
 			{
 				global $me;
@@ -31,7 +31,7 @@
 		function field_group_id_storage() { return 'punbb.users.group_id(id)'; }
 
 
-		function group() { return class_load('group', $this->group_id()); }
+		function group() { return class_load('forum/borsForumGroup', $this->group_id()); }
 
 		var $stb_user_title;
 		function user_title() { return $this->stb_user_title; }
@@ -109,4 +109,23 @@
 
 		function set_signature_html($signature_html, $db_update = false) { $this->set("signature_html", $signature_html, $db_update); }
 		function field_signature_html_storage() { return 'punbb.users.signature_html(id)'; }
+
+		function cache_clean_self()
+		{
+			parent::cache_clean_self();
+			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/rep.gif");
+			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/personal.js");
+			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/warnings.gif");
+			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/use-topics.html");
+		}
+
+		var $stb_warnings;
+		function warnings() { return $this->stb_warnings; }
+		function set_warnings($warnings, $db_update = false) { $this->set("warnings", $warnings, $db_update); }
+		function field_warnings_storage() { return 'punbb.users.warnings(id)'; }
+
+		var $stb_reputation;
+		function reputation() { return $this->stb_reputation; }
+		function set_reputation($reputation, $db_update = false) { $this->set("reputation", $reputation, $db_update); }
+		function field_reputation_storage() { return 'punbb.users.reputation(id)'; }
 	}
