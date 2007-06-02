@@ -1,8 +1,8 @@
 <?
 	require_once('borsForumAbstract.php');
-	class Topic extends ForumAbstract
+	class borsForumTopic extends borsForumAbstract
 	{
-		function class_name() { return 'forum/Topic'; }
+		function class_name() { return 'forum/borsForumTopic'; }
 		function uri_name() { return 'topic'; }
 
 		var $stb_forum_id = '';
@@ -32,8 +32,8 @@
 			if(!$forum->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
-			if($forum->is_public_access())
-				$GLOBALS['cms']['cache_static'] = true;
+//			if($forum->is_public_access())
+//				$GLOBALS['cms']['cache_static'] = true;
 
 			$GLOBALS['cms']['cache_disabled'] = true;
 
@@ -94,7 +94,12 @@
 		function set_last_poster_name($last_poster_name, $db_update = false) { $this->set("last_poster_name", $last_poster_name, $db_update); }
 		function field_last_poster_name_storage() { return 'punbb.topics.last_poster(id)'; }
 
-		function cache_parents() { return array(class_load('forum/borsForum', $this->forum_id()));}
+		function cache_parents()
+		{
+			$res = array(class_load('forum/borsForum', $this->forum_id()));
+			foreach($this->all_users() as $user_id)
+				$res = array_merge($res, class_load('forum/borsUser', $user_id));
+		}
 
 		function forum() { return class_load('forum/borsForum', $this->forum_id()); }
 
@@ -112,5 +117,11 @@
 		{
 			$db = &new DataBase('punbb');
 			return $db->get_array("SELECT id FROM posts WHERE topic_id={$this->id} ORDER BY posted");
+		}
+
+		function all_users()
+		{
+			$db = &new DataBase('punbb');
+			return $db->get_array("SELECT user_id FROM posts WHERE topic_id={$this->id}");
 		}
 	}

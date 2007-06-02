@@ -19,7 +19,7 @@
 		
 		function add_changed_object($obj)
 		{
-			$this->changed_objects[$obj->type()."-".$obj->id()] = $obj;
+			$this->changed_objects[$obj->uri_name()."-".$obj->id()] = $obj;
 		}
 		
 		function changed_save()
@@ -99,9 +99,9 @@
 		if(!$cls)
 			$cls = &new $class_name($id);
 			
-		$GLOBALS['bors_data']['classes'][$class_full_name][$id] = $cls;
-		$GLOBALS['bors_data']['borsclasses'][$cls->internal_uri()] = $cls;
-		$GLOBALS['bors_data']['borsclasses'][$cls->uri()] = $cls;
+		$GLOBALS['bors_data']['classes'][$class_full_name][$id][1] = $cls;
+		$GLOBALS['bors_data']['classes_by_uri'][$cls->internal_uri()] = $cls;
+		$GLOBALS['bors_data']['classes_by_uri'][$cls->uri()] = $cls;
 		return $cls;
 	}
 
@@ -127,8 +127,11 @@
 		if($id == NULL)
 			list($class, $id) = split("-", $class);
 	
-		$iclass = $class;
-		$cls = @$GLOBALS['bors_data']['classes'][$class][$id];
+		if(!$page)
+			$page = 1;
+
+		$class_path = $class;
+		$cls = @$GLOBALS['bors_data']['classes'][$class_path][$id][$page];
 		
 		if(!$cls)
 		{
@@ -139,31 +142,25 @@
 				$class = $m[2];
 			}
 			
-			$class_name = "BorsClass".ucfirst($class);
-			@include_once("classes/objects/$path$class_name.php");
-			if(class_exists($class_name))
-			{
-				$cls = &new $class_name($id);
-			}
-			else
-			{			
-				@include_once("classes/bors/$path$class.php");
-				if(class_exists($class))
-					$cls = &new $class($id);
-			}
+			include_once("classes/bors/$path$class.php");
+			if(class_exists($class))
+				$cls = &new $class($id);
+
+//			echo "classes/bors/$path$class.php<Br/>";
+//			echo "path=$path, class=$class, obj=".$cls;
+
 			if($cls)
 			{
-				$GLOBALS['bors_data']['classes'][$iclass][$id] = $cls;
-				$GLOBALS['bors_data']['borsclasses'][$cls->internal_uri()] = $cls;
-				$GLOBALS['bors_data']['borsclasses'][$cls->uri()] = $cls;
+				$GLOBALS['bors_data']['classes'][$class_path][$id][$page] = $cls;
+				if(method_exists($cls, 'uri'))
+					$GLOBALS['bors_data']['classes_by_uri'][$cls->uri()] = $cls;
+				if(method_exists($cls, 'internal_uri'))
+					$GLOBALS['bors_data']['classes_by_uri'][$cls->internal_uri()] = $cls;
 			}
 		}
 
-		if(!$page)
-			$page = 1;
-
-		if(!empty($GLOBALS['bors_data']['classes'][$iclass][$id]))
-			$GLOBALS['bors_data']['classes'][$iclass][$id]->set_page($page);
+		if(!empty($cls) && $page > 1)
+			$cls->set_page($page);
 	
 		return $cls;
 	}
@@ -174,42 +171,57 @@
 	
 //		print_r($GLOBALS['bors_map']);
 
-		if(empty($GLOBALS['bors_data']['borsclasses'][$uri]) && !empty($GLOBALS['bors_map']))
+		$obj = @$GLOBALS['bors_data']['classes_by_uri'][$uri];
+		if(!empty($obj))
+			return $obj;
+			
+		if(empty($GLOBALS['bors_map']))
+			return NULL;
+
+		foreach($GLOBALS['bors_map'] as $uri_pattern => $class_path)
 		{
-			foreach($GLOBALS['bors_map'] as $uri_pattern => $class_path)
+//			echo "Check $uri_pattern to $uri <br />";
+			if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$uri_pattern$!", $uri, $match))
 			{
-//				echo "Check $uri_pattern to $uri <br />";
-				if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$uri_pattern$!", $uri, $match))
+				$id = $uri;
+				$page = 1;
+				
+				if(preg_match("!^(.+)\((\d+),(\d+)\)$!", $class_path, $m))	
 				{
-					if(preg_match("!^(.+)/([^/]+)$!", $class_path, $m))
-						$class = $m[2];
-					else
-						$class = $class_path;
+					$class_path = $m[1];
+					$id = $match[$m[2]+1];
+					$page = max(@$match[$m[3]+1], 1);
+				}
+				elseif(preg_match("!^(.+)\((\d+)\)$!", $class_path, $class_match))	
+				{
+					$class_path = $class_match[1];
+					$id = $match[$class_match[2]+1];
+				}
+
+				if(preg_match("!^(.+)/([^/]+)$!", $class_path, $m))
+					$class = $m[2];
+				else
+					$class = $class_path;
+						
+//					echo "Class=$class, path=$class_path, id=$id, page=$page";
+					
 //					echo "<b>true to $class (in $class_path)</b><br />";
 //					$errrep_save = error_reporting();
 //					error_reporting($errrep_save & ~E_NOTICE);
-					include_once("classes/bors/$class_path.php");
+				include_once("classes/bors/$class_path.php");
 //					error_reporting($errrep_save);
-					if(class_exists($class))
-					{
+				if(class_exists($class))
+				{
 //						echo "<b>Yes!</b><br />";
-						$cls = &new $class($uri, $match);
-						$GLOBALS['bors_data']['borsclasses'][$uri] = $cls;
-						$GLOBALS['bors_data']['classes'][$class_path][$uri] = $cls;
-//						echo "::".$GLOBALS['bors_data']['borsclasses'][$uri]->title()." -> ".$GLOBALS['bors_data']['borsclasses'][$uri]->uri()."<br />";
-						break;
-					}
+					$obj = &new $class($id);
+					$obj->set_page($page);
+					$GLOBALS['bors_data']['classes_by_uri'][$uri] = $obj;
+					$GLOBALS['bors_data']['classes_by_uri'][$obj->internal_uri()] = $obj;
+					$GLOBALS['bors_data']['classes'][$class_path][$id][$page] = $obj;
+					return $obj;
 				}
 			}
 		}
 
-		if(empty($GLOBALS['bors_data']['borsclasses'][$uri]))
-			return NULL;
-
-		if($page < 2)
-			$page = 1;
-
-		$GLOBALS['bors_data']['borsclasses'][$uri]->set_page($page);
-
-		return $GLOBALS['bors_data']['borsclasses'][$uri];
+		return NULL;
 	}

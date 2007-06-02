@@ -1,6 +1,6 @@
 <?
-	require_once('BorsBaseForumObject.php');
-	class BorsClassForumCategory extends BorsBaseForumObject
+	require_once('borsForumAbstract.php');
+	class borsForumCategory extends borsForumAbstract
 	{
 		function type() { return 'forumCategory'; }
 
@@ -22,7 +22,7 @@
 			if($this->parent_category_id())
 				return array(array('forumCategory', $this->parent_category_id()));
 
-			return array(array('page', 'http://balancer.ru/forum/'));
+			return array(array('borsPage', 'http://balancer.ru/forum/'));
 		}
 
         function body()
@@ -88,7 +88,7 @@
 		{
 			$subforums = array();
 			foreach($this->direct_subforums_ids() as $forum_id)
-				$subforums[] = class_load('forum', $forum_id);
+				$subforums[] = class_load('forum/borsForum', $forum_id);
 			return $subforums;
 		}
 

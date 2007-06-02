@@ -1,7 +1,7 @@
 <?
-	require_once("classes/objects/BorsClassPage.php");
+	require_once("borsPage.php");
 
-	class BorsBasePage extends BorsClassPage
+	class BorsBasePage extends borsPage
 	{
 		function type() 
 		{

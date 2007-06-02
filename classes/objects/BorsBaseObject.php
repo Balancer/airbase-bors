@@ -20,6 +20,7 @@
 			// Если не указан ID, но нет признака отсутствия загрузки, то создаётся новый объект в БД.
 
 			$this->id = $this->initial_id = $id;
+			$this->page = 1;
 
 /*			if(!$this->methods_added)
 			{
@@ -100,7 +101,7 @@
 				
 			require_once("funcs/modules/uri.php");
 			$uri = strftime("/%Y/%m/%d/", $this->modify_time());
-			$uri .= $this->type()."-".$this->id();
+			$uri .= $this->uri_name()."-".$this->id();
 
 			if($page > 1)
 				$uri .= ",$page";
@@ -114,7 +115,7 @@
 			if(preg_match("!^http://!", $this->id()))
 				return $this->id();
 
-			return  $this->type().'://'.$this->id().'/'; 
+			return  $this->class_name().'://'.$this->id().'/'; 
 		}
 
 		function parents() { return array(); }
@@ -192,7 +193,7 @@
 
 		function template_local_vars()
 		{
-			return 'create_time description id modify_time nav_name title type';
+			return 'create_time description id modify_time nav_name title';
 		}
 		
 		function is_cache_disabled() { return true; }
@@ -217,7 +218,7 @@
 		function set_owner_id($owner_id, $db_update=true) { $this->set("owner_id", $owner_id, $db_update); }
 		function owner_id() { return $this->stb_owner_id; }
 
-		function owner() { return class_load('user', $this->owner_id()); }
+		function owner() { return class_load('borsUser', $this->owner_id()); }
 
 		var $stb_cr_type = NULL;
 		function set_cr_type($cr_type, $db_update=true) { $this->set("cr_type", $cr_type, $db_update); }
@@ -278,5 +279,7 @@
 		function set_type_id($type_id, $db_update = false) { $this->set("type_id", $type_id, $db_update); }
 
 		function need_access_level() { return 0; }
-	     
+	
+		function class_name() { return get_class($this); }
+		function uri_name()   { return get_class($this); }
 	}

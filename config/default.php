@@ -44,6 +44,8 @@
 		'templates_cache_disabled' => true,
 		'cache_engine' => 'Cache',
 
+		'mysql_server' => 'localhost',
+
 		'referer' => @$_SERVER['HTTP_REFERER'],
 	);
 

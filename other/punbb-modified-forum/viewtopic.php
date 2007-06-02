@@ -548,24 +548,7 @@ while ($cur_post = $db->fetch_assoc($result))
 	// Attachment Mod Block End
 
 	$user_warn_count	= intval($poster['warnings']);
-	$user_warn = "";
-
-	if($user_warn_count)
-	{
-		$user_warn = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings/\">";
-		$user_warn .= str_repeat("<img src=\"http://balancer.ru/img/web/cross.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"+\" />", intval($user_warn_count/2));
-
-		if($user_warn_count % 2)
-			$user_warn .= "<img src=\"http://balancer.ru/img/web/cross-half.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"-\" />";
-
-		if(intval($user_warn_count/2+0.5) < 5)
-			$user_warn .= str_repeat("<img src=\"http://balancer.ru/coppermine/images/flags/blank.gif\" width=\"16\" height=\"16\" border=\"0\" alt =\"\" />", 5-intval($user_warn_count/2+0.5));
-	
-		if($user_warn_count >= 10)
-			$user_warn .= "<div style=\"font-size: 6pt; color: red;\">R/O до ".strftime("%y-%m-%d", 30*86400+$cms_db->get("SELECT MIN(`time`) FROM warnings WHERE user_id = user_id AND time > ".(time()-30*86400)." LIMIT 10", true, 3600))."</div>";
-		$user_warn .= "</a>";
-	}
-
+	$user_warn = $user_warn_count ? "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings/\"><img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings.gif\" width=\"100\" height=\"16\" border=\"0\"></a>\n" : "";
 ?>
 <div id="p<?php echo $cur_post['id'] ?>" class="blockpost<?php echo $vtbg ?><?php if (($post_count + $start_from) == 1) echo ' firstpost'; ?>">
 	<h2><b>

@@ -96,7 +96,7 @@
 			$out = $txt;
 			$txt = $fn($txt);
 			if(!$txt && $out)
-				echo "Drop on $fn convert '$out' to '$txt'";
+				echo "Drop on $fn convert '".substr($out,0,256)."...'";
 		}
 
 		return $txt;
