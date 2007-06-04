@@ -12,11 +12,8 @@
 		$GLOBALS['cms']['cache_disabled'] = true;
 		
 		$topics = false;
-		if($query = @$_GET['q'])
+		if($query = norm(@$_GET['q']))
 		{
-			if(preg_match('!%!', $query))
-				$query = urldecode($query);
-			
 			$order="";
 			if(empty($_GET['order']))
 				$_GET['order'] = "ud";
@@ -53,10 +50,18 @@
 
     function balancer_plugins_search_topic_titles_title($uri, $m)
 	{
-		return empty($_GET['q']) ? ec("Поиск в заголовках форумов") : $_GET['q'];
+		return empty($_GET['q']) ? ec("Поиск в заголовках форумов") : norm($_GET['q']);
 	}
 
     function balancer_plugins_search_topic_titles_nav_name($uri, $m)
 	{
-		return "в заголовках форума: ".$_GET['q'];
+		return "в заголовках форума: ".norm($_GET['q']);
+	}
+
+	function norm($query)
+	{
+		if(preg_match('!%!', $query))
+			$query = urldecode($query);
+
+		return $query;
 	}
