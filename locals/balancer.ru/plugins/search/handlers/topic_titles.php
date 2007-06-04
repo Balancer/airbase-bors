@@ -14,6 +14,9 @@
 		$topics = false;
 		if($query = @$_GET['q'])
 		{
+			if(preg_match('!%!', $query))
+				$query = urldecode($query);
+			
 			$order="";
 			if(empty($_GET['order']))
 				$_GET['order'] = "ud";
