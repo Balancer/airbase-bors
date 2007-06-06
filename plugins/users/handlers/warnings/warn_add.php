@@ -46,11 +46,15 @@
 
     function plugins_users_warn_add_do($uri, $action)
 	{
+
 		require_once('funcs/modules/messages.php');
 
 		$uid = intval($_POST['user_id']);
 		if(!$uid)
 			return error_message(ec("Не задан ID пользователя."));
+
+		require_once('classes/bors/borsUser.php');
+		class_load('borsUser', $uid)->cache_clean_self();
 
 		$me = new User();
 		if(!in_array($me->data('group'), array(1,2,5,21)))
