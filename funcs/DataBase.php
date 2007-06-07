@@ -45,6 +45,7 @@
 			{
 				if(empty($GLOBALS['global_db_new_connections']))
 					$GLOBALS['global_db_new_connections'] = 0;
+				
 				$GLOBALS['global_db_new_connections']++;
 
 //				echo $base;
@@ -99,6 +100,7 @@
 			
 			if(empty($GLOBALS['global_db_queries']))
 				$GLOBALS['global_db_queries'] = 0;
+			
 			$GLOBALS['global_db_queries']++;
 
 			echolog("<small>query {$GLOBALS['global_db_queries']}=|".htmlspecialchars($query)."|</small>", 5);
@@ -115,6 +117,8 @@
 				$GLOBALS['stat']['queries_time'] = 0;
 				
 			$GLOBALS['stat']['queries_time'] += $qtime;
+
+//			echo "--- queries_time = {$GLOBALS['stat']['queries_time']}<br />\n";
 
 			if(@$_GET['log_level'] == 4 && $qtime > @$_GET['qtime'])
 				echolog("<small>query {$GLOBALS['global_db_queries']}($qtime)=|".htmlspecialchars($query)."|</small>", 4);

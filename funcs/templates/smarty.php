@@ -292,9 +292,6 @@
             $smarty->assign("main_uri", @$GLOBALS['main_uri']);
             $smarty->assign("time", time());
             $smarty->assign("ref", @$_SERVER['HTTP_REFERER']);
-            $smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
-            $smarty->assign("queries", $GLOBALS['global_db_queries']);
-
             $smarty->assign("me", $us);
 
 			if(!empty($GLOBALS['stat']['start_microtime']))
@@ -377,6 +374,11 @@
 		if($nocache)
 			$smarty->clear_cache($tpl, $page);
 		
+
+		$smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
+		$smarty->assign("queries", $GLOBALS['global_db_queries']);
+
+
 		$out = $smarty->fetch($tpl, $page);
 	    error_reporting($errrep_save);
 

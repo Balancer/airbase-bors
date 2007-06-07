@@ -29,8 +29,6 @@
 		$smarty->assign("main_uri", @$GLOBALS['main_uri']);
 		$smarty->assign("now", time());
 		$smarty->assign("ref", @$_SERVER['HTTP_REFERER']);
-		$smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
-		$smarty->assign("queries", $GLOBALS['global_db_queries']);
 		$smarty->assign("this", $obj);
 
 		//TODO: убрать user_id и user_nameв старых шаблонах.
@@ -64,7 +62,12 @@
 		{
 		    list($usec, $sec) = explode(" ",microtime());
    	        $smarty->assign("make_time", sprintf("%.3f", ((float)$usec + (float)$sec) - $GLOBALS['stat']['start_microtime']));
+
 		}
+
+//		echo "*** queries_time = {$GLOBALS['stat']['queries_time']}<br />\n";
+		$smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
+		$smarty->assign("queries", $GLOBALS['global_db_queries']);
 
 		$out = $smarty->fetch($template, $obj->uri());
 

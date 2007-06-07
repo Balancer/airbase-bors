@@ -6,31 +6,34 @@
 	{
 		$ret = false;
 
-		foreach ($handlers as $uri_pattern => $row)
+		foreach ($handlers as $uri_pattern => $rows)
 		{
-			$func = $row['func'];
-			$plugin_data = @$row['plugin_data'];
-		
-			if (!empty ($_GET['debug']))
-				echo "<tt>Test pattern '$uri_pattern' to '$match' by $func()</tt><br />\n";
-			$m = array ();
-//			echo $uri_pattern."<br/>";
-			if (preg_match($uri_pattern, $match, $m))
+			foreach($rows as $row)
 			{
+				$func = $row['func'];
+				$plugin_data = @$row['plugin_data'];
+		
 				if (!empty ($_GET['debug']))
-					echo "----------------> ok!";
+					echo "<tt>Test pattern '$uri_pattern' to '$match' by $func()</tt><br />\n";
+				$m = array ();
+//				echo $uri_pattern."<br/>";
+				if (preg_match($uri_pattern, $match, $m))
+				{
+					if (!empty ($_GET['debug']))
+						echo "----------------> ok!";
 //				echo "Call $func('$uri')<br />";
 //				header("X-Bors: Call $func('$uri')");
-				$res = $func ($uri, $m, $plugin_data);
-				if ($res === true)
-				{
-					if (isset ($_GET['debug']))
-						echo "Loaded by pattern $uri_pattern=>$func<br/>";
+					$res = $func ($uri, $m, $plugin_data);
+					if ($res === true)
+					{
+						if (isset ($_GET['debug']))
+							echo "Loaded by pattern $uri_pattern=>$func<br/>";
 
-					return true;
+						return true;
+					}
+					if ($res !== false)
+						$ret = $uri = $match = $res;
 				}
-				if ($res !== false)
-					$ret = $uri = $match = $res;
 			}
 		}
 
