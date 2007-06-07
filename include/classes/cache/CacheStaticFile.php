@@ -64,8 +64,15 @@
 //			echo "'$uri'";
 		}
 
-		function save(&$content, $mtime = 0)
+		function save(&$content, $mtime = 0, $expire_time = 0)
 		{
+            $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
+			
+			@unlink($db->get("SELECT file FROM cached_files WHERE original_uri = '".addslashes($this->original_uri)."'"));
+
+			if($expire_time == 0)
+				return $content;
+
 //			echo "save file '{$this->file}'";
 			require_once("funcs/filesystem_ext.php");
 			mkpath(dirname($this->file));
@@ -86,14 +93,15 @@
 			if($mtime)
 				touch($this->file, $mtime);
 			
-            $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
-			
-			$db->store('cached_files', "file = '".addslashes($this->file)."'", array(
+			$db->replace('cached_files', // "original_uri = '".addslashes($this->original_uri)."'", 
+				array(
 					'file'			=> $this->file,
 					'uri'			=> $this->uri,
 					'original_uri'	=> $this->original_uri,
 					'last_compile'	=> time(),
-			));
+					'int expire_time'	=> $expire_time > 0 ? time() + $expire_time : -1,
+				)
+			);
 			
 			return $content;
 		}

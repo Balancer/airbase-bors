@@ -88,8 +88,8 @@
 		function set_title($new_title, $db_update=true) { $this->set("title", $new_title, $db_update); }
 
 		var $page = '';
-		function page() { return $this->stb_page; }
-		function set_page($page) { $this->set("page", $page, false); }
+		function page() { return $this->page; }
+		function set_page($page) { $this->page = $page; }
 
 		function uri($page = 1)
 		{
@@ -119,6 +119,7 @@
 		}
 
 		function parents() { return array(); }
+		
 		function parent()
 		{
 //			echo "Parent for ".$this->internal_uri()." is ";
@@ -204,7 +205,7 @@
 
 		var $stb_nav_name = NULL;
 		function set_nav_name($nav_name, $db_update=true) { $this->set("nav_name", $nav_name, $db_update); }
-		function nav_name() { return $this->stb_nav_name ? $this->stb_nav_name : $this->title(); }
+		function nav_name() { return !empty($this->stb_nav_name) ? $this->stb_nav_name : $this->title(); }
 
 		var $stb_source = NULL;
 		function set_source($source, $db_update=true) { $this->set("source", $source, $db_update); }
@@ -269,10 +270,8 @@
 			return $content;
 		}
 		
-		function cacheable_body()
-		{
-			return ec("Страница не определена");
-		}
+		function cacheable_body() { return ec("Страница не определена"); }
+		function cache_static() { return 0; }
 
 		var $stb_type_id;
 		function type_id() { return $this->stb_type_id; }

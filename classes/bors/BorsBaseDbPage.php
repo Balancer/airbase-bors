@@ -7,21 +7,15 @@
 
 		function parents()
 		{
-//			print_r("http://{$this->match[1]}{$this->match[2]}");
-
-			$uri = "http://{$this->match[1]}{$this->match[2]}";
-
-			if(borsclass_uri_load($uri))
-				return array(array('borspage', $uri));
-			else
-				return array(array('borsPage', $uri));
+//			echo "match=".print_r($this->match, true)."<br />\n";
+			return array("http://{$this->match[1]}{$this->match[2]}");
 		}
 	
-		function BorsBaseDbPage($id, $match = false)
+		function BorsBaseDbPage($id)
 		{
-			parent::BorsBasePage($id, $match);
-
 			$this->db = &new DataBase($GLOBALS['cms']['mysql_database']);
+			
+			parent::BorsBasePage($id);
 
 			if(!($qlist = $this->_global_queries()))
 				return;
