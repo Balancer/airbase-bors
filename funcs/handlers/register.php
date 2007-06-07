@@ -16,9 +16,11 @@
 //			echo "--- plugin pre for $uri_pattern<br />";
 		}
 
-		$GLOBALS['cms_patterns'][$uri_pattern]['func'] = $func;
+		$store['func'] = $func;
 		if(!empty($GLOBALS['cms']['plugin_data']))
-			$GLOBALS['cms_patterns'][$uri_pattern]['plugin_data'] = $GLOBALS['cms']['plugin_data'];
+			$store['plugin_data'] = $GLOBALS['cms']['plugin_data'];
+
+		$GLOBALS['cms_patterns'][$uri_pattern][] = $store;
 	}
 
 	function register_action($regexp, $action_type, $func = NULL)
