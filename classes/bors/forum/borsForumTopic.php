@@ -18,7 +18,7 @@
 
         function parents()
 		{
-			return array(array('forum/borsForum', $this->forum_id() ));
+			return array("forum.borsForum://".$this->forum_id());
 		}
 
         function body()
@@ -96,12 +96,12 @@
 
 		function cache_parents()
 		{
-			$res = array(class_load('forum/borsForum', $this->forum_id()));
+			$res = array(class_load('forum.borsForum', $this->forum_id()));
 			foreach($this->all_users() as $user_id)
-				$res = array_merge($res, class_load('forum/borsUser', $user_id));
+				$res = array_merge($res, class_load('forum.borsUser', $user_id));
 		}
 
-		function forum() { return class_load('forum/borsForum', $this->forum_id()); }
+		function forum() { return class_load('forum.borsForum', $this->forum_id()); }
 
 		var $stb_author_name = '';
 		function set_author_name($author_name, $db_update = false) { $this->set("author_name", $author_name, $db_update); }

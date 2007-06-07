@@ -1,18 +1,12 @@
 <?
-	require_once("BorsBasePage.php");
+	require_once("BorsBaseDbPage.php");
 
-	class BorsPageJS extends BorsBasePage
+	class BorsPageJS extends BorsBaseDbPage
 	{
-		function BorsPageJS($id)
-		{
-			parent::BorsBasePage($id);
-		}
-
 		function preShowProcess()
 		{
 			include_once("funcs/js.php");
 			header("Content-type", "text/javascript");
-			echo str2js($this->cacheable_body());
-			return true;
+			return str2js($this->cacheable_body());
 		}
 	}

@@ -3,27 +3,16 @@
 
 	class BorsBasePage extends borsPage
 	{
-		function type() 
-		{
-			if(preg_match('!^http://!', $this->id()))
-				return get_class($this);
-			else
-				return get_class($this);
-		}
-		
 		var $match;
-		function BorsBasePage($uri, $match = false)
-		{
-			$this->match = $match;
-			parent::BorsClassPage($uri);
-		}
+		
+		function set_match($match) { $this->match = $match;	}
 		
 		function internal_uri() 
 		{
 			if(preg_match('!^http://!', $this->id()))
 				return $this->id(); 
 			else
-				return $this->type()."://".$this->id()."/";
+				return get_class($this)."://".$this->id();
 		}
 
 		function cacheable_body()
@@ -39,11 +28,15 @@
 						$q		= $m[1];
 						$cache	= $m[2];
 					}
-					
-					$data[$qname] = $this->db->get_array($q, false, $cache);
+
+					if(preg_match("/!(.+)$/s", $q, $m))
+						$data[$qname] = $this->db->get($m[1], false, $cache);
+					else
+						$data[$qname] = $this->db->get_array($q, false, $cache);
 				}
 
 			$data['template_dir'] = $this->_body_template_dir();
+			$data['this'] = $this;
 
 			return template_assign_data($this->_body_template(), $data);
 		}

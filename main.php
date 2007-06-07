@@ -1,6 +1,9 @@
 <?
-	if($_SERVER['REMOTE_ADDR']=="85.141.131.23")
-		exit();
+	if(preg_match("!^38\.!", $_SERVER['REMOTE_ADDR'])) exit();
+	if(preg_match("!^74\.!", $_SERVER['REMOTE_ADDR'])) exit();
+	if(preg_match("!^77\.!", $_SERVER['REMOTE_ADDR'])) exit();
+	if(preg_match("!^66\.!", $_SERVER['REMOTE_ADDR'])) exit();
+	if(preg_match("!^91\.!", $_SERVER['REMOTE_ADDR'])) exit();
 		
 //	ini_set("xdebug.profiler_enable", "1");
 
@@ -14,8 +17,8 @@
     require_once("config.php");
 //	require_once('funcs/modules/messages.php');
 
-    header("Content-Type: text/html; charset={$GLOBALS['cms']['charset']}");
-    header('Content-Language: ru');
+    @header("Content-Type: text/html; charset={$GLOBALS['cms']['charset']}");
+    @header('Content-Language: ru');
     ini_set('default_charset',$GLOBALS['cms']['charset']);
     setlocale(LC_ALL, $GLOBALS['cms']['locale']);
 
@@ -35,6 +38,7 @@
 	require_once("funcs/templates/global.php");
 	require_once("funcs/users.php");
     require_once("funcs/handlers.php");
+    require_once("classes/objects/Bors.php");
 
 	if(empty($GLOBALS['cms']['only_load']))
 	{

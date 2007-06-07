@@ -1,7 +1,6 @@
 <?
     function print_top_navs($uri=NULL)
     {
-		require_once("classes/objects/Bors.php");
 //		echo "Get nav for $uri<br />";
 	
 	    require_once("funcs/Cache.php");
@@ -12,25 +11,23 @@
 			return;
         }
 
-	    require_once("funcs/DataBaseHTS.php");
-    
 	    $out = '';
-
-        $hts = &new DataBaseHTS();
 
         $GLOBALS['visited_pairs'] = array();
 
         $parents = link_line($uri);
 
 		include_once("funcs/templates/assign.php");
-		$tpl = "top-navs.html";
+		$tpl = "xfile:top-navs.html";
 		if(!empty($GLOBALS['module_data']['template']))
 			$tpl = $GLOBALS['module_data']['template'];
         
 		$data = array();
+
         if(!is_array($parents) || sizeof($parents)==0)
 		{
-			$data[] = array(array('uri'=>$uri, 'title'=>$hts->get($uri, 'nav_name')));
+			$obj = class_load($uri);
+			$data[] = array(array('uri' => $uri, 'title' => $obj->nav_name()));
 		}
 		else
 		{
@@ -43,10 +40,12 @@
 				foreach(split("\|#\|", $nav) as $link)
 				{	
 //					echo "$link<br />";
+					$obj = class_load($link);
 					$link_line[] = array(
-						'uri' => Bors::real_uri($link),
-						'title' => $hts->get($link, 'nav_name'),
+						'uri' => preg_match('!^http://!', $link) ? $link : $obj->uri(),
+						'title' => $obj->title(),
 					);
+//					echo "nav_name for $link = '".$obj->nav_name()."' ('$obj->stb_nav_name', '".$obj->title()."')<br />";
 //					print_r($link_line);
 				}
 				
@@ -61,19 +60,23 @@
 
     function link_line($uri)
     {
-        $hts = &new DataBaseHTS();
-
-        $parents = $hts->get_data_array($uri, 'parent');
+//		echo "Link line for '$uri'<br />\n";
+		
+		$obj = class_load($uri);
+		if(!$obj)
+		{
+			echo "Can't load class '$uri'<br/>\n";
+			return array();
+		}
+	
+        $parents = $obj->parents();
 //		echo "parents for $uri = ".print_r($parents, true)."<br/>";
         $links = array();
 
         foreach($parents as $parent)
         {
-//			echo "Normalize $parent to ";
-			$parent = $hts->normalize_uri($parent);
-//			echo "$parent<br />";
-
-			if($parent == $uri)
+//			echo "Check '$parent' for '$uri'<br />\n";
+			if($parent == $uri || $parent == $obj->uri())
 				continue;
 
             if(!isset($GLOBALS['visited_pairs']["$parent|#|$uri"]))

@@ -20,9 +20,9 @@
         function parents()
 		{
 			if($this->parent_forum_id())
-				return array(array('forum/borsForum', $this->parent_forum_id() ));
+				return array("forum.borsForum" . $this->parent_forum_id());
 			else
-				return array(array('borsPage', 'http://balancer.ru/forum-new/'));
+				return array("http://balancer.ru/forum-new/");
 //				return array(array('forumCategory', $this->category_id() ));
 		}
 
@@ -76,10 +76,10 @@
 		{ 
 			$parent_caches = array();
 			if($this->parent_forum_id())
-				$parent_caches[] = class_load('forum/borsForum', $this->parent_forum_id());
+				$parent_caches[] = class_load('forum.borsForum', $this->parent_forum_id());
 
 			if($this->category_id())
-				$parent_caches[] = class_load('forum/borsForumCategory', $this->category_id());
+				$parent_caches[] = class_load('forum.borsForumCategory', $this->category_id());
 			
 			return $parent_caches;
 		}

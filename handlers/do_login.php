@@ -13,5 +13,5 @@
 		include_once("funcs/logs.php");
 		log_action("user-login", $uri);
 
-		return message(ec("Вы успешно вошли в систему"), "$uri?", "", 2);
+		return message(ec("Вы успешно вошли в систему"), "$uri?", "", 1);
 	}

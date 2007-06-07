@@ -18,22 +18,28 @@
 		if(!$obj)
 			return false;
 	
-		if($obj->preShowProcess())
+		$processed = $obj->preShowProcess();
+		if($processed === true)
 			return true;
-
-		$GLOBALS['bors']->set_main_object($obj);
-
-		if(empty($GLOBALS['main_uri']))
-			$GLOBALS['main_uri'] = $obj->uri();
 	
-	    require_once('funcs/templates/bors.php');
-		$content = template_assign_bors_object($obj);
+		if($processed === false)
+		{
+			$GLOBALS['bors']->set_main_object($obj);
 
-		if(!empty($GLOBALS['cms']['cache_static']))
+			if(empty($GLOBALS['main_uri']))
+				$GLOBALS['main_uri'] = $obj->uri();
+	
+		    require_once('funcs/templates/bors.php');
+			$content = template_assign_bors_object($obj);
+		}
+		else
+			$content = $processed;
+		
+		if(!empty($GLOBALS['cms']['cache_static']) || $obj->cache_static())
 		{
 			$page = $obj->page();
 			$sf = &new CacheStaticFile($obj->uri($page));
-			$sf->save($content, $obj->modify_time());
+			$sf->save($content, $obj->modify_time(), $obj->cache_static());
 
 			require_once('funcs/navigation/go.php');
 			return go($obj->uri($page), true, 0, false);

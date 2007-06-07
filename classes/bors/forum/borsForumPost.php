@@ -14,7 +14,7 @@
 		
         function parents()
 		{
-			return array(array('forum/borsForumTopic', $this->topic_id() ));
+			return array("forum.borsForumTopic://".$this->topic_id());
 		}
 
 		var $stb_body = '';

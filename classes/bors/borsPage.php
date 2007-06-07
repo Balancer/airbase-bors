@@ -15,11 +15,6 @@
 			$this->BorsBaseObject($uri);
 		}
 	
-		function parents()
-		{
-			return array();
-		}
-
         function title()
 		{
 			return $this->hts ? $this->hts->get('title') : parent::title();
