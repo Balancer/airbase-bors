@@ -62,8 +62,8 @@
 		
 		$smarty->secure_dir += array($caller_path, $caller_default_template);
 
-		$template_uri = @$caller_local_tpln.$assign_template;
-		if(!$smarty->template_exists($template_uri))
+//		$template_uri = @$caller_local_tpln.$assign_template;
+//		if(!$smarty->template_exists($template_uri))
 			$template_uri = $caller_local_main.$assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = "xfile:{$GLOBALS['cms']['base_dir']}/templates/$module_relative_path/$assign_template";
