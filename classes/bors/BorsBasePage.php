@@ -35,7 +35,7 @@
 						$data[$qname] = $this->db->get_array($q, false, $cache);
 				}
 
-			$data['template_dir'] = $this->_body_template_dir();
+			$data['template_dir'] = $this->_class_dir();
 			$data['this'] = $this;
 
 			return template_assign_data($this->_body_template(), $data);
@@ -46,21 +46,26 @@
 			$GLOBALS['cms']['templates']['data'][$var_name] = $value;
 		}
 
+		function _class_dir()
+		{
+			if(!method_exists($this, '_class_file'))
+				return NULL;
+
+			return dirname($this->_class_file());
+		}
+
 		function _body_template()
 		{
-			$cf = $this->_class_file();
+			$cf = false;
+			if(method_exists($this, '_class_file'))
+				$cf = $this->_class_file();
+				
 			if($cf)
 				return preg_replace("!^(.+)\.php$!", "xfile:$1.html", $cf);
 			else
 				return 'main.html';
 		}
 
-		function _body_template_dir()
-		{
-			$cf = $this->_class_file();
-			return dirname($cf);
-		}
-		
 		function _queries() { return array(); }
 		function _global_queries() { return array(); }
 	}
