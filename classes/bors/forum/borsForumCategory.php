@@ -55,7 +55,7 @@
 		{
 			$subcats = array();
 			foreach($this->direct_subcats_ids() as $cat_id)
-				$subcats[] = class_load('forumCategory', $cat_id);
+				$subcats[] = class_load('forum_category', $cat_id);
 			return $subcats;
 		}
 		
@@ -69,7 +69,7 @@
 					continue;
 
 				$processed[] = $forum_id;
-				$subforum = $cats[] = class_load('forumCategory', $forum_id);
+				$subforum = $cats[] = class_load('forum_category', $forum_id);
 				$cats = array_merge($cats, $subforum->all_subforums(&$processed));
 			}
 			
@@ -88,7 +88,7 @@
 		{
 			$subforums = array();
 			foreach($this->direct_subforums_ids() as $forum_id)
-				$subforums[] = class_load('forum/borsForum', $forum_id);
+				$subforums[] = class_load('forum_forum', $forum_id);
 			return $subforums;
 		}
 

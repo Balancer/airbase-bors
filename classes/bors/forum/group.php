@@ -1,9 +1,7 @@
 <?
 	require_once('classes/objects/BorsBaseObject.php');
-	class borsForumGroup extends BorsBaseObject
+	class forum_group extends BorsBaseObject
 	{
-		function type() { return 'group'; }
-
 		function field_title_storage() { return 'punbb.groups.g_title(g_id)'; }
 
         function body() { return ec("Группа '{$this->title()}' (№{$this->id()})"); }

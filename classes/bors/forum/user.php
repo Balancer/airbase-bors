@@ -1,6 +1,6 @@
 <?
 	require_once('classes/objects/BorsBaseObject.php');
-	class user extends BorsBaseObject
+	class forum_user extends BorsBaseObject
 	{
 		function user($id)
 		{
@@ -29,7 +29,7 @@
 		function field_group_id_storage() { return 'punbb.users.group_id(id)'; }
 
 
-		function group() { return class_load('forum/borsForumGroup', $this->group_id()); }
+		function group() { return class_load('forum_group', $this->group_id()); }
 
 		var $stb_user_title;
 		function user_title() { return $this->stb_user_title; }
