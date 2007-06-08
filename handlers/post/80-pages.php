@@ -2,8 +2,8 @@
     require_once('funcs/DataBaseHTS.php');
 //    require_once('Smarty/Smarty.class.php');
 
-	if(empty($GLOBALS['cms']['only_load']))
-		register_handler('!^http://([^/]+)(.*)$!', 'handler_pages');
+//	if(empty($GLOBALS['cms']['only_load']))
+	register_handler('!^http://([^/]+)(.*)$!', 'handler_pages');
 
 	function handler_pages($uri, $m=array())
 	{
