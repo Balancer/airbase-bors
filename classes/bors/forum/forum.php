@@ -1,10 +1,7 @@
 <?
 	require_once('borsForumAbstract.php');
-	class borsForum extends borsForumAbstract
+	class forum_forum extends borsForumAbstract
 	{
-		function uri_name() { return 'forum'; }
-		function class_name() { return 'forum/borsForum'; }
-
 		function field_title_storage() { return 'punbb.forums.forum_name(id)'; }
 
 		var $stb_parent_forum_id = '';
@@ -20,7 +17,7 @@
         function parents()
 		{
 			if($this->parent_forum_id())
-				return array("forum.borsForum" . $this->parent_forum_id());
+				return array("forum_forum" . $this->parent_forum_id());
 			else
 				return array("http://balancer.ru/forum-new/");
 //				return array(array('forumCategory', $this->category_id() ));
@@ -62,13 +59,13 @@
 
 		function is_public_access()
 		{
-			$access = class_load('forum/borsForumAccess', "{$this->id()}:3");
+			$access = class_load('forum_access', "{$this->id()}:3");
 			return $access->can_read();
 		}
 
 		function can_read()
 		{
-			$access = class_load('forum/borsForumAccess', "{$this->id()}:" . class_load('borsUser', -1)->group_id());
+			$access = class_load('forum_access', "{$this->id()}:" . class_load('user', -1)->group_id());
 			return $access->can_read();
 		}
 
@@ -76,10 +73,10 @@
 		{ 
 			$parent_caches = array();
 			if($this->parent_forum_id())
-				$parent_caches[] = class_load('forum.borsForum', $this->parent_forum_id());
+				$parent_caches[] = class_load('forum_forum', $this->parent_forum_id());
 
 			if($this->category_id())
-				$parent_caches[] = class_load('forum.borsForumCategory', $this->category_id());
+				$parent_caches[] = class_load('forum_category', $this->category_id());
 			
 			return $parent_caches;
 		}
@@ -103,7 +100,7 @@
 		{
 			$subforums = array();
 			foreach($this->direct_subforums_ids() as $forum_id)
-				$subforums[] = class_load('forum/borsForum', $forum_id);
+				$subforums[] = class_load('forum_forum', $forum_id);
 			return $subforums;
 		}
 		
@@ -117,7 +114,7 @@
 					continue;
 
 				$processed[] = $forum_id;
-				$subforum = $forums[] = class_load('forum/borsForum', $forum_id);
+				$subforum = $forums[] = class_load('forum_forum', $forum_id);
 				$forums = array_merge($forums, $subforum->all_subforums(&$processed));
 			}
 			

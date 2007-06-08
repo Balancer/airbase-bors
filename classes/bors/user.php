@@ -1,12 +1,10 @@
 <?
 	require_once('classes/objects/BorsBaseObject.php');
-	class borsUser extends BorsBaseObject
+	class user extends BorsBaseObject
 	{
-		function class_name() { return 'borsUser'; }
-
-		function borsUser($id)
+		function user($id)
 		{
-//			echo "borsUser($id)<br />";
+//			echo "user($id)<br />";
 			if($id == -1)
 			{
 				global $me;

@@ -3,10 +3,6 @@
 
 	class BorsBasePage extends borsPage
 	{
-		var $match;
-		
-		function set_match($match) { $this->match = $match;	}
-		
 		function internal_uri() 
 		{
 			if(preg_match('!^http://!', $this->id()))
