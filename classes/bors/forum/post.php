@@ -73,7 +73,7 @@
 		function field_owner_id_storage() { return 'punbb.posts.poster_id(id)'; }
 		function owner_id() { return $this->stb_owner_id; }
 
-		function owner() { return class_load('user', $this->owner_id()); }
+		function owner() { return class_load('forum_user', $this->owner_id()); }
 
 		var $stb_answer_to_id = '';
 		function set_answer_to_id($answer_to_id, $db_update = false) { $this->set("answer_to_id", $answer_to_id, $db_update); }
