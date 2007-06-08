@@ -140,7 +140,7 @@
 		return $obj;
 	}
 
-	function class_load($class, $id = NULL, $page=1)
+	function class_load($class, $id = NULL, $page=1, $use_http = true)
 	{
 		if(preg_match("!^/!", $class))
 			$class = 'http://'.$_SERVER['HTTP_HOST'].$class;
@@ -149,18 +149,24 @@
 			$id = $m[1];
 	
 //		echo "class_load('$class', '$id')<br />";
-	
+		
 		if(preg_match("!^(\w+)://.+!", $class, $m))
 		{
 			if(preg_match("!^http://!", $class))
+			{
 				if($obj = borsclass_uri_load($class, $page))
 					return $obj;
-
-			if($obj = class_internal_uri_load($class))
+				if($use_http && $obj = class_internal_uri_load($class))
+					return $obj;
+			}
+			elseif($obj = class_internal_uri_load($class))
 				return $obj;
 		}
 	
-		return pure_class_load($class, $id, $page);
+		if(preg_match("!^\w+$!", $class))
+			return pure_class_load($class, $id, $page);
+		else
+			return NULL;
 	}
 
 	function borsclass_uri_load($uri, $page=1)
