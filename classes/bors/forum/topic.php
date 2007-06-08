@@ -1,10 +1,7 @@
 <?
 	require_once('borsForumAbstract.php');
-	class borsForumTopic extends borsForumAbstract
+	class forum_topic extends borsForumAbstract
 	{
-		function class_name() { return 'forum/borsForumTopic'; }
-		function uri_name() { return 'topic'; }
-
 		var $stb_forum_id = '';
 		function forum_id() { return $this->stb_forum_id; }
 		function set_forum_id($forum_id, $db_update = false) { $this->set("forum_id", $forum_id, $db_update); }
@@ -18,7 +15,7 @@
 
         function parents()
 		{
-			return array("forum.borsForum://".$this->forum_id());
+			return array("forum_forum://".$this->forum_id());
 		}
 
         function body()
@@ -27,7 +24,7 @@
 		
 			global $bors;
 
-			$forum = class_load('forum/borsForum', $this->forum_id());
+			$forum = class_load('forum_forum', $this->forum_id());
 		
 			if(!$forum->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
@@ -62,7 +59,7 @@
 			$data['posts'] = array();
 
 			foreach($posts as $pid)
-				$data['posts'][] = class_load('forum/borsForumPost', $pid);
+				$data['posts'][] = class_load('forum_post', $pid);
 
 			$total = $this->num_replies()+1;
 			if($total > $posts_per_page)
@@ -96,9 +93,9 @@
 
 		function cache_parents()
 		{
-			$res = array(class_load('forum.borsForum', $this->forum_id()));
+			$res = array(class_load('forum_forum', $this->forum_id()));
 			foreach($this->all_users() as $user_id)
-				$res = array_merge($res, class_load('forum.borsUser', $user_id));
+				$res = array_merge($res, class_load('user', $user_id));
 		}
 
 		function forum() { return class_load('forum.borsForum', $this->forum_id()); }

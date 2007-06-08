@@ -1,10 +1,7 @@
 <?
 	require_once('classes/objects/BorsBaseObject.php');
-	class borsForumPost extends BorsBaseObject
+	class forum_post extends BorsBaseObject
 	{
-		function class_name() { return 'forum/borsForumPost'; }
-		function uri_name() { return 'post'; }
-
 		var $stb_topic_id = '';
 		function topic_id() { return $this->stb_topic_id; }
 		function set_topic_id($topic_id, $db_update = false) { $this->set("topic_id", $topic_id, $db_update); }
@@ -14,7 +11,7 @@
 		
         function parents()
 		{
-			return array("forum.borsForumTopic://".$this->topic_id());
+			return array("forum_topic://".$this->topic_id());
 		}
 
 		var $stb_body = '';
@@ -76,7 +73,7 @@
 		function field_owner_id_storage() { return 'punbb.posts.poster_id(id)'; }
 		function owner_id() { return $this->stb_owner_id; }
 
-		function owner() { return class_load('borsUser', $this->owner_id()); }
+		function owner() { return class_load('user', $this->owner_id()); }
 
 		var $stb_answer_to_id = '';
 		function set_answer_to_id($answer_to_id, $db_update = false) { $this->set("answer_to_id", $answer_to_id, $db_update); }
@@ -86,7 +83,7 @@
 		function answer_to()
 		{
 			if($id = $this->answer_to_id())
-				return class_load('forum/borsForumPost', $id);
+				return class_load('forum_post', $id);
 
 			return false;
 		}
@@ -102,7 +99,7 @@
 				return false;
 			}
 	
-			$topic = class_load('forum/borsForumTopic', $tid);
+			$topic = class_load('forum_topic', $tid);
 	
 			$posts = $topic->get_all_posts_id();
 
