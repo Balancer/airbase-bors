@@ -25,7 +25,7 @@
 
 	if(!empty($GLOBALS['cms']['convert_cmd']) && @filesize($source_file) == 0)
 		exit("Ошибка! Нулевой размер файла $source_image");
-
+	
 	$imd = getimagesize(empty($GLOBALS['cms']['convert_cmd']) ? $source_image_url : $source_file);
 
 //	echo "<xmp>"; print_r($imd); echo "</xmp>";
@@ -49,7 +49,7 @@
 
 	$size = $need_width."x".$need_height;
 
-	if($resize)
+	if(1 || $resize)
 	{
 		if(!empty($GLOBALS['cms']['convert_cmd']))
 			system("{$GLOBALS['cms']['convert_cmd']} -geometry $size ".escapeshellarg($source_file)." ".escapeshellarg($target_file));
@@ -65,7 +65,7 @@
 	else
 		copy($source_file, $target_file);
 
-	@chmod($target_file, 0666);
+	chmod($target_file, 0666);
 		
 	header("Status: 200 OK");
 	header("Content-Length: ".filesize($target_file));

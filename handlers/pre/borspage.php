@@ -12,7 +12,8 @@
 			) as $dir)
 		{
 			$map = array();
-			@include("{$dir}handlers/bors_map.php");
+			if(file_exists($file = "{$dir}handlers/bors_map.php"))
+				include($file);
 			
 			$bors_map = array_merge($bors_map, $map);
 		}
