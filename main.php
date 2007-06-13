@@ -1,10 +1,4 @@
 <?
-	if(preg_match("!^38\.!", $_SERVER['REMOTE_ADDR'])) exit();
-	if(preg_match("!^74\.!", $_SERVER['REMOTE_ADDR'])) exit();
-	if(preg_match("!^77\.!", $_SERVER['REMOTE_ADDR'])) exit();
-	if(preg_match("!^66\.!", $_SERVER['REMOTE_ADDR'])) exit();
-	if(preg_match("!^91\.!", $_SERVER['REMOTE_ADDR'])) exit();
-		
 //	ini_set("xdebug.profiler_enable", "1");
 
     list($usec, $sec) = explode(" ",microtime());
@@ -38,7 +32,6 @@
 	require_once("funcs/templates/global.php");
 	require_once("funcs/users.php");
     require_once("funcs/handlers.php");
-    require_once("classes/objects/Bors.php");
 
 	if(empty($GLOBALS['cms']['only_load']))
 	{
@@ -117,6 +110,10 @@
 
 	if(empty($title))
 		$title='';
+
+	@file_put_contents($_SERVER['DOCUMENT_ROOT']."/logs/404.log", "$uri <= ".@$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
+
+	return go("/404.html", true);
 		
 	echo ec("Страница '$uri' не найдена. Попробуйте <a href=\"$uri?edit\">создать её</a>");
 	echo "</pre>";
