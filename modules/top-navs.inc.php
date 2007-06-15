@@ -5,7 +5,7 @@
 	
 	    require_once("funcs/Cache.php");
         $ch = &new Cache();
-        if($ch->get('top_navs-v3', $uri))
+        if($ch->get('top_navs-v5', $uri))
         {
 			echo $ch->last();
 			return;
@@ -17,6 +17,8 @@
 
         $parents = link_line($uri);
 
+		$hts = &new DataBaseHTS();
+
 		include_once("funcs/templates/assign.php");
 		$tpl = "xfile:top-navs.html";
 		if(!empty($GLOBALS['module_data']['template']))
@@ -27,7 +29,10 @@
         if(!is_array($parents) || sizeof($parents)==0)
 		{
 			$obj = class_load($uri);
-			$data[] = array(array('uri' => $uri, 'title' => $obj->nav_name()));
+			if($obj)
+				$data[] = array(array('uri' => $uri, 'title' => $obj->nav_name()));
+			else
+				$data[] = array(array('uri' => $uri, 'title' => $hts->get($uri, 'nav_name')));
 		}
 		else
 		{
@@ -43,7 +48,7 @@
 					$obj = class_load($link);
 					$link_line[] = array(
 						'uri' => preg_match('!^http://!', $link) ? $link : $obj->uri(),
-						'title' => $obj->title(),
+						'title' => $obj ? $obj->title() : $hts->get($link, 'nav_name'),
 					);
 //					echo "nav_name for $link = '".$obj->nav_name()."' ('$obj->stb_nav_name', '".$obj->title()."')<br />";
 //					print_r($link_line);
@@ -63,20 +68,21 @@
 //		echo "Link line for '$uri'<br />\n";
 		
 		$obj = class_load($uri);
-		if(!$obj)
+		if($obj)
+	        $parents = $obj->parents();
 		{
-			echo "Can't load class '$uri'<br/>\n";
-			return array();
+//			echo "Can't load class '$uri'<br/>\n";
+			$hts = &new DataBaseHTS($uri);
+			$parents = $hts->get_array('parent');
 		}
 	
-        $parents = $obj->parents();
 //		echo "parents for $uri = ".print_r($parents, true)."<br/>";
         $links = array();
 
         foreach($parents as $parent)
         {
 //			echo "Check '$parent' for '$uri'<br />\n";
-			if($parent == $uri || $parent == $obj->uri())
+			if($parent == $uri || $obj && $parent == $obj->uri())
 				continue;
 
             if(!isset($GLOBALS['visited_pairs']["$parent|#|$uri"]))

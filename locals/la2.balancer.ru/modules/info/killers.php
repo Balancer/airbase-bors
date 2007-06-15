@@ -1,6 +1,8 @@
 <?
 	function module_locale_info_killers()
 	{
+		return "";
+	
 		$cache = new Cache();
 		
 		if($cache->get('LBR:Info', 'killers'))

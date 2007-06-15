@@ -33,11 +33,12 @@
 			$forums = join(", ", punbb_get_all_subforums($forum_id));
 			$ch->set(serialize($forums), 3600);
 		}
-		
+
 		$topics = array();
 		$db = &new DataBase('punbb');
-		foreach($db->get_array("SELECT id as topic_id, subject as title,  id mod 1000 as sub FROM topics WHERE last_post > ".(time()-90*86400)." AND forum_id IN($forums) ORDER BY last_post DESC LIMIT $limit") as $t)
-			$topics[] = $t;
+		if($forums)
+			foreach($db->get_array("SELECT id as topic_id, subject as title,  id mod 1000 as sub FROM topics WHERE last_post > ".(time()-90*86400)." AND forum_id IN($forums) ORDER BY last_post DESC LIMIT $limit") as $t)
+				$topics[] = $t;
 
 		$data['topics'] = $topics;
 		

@@ -1,11 +1,11 @@
 <?
 	require_once('classes/objects/BorsBaseObject.php');
-	class borsForumAccess extends BorsBaseObject
+	class forum_access extends BorsBaseObject
 	{
 		var $forum_id = '';
 		var $group_id = '';
 
-		function borsForumAccess($id)
+		function forum_access($id)
 		{
 //			echo "borsForumAccess($id)<br />";
 			list($this->forum_id, $this->group_id) = split(':', $id);

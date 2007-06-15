@@ -44,6 +44,7 @@
 			$sf->save($content, $obj->modify_time(), $obj->cache_static());
 
 			require_once('funcs/navigation/go.php');
+//			exit("stat");
 			return go($obj->uri($page), true, 0, false);
 		}
 

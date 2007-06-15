@@ -53,8 +53,7 @@
 		if(!$uid)
 			return error_message(ec("Не задан ID пользователя."));
 
-		require_once('classes/bors/borsUser.php');
-		class_load('borsUser', $uid)->cache_clean_self();
+		class_load('forum_user', $uid)->cache_clean_self();
 
 		$me = new User();
 		if(!in_array($me->data('group'), array(1,2,5,21)))

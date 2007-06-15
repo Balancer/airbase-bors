@@ -99,13 +99,13 @@
 		$MAP_MIN_Y = -256144;
 		$MAP_MAX_Y = 262144;
 		
-		list($map_img_w, $map_img_h) = getimagesize("{$_SERVER['DOCUMENT_ROOT']}/l2jz/modules/map/i/mediumMap.jpg");
+		list($map_img_w, $map_img_h) = getimagesize("{$_SERVER['DOCUMENT_ROOT']}/images/maps/mediumMap.jpg");
 		
 		foreach($db->get_array("SELECT * FROM spawnlist WHERE npc_templateid = $mob_id") as $row)
 		{
 			if(($row['locx']=='0')&&($row['locy']=='0'))
 			{
-				$loc = $db->get("SELECT loc_x, loc_y FROM locations WHERE loc_id = ".intval($row['loc_id'])." ORDER BY RAND()");
+				$loc = $db->get("SELECT loc_x, loc_y FROM locations WHERE name = ".intval($row['loc_id'])." ORDER BY RAND() LIMIT 1");
 			
 				$row['locx'] = $loc['loc_x'];
 				$row['locy'] = $loc['loc_y'];
@@ -114,7 +114,7 @@
 			$m_x = intval($map_img_w*($row['locx']-$MAP_MIN_X)/($MAP_MAX_X-$MAP_MIN_X)-3);
 			$m_y = intval($map_img_h*($row['locy']-$MAP_MIN_Y)/($MAP_MAX_Y-$MAP_MIN_Y)-3);
 
-			$map .=	"<div style=\"position:absolute;top:{$m_y}px;left:{$m_x}px\"><img src=\"/l2jz/modules/map/i/points/monster.gif\" title=\"{$row['count']}\"></div>";
+			$map .=	"<div style=\"position:absolute;top:{$m_y}px;left:{$m_x}px\"><img src=\"/i/monster.gif\" title=\"{$row['count']}\"></div>";
 		}
 
 
@@ -148,12 +148,12 @@
 <br/>
 <div align="center">
 <table border="0" cellpadding="0" cellspacing="0" width="461">
-  <tr width="{$map_img_w}" height="1"><td colSpan="2" width="{$map_img_w}" height="1"><img src="/l2jz/i/tdot.gif" width="{$map_img_w}" height="1"></td></tr>
+  <tr width="{$map_img_w}" height="1"><td colSpan="2" width="{$map_img_w}" height="1"><img src="/i/tdot.gif" width="{$map_img_w}" height="1"></td></tr>
   <tr width="{$map_img_w}" height="{$map_img_h}">
-	<td valign="top" height="{$map_img_h}" width="1"><img src="/l2jz/i/tdot.gif" width="1" height="{map_img_h}"></td>
+	<td valign="top" height="{$map_img_h}" width="1"><img src="/i/tdot.gif" width="1" height="{map_img_h}"></td>
     <td valign="top" height="{$map_img_h}" width="{$map_img_w}">
       <div style="position:absolute">
-        <img src="http://la2.balancer.ru/l2jz/modules/map/i/bigMap.jpg" width="{$map_img_w}" height="{$map_img_h}" border="1" style="border-color:#000000;" style="position:absolute;top:0px;left:0px;"/>
+        <img src="http://la2.balancer.ru/images/maps/mediumMap.jpg" width="{$map_img_w}" height="{$map_img_h}" border="1" style="border-color:#000000;" style="position:absolute;top:0px;left:0px;"/>
 		$map
       </div>
     </td>

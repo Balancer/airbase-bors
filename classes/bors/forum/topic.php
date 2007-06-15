@@ -2,6 +2,8 @@
 	require_once('borsForumAbstract.php');
 	class forum_topic extends borsForumAbstract
 	{
+		function uri_name() { return 'topic'; }
+
 		var $stb_forum_id = '';
 		function forum_id() { return $this->stb_forum_id; }
 		function set_forum_id($forum_id, $db_update = false) { $this->set("forum_id", $forum_id, $db_update); }
@@ -28,9 +30,6 @@
 		
 			if(!$forum->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
-
-//			if($forum->is_public_access())
-//				$GLOBALS['cms']['cache_static'] = true;
 
 			$GLOBALS['cms']['cache_disabled'] = true;
 
@@ -95,7 +94,7 @@
 		{
 			$res = array(class_load('forum_forum', $this->forum_id()));
 			foreach($this->all_users() as $user_id)
-				$res = array_merge($res, class_load('forum_user', $user_id));
+				$res[] = class_load('forum_user', $user_id);
 		}
 
 		function forum() { return class_load('forum_forum', $this->forum_id()); }

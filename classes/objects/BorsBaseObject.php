@@ -6,7 +6,11 @@
 		var $id = NULL;
 		var $initial_id = NULL;
 		var $changed_fields = array();
+		var $match;
+		
 //		var $methods_added = false;
+
+		function set_match($match) { $this->match = $match;	}
 
 		function id() { return $this->id; }
 		function set_id($id) { $this->id = $id; }
@@ -219,7 +223,7 @@
 		function set_owner_id($owner_id, $db_update=true) { $this->set("owner_id", $owner_id, $db_update); }
 		function owner_id() { return $this->stb_owner_id; }
 
-		function owner() { return class_load('borsUser', $this->owner_id()); }
+		function owner() { return class_load('forum_user', $this->owner_id()); }
 
 		var $stb_cr_type = NULL;
 		function set_cr_type($cr_type, $db_update=true) { $this->set("cr_type", $cr_type, $db_update); }

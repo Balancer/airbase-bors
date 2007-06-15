@@ -89,6 +89,8 @@ if(isset($_POST['qid']))
 		message($lang_common['Bad request']);
 }
 
+$GLOBALS['cms']['cache_disabled'] = true;
+
 // Did someone just hit "Submit" or "Preview"?
 if (isset($_POST['form_sent']))
 {
@@ -350,7 +352,7 @@ if (isset($_POST['form_sent']))
 			}
 
 			include_once("classes/objects/Bors.php");
-			class_load('forum/borsForumTopic', $tid)->cache_clean();
+			class_load('forum_topic', $tid)->cache_clean();
 		}
 		// If it's a new topic
 		else if ($fid)
