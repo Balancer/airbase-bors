@@ -60,8 +60,8 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 		if($pun_user['is_guest'] || $pun_user['id'] <= 2)
 			message($ret.$anon);
 
-		if($pun_user['num_posts'] < 50)
-			message($ret."<br/><br/>Также у вас менее 50 постингов на форуме, что блокирует возможность скачивания незавивисо от состояния соотношения трафика.".$anon);
+//		if($pun_user['num_posts'] < 50)
+//			message($ret."<br/><br/>Также у вас менее 50 постингов на форуме, что блокирует возможность скачивания незавивисо от состояния соотношения трафика.".$anon);
 
 		if(!preg_match("!^(\d+)\.(\d+)\.(\d+)\.(\d+)$!", $_SERVER["REMOTE_ADDR"]))
 			exit("Извините, неопознанный формат Вашего IP: {$_SERVER['REMOTE_ADDR']}!");

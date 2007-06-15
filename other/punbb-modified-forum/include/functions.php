@@ -65,8 +65,6 @@ function check_cookie(&$pun_user)
 		if (!@file_exists(PUN_ROOT."lang/{$pun_user['language']}/common.php"))
 			$pun_user['language'] = $pun_config['o_default_lang'];
 
-//		echo("<xmp>"); print_r($pun_config); print_r($pun_user); echo("U=".$me->data('id')); exit("</xmp>");
-		
 		// Set a default style if the user selected style no longer exists
 		if (!@file_exists(PUN_ROOT.'style/'.$pun_user['style'].'.css'))
 			$pun_user['style'] = $pun_config['o_default_style'];
@@ -692,11 +690,6 @@ function random_pass($len)
 //
 function pun_hash($password, $name)
 {
-//	echo("$password/$name => ".(sha1(strtolower($name) . $password)));
-//	$a = 5/0;
-//	if($password)
-//		exit();
-
 	return sha1(strtolower($name) . $password);
 
 	if (function_exists('sha1'))	// Only in PHP 4.3.0+

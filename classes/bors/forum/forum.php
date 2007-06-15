@@ -4,6 +4,8 @@
 	{
 		function field_title_storage() { return 'punbb.forums.forum_name(id)'; }
 
+		function uri_name() { return 'forum'; }
+
 		var $stb_parent_forum_id = '';
 		function parent_forum_id() { return $this->stb_parent_forum_id; }
 		function set_parent_forum_id($parent_forum_id, $db_update = false) { $this->set("parent_forum_id", $parent_forum_id, $db_update); }
@@ -33,8 +35,6 @@
 			if(!$this->can_read())
 				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
-			if($this->is_public_access())
-				$GLOBALS['cms']['cache_static'] = true;
 
 			include_once("funcs/templates/assign.php");
 
@@ -65,7 +65,7 @@
 
 		function can_read()
 		{
-			$access = class_load('forum_access', "{$this->id()}:" . class_load('user', -1)->group_id());
+			$access = class_load('forum_access', "{$this->id()}:" . class_load('forum_user', -1)->group_id());
 			return $access->can_read();
 		}
 
@@ -130,4 +130,6 @@
 		function num_posts() { return $this->stb_num_posts; }
 		function set_num_posts($num_posts, $db_update = false) { $this->set("num_posts", $num_posts, $db_update); }
 		function field_num_posts_storage() { return 'punbb.forums.num_posts(id)'; }
+
+		function cache_static() { return $this->is_public_access() ? 600 : 0; }
 	}

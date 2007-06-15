@@ -70,10 +70,10 @@
 			
 			@unlink($db->get("SELECT file FROM cached_files WHERE original_uri = '".addslashes($this->original_uri)."'"));
 
+//			echo "save file '{$this->file}, exp=$expire_time'";
 			if($expire_time == 0)
 				return $content;
 
-//			echo "save file '{$this->file}'";
 			require_once("funcs/filesystem_ext.php");
 			mkpath(dirname($this->file));
 			

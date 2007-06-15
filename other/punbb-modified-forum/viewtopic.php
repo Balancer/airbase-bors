@@ -22,7 +22,6 @@
 
 ************************************************************************/
 
-
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $pid = isset($_GET['pid']) ? intval($_GET['pid']) : 0;
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
@@ -210,7 +209,6 @@ require PUN_ROOT.'header.php';
 
 //$GLOBALS['log_level'] = 10;
 //echo $GLOBALS['global_cache']->get("punbb-viewtopics", "$id:$last");
-//exit("***");
 
 // Increment "num_views" for topic
 $low_prio = '';//($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
@@ -244,7 +242,6 @@ $ret = $cms_db->get("SELECT last_post, last_edit FROM topics WHERE id=".intval($
 $last = max($ret['last_post'], $ret['last_edit']);
 if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun_user['id']}-{$pun_user['style']}-v21", "$id:$last:$p"))
 {
-//	exit("Cached");
 	echo $GLOBALS['global_cache']->last();
 	$GLOBALS['global_cache'] = NULL;
 

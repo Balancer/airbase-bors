@@ -9,7 +9,7 @@
 		$txt = preg_replace("!</p>!","", $txt);
 		$txt = preg_replace("!<p>!","<br /><br />", $txt);
 	
-		foreach(split(' ','b br code hr i li pre s u ul xmp object param embed') as $tag)
+		foreach(split(' ','b br code embed hr i li object param pre s u ul xmp') as $tag)
 		{
 			$txt = preg_replace("!<$tag>!","[$tag]", $txt);
 			$txt = preg_replace("!<$tag\s+/>!","[$tag]", $txt);

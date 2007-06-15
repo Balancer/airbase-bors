@@ -2,7 +2,7 @@
 	require_once('classes/objects/BorsBaseObject.php');
 	class forum_user extends BorsBaseObject
 	{
-		function user($id)
+		function forum_user($id)
 		{
 //			echo "user($id)<br />";
 			if($id == -1)

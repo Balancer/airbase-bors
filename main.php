@@ -28,7 +28,6 @@
 	}
 
 //	print_r($_GET);
-
 	require_once("funcs/templates/global.php");
 	require_once("funcs/users.php");
     require_once("funcs/handlers.php");
@@ -46,6 +45,8 @@
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 	
 //	$uri = preg_replace("!/[^/]+\.html$!", "/", $uri);
+
+    @header("X-Bors: $uri");
 	
 	$parse = parse_url($uri);
 	
