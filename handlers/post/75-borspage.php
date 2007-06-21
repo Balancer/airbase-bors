@@ -36,7 +36,7 @@
 		}
 		else
 			$content = $processed;
-		
+
 		if(!empty($GLOBALS['cms']['cache_static']) || $obj->cache_static())
 		{
 			$page = $obj->page();
@@ -45,7 +45,7 @@
 
 			require_once('funcs/navigation/go.php');
 //			exit("stat");
-			return go($obj->uri($page), true, 0, false);
+			return go($obj->uri($page).(empty($_SERVER['QUERY_STRING'])?"":"?".$_SERVER['QUERY_STRING']), true, 0, false);
 		}
 
         $last_modify = gmdate('D, d M Y H:i:s', $obj->modify_time()).' GMT';

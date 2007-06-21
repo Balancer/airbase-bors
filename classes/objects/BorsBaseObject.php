@@ -104,7 +104,7 @@
 				return $this->id();
 				
 			require_once("funcs/modules/uri.php");
-			$uri = strftime("/%Y/%m/%d/", $this->modify_time());
+			$uri = 'http://balancer.ru'.strftime("/%Y/%m/%d/", $this->modify_time());
 			$uri .= $this->uri_name()."-".$this->id();
 
 			if($page > 1)

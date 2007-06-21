@@ -50,7 +50,7 @@
 			$data2[] = $d;
 		}
 		
-		$tpl = "xfile:navleft.htm";
+		$tpl = "navleft.htm";
 		if(!empty($GLOBALS['module_data']['template']))
 			$tpl = $GLOBALS['module_data']['template'];
 

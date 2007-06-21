@@ -5,7 +5,7 @@
 	
 	    require_once("funcs/Cache.php");
         $ch = &new Cache();
-        if($ch->get('top_navs-v5', $uri))
+        if($ch->get('top_navs-v6', $uri))
         {
 			echo $ch->last();
 			return;
@@ -20,7 +20,7 @@
 		$hts = &new DataBaseHTS();
 
 		include_once("funcs/templates/assign.php");
-		$tpl = "xfile:top-navs.html";
+		$tpl = "top-navs.html";
 		if(!empty($GLOBALS['module_data']['template']))
 			$tpl = $GLOBALS['module_data']['template'];
         
@@ -48,7 +48,7 @@
 					$obj = class_load($link);
 					$link_line[] = array(
 						'uri' => preg_match('!^http://!', $link) ? $link : $obj->uri(),
-						'title' => $obj ? $obj->title() : $hts->get($link, 'nav_name'),
+						'title' => $obj ? $obj->nav_name() : $hts->get($link, 'nav_name'),
 					);
 //					echo "nav_name for $link = '".$obj->nav_name()."' ('$obj->stb_nav_name', '".$obj->title()."')<br />";
 //					print_r($link_line);
@@ -70,6 +70,7 @@
 		$obj = class_load($uri);
 		if($obj)
 	        $parents = $obj->parents();
+		else
 		{
 //			echo "Can't load class '$uri'<br/>\n";
 			$hts = &new DataBaseHTS($uri);

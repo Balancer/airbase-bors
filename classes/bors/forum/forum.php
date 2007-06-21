@@ -19,7 +19,7 @@
         function parents()
 		{
 			if($this->parent_forum_id())
-				return array("forum_forum" . $this->parent_forum_id());
+				return array("forum_forum://" . $this->parent_forum_id());
 			else
 				return array("http://balancer.ru/forum-new/");
 //				return array(array('forumCategory', $this->category_id() ));

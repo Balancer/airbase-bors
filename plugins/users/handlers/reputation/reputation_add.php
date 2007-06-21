@@ -66,6 +66,8 @@
 		include_once("funcs/Cache.php");
 		$ch = &new Cache();
 		$ch->clear_by_id("http://balancer.ru/user/$uid/avatarblock/");
+		
+		class_load('forum_user', $uid)->cache_clean_self();
 
 		include_once("funcs/navigation/go.php");
 		go("http://balancer.ru/user/$uid/reputation/");

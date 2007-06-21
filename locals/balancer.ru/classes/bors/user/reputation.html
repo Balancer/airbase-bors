@@ -2,26 +2,26 @@
 <b>Положительных голосов:</b> {$plus}<br />
 <b>Негативных голосов:</b> {$minus}<br />
 
-<p><i><b>Внимание!</b> Репутацию может выставить только участник, имеющий более 50 сообщений на форуме.</i></p>
+<p><i><b>Внимание!</b> Репутацию может выставить только участник, имеющий более 50 сообщений на форуме. <small>Страница обновляется один раз в 10 минут</small></i></p>
 
 <table width="100%"><tr>
 <td width="90%">
-<form method="post" action="{$main_uri}?reputation_add_do">
+<form method="post" action="{$main_uri}?reputation_add_do" name="rep">
 <div style="background-color: #cfc;"><input type="radio" id="s1" name="score" value="+1">&nbsp;увеличить репутацию</div>
 <div style="background-color: #fcc;"><input type="radio" id="s2" name="score" value="-1">&nbsp;уменьшить репутацию</div>
 <textarea name="comment" style="width: 98%;" rows="5"></textarea>
-Ссылка (опционально):&nbsp;<input name="uri" value="{$ref}" style="width: 60%;"><br />
+Ссылка (опционально):&nbsp;<input name="uri" value="11" style="width: 60%;"><br />
 <input type="hidden" name="user_id" value="{$user_id}">
-<input type="hidden" name="ref" value="{$ref}">
 <input type="submit" value="Отправить" onClick="{literal}if(!getElementById('s1').checked && !getElementById('s2').checked){ alert('Выберите оценку!'); return false;} else return true;{/literal}">
 </form>
 </td>
 <td>
-<div class="userinfo" style="width: 100px; float: right; margin: 0px 0px 8px 16px; display: inline; border: 1px solid; background-color: white;">
-	<script src="http://airbase.ru/js/include/http://balancer.ru/user/{$user_id}/avatarblock/"></script>
-</div>
+{bors_class_load var=owner class="forum_user" id=$user_id}
+<div class="avatar_block">{include file="xfile:/var/www/balancer.ru/htdocs/cms/classes/bors/forum/templates/post-avatar.html"}</div>
 </td>
 </tr></table>
+
+<script>document.forms['rep'].elements['uri'].value = document.location.search.substring(1) ? document.location.search.substring(1) : document.referrer </script>
 
 {if $list}
 <table cellSpacing="0" class="btab">

@@ -115,6 +115,9 @@
 			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/personal.js");
 			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/warnings.gif");
 			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/use-topics.html");
+			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/reputation/index.html");
+			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/reputation.html");
+			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/blog.html");
 		}
 
 		var $stb_warnings;
@@ -126,4 +129,7 @@
 		function reputation() { return $this->stb_reputation; }
 		function set_reputation($reputation, $db_update = false) { $this->set("reputation", $reputation, $db_update); }
 		function field_reputation_storage() { return 'punbb.users.reputation(id)'; }
+		
+		function uri() { return "http://balancer.ru/user/{$this->id()}/"; }
+		function parents() { return array("http://balancer.ru/forum/users/"); }
 	}
