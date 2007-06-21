@@ -433,9 +433,11 @@ while ($cur_post = $db->fetch_assoc($result))
 		if($is_coordinator)
 			$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warn_add/?ref=".urlencode("{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['id']}#p{$cur_post['id']}")."\" style=\"color: red;\">Выставить штраф</a>";
 
-		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation/post://{$cur_post['id']}/\">Репутация участника</a>";
+		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation.html?post://{$cur_post['id']}\">Репутация участника</a>";
 
-		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/blog/\">Блог участника</a>";
+		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/blog.html\">Блог участника</a>";
+
+		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/use-topics.html\">Темы с его участием</a>";
 	}
 	// If the poster is a guest (or a user that has been deleted)
 	else
@@ -572,7 +574,7 @@ while ($cur_post = $db->fetch_assoc($result))
 							<center>
 							<?
 								if($poster['reputation'])
-									echo "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation/post://{$cur_post['id']}/\"><img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/rep.gif\" width=\"100\" height=\"16\" border=\"0\" alt=\"*\" /></a>\n";
+									echo "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation.html?post://{$cur_post['id']}\"><img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/rep.gif\" width=\"100\" height=\"16\" border=\"0\" alt=\"*\" /></a>\n";
 							?>
 							<div><?echo $user_warn;?></div>
 							</center>

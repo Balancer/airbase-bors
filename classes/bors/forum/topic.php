@@ -92,7 +92,10 @@
 
 		function cache_parents()
 		{
-			$res = array(class_load('forum_forum', $this->forum_id()));
+			$res = array(
+				class_load('forum_forum', $this->forum_id()),
+				class_load('forum_printable', $this->id()),
+			);
 			foreach($this->all_users() as $user_id)
 				$res[] = class_load('forum_user', $user_id);
 		}
@@ -119,5 +122,10 @@
 		{
 			$db = &new DataBase('punbb');
 			return $db->get_array("SELECT user_id FROM posts WHERE topic_id={$this->id}");
+		}
+		
+		function cache_static()
+		{
+			return class_load('forum_forum', $this->forum_id())->is_public_access() ? 86400*90 : 0;
 		}
 	}

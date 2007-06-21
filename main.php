@@ -1,6 +1,13 @@
 <?
 //	ini_set("xdebug.profiler_enable", "1");
 
+	if($_SERVER['REQUEST_URI'] == '/cms/main.php')
+	{
+		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/main-php-referers.log", @$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
+		@chmod($file, 0666);
+		exit("Link error");
+	}
+
     list($usec, $sec) = explode(" ",microtime());
     $GLOBALS['stat']['start_microtime'] = ((float)$usec + (float)$sec);
 
@@ -18,6 +25,7 @@
 
 	if(empty($GLOBALS['cms']['only_load']) && empty($_GET) && preg_match("!^(.+?)\?(.+)$!", $_SERVER['REQUEST_URI'], $m))
 	{
+		$_SERVER['QUERY_STRING'] = $m[2];
 		$_SERVER['REQUEST_URI'] = $m[1];
 		foreach(split("&", $m[2]) as $pair)
 		{
@@ -99,6 +107,15 @@
 	global $bors;
 	if(!empty($bors) && is_object($bors))
 		$bors->changed_save();
+
+    list($usec, $sec) = explode(" ",microtime());
+    $time = ((float)$usec + (float)$sec) - $GLOBALS['stat']['start_microtime'];
+
+	if($time > 1)
+	{
+		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/timing.log", $time . " [".$uri . "]: " . @$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
+		@chmod($file, 0666);
+	}
 	
 	if($ret === true)
 		return;
@@ -112,9 +129,10 @@
 	if(empty($title))
 		$title='';
 
-	@file_put_contents($_SERVER['DOCUMENT_ROOT']."/logs/404.log", "$uri <= ".@$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
+	@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/404.log", "$uri <= ".@$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
+	@chmod($file, 0666);
 
-	return go("/404.html", true);
+//	return go("/404.html", true);
 		
 	echo ec("Страница '$uri' не найдена. Попробуйте <a href=\"$uri?edit\">создать её</a>");
 	echo "</pre>";
