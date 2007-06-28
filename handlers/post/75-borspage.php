@@ -19,7 +19,36 @@
 			return false;
 
 //		echo get_class($obj);
-	
+
+		if(!empty($_GET['class_name']))
+		{
+			$form = class_load($_GET['class_name'], $_GET['id']);
+		
+			if(empty($_GET['action']))
+				$method = 'onAction';
+			else
+				$method = 'onAction_'.$_GET['action'];
+				
+			if(method_exists($form, $method))
+			{
+				$result = $form->$method($_GET);
+				if($result === true)
+					return true;
+			}
+			else
+			{
+				foreach($_GET as $key => $val)
+				{
+					$method = "set_$key";
+					if(method_exists($form, $method))
+						$form->$method($val);
+				}
+			}
+
+			if(!empty($_GET['go']))
+				return go($_GET['go']);
+		}
+		
 		$processed = $obj->preShowProcess();
 		if($processed === true)
 			return true;

@@ -35,7 +35,9 @@
 		}
 	}
 
-//	print_r($_GET);
+	$_GET = array_merge($_GET, $_POST);
+
+//	print_r($_POST);
 	require_once("funcs/templates/global.php");
 	require_once("funcs/users.php");
     require_once("funcs/handlers.php");
