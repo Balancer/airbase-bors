@@ -1,0 +1,19 @@
+<dl class="forumposting">
+<dt>Основные разделы</dt>
+<dd>
+
+{assign var=columns value=3}
+<table width="90%" border="0" cellPadding="0" cellSpacing="0"><tr><td><ul>
+{foreach from=$base_categories item=cat name=loop}
+{if not $smarty.foreach.loop.first && $smarty.foreach.loop.iteration % $columns == 1}
+</ul></td><td><ul>
+{/if}
+<li><a href="{$cat.base_uri}">{$cat.cat_name}</a></li>
+{/foreach}
+</ul></td></table>
+
+</dd>
+</dl>
+
+{assign var=skip_subforums value=1}
+{include file="xfile:templates/ForumBody.html"}
