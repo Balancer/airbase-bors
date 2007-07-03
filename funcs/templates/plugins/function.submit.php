@@ -3,5 +3,11 @@
 	{
 		extract($params);
 		
-		echo "<input type=\"submit\" value=\"".addslashes($value)."\"/>";
+		echo "<input type=\"submit\" value=\"".addslashes($value)."\"";
+
+		foreach(split(' ', 'class style') as $p)
+			if(!empty($$p))
+				echo " $p=\"{$$p}\"";
+
+		echo " />";
 	}

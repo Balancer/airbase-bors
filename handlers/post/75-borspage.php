@@ -20,14 +20,25 @@
 
 //		echo get_class($obj);
 
+		$processed = $obj->preParseProcess();
+		if($processed === true)
+			return true;
+
 		if(!empty($_GET['class_name']))
 		{
-			$form = class_load($_GET['class_name'], $_GET['id']);
-		
+			$form = class_load($_GET['class_name'], @$_GET['id']);
+
+//			$processed2 = $form->preParseProcess();
+//			if($processed2 === true)
+//				return true;
+//			exit("x");
+									   			
 			if(empty($_GET['action']))
 				$method = 'onAction';
 			else
 				$method = 'onAction_'.$_GET['action'];
+				
+			global $bors;
 				
 			if(method_exists($form, $method))
 			{
@@ -41,12 +52,43 @@
 				{
 					$method = "set_$key";
 					if(method_exists($form, $method))
-						$form->$method($val);
+						$form->$method($val, true);
+				}
+
+				$bors->changed_save();
+
+				foreach($_GET as $key => $val)
+				{
+					if(!$val || !preg_match("!^file_(\w+)_delete_do$!", $key, $m))
+						continue;
+						
+					$method = "remove_{$m[1]}_file";
+					if(method_exists($form, $method))
+						$form->$method(true);
+				}
+				
+				if(!empty($_FILES))
+				{
+					foreach($_FILES as $file => $params)
+					{
+						$method = "upload_{$file}_file";
+						if(method_exists($form, $method))
+							$form->$method($params, true);
+					}
 				}
 			}
 
+			$bors->changed_save();
+
+//			print_r($_FILES);
+//			phpinfo();
+//			exit();
+
 			if(!empty($_GET['go']))
+			{
+				$_GET['go'] = str_replace('%OBJECT_ID%', $form->id(), $_GET['go']);
 				return go($_GET['go']);
+			}
 		}
 		
 		$processed = $obj->preShowProcess();

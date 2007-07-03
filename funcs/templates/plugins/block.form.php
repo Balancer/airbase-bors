@@ -23,8 +23,16 @@
 
 			if(empty($action))
 				$action = $uri;
+			if($action == 'this')
+				$action = $GLOBALS['main_uri'];
 				
-			echo "<form method=\"$method\" action=\"$action\" name=\"$name\">\n";
+			echo "<form";
+			
+			foreach(split(' ', 'action method name class style enctype') as $p)
+				if(!empty($$p))
+					echo " $p=\"{$$p}\"";
+			
+			echo ">\n";
 			return;
 		}
 		
