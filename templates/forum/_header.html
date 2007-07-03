@@ -4,8 +4,8 @@
 	<title>{$title}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
-	<link rel="stylesheet" type="text/css" href="/cms/templates/forum/main3.css" />
-	<script  type="text/javascript" src="/cms/templates/forum/tune.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://forums.balancer.ru/tpl/default/css/main3.css" />
+	<script  type="text/javascript" src="http://forums.balancer.ru/tpl/default/js/tune.js"></script>
 {if $type == 'topic' and $id}
 <script type="text/javascript">
 var readed = readCookie('readedTopics', "").split(' ')
@@ -95,7 +95,7 @@ var me_hash = readCookie('cookie_hash', 0)
 			if(me_id < 2 || !me_hash)
 				document.writeln("<"+"script  type=\"text/javascript\" src=\"{$bors_local_cache}templates/login.js\"></"+"script>")
 			else
-				document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
+				document.writeln("<"+"script  type=\"text/javascript\" src=\"http://balancer.ru/user/"+me_id+"/personal.js\"></"+"script>")
 			</script>
 			<noscript>Не работает без JavaScript</noscript>
 		</dd>

@@ -64,4 +64,4 @@
 
 		function _queries() { return array(); }
 		function _global_queries() { return array(); }
-	}
+}

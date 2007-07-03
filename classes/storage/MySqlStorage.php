@@ -219,9 +219,6 @@
 
 		function save($object)
 		{
-			if(!$object->id())
-				return;
-		
 			global $mysql_map;
 		
 			foreach($object->changed_fields as $field_name => $field)
@@ -232,17 +229,50 @@
 				else
 					$map = @$mysql_map[$field_name];
 
-				if(!preg_match("!^(\w+)\.(\w+).(\w+)\((\w+)\)$!", $map, $m))
+
+				$db = $object->main_db_storage();
+				if(!$db)
+					$db = $GLOBALS['cms']['mysql_database'];
+								   
+				$table = $object->main_table_storage();
+//				echo "$map </br>";
+				if(preg_match("!^(\w+)\.(\w+)\.((\w+)\(([^\(\)]+)\))$!", $map, $m))
+				{
+					$db		= $m[1];
+					$table	= $m[2];
+					$map	= $m[3];
+				}
+
+				if(preg_match("!^(\w+)\.((\w+)\(([^\(\)]+)\))$!", $map, $m))
+				{
+					$table	= $m[1];
+					$map	= $m[2];
+				}
+
+//				echo $map."</br>";
+
+				if(!preg_match("!^(\w+)\(([^\(\)]+)\)$!", $map, $m))
 					continue;
-				
-				list($dummy, $db, $table, $db_field, $id_field) = $m;
+					
+				list($dummy, $db_field, $id_field) = $m;
 		
 				$dbh = &new DataBase($db);
-				$dbh->store($table, make_id_field($table, $id_field, $object->id()),
-						array(
-							$id_field => $object->id(),
-							$db_field => $object->$field,
-						));
+				
+				$store = array();
+				if($object->id())
+				{
+					$dbh->update($table, make_id_field($table, $id_field, $object->id()), array(
+						$db_field => $object->$field,
+					));
+				}
+				else
+				{
+					$dbh->insert($table, array(
+						$db_field => $object->$field,
+					));
+					
+					$object->set_id($dbh->get_last_id());
+				}
 			}
 
 			$object->changed_fields = array();
@@ -251,8 +281,8 @@
 
 	$mysql_map = array();
 	
-	$mysql_map['create_time']	= 'hts_data_create_time.value(id)';
-	$mysql_map['name'] 			= 'hts_data_title.value(id)';
+//	$mysql_map['create_time']	= 'hts_data_create_time.value(id)';
+//	$mysql_map['name'] 			= 'hts_data_title.value(id)';
 
 	function mysql_storage_map($class, $key, $map)
 	{

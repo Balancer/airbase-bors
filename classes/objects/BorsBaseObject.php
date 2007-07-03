@@ -88,7 +88,7 @@
 		}
 
 		var $stb_title = '';
-		function title() { return $this->stb_title ? $this->stb_title : $this->internal_uri(); }
+		function title() { return $this->stb_title/* ? $this->stb_title : $this->internal_uri()*/; }
 		function set_title($new_title, $db_update=true) { $this->set("title", $new_title, $db_update); }
 
 		var $page = '';
@@ -217,7 +217,7 @@
 
 		var $stb_template = NULL;
 		function set_template($template, $db_update=true) { $this->set("template", $template, $db_update); }
-		function template() { return $this->stb_template; }
+        function template() { return $this->stb_template ? $this->stb_template : @$GLOBALS['cms']['default_template']; }
 
 		var $stb_owner_id = NULL;
 		function set_owner_id($owner_id, $db_update=true) { $this->set("owner_id", $owner_id, $db_update); }
@@ -274,7 +274,7 @@
 			return $content;
 		}
 		
-		function cacheable_body() { return ec("Страница не определена"); }
+		function cacheable_body() { return ec("Содержимое страницы отсутствует"); }
 		function cache_static() { return 0; }
 
 		var $stb_type_id;
@@ -285,4 +285,9 @@
 	
 		function class_name() { return get_class($this); }
 		function uri_name()   { return get_class($this); }
+
+		function preParseProcess()
+		{
+			return false;
+		}
 	}

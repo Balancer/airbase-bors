@@ -19,13 +19,22 @@
 		
 		function add_changed_object($obj)
 		{
-			$this->changed_objects[$obj->uri_name()."-".$obj->id()] = $obj;
+			$this->changed_objects[$obj->internal_uri()] = $obj;
 		}
 		
 		function changed_save()
 		{
+			if(empty($this->changed_objects))
+				return;
+				
 			foreach($this->changed_objects as $name => $obj)
+			{
+				if(!$obj->id())
+					$obj->set_create_time(time(), true);
+					
+				$obj->set_modify_time(time(), true);
 				$this->config()->storage()->save($obj);
+			}
 		}
 		
 		function get_html($object)
