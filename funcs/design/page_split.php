@@ -40,12 +40,19 @@
 
 	function pages_show($obj, $total_pages, $limit)
 	{
+
 		$pages = array();
 		$total_pages = intval($total_pages);
 
 		if($total_pages > 1)
 		{
-			$pages[] = get_page_link($obj, 1);
+			$q = "";
+			if(!empty($_GET))
+				foreach($_GET as $key => $value)
+					$q .= ($q=="") ? "?$key=$value" : "&$key=$value";
+
+			for($i = 1; $i <= intval($limit/2); $i++)
+				$pages[] = get_page_link($obj, $i, "", $q);
 			
 			if($total_pages > $limit)
 			{
@@ -53,8 +60,8 @@
 				$limit--;
 			}
 			
-			for($i = max(2, $total_pages - $limit + 2); $i <= $total_pages; $i++)
-				$pages[] = get_page_link($obj, $i);
+			for($i = max(intval($limit/2)+1, $total_pages - intval($limit/2) + 1); $i <= $total_pages; $i++)
+				$pages[] = get_page_link($obj, $i, "", $q);
 		}
 		
 //		print_r($pages);

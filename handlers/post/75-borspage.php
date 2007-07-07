@@ -82,7 +82,7 @@
 
 //			print_r($_FILES);
 //			phpinfo();
-//			exit();
+			exit();
 
 			if(!empty($_GET['go']))
 			{

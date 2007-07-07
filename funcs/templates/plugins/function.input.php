@@ -7,7 +7,7 @@
 		
 		$value = $obj->$name();
 		
-		echo "<input type=\"text\" name=\"$name\" value=\"".addslashes($value)."\"";
+		echo "<input type=\"text\" name=\"$name\" value=\"".htmlspecialchars($value)."\"";
 
 		foreach(split(' ', 'class style maxlength size') as $p)
 			if(!empty($$p))
