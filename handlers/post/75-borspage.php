@@ -27,6 +27,8 @@
 		if(!empty($_GET['class_name']))
 		{
 			$form = class_load($_GET['class_name'], @$_GET['id']);
+			if(!$form->id())
+				$form->new_instance();
 
 //			$processed2 = $form->preParseProcess();
 //			if($processed2 === true)
@@ -51,11 +53,15 @@
 				foreach($_GET as $key => $val)
 				{
 					$method = "set_$key";
+//					echo "Set $key to $val<br />";
 					if(method_exists($form, $method))
 						$form->$method($val, true);
 				}
 
+				
 				$bors->changed_save();
+
+//				print_r($form);
 
 				foreach($_GET as $key => $val)
 				{
@@ -82,7 +88,7 @@
 
 //			print_r($_FILES);
 //			phpinfo();
-			exit();
+//			exit();
 
 			if(!empty($_GET['go']))
 			{
