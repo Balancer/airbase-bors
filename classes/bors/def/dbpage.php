@@ -12,6 +12,18 @@
 		}
 
 		function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
+
+		function new_instance()
+		{
+			$tab = $this->main_table_storage();
+			if(!$tab)
+				exit("Try to gent new instance with empty main table in class ".__FILE__);
+			
+			$this->db->insert($tab, array());
+			$this->set_id($this->db->get_last_id());
+			$this->set_create_time(time(), true);
+			$this->set_modify_time(time(), true);
+		}
 	
 		function def_dbpage($id)
 		{
@@ -37,4 +49,6 @@
 				$GLOBALS['cms']['templates']['data'][$qname] = $this->db->get_array($q, false, $cache);
 			}
 		}
+		
+		function edit_link() { return $this->uri."?edit"; }
 	}

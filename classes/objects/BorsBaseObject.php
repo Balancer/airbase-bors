@@ -17,6 +17,8 @@
 		function main_db_storage(){ return ''; }
 		function main_table_storage(){ return ''; }
 
+		function new_instance() { exit("Try to get new empty instance"); }
+
 		function BorsBaseObject($id = NULL, $noload = false)
 		{
 //			echo "BorsBaseObject($id)<br />";
@@ -63,6 +65,7 @@
 
 			$this->$field_name = $value;
 		}
+
 
 		var $stb_create_time = NULL;
 		function set_create_time($unix_time, $db_update=false) { $this->set("create_time", $unix_time, $db_update); }

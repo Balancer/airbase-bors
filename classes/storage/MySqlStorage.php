@@ -138,6 +138,9 @@
 				{
 					if(!$table_name)
 						$table_name = $def_table;
+
+					if(!$table_name)
+						continue;
 						
 					foreach($ids as $id_field => $field_list)
 					{
@@ -166,6 +169,9 @@
 				}
 
 //				$GLOBALS['log_level'] = 10;
+				if(empty($select))
+					return;
+					
 				$result = $dbh->get("SELECT ".join(",", $select)." $from $where", false);
 //				$GLOBALS['log_level'] = 2;
 //				echo "res = "; print_r($result); echo "<br />";
@@ -272,6 +278,7 @@
 					));
 					
 					$object->set_id($dbh->get_last_id());
+//					echo "Set id to ".$dbh->get_last_id()."<br />";
 				}
 			}
 

@@ -46,7 +46,7 @@
 
 		function cache_static()
 		{
-			return 86400*7;
+			return 86400*30;
 		}
 		
 		function template()
