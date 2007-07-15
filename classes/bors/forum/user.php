@@ -28,8 +28,7 @@
 		function set_group_id($group_id, $db_update = false) { $this->set("group_id", $group_id, $db_update); }
 		function field_group_id_storage() { return 'punbb.users.group_id(id)'; }
 
-
-		function group() { return class_load('forum_group', $this->group_id()); }
+		function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
 
 		var $stb_user_title;
 		function user_title() { return $this->stb_user_title; }
@@ -111,13 +110,8 @@
 		function cache_clean_self()
 		{
 			parent::cache_clean_self();
-			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/rep.gif");
-			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/personal.js");
-			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/warnings.gif");
-			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/use-topics.html");
-			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/reputation/index.html");
-			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/reputation.html");
-			@unlink("/var/www/balancer.ru/htdocs/user/".$this->id()."/blog.html");
+			include_once('funcs/filesystem_ext.php');
+			rec_rmdir("/var/www/balancer.ru/htdocs/user/".$this->id());
 		}
 
 		var $stb_warnings;

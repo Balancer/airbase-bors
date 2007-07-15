@@ -6,13 +6,12 @@
 		function topic_id() { return $this->stb_topic_id; }
 		function set_topic_id($topic_id, $db_update = false) { $this->set("topic_id", $topic_id, $db_update); }
 		function field_topic_id_storage() { return 'punbb.posts.topic_id(id)'; }
+
+		function topic() { return class_load('forum_topic', $this->topic_id()); }
 		
 		function field_create_time_storage() { return 'punbb.posts.posted(id)'; }
 		
-        function parents()
-		{
-			return array("forum_topic://".$this->topic_id());
-		}
+        function parents() { return array("forum_topic://".$this->topic_id()); }
 
 		var $stb_body = '';
 		function set_body($body, $db_update = true) { $this->set("body", $body, $db_update); }
@@ -119,6 +118,16 @@
 		function uri() 
 		{ 
 			require_once("funcs/modules/uri.php");
-			return strftime("/%Y/%m/%d/post-", $this->modify_time()).$this->id().".html"; 
+			return "http://balancer.ru/".strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html"; 
+		}
+		
+		function title()
+		{
+			return $this->topic()->title()." <small>[".$this->owner()->title().", ".strftime("%d.%m.%y", $this->create_time())."]</small>";
+		}
+
+		function base_uri()
+		{
+			return $this->topic()->forum()->category()->category_base_full();
 		}
 	}

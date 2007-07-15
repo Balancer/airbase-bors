@@ -40,3 +40,22 @@
 
 	if(!function_exists("scandir"))
 		require_once("include/php4/scandir.php");
+
+	function rec_rmdir($dir, $delete_self = true)
+	{
+    	if(!$dh = @opendir($dir))
+			return;
+
+	    while(($obj = readdir($dh))) 
+		{
+	        if($obj=='.' || $obj=='..')
+				continue;
+	        if(!@unlink($dir.'/'.$obj))
+				rec_rmdir($dir.'/'.$obj, true);
+	    }
+
+		@closedir($dh);
+		
+	    if ($delete_self)
+	        @rmdir($dir);
+	}

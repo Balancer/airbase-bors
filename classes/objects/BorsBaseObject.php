@@ -98,6 +98,8 @@
 		function page() { return $this->page; }
 		function set_page($page) { $this->page = $page; }
 
+		function base_uri() { return 'http://balancer.ru/'; }
+
 		function uri($page = 1)
 		{
 			if($page < 1)
@@ -107,7 +109,7 @@
 				return $this->id();
 				
 			require_once("funcs/modules/uri.php");
-			$uri = 'http://balancer.ru'.strftime("/%Y/%m/%d/", $this->modify_time());
+			$uri = $this->base_uri().strftime("%Y/%m/%d/", $this->modify_time());
 			$uri .= $this->uri_name()."-".$this->id();
 
 			if($page > 1)
@@ -183,9 +185,18 @@
 
 		function cache_clean()
 		{
+			global $cleaned;
+
+			if(empty($cleaned))
+				$cleaned = array();
+				
 			$this->cache_clean_self();
 			foreach($this->cache_parents() as $parent_cache)
-				$parent_cache->cache_clean();
+				if(empty($cleaned[$parent_cache->internal_uri()]))
+				{
+					$cleaned[$parent_cache->internal_uri()] = 1;
+					$parent_cache->cache_clean();
+				}
 		}
 
 		function cache_clean_self()

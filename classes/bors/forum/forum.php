@@ -16,6 +16,8 @@
 		function set_category_id($category_id, $db_update = false) { $this->set("category_id", $category_id, $db_update); }
 		function field_category_id_storage() { return 'punbb.forums.cat_id(id)'; }
 
+		function category() { return class_load('forum_category', $this->category_id()); }
+
         function parents()
 		{
 			if($this->parent_forum_id())
@@ -59,14 +61,29 @@
 
 		function is_public_access()
 		{
-			$access = class_load('forum_access', "{$this->id()}:3");
-			return $access->can_read();
+			$can_read = class_load('forum_access', "{$this->id()}:3")->can_read();
+//			print_r($can_read);
+//			exit();
+
+			if($can_read === NULL)
+				$can_read = class_load('forum_group', 3)->can_read();
+
+			return $can_read;
 		}
 
 		function can_read()
 		{
-			$access = class_load('forum_access', "{$this->id()}:" . class_load('forum_user', -1)->group_id());
-			return $access->can_read();
+			$gid = class_load('forum_user', -1)->group_id();
+			if(!$gid)
+				$gid = 3;
+
+			$can_read = class_load('forum_access', "{$this->id()}:$gid")->can_read();
+//			exit("gid = $gid, can_read = ".print_r($can_read, true));
+
+			if($can_read === NULL)
+				$can_read = class_load('forum_group', $gid)->can_read();
+
+			return $can_read;
 		}
 
 		function cache_parents()

@@ -46,7 +46,7 @@
 
 		if($ul_open)
 			for($ul_open;$ul_open>0;$ul_open--)
-				$res.="[/ul]";
+				$res .= "[/".array_pop($stack)."]";
 
         if($res)
             $sum[] = $res;

@@ -1,20 +1,29 @@
 <?
-	require_once('borsForumAbstract.php');
-	class borsForumCategory extends borsForumAbstract
+	class_include('forum_abstract');
+	class forum_category extends forum_abstract
 	{
-		function type() { return 'forumCategory'; }
-
 		function field_title_storage() { return 'punbb.categories.cat_name(id)'; }
+
+		function uri_name() { return 'category'; }
 
 		var $stb_parent_category_id = '';
 		function parent_category_id() { return $this->stb_parent_category_id; }
 		function set_parent_category_id($parent_category_id, $db_update = false) { $this->set("parent_category_id", $parent_category_id, $db_update); }
 		function field_parent_category_id_storage() { return 'punbb.categories.parent(id)'; }
 
-		var $stb_base_uri = '';
-		function base_uri() { return $this->stb_base_uri; }
-		function set_base_uri($base_uri, $db_update = false) { $this->set("base_uri", $base_uri, $db_update); }
-		function field_base_uri_storage() { return 'punbb.categories.base_uri(id)'; }
+		var $stb_category_base = '';
+		function category_base() { return $this->stb_category_base; }
+		function set_category_base($category_base, $db_update = false) { $this->set("category_base", $category_base, $db_update); }
+		function field_category_base_storage() { return 'punbb.categories.base_uri(id)'; }
+
+		function category_base_full()
+		{
+			$cat = $this;
+			while(!$cat->category_base() && $this->parent_category_id())
+				$cat = class_load('forum_category', $this->parent_category_id());
+			
+			return $cat->category_base();
+		}
 
 		function parents()
 		{
@@ -23,24 +32,6 @@
 				return array("forum.forumCategory://". $this->parent_category_id());
 
 			return array("http://balancer.ru/forum/");
-		}
-
-        function body()
-		{
-			global $bors;
-
-//			if($this->is_public_access())
-//				$GLOBALS['cms']['cache_static'] = true;
-
-			include_once("funcs/templates/assign.php");
-
-			$bors->config()->set_cache_uri($this->internal_uri());
-			
-			$data = array();
-
-			$data['this'] = $this;
-
-			return template_assign_data("templates/BorsClassCategoryBody.html", $data);
 		}
 
 		function direct_subcats_ids()
