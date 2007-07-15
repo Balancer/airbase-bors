@@ -361,6 +361,8 @@
 			else
 				switch($type)
 				{
+					case 'raw':
+						break;
 					case 'int':
 						if(!preg_match('!^0x[\da-fA-F]+$!', $value))
 							if(!preg_match('!^\d+$!', $value))

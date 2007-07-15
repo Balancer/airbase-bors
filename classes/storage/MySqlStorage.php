@@ -235,7 +235,6 @@
 				else
 					$map = @$mysql_map[$field_name];
 
-
 				$db = $object->main_db_storage();
 				if(!$db)
 					$db = $GLOBALS['cms']['mysql_database'];
@@ -255,6 +254,21 @@
 					$map	= $m[2];
 				}
 
+				global $back_functions;
+				$back_func = NULL;
+				if(preg_match("!^(.+)\|(.+$)!", $map, $m)) // Name(ID)|html_entity_decode
+				{
+					$map = $m[1];
+					$back_func = $back_functions[$m[2]];
+				}
+
+				$mysql_func = NULL;
+				if(preg_match("!^(\w+)\((\w+\(\w+\))\)$!", $map, $m)) // Name(ID)|html_entity_decode
+				{
+					$map = $m[2];
+					$mysql_func = $back_functions[$m[1]];
+				}
+
 //				echo $map."</br>";
 
 				if(!preg_match("!^(\w+)\(([^\(\)]+)\)$!", $map, $m))
@@ -265,17 +279,22 @@
 				$dbh = &new DataBase($db);
 				
 				$store = array();
+				$value = $back_func ? $back_func($object->$field) : $object->$field;
+				if($mysql_func)
+				{
+					$key = $db_field;
+					$dbh->normkeyval($key, $value);
+					$db_field = "raw $db_field";
+					$value = "$mysql_func($value)";
+				}
+				
 				if($object->id())
 				{
-					$dbh->update($table, make_id_field($table, $id_field, $object->id()), array(
-						$db_field => $object->$field,
-					));
+					$dbh->update($table, make_id_field($table, $id_field, $object->id()), array($db_field => $value));
 				}
 				else
 				{
-					$dbh->insert($table, array(
-						$db_field => $object->$field,
-					));
+					$dbh->insert($table, array($db_field => $value));
 					
 					$object->set_id($dbh->get_last_id());
 //					echo "Set id to ".$dbh->get_last_id()."<br />";
@@ -313,3 +332,10 @@
 		}
 		return $out;
 	}
+
+	global $back_functions;
+	$back_functions = array(
+		'html_entity_decode' => 'htmlspecialchars',
+		'UNIX_TIMESTAMP' => 'FROM_UNIXTIME',
+	);
+

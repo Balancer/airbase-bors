@@ -51,7 +51,7 @@
 				foreach($_GET as $key => $value)
 					$q .= ($q=="") ? "?$key=$value" : "&$key=$value";
 
-			for($i = 1; $i <= intval($limit/2); $i++)
+			for($i = 1; $i <= min(intval($limit/2), $total_pages); $i++)
 				$pages[] = get_page_link($obj, $i, "", $q);
 			
 			if($total_pages > $limit)
@@ -59,9 +59,11 @@
 				$pages[] = "...";
 				$limit--;
 			}
+
+			$current_page = $obj->page();
 			
 			for($i = max(intval($limit/2)+1, $total_pages - intval($limit/2) + 1); $i <= $total_pages; $i++)
-				$pages[] = get_page_link($obj, $i, "", $q);
+				$pages[] = get_page_link($obj, $i, $i==$current_page ? 'current_page' : 'select_page', $q);
 		}
 		
 //		print_r($pages);
