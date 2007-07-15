@@ -82,7 +82,7 @@
 				return "";
 
 			include_once('funcs/design/page_split.php');
-			return join(" ", pages_show($this, $this->total_pages(), 5));
+			return join(" ", pages_show($this, $this->total_pages(), 5, false));
 		}
 
 		var $stb_last_poster_name;
@@ -96,8 +96,11 @@
 				class_load('forum_forum', $this->forum_id()),
 				class_load('forum_printable', $this->id()),
 			);
+
 			foreach($this->all_users() as $user_id)
 				$res[] = class_load('forum_user', $user_id);
+			
+			return $res;
 		}
 
 		function forum() { return class_load('forum_forum', $this->forum_id()); }
@@ -112,6 +115,13 @@
 		function field_num_replies_storage() { return 'punbb.topics.num_replies(id)'; }
 		function num_replies() { return $this->stb_num_replies; }
 
+		var $stb_first_post_id = '';
+		function set_first_post_id($first_post_id, $db_update = false) { $this->set("first_post_id", $first_post_id, $db_update); }
+		function field_first_post_id_storage() { return 'punbb.topics.first_pid(id)'; }
+		function first_post_id() { return $this->stb_first_post_id; }
+		
+		function first_post() { return class_load('forum_post', $this->first_post_id()); }
+
 		function get_all_posts_id()
 		{
 			$db = &new DataBase('punbb');
@@ -121,11 +131,18 @@
 		function all_users()
 		{
 			$db = &new DataBase('punbb');
-			return $db->get_array("SELECT user_id FROM posts WHERE topic_id={$this->id}");
+			return $db->get_array("SELECT DISTINCT poster_id FROM posts WHERE topic_id={$this->id}");
 		}
 		
 		function cache_static()
 		{
 			return class_load('forum_forum', $this->forum_id())->is_public_access() ? 86400*90 : 0;
 		}
+		
+		function base_uri()
+		{
+			return $this->forum()->category()->category_base_full();
+		}
+		
+		
 	}

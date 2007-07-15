@@ -426,6 +426,9 @@ if (isset($_POST['form_sent']))
 			index_body($new_pid, $message);
 
 			update_forum($fid);
+
+			include_once("classes/objects/Bors.php");
+			class_load('forum_topic', $new_tid)->cache_clean();
 		}
 
 		// If the posting user is logged in, increment his/her post count
@@ -436,28 +439,39 @@ if (isset($_POST['form_sent']))
 		}
 
 		// Attachment Mod Block Start
-		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name'])){
+		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))
+		{
 			//fetch the rules for this forum for this group
-			$attach_result = $db->query("SELECT rules,size,file_ext FROM {$db->prefix}attach_2_rules WHERE group_id={$pun_user['g_id']} AND (forum_id={$cur_posting['id']} OR forum_id=0) ORDER BY forum_id DESC LIMIT 1")
-				or error('Unable to fetch attachment rules',__FILE__,__LINE__,$db->error());	
-			if($db->num_rows($attach_result)!=0||$pun_user['g_id']==PUN_ADMIN){
-				$attach_rules=0; $attach_size=0; $attach_file_ext=''; // just some defaults to get the parser to stop nagging me if it's an admin :D
-				if($db->num_rows($attach_result)!=0)
-					list($attach_rules,$attach_size,$attach_file_ext)=$db->fetch_row($attach_result);
+
+//			$attach_result = $db->query("SELECT rules,size,file_ext FROM {$db->prefix}attach_2_rules WHERE group_id={$pun_user['g_id']} AND (forum_id={$cur_posting['id']} OR forum_id=0) ORDER BY forum_id DESC LIMIT 1")
+//				or error('Unable to fetch attachment rules',__FILE__,__LINE__,$db->error());	
+
+//			if($db->num_rows($attach_result)!=0 || $pun_user['g_id']==PUN_ADMIN)
+//			{
+//				$attach_rules=0; $attach_size=0; $attach_file_ext=''; // just some defaults to get the parser to stop nagging me if it's an admin :D
+//				if($db->num_rows($attach_result)!=0)
+//					list($attach_rules,$attach_size,$attach_file_ext)=$db->fetch_row($attach_result);
+					
 				//check so that the user is allowed to upload
-				if(attach_allow_upload($attach_rules,$attach_size,$attach_file_ext,$_FILES['attached_file']['size'],$_FILES['attached_file']['name'])){
+//				if(attach_allow_upload($attach_rules,$attach_size,$attach_file_ext,$_FILES['attached_file']['size'],$_FILES['attached_file']['name']))
+//				{
 					// ok we're allowed to post ... time to fix everything... 
-					if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message))){
+					if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
+					{
 						error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
 					}
-				}else{
+//				}
+//				else
+//				{
 					// no output ... but if you want, enable this error (you really shouldn't need to as this will only happen if someone try to go around the restrictions
-					// error($lang_attach['Not allowed to post attachments']);
-				}
-			}else{
-				// no output ... but if you want, enable this error (you really shouldn't need to as this will only happen if someone try to go around the restrictions
-				// error($lang_attach['Not allowed to post attachments']);
-			}
+//					error('Not allowed to post attachments: error1');
+//				}
+//			}
+//			else
+//			{
+//				// no output ... but if you want, enable this error (you really shouldn't need to as this will only happen if someone try to go around the restrictions
+//				error('Not allowed to post attachments: error2');
+//			}
 		}
 		// Attachment Mod Block End
 

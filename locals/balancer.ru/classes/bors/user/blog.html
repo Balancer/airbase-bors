@@ -1,2 +1,12 @@
-{module name="show/lenta/personal" user_id=$user_id limit=20}
+{if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
 
+{foreach from=$topics item=topic_id}
+{bors_class_load class="forum_topic" id=$topic_id var="t"}
+{assign var="f" value=$t->forum()}
+{assign var="p" value=$t->first_post()}
+{if $f->is_public_access()}
+{include file="xfile:templates/forum/post.html"}
+{/if}
+{/foreach}
+
+{if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}

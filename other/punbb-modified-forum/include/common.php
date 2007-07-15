@@ -30,7 +30,10 @@ define('PUN_DEBUG', 1);
 //define('PUN_SHOW_QUERIES', 1);
 
 if (!defined('PUN_ROOT'))
+{
+	echo 0/0;
 	exit('The constant PUN_ROOT must be defined and point to a valid PunBB installation root directory.');
+}
 
 ini_set('include_path', ini_get('include_path') . ":/var/www/balancer.ru/htdocs/forum/punbb");
 

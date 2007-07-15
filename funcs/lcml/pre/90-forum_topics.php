@@ -27,23 +27,25 @@
         $txt=preg_replace("!(\s|^|\()http://forums\.airbase\.ru/\?showtopic=(\d+)(\s|$|\.|,|\))!me","'$1'.lcml_forum_topics_title('$2').'$3'",$txt);
         $txt=preg_replace("!(\s|^|\()http://forums\.airbase\.ru/\?showtopic=(\d+)&amp;view=findpost&amp;p=(\d+)(\s|$|\.|,|\))!me","'$1'.lcml_forum_topics_post('$2','$3').'$4'",$txt);
 
+        $txt=preg_replace("!(\s|^|\()http://balancer\.ru/.+viewtopic\.php\?id=(\d+)(\s|$|\.|,|\))!me","'$1'.lcml_forum_topics_title('$2').'$3'",$txt);
+        $txt=preg_replace("!(\s|^|\()http://balancer\.ru/.+viewtopic\.php\?pid=(\d+)#p(\d+)!me","'$1'.lcml_forum_post_title('$2')",$txt);
+        $txt=preg_replace("!(\s|^|\()http://balancer\.ru/.+viewtopic\.php\?pid=(\d+)!me","'$1'.lcml_forum_post_title('$2')",$txt);
+
         return $txt;
     }
 
-    function lcml_forum_topics_title($topic)
+    function lcml_forum_topics_title($topic_id)
     {
-        $hts = new DataBaseHTS();
-        $topic = intval($topic);
+		$topic = class_load('forum_topic', intval($topic_id));
 
-        $url="http://forums.airbase.ru/index.php?showtopic=$topic";
-        $res=$hts->dbh->get("SELECT `title` FROM forums_airbase_ru.ib_topics WHERE `tid`='$topic'");
+        return "<a href=\"".$topic->uri()."\">".$topic->title()."</a>";
+    }
 
-        if($res)
-            $title=chop($res);
-        else
-            $title=$url;
-        
-        return "<a href=\"$url\">$title</a>";
+    function lcml_forum_post_title($post_id)
+    {
+		$post = class_load('forum_post', intval($post_id));
+
+        return "<a href=\"".$post->uri()."\">".$post->title()."</a>";
     }
 
     function lcml_forum_topics_post($topic,$post)

@@ -1,0 +1,15 @@
+{assign var=subcats value=$this->direct_subcats()}
+{if $subcats}
+{foreach from=$subcats item=c}
+<dl class="box">
+<dt><a href="{$c->uri()}">{$c->title()}</a></dt>
+	{assign var=subforums value=$c->all_subforums()}
+</dl>
+{/foreach}
+{/if}
+
+{assign var=forums value=$this->direct_subforums()}
+{foreach from=$forums item=f}
+{assign var=subforums value=$f->direct_subforums()}
+{include file="xfile:templates/forums-list.html"}
+{/foreach}
