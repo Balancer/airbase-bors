@@ -13,7 +13,10 @@
 	
 		function BorsBaseDbPage($id)
 		{
-			$this->db = &new DataBase($GLOBALS['cms']['mysql_database']);
+			if(method_exists($this, 'main_db_storage'))
+				$this->db = &new DataBase($this->main_db_storage());
+			else
+				$this->db = &new DataBase($GLOBALS['cms']['mysql_database']);
 			
 			parent::BorsBasePage($id);
 
