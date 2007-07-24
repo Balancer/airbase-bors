@@ -17,8 +17,7 @@
 
 		
     	if (!in_array('id', array_keys($params))) {
-        	$smarty->trigger_error("bors_class_load: missing 'id' parameter");
-	        return;
+			$id = NULL;
     	}
 
 //		echo "smarty: class_load($class, $id)<br />";

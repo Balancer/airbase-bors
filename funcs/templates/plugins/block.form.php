@@ -28,7 +28,7 @@
 				
 			echo "<form";
 			
-			foreach(split(' ', 'action method name class style enctype') as $p)
+			foreach(split(' ', 'act action method name class style enctype') as $p)
 				if(!empty($$p))
 					echo " $p=\"{$$p}\"";
 			
@@ -42,7 +42,8 @@
 			echo "<input type=\"hidden\" name=\"ref\" value=\"$ref\" />\n";
 
 		if(!empty($action))
-			echo "<input type=\"hidden\" name=\"action\" value=\"$action\" />\n";
+			echo "<input type=\"hidden\" name=\"act\" value=\"$act\" />\n";
+			
 		echo "<input type=\"hidden\" name=\"class_name\" value=\"$name\" />\n";
 		if(!empty($id))
 			echo "<input type=\"hidden\" name=\"id\" value=\"$id\" />\n";

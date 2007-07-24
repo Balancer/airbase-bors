@@ -33,17 +33,20 @@
 //			$processed2 = $form->preParseProcess();
 //			if($processed2 === true)
 //				return true;
-//			exit("x");
+
+//			print_r($_GET); exit("x");
 									   			
-			if(empty($_GET['action']))
+			if(empty($_GET['act']))
 				$method = 'onAction';
 			else
-				$method = 'onAction_'.$_GET['action'];
-				
+				$method = 'onAction_'.$_GET['act'];
+
 			global $bors;
+//			print_r($form); exit();
 				
 			if(method_exists($form, $method))
 			{
+//				exit("Yes!");
 				$result = $form->$method($_GET);
 				if($result === true)
 					return true;
