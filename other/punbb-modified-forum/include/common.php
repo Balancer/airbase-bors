@@ -22,6 +22,34 @@
 
 ************************************************************************/
 
+	global $client;
+	$client['is_bot'] = false;
+	foreach(array(
+			'yahoo' => 'Yahoo',
+			'rambler' => 'Rambler',
+			'google' => 'Google',
+			'yandex' => 'Yandex',
+		) as $pattern => $bot)
+	{
+		if(preg_match("!".$pattern."!i", $_SERVER['HTTP_USER_AGENT']))
+		{
+			$client['is_bot'] = $bot;
+			break;
+		}
+	}
+
+	if($client['is_bot'] && rand(0,100) < 50)
+	{
+		header('HTTP/1.1 503 Service Temporarily Unavailable');
+		header('Status: 503 Service Temporarily Unavailable');
+		header('Retry-After: 600');
+
+		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/blocked-bots.log", $_SERVER['REQUEST_URI']."/".@$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
+		@chmod($file, 0666);
+		exit("Service Temporarily Unavailable");
+	}
+
+
 // Enable DEBUG mode by removing // from the following line
 define('PUN_DEBUG', 1);
 

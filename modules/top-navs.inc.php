@@ -5,7 +5,7 @@
 	
 	    require_once("funcs/Cache.php");
         $ch = &new Cache();
-        if($ch->get('top_navs-v6', $uri))
+        if($ch->get('top_navs-v7', $uri))
         {
 			echo $ch->last();
 			return;
