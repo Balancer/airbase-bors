@@ -25,9 +25,11 @@
 		foreach($dbu1->get_array("SELECT DISTINCT user_id FROM `reputation_votes`", true, 720) as $user)
 		{
 			$total = 0;
+			$pure = 0;
 			foreach($dbu1->get_array("SELECT voter_id as id, SUM(score) as sum FROM `reputation_votes` WHERE user_id = $user GROUP BY voter_id") as $v)
 			{
 				$reput = (atan($dbf->get("SELECT reputation FROM users WHERE id={$v['id']}"))*2/pi() + 1)/2;
+				$pure_reput = (atan($dbf->get("SELECT pure_reputation FROM users WHERE id={$v['id']}"))*2/pi() + 1)/2;
 				$group = $dbf->get("SELECT group_id FROM users WHERE id={$v['id']}");
 				
 				$weight = $grw[$group];
@@ -40,14 +42,15 @@
 				if($dbf->get("SELECT num_posts FROM users WHERE id={$v['id']}") < 50)
 					$weight = 0;
 				
-				$sum = atan($v['sum'])*2/pi() * $weight * $reput;
-				$total += $sum;
+				$total += atan($v['sum'])*2/pi() * $weight * $reput;
+				$pure  += atan($v['sum'])*2/pi() * $pure_reput;
 //				echo "$user <- {$v['id']}: s={$v['sum']}, t={$v['total']}, r=$reput, w=$weight  --> $sum\n";
 			}
 
 			$totaln = atan($total)*2/pi();
 			
 			$dbf->query("UPDATE users SET reputation = $total WHERE id = $user");
-			echo $dbf->get("SELECT username FROM users WHERE id=$user")."[$user]: $total ($totaln)\n";
+			$dbf->query("UPDATE users SET pure_reputation = $pure WHERE id = $user");
+//			echo $dbf->get("SELECT username FROM users WHERE id=$user")."[$user]: $total ($totaln)\n";
 		}
 	}

@@ -20,11 +20,16 @@
 		"/user/(\d+)/posts/" => 'user_posts(1)',
 		"/user/(\d+)/posts/index.html" => 'user_posts(1)',
 		"/user/(\d+)/posts/index\-(\d+)\.html" => 'user_posts(1,2)',
+		"/user/(\d+)/posts/(\d+)\.html" => 'user_posts(1,2)',
+
 
 		"/user/(\d+)/reputation/" => 'user_reputation(1)',
 		"/user/(\d+)/reputation/(.+)" => 'user_reputation(1,2)',
 		"/user/(\d+)/reputation\.html" => 'user_reputation(1)',
 		"/user/(\d+)/reputation\.html(.+)" => 'user_reputation(1,2)',
+
+		"(/)users/?" => 'users_main',
+		"(/users/)toprep/?" => 'users_toprep',
 
 		"(/forum/)topic/\d+/(\d+),new/" => 'forum_topic(2)',
 

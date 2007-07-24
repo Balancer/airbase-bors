@@ -29,7 +29,7 @@
 
 		$reputation_value = $db->get("SELECT reputation FROM users WHERE id = $user_id");
 		
-		$reputation_abs = intval(0.9 + 20*atan(abs($reputation_value)/4)/pi())/2;
+		$reputation_abs = intval(0.99 + 20*atan($reputation_value*$reputation_value/200)/pi())/2;
 
 		if($reputation_value > 0)
 		{
