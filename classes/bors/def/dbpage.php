@@ -17,7 +17,7 @@
 		{
 			$tab = $this->main_table_storage();
 			if(!$tab)
-				exit("Try to gent new instance with empty main table in class ".__FILE__);
+				exit("Try to gent new instance with empty main table in class ".__FILE__.":".__LINE__);
 			
 			$this->db->insert($tab, array());
 			$this->set_id($this->db->get_last_id());

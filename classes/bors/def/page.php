@@ -42,6 +42,11 @@
 			$GLOBALS['cms']['templates']['data'][$var_name] = $value;
 		}
 
+		function template_data($var_name)
+		{
+			return @$GLOBALS['cms']['templates']['data'][$var_name];
+		}
+
 		function _class_dir()
 		{
 			if(!method_exists($this, '_class_file'))
@@ -64,4 +69,13 @@
 
 		function _queries() { return array(); }
 		function _global_queries() { return array(); }
-}
+		
+		function change_time() { return max($this->create_time(), $this->modify_time()); }
+
+		function error_message($message)
+		{
+			require_once('funcs/modules/messages.php');
+			return error_message($message);
+		}
+	}
+

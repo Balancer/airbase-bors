@@ -131,20 +131,24 @@
 		return pure_class_load($class_name, $id, $page);
 	}
 
-	function pure_class_load($class_name, $id, $page)
+	function pure_class_load($class_name, $id, $page, $use_cache = true)
 	{
 		if(!class_include($class_name))
 			return NULL;
 
-		if($obj = load_cached_object($class_name, $id, $page))
+		if($use_cache && $obj = load_cached_object($class_name, $id, $page))
 			return $obj;
 		
 		$obj = &new $class_name($id);
+
+		if(preg_match("!^(\w+_)([^_]+)$!", $class_name, $m) && $m[2] != 'config')
+			pure_class_load($m[1].'config', &$obj, 1, false);
 		
 		if($page > 1)
 			$obj->set_page($page);
 
-		save_cached_object($obj);
+		if($use_cache)
+			save_cached_object($obj);
 			
 		return $obj;
 	}
