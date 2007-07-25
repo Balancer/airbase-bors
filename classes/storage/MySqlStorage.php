@@ -15,23 +15,37 @@
 
 		function load($object)
 		{
-			static $total = 0;
-			static $stb_total = 0;
+//			static $total = 0;
+//			static $stb_total = 0;
 		
 			if(!$object->id())
 				return;
 		
 			global $mysql_map;
 
-			$total += sizeof(get_object_vars($object));
-//			echo "MySqlStorage.load: {$object->internal_uri()}, size=".sizeof(get_object_vars($object)).", total=$total/$stb_total<br />";
+//			static $count = 0;
+//			$total += sizeof(get_object_vars($object));
+//			echo "MySqlStorage.load: <b>{$object->internal_uri()}</b>, size=".sizeof(get_object_vars($object))."; cnt=".(++$count)."<br />";
 
 //			$GLOBALS['log_level'] = 10;
 
-			$data    = array();
-		
-			foreach(get_object_vars($object) as $field => $value)
+
+			$def_db = $object->main_db_storage();
+
+			if(!$def_db)
+				$def_db = $GLOBALS['cms']['mysql_database'];
+
+			$def_table = $object->main_table_storage();
+
+			global $MySqlStorage_data_cache;
+			$fields = get_object_vars($object);
+			
+			$hash = md5(serialize($fields));
+			if(!($data = @$MySqlStorage_data_cache[$hash]))
 			{
+			  $data    = array();
+			  foreach($fields as $field => $value)
+			  {
 //				echo "--- load $field<br />";
 //TODO:?				if($field{0} != 's' || substr($field, 0, 4) != 'stb_')
 				if(!preg_match('!^stb_(.+)$!', $field, $m))
@@ -39,13 +53,15 @@
 					
 				$name = $m[1];
 
-				$stb_total++;
+//				$stb_total++;
 
 				$field_storage_method_name = "field_{$name}_storage";
-				if(method_exists($object, $field_storage_method_name))
-					$map = $object->$field_storage_method_name();
-				else
-					$map = @$mysql_map[$name];
+				if(!method_exists($object, $field_storage_method_name))
+					continue;
+
+				$map = $object->$field_storage_method_name();
+//				else
+//					$map = @$mysql_map[$name];
 
 //				echo "=== got $map ===</br>";
 
@@ -74,12 +90,7 @@
 //				echo "=== s: $map ===</br>";
 				
 				$db		= '';
-				$def_db = $object->main_db_storage();
-				if(!$def_db)
-					$def_db = $GLOBALS['cms']['mysql_database'];
-								   
 				$table	= '';
-				$def_table = $object->main_table_storage();
 //				echo "$map </br>";
 				if(preg_match("!^(\w+)\.(\w+)\.((\w+)\(([^\(\)]+)\))$!", $map, $m))
 				{
@@ -107,106 +118,121 @@
 				if($sfunc)
 					$field = "$sfunc($field)";
 
-				if($db == $def_db) $db = '';
-				if($table == $def_table) $table = '';
+				if($db == $def_db)
+					$db = '';
+					
+				if($table == $def_table)
+					$table = '';
 
 				$data[$db][$table][$id_field][$field] = $name;
+			  }
+			  ksort($data);
+			  $MySqlStorage_data_cache[$hash] = $data;
 			}
 
 			$oid = addslashes($object->id());
 
-			ksort($data);
-//			echo "<xmp>"; print_r($data); echo "</xmp>";
-			
+//			echo "<xmp>"; print_r(serialize($data)); echo "</xmp>";
+
+			global $MySqlStorage_queries_cache;
 			foreach($data as $db_name => $tables)
 			{
 				if(!$db_name)
 					$db_name = $def_db;
-					
-				ksort($tables);
-//				echo "<xmp>"; print_r($tables); echo "</xmp>";
+
 				$dbh = &new DataBase($db_name);
 				
-				$tab_count = 0;
-				$select = array();
-				$from = "";
-				$where = "";
-				$first_name = "";
-				$added = array();
+				$hash = md5(serialize($tables));
+				$x = @$MySqlStorage_queries_cache[$db_name][$hash];
+				if(!$x)
+				{					
+					ksort($tables);
+//				echo "<xmp>"; print_r($tables); echo "</xmp>";
 				
-				foreach($tables as $table_name => $ids)
-				{
-					if(!$table_name)
-						$table_name = $def_table;
-
-					if(!$table_name)
-						continue;
-						
-					foreach($ids as $id_field => $field_list)
+					$tab_count = 0;
+					$select = array();
+					$from = "";
+					$where = "";
+					$first_name = "";
+					$added = array();
+				
+					foreach($tables as $table_name => $ids)
 					{
-						if(empty($added["$table_name($id_field)"]))
+						if(!$table_name)
+							$table_name = $def_table;
+
+						if(!$table_name)
+							continue;
+						
+						foreach($ids as $id_field => $field_list)
 						{
-							$current_tab = "`t".($tab_count++)."`";
-							if(empty($from))
+							if(empty($added[$table_name.'-'.$id_field]))
 							{
-								$from = "FROM `$table_name` AS $current_tab";
-								$where = "WHERE ".make_id_field($current_tab, $id_field, $object->id());
+								$added[$table_name.'-'.$id_field] = 1;
+							
+								$current_tab = "`t".($tab_count++)."`";
+								if(empty($from))
+								{
+									$from = 'FROM `'.$table_name.'` AS '.$current_tab;
+									$where = 'WHERE '.make_id_field($current_tab, $id_field);
+								}
+								else
+									$from .= ' LEFT JOIN `'.$table_name.'` AS '.$current_tab.' ON ('.make_id_field($current_tab, $id_field).')';
 							}
-							else
-								$from .= " LEFT JOIN `$table_name` AS $current_tab ON (".make_id_field($current_tab, $id_field, $object->id()).")";
-						}
 
-						foreach($field_list as $field => $name)
-						{
-							if(preg_match("!^(\w+)\((\w+)\)$!", $field, $m))
-								$select[] = "{$m[1]}($current_tab.{$m[2]}) AS `$name`";
-							else
-								$select[] = $current_tab.".$field AS `$name`";
+							foreach($field_list as $field => $name)
+							{
+								if(preg_match('!^(\w+)\((\w+)\)$!', $field, $m))
+									$select[] = $m[1].'('.$current_tab.'.'.$m[2].') AS `'.$name.'`';
+								else
+									$select[] = $current_tab.'.'.$field.' AS `'.$name.'`';
 
-							$first_name = $name;
+								$first_name = $name;
+							}
 						}
 					}
-				}
-
-//				$GLOBALS['log_level'] = 10;
-				if(empty($select))
-					return;
 					
-				$result = $dbh->get("SELECT ".join(",", $select)." $from $where", false);
+					$query = 'SELECT '.join(',', $select).' '.$from.' '.$where;
+					$MySqlStorage_queries_cache[$db_name][$hash] = array($query, $first_name);
+//					echo "New: <b>$query</b><br />";
+				}
+				else
+				{
+					list($query, $first_name) = $x;
+//					echo "Cached: <b>$query</b><br />";
+				}
+//				$GLOBALS['log_level'] = 10;
+//				if(empty($select))
+//					return;
+					
+				$result = $dbh->get(str_replace('%MySqlStorageOID%', $oid, $query), false);
 //				$GLOBALS['log_level'] = 2;
 //				echo "res = "; print_r($result); echo "<br />";
 					
-//				if(is_array($result))
 				if(count($result) > 1)
 				{
 					foreach($result as $name => $value)
 					{
-						$pfunc = "";
-						if(preg_match("!^(.+)\|(.+)$!", $name, $m))
+						if(preg_match('!^(.+)\|(.+)$!', $name, $m))
 						{
-							$pfunc	= $m[2];
 							$name	= $m[1];
-							$value = $this->do_func($pfunc, $value);
+							$value = $this->do_func($m[2], $value);
 						}
-						$set_method = "set_".$name;
+						$set_method = 'set_'.$name;
 						$object->$set_method($value, false);
 					}
 				}
 				else
 				{
-					$pfunc = "";
-					if(preg_match("!^(.+)\|(.+)$!", $first_name, $m))
+					if(preg_match('!^(.+)\|(.+)$!', $first_name, $m))
 					{
-						$pfunc	= $m[2];
 						$first_name	= $m[1];
-						$result = $this->do_func($pfunc, $result);
+						$result = $this->do_func($m[2], $result);
 					}
-					$set_method = "set_".$first_name;
+					$set_method = 'set_'.$first_name;
 					$object->$set_method($result, false);
 				}
 			}
-			
-//			$GLOBALS['log_level'] = 2;
 		}
 
 		function do_func($func, $str)
@@ -316,10 +342,11 @@
 		$mysql_map[$key] = $map;
 	}
 
-	function make_id_field($table, $id_field, $oid)
+	function make_id_field($table, $id_field, $oid = '%MySqlStorageOID%')
 	{
 		if(strpos($id_field, '=') === false)
 			return "$table.$id_field = '".addslashes($oid)."'";
+
 		if(strpos($id_field, ' ') === false)
 		{
 			$out =  preg_replace("!(\w+)=(\w+)!", "$table.$1=$2", $id_field);
