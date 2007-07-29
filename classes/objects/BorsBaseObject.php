@@ -41,7 +41,7 @@
 						continue;
 
 					$this->addMethod("function $name() { return \$this->$field; }");
-					$this->addMethod("function set_$name(\$value, \$db_update = true) { \$this-set(\"\$value\", \$value, \$db_update); }");
+					$this->addMethod("function set_$name(\$value, \$db_update) { \$this-set(\"\$value\", \$value, \$db_update); }");
 				}
 			}
 */			
@@ -51,7 +51,7 @@
 			$this->load();
 		}
 
-		function set($field, $value, $db_update = true)
+		function set($field, $value, $db_update)
 		{
 			global $bors;
 			
@@ -68,7 +68,7 @@
 
 
 		var $stb_create_time = NULL;
-		function set_create_time($unix_time, $db_update=false) { $this->set("create_time", $unix_time, $db_update); }
+		function set_create_time($unix_time, $db_update) { $this->set("create_time", $unix_time, $db_update); }
 		function create_time()
 		{
 			if($this->stb_create_time)
@@ -81,7 +81,7 @@
 		}
 
 		var $stb_modify_time = NULL;
-		function set_modify_time($unix_time, $db_update=true) { $this->set("modify_time", $unix_time, $db_update); }
+		function set_modify_time($unix_time, $db_update) { $this->set("modify_time", $unix_time, $db_update); }
 		function modify_time()
 		{
 			if($this->stb_modify_time)
@@ -92,7 +92,7 @@
 
 		var $stb_title = '';
 		function title() { return $this->stb_title/* ? $this->stb_title : $this->internal_uri()*/; }
-		function set_title($new_title, $db_update=true) { $this->set("title", $new_title, $db_update); }
+		function set_title($new_title, $db_update) { $this->set("title", $new_title, $db_update); }
 
 		var $page = '';
 		function page() { return $this->page; }
@@ -218,33 +218,33 @@
 		function is_cache_disabled() { return true; }
 
 		var $stb_description = NULL;
-		function set_description($description, $db_update=true) { $this->set("description", $description, $db_update); }
+		function set_description($description, $db_update) { $this->set("description", $description, $db_update); }
 		function description() { return $this->stb_description; }
 
 		var $stb_nav_name = NULL;
-		function set_nav_name($nav_name, $db_update=true) { $this->set("nav_name", $nav_name, $db_update); }
+		function set_nav_name($nav_name, $db_update) { $this->set("nav_name", $nav_name, $db_update); }
 		function nav_name() { return !empty($this->stb_nav_name) ? $this->stb_nav_name : $this->title(); }
 
 		var $stb_source = NULL;
-		function set_source($source, $db_update=true) { $this->set("source", $source, $db_update); }
+		function set_source($source, $db_update) { $this->set("source", $source, $db_update); }
 		function source() { return $this->stb_source; }
 
 		var $stb_template = NULL;
-		function set_template($template, $db_update=true) { $this->set("template", $template, $db_update); }
+		function set_template($template, $db_update) { $this->set("template", $template, $db_update); }
         function template() { return $this->stb_template ? $this->stb_template : @$GLOBALS['cms']['default_template']; }
 
 		var $stb_owner_id = NULL;
-		function set_owner_id($owner_id, $db_update=true) { $this->set("owner_id", $owner_id, $db_update); }
+		function set_owner_id($owner_id, $db_update) { $this->set("owner_id", $owner_id, $db_update); }
 		function owner_id() { return $this->stb_owner_id; }
 
 		function owner() { return class_load('forum_user', $this->owner_id()); }
 
 		var $stb_cr_type = NULL;
-		function set_cr_type($cr_type, $db_update=true) { $this->set("cr_type", $cr_type, $db_update); }
+		function set_cr_type($cr_type, $db_update) { $this->set("cr_type", $cr_type, $db_update); }
 		function cr_type() { return $this->stb_cr_type; }
 	
 		var $stb_level = NULL;
-		function set_level($level, $db_update=true) { $this->set("level", $level, $db_update); }
+		function set_level($level, $db_update) { $this->set("level", $level, $db_update); }
 		function level() { return $this->stb_level; }
 
 		function preShowProcess() {	return false; }
@@ -293,7 +293,7 @@
 
 		var $stb_type_id;
 		function type_id() { return $this->stb_type_id; }
-		function set_type_id($type_id, $db_update = false) { $this->set("type_id", $type_id, $db_update); }
+		function set_type_id($type_id, $db_update) { $this->set("type_id", $type_id, $db_update); }
 
 		function need_access_level() { return 0; }
 	

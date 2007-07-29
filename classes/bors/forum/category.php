@@ -8,12 +8,12 @@
 
 		var $stb_parent_category_id = '';
 		function parent_category_id() { return $this->stb_parent_category_id; }
-		function set_parent_category_id($parent_category_id, $db_update = false) { $this->set("parent_category_id", $parent_category_id, $db_update); }
+		function set_parent_category_id($parent_category_id, $db_update) { $this->set("parent_category_id", $parent_category_id, $db_update); }
 		function field_parent_category_id_storage() { return 'punbb.categories.parent(id)'; }
 
 		var $stb_category_base = '';
 		function category_base() { return $this->stb_category_base; }
-		function set_category_base($category_base, $db_update = false) { $this->set("category_base", $category_base, $db_update); }
+		function set_category_base($category_base, $db_update) { $this->set("category_base", $category_base, $db_update); }
 		function field_category_base_storage() { return 'punbb.categories.base_uri(id)'; }
 
 		function category_base_full()
