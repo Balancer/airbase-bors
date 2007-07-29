@@ -317,6 +317,7 @@
 				if($object->id())
 				{
 					$dbh->update($table, make_id_field($table, $id_field, $object->id()), array($db_field => $value));
+//					echo 0/0;
 				}
 				else
 				{

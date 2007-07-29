@@ -6,7 +6,7 @@
 
 		var $stb_forum_id = '';
 		function forum_id() { return $this->stb_forum_id; }
-		function set_forum_id($forum_id, $db_update = false) { $this->set("forum_id", $forum_id, $db_update); }
+		function set_forum_id($forum_id, $db_update) { $this->set("forum_id", $forum_id, $db_update); }
 		function field_forum_id_storage() { return 'punbb.topics.forum_id(id)'; }
 		
 		function field_title_storage() { return 'punbb.topics.subject(id)'; }
@@ -87,7 +87,7 @@
 
 		var $stb_last_poster_name;
 		function last_poster_name() { return $this->stb_last_poster_name; }
-		function set_last_poster_name($last_poster_name, $db_update = false) { $this->set("last_poster_name", $last_poster_name, $db_update); }
+		function set_last_poster_name($last_poster_name, $db_update) { $this->set("last_poster_name", $last_poster_name, $db_update); }
 		function field_last_poster_name_storage() { return 'punbb.topics.last_poster(id)'; }
 
 		function cache_parents()
@@ -106,17 +106,17 @@
 		function forum() { return class_load('forum_forum', $this->forum_id()); }
 
 		var $stb_author_name = '';
-		function set_author_name($author_name, $db_update = false) { $this->set("author_name", $author_name, $db_update); }
+		function set_author_name($author_name, $db_update) { $this->set("author_name", $author_name, $db_update); }
 		function field_author_name_storage() { return 'punbb.topics.poster(id)'; }
 		function author_name() { return $this->stb_author_name; }
 
 		var $stb_num_replies = '';
-		function set_num_replies($num_replies, $db_update = false) { $this->set("num_replies", $num_replies, $db_update); }
+		function set_num_replies($num_replies, $db_update) { $this->set("num_replies", $num_replies, $db_update); }
 		function field_num_replies_storage() { return 'punbb.topics.num_replies(id)'; }
 		function num_replies() { return $this->stb_num_replies; }
 
 		var $stb_first_post_id = '';
-		function set_first_post_id($first_post_id, $db_update = false) { $this->set("first_post_id", $first_post_id, $db_update); }
+		function set_first_post_id($first_post_id, $db_update) { $this->set("first_post_id", $first_post_id, $db_update); }
 		function field_first_post_id_storage() { return 'punbb.topics.first_pid(id)'; }
 		function first_post_id() { return $this->stb_first_post_id; }
 		

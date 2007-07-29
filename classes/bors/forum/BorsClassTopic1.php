@@ -6,7 +6,7 @@
 
 		var $stb_forum_id = '';
 		function forum_id() { return $this->stb_forum_id; }
-		function set_forum_id($forum_id, $db_update = false) { $this->set("forum_id", $forum_id); }
+		function set_forum_id($forum_id, $db_update) { $this->set("forum_id", $forum_id); }
 		function field_forum_id_storage() { return 'punbb.topics.forum_id(id)'; }
 		
 		function field_title_storage() { return 'punbb.topics.subject(id)'; }

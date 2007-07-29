@@ -38,32 +38,33 @@
 		return $pages;
 	}
 
-	function pages_show($obj, $total_pages, $limit, $show_current = true)
+	function pages_show($obj, $total_pages, $limit, $show_current = true, $current_page_class = 'current_page', $other_page_class = 'select_page')
 	{
 
 		$pages = array();
 		$total_pages = intval($total_pages);
 		$current_page = $show_current ? $obj->page() : -1;
 
-		if($total_pages > 1)
-		{
-			$q = "";
-			if(!empty($_GET))
-				foreach($_GET as $key => $value)
-					$q .= ($q=="") ? "?$key=$value" : "&$key=$value";
+		if($total_pages < 2)
+			return $pages;
 
-			for($i = 1; $i <= min(intval($limit/2), $total_pages); $i++)
-				$pages[] = get_page_link($obj, $i, $i==$current_page ? 'current_page' : 'select_page', $q);
-			
-			if($total_pages > $limit)
-			{
-				$pages[] = "...";
-				$limit--;
-			}
+		$q = "";
+		if(!empty($_GET))
+			foreach($_GET as $key => $value)
+				$q .= ($q=="") ? "?$key=$value" : "&$key=$value";
 
-			for($i = max(intval($limit/2)+1, $total_pages - intval($limit/2) + 1); $i <= $total_pages; $i++)
-				$pages[] = get_page_link($obj, $i, $i==$current_page ? 'current_page' : 'select_page', $q);
-		}
+		$stop = $limit >= $total_pages ? $total_pages : intval($limit / 2);
+
+		for($i = 1; $i <= $stop; $i++)
+			$pages[] = get_page_link($obj, $i, $i==$current_page ? $current_page_class : $other_page_class, $q);
+		
+		if($limit >= $total_pages)
+			return $pages;
+		
+		$pages[] = "...";
+
+		for($i = $total_pages - intval($limit/2) + 1; $i <= $total_pages; $i++)
+			$pages[] = get_page_link($obj, $i, $i==$current_page ? $current_page_class : $other_page_class, $q);
 		
 //		print_r($pages);
 		

@@ -13,9 +13,7 @@
 		$hts = &new DataBaseHTS();
 
 //		$children = $hts->get_data_array($uri, 'child');
-//		$GLOBALS['loglevel'] = 10;
 		$children = $hts->get_children_array_ex($uri, array('order' => 'order asc', 'range' => -1));
-//		$GLOBALS['loglevel'] = 2;
 
 		$data = array();
 	

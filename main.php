@@ -3,6 +3,7 @@
 
 //	exit($_SERVER['REQUEST_URI']);
 
+
 	if($_SERVER['REQUEST_URI'] == '/cms/main.php')
 	{
 		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/main-php-referers.log", @$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
@@ -45,7 +46,6 @@
     ini_set('log_errors', 'On');
 
     require_once("config.php");
-//	require_once('funcs/modules/messages.php');
 
     @header("Content-Type: text/html; charset={$GLOBALS['cms']['charset']}");
     @header('Content-Language: ru');

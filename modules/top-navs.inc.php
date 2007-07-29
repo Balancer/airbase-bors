@@ -78,7 +78,7 @@
 		}
 	
 //		echo "parents for $uri = ".print_r($parents, true)."<br/>";
-        $links = array();
+		$links = array();
 
         foreach($parents as $parent)
         {

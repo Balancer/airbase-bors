@@ -462,3 +462,8 @@
 			return new DataBase($db);
 		}
 	}
+
+	function loglevel($n)
+	{
+		$GLOBALS['log_level'] = $n;
+	}

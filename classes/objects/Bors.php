@@ -29,10 +29,11 @@
 				
 			foreach($this->changed_objects as $name => $obj)
 			{
+				echo "<b>Update $name</b><br />";
+			
 				if(!$obj->id())
-					$obj->set_create_time(time(), true);
+					$obj->new_instance();
 					
-				$obj->set_modify_time(time(), true);
 				$this->config()->storage()->save($obj);
 			}
 		}
