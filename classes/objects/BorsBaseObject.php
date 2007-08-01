@@ -100,6 +100,11 @@
 
 		function base_uri() { return 'http://balancer.ru/'; }
 
+		function url($page = 1)
+		{
+			return $this->uri($page);
+		}
+		
 		function uri($page = 1)
 		{
 			if($page < 1)

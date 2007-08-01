@@ -22,6 +22,9 @@
 
 			if(!($qlist = $this->_global_queries()))
 				return;
+
+			$save_cached = $GLOBALS['cms']['cache_disabled'];
+			$GLOBALS['cms']['cache_disabled'] = false;
 				
 			foreach($qlist as $qname => $q)
 			{
@@ -37,5 +40,7 @@
 					
 				$GLOBALS['cms']['templates']['data'][$qname] = $this->db->get_array($q, false, $cache);
 			}
+			
+			$GLOBALS['cms']['cache_disabled'] = $save_cached;
 		}
 	}
