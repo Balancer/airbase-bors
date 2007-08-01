@@ -43,8 +43,9 @@
             if($this->col >= $this->cols)
             { 
                 if($this->row > 0)
-                    error_log_translate_warning(__FILE__."[".__LINE__."] Cols (".($this->col+1).") in line {$this->row} greater then maximum in one of previous lines ({$this->cols})!");
-                $this->cols = $this->col + 1;
+                    error_log_translate_warning(__FILE__."[".__LINE__."] Cols (".($this->col+1).") in line {$this->row} greater then maximum in one of previous lines ({$this->cols})!".(0/0));
+       
+	            $this->cols = $this->col + 1;
 
                 if($this->rows == 0)
                     $this->rows = 1;
@@ -56,14 +57,18 @@
 
         function next_col()
         {
-            $this->col++;
+			if(@$this->col_spans[$this->row][$this->col] > 1)
+	            $this->col += $this->col_spans[$this->row][$this->col];
+			else
+    	        $this->col++;
         }
 
         function new_row()
         {
+            $this->set_max();
 //            echo "{$this->row} {$this->col} {$this->cols}\n";
-            if($this->row > 0 && $this->col != $this->cols)
-                error_log_translate_warning(__FILE__."[".__LINE__."] Cols (".($this->col).") in line {$this->row} less then maximum in one of previous lines ({$this->cols})!");
+            if($this->row > 0 && $this->col != $this->cols-1)
+                error_log_translate_warning(__FILE__."[".__LINE__."] Cols ({$this->col}) in line {$this->row} less then maximum in one of previous lines ({$this->cols})!");
             $this->col = 0;
             $this->row++;
         }
@@ -82,19 +87,16 @@
 
         function setColSpan($col_span)
         {
-            $this->set_max();
             $this->col_spans[$this->row][$this->col] = $col_span;
         }
 
-        function setRolSpan($rol_span)
+        function setRowSpan($rowe_span)
         {
-            $this->set_max();
-            $this->rol_spans[$this->row][$this->col] = $rol_span;
+            $this->row_spans[$this->row][$this->col] = $row_span;
         }
 
         function setHead($head_bit=1)
         {
-            $this->set_max();
             $this->heads[$this->row][$this->col] = $head_bit;
         }
 
@@ -104,10 +106,11 @@
             for($r=0; $r < $this->rows; $r++)
             {
                 $out .= "<tr>";
-                for($c=0; $c < $this->cols; $c++)
+                for($c=0; $c < $this->cols; $c+=@$this->col_spans[$r][$c] > 1 ? $this->col_spans[$r][$c] : 1)
                 {
                     $tx = !empty($this->heads[$r][$c]) ? 'th' : 'td';
-                    $out .= "<$tx>".$this->data[$r][$c]."</$tx>";
+					$colspan = @$this->col_spans[$r][$c] > 1 ? " colSpan=\"".$this->col_spans[$r][$c]."\"" : "";
+                    $out .= "<$tx$colspan>".$this->data[$r][$c]."</$tx>";
                 }
                 $out .= "</tr>\n";
             }
@@ -115,4 +118,3 @@
             return $out;
         }
     }
-?>

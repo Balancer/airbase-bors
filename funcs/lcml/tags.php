@@ -230,7 +230,7 @@
             if(preg_match("!^border$!",$param))   { $params['border']=1; continue;}
             if(preg_match("!^noborder$!",$param)) { $params['border']=0; continue;}
             if(preg_match("!^nohref$!",$param)) { $params['nohref']=true; continue;}
-            if(preg_match("!^(\w+)=\"(.*?)\"$!s",$param,$m)) { $params[$m[1]]=$m[2]; continue;}
+//            if(preg_match("!^(\w+)=\"([^\"]+)\"$!s",$param,$m)) { $params[$m[1]]=$m[2]; continue;}
             if(empty($params['url']))
 			{
 				if(preg_match("!\"(.+)\"!", $param, $m))
@@ -239,6 +239,13 @@
 	                $params['url'] = $param;
 			}
         }
+
+		if(preg_match_all("!(\w+)=\"([^\"]+)\"!", $in, $match, PREG_SET_ORDER))
+		{
+//			$params['match'] = print_r($match, true);
+			foreach($match as $m)
+				$params[$m[1]] = $m[2];
+		}
 
 //	echo "nohref={$params['nohref']}<br />";
 

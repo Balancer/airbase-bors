@@ -29,7 +29,7 @@
 		
 			$db = &new DataBase('punbb');
 //			$GLOBALS['log_level'] = 10;
-			if($_GET['type'] == 'm')
+			if(@$_GET['type'] == 'm')
 				$topics = find_in_posts($query);
 			else
 				$topics = find_in_topics($query);

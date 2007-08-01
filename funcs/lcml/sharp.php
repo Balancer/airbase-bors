@@ -18,9 +18,7 @@
 
         for($i=0, $count = count($array); $i < $count; $i++)
         {
-		
-		
-            $s = $array[$i];
+            $s = @$array[$i];
 
 //			$out .= "test $i: >=$s<=".print_r($array,true)."|".print_r($mask_array,true);
 

@@ -27,16 +27,16 @@
 		}
 	}
 
-	if($client['is_bot'] && rand(0,100) < 50)
-	{
-		header('HTTP/1.1 503 Service Temporarily Unavailable');
-		header('Status: 503 Service Temporarily Unavailable');
-		header('Retry-After: 600');
+//	if($client['is_bot'] && rand(0,100) < 30)
+//	{
+//		header('HTTP/1.1 503 Service Temporarily Unavailable');
+//		header('Status: 503 Service Temporarily Unavailable');
+//		header('Retry-After: 600');
 
-		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/blocked-bots.log", $_SERVER['REQUEST_URI']."/".@$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
-		@chmod($file, 0666);
-		exit("Service Temporarily Unavailable");
-	}
+//		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/blocked-bots.log", $_SERVER['REQUEST_URI']."/".@$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
+//		@chmod($file, 0666);
+//		exit("Service Temporarily Unavailable");
+//	}
 	
     list($usec, $sec) = explode(" ",microtime());
     $GLOBALS['stat']['start_microtime'] = ((float)$usec + (float)$sec);

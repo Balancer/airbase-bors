@@ -29,7 +29,7 @@
 				
 			foreach($this->changed_objects as $name => $obj)
 			{
-				echo "<b>Update $name</b><br />";
+//				echo "<b>Update $name</b><br />";
 			
 				if(!$obj->id())
 					$obj->new_instance();

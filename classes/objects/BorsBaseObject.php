@@ -304,4 +304,6 @@
 		{
 			return false;
 		}
+		
+		function postSave() { }
 	}

@@ -35,3 +35,30 @@
 	{
 		return "<style ".make_enabled_params($params, 'type').">$inner</style>";
 	}
+
+	function lp_td($inner, $params)
+	{
+		return "<td ".make_enabled_params($params, 'style').">".lcml($inner)."</td>";
+	}
+
+	function lp_tabtr($inner, $params)
+	{
+		return "<tr>".lcml($inner)."</tr>";
+	}
+
+	function lp_table($inner, $params)
+	{
+		return "<table ".make_enabled_params($params, 'style border').">".lcml($inner)."</table>";
+	}
+
+	function lp_html_a($inner, $params)
+	{
+		$params['href'] = preg_replace("!javascript!", "жабаскрипт", $params['href']);
+		return "<a ".make_enabled_params($params, 'href style').">".lcml($inner)."</a>";
+	}
+
+	function lt_html_img($params)
+	{
+		$params['src'] = preg_replace("!javascript!", "жабаскрипт", $params['src']);
+		return "<img ".make_enabled_params($params, 'src align style')." />";
+	}
