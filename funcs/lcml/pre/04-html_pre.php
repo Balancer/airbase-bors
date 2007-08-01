@@ -8,8 +8,14 @@
 		
 		$txt = preg_replace("!</p>!","", $txt);
 		$txt = preg_replace("!<p>!","<br /><br />", $txt);
+		$txt = preg_replace("!<tr!","<tabtr", $txt);
+		$txt = preg_replace("!</tr!","</tabtr", $txt);
+
+		$txt = preg_replace("!<img !","<html_img ", $txt);
+		$txt = preg_replace("!<a !","<html_a ", $txt);
+		$txt = preg_replace("!</a>!","</html_a>", $txt);
 	
-		foreach(split(' ','b br code embed hr i li object param pre s u ul xmp') as $tag)
+		foreach(split(' ','b br code embed hr i li object param pre s u ul xmp tabtr table td html_img html_a') as $tag)
 		{
 			$txt = preg_replace("!<$tag>!","[$tag]", $txt);
 			$txt = preg_replace("!<$tag\s+/>!","[$tag]", $txt);

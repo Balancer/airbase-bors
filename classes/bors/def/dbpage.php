@@ -24,10 +24,13 @@
 			$this->set_create_time(time(), true);
 			$this->set_modify_time(time(), true);
 		}
+
+		function uri2id($id) { return $id; }
 	
 		function def_dbpage($id)
 		{
 			$this->db = &new DataBase($this->main_db_storage());
+			$id = $this->uri2id($id);
 			
 			parent::def_page($id);
 

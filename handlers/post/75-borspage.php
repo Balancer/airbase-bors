@@ -63,6 +63,7 @@
 
 				
 				$bors->changed_save();
+				$obj->postSave();
 
 //				print_r($form);
 
@@ -88,6 +89,7 @@
 			}
 
 			$bors->changed_save();
+			$obj->postSave();
 
 //			print_r($_FILES);
 //			phpinfo();

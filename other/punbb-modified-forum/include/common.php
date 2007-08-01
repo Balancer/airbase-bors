@@ -38,7 +38,7 @@
 		}
 	}
 
-	if($client['is_bot'] && rand(0,100) < 50)
+/*	if($client['is_bot'] && rand(0,100) < 50)
 	{
 		header('HTTP/1.1 503 Service Temporarily Unavailable');
 		header('Status: 503 Service Temporarily Unavailable');
@@ -48,7 +48,7 @@
 		@chmod($file, 0666);
 		exit("Service Temporarily Unavailable");
 	}
-
+*/
 
 // Enable DEBUG mode by removing // from the following line
 define('PUN_DEBUG', 1);

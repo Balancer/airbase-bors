@@ -36,7 +36,7 @@
     function lp_csv($txt, $params)
     {
 
-        $tab = new bcsTable();
+        $tab = &new bcsTable();
 
         if(!empty($params['width']))
             $tab->table_width($params['width']);
@@ -44,19 +44,27 @@
 //        if(!empty($params['noborder']))
 //            echo $params['noborder'];
             
-        foreach(split("\n",$txt) as $s)
+        foreach(split("\n", $txt) as $s)
         {
-            if($s)
+            if($s = trim($s))
             {
-                foreach(csv_explode($s,';') as $d)
+                foreach(csv_explode($s, ';') as $d)
                 {
-                    if($d && $d{0} == '*')
+                    if(preg_match("!^\*(.+)$!", $d, $m))
                     {
-                        $d = substr($d,1);
+                        $d = trim($m[1]);
                         $tab->setHead();
                     }
-                    if($d=='')
+
+                    if(preg_match("!^\|(\d+)(.+)$!", $d, $m))
+                    {
+                        $d = trim($m[2]);
+                        $tab->setColSpan($m[1]);
+                    }
+					
+                    if($d == '')
                         $d = '&nbsp;';
+						
                     $tab->append(lcml($d));
                 }
                 $tab->new_row();
