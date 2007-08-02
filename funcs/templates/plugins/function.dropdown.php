@@ -19,6 +19,10 @@
 			$list = $obj->$list();
 
 		$current = $obj->$name();
+		
+		if(!$current && !empty($list['default']))
+			$current = $list['default'];
+		
 		foreach($list as $id => $name)
 			echo "<option value=\"$id\"".($id == $current ? " selected=\"selected\"" : "").">$name</option>\n";
 	

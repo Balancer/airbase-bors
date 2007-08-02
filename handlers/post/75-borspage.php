@@ -97,6 +97,9 @@
 
 			if(!empty($_GET['go']))
 			{
+				if($_GET['go'] == "newpage")
+					return go($form->url(1));
+					
 				$_GET['go'] = str_replace('%OBJECT_ID%', $form->id(), $_GET['go']);
 				return go($_GET['go']);
 			}
