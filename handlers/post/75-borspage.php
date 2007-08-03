@@ -101,6 +101,7 @@
 					return go($form->url(1));
 					
 				$_GET['go'] = str_replace('%OBJECT_ID%', $form->id(), $_GET['go']);
+				require_once('funcs/navigation/go.php');
 				return go($_GET['go']);
 			}
 		}
