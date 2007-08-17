@@ -38,6 +38,35 @@
 		return $pages;
 	}
 
+	function pages_start_stop_calculate($current_page, $total_pages, $limit)
+	{
+		if($total_pages <= $limit) // 1, 2, 3
+			return array(2, $total_pages - 1);
+
+		if($current_page > 0)
+			$min = min($current_page - intval($limit/2), $total_pages - $limit);
+		else
+			$min = $total_pages - $limit + 2;
+			
+		$min = max(2, $min);
+		
+		if($min > 2)
+		{
+//			$limit--;
+			$min++;
+		}
+		
+		if($min == 2)
+			$max = max($limit - 2, $min + $limit - 2);
+		else
+			$max = max($limit - 2, $min + $limit - 3);
+			
+		if($max >= $total_pages)
+			$max = $total_pages - 1;
+		
+		return array($min, $max);
+	}
+
 	function pages_show($obj, $total_pages, $limit, $show_current = true, $current_page_class = 'current_page', $other_page_class = 'select_page')
 	{
 
@@ -53,18 +82,25 @@
 			foreach($_GET as $key => $value)
 				$q .= ($q=="") ? "?$key=$value" : "&$key=$value";
 
-		$stop = $limit >= $total_pages ? $total_pages : intval($limit / 2);
+		list($start, $stop) = pages_start_stop_calculate($current_page, $total_pages, $limit);
+//		$pages[] = $start;
+//		$pages[] = $stop;
+		
+		$pages[] = get_page_link($obj, 1, 1==$current_page ? $current_page_class : $other_page_class, $q);
+		
+		if($start > 2)
+			$pages[] = "...";
 
-		for($i = 1; $i <= $stop; $i++)
+		for($i = $start; $i <= $stop; $i++)
 			$pages[] = get_page_link($obj, $i, $i==$current_page ? $current_page_class : $other_page_class, $q);
 		
-		if($limit >= $total_pages)
-			return $pages;
-		
-		$pages[] = "...";
+		if($stop < $total_pages - 2)
+			$pages[] = "...";
 
-		for($i = $total_pages - intval($limit/2) + 1; $i <= $total_pages; $i++)
-			$pages[] = get_page_link($obj, $i, $i==$current_page ? $current_page_class : $other_page_class, $q);
+		$pages[] = get_page_link($obj, $total_pages, $total_pages==$current_page ? $current_page_class : $other_page_class, $q);
+		
+//		for($i = $total_pages - intval($limit/2) + 1; $i <= $total_pages; $i++)
+//			$pages[] = get_page_link($obj, $i, $i==$current_page ? $current_page_class : $other_page_class, $q);
 		
 //		print_r($pages);
 		
