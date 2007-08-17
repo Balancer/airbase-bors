@@ -16,6 +16,7 @@
 		var $stb_body = '';
 		function set_body($body, $db_update) { $this->set("body", $body, $db_update); }
 		function field_body_storage() { return 'punbb.messages.html(id)'; }
+
 		function body()
 		{
 			if(empty($this->stb_body) || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
@@ -31,7 +32,7 @@
 					)
 				);
 	
-				$this->set_body($body);
+				$this->set_body($body, true);
 			}
 			return $this->stb_body; 
 		}

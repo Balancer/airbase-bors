@@ -41,6 +41,17 @@
 		return "<td ".make_enabled_params($params, 'style').">".lcml($inner)."</td>";
 	}
 
+	function lp_span($inner, $params)
+	{
+		return "<span ".make_enabled_params($params, 'style').">".lcml($inner)."</span>";
+	}
+
+
+	function lp_div($inner, $params)
+	{
+		return "<div ".make_enabled_params($params, 'style').">".lcml($inner)."</div>";
+	}
+
 	function lp_tabtr($inner, $params)
 	{
 		return "<tr>".lcml($inner)."</tr>";
