@@ -20,13 +20,18 @@
 
 //		echo get_class($obj);
 
-		$processed = $obj->preParseProcess();
+		$processed = $obj->preParseProcess($_GET);
 		if($processed === true)
 			return true;
 
 		if(!empty($_GET['class_name']))
 		{
 			$form = class_load($_GET['class_name'], @$_GET['id']);
+			
+			$processed = $form->preAction($_GET);
+			if($processed === true)
+				return true;
+			
 			if(!$form->id())
 				$form->new_instance();
 
@@ -63,7 +68,6 @@
 
 				
 				$bors->changed_save();
-				$obj->postSave();
 
 //				print_r($form);
 
@@ -89,7 +93,6 @@
 			}
 
 			$bors->changed_save();
-			$obj->postSave();
 
 //			print_r($_FILES);
 //			phpinfo();
