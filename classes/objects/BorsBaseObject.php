@@ -310,5 +310,23 @@
 			return false;
 		}
 		
-		function postSave() { }
+		function set_fields($array, $db_update_flag)
+		{
+			if(!$this->id())
+				$this->new_instance();
+		
+			foreach($array as $key => $val)
+			{
+				$method = "set_$key";
+//				echo "Set $key to $val<br />";
+				if(method_exists($this, $method))
+					$this->$method($val, $db_update_flag);
+			}
+
+			if($db_update_flag)
+			{
+				global $bors;
+				$bors->changed_save();
+			}
+		}
 	}

@@ -118,11 +118,11 @@
 				if($sfunc)
 					$field = "$sfunc($field)";
 
-				if($db == $def_db)
-					$db = '';
+				if($db == '')
+					$db = $def_db;
 					
-				if($table == $def_table)
-					$table = '';
+				if($table == '')
+					$table = $def_table;
 
 				$data[$db][$table][$id_field][$field] = $name;
 			  }
@@ -137,8 +137,8 @@
 			global $MySqlStorage_queries_cache;
 			foreach($data as $db_name => $tables)
 			{
-				if(!$db_name)
-					$db_name = $def_db;
+//				if(!$db_name)
+//					$db_name = $def_db;
 
 				$dbh = &new DataBase($db_name);
 				
@@ -158,8 +158,8 @@
 				
 					foreach($tables as $table_name => $ids)
 					{
-						if(!$table_name)
-							$table_name = $def_table;
+//						if(!$table_name)
+//							exit($table_name = $def_table);
 
 						if(!$table_name)
 							continue;
@@ -317,7 +317,6 @@
 				if($object->id())
 				{
 					$dbh->update($table, make_id_field($table, $id_field, $object->id()), array($db_field => $value));
-//					echo 0/0;
 				}
 				else
 				{
