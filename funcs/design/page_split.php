@@ -43,28 +43,16 @@
 		if($total_pages <= $limit) // 1, 2, 3
 			return array(2, $total_pages - 1);
 
-		if($current_page > 0)
-			$min = min($current_page - intval($limit/2), $total_pages - $limit);
-		else
-			$min = $total_pages - $limit + 2;
-			
-		$min = max(2, $min);
-		
-		if($min > 2)
-		{
-//			$limit--;
-			$min++;
-		}
-		
-		if($min == 2)
-			$max = max($limit - 2, $min + $limit - 2);
-		else
-			$max = max($limit - 2, $min + $limit - 3);
-			
-		if($max >= $total_pages)
-			$max = $total_pages - 1;
-		
-		return array($min, $max);
+		$limit_down = intval(($limit-4.5)/2);
+		$limit_up = intval(($limit-4)/2);
+
+		if($current_page < 0 || $current_page - $limit_down >= $total_pages - $limit + 2) // 1 .. 4, 5, |6|, 7, 8, 9
+			return array($total_pages - $limit + 3, $total_pages - 1);
+
+		if($current_page + $limit_up <= $limit - 2) // 1 2 3 4 5 .. 9
+			return array(2, $limit - 2);
+
+		return array(max(2, $current_page - $limit_down), min($total_pages - 1, $current_page + $limit_up));
 	}
 
 	function pages_show($obj, $total_pages, $limit, $show_current = true, $current_page_class = 'current_page', $other_page_class = 'select_page')
@@ -94,7 +82,7 @@
 		for($i = $start; $i <= $stop; $i++)
 			$pages[] = get_page_link($obj, $i, $i==$current_page ? $current_page_class : $other_page_class, $q);
 		
-		if($stop < $total_pages - 2)
+		if($stop < $total_pages - 1)
 			$pages[] = "...";
 
 		$pages[] = get_page_link($obj, $total_pages, $total_pages==$current_page ? $current_page_class : $other_page_class, $q);
