@@ -57,14 +57,18 @@
 		));
 		
         $req->addHeader('Content-Encoding', 'gzip');
-        $req->addHeader('Range','bytes=0-4095');
         $req->addHeader('Accept-Charset',$GLOBALS['lcml_request_charset_default']);
+        
+		if(!preg_match("!soldat\-udachi\.com!", $url))
+			$req->addHeader('Range','bytes=0-4095');
         
         if(preg_match("!lenta\.ru!",$url))
             $req->setProxy('home.balancer.ru', 3128);
-
+		
         $response = $req->sendRequest();
 
+//        return "=<a href=\"$url\" class=\"external\">".lcml_strip_url($url)."</a>";
+		
         if(!empty($response) && PEAR::isError($response))
             return lcml_strip_url($url);
 
