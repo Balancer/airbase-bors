@@ -1,0 +1,3 @@
+<?
+	register_vhost('balancer.ru');
+	register_vhost('forums.balancer.ru');
