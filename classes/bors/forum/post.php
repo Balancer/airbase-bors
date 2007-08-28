@@ -131,4 +131,24 @@
 		{
 			return $this->topic()->forum()->category()->category_base_full();
 		}
+
+		var $_attach_ids = false;
+
+		function attach_ids()
+		{
+			if($this->_attach_ids !== false)
+				return $this->_attach_ids;
+
+			$db = &new DataBase('punbb');
+			return $this->_attach_ids = $db->get_array("SELECT id FROM attach_2_files WHERE post_id = ".$this->id());
+		}
+		
+		function attaches()
+		{
+			$result = array();
+			foreach($this->attach_ids() as $attach_id)
+				$result[] = class_load('forum_attach', $attach_id);
+
+			return $result;
+		}
 	}
