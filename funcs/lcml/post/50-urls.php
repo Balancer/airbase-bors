@@ -59,7 +59,7 @@
         $req->addHeader('Content-Encoding', 'gzip');
         $req->addHeader('Accept-Charset',$GLOBALS['lcml_request_charset_default']);
         
-		if(!preg_match("!soldat\-udachi\.com!", $url))
+		if(!preg_match("!soldat\-udachi\.com|en\.wikipedia\.org|www\.arstdesign\.com!", $url))
 			$req->addHeader('Range','bytes=0-4095');
         
         if(preg_match("!lenta\.ru!",$url))

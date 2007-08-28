@@ -126,19 +126,29 @@
 		else
 			$content = $processed;
 
+		$last_modify = gmdate('D, d M Y H:i:s', $obj->modify_time()).' GMT';
+		header ('Last-Modified: '.$last_modify);
+	    header("Status: 200 OK");
+	    header("X-Borss: static cache maden");
+		header ('Last-Modified: '.$last_modify);
+	   
 		if((!empty($GLOBALS['cms']['cache_static']) || $obj->cache_static()) && (empty($_SERVER['QUERY_STRING']) || $_SERVER['QUERY_STRING']=='del'))
 		{
 			$page = $obj->page();
 			$sf = &new CacheStaticFile($obj->uri($page));
 			$sf->save($content, $obj->modify_time(), $obj->cache_static());
 
-			require_once('funcs/navigation/go.php');
+//		    header("HTTP/1.0 200 OK");
+//		    header("HTTP/1.1 200 OK");
+
+			echo $content;
+			return true;
+
+//			require_once('funcs/navigation/go.php');
 //			exit("stat");
-			return go($obj->uri($page), true, 0, false);
+//			return go($obj->uri($page), true, 0, false);
 		}
 
-        $last_modify = gmdate('D, d M Y H:i:s', $obj->modify_time()).' GMT';
-   	    @header ('Last-Modified: '.$last_modify);
 		
 		echo $content;
 		return true;

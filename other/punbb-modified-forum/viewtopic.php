@@ -130,8 +130,11 @@ if($pun_user['is_guest'])
 	$_COOKIE['cookie_hash'] = "none";
 	SetCookie("user_id", "0", 0, "/");
 	$_COOKIE['user_id'] = "0";
-//	exit("Redir to ".class_load("forum_topic", $id)->uri());
-	go(class_load("forum_topic", $id)->uri(max(1,@$_GET['p'])), 0, true);
+//	exit("Redir to ".class_load("forum_post", $pid)->url());
+	if($pid)
+		go(class_load("forum_post", $pid)->url(), 0, true);
+	else
+		go(class_load("forum_topic", $id)->url(max(1,@$_GET['p'])), 0, true);
 }
 
 for($ii=0; $ii<2; $i++)
