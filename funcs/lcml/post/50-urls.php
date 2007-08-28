@@ -31,7 +31,7 @@
         if(class_exists('Cache'))
         {
             $cache = &new Cache();
-            if($cache->get('url_titles-v2', $url))
+            if($cache->get('url_titles-v4', $url))
                 return $cache->last();
             else
                 return $cache->set(lcml_urls_title_nocache($url), 7*86400);
@@ -42,27 +42,60 @@
 
     function lcml_urls_title_nocache($url)
     {
-		if(strpos($url, '?') === false && class_exists('DataBaseHTS'))
+		$original_url = $url;
+		$anchor = "";
+	
+		if(preg_match("!^(.+)#(.+?)$!", $url, $m))
+		{
+			$url = $m[1];
+			$anchor = $m[2];
+		}
+		
+		$pure_url = $url;
+		$query = "";
+	
+		if(preg_match("!^(.+?)\?(.+)$!", $url, $m))
+		{
+			$pure_url = $m[1];
+			$query = $m[2];
+		}
+			
+
+		if(preg_match("!/[^/]+\.[^/]+$!", $pure_url) && !preg_match("!\.(html|htm|phtml|shtml|jsp|pl|php|php4|php5|cgi)$!i", $pure_url))
+	    	    return "<a href=\"{$original_url}\" class=\"external\">".lcml_strip_url($original_url)."</a>";
+
+		if(!$query && class_exists('DataBaseHTS'))
         {
             $hts = &new DataBaseHTS($url);
             if($title = $hts->get('title'))
-                return "<a href=\"$url\">$title</a>";
+                return "<a href=\"{$original_url}\">$title</a>";
         }
 
+
         require_once('HTTP/Request.php');
-        $req = &new HTTP_Request($url, array(
+        $req = &new HTTP_Request($pure_url, array(
             'allowRedirects' => true,
-            'maxRedirects' => 5,
-            'timeout' => 2,
+            'maxRedirects' => 3,
+          'timeout' => 5,
 		));
+
+//        $req = &new HTTP_Request($pure_url);
 		
+		if($query)
+		{
+//			echo "<xmp>Get $pure_url for '$query'</xmp>";
+			$req->setMethod(HTTP_REQUEST_METHOD_GET);
+			$req->addRawQueryString(htmlspecialchars_decode($query));
+                                   
+		}
+
         $req->addHeader('Content-Encoding', 'gzip');
         $req->addHeader('Accept-Charset',$GLOBALS['lcml_request_charset_default']);
         
-		if(!preg_match("!soldat\-udachi\.com|en\.wikipedia\.org|www\.arstdesign\.com!", $url))
-			$req->addHeader('Range','bytes=0-4095');
+//		if(!preg_match("!soldat\-udachi\.com|en\.wikipedia\.org|www\.arstdesign\.com!", $url))
+//			$req->addHeader('Range','bytes=0-4095');
         
-        if(preg_match("!lenta\.ru!",$url))
+        if(preg_match("!lenta\.ru!", $url))
             $req->setProxy('home.balancer.ru', 3128);
 		
         $response = $req->sendRequest();
@@ -70,9 +103,11 @@
 //        return "=<a href=\"$url\" class=\"external\">".lcml_strip_url($url)."</a>";
 		
         if(!empty($response) && PEAR::isError($response))
-            return lcml_strip_url($url);
+            return lcml_strip_url($original_url);
 
 		$data = $req->getResponseBody();
+
+//		echo "<xmp>"; print_r($data); echo "</xmp>";
 
         $content_type = $req->getResponseHeader('Content-Type');
         if(preg_match("!charset=(\S+)!i",$content_type,$m))
@@ -89,10 +124,13 @@
         {
             if($charset)
                 $m[1] = iconv($charset,'utf-8//translit', $m[1]);
-            return "<a href=\"$url\" class=\"external\">".substr(trim(preg_replace("!\s+!"," ",str_replace("\n"," ",strip_tags($m[1])))),0,256)."</a>";
+
+			echo $m[1];
+
+            return "<a href=\"{$original_url}\" class=\"external\">".substr(trim(preg_replace("!\s+!"," ",str_replace("\n"," ",strip_tags($m[1])))),0,256)."</a>";
         }
 
-        return "<a href=\"$url\" class=\"external\">".lcml_strip_url($url)."</a>";
+        return "<a href=\"{$original_url}\" class=\"external\">".lcml_strip_url($original_url)."</a>";
     }
 
     function lcml_urls($txt)
