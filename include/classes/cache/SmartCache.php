@@ -109,4 +109,4 @@
 			$type = "0x".md5($type);
 			return $this->dbh->get_array("SELECT DISTINCT value FROM `cache` WHERE `type` = $type");
         }
-    }
+}

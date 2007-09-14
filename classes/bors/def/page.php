@@ -1,8 +1,8 @@
 <?
-	require_once("classes/bors/borsPage.php");
+require_once("classes/bors/borsPage.php");
 
-	class def_page extends borsPage
-	{
+class def_page extends borsPage
+{
 		function internal_uri() 
 		{
 			if(preg_match('!^http://!', $this->id()))
@@ -16,6 +16,7 @@
 			$data = array();
 		
 			if($qlist = $this->_queries())
+			{
 				foreach($qlist as $qname => $q)
 				{
 					$cache = NULL;
@@ -30,7 +31,7 @@
 					else
 						$data[$qname] = $this->db->get_array($q, false, $cache);
 				}
-
+			}
 			$data['template_dir'] = $this->_class_dir();
 			$data['this'] = $this;
 
@@ -78,5 +79,19 @@
 			require_once('funcs/modules/messages.php');
 			return error_message($message);
 		}
-	}
 
+	var $_called_url;
+	function called_url() { return $this->_called_url; }
+	function set_called_url($url) { return $this->_called_url = $url; }
+
+	var $stb_parents;
+	function parents() { return $this->stb_parents; }
+	function set_parents($array) { return $this->stb_parents = $array; }
+	
+	function set_template_data($data)
+	{
+		foreach($data as $pair)
+			if(preg_match("!^(.+?)=(.+)$!", $pair, $m))
+				$this->add_template_data(trim($m[1]), trim($m[2]));
+	}
+}

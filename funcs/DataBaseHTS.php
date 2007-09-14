@@ -24,10 +24,13 @@ class DataBaseHTS
 		}
 		else
 		{
+			if(preg_match("!^/!", $data))
+				$data = "http://{$_SERVER['HTTP_HOST']}{$data}";
+		
 			if(preg_match("!^[\w]+://!", $data))
 			{
 				$this->uri = $data;
-				$this->dbh = new DataBase();
+				$this->dbh = &new DataBase();
 			}
 			else
 			{

@@ -9,7 +9,7 @@
 			return $ch->last();
 
 		global $cur_post;
-		$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = '/forum/post'.@$cur_post['id'];
+//		$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = '/forum/post'.@$cur_post['id'];
 			
 		return $ch->set(lcml($text, 
 			array(

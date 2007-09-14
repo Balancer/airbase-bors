@@ -52,6 +52,13 @@
     ini_set('default_charset',$GLOBALS['cms']['charset']);
     setlocale(LC_ALL, $GLOBALS['cms']['locale']);
 
+//    echo "<!--"; 
+//	print_r($_POST); 
+//	print_r($_GET); 
+//	echo "-->"; 
+								
+
+
 	if(empty($GLOBALS['cms']['only_load']) && empty($_GET) && preg_match("!^(.+?)\?(.+)$!", $_SERVER['REQUEST_URI'], $m))
 	{
 		$_SERVER['QUERY_STRING'] = $m[2];

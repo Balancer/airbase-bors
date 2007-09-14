@@ -1,7 +1,7 @@
 <?
-	class SeparateFilesStorage
+	class 
 	{
-		function save($uri)
+		function save($obj)
 		{
 			
 		}

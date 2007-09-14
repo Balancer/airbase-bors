@@ -1,8 +1,8 @@
 <?
-	require_once("BorsBasePage.php");
+require_once("BorsBasePage.php");
 
-	class BorsBaseDbPage extends BorsBasePage
-	{
+class BorsBaseDbPage extends BorsBasePage
+{
 		var $db;
 
 		function parents()
@@ -43,4 +43,6 @@
 			
 			$GLOBALS['cms']['cache_disabled'] = $save_cached;
 		}
-	}
+
+	function storage_engine() { return 'storage_db_mysql'; }
+}

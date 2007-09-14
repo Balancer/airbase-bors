@@ -8,13 +8,13 @@
 	        $smarty->trigger_error("form: empty parameter 'name'");
 	        return;
 		}
-		
+			
 		if(empty($id))
 			$id = NULL;
 			
 		$smarty->assign('current_form_class', class_load($name, $id));
 		
-		$uri = $GLOBALS['bors']->main_object()->uri();
+		$uri = $GLOBALS['bors']->main_object()->url();
 		
 		if($content == NULL)
 		{

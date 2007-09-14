@@ -20,6 +20,7 @@
 		if(!file_exists($smarty->cache_dir))
 			mkdir($smarty->cache_dir, 0775, true);
 
+
 		$caching = !is_null($uri)
 				&& @$data['caching'] !== false
 				&& @$GLOBALS['cms']['templates_cache_disabled'] !== true
