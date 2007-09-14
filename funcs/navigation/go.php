@@ -3,6 +3,8 @@
 
     function go($uri, $permanent = false, $time = 0, $exit = true)
     {
+//		echo 0/0; exit("Go to $url");
+	
         if(!headers_sent($filename, $linenum) && $time==0) 
         {
 			if($permanent)

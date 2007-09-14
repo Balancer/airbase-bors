@@ -19,36 +19,24 @@
 
 		function new_instance() { exit("Try to get new empty instance"); }
 
-		function BorsBaseObject($id = NULL, $noload = false)
+		var $_loaded = false;
+		function loaded() { return $this->_loaded; }
+
+		function BorsBaseObject($id = NULL)
 		{
-//			echo "BorsBaseObject($id)<br />";
-
-			// Если не указан ID, но нет признака отсутствия загрузки, то создаётся новый объект в БД.
-
 			$this->id = $this->initial_id = $id;
 			$this->page = 1;
 
-/*			if(!$this->methods_added)
-			{
-				foreach(get_object_vars($this) as $field => $value)
-				{
-					if(substr($field, 0, 4) != 'stb_')
-						continue;
-					
-					$name = substr($field, 4);
-					
-					if(method_exists($this, $name))
-						continue;
-
-					$this->addMethod("function $name() { return \$this->$field; }");
-					$this->addMethod("function set_$name(\$value, \$db_update) { \$this-set(\"\$value\", \$value, \$db_update); }");
-				}
-			}
-*/			
-			if($noload || !$this->id)
+			if(!$id)
 				return;
 			
-			$this->load();
+			//TODO: убрать после введения во все классы:
+			if(!method_exists($this, 'storage_engine'))
+				echo "Not defined 'storage_engine' in class '".get_class($this)."'<br />\n";
+			else
+				if($engine = $this->storage_engine())
+					if(class_load($engine)->load($this) !== false)
+						$this->_loaded = true;
 		}
 
 		function set($field, $value, $db_update)
@@ -68,7 +56,7 @@
 
 
 		var $stb_create_time = NULL;
-		function set_create_time($unix_time, $db_update) { $this->set("create_time", $unix_time, $db_update); }
+		function set_create_time($unix_time, $db_update) { $this->set("create_time", intval($unix_time), $db_update); }
 		function create_time()
 		{
 			if($this->stb_create_time)
@@ -112,7 +100,11 @@
 		
 			if(preg_match("!^http://!", $this->id()))
 				return $this->id();
-				
+			
+//			echo "Obj ".$this->title()." called = ".$this->called_url()."<br />";
+			if($this->called_url())
+				return $this->called_url();
+			
 			require_once("funcs/modules/uri.php");
 			$uri = $this->base_uri().strftime("%Y/%m/%d/", $this->modify_time());
 			$uri .= $this->uri_name()."-".$this->id();
@@ -146,15 +138,6 @@
 			}
 			
 			return $res;
-		}
-
-		var $loaded = false;
-		function load()
-		{
-			global $bors;
-			
-			$bors->config()->storage()->load($this);
-			$loaded = true;
 		}
 
 		function save()
@@ -208,6 +191,7 @@
 		{
 			include_once('include/classes/cache/CacheStaticFile.php');
 			CacheStaticFile::clean($this->internal_uri());
+			CacheStaticFile::clean($this->url());
 		}
 
 		function template_vars()
@@ -260,6 +244,12 @@
 
 		function body()
 		{
+			if($body_engine = $this->body_engine())
+			{
+				$be = class_load($body_engine);
+				return $be->body($this);
+			}
+			
 			global $me;
 		
 			if($this->need_access_level() > $me->get("level"))
@@ -288,7 +278,7 @@
 			
 			foreach(split(' ', $this->cache_groups()) as $group)
 				if($group)
-					$ch->group_register($group, $this);
+					class_load('cache_group', $group)->register($this);
 
 			return $content;
 		}
@@ -310,23 +300,29 @@
 			return false;
 		}
 		
-		function set_fields($array, $db_update_flag)
-		{
-			if(!$this->id())
-				$this->new_instance();
+	function set_fields($array, $db_update_flag)
+	{
+		if(!$this->id())
+			$this->new_instance();
 		
-			foreach($array as $key => $val)
-			{
-				$method = "set_$key";
-//				echo "Set $key to $val<br />";
-				if(method_exists($this, $method))
-					$this->$method($val, $db_update_flag);
-			}
+		foreach($array as $key => $val)
+		{
+			$method = "set_$key";
+//			echo "Set $key to $val<br />";
+			if(method_exists($this, $method))
+				$this->$method($val, $db_update_flag);
+		}
 
-			if($db_update_flag)
-			{
-				global $bors;
-				$bors->changed_save();
-			}
+		if($db_update_flag)
+		{
+			global $bors;
+			$bors->changed_save();
 		}
 	}
+
+	function config_class() { return ''; }
+
+	function render_engine() { return ''; }
+	function storage_engine() { return ''; }
+	function body_engine() { return ''; }
+}

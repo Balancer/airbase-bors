@@ -3,7 +3,8 @@
 
 	function handler_bors_auto($uri, $m)
 	{
-//		echo "<tt>try show page '$uri'</tt><br/>";
+//		echo "<tt>try show page '$uri'</tt><br/>"; exit();
+		
 //		$GLOBALS['cms']['cache_disabled'] = true;
 		require_once("classes/objects/Bors.php");
 
@@ -18,7 +19,7 @@
 		if(!$obj)
 			return false;
 
-//		echo get_class($obj);
+//		echo get_class($obj); exit();
 
 		$processed = $obj->preParseProcess($_GET);
 		if($processed === true)
@@ -26,11 +27,17 @@
 
 		if(!empty($_GET['class_name']))
 		{
+//			print_r($_GET);
 			$form = class_load($_GET['class_name'], @$_GET['id']);
-			
-			$processed = $form->preAction($_GET);
-			if($processed === true)
-				return true;
+//			echo get_class($form);
+//			loglevel(10);
+//			
+			if(method_exists($form, 'preAction'))
+			{
+				$processed = $form->preAction($_GET);
+				if($processed === true)
+					return true;
+			}
 			
 			if(!$form->id())
 				$form->new_instance();
@@ -39,7 +46,6 @@
 //			if($processed2 === true)
 //				return true;
 
-//			print_r($_GET); exit("x");
 									   			
 			if(empty($_GET['act']))
 				$method = 'onAction';
@@ -51,7 +57,6 @@
 				
 			if(method_exists($form, $method))
 			{
-//				exit("Yes!");
 				$result = $form->$method($_GET);
 				if($result === true)
 					return true;
@@ -120,17 +125,26 @@
 			if(empty($GLOBALS['main_uri']))
 				$GLOBALS['main_uri'] = $obj->uri();
 	
-		    require_once('funcs/templates/bors.php');
-			$content = template_assign_bors_object($obj);
+			if($render_engine = $obj->render_engine())
+			{
+				$re = class_load($render_engine);
+				$content = $re->render($obj);
+			}
+			else
+			{
+			    require_once('funcs/templates/bors.php');
+				$content = template_assign_bors_object($obj);
+			}
 		}
 		else
 			$content = $processed;
 
 		$last_modify = gmdate('D, d M Y H:i:s', $obj->modify_time()).' GMT';
-		header ('Last-Modified: '.$last_modify);
+		header('Last-Modified: '.$last_modify);
 	    header("Status: 200 OK");
 	    header("X-Borss: static cache maden");
-		header ('Last-Modified: '.$last_modify);
+		header('Last-Modified: '.$last_modify);
+	   
 	   
 		if((!empty($GLOBALS['cms']['cache_static']) || $obj->cache_static()) && (empty($_SERVER['QUERY_STRING']) || $_SERVER['QUERY_STRING']=='del'))
 		{
@@ -138,17 +152,16 @@
 			$sf = &new CacheStaticFile($obj->uri($page));
 			$sf->save($content, $obj->modify_time(), $obj->cache_static());
 
-//		    header("HTTP/1.0 200 OK");
-//		    header("HTTP/1.1 200 OK");
-
+			foreach(split(' ', $obj->cache_groups()) as $group)
+				if($group)
+					class_load('cache_group', $group)->register($obj);
+				
 			echo $content;
 			return true;
 
 //			require_once('funcs/navigation/go.php');
-//			exit("stat");
 //			return go($obj->uri($page), true, 0, false);
 		}
-
 		
 		echo $content;
 		return true;

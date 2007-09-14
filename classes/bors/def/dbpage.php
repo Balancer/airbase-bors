@@ -1,8 +1,8 @@
 <?
-	class_include('def_page');
+class_include('def_page');
 
-	class def_dbpage extends def_page
-	{
+class def_dbpage extends def_page
+{
 		var $db;
 
 		function parents()
@@ -53,5 +53,6 @@
 			}
 		}
 		
-		function edit_link() { return $this->uri."?edit"; }
-	}
+	function edit_link() { return $this->uri."?edit"; }
+	function storage_engine() { return 'storage_db_mysql'; }
+}

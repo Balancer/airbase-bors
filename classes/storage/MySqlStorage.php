@@ -4,8 +4,10 @@
 
 //	require_once($_SERVER['DOCUMENT_ROOT'].'/cms/config.php');
 
-	class MySqlStorage
-	{
+class_include('def_empty');
+
+class MySqlStorage extends def_empty
+{
 		var $dbhs;
 		var $mysql_map;
 
@@ -15,12 +17,14 @@
 
 		function load($object)
 		{
+//			echo "Try load {$object->id()}<br />\n";
 //			static $total = 0;
 //			static $stb_total = 0;
 		
-			if(!$object->id())
-				return;
+			if(!$object->id() || is_object($object->id()))
+				return false;
 		
+			$was_loaded = false;
 			global $mysql_map;
 
 //			static $count = 0;
@@ -28,7 +32,6 @@
 //			echo "MySqlStorage.load: <b>{$object->internal_uri()}</b>, size=".sizeof(get_object_vars($object))."; cnt=".(++$count)."<br />";
 
 //			$GLOBALS['log_level'] = 10;
-
 
 			$def_db = $object->main_db_storage();
 
@@ -54,6 +57,8 @@
 				$name = $m[1];
 
 //				$stb_total++;
+
+//				echo get_class($object)."->$name<br />\n";
 
 				$field_storage_method_name = "field_{$name}_storage";
 				if(!method_exists($object, $field_storage_method_name))
@@ -220,6 +225,8 @@
 						}
 						$set_method = 'set_'.$name;
 						$object->$set_method($value, false);
+						if($value)
+							$was_loaded = true;
 					}
 				}
 				else
@@ -231,8 +238,13 @@
 					}
 					$set_method = 'set_'.$first_name;
 					$object->$set_method($result, false);
+					if($result)
+						$was_loaded = true;
 				}
 			}
+			
+//			echo "<b>{$object->url()} loaded = {$was_loaded}</b><br />";
+			return $was_loaded;
 		}
 
 		function do_func($func, $str)

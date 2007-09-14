@@ -1,7 +1,8 @@
 <?
-    register_action('do-login', 'handler_action_do_login');
 
-    function handler_action_do_login($uri, $action)
+register_action('do-login', 'handler_action_do_login');
+
+function handler_action_do_login($uri, $action)
 	{
 		$me = &new User();
 			
@@ -14,4 +15,4 @@
 		log_action("user-login", $uri);
 
 		return message(ec("Вы успешно вошли в систему"), "$uri?", "", 2);
-	}
+}

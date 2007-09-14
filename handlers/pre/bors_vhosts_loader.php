@@ -13,10 +13,14 @@
 			$bors_local = dirname($documents_root).'/bors-local';
 			
 		$map = array();
+
+		if(file_exists($file = BORS_INCLUDE.'/vhosts/'.$host.'/handlers/bors_map.php'))
+			include($file);
+
 		if(file_exists($file = $bors_local.'handlers/bors_map.php'))
 			include($file);
 			
-		$bors_data['vhost'][$host] = array(
+		$bors_data['vhosts'][$host] = array(
 			'bors_map' => $map,
 			'bors_local' => $bors_local,
 		);

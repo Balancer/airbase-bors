@@ -33,7 +33,9 @@
 			
 				if(!$obj->id())
 					$obj->new_instance();
-					
+				
+				$obj->cache_clean();
+				
 				$this->config()->storage()->save($obj);
 			}
 		}
@@ -88,13 +90,22 @@
 		}
 
 		foreach(array(BORS_INCLUDE_LOCAL, BORS_INCLUDE.'/vhosts/'.$_SERVER['HTTP_HOST'], BORS_INCLUDE, $local_path) as $dir)
+		{
+			if(file_exists($file_name = "$dir/classes/$class_path$class_file.php"))
+			{
+				require_once($file_name);
+				$GLOBALS['bors_data']['class_included'][$class_name] = true;
+				return true;
+			}
+			
 			if(file_exists($file_name = "$dir/classes/bors/$class_path$class_file.php"))
 			{
 				require_once($file_name);
 				$GLOBALS['bors_data']['class_included'][$class_name] = true;
 				return true;
 			}
-
+		}
+		
 		return false;
 	}
 
@@ -107,7 +118,8 @@
 	function save_cached_object($object)
 	{
 //		echo "Save cache object ".get_class($object)."'(".$object->id()."', ".$object->page().")<br />\n";
-		$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][$object->page()] = $object;
+		if(method_exists($object, 'id'))
+			$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][$object->page()] = $object;
 	}
 
 	function class_internal_uri_load($uri)
@@ -134,6 +146,8 @@
 
 	function pure_class_load($class_name, $id, $page, $use_cache = true, $local_path = NULL)
 	{
+//		echo "Pure load {$class_name}({$id})<br />\n";
+	
 		if(!class_include($class_name, $local_path))
 			return NULL;
 
@@ -141,9 +155,9 @@
 			return $obj;
 		
 		$obj = &new $class_name($id);
-
-		if(preg_match("!^(\w+_)([^_]+)$!", $class_name, $m) && $m[2] != 'config')
-			pure_class_load($m[1].'config', &$obj, 1, false);
+//		echo "Pure load {$class_name}({$id}), loaded={$obj->loaded()}, storage engine = {$obj->storage_engine()}<br />\n";
+		if($id && !$obj->loaded() && $obj->storage_engine())
+			return NULL;
 		
 		if($page > 1)
 			$obj->set_page($page);
@@ -163,13 +177,14 @@
 			$id = $m[1];
 	
 //		echo "class_load('$class', '$id')<br />";
-		
+	
 		if(preg_match("!^(\w+)://.+!", $class, $m))
 		{
 			if(preg_match("!^http://!", $class))
 			{
 				if($obj = class_load_by_url($class, $page))
 					return $obj;
+
 				if($use_http && $obj = class_internal_uri_load($class))
 					return $obj;
 			}
@@ -185,10 +200,10 @@
 
 	function class_load_by_url($url, $page=1)
 	{
-		if($obj = class_load_by_local_url($url, $page))
+		if($obj = class_load_by_vhosts_url($url, $page))
 			return $obj;
 		
-		return class_load_by_vhosts_url($url, $page);
+		return class_load_by_local_url($url, $page);
 	}
 
 	function class_load_by_local_url($url, $page)
@@ -200,9 +215,15 @@
 		if(empty($GLOBALS['bors_map']))
 			return NULL;
 
-		foreach($GLOBALS['bors_map'] as $url_pattern => $class_path)
+		foreach($GLOBALS['bors_map'] as $pair)
 		{
-//			echo "Check $uri_pattern to $uri <br />";
+			if(!preg_match('!^(.*)\s*=>\s*(.+)$!', $pair, $match))
+				exit(ec("Ошибка формата bors_map: {$pair}"));
+			
+			$url_pattern = trim($match[1]);
+			$class_path  = trim($match[2]);
+		
+//			echo "Check $url_pattern to $url for $class_path -- !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$!<br />\n";
 			if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$url_pattern$!", $url, $match))
 			{
 				$id = $url;
@@ -225,16 +246,15 @@
 				else
 					$class = $class_path;
 						
-//					echo "Class=$class, path=$class_path, id=$id, page=$page";
-					
-//					echo "<b>true to $class (in $class_path)</b><br />";
-//					$errrep_save = error_reporting();
-//					error_reporting($errrep_save & ~E_NOTICE);
-				
-				$obj = pure_class_load($class_path, $id, $page);
-				if($obj)
+//				echo "Try load {$class_path}('{$id}')<br />\n";
+			
+				if($obj = pure_class_load($class_path, $id, $page))
+				{
 					$obj->set_match($match);
-				return $obj;
+					$obj->set_called_url($url);
+					return $obj;
+				}
+				
 			}
 		}
 
@@ -257,16 +277,25 @@
 		if(!empty($obj))
 			return $obj;
 			
+//		print_r($bors_data['vhosts']);
 
 		if(empty($bors_data['vhosts'][$data['host']]))
 			return NULL;
 
 		$host_data = $bors_data['vhosts'][$data['host']];
 		
-		foreach($host_data['bors_map'] as $url_pattern => $class_path)
+		foreach($host_data['bors_map'] as $pair)
 		{
-			if(preg_match("!^http://({$host})$url_pattern$!", $url, $match))
+			if(!preg_match('!^(.*)\s*=>\s*(.+)$!', $pair, $match))
+				exit(ec("Ошибка формата bors_map[{$data['host']}]: {$pair}"));
+			
+			$url_pattern = trim($match[1]);
+			$class_path  = trim($match[2]);
+
+//			echo "Check vhost $url_pattern to $url for $class_path -- !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$!<br />\n";
+			if(preg_match("!^http://({$data['host']})$url_pattern$!", $url, $match))
 			{
+			
 				$id = $url;
 				$page = 1;
 				
@@ -287,14 +316,13 @@
 				else
 					$class = $class_path;
 						
-				$obj = pure_class_load($class_path, $id, $page, true, $host_data['bors_local']);
-
-				if($obj)
+				if($obj = pure_class_load($class_path, $id, $page, true, $host_data['bors_local']))
+				{
 					$obj->set_match($match);
-
-				$bors_data['classes_by_uri'][$url] = $obj;
-					
-				return $obj;
+					$obj->set_called_url($url);
+					$bors_data['classes_by_uri'][$url] = $obj;
+					return $obj;
+				}
 			}
 		}
 

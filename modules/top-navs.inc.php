@@ -5,7 +5,7 @@
 	
 	    require_once("funcs/Cache.php");
         $ch = &new Cache();
-        if($ch->get('top_navs-v7', $uri))
+        if($ch->get('top_navs-v7', $uri) && false)
         {
 			echo $ch->last();
 			return;
@@ -40,14 +40,14 @@
 		
     	    foreach($parents as $nav)
 			{
-//				echo "$nav <br />";
+//				echo "$nav <br />\n";
 				$link_line = array();
 				foreach(split("\|#\|", $nav) as $link)
 				{	
-//					echo "$link<br />";
 					$obj = class_load($link);
+//					echo "{$link} -> {$obj->title()}<br />\n";
 					$link_line[] = array(
-						'uri' => preg_match('!^http://!', $link) ? $link : $obj->uri(),
+						'uri' => $obj ? $obj->url() : $link,
 						'title' => $obj ? $obj->nav_name() : $hts->get($link, 'nav_name'),
 					);
 //					echo "nav_name for $link = '".$obj->nav_name()."' ('$obj->stb_nav_name', '".$obj->title()."')<br />";
@@ -67,8 +67,7 @@
     {
 //		echo "Link line for '$uri'<br />\n";
 		
-		$obj = class_load($uri);
-		if($obj)
+		if($obj = class_load($uri))
 	        $parents = $obj->parents();
 		else
 		{
@@ -77,7 +76,7 @@
 			$parents = $hts->get_array('parent');
 		}
 	
-//		echo "parents for $uri = ".print_r($parents, true)."<br/>";
+//		echo "parents for $uri (".get_class($obj)."({$obj->id()})) = ".print_r($parents, true)."<br/>";
 		$links = array();
 
         foreach($parents as $parent)
