@@ -10,9 +10,11 @@
 //				return "xfile://{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/forum.new.html"; 
 		}
 		
-        function cache_life_time()
-        {
-            $GLOBALS['cms']['cache_disabled'] = true;
-            return -1;
-        }
+    function cache_life_time()
+    {
+        $GLOBALS['cms']['cache_disabled'] = true;
+		return -1;
 	}
+
+    function storage_engine() { return 'storage_db_mysql'; }
+}

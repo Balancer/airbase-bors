@@ -21,10 +21,6 @@ class borsPage extends BorsBaseObject
 		return $this->hts ? $this->hts->get('title') : parent::title();
 	}
 
-	var $_called_url;
-	function called_url() { return $this->_called_url; }
-	function set_called_url($url) { return $this->_called_url = $url; }
-	
 	function dir()
 	{
 		//TODO: затычка!

@@ -14,7 +14,6 @@
 		function field_modify_time_storage() { return 'punbb.topics.last_post(id)'; }
 		function field_owner_id_storage() { return 'punbb.topics.poster_id(id)'; }
 
-
         function parents()
 		{
 			return array("forum_forum://".$this->forum_id());
@@ -143,6 +142,4 @@
 		{
 			return $this->forum()->category()->category_base_full();
 		}
-		
-		
 	}

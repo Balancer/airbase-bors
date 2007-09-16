@@ -562,13 +562,7 @@ while ($cur_post = $db->fetch_assoc($result))
 
 	$user_warn_count	= intval($poster['warnings']);
 	$user_warn = $user_warn_count ? "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings/\"><img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings.gif\" width=\"100\" height=\"16\" border=\"0\"></a>\n" : "";
-	if($user_warn_count >= 10)
-	{
-		$w = $cdb->get_array("SELECT time FROM warnings WHERE user_id = {$cur_post['poster_id']} ORDER BY time DESC LIMIT 10");
-		$w = @$w[9];
-		if($w)
-			$user_warn .= "<div style=\"color: red; font-size: 8pt;\">R/O до ".strftime("%d.%m.%Y", $w+30*86400)."</div>\n";
-	}
+//	$user_warn = $user_warn_count ? "<script src=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings.js\" type=\"text/javascript\"></script>\n" : "";
 ?>
 <div id="p<?php echo $cur_post['id'] ?>" class="blockpost<?php echo $vtbg ?><?php if (($post_count + $start_from) == 1) echo ' firstpost'; ?>">
 	<h2><b>

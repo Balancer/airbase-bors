@@ -5,7 +5,7 @@
 
 		$cache = &new Cache();
 		
-		if($cache->get('LBR:DB',"$db_name-online-v4"))
+		if($cache->get('LBR:DB',"$db_name-online-v5"))
 			return $cache->last();
 
 		$map = "";
@@ -24,7 +24,7 @@
 			$m_x = intval($map_img_w*($row['x']-$MAP_MIN_X)/($MAP_MAX_X-$MAP_MIN_X)-3);
 			$m_y = intval($map_img_h*($row['y']-$MAP_MIN_Y)/($MAP_MAX_Y-$MAP_MIN_Y)-3);
 
-			$map .=	"<div style=\"position:absolute;top:{$m_y}px;left:{$m_x}px\"><img src=\"/i/monster.gif\" title=\"{$row['char_name']}\"></div>";
+			$map .=	"<div style=\"position:absolute;top:{$m_y}px;left:{$m_x}px\"><img src=\"/i/monster.gif\"></div>"; //  title=\"{$row['char_name']}\"
 		}
 
 $out = <<< __EOT__

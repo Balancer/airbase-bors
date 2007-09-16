@@ -75,13 +75,12 @@
 
 	function class_include($class_name, $local_path = "")
 	{
-//		echo "Include class '$class_name'<br />\n";
-	
 		if(!empty($GLOBALS['bors_data']['class_included'][$class_name]))
 			return true;
 	
 		$class_path = "";
 		$class_file = $class_name;
+
 
 		if(preg_match("!^(.+/)([^/]+)$!", str_replace("_", "/", $class_name), $m))
 		{
@@ -156,7 +155,7 @@
 		
 		$obj = &new $class_name($id);
 //		echo "Pure load {$class_name}({$id}), loaded={$obj->loaded()}, storage engine = {$obj->storage_engine()}<br />\n";
-		if($id && !$obj->loaded() && $obj->storage_engine())
+		if($id && !$obj->loaded() && $obj->storage_engine() && method_exists($obj, 'can_be_empty') && !$obj->can_be_empty())
 			return NULL;
 		
 		if($page > 1)
