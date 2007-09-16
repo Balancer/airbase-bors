@@ -80,10 +80,6 @@ class def_page extends borsPage
 			return error_message($message);
 		}
 
-	var $_called_url;
-	function called_url() { return $this->_called_url; }
-	function set_called_url($url) { return $this->_called_url = $url; }
-
 	var $stb_parents;
 	function parents() { return $this->stb_parents; }
 	function set_parents($array) { return $this->stb_parents = $array; }

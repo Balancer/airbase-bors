@@ -12,7 +12,7 @@
 
 		$cache = &new Cache();
 		
-		if($cache->get('LBR:DB',"mob-$mob_id-2"))
+		if($cache->get('LBR:DB',"mob-$mob_id-3"))
 			return $cache->last();
 		
 		$db = new DataBase('l2jdb', 'la2', 'la2kkk');
@@ -105,7 +105,7 @@
 		{
 			if(($row['locx']=='0')&&($row['locy']=='0'))
 			{
-				$loc = $db->get("SELECT loc_x, loc_y FROM locations WHERE name = ".intval($row['loc_id'])." ORDER BY RAND() LIMIT 1");
+				$loc = $db->get("SELECT loc_x, loc_y FROM locations WHERE name = '".addslashes($row['location'])."' ORDER BY RAND() LIMIT 1");
 			
 				$row['locx'] = $loc['loc_x'];
 				$row['locy'] = $loc['loc_y'];

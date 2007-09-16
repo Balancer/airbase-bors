@@ -102,6 +102,7 @@
 				return $this->id();
 			
 //			echo "Obj ".$this->title()." called = ".$this->called_url()."<br />";
+//			exit("xxx");
 			if($this->called_url())
 				return $this->called_url();
 			
@@ -325,4 +326,9 @@
 	function render_engine() { return ''; }
 	function storage_engine() { return ''; }
 	function body_engine() { return ''; }
+
+	var $_called_url;
+	function called_url() { return $this->_called_url; }
+	function set_called_url($url) { return $this->_called_url = $url; }
+	
 }

@@ -373,3 +373,14 @@ body {
 	font-family: Georgia, serif;
 	font-size: 100%;
 }
+
+a tt.warnings {
+	font-size: 30px;
+	color: black;
+	text-decoration: none;
+}
+
+a tt.warnings small {
+	font-size: 30px;
+	color: #888;
+}

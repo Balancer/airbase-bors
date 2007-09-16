@@ -1,8 +1,12 @@
-<?
-	require_once('classes/objects/BorsBaseObject.php');
-	class forum_user extends BorsBaseObject
-	{
-		function forum_user($id)
+<?php
+
+class_include('def_db_object');
+
+class forum_user extends def_db_object
+{
+	function storage_engine() { return 'storage_db_mysql'; }
+
+		function __construct($id)
 		{
 //			echo "user($id)<br />";
 			if($id == -1)
@@ -15,7 +19,7 @@
 //				echo "Current user id = $id<br />";
 			}
 			
-			$this->BorsBaseObject($id);
+			parent::__construct($id);
 		}
 
 
@@ -126,4 +130,4 @@
 		
 		function uri() { return "http://balancer.ru/user/{$this->id()}/"; }
 		function parents() { return array("http://balancer.ru/forum/users/"); }
-	}
+}

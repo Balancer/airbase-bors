@@ -1,8 +1,8 @@
 <?php
 
-class_include('def_empty');
+class_include('def_object');
 
-class def_db_object($id) extends def_object
+class def_db_object extends def_object
 {
 	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
 
@@ -11,7 +11,8 @@ class def_db_object($id) extends def_object
 	function __construct($id)
 	{
 		$this->db = &new DataBase($this->main_db_storage());
-		$id = $this->uri2id($id);
+		if(method_exists($this, 'uri2id'))
+			$id = $this->uri2id($id);
 			
 		parent::__construct($id);
 	}
