@@ -39,7 +39,7 @@
 
 		function add_template_data($var_name, $value)
 		{
-			$GLOBALS['cms']['templates']['data'][$var_name] = $value;
+			return $GLOBALS['cms']['templates']['data'][$var_name] = $value;
 		}
 
 		function add_template_data_array($var_name, $value)

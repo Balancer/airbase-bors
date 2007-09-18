@@ -45,11 +45,19 @@
 				foreach(split("\|#\|", $nav) as $link)
 				{	
 					$obj = class_load($link);
+					if($obj && $obj->nav_name())
+					{
+						$url = $obj->url();
+						$nav = $obj->nav_name();
+					}
+					else
+					{
+						$url = $link;
+						$nav = $hts->get($link, 'nav_name');
+					}
+					
 //					echo "{$link} -> {$obj->title()}<br />\n";
-					$link_line[] = array(
-						'uri' => $obj ? $obj->url() : $link,
-						'title' => $obj ? $obj->nav_name() : $hts->get($link, 'nav_name'),
-					);
+					$link_line[] = array('uri' => $url, 'title' => $nav);
 //					echo "nav_name for $link = '".$obj->nav_name()."' ('$obj->stb_nav_name', '".$obj->title()."')<br />";
 //					print_r($link_line);
 				}
@@ -79,7 +87,13 @@
 //		echo "parents for $uri (".get_class($obj)."({$obj->id()})) = ".print_r($parents, true)."<br/>";
 		$links = array();
 
-        foreach($parents as $parent)
+		if(!is_array($parents))
+		{
+//			echo "Can't get parents for $uri<br />\n";
+	        return $links;
+		}
+		
+		foreach($parents as $parent)
         {
 //			echo "Check '$parent' for '$uri'<br />\n";
 			if($parent == $uri || $obj && $parent == $obj->uri())
