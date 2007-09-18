@@ -13,11 +13,13 @@
 		'/user/(\d+)/? => user_main(1)',
 
 		'/user/(\d+)/blog/ => user_blog(1)',
-		'/user/(\d+)/blog/index.html => user_blog(1)',
+		'/user/(\d+)/blog/index.html => redirect:user_blog(1)',
 		'/user/(\d+)/blog/(\d+).html => user_blog(1,2)',
-		'/user/(\d+)/blog\.html => user_blog(1)',
-		'/user/(\d+)/blog(\-(\d+))\.html => user_blog(1,3)',
-		'/user/(\d+)/blog/index\-(\d+)\.html => user_blog(1,2)',
+		'/user/(\d+)/blog\.html => redirect:user_blog(1)',
+		'/user/(\d+)/blog(\-(\d+))\.html => redirect:user_blog(1,3)',
+		'/user/(\d+)/blog/index\-(\d+)\.html => redirect:user_blog(1,2)',
+
+		'/user/(\d+)/blog/rss.xml => user_blog_rss(1)',
 
 		'/user/(\d+)/posts/ => user_posts(1)',
 		'/user/(\d+)/posts/index.html => user_posts(1)',

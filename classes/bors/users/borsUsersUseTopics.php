@@ -18,7 +18,7 @@
 			$this->add_template_data('skip_subforums', true);
 		}
 
-		function uri()
+		function url()
 		{
 			return "http://balancer.ru/user/".$this->id()."/use-topics.html";
 		}

@@ -88,23 +88,18 @@
 
 		function base_uri() { return 'http://balancer.ru/'; }
 
-		function url($page = 1)
+		function uri($page = NULL)
 		{
-			return $this->uri($page);
+			return $this->url($page);
 		}
 		
-		function uri($page = 1)
+		function url($page = NULL)
 		{
-			if($page < 1)
-				$page = $this->page();
-		
 			if(preg_match("!^http://!", $this->id()))
 				return $this->id();
 			
-//			echo "Obj ".$this->title()." called = ".$this->called_url()."<br />";
-//			exit("xxx");
-			if($this->called_url())
-				return $this->called_url();
+			if($page < 1)
+				$page = $this->page();
 			
 			require_once("funcs/modules/uri.php");
 			$uri = $this->base_uri().strftime("%Y/%m/%d/", $this->modify_time());
@@ -326,9 +321,4 @@
 	function render_engine() { return ''; }
 	function storage_engine() { return ''; }
 	function body_engine() { return ''; }
-
-	var $_called_url;
-	function called_url() { return $this->_called_url; }
-	function set_called_url($url) { return $this->_called_url = $url; }
-	
 }

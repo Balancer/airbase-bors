@@ -278,8 +278,4 @@ class def_object extends def_empty
 	}
 
 	function config_class() { return ''; }
-
-	var $_called_url;
-	function called_url() { return $this->_called_url; }
-	function set_called_url($url) { return $this->_called_url = $url; }
 }

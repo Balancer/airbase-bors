@@ -221,12 +221,25 @@
 			
 			$url_pattern = trim($match[1]);
 			$class_path  = trim($match[2]);
+
+			if(preg_match("!\\\\\?!", $url_pattern))
+				$check_url = $url."?".$_SERVER['QUERY_STRING'];
+			else
+				$check_url = $url;
 		
 //			echo "Check $url_pattern to $url for $class_path -- !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$!<br />\n";
-			if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$url_pattern$!", $url, $match))
+			if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$url_pattern$!", $check_url, $match))
 			{
 				$id = $url;
 				$page = 1;
+				
+				if(preg_match("!^redirect:(.+)$!", $class_path, $m))
+				{
+					$class_path = $m[1];
+					$redirect = true;
+				}
+				else
+					$redirect = false;
 				
 				if(preg_match("!^(.+)\((\d+),(\d+)\)$!", $class_path, $m))	
 				{
@@ -250,7 +263,13 @@
 				if($obj = pure_class_load($class_path, $id, $page))
 				{
 					$obj->set_match($match);
-					$obj->set_called_url($url);
+					
+					if($redirect)
+					{
+						go($obj->url($page), true);
+						exit("Redirect");
+					}
+					
 					return $obj;
 				}
 				
@@ -291,9 +310,21 @@
 			$url_pattern = trim($match[1]);
 			$class_path  = trim($match[2]);
 
+			if(preg_match("!\\\\\?!", $url_pattern))
+				$check_url = $url."?".$_SERVER['QUERY_STRING'];
+			else
+				$check_url = $url;
+
 //			echo "Check vhost $url_pattern to $url for $class_path -- !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$!<br />\n";
-			if(preg_match("!^http://({$data['host']})$url_pattern$!", $url, $match))
+			if(preg_match("!^http://({$data['host']})$url_pattern$!", $check_url, $match))
 			{
+				if(preg_match("!^redirect:(.+)$!", $class_path, $m))
+				{
+					$class_path = $m[1];
+					$redirect = true;
+				}
+				else
+					$redirect = false;
 			
 				$id = $url;
 				$page = 1;
@@ -318,8 +349,14 @@
 				if($obj = pure_class_load($class_path, $id, $page, true, $host_data['bors_local']))
 				{
 					$obj->set_match($match);
-					$obj->set_called_url($url);
 					$bors_data['classes_by_uri'][$url] = $obj;
+					
+					if($redirect)
+					{
+						go($obj->url($page), true);
+						exit("Redirect");
+					}
+					
 					return $obj;
 				}
 			}

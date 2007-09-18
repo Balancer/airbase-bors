@@ -1,33 +1,40 @@
 <?php
 /***************************************************************************
 
-FeedCreator class v1.7.1
+FeedCreator class v1.7.2
 originally (c) Kai Blankenhorn
 www.bitfolge.de
 kaib@bitfolge.de
 v1.3 work by Scott Reynen (scott@randomchaos.com) and Kai Blankenhorn
 v1.5 OPML support by Dirk Clemens
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details: <http://www.gnu.org/licenses/gpl.txt>
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 ****************************************************************************
 
 
 Changelog:
 
+v1.7.2	10-11-04
+	license changed to LGPL
+
 v1.7.1
 	fixed a syntax bug
 	fixed left over debug code
 
-v1.7
+v1.7	07-18-04
 	added HTML and JavaScript feeds (configurable via CSS) (thanks to Pascal Van Hecke)
 	added HTML descriptions for all feed formats (thanks to Pascal Van Hecke)
 	added a switch to select an external stylesheet (thanks to Pascal Van Hecke)
@@ -149,7 +156,7 @@ echo $rss->saveFeed("RSS1.0", "news/feed.xml");
 **************************************************************************/
 
 // your local timezone, set to "" to disable or for GMT
-define("TIME_ZONE","+03:00");
+define("TIME_ZONE","+01:00");
 
 
 
@@ -157,7 +164,7 @@ define("TIME_ZONE","+03:00");
 /**
  * Version string.
  **/
-define("FEEDCREATOR_VERSION", "FeedCreator 1.7.1");
+define("FEEDCREATOR_VERSION", "FeedCreator 1.7.2");
 
 
 
@@ -487,7 +494,7 @@ class FeedCreator extends HtmlDescribable {
 	 * This feed's character encoding.
 	 * @since 1.6.1
 	 **/
-	var $encoding = "UTF-8";
+	var $encoding = "utf-8";
 	
 	
 	/**
@@ -656,7 +663,7 @@ class FeedCreator extends HtmlDescribable {
 		if ($filename=="") {
 			$filename = $this->_generateFilename();
 		}
-		if (@file_exists($filename) AND (time()-filemtime($filename) < $timeout)) {
+		if (file_exists($filename) AND (time()-filemtime($filename) < $timeout)) {
 			$this->_redirect($filename);
 		}
 	}
@@ -685,6 +692,7 @@ class FeedCreator extends HtmlDescribable {
 			echo "<br /><b>Error creating feed file, please check write permissions.</b><br />";
 		}
 	}
+	
 }
 
 
@@ -845,9 +853,8 @@ class RSSCreator10 extends FeedCreator {
 			if ($this->items[$i]->source!="") {
 				$feed.= "        <dc:source>".htmlspecialchars($this->items[$i]->source)."</dc:source>\n";
 			}
-            $creator = $this->getAuthor($this->items[$i]->author, $this->items[$i]->authorEmail);
-			if ($creator) {
-				$feed.= "        <dc:creator>".htmlspecialchars($creator)."</dc:creator>\n";
+			if ($this->items[$i]->author!="") {
+				$feed.= "        <dc:creator>".htmlspecialchars($this->items[$i]->author)."</dc:creator>\n";
 			}
 			$feed.= "        <title>".htmlspecialchars(strip_tags(strtr($this->items[$i]->title,"\n\r","  ")))."</title>\n";
 			$feed.= "        <link>".htmlspecialchars($this->items[$i]->link)."</link>\n";
@@ -858,22 +865,6 @@ class RSSCreator10 extends FeedCreator {
 		$feed.= "</rdf:RDF>\n";
 		return $feed;
 	}
-
-    /**
-     * Compose the RSS-1.0 author field.
-     *
-     * @author Joe Lapp <joe.lapp@pobox.com>
-     */
-     
-    function getAuthor($author, $email) {
-      if($author) {
-        if($email) {
-          return $author.' ('.$email.')';
-        }
-        return $author;
-      }
-      return $email;
-    }        
 }
 
 
@@ -983,9 +974,8 @@ class RSSCreator091 extends FeedCreator {
 			$feed.= "            <link>".htmlspecialchars($this->items[$i]->link)."</link>\n";
 			$feed.= "            <description>".$this->items[$i]->getDescription()."</description>\n";
 			
-            $author = $this->getAuthor($this->items[$i]->author, $this->items[$i]->authorEmail);
-			if ($author) {
-				$feed.= "            <author>".htmlspecialchars($author)."</author>\n";
+			if ($this->items[$i]->author!="") {
+				$feed.= "            <author>".htmlspecialchars($this->items[$i]->author)."</author>\n";
 			}
 			/*
 			// on hold
@@ -1013,19 +1003,6 @@ class RSSCreator091 extends FeedCreator {
 		$feed.= "</rss>\n";
 		return $feed;
 	}
-
-    /**
-     * Compose the RSS-0.91 and RSS-2.0 author field.
-     *
-     * @author Joe Lapp <joe.lapp@pobox.com>
-     */
-     
-    function getAuthor($author, $email) {
-      if($author && $email) {
-        return $email.' ('.$author.')';
-      }
-      return $email;
-    }        
 }
 
 
@@ -1157,20 +1134,11 @@ class AtomCreator03 extends FeedCreator {
 			$feed.= "        <modified>".htmlspecialchars($itemDate->iso8601())."</modified>\n";
 			$feed.= "        <id>".htmlspecialchars($this->items[$i]->link)."</id>\n";
 			$feed.= $this->_createAdditionalElements($this->items[$i]->additionalElements, "        ");
-
-            $author = $this->items[$i]->author;
-            $authorEmail = $this->items[$i]->authorEmail;
-			if ($author || $authorEmail) {
+			if ($this->items[$i]->author!="") {
 				$feed.= "        <author>\n";
-                if($author) {
-  				    $feed.= "            <name>".htmlspecialchars($author)."</name>\n";
-				}
-                if($authorEmail) {
-  				    $feed.= "            <email>".htmlspecialchars($authorEmail)."</email>\n";
-                }
-                $feed.= "        </author>\n";
+				$feed.= "            <name>".htmlspecialchars($this->items[$i]->author)."</name>\n";
+				$feed.= "        </author>\n";
 			}
-            
 			if ($this->items[$i]->description!="") {
 				$feed.= "        <summary>".htmlspecialchars($this->items[$i]->description)."</summary>\n";
 			}
@@ -1570,19 +1538,4 @@ echo $rss->saveFeed("RSS0.91", "feed.xml");
 
 ***************************************************************************/
 
-/**
- * This class allows to override the hardcoded charset
- *
- * @author Andreas Gohr <andi@splitbrain.org>
- */
-class DokuWikiFeedCreator extends UniversalFeedCreator{
-  function createFeed($format = "RSS0.91",$encoding='iso-8859-15') {
-    $this->_setFormat($format);
-    $this->_feed->encoding = $encoding;
-    return $this->_feed->createFeed();
-  }
-}
-
-
-
-//Setup VIM: ex: et ts=2 enc=utf-8 :
+?>
