@@ -86,7 +86,7 @@
 		function page() { return $this->page; }
 		function set_page($page) { $this->page = $page; }
 
-		function base_uri() { return 'http://balancer.ru/'; }
+		function base_url() { return 'http://balancer.ru/'; }
 
 		function uri($page = NULL)
 		{
@@ -102,7 +102,7 @@
 				$page = $this->page();
 			
 			require_once("funcs/modules/uri.php");
-			$uri = $this->base_uri().strftime("%Y/%m/%d/", $this->modify_time());
+			$uri = $this->base_url().strftime("%Y/%m/%d/", $this->modify_time());
 			$uri .= $this->uri_name()."-".$this->id();
 
 			if($page > 1)

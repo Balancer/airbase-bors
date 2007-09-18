@@ -59,6 +59,8 @@
 			foreach($posts as $pid)
 				$data['posts'][] = class_load('forum_post', $pid);
 
+			$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".addslashes($this->title())."'\" />");
+
 			return template_assign_data("templates/TopicBody.html", $data);
 		}
 
@@ -140,7 +142,7 @@
 			return class_load('forum_forum', $this->forum_id())->is_public_access() ? 86400*90 : 0;
 		}
 		
-		function base_uri()
+		function base_url()
 		{
 			return $this->forum()->category()->category_base_full();
 		}
@@ -149,4 +151,6 @@
 		{
 			return "<a href=\"".$this->url()."\">".$this->title()."</a>";
 		}
-	}
+
+	function rss_url() { return $this->base_url().strftime("%Y/%m/%d/", $this->modify_time())."topic-".$this->id()."-rss.xml"; }
+}

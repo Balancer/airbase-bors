@@ -66,7 +66,7 @@ class def_object extends def_empty
 		function title() { return $this->stb_title/* ? $this->stb_title : $this->internal_uri()*/; }
 		function set_title($new_title, $db_update) { $this->set("title", $new_title, $db_update); }
 
-		function base_uri() { return "http://{$_SERVER['HTTP_HOST']}/"; }
+		function base_url() { return "http://{$_SERVER['HTTP_HOST']}/"; }
 
 		//TODO: Устарело, после убирания вызовов - нафиг.
 		function uri($page = 1)
@@ -83,7 +83,7 @@ class def_object extends def_empty
 				return $this->id();
 				
 			require_once("funcs/modules/uri.php");
-			$uri = $this->base_uri().strftime("%Y/%m/%d/", $this->modify_time());
+			$uri = $this->base_url().strftime("%Y/%m/%d/", $this->modify_time());
 			$uri .= $this->uri_name()."-".$this->id();
 
 			if($page > 1)
