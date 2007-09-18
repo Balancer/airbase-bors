@@ -152,10 +152,14 @@
 
 		if($use_cache && $obj = load_cached_object($class_name, $id, $page))
 			return $obj;
-		
+
 		$obj = &new $class_name($id);
 //		echo "Pure load {$class_name}({$id}), loaded={$obj->loaded()}, storage engine = {$obj->storage_engine()}<br />\n";
-		if($id && !$obj->loaded() && $obj->storage_engine() && method_exists($obj, 'can_be_empty') && !$obj->can_be_empty())
+		if($id 
+				&& !$obj->loaded() 
+				&& $obj->storage_engine() 
+				&& method_exists($obj, 'can_be_empty') 
+				&& !$obj->can_be_empty())
 			return NULL;
 		
 		if($page > 1)
@@ -345,6 +349,8 @@
 					$class = $m[2];
 				else
 					$class = $class_path;
+
+//				echo "$class_path($id)";
 						
 				if($obj = pure_class_load($class_path, $id, $page, true, $host_data['bors_local']))
 				{

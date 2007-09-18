@@ -1,19 +1,13 @@
-<?
-    register_handler("rep\.gif", 'cms_plugins_forum_user_reputation_line');
+<?php
 
-    function cms_plugins_forum_user_reputation_line($uri, $m, $plugin_data)
+class_include('def_image_gif');
+
+class user_image_reputation extends def_image_gif
+{
+    function image()
 	{
-		if(!preg_match("!/(\d+)/$!", $plugin_data['base_path'], $m))
-			return false;
-		
-		$user_id = intval($m[1]);
-
-		if(!$user_id)
-			return false;
-
 		$func1 = "imagecreatefromgif";
 		$func2 = "imagegif";
-			
 
 		$ww = 100;
 		$hh = 16;
@@ -27,7 +21,7 @@
 		
 		$db = &new DataBase('punbb');
 
-		$reputation_value = $db->get("SELECT reputation FROM users WHERE id = $user_id");
+		$reputation_value = $db->get("SELECT reputation FROM users WHERE id = ".intval($this->id()));
 		
 		$reputation_abs = intval(0.99 + 20*atan($reputation_value*$reputation_value/200)/pi())/2;
 
@@ -54,18 +48,21 @@
 				imagecopy($img, $star_half, 10+intval($reputation_abs)*$sx, 0, 0, 0, imagesx($star), imagesy($star));
 		}
 
-		header("Content-type: " . image_type_to_mime_type(IMAGETYPE_GIF));
-
-		$path = "/var/www/balancer.ru/htdocs/user/$user_id";
-		include_once("funcs/filesystem_ext.php");
-		mkpath($path, 0775);
-		imagegif($img, "$path/rep.gif");
-		chmod("$path/rep.gif", 0664);
-		readfile("$path/rep.gif");
+		ob_start();
+		imagegif($img);
+		$result = ob_get_contents();
+		ob_end_clean();
 
 		imagedestroy($img);
 		imagedestroy($star);
 		imagedestroy($star_half);
 
-		return true;
+		return $result;
 	}
+	
+	function url() { return "http://balancer.ru/user/{$this->id()}/rep.gif"; }
+	
+	function cache_static() { return 3600*57; }
+	
+	function cache_groups() { return "user-{$this->id()}-reputation"; }
+}
