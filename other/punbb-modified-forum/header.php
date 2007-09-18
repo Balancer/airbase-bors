@@ -66,8 +66,11 @@ if (!defined('PUN_ALLOW_INDEX'))
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css';/*"*/?>" />
 <link rel="stylesheet" type="text/css" href="/cms/templates/forum/main.css" />
-<link rel="alternate" type="application/rss+xml" href="<?echo $pun_config['root_uri'];?>/rss.php" title="New Posts" />
 <?php
+	global $header;
+	if(!empty($header))
+		foreach($header as $h)	
+			echo $h;
 
 if (defined('PUN_ADMIN_CONSOLE'))
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$pun_config['root_uri']}/style/imports/base_admin.css\" />\n";

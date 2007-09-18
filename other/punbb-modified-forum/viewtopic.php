@@ -218,6 +218,11 @@ else
 
 $page_title = pun_htmlspecialchars("{$cur_topic['subject']} / {$pun_config['o_board_title']}");
 define('PUN_ALLOW_INDEX', 1);
+
+global $header;
+$rss = class_load('forum_topic_rss', $id);
+$header[] = "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$rss->url()."\" title=\"Новые сообщения в теме '".$rss->title()."'\" />";
+
 require PUN_ROOT.'header.php';
 
 

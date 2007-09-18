@@ -1,14 +1,15 @@
-<?
-	require_once('classes/objects/BorsBaseObject.php');
-	class borsForumAbstract extends BorsBaseObject
-	{
-		function template()
-		{ 
-//			if($this->id() == 20)
-				return "xfile://{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/_header.html"; 
-//			else
-//				return "xfile://{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/forum.new.html"; 
-		}
+<?php
+class_include('def_dbpage');
+
+class borsForumAbstract extends def_dbpage
+{
+	function template()
+	{ 
+//		if($this->id() == 20)
+			return "xfile://{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/_header.html"; 
+//		else
+//			return "xfile://{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/forum.new.html"; 
+	}
 		
     function cache_life_time()
     {

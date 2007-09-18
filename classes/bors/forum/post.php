@@ -132,7 +132,7 @@ class forum_post extends def_db_object
 			return $this->topic()->title()." <small>[".$this->owner()->title().", ".strftime("%d.%m.%y", $this->create_time())."]</small>";
 		}
 
-		function base_uri()
+		function base_url()
 		{
 			return $this->topic()->forum()->category()->category_base_full();
 		}
