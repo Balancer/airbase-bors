@@ -27,9 +27,10 @@
 			parent::def_dbpage($id);
 			
 			$this->add_template_data('user_id', $id);
+			$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url(1)."rss.xml\" title=\"RSS блога пользователя ".addslashes($this->user->title())."\" />");
 		}
 
-		function uri($page = 1)
+		function url($page = 1)
 		{	
 			if($page < 2)
 				return "http://balancer.ru/user/".$this->id()."/blog/"; 

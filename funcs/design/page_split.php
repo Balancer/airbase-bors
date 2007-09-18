@@ -57,7 +57,6 @@
 
 	function pages_show($obj, $total_pages, $limit, $show_current = true, $current_page_class = 'current_page', $other_page_class = 'select_page')
 	{
-
 		$pages = array();
 		$total_pages = intval($total_pages);
 		$current_page = $show_current ? $obj->page() : -1;
@@ -98,7 +97,7 @@
 	function get_page_link($obj, $page_num, $class="", $q = "")
 	{
 		if(is_object($obj))
-			$p = $obj->uri($page_num);
+			$p = $obj->url($page_num);
 		else
 		{
 			$p = $obj;

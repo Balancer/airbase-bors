@@ -128,6 +128,6 @@ class forum_user extends def_db_object
 		function set_reputation($reputation, $db_update) { $this->set("reputation", $reputation, $db_update); }
 		function field_reputation_storage() { return 'punbb.users.reputation(id)'; }
 		
-		function uri() { return "http://balancer.ru/user/{$this->id()}/"; }
+		function url() { return "http://balancer.ru/user/{$this->id()}/"; }
 		function parents() { return array("http://balancer.ru/forum/users/"); }
 }

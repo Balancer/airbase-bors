@@ -448,10 +448,9 @@ while ($cur_post = $db->fetch_assoc($result))
 			$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warn_add/?ref=".urlencode("{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['id']}#p{$cur_post['id']}")."\" style=\"color: red;\">Выставить штраф</a>";
 
 		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation.html?post://{$cur_post['id']}\">Репутация участника</a>";
-
 		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/blog.html\">Блог участника</a>";
-
 		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/use-topics.html\">Темы с его участием</a>";
+		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/posts/\">Все сообщения участника</a>";
 	}
 	// If the poster is a guest (or a user that has been deleted)
 	else

@@ -39,7 +39,7 @@
 			$this->add_template_data('user_id', $id);
 		}
 
-		function uri()
+		function url()
 		{
 			return "http://balancer.ru/user/".$this->id()."/reputation.html";
 		}

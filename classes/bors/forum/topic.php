@@ -59,13 +59,6 @@
 			foreach($posts as $pid)
 				$data['posts'][] = class_load('forum_post', $pid);
 
-			$total = $this->num_replies()+1;
-			if($total > $posts_per_page)
-			{
-				include_once('funcs/design/page_split.php');
-				$data['pagelist'] = join(" ", pages_select($this, $this->page(), ($total-1)/$posts_per_page+1));
-			}
-			
 			return template_assign_data("templates/TopicBody.html", $data);
 		}
 
@@ -76,6 +69,15 @@
 		}
 
 		function pages_links()
+		{
+			if($this->total_pages() < 2)
+				return "";
+
+			include_once('funcs/design/page_split.php');
+			return join(" ", pages_show($this, $this->total_pages(), 20));
+		}
+
+		function title_pages_links()
 		{
 			if($this->total_pages() < 2)
 				return "";
@@ -141,5 +143,10 @@
 		function base_uri()
 		{
 			return $this->forum()->category()->category_base_full();
+		}
+		
+		function title_url()
+		{
+			return "<a href=\"".$this->url()."\">".$this->title()."</a>";
 		}
 	}

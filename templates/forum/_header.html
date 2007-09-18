@@ -32,6 +32,11 @@ dd, dt { height: 1%; }
 }
 </style><![endif]-->
 {/literal}
+{if $header}
+{foreach from=$header item="h"}
+{$h}
+{/foreach}
+{/if}
 </head>
 
 <body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg" id="body" onLoad="onLoad(this)">

@@ -42,6 +42,11 @@
 			$GLOBALS['cms']['templates']['data'][$var_name] = $value;
 		}
 
+		function add_template_data_array($var_name, $value)
+		{
+			$GLOBALS['cms']['templates']['data'][$var_name][] = $value;
+		}
+
 		function _class_dir()
 		{
 			if(!method_exists($this, '_class_file'))
