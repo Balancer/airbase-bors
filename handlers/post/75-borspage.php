@@ -139,6 +139,9 @@
 		else
 			$content = $processed;
 
+		if($content === false)
+			return false;
+
 	    header("Status: 200 OK");
 		
 		$last_modify = gmdate('D, d M Y H:i:s', $obj->modify_time()).' GMT';

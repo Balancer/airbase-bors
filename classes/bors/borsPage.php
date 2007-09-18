@@ -26,4 +26,6 @@ class borsPage extends BorsBaseObject
 		//TODO: затычка!
 		return $_SERVER['DOCUMENT_ROOT'].preg_replace('!^http://[^/]+!', '', $this->id());
 	}
+
+	function can_be_empty()		{ return false; }
 }
