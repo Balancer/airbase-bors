@@ -8,7 +8,7 @@
 //		$GLOBALS['cms']['cache_disabled'] = true;
 		require_once("classes/objects/Bors.php");
 
-		if($ret = handler_bors_auto_do(class_load($uri,NULL,1,false)))
+		if($ret = handler_bors_auto_do(class_load($uri, NULL, 1, false)))
 			return $ret;
 
 		return false;
@@ -16,10 +16,10 @@
 
 	function handler_bors_auto_do($obj)
 	{
+//		echo get_class($obj); exit();
+
 		if(!$obj)
 			return false;
-
-//		echo get_class($obj); exit();
 
 		$processed = $obj->preParseProcess($_GET);
 		if($processed === true)

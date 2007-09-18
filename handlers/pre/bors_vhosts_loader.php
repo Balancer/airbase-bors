@@ -17,11 +17,13 @@
 		if(file_exists($file = BORS_INCLUDE.'/vhosts/'.$host.'/handlers/bors_map.php'))
 			include($file);
 
-		if(file_exists($file = $bors_local.'handlers/bors_map.php'))
+		$map2 = $map;
+
+		if(file_exists($file = $bors_local.'/handlers/bors_map.php'))
 			include($file);
 			
 		$bors_data['vhosts'][$host] = array(
-			'bors_map' => $map,
+			'bors_map' => array_merge($map2, $map),
 			'bors_local' => $bors_local,
 		);
 	}

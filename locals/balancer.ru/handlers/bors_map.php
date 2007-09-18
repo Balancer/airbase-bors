@@ -1,4 +1,4 @@
-<?
+<?php
     $map = array(
 
 		'/\d{4}/\d{1,2}/\d{1,2}/forum\-(\d+)(,(\d+))?\-\-.*\.html => forum_forum(1,3)',
@@ -26,6 +26,7 @@
 		'/user/(\d+)/posts/index\-(\d+)\.html => user_posts(1,2)',
 		'/user/(\d+)/posts/(\d+)\.html => user_posts(1,2)',
 
+		'/user/(\d+)/rep\.gif => user_image_reputation(1)',
 
 		'/user/(\d+)/reputation/ => user_reputation(1)',
 		'/user/(\d+)/reputation/(.+) => user_reputation(1,2)',

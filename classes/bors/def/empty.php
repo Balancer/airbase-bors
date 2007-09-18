@@ -20,4 +20,6 @@ class def_empty
 	function storage_engine() { return ''; }
 	function body_engine() { return ''; }
 	function loaded() { return true; }
+	function internal_uri() { return get_class($this).'://'.$this->id(); }
+	function cache_clean() { }
 }

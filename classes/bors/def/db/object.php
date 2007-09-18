@@ -1,8 +1,8 @@
 <?php
 
-//class_include('def_object');
+class_include('def_empty');
 
-class def_db_object // extends def_object
+class def_db_object extends def_empty
 {
 	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
 

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS `cache_groups` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `cache_group` varchar(128) NOT NULL,
   `class_name` varchar(64) NOT NULL,
   `class_id` int(10) unsigned NOT NULL,
