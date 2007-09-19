@@ -1,0 +1,7 @@
+{if $list}
+{section name=i loop=$list}
+* [../{if $list[i].parameter}{$list[i].parameter|urlencode}:{/if}{$list[i].object|urlencode}/|{$list[i].object}]
+{/section}
+{else}
+Ничего не найдено
+{/if}
