@@ -24,7 +24,8 @@
 			$current = $list['default'];
 		
 		foreach($list as $id => $name)
-			echo "<option value=\"$id\"".($id == $current ? " selected=\"selected\"" : "").">$name</option>\n";
+			if($id !== 'default')
+				echo "<option value=\"$id\"".($id == $current ? " selected=\"selected\"" : "").">$name</option>\n";
 	
 		echo "</select>";
 	}
