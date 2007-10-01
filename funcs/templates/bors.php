@@ -1,4 +1,4 @@
-<?  
+<?php  
 	function template_assign_bors_object($obj)
 	{
 	

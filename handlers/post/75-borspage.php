@@ -155,7 +155,10 @@
 
 			foreach(split(' ', $obj->cache_groups()) as $group)
 				if($group)
-					class_load('cache_group', $group)->register($obj);
+				{
+					$group = class_load('cache_group', $group);
+					$group->register($obj);
+				}
 				
 		    header("X-Bors: static cache maden");
 			
