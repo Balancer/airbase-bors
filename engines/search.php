@@ -49,7 +49,7 @@ function bors_search_object_index($object)
 					'object_modify_time' => $object->modify_time(),
 				));
 			else
-				$db->update("bors_search_source_{$sub}", "word_id = $id AND class_name = '$class_name' AND class_id = $class_id", array(
+				$db->update("bors_search_source_{$sub}", "word_id = {$word_id} AND class_name = '{$class_name}' AND class_id = {$class_id}", array(
 					'count' => $count+1, 
 					'object_create_time' => $object->create_time(), 
 					'object_modify_time' => $object->modify_time(),
@@ -175,7 +175,7 @@ function bors_search_get_word_id($word, $db = NULL)
 		$word_id = $db->last_id();
 	}
 		
-	return $word_id;
+	return intval($word_id);
 }
 
 function search_titles_like($title, $limit=20, $forum=0)
@@ -321,13 +321,9 @@ function bors_search_in_bodies($query)
 		}
 	}
 
-	loglevel(10);
 	if($none)
-	{
 		foreach($none as $w)
 			$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_source_".($w%10)." WHERE word_id = {$w}"));
-	}
-	loglevel(2);
 
 	$result = array();
 	
