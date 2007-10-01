@@ -22,4 +22,6 @@ class def_empty
 	function loaded() { return true; }
 	function internal_uri() { return get_class($this).'://'.$this->id(); }
 	function cache_clean() { }
+
+	function auto_search_index() { return false; }
 }
