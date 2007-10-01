@@ -24,6 +24,8 @@
 		
 		function changed_save()
 		{
+			include_once('engines/search.php');
+		
 			if(empty($this->changed_objects))
 				return;
 				
@@ -39,6 +41,9 @@
 				$cfg = $this->config();
 				$storage = $cfg->storage();
 				$storage->save($obj);
+				
+				if(config('search_autoindex'))
+					bors_search_object_index($obj);
 			}
 		}
 		
