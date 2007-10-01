@@ -14,7 +14,7 @@ function bors_search_object_index($object)
 
 	$Stemmer = &new Lingua_Stem_Ru();
 	
-	$class_id	= $object->id();
+	$class_id	= intval($object->id());
 	$class_name	= get_class($object);
 	
 	if($source)
@@ -22,7 +22,7 @@ function bors_search_object_index($object)
 		$words = index_split($source);
 		
 		for($i=0; $i<10; $i++)
-			$db->query("DELETE FROM body_$i WHERE class_name = '$class_name' AND class_id = $class_id");
+			$db->query("DELETE FROM bors_search_source_{$i} WHERE class_name = '{$class_name}' AND class_id = {$class_id}");
 		
 		foreach($words as $word)
 		{
@@ -34,20 +34,26 @@ function bors_search_object_index($object)
 			if(strlen($word) > 16)
 				$word = substr($word, 0, 16);
 				
-			$id = $db->get("SELECT id FROM words WHERE word = '".addslashes($word)."'");
-			if(!$id)
-			{
-				$db->insert('words', array('word' => $word));
-				$id = $db->last_id();
-			}
+			$word_id = bors_search_get_word_id($word);
 
-			$sub = $id%10;
+			$sub = $word_id%10;
 			
-			$count = intval($db->get("SELECT count FROM body_$sub WHERE word_id = $id AND class_name = '$class_name' AND class_id = $class_id"));
+			$count = intval($db->get("SELECT count FROM bors_search_source_{$sub} WHERE word_id = {$word_id} AND class_name = '{$class_name}' AND class_id = {$class_id}"));
 			if(!$count)
-				$db->replace("body_$sub", array('word_id'=>$id, 'class_id'=>$class_id, 'class_name'=>$class_name, 'count'=>1));
+				$db->replace("bors_search_source_{$sub}", array(
+					'word_id' => $word_id, 
+					'class_id' => $class_id, 
+					'class_name' => $class_name, 
+					'count' => 1, 
+					'object_create_time' => $object->create_time(), 
+					'object_modify_time' => $object->modify_time(),
+				));
 			else
-				$db->update("body_$sub", "word_id = $id AND class_name = '$class_name' AND class_id = $class_id", array('count' => $count+1));
+				$db->update("bors_search_source_{$sub}", "word_id = $id AND class_name = '$class_name' AND class_id = $class_id", array(
+					'count' => $count+1, 
+					'object_create_time' => $object->create_time(), 
+					'object_modify_time' => $object->modify_time(),
+				));
 		}
 	}
 
@@ -55,8 +61,7 @@ function bors_search_object_index($object)
 	{
 		$words = index_split($title);
 		
-		if($clean)
-			$db->query("DELETE FROM titles_map WHERE class_name = '$class_name' AND class_id = $class_id");
+		$db->query("DELETE FROM bors_search_titles WHERE class_name = '{$class_name}' AND class_id = {$class_id}");
 		
 		foreach($words as $word)
 		{
@@ -68,14 +73,15 @@ function bors_search_object_index($object)
 			if(strlen($word) > 16)
 				$word = substr($word, 0, 16);
 				
-			$word_id = $db->get("SELECT id FROM words WHERE word = '".addslashes($word)."'");
-			if(!$word_id)
-			{
-				$db->insert('words', array('word' => $word));
-				$word_id = $db->last_id();
-			}
+			$word_id = bors_search_get_word_id($word);
 		
-			$db->insert_ignore("titles_map", array('word_id'=>$word_id, 'class_id'=>$class_id, 'class_name'=>$class_name));
+			$db->replace("bors_search_titles", array(
+				'word_id' => $word_id, 
+				'class_id' => $class_id, 
+				'class_name' => $class_name, 
+				'object_create_time' => $object->create_time(), 
+				'object_modify_time' => $object->modify_time(),
+			));
 		}
 	}
 }
@@ -86,7 +92,7 @@ function index_split($text)
 	return preg_split("![^\wА-ЯЁа-яё\-\.]|[\._\-]+(\s+|$)!u", $text);
 }
 
-function find_in_titles($query)
+function bors_search_in_titles($query)
 {
 	// +word -word word
 		
@@ -104,21 +110,25 @@ function find_in_titles($query)
 	$must = array();
 	$none = array();
 	$maybe= array();
+
 	foreach($words as $word)
+	{
 //		if($word{0} == '+')
-//			$must[] = get_word_id(substr($word, 1));
+//			$must[] = bors_search_get_word_id(substr($word, 1));
 		if($word{0} == '-')
-			$none[] = get_word_id(substr($word, 1));
+			$none[] = bors_search_get_word_id(substr($word, 1));
 		else
-			$maybe[] = get_word_id($word);
-	
+			$maybe[] = bors_search_get_word_id($word);
+	}
+		
 	$cross = array();
+
 	if($maybe)
 	{
 		$first = true;
 		foreach($maybe as $w)
 		{
-			$res = $db->get_array("SELECT DISTINCT class_name, class_id	FROM titles_map WHERE t.word_id = $w");
+			$res = $db->get_array("SELECT DISTINCT class_name, class_id	FROM bors_search_titles WHERE word_id = $w");
 			if($first)
 				$cross = $res;
 			else
@@ -129,11 +139,17 @@ function find_in_titles($query)
 	}
 
 	if($none)
-		$corss = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id FROM titles_map WHERE t.word_id IN (".join(",", $none).")"));
-	return $cross;
+		$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_titles WHERE word_id IN (".join(",", $none).")"));
+
+	$result = array();
+	
+	foreach($cross as $x)
+		$result[] = class_load($x['class_name'], $x['class_id']);
+
+	return $result;
 }
 
-function get_word_id($word, $db = NULL)
+function bors_search_get_word_id($word, $db = NULL)
 {
 	include_once("include/classes/text/Stem_ru.php");
 		
@@ -151,10 +167,11 @@ function get_word_id($word, $db = NULL)
 	if(strlen($word) > 16)
 		$word = substr($word, 0, 16);
 			
-	$word_id = $db->get("SELECT id FROM words WHERE word = '".addslashes($word)."'");
+	$word_id = $db->get("SELECT id FROM bors_search_words WHERE word = '".addslashes($word)."'");
+
 	if(!$word_id)
 	{
-		$db->insert('words', array('word' => $word));
+		$db->insert('bors_search_words', array('word' => $word));
 		$word_id = $db->last_id();
 	}
 		
@@ -176,7 +193,7 @@ function search_titles_like($title, $limit=20, $forum=0)
 				
 	$search = array();
 	foreach($words as $word)
-		$search[] = get_word_id($word);
+		$search[] = bors_search_get_word_id($word);
 	
 	$cross = array();
 	if($maybe)
@@ -259,7 +276,7 @@ function search_titles_like($title, $limit=20, $forum=0)
 	return $ch->set($out, 86400+rand(0,86400));
 }
 
-function find_in_bodies($query)
+function bors_search_in_bodies($query)
 {
 	// +word -word word
 		
@@ -277,13 +294,16 @@ function find_in_bodies($query)
 	$must = array();
 	$none = array();
 	$maybe= array();
+
 	foreach($words as $word)
+	{
 //		if($word{0} == '+')
-//			$must[] = get_word_id(substr($word, 1));
-		if($word{0} == '-')
-			$none[] = get_word_id(substr($word, 1));
+//			$must[] = bors_search_get_word_id(substr($word, 1));
+		if(preg_match("!^\-(.+)$!", $word, $m))
+			$none[] = bors_search_get_word_id($m[1]);
 		else
-			$maybe[] = get_word_id($word);
+			$maybe[] = bors_search_get_word_id($word);
+	}
 	
 	$cross = array();
 	if($maybe)
@@ -291,10 +311,7 @@ function find_in_bodies($query)
 		$first = true;
 		foreach($maybe as $w)
 		{
-			$res = $db->get_array("SELECT DISTINCT p.topic_id 
-				FROM SEARCH.body_".substr($w,-1)." b
-					INNER JOIN punbb.posts p ON p.id = b.page_id
-				WHERE b.word_id = $w");
+			$res = $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_source_".($w%10)." WHERE word_id = $w");
 			if($first)
 				$cross = $res;
 			else
@@ -304,10 +321,18 @@ function find_in_bodies($query)
 		}
 	}
 
+	loglevel(10);
 	if($none)
-		$corss = array_diff($cross, $db->get_array("SELECT DISTINCT p.topic_id 
-			FROM SEARCH.body_".substr($w,-1)." b
-				INNER JOIN punbb.posts p ON p.id = b.page_id
-			WHERE b.word_id IN (".join(",", $none).")"));
-	return $cross;
+	{
+		foreach($none as $w)
+			$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_source_".($w%10)." WHERE word_id = {$w}"));
+	}
+	loglevel(2);
+
+	$result = array();
+	
+	foreach($cross as $x)
+		$result[] = class_load($x['class_name'], $x['class_id']);
+
+	return $result;
 }
