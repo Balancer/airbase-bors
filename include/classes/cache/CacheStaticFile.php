@@ -42,8 +42,12 @@
 			$this->uri  = $uri;
 			$this->page  = $page;
 			$this->original_uri  = $uri;
-			if(!empty($GLOBALS['bors']) && $GLOBALS['bors']->config()->cache_uri())
-				$this->original_uri = $GLOBALS['bors']->config()->cache_uri();
+			if(!empty($GLOBALS['bors']))
+			{
+				$cfg = $GLOBALS['bors']->config();
+				if($cfg->cache_uri())
+					$this->original_uri = $cfg->cache_uri();
+			}
 			
 			$this->file = $_SERVER['DOCUMENT_ROOT'].preg_replace('!http://[^/]+!', '', $uri);
 			

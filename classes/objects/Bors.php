@@ -36,7 +36,9 @@
 				
 				$obj->cache_clean();
 				
-				$this->config()->storage()->save($obj);
+				$cfg = $this->config();
+				$storage = $cfg->storage();
+				$storage->save($obj);
 			}
 		}
 		
