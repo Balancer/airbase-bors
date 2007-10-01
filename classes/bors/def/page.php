@@ -102,4 +102,8 @@ class def_page extends borsPage
 				$this->add_template_data(trim($m[1]), trim($m[2]));
 		}
 	}
+
+	function search_source() { return $this->source(); }
+
+	function auto_search_index() { return true; }
 }

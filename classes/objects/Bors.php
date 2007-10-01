@@ -42,7 +42,7 @@
 				$storage = $cfg->storage();
 				$storage->save($obj);
 				
-				if(config('search_autoindex'))
+				if(config('search_autoindex') && $obj->auto_search_index())
 					bors_search_object_index($obj);
 			}
 		}

@@ -321,4 +321,7 @@
 	function render_engine() { return ''; }
 	function storage_engine() { return ''; }
 	function body_engine() { return ''; }
+
+	function search_source() { return $this->source(); }
+	function auto_search_index() { return true; }
 }
