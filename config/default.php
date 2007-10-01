@@ -1,5 +1,9 @@
-<?
-	$GLOBALS['log_level'] = 2;
+<?php
+
+function config_set($key, $value) { $GLOBALS['cms']['config'][$key] = $value; }
+function config($key) { return @$GLOBALS['cms']['config'][$key]; }
+
+$GLOBALS['log_level'] = 2;
 
 	if(!defined("BORS_INCLUDE"))
 		define("BORS_INCLUDE", "{$_SERVER['DOCUMENT_ROOT']}/cms/");
@@ -83,3 +87,4 @@
 	);
 
 config_set('search_db', 'BORS_SEARCH');
+config_set('search_autoindex', true);
