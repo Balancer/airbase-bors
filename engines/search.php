@@ -8,7 +8,7 @@ function bors_search_object_index($object)
 	$source	= $object->search_source();
 	$title	= $object->title();
 
-	include_once("include/classes/text/Stem_ru.php");
+	include_once("include/classes/text/Stem_ru-{$GLOBALS['cms']['charset_u']}.php");
 			
 	$db = &new DataBase(config('search_db'));
 
@@ -88,8 +88,7 @@ function bors_search_object_index($object)
 
 function index_split($text)
 {
-//	return preg_split("!\s+|\.(\s+|$)|,\s*|:|;|\.\.\.|\(|\)|\"|\{|\}|\[|\]!", $text);
-	return preg_split("![^\wА-ЯЁа-яё\-\.]|[\._\-]+(\s+|$)!u", $text);
+	return preg_split('![ -,\./:-@\[-`\{-~\s]+!', $text);
 }
 
 function bors_search_in_titles($query)
@@ -101,7 +100,7 @@ function bors_search_in_titles($query)
 	if(!$words)
 		return array();
 
-	include_once("include/classes/text/Stem_ru.php");
+	include_once("include/classes/text/Stem_ru-{$GLOBALS['cms']['charset_u']}.php");
 			
 	$db = &new DataBase(config('search_db'));
 
@@ -151,7 +150,7 @@ function bors_search_in_titles($query)
 
 function bors_search_get_word_id($word, $db = NULL)
 {
-	include_once("include/classes/text/Stem_ru.php");
+	include_once("include/classes/text/Stem_ru-{$GLOBALS['cms']['charset_u']}.php");
 		
 	$word = trim($word);
 
@@ -185,7 +184,7 @@ function search_titles_like($title, $limit=20, $forum=0)
 	if(!$words)
 		return array();
 
-	include_once("include/classes/text/Stem_ru.php");
+	include_once("include/classes/text/Stem_ru-{$GLOBALS['cms']['charset_u']}.php");
 			
 	$db = &new DataBase(config('search_db'));
 
@@ -285,7 +284,7 @@ function bors_search_in_bodies($query)
 	if(!$words)
 		return array();
 
-	include_once("include/classes/text/Stem_ru.php");
+	include_once("include/classes/text/Stem_ru-{$GLOBALS['cms']['charset_u']}.php");
 			
 	$db = &new DataBase(config('search_db'));
 
