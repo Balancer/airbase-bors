@@ -46,7 +46,10 @@ class def_page extends borsPage
 
 		function add_template_data_array($var_name, $value)
 		{
-			$GLOBALS['cms']['templates']['data'][$var_name][] = $value;
+			if(preg_match('!^(.+)\[(.+)\]$!', $var_name, $m))
+				$GLOBALS['cms']['templates']['data'][$m[1]][$m[2]] = $value;
+			else
+				$GLOBALS['cms']['templates']['data'][$var_name][] = $value;
 		}
 
 		function template_data($var_name)
@@ -92,7 +95,11 @@ class def_page extends borsPage
 	function set_template_data($data)
 	{
 		foreach($data as $pair)
-			if(preg_match("!^(.+?)=(.+)$!", $pair, $m))
+		{
+			if(preg_match('!^(.+?)\[(.+?)\]\s*=(.+)$!', $pair, $m))
+				$this->add_template_data_array(trim($m[1]).'['.trim($m[2]).']', trim($m[3]));
+			else if(preg_match('!^(.+?)=(.+)$!', $pair, $m))
 				$this->add_template_data(trim($m[1]), trim($m[2]));
+		}
 	}
 }
