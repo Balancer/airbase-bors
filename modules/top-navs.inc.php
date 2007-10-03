@@ -96,7 +96,7 @@
 		foreach($parents as $parent)
         {
 //			echo "Check '$parent' for '$uri'<br />\n";
-			if($parent == $uri || $obj && $parent == $obj->uri())
+			if($parent == $uri || $obj && $parent == $obj->url())
 				continue;
 
             if(!isset($GLOBALS['visited_pairs']["$parent|#|$uri"]))

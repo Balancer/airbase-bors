@@ -118,7 +118,7 @@ class forum_post extends def_db_object
 				}
 			
 			require_once('funcs/navigation/go.php');
-			return go($topic->uri($page)."#p".$pid, true, 0, false);
+			return go($topic->url($page)."#p".$pid, true, 0, false);
 		}
 
 		function url() 

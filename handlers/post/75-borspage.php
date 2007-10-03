@@ -123,7 +123,7 @@
 			$GLOBALS['bors']->set_main_object($obj);
 
 			if(empty($GLOBALS['main_uri']))
-				$GLOBALS['main_uri'] = $obj->uri();
+				$GLOBALS['main_uri'] = $obj->url();
 	
 			if($render_engine = $obj->render_engine())
 			{
@@ -150,7 +150,7 @@
 		if((!empty($GLOBALS['cms']['cache_static']) || $obj->cache_static()) && (empty($_SERVER['QUERY_STRING']) || $_SERVER['QUERY_STRING']=='del'))
 		{
 			$page = $obj->page();
-			$sf = &new CacheStaticFile($obj->uri($page));
+			$sf = &new CacheStaticFile($obj->url($page));
 			$sf->save($content, $obj->modify_time(), $obj->cache_static());
 
 			foreach(split(' ', $obj->cache_groups()) as $group)
@@ -163,7 +163,7 @@
 		    header("X-Bors: static cache maden");
 			
 //			require_once('funcs/navigation/go.php');
-//			return go($obj->uri($page), true, 0, false);
+//			return go($obj->url($page), true, 0, false);
 		}
 		
 		echo $content;

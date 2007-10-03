@@ -23,7 +23,7 @@
 				$last = $i;
 				
 				if(is_object($page))
-					$p = $page->uri($i);
+					$p = $page->url($i);
 				else
 				{
 					$p = $page;

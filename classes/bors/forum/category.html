@@ -2,7 +2,7 @@
 {if $subcats}
 {foreach from=$subcats item=c}
 <dl class="box">
-<dt><a href="{$c->uri()}">{$c->title()}</a></dt>
+<dt><a href="{$c->url()}">{$c->title()}</a></dt>
 	{assign var=subforums value=$c->all_subforums()}
 </dl>
 {/foreach}
