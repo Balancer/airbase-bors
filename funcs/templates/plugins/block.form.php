@@ -23,6 +23,7 @@
 
 			if(empty($action))
 				$action = $uri;
+
 			if($action == 'this')
 				$action = $GLOBALS['main_uri'];
 				
