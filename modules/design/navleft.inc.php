@@ -44,7 +44,7 @@
 		{
 			$d['indent'] = $max - $d['indent'];
 			if(is_object($d['uri']))
-				$d['uri'] = $d['uri']->uri();
+				$d['uri'] = $d['uri']->url();
 			$data2[] = $d;
 		}
 		

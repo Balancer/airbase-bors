@@ -38,14 +38,14 @@
     {
 		$topic = class_load('forum_topic', intval($topic_id));
 
-        return "<a href=\"".$topic->uri()."\">".$topic->title()."</a>";
+        return "<a href=\"".$topic->url()."\">".$topic->title()."</a>";
     }
 
     function lcml_forum_post_title($post_id)
     {
 		$post = class_load('forum_post', intval($post_id));
 
-        return "<a href=\"".$post->uri()."\">".$post->title()."</a>";
+        return "<a href=\"".$post->url()."\">".$post->title()."</a>";
     }
 
     function lcml_forum_topics_post($topic,$post)

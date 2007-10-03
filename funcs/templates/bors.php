@@ -61,7 +61,7 @@
 			}
 
 		if(!$caching)
-			$smarty->clear_cache($template, $obj->uri());
+			$smarty->clear_cache($template, $obj->url());
 
 		if(!empty($GLOBALS['stat']['start_microtime']))
 		{
@@ -74,7 +74,7 @@
 		$smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
 		$smarty->assign("queries", $GLOBALS['global_db_queries']);
 
-		$out = $smarty->fetch($template, $obj->uri());
+		$out = $smarty->fetch($template, $obj->url());
 
 /*		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out); */
 

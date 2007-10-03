@@ -13,9 +13,9 @@
 {assign var=o value=$t->owner()}
 <tr class="tr_forum_{$f->id()}">
 	<td><div class="visited_topic" id="vtl_{$t->id()}">&nbsp;</div></td>
-	<td id="vtt_{$t->id()}"><a href="{$t->uri()}">{$t->title()}</a> 
+	<td id="vtt_{$t->id()}"><a href="{$t->url()}">{$t->title()}</a> 
 		{if $t->total_pages() > 1}<small><span class="topic_pages_links">[ {$t->pages_links()} ]</small></span>{/if}
-		(<a href="{$f->uri()}">{$f->title()}</a>, {$t->create_time()|airbase_time})</td>
+		(<a href="{$f->url()}">{$f->title()}</a>, {$t->create_time()|airbase_time})</td>
 	<td class="small aligncenter">{$t->num_replies()}</td>
 	<td class="small">{$t->modify_time()|airbase_time} <small>({$t->last_poster_name()})</small></td>
 </tr>
