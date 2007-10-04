@@ -1,5 +1,6 @@
 <?
 require_once("classes/bors/borsPage.php");
+include_once("funcs/templates/global.php");
 
 class def_page extends borsPage
 {
@@ -103,7 +104,7 @@ class def_page extends borsPage
 		}
 	}
 
-	function search_source() { return $this->source(); }
+	function search_source() { return strip_tags($this->body()); }
 
 	function auto_search_index() { return true; }
 }

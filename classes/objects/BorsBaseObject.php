@@ -248,7 +248,7 @@
 			
 			global $me;
 		
-			if($this->need_access_level() > $me->get("level"))
+			if($this->need_access_level() > 1 && $this->need_access_level() > $me->get("level"))
 			{
 				require_once("funcs/modules/messages.php");
 				return error_message(ec("У Вас недостаточный уровень доступа для этой страницы. Ваш уровень ").$me->get("level").ec(", требуется ").$this->need_access_level());
@@ -322,6 +322,6 @@
 	function storage_engine() { return ''; }
 	function body_engine() { return ''; }
 
-	function search_source() { return $this->source(); }
+	function search_source() { return strip_tags($this->body()); }
 	function auto_search_index() { return true; }
 }
