@@ -16,7 +16,7 @@
 
 	function handler_bors_auto_do($obj)
 	{
-//		echo get_class($obj); exit();
+//		echo "Bors class=".get_class($obj); exit();
 
 		if(!$obj)
 			return false;
