@@ -98,7 +98,7 @@ dd, dt { height: 1%; }
 var me_id = readCookie('user_id', 0)
 var me_hash = readCookie('cookie_hash', 0)
 			if(me_id < 2 || !me_hash)
-				document.writeln("<"+"script  type=\"text/javascript\" src=\"{$bors_local_cache}templates/login.js\"></"+"script>")
+				document.writeln("<"+"script  type=\"text/javascript\" src=\"/templates/login.js\"></"+"script>")
 			else
 				document.writeln("<"+"script  type=\"text/javascript\" src=\"http://balancer.ru/user/"+me_id+"/personal.js\"></"+"script>")
 			</script>

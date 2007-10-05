@@ -54,6 +54,7 @@
 					{
 						$url = $link;
 						$nav = $hts->get($link, 'nav_name');
+//						echo "<b>***Nav for '$link' = '$nav'***</b><br/>";
 					}
 					
 //					echo "{$link} -> {$obj->title()}<br />\n";

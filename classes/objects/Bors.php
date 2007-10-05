@@ -71,8 +71,8 @@
 				
 			$cls = class_load($m[1], $m[2].(preg_match("!^\d+$!", $m[2]) ? '' : '/'));
 			
-			if(method_exists($cls, 'uri'))
-				return $cls->uri();
+			if(method_exists($cls, 'url'))
+				return $cls->url();
 			else
 				return $uri;
 		}
@@ -306,7 +306,7 @@
 		if(!empty($obj))
 			return $obj;
 			
-//		print_r($bors_data['vhosts']);
+//		echo "<xmp>"; print_r($data); print_r($bors_data['vhosts']); echo "</xmp>";
 
 		if(empty($bors_data['vhosts'][$data['host']]))
 			return NULL;
