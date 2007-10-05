@@ -1,8 +1,8 @@
 <?php
 
-class_include('def_db_object');
+class_include('def_dbpage');
 
-class forum_post extends def_db_object
+class forum_post extends def_dbpage
 {
 	function storage_engine() { return 'storage_db_mysql'; }
 	function can_be_empty() { return false; }
@@ -15,6 +15,7 @@ class forum_post extends def_db_object
 	function topic() { return class_load('forum_topic', $this->topic_id()); }
 		
 	function field_create_time_storage() { return 'punbb.posts.posted(id)'; }
+	function field_modify_time_storage() { return 'punbb.posts.edited(id)'; }
 		
 	function parents() { return array("forum_topic://".$this->topic_id()); }
 

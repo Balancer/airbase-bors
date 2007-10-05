@@ -21,6 +21,8 @@
 
 		if(file_exists($file = $bors_local.'/handlers/bors_map.php'))
 			include($file);
+	
+//		echo "<xmp>"; print_r($map); echo "</xmp>";
 			
 		$bors_data['vhosts'][$host] = array(
 			'bors_map' => array_merge($map2, $map),

@@ -59,7 +59,6 @@
 			$pure_url = $m[1];
 			$query = $m[2];
 		}
-			
 
 		if(preg_match("!/[^/]+\.[^/]+$!", $pure_url) && !preg_match("!\.(html|htm|phtml|shtml|jsp|pl|php|php4|php5|cgi)$!i", $pure_url))
 	    	    return "<a href=\"{$original_url}\" class=\"external\">".lcml_strip_url($original_url)."</a>";
@@ -71,54 +70,44 @@
                 return "<a href=\"{$original_url}\">$title</a>";
         }
 
+		$header = array();
+		$header[] = "Accept-Charset: {$GLOBALS['lcml_request_charset_default']}";
+		$header[] = "Accept-Language: ru, en";
 
-        require_once('HTTP/Request.php');
-        $req = &new HTTP_Request($pure_url, array(
-            'allowRedirects' => true,
-            'maxRedirects' => 3,
-          'timeout' => 5,
+		$ch = curl_init($url);
+		curl_setopt_array($ch, array(
+			CURLOPT_TIMEOUT => 5,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_MAXREDIRS => 3,
+			CURLOPT_ENCODING => 'gzip,deflate',
+			CURLOPT_RANGE => '0-4095',
+			CURLOPT_REFERER => $original_url,
+			CURLOPT_AUTOREFERER => true,
+			CURLOPT_HTTPHEADER => $header,
+			CURLOPT_USERAGENT => 'Googlebot/2.1 (+http://www.google.com/bot.html)',
+			CURLOPT_RETURNTRANSFER => true,
 		));
-
-//        $req = &new HTTP_Request($pure_url);
 		
-		if($query)
-		{
-//			echo "<xmp>Get $pure_url for '$query'</xmp>";
-			$req->setMethod(HTTP_REQUEST_METHOD_GET);
-			$req->addRawQueryString(htmlspecialchars_decode($query));
-                                   
-		}
-
-        $req->addHeader('Content-Encoding', 'gzip');
-        $req->addHeader('Accept-Charset',$GLOBALS['lcml_request_charset_default']);
-        
-//		if(!preg_match("!soldat\-udachi\.com|en\.wikipedia\.org|www\.arstdesign\.com!", $url))
-//			$req->addHeader('Range','bytes=0-4095');
-        
         if(preg_match("!lenta\.ru!", $url))
-            $req->setProxy('home.balancer.ru', 3128);
+			curl_setopt($ch, CURLOPT_PROXY, 'home.balancer.ru:3128');
 		
-        $response = $req->sendRequest();
+		$data = trim(curl_exec($ch));
 
-//        return "=<a href=\"$url\" class=\"external\">".lcml_strip_url($url)."</a>";
-		
-        if(!empty($response) && PEAR::isError($response))
-            return lcml_strip_url($original_url);
-
-		$data = $req->getResponseBody();
-
+		$content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 //		echo "<xmp>"; print_r($data); echo "</xmp>";
-
-        $content_type = $req->getResponseHeader('Content-Type');
-        if(preg_match("!charset=(\S+)!i",$content_type,$m))
+		
+        if(preg_match("!charset=(\S+)!i", $content_type, $m))
             $charset = $m[1];
         else
             $charset = '';
 
-        if(preg_match("!<meta http\-equiv=\"Content\-Type\"[^>]+charset=(.+?)\"!i",$data,$m))
+		curl_close($ch);
+
+        if(preg_match("!<meta http\-equiv=\"Content\-Type\"[^>]+charset=(.+?)\"!i", $data, $m))
             $charset = $m[1];
 
-        if(!$charset) $charset = $GLOBALS['lcml_request_charset_default'];
+        if(!$charset)
+			$charset = $GLOBALS['lcml_request_charset_default'];
 
         if(preg_match("!<title>(.+?)</title>!is",$data,$m)) //@file_get_contents($url)
         {

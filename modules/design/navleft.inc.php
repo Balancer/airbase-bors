@@ -5,7 +5,7 @@
 		include_once("funcs/Cache.php");
 		$ch = &new Cache();
 		
-		if($ch->get('modules-design-navleft-v8', $uri))
+		if($ch->get('modules-design-navleft-v9', $uri))
 			return $ch->last();
 	
 		include_once("funcs/templates/assign.php");

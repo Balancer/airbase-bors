@@ -1,8 +1,8 @@
 <?php
 
-class_include('def_db_object');
+class_include('def_dbpage');
 
-class forum_user extends def_db_object
+class forum_user extends def_dbpage
 {
 	function storage_engine() { return 'storage_db_mysql'; }
 
