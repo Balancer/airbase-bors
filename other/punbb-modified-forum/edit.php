@@ -110,8 +110,6 @@ if (isset($_POST['form_sent']))
 	$hide_smilies = isset($_POST['hide_smilies']) ? intval($_POST['hide_smilies']) : 0;
 	if ($hide_smilies != '1') $hide_smilies = '0';
 
-	include_once("funcs/search/index.php");
-
 	// Did everything go according to plan?
 	if (empty($errors) && !isset($_POST['preview']))
 	{
@@ -119,15 +117,11 @@ if (isset($_POST['form_sent']))
 
 		require PUN_ROOT.'include/search_idx.php';
 
-		index_body($id, $message);
 		if ($can_edit_subject)
 		{
 			// Update the topic and any redirect topics
 			$db->query('UPDATE '.$db->prefix.'topics SET subject=\''.$db->escape($subject).'\' WHERE id='.$cur_post['tid'].' OR moved_to='.$cur_post['tid'])
 				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
-
-			// We changed the subject, so we need to take that into account when we update the search words
-			index_title($cur_post['tid'], $subject);
 		}
 
 		// Update the post
@@ -141,7 +135,12 @@ if (isset($_POST['form_sent']))
 			or error('Unable to update post', __FILE__, __LINE__, $db->error());
 
 		include_once("classes/objects/Bors.php");
-		class_load('forum_topic', $cur_post['tid'])->cache_clean();
+		$topic = class_load('forum_topic', $cur_post['tid']);
+		$post  = class_load('forum_post',  $id);
+		$topic->cache_clean();
+			
+		include_once('engines/search.php');
+		bors_search_object_index($post);
 
 		//Attachment Mod 2.0 Block Start
 		//First check if there are any files to delete, the postvariables should be named 'attach_delete_'.$i , if it's set you're going to delete the value of this (the 0 =< $i < attachments, just to get some order in there...)
