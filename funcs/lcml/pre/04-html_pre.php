@@ -15,7 +15,7 @@
 		$txt = preg_replace("!<a !","<html_a ", $txt);
 		$txt = preg_replace("!</a>!","</html_a>", $txt);
 	
-		foreach(split(' ','b br center code div embed hr i li object param pre s span u ul xmp tabtr table td html_img html_a') as $tag)
+		foreach(split(' ','b big br center code div embed hr i li object param pre s small span u ul xmp tabtr table td html_img html_a') as $tag)
 		{
 			$txt = preg_replace("!<$tag>!","[$tag]", $txt);
 			$txt = preg_replace("!<$tag\s+/>!","[$tag]", $txt);

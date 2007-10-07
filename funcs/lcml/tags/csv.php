@@ -35,7 +35,6 @@
 
     function lp_csv($txt, $params)
     {
-
         $tab = &new bcsTable();
 
         if(!empty($params['width']))
@@ -61,11 +60,29 @@
                         $d = trim($m[2]);
                         $tab->setColSpan($m[1]);
                     }
+
+                    if(preg_match("!^\[cs=(\d+)\](.+)$!", $d, $m))
+                    {
+                        $d = trim($m[2]);
+                        $tab->setColSpan($m[1]);
+                    }
+
+                    if(preg_match("!^\[cs=max\](.+)$!", $d, $m))
+                    {
+                        $d = trim($m[1]);
+                        $tab->setColSpan($tab->cols-1 - $tab->col);
+                    }
+
+                    if(preg_match("!^\[rs=(\d+)\](.+)$!", $d, $m))
+                    {
+                        $d = trim($m[2]);
+                        $tab->setRowSpan($m[1]);
+                    }
 					
                     if($d == '')
                         $d = '&nbsp;';
 						
-                    $tab->append(lcml($d));
+                    $tab->append($d);
                 }
                 $tab->new_row();
             }
@@ -75,4 +92,3 @@
     }
 
 //    echo lp_csv("*1;2;;0\n5;6;7;8",0);
-?>

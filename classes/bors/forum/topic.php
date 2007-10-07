@@ -61,6 +61,8 @@
 
 			$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".addslashes($this->title())."'\" />");
 
+			$data['this'] = $this;
+
 			return template_assign_data("templates/TopicBody.html", $data);
 		}
 

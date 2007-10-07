@@ -88,7 +88,7 @@ function bors_search_object_index($object)
 
 function index_split($text)
 {
-	return preg_split('![ -,\./:-@\[-`\{-~\s]+!', $text);
+	return preg_split('![ -,\./:-@\[-`\{-~\s¡-¿]+!u', $text);
 }
 
 function bors_search_in_titles($query)

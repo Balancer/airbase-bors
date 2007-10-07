@@ -73,7 +73,6 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/post.php';
 $errors = array();
 
 include_once("funcs/system.php");
-include_once("funcs/search/index.php");
 
 $qid = 0;
 if(isset($_GET['qid']))
@@ -273,8 +272,6 @@ if (isset($_POST['form_sent']))
 			$db->query('UPDATE '.$db->prefix.'topics SET num_replies='.$num_replies.', last_post='.$now.', last_post_id='.$new_pid.', last_poster=\''.$db->escape($username).'\' WHERE id='.$tid) 
 				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
-			index_body($new_pid, $message);
-
 			update_forum($cur_posting['id']);
 
 			// Should we send out notifications?
@@ -352,7 +349,8 @@ if (isset($_POST['form_sent']))
 			}
 
 			include_once("classes/objects/Bors.php");
-			class_load('forum_topic', $tid)->cache_clean();
+			$topic = class_load('forum_topic', $tid);
+			$post  = class_load('forum_post', $new_pid);
 		}
 		// If it's a new topic
 		else if ($fid)
@@ -421,15 +419,17 @@ if (isset($_POST['form_sent']))
 			$db->query('UPDATE '.$db->prefix.'topics SET last_post_id='.$new_pid.' WHERE id='.$new_tid) 
 				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
-			$global_id = global_id('topic', $new_tid);
-			index_title($global_id, $subject);
-			index_body($new_pid, $message);
-
 			update_forum($fid);
 
 			include_once("classes/objects/Bors.php");
-			class_load('forum_topic', $new_tid)->cache_clean();
+			$topic = class_load('forum_topic', $new_tid);
+			$post  = class_load('forum_post',  $new_pid);
 		}
+
+		$topic->cache_clean();
+		
+		include_once('engines/search.php');
+		bors_search_object_index($post);
 
 		// If the posting user is logged in, increment his/her post count
 		if (!$pun_user['is_guest'])

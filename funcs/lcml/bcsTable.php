@@ -42,8 +42,8 @@
         {
             if($this->col >= $this->cols)
             { 
-                if($this->row > 0)
-                    error_log_translate_warning(__FILE__."[".__LINE__."] Cols (".($this->col+1).") in line {$this->row} greater then maximum in one of previous lines ({$this->cols})!".(0/0));
+//                if($this->row > 0)
+//                    error_log_translate_warning(__FILE__."[".__LINE__."] Cols (".($this->col+1).") in line {$this->row} greater then maximum in one of previous lines ({$this->cols})!<br />");
        
 	            $this->cols = $this->col + 1;
 
@@ -67,8 +67,8 @@
         {
             $this->set_max();
 //            echo "{$this->row} {$this->col} {$this->cols}\n";
-            if($this->row > 0 && $this->col != $this->cols-1)
-                error_log_translate_warning(__FILE__."[".__LINE__."] Cols ({$this->col}) in line {$this->row} less then maximum in one of previous lines ({$this->cols})!");
+//            if($this->row > 0 && $this->col != $this->cols-1)
+//              error_log_translate_warning(__FILE__."[".__LINE__."] Cols ({$this->col}) in line {$this->row} less then maximum in one of previous lines ({$this->cols})!<br />");
             $this->col = 0;
             $this->row++;
         }
@@ -106,7 +106,7 @@
             for($r=0; $r < $this->rows; $r++)
             {
                 $out .= "<tr>";
-                for($c=0; $c < $this->cols; $c+=@$this->col_spans[$r][$c] > 1 ? $this->col_spans[$r][$c] : 1)
+                for($c=0; $c < $this->cols-1; $c+=@$this->col_spans[$r][$c] > 1 ? $this->col_spans[$r][$c] : 1)
                 {
                     $tx = !empty($this->heads[$r][$c]) ? 'th' : 'td';
 					$colspan = @$this->col_spans[$r][$c] > 1 ? " colSpan=\"".$this->col_spans[$r][$c]."\"" : "";

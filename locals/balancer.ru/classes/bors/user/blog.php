@@ -59,4 +59,6 @@
 		}
 
 		function num_blog() { return $this->db->get('SELECT COUNT(*) FROM topics WHERE poster_id='.$this->id()); }
-	}
+
+	function can_be_empty() { return true; }
+}
