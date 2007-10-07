@@ -91,14 +91,10 @@ function bors_search_object_index($object, $db = NULL, $append = false)
 
 function index_split($text)
 {
-//	switch($GLOBALS['cms']['charset'])
-//	{
-//		case 'utf-8':
-//			return preg_split('![ -,\./:-@\[-`\{-~\s¡-¿]+!u', $text);
-//		case 'koi8-r':
-//			return preg_split('![^\w�-��-�\-]+!', $text);
-//	}
-	return preg_split(ec('![^\wа-яА-Я\-]+!'), $text);
+	if($GLOBALS['cms']['charset'] == 'utf-8')
+		return preg_split('![ -,\./:-@\[-`\{-~\s¡-¿]+!u', $text);
+	else
+		return preg_split(ec('![^\wа-яА-Я\-]+!'), $text);
 }
 
 function bors_search_in_titles($query)
