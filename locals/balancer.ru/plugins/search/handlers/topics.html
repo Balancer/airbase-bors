@@ -23,14 +23,16 @@
 	<th>создана</th>
 	<th>крайний ответ</th>
 </tr>
-{foreach from=$topics item=t}
+{foreach from=$objects item=o}
+{assign var="t" value=$o->topic()}
+{assign var="f" value=$t->forum()}
 <tr>
-	<td style="font-size: 8pt;"><a href="http://balancer.ru/forum/punbb/viewforum.php?id={$t.forum_id}">{$t.forum_name}</a></td>
-	<td style="font-size: 8pt;"><a href="http://balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">{$t.subject}</a></td>
-	<td style="font-size: 8pt;">{$t.num_replies}</td>
-	<td style="font-size: 8pt;">{$t.num_views}</td>
-	<td style="font-size: 8pt;">{$t.posted|airbase_time}</td>
-	<td style="font-size: 8pt;">{$t.last_post|airbase_time}</td>
+	<td style="font-size: 8pt;"><a href="{$f->url()}">{$f->title()}</a></td>
+	<td style="font-size: 8pt;"><a href="{$t->url()}">{$t->title()}</a></td>
+	<td style="font-size: 8pt;">{$t->num_replies()}</td>
+	<td style="font-size: 8pt;">{$t->num_views()}</td>
+	<td style="font-size: 8pt;">{$t->create_time()|airbase_time}</td>
+	<td style="font-size: 8pt;">{$t->modify_time()|airbase_time}</td>
 </tr>
 {foreachelse}
 <li>Не найдено</li>

@@ -8,10 +8,11 @@
 
     function balancer_plugins_search_topic_titles_body($uri, $m)
 	{
-		include_once("funcs/search/index.php");
+		include_once("engines/search.php");
 		$GLOBALS['cms']['cache_disabled'] = true;
 		
-		$topics = false;
+		$result = array();
+		
 		if($query = norm(@$_GET['q']))
 		{
 			$order="";
@@ -30,22 +31,19 @@
 			$db = &new DataBase('punbb');
 //			$GLOBALS['log_level'] = 10;
 			if(@$_GET['type'] == 'm')
-				$topics = find_in_posts($query);
+				$objects = bors_search_in_bodies($query);
 			else
-				$topics = find_in_topics($query);
+				$objects = bors_search_in_titles($query);
 //			$GLOBALS['log_level'] = 2;
-			
-			if($topics)
-				$topics = $db->get_array("
-					SELECT t.*, f.forum_name
-					FROM topics t
-						LEFT JOIN forums f ON (t.forum_id = f.id)
-					WHERE t.id IN (".join(",", $topics).") 
-					$order");
+
+			$result = array();
+			foreach($objects as $obj)
+				if(empty($result[$tid=$obj->topic()->id()]))
+					$result[$tid] = $obj;
 		}
 		
         include_once("funcs/templates/assign.php");
-		return template_assign_data("topics.html", array('topics'=>$topics, 'q'=>$query, 'type' => @$_GET['type']));
+		return template_assign_data("topics.html", array('objects'=>$result, 'q'=>$query, 'type' => @$_GET['type']));
 	}
 
     function balancer_plugins_search_topic_titles_title($uri, $m)
