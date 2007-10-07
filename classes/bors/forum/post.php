@@ -157,4 +157,6 @@ class forum_post extends def_dbpage
 
 		return $result;
 	}
+
+	function search_source() { return $this->source(); }
 }

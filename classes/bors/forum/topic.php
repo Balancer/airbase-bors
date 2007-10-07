@@ -120,6 +120,11 @@
 		function field_num_replies_storage() { return 'punbb.topics.num_replies(id)'; }
 		function num_replies() { return $this->stb_num_replies; }
 
+		var $stb_num_views = '';
+		function set_num_views($num_views, $db_update) { $this->set("num_views", $num_views, $db_update); }
+		function field_num_views_storage() { return 'punbb.topics.num_views(id)'; }
+		function num_views() { return $this->stb_num_views; }
+
 		var $stb_first_post_id = '';
 		function set_first_post_id($first_post_id, $db_update) { $this->set("first_post_id", $first_post_id, $db_update); }
 		function field_first_post_id_storage() { return 'punbb.topics.first_pid(id)'; }
