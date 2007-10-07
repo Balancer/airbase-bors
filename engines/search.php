@@ -1,6 +1,6 @@
 <?php
 
-function bors_search_object_index($object)
+function bors_search_object_index($object, $db = NULL, $append = false)
 {
 	if(!$object)
 		return $object;
@@ -10,10 +10,9 @@ function bors_search_object_index($object)
 
 	include_once("include/classes/text/Stem_ru-{$GLOBALS['cms']['charset_u']}.php");
 			
-	$db = &new DataBase(config('search_db'));
+	if(!$db)
+		$db = &new DataBase(config('search_db'));
 
-	$Stemmer = &new Lingua_Stem_Ru();
-	
 	$class_id	= intval($object->id());
 	$class_name	= get_class($object);
 	
@@ -21,39 +20,42 @@ function bors_search_object_index($object)
 	{
 		$words = index_split($source);
 		
-		for($i=0; $i<10; $i++)
-			$db->query("DELETE FROM bors_search_source_{$i} WHERE class_name = '{$class_name}' AND class_id = {$class_id}");
-		
+		$buffer = array();
 		foreach($words as $word)
 		{
 			if(!$word)
 				continue;
 				
-			$word = $Stemmer->stem_word($word);
-			
-			if(strlen($word) > 16)
-				$word = substr($word, 0, 16);
-				
-			$word_id = bors_search_get_word_id($word);
+			$word_id = bors_search_get_word_id($word, $db);
+			if(!$word_id)
+				continue;
 
-			$sub = $word_id%10;
-			
-			$count = intval($db->get("SELECT count FROM bors_search_source_{$sub} WHERE word_id = {$word_id} AND class_name = '{$class_name}' AND class_id = {$class_id}"));
-			if(!$count)
-				$db->replace("bors_search_source_{$sub}", array(
-					'word_id' => $word_id, 
-					'class_id' => $class_id, 
-					'class_name' => $class_name, 
-					'count' => 1, 
-					'object_create_time' => $object->create_time(), 
-					'object_modify_time' => $object->modify_time(),
-				));
-			else
-				$db->update("bors_search_source_{$sub}", "word_id = {$word_id} AND class_name = '{$class_name}' AND class_id = {$class_id}", array(
-					'count' => $count+1, 
-					'object_create_time' => $object->create_time(), 
-					'object_modify_time' => $object->modify_time(),
-				));
+			@$buffer[$word_id%10][$word_id]++;
+		}
+
+		for($sub=0; $sub<10; $sub++)
+		{
+			$tab = "bors_search_source_{$sub}";
+
+			if(!$append)
+				$db->query("DELETE FROM bors_search_source_{$sub} WHERE class_name = '{$class_name}' AND class_id = {$class_id}");
+
+			if(!empty($buffer[$sub]))
+			{
+				$db->multi_insert_init($tab);
+				foreach($buffer[$sub] as $word_id => $count)
+				{
+					$db->multi_insert_add($tab, array(
+						'word_id' => $word_id, 
+						'class_id' => $class_id, 
+						'class_name' => $class_name, 
+						'count' => $count, 
+						'object_create_time' => $object->create_time(), 
+						'object_modify_time' => $object->modify_time(),
+					));
+				}
+				$db->multi_insert_do($tab);
+			}
 		}
 	}
 
@@ -61,21 +63,22 @@ function bors_search_object_index($object)
 	{
 		$words = index_split($title);
 		
-		$db->query("DELETE FROM bors_search_titles WHERE class_name = '{$class_name}' AND class_id = {$class_id}");
+		if(!$append)
+			$db->query("DELETE FROM bors_search_titles WHERE class_name = '{$class_name}' AND class_id = {$class_id}");
 		
+		$doing = array();
 		foreach($words as $word)
 		{
 			if(!$word)
 				continue;
-				
-			$word = $Stemmer->stem_word($word);
 			
-			if(strlen($word) > 16)
-				$word = substr($word, 0, 16);
-				
-			$word_id = bors_search_get_word_id($word);
+			$word_id = bors_search_get_word_id($word, $db);
+			if(!$word_id || !empty($doing[$word_id]))
+				continue;
 		
-			$db->replace("bors_search_titles", array(
+			$doing[$word_id] = true;
+		
+			$db->insert("bors_search_titles", array(
 				'word_id' => $word_id, 
 				'class_id' => $class_id, 
 				'class_name' => $class_name, 
@@ -88,7 +91,14 @@ function bors_search_object_index($object)
 
 function index_split($text)
 {
-	return preg_split('![ -,\./:-@\[-`\{-~\s¡-¿]+!u', $text);
+//	switch($GLOBALS['cms']['charset'])
+//	{
+//		case 'utf-8':
+//			return preg_split('![ -,\./:-@\[-`\{-~\s¡-¿]+!u', $text);
+//		case 'koi8-r':
+//			return preg_split('![^\w�-��-�\-]+!', $text);
+//	}
+	return preg_split(ec('![^\wа-яА-Я\-]+!'), $text);
 }
 
 function bors_search_in_titles($query)
@@ -150,22 +160,29 @@ function bors_search_in_titles($query)
 
 function bors_search_get_word_id($word, $db = NULL)
 {
-	include_once("include/classes/text/Stem_ru-{$GLOBALS['cms']['charset_u']}.php");
-		
 	$word = trim($word);
 
 	if(!$word)
 		return 0;
 			
-	if(!$db)
-		$db = &new DataBase(config('search_db'));
-
+	if(!empty($GLOBALS['bors_search_get_word_id_cache'][$word]))
+		return $GLOBALS['bors_search_get_word_id_cache'][$word];
+	
+	include_once("include/classes/text/Stem_ru-{$GLOBALS['cms']['charset_u']}.php");
+		
 	$Stemmer = &new Lingua_Stem_Ru();
+	$original = $word;
 	$word = $Stemmer->stem_word($word);
 			
 	if(strlen($word) > 16)
 		$word = substr($word, 0, 16);
+
+	if(!empty($GLOBALS['bors_search_get_word_id_cache'][$word]))
+		return $GLOBALS['bors_search_get_word_id_cache'][$word];
 			
+	if(!$db)
+		$db = &new DataBase(config('search_db'));
+
 	$word_id = $db->get("SELECT id FROM bors_search_words WHERE word = '".addslashes($word)."'");
 
 	if(!$word_id)
@@ -173,8 +190,11 @@ function bors_search_get_word_id($word, $db = NULL)
 		$db->insert('bors_search_words', array('word' => $word));
 		$word_id = $db->last_id();
 	}
+
+//	if(strtolower($original) == strtolower($word))
+//		echo dc("{$original} => {$word}\n");
 		
-	return intval($word_id);
+	return $GLOBALS['bors_search_get_word_id_cache'][$word] = $GLOBALS['bors_search_get_word_id_cache'][$original] = intval($word_id);
 }
 
 function search_titles_like($title, $limit=20, $forum=0)

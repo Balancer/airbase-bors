@@ -68,7 +68,10 @@
 				while(!$this->dbh && $nnn<2)
 				{
 //					echo "mysql_connect($server, $login, $password);\n";
-					$this->dbh = @mysql_connect($server, $login, $password);
+					if(config('mysql_persistent'))
+						$this->dbh = @mysql_pconnect($server, $login, $password);
+					else
+						$this->dbh = @mysql_connect($server, $login, $password);
 //					echo "NNew\[{$base}]".$this->dbh."<br>\n";
 					if(!$this->dbh)
 						sleep(2);
@@ -96,7 +99,8 @@
 
 		function query($query, $ignore_error=false)
 		{
-			mysql_select_db($this->db_name, $this->dbh);
+			if(!config('mysql_disable_autoselect_db'))
+				mysql_select_db($this->db_name, $this->dbh);
 			
 			if(empty($GLOBALS['global_db_queries']))
 				$GLOBALS['global_db_queries'] = 0;
@@ -315,7 +319,7 @@
 			return $res;
 		}
 
-		function make_string_values($array)
+		function make_string_values($array, $with_keys = true)
 		{
 			$keys=array();
 			$values=array();
@@ -326,7 +330,10 @@
 				$values[] = $v;
 			}
 			
-			return " (".join(",", $keys).") VALUES (".join(",", $values).") ";
+			if($with_keys)
+				return " (".join(",", $keys).") VALUES (".join(",", $values).") ";
+			else
+				return " (".join(",", $values).") ";
 		}
 
 		function make_string_set($array)
@@ -391,6 +398,31 @@
 		function replace($table, $fields)
 		{
 			$this->query("REPLACE $table ".$this->make_string_values($fields));
+		}
+
+		var $insert_buffer;
+
+		function multi_insert_init($table) { $this->insert_buffer[$table] = array(); }
+		function multi_insert_add($table, $fields)
+		{
+			if(empty($this->insert_buffer[$table]))
+				$this->insert_buffer[$table][] = $this->make_string_values($fields); 
+			else
+				$this->insert_buffer[$table][] = $this->make_string_values($fields, false); 
+		}
+		function multi_insert_do($table)
+		{
+			if(!empty($this->insert_buffer[$table]))
+				$this->query("INSERT INTO $table ".join(",", $this->insert_buffer[$table])); 
+
+			unset($this->insert_buffer[$table]);
+		}
+		function multi_insert_replace($table)
+		{
+			if(!empty($this->insert_buffer[$table]))
+				$this->query("REPLACE $table ".join(",", $this->insert_buffer[$table])); 
+
+			unset($this->insert_buffer[$table]);
 		}
 
 		//TODO: Change 'where' to array-type
