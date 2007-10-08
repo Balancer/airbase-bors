@@ -417,6 +417,13 @@
 
 			unset($this->insert_buffer[$table]);
 		}
+		function multi_insert_ignore($table)
+		{
+			if(!empty($this->insert_buffer[$table]))
+				$this->query("INSERT IGNORE $table ".join(",", $this->insert_buffer[$table])); 
+
+			unset($this->insert_buffer[$table]);
+		}
 		function multi_insert_replace($table)
 		{
 			if(!empty($this->insert_buffer[$table]))
