@@ -1,6 +1,6 @@
 <?php
 
-function bors_search_object_index($object, $db = NULL, $append = false)
+function bors_search_object_index($object, $db = NULL, $append = 'replace')
 {
 	if(!$object)
 		return $object;
@@ -37,7 +37,7 @@ function bors_search_object_index($object, $db = NULL, $append = false)
 		{
 			$tab = "bors_search_source_{$sub}";
 
-			if(!$append)
+			if($append == 'replace')
 				$db->query("DELETE FROM bors_search_source_{$sub} WHERE class_name = '{$class_name}' AND class_id = {$class_id}");
 
 			if(!empty($buffer[$sub]))
@@ -54,7 +54,10 @@ function bors_search_object_index($object, $db = NULL, $append = false)
 						'object_modify_time' => $object->modify_time(),
 					));
 				}
-				$db->multi_insert_do($tab);
+				if($append == 'replace')
+					$db->multi_insert_do($tab);
+				else
+					$db->multi_insert_ignore($tab);
 			}
 		}
 	}
@@ -63,7 +66,7 @@ function bors_search_object_index($object, $db = NULL, $append = false)
 	{
 		$words = index_split($title);
 		
-		if(!$append)
+		if($append=='replace')
 			$db->query("DELETE FROM bors_search_titles WHERE class_name = '{$class_name}' AND class_id = {$class_id}");
 		
 		$doing = array();
@@ -77,14 +80,18 @@ function bors_search_object_index($object, $db = NULL, $append = false)
 				continue;
 		
 			$doing[$word_id] = true;
+			$data = array(
+					'word_id' => $word_id, 
+					'class_id' => $class_id, 
+					'class_name' => $class_name, 
+					'object_create_time' => $object->create_time(), 
+					'object_modify_time' => $object->modify_time(),
+			);
 		
-			$db->insert("bors_search_titles", array(
-				'word_id' => $word_id, 
-				'class_id' => $class_id, 
-				'class_name' => $class_name, 
-				'object_create_time' => $object->create_time(), 
-				'object_modify_time' => $object->modify_time(),
-			));
+			if($append == 'replace')
+				$db->insert("bors_search_titles", $data);
+			else
+				$db->insert_ignore("bors_search_titles", $data);
 		}
 	}
 }

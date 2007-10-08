@@ -19,7 +19,7 @@
 	$max = $pundb->get('SELECT MAX(id) FROM posts');
 //	$min = $db->get('SELECT MIN(class_id) FROM bors_search_titles')-1;
 
-	for($i = $max; $i>0; $i--)
+	for($i = 1274057; $i>0; $i--)
 	{
 		$obj = class_load('forum_post', $i);
 
@@ -27,6 +27,8 @@
 			continue;
 			
 		$GLOBALS['bors']->_main_obj=$obj;
-		bors_search_object_index($obj, $db);
+		bors_search_object_index($obj, $db, 'ignore');
 		echo dc("{$i}: {$obj->title()} [".sizeof($GLOBALS['bors_search_get_word_id_cache'])."]\n");
+		if(sizeof($GLOBALS['bors_search_get_word_id_cache']) > 60000)
+			unset($GLOBALS['bors_search_get_word_id_cache']);
 	}
