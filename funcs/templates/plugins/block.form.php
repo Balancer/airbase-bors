@@ -16,7 +16,7 @@
 		
 		$uri = $GLOBALS['bors']->main_object()->url();
 		
-		if($content == NULL)
+		if($content == NULL) // Открытие формы
 		{
 			if(empty($method))
 				$method = 'post';

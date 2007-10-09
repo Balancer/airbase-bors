@@ -157,6 +157,17 @@
 
 			$smarty->assign("this", $obj);
 		}
+
+		if(is_object(@$data['this']))
+		{
+			foreach(split(' ', $data['this']->template_local_vars()) as $var)
+			{
+//				echo "Assign $var to {$obj->$var()}<br />";
+				$smarty->assign($var, $data['this']->$var());
+			}
+
+			$smarty->assign("this", $data['this']);
+		}
 		
 //		echo $template_uri;
 

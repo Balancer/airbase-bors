@@ -38,7 +38,7 @@
 				if($processed === true)
 					return true;
 			}
-			
+
 			if(!$form->id())
 				$form->new_instance();
 

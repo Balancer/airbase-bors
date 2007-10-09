@@ -99,16 +99,37 @@ function bors_search_object_index($object, $db = NULL, $append = 'replace')
 function index_split($text)
 {
 	if($GLOBALS['cms']['charset'] == 'utf-8')
-		return preg_split('![ -,\./:-@\[-`\{-~\s¡-¿]+!u', $text);
-	else
-		return preg_split(ec('![^\wа-яА-Я\-]+!'), $text);
+		return preg_split('![ -,\./:-@\[-`\{-~\s¡-¿]+!u', trim($text));
+
+	return preg_split(ec('![^\wа-яА-Я\-]+!'), trim($text));
 }
 
-function bors_search_in_titles($query)
+function defval($data, $name, $default)
 {
+	if(empty($data[$name]))
+		return $default;
+	
+	return $data[$name];
+}
+
+function bors_search_in_titles($query, $params = array())
+{
+
+	$limit = defval($params, 'limit', 25);
+	$page  = defval($params, 'page' ,  0);
+
+	$sort = "";
+	$lim  = "";
+	if(empty($params['pages']))
+	{
+		$sort = "ORDER BY object_modify_time DESC";
+		if($page > 0)
+			$lim = "LIMIT ".($limit*($page-1)).", ".$limit;
+	}
+
 	// +word -word word
 		
-	$words = preg_split("!\s+!u", trim($query));
+	$words = index_split($query);
 		
 	if(!$words)
 		return array();
@@ -125,6 +146,9 @@ function bors_search_in_titles($query)
 
 	foreach($words as $word)
 	{
+		if(!$word)
+			continue;
+		
 //		if($word{0} == '+')
 //			$must[] = bors_search_get_word_id(substr($word, 1));
 		if($word{0} == '-')
@@ -140,7 +164,8 @@ function bors_search_in_titles($query)
 		$first = true;
 		foreach($maybe as $w)
 		{
-			$res = $db->get_array("SELECT DISTINCT class_name, class_id	FROM bors_search_titles WHERE word_id = $w");
+			$res = $db->get_array("SELECT DISTINCT class_name, class_id	FROM bors_search_titles WHERE word_id = $w $sort $lim");
+
 			if($first)
 				$cross = $res;
 			else
@@ -153,6 +178,9 @@ function bors_search_in_titles($query)
 	if($none)
 		$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_titles WHERE word_id IN (".join(",", $none).")"));
 
+	if(!empty($params['pages']))
+		return sizeof($cross);
+	
 	$result = array();
 	
 	foreach($cross as $x)
@@ -302,7 +330,7 @@ function bors_search_in_bodies($query)
 {
 	// +word -word word
 		
-	$words = preg_split("!\s+!u", trim($query));
+	$words = index_split($query);
 		
 	if(!$words)
 		return array();
@@ -319,6 +347,9 @@ function bors_search_in_bodies($query)
 
 	foreach($words as $word)
 	{
+		if(!$word)
+			continue;
+
 //		if($word{0} == '+')
 //			$must[] = bors_search_get_word_id(substr($word, 1));
 		if(preg_match("!^\-(.+)$!", $word, $m))
@@ -333,7 +364,7 @@ function bors_search_in_bodies($query)
 		$first = true;
 		foreach($maybe as $w)
 		{
-			$res = $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_source_".($w%10)." WHERE word_id = $w");
+			$res = $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_source_".($w%10)." WHERE word_id = $w ORDER BY object_modify_time DESC");
 			if($first)
 				$cross = $res;
 			else
