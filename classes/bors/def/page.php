@@ -105,6 +105,7 @@ class def_page extends borsPage
 	}
 
 	function search_source() { return strip_tags($this->body()); }
+	function search_type_name() { return "";}
 
 	function auto_search_index() { return true; }
 }

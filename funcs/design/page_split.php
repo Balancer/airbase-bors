@@ -97,7 +97,11 @@
 	function get_page_link($obj, $page_num, $class="", $q = "")
 	{
 		if(is_object($obj))
+		{
 			$p = $obj->url($page_num);
+			if(preg_match("!\?!", $p))
+				$q = "";
+		}
 		else
 		{
 			$p = $obj;
