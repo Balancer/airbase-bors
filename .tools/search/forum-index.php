@@ -16,19 +16,25 @@
 
 	$db = &new DataBase(config('search_db'));
 	$pundb = &new DataBase('punbb');
-	$max = $pundb->get('SELECT MAX(id) FROM posts');
+	$max = $pundb->get('SELECT MAX(id) FROM topics');
 //	$min = $db->get('SELECT MIN(class_id) FROM bors_search_titles')-1;
 
-	for($i = 1274057; $i>0; $i--)
+	// 1193541:
+	for($i = $max; $i>0; $i--)
 	{
-		$obj = class_load('forum_post', $i);
+		$obj = class_load('forum_topic', $i);
 
 		if(!$obj)
 			continue;
 			
 		$GLOBALS['bors']->_main_obj=$obj;
-		bors_search_object_index($obj, $db, 'ignore');
-		echo dc("{$i}: {$obj->title()} [".sizeof($GLOBALS['bors_search_get_word_id_cache'])."]\n");
-		if(sizeof($GLOBALS['bors_search_get_word_id_cache']) > 60000)
+		for($p=1; $p<= $obj->total_pages(); $p++)
+		{
+			$obj->set_page($p);
+			bors_search_object_index($obj, $db, 'ignore');
+			echo dc("{$i}: {$obj->title()} [{$p}], (".sizeof($GLOBALS['bors_search_get_word_id_cache']).")\n");
+//			echo dc("{$obj->search_source()}\n\n\n");
+		}
+		if(sizeof($GLOBALS['bors_search_get_word_id_cache']) > 25000)
 			unset($GLOBALS['bors_search_get_word_id_cache']);
 	}

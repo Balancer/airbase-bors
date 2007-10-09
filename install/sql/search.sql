@@ -20,10 +20,11 @@ CREATE TABLE IF NOT EXISTS `bors_search_source_0` (
 	`word_id` int(10) unsigned NOT NULL,
 	`class_name` varbinary(64) NOT NULL,
 	`class_id` int(10) unsigned NOT NULL,
+	`class_page` int(4) unsigned NOT NULL,
 	`count` int(5) unsigned NOT NULL,
 	`object_create_time` int(10) unsigned NOT NULL,
 	`object_modify_time` int(10) unsigned NOT NULL,
-	PRIMARY KEY  (`word_id`,`class_name`,`class_id`),
+	PRIMARY KEY  (`word_id`,`class_name`,`class_id`,`class_page`),
 	KEY `object_create_time` (`object_create_time`),
 	KEY `object_modify_time` (`object_modify_time`)
 );
@@ -32,10 +33,11 @@ CREATE TABLE IF NOT EXISTS `bors_search_source_1` (
 	`word_id` int(10) unsigned NOT NULL,
 	`class_name` varbinary(64) NOT NULL,
 	`class_id` int(10) unsigned NOT NULL,
+	`class_page` int(4) unsigned NOT NULL,
 	`count` int(5) unsigned NOT NULL,
 	`object_create_time` int(10) unsigned NOT NULL,
 	`object_modify_time` int(10) unsigned NOT NULL,
-	PRIMARY KEY  (`word_id`,`class_name`,`class_id`),
+	PRIMARY KEY  (`word_id`,`class_name`,`class_id`,`class_page`),
 	KEY `object_create_time` (`object_create_time`),
 	KEY `object_modify_time` (`object_modify_time`)
 );
@@ -44,10 +46,11 @@ CREATE TABLE IF NOT EXISTS `bors_search_source_2` (
 	`word_id` int(10) unsigned NOT NULL,
 	`class_name` varbinary(64) NOT NULL,
 	`class_id` int(10) unsigned NOT NULL,
+	`class_page` int(4) unsigned NOT NULL,
 	`count` int(5) unsigned NOT NULL,
 	`object_create_time` int(10) unsigned NOT NULL,
 	`object_modify_time` int(10) unsigned NOT NULL,
-	PRIMARY KEY  (`word_id`,`class_name`,`class_id`),
+	PRIMARY KEY  (`word_id`,`class_name`,`class_id`,`class_page`),
 	KEY `object_create_time` (`object_create_time`),
 	KEY `object_modify_time` (`object_modify_time`)
 );
@@ -56,10 +59,11 @@ CREATE TABLE IF NOT EXISTS `bors_search_source_3` (
 	`word_id` int(10) unsigned NOT NULL,
 	`class_name` varbinary(64) NOT NULL,
 	`class_id` int(10) unsigned NOT NULL,
+	`class_page` int(4) unsigned NOT NULL,
 	`count` int(5) unsigned NOT NULL,
 	`object_create_time` int(10) unsigned NOT NULL,
 	`object_modify_time` int(10) unsigned NOT NULL,
-	PRIMARY KEY  (`word_id`,`class_name`,`class_id`),
+	PRIMARY KEY  (`word_id`,`class_name`,`class_id`,`class_page`),
 	KEY `object_create_time` (`object_create_time`),
 	KEY `object_modify_time` (`object_modify_time`)
 );
@@ -68,10 +72,11 @@ CREATE TABLE IF NOT EXISTS `bors_search_source_4` (
 	`word_id` int(10) unsigned NOT NULL,
 	`class_name` varbinary(64) NOT NULL,
 	`class_id` int(10) unsigned NOT NULL,
+	`class_page` int(4) unsigned NOT NULL,
 	`count` int(5) unsigned NOT NULL,
 	`object_create_time` int(10) unsigned NOT NULL,
 	`object_modify_time` int(10) unsigned NOT NULL,
-	PRIMARY KEY  (`word_id`,`class_name`,`class_id`),
+	PRIMARY KEY  (`word_id`,`class_name`,`class_id`,`class_page`),
 	KEY `object_create_time` (`object_create_time`),
 	KEY `object_modify_time` (`object_modify_time`)
 );
@@ -80,10 +85,11 @@ CREATE TABLE IF NOT EXISTS `bors_search_source_5` (
 	`word_id` int(10) unsigned NOT NULL,
 	`class_name` varbinary(64) NOT NULL,
 	`class_id` int(10) unsigned NOT NULL,
+	`class_page` int(4) unsigned NOT NULL,
 	`count` int(5) unsigned NOT NULL,
 	`object_create_time` int(10) unsigned NOT NULL,
 	`object_modify_time` int(10) unsigned NOT NULL,
-	PRIMARY KEY  (`word_id`,`class_name`,`class_id`),
+	PRIMARY KEY  (`word_id`,`class_name`,`class_id`,`class_page`),
 	KEY `object_create_time` (`object_create_time`),
 	KEY `object_modify_time` (`object_modify_time`)
 );
@@ -92,10 +98,11 @@ CREATE TABLE IF NOT EXISTS `bors_search_source_6` (
 	`word_id` int(10) unsigned NOT NULL,
 	`class_name` varbinary(64) NOT NULL,
 	`class_id` int(10) unsigned NOT NULL,
+	`class_page` int(4) unsigned NOT NULL,
 	`count` int(5) unsigned NOT NULL,
 	`object_create_time` int(10) unsigned NOT NULL,
 	`object_modify_time` int(10) unsigned NOT NULL,
-	PRIMARY KEY  (`word_id`,`class_name`,`class_id`),
+	PRIMARY KEY  (`word_id`,`class_name`,`class_id`,`class_page`),
 	KEY `object_create_time` (`object_create_time`),
 	KEY `object_modify_time` (`object_modify_time`)
 );
@@ -104,10 +111,11 @@ CREATE TABLE IF NOT EXISTS `bors_search_source_7` (
 	`word_id` int(10) unsigned NOT NULL,
 	`class_name` varbinary(64) NOT NULL,
 	`class_id` int(10) unsigned NOT NULL,
+	`class_page` int(4) unsigned NOT NULL,
 	`count` int(5) unsigned NOT NULL,
 	`object_create_time` int(10) unsigned NOT NULL,
 	`object_modify_time` int(10) unsigned NOT NULL,
-	PRIMARY KEY  (`word_id`,`class_name`,`class_id`),
+	PRIMARY KEY  (`word_id`,`class_name`,`class_id`,`class_page`),
 	KEY `object_create_time` (`object_create_time`),
 	KEY `object_modify_time` (`object_modify_time`)
 );
@@ -116,10 +124,11 @@ CREATE TABLE IF NOT EXISTS `bors_search_source_8` (
 	`word_id` int(10) unsigned NOT NULL,
 	`class_name` varbinary(64) NOT NULL,
 	`class_id` int(10) unsigned NOT NULL,
+	`class_page` int(4) unsigned NOT NULL,
 	`count` int(5) unsigned NOT NULL,
 	`object_create_time` int(10) unsigned NOT NULL,
 	`object_modify_time` int(10) unsigned NOT NULL,
-	PRIMARY KEY  (`word_id`,`class_name`,`class_id`),
+	PRIMARY KEY  (`word_id`,`class_name`,`class_id`,`class_page`),
 	KEY `object_create_time` (`object_create_time`),
 	KEY `object_modify_time` (`object_modify_time`)
 );
@@ -128,10 +137,11 @@ CREATE TABLE IF NOT EXISTS `bors_search_source_9` (
 	`word_id` int(10) unsigned NOT NULL,
 	`class_name` varbinary(64) NOT NULL,
 	`class_id` int(10) unsigned NOT NULL,
+	`class_page` int(4) unsigned NOT NULL,
 	`count` int(5) unsigned NOT NULL,
 	`object_create_time` int(10) unsigned NOT NULL,
 	`object_modify_time` int(10) unsigned NOT NULL,
-	PRIMARY KEY  (`word_id`,`class_name`,`class_id`),
+	PRIMARY KEY  (`word_id`,`class_name`,`class_id`,`class_page`),
 	KEY `object_create_time` (`object_create_time`),
 	KEY `object_modify_time` (`object_modify_time`)
 );

@@ -160,4 +160,33 @@
 		}
 
 	function rss_url() { return $this->base_url().strftime("%Y/%m/%d/", $this->modify_time())."topic-".$this->id()."-rss.xml"; }
+
+	function search_source()
+	{
+		$result = array();
+	
+		$db = &new DataBase('punbb');
+
+		$posts_per_page = 25;
+		$start_from = ($this->page() - 1) * $posts_per_page;
+
+		$query = "SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY id LIMIT $start_from, $posts_per_page";
+			
+		$posts = $db->get_array($query);
+		if(empty($posts))
+		{
+			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = {$this->id()}");
+			$posts = $db->get_array($query);
+		}
+
+		$data['posts'] = array();
+
+		foreach($posts as $pid)
+		{
+			$post = class_load('forum_post', $pid);
+			$result[] = $post->author_name().":\n---------------\n".$post->source();
+		}
+		
+		return join("\n============================\n\n", $result);
+	}
 }
