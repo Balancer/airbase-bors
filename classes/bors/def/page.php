@@ -83,11 +83,17 @@ class def_page extends borsPage
 		
 		function change_time() { return max($this->create_time(), $this->modify_time()); }
 
-		function error_message($message)
-		{
-			require_once('funcs/modules/messages.php');
-			return error_message($message);
-		}
+	function error_message($message)
+	{
+		require_once('funcs/modules/messages.php');
+		return error_message($message);
+	}
+
+	function message($message)
+	{
+		require_once('funcs/modules/messages.php');
+		return message($message);
+	}
 
 	var $stb_parents;
 	function parents() { return $this->stb_parents; }

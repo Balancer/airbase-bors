@@ -3,7 +3,7 @@
 	{
 		$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
-		if(!empty($_GET))
+		if(!empty($_GET) && empty($_GET['class_name']))
 		{
 			$ret = do_action_handlers($uri, $uri, $GLOBALS['cms_actions']);
 		

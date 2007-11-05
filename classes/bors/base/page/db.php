@@ -74,9 +74,9 @@ forum_id -> comments_id
 
 
 
-class_include('base_page');
+class_include('def_dbpage');
 
-class base_page_db extends base_page
+class base_page_db extends def_dbpage
 {
-	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
+//	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
 }
