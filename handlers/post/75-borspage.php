@@ -21,6 +21,8 @@
 		if(!$obj)
 			return false;
 
+	    header("Status: 200 OK");
+
 		$processed = $obj->preParseProcess($_GET);
 		if($processed === true)
 			return true;
@@ -142,7 +144,6 @@
 		if($content === false)
 			return false;
 
-	    header("Status: 200 OK");
 		
 		$last_modify = gmdate('D, d M Y H:i:s', $obj->modify_time()).' GMT';
 		header('Last-Modified: '.$last_modify);
