@@ -21,7 +21,7 @@
 				$redir = user_data('level') > 3 ? "/admin/news/" : "/";
 		}
 		
-		if($redir)
+		if($redir && $timeout >= 0)
 			go($redir, false, $timeout);
 		
 		return true;
@@ -41,7 +41,7 @@
 
 		show_page(@$GLOBALS['main_uri']);
 		
-		if($redir)
+		if($redir && $timeout >= 0)
 			if($redir !== true)
 				go($redir, false, $timeout);
 			else

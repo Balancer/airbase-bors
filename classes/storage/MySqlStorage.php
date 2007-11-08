@@ -367,8 +367,9 @@ class MySqlStorage extends def_empty
 		else
 		{
 			$out =  preg_replace("!%TABLE%!", $table, $id_field);
-			$out =  preg_replace("!%ID%!", $oid, $out);
+			$out =  preg_replace("!%ID%!", addslashes($oid), $out);
 		}
+		
 		return $out;
 	}
 

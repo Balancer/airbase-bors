@@ -296,19 +296,30 @@
 			return false;
 		}
 		
-	function set_fields($array, $db_update_flag)
+	function set_fields($array, $db_update_flag, $fields_list = NULL)
 	{
 		if(!$this->id())
 			$this->new_instance();
 		
-		foreach($array as $key => $val)
+		if($fields_list)
 		{
-			$method = "set_$key";
-//			echo "Set $key to $val<br />";
-			if(method_exists($this, $method))
-				$this->$method($val, $db_update_flag);
+			foreach(split(' ', $fields_list) as $key)
+			{
+				$method = "set_$key";
+				$this->$method(@$array[$key], $db_update_flag);
+			}
 		}
-
+		else
+		{
+			foreach($array as $key => $val)
+			{
+				$method = "set_$key";
+//			echo "Set $key to $val<br />";
+				if(method_exists($this, $method))
+					$this->$method($val, $db_update_flag);
+			}
+		}
+		
 		if($db_update_flag)
 		{
 			global $bors;
