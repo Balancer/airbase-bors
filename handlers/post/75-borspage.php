@@ -47,12 +47,11 @@
 //			$processed2 = $form->preParseProcess();
 //			if($processed2 === true)
 //				return true;
-
-									   			
-			if(empty($_GET['act']))
+								   			
+			if(empty($_GET['subaction']))
 				$method = 'onAction';
 			else
-				$method = 'onAction_'.$_GET['act'];
+				$method = 'onAction_'.$_GET['subaction'];
 
 			global $bors;
 //			print_r($form); exit();
@@ -126,6 +125,10 @@
 
 			if(empty($GLOBALS['main_uri']))
 				$GLOBALS['main_uri'] = $obj->url();
+			
+			$my_user = class_load(config('user_class'), -1);
+			if($my_user && $my_user->id())
+				def_page::add_template_data('my_user', $my_user);
 	
 			if($render_engine = $obj->render_engine())
 			{

@@ -42,8 +42,8 @@
 		if(!empty($ref))
 			echo "<input type=\"hidden\" name=\"ref\" value=\"$ref\" />\n";
 
-		if(!empty($action))
-			echo "<input type=\"hidden\" name=\"act\" value=\"$act\" />\n";
+		if(!empty($subaction))
+			echo "<input type=\"hidden\" name=\"subaction\" value=\"$subaction\" />\n";
 			
 		echo "<input type=\"hidden\" name=\"class_name\" value=\"$name\" />\n";
 		if(!empty($id))
