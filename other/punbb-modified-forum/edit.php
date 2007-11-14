@@ -137,10 +137,14 @@ if (isset($_POST['form_sent']))
 		include_once("classes/objects/Bors.php");
 		$topic = class_load('forum_topic', $cur_post['tid']);
 		$post  = class_load('forum_post',  $id);
+
+		$page = $topic->page_by_post_id($post->id());
+		$topic->set_page($page);
+
 		$topic->cache_clean();
 			
 		include_once('engines/search.php');
-		bors_search_object_index($post);
+		bors_search_object_index($topic, $cms_db, 'replace');
 
 		//Attachment Mod 2.0 Block Start
 		//First check if there are any files to delete, the postvariables should be named 'attach_delete_'.$i , if it's set you're going to delete the value of this (the 0 =< $i < attachments, just to get some order in there...)

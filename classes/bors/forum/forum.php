@@ -73,7 +73,8 @@
 
 		function can_read()
 		{
-			$gid = class_load('forum_user', -1)->group_id();
+			$user = class_load('forum_user', -1);
+			$gid = $user ? $user->group_id() : 3;
 			if(!$gid)
 				$gid = 3;
 

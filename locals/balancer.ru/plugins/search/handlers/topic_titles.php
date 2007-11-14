@@ -8,6 +8,8 @@
 
     function balancer_plugins_search_topic_titles_body($uri, $m)
 	{
+		return ec("Временно закрыт");
+	
 		include_once("engines/search.php");
 		$GLOBALS['cms']['cache_disabled'] = true;
 		
@@ -36,14 +38,14 @@
 				$objects = bors_search_in_titles($query);
 //			$GLOBALS['log_level'] = 2;
 
-			$result = array();
+/*			$result = array();
 			foreach($objects as $obj)
 				if(empty($result[$tid=$obj->topic()->id()]))
-					$result[$tid] = $obj;
+					$result[$tid] = $obj;*/
 		}
 		
         include_once("funcs/templates/assign.php");
-		return template_assign_data("topics.html", array('objects'=>$result, 'q'=>$query, 'type' => @$_GET['type']));
+		return template_assign_data("topics.html", array('objects'=>@$objects, 'q'=>$query, 'type' => @$_GET['type']));
 	}
 
     function balancer_plugins_search_topic_titles_title($uri, $m)

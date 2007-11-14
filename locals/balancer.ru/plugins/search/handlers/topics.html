@@ -16,18 +16,18 @@
 {if $topics !== false}
 <table class="btab" cellSpacing="0">
 <tr>
-	<th>форум</th>
+{*	<th>форум</th>*}
 	<th>тема</th>
 	<th>ответов</th>
 	<th>просмотров</th>
 	<th>создана</th>
 	<th>крайний ответ</th>
 </tr>
-{foreach from=$objects item=o}
-{assign var="t" value=$o->topic()}
-{assign var="f" value=$t->forum()}
+{foreach from=$objects item=t}
+{* assign var="t" value=$o->topic() *}
+{* assign var="f" value=$t->forum() *}
 <tr>
-	<td style="font-size: 8pt;"><a href="{$f->url()}">{$f->title()}</a></td>
+{*	<td style="font-size: 8pt;"><a href="{$f->url()}">{$f->title()}</a></td> *}
 	<td style="font-size: 8pt;"><a href="{$t->url()}">{$t->title()}</a></td>
 	<td style="font-size: 8pt;">{$t->num_replies()}</td>
 	<td style="font-size: 8pt;">{$t->num_views()}</td>

@@ -99,7 +99,8 @@
 
 					$content_type = $req->getResponseHeader('Content-Type');
 					if(!preg_match("!image!",$content_type))
-						return lcml("Non-image content type ('$content_type') image ={$uri}= error.");
+						return $params['url'];
+//						return lcml("Non-image content type ('$content_type') image ={$uri}= error.");
 
 					require_once('funcs/filesystem_ext.php');
 					mkpath(dirname($path));

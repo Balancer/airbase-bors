@@ -1,7 +1,9 @@
-<?
-	require_once('Bors.php');
+<?php
+require_once('Bors.php');
 
-	class BorsBaseObject
+//class_include('base_');
+
+class BorsBaseObject
 	{
 		var $id = NULL;
 		var $initial_id = NULL;
