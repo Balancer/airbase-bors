@@ -5,9 +5,9 @@ class forum_js_personal extends def_js
 {
 	var $owner;
 
-	function forum_js_personal($id)
+	function __construct($id)
 	{
-		parent::def_js($id);
+		parent::__construct($id);
 		$this->owner = class_load('forum_user', $this->id());
 	}
 

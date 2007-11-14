@@ -27,12 +27,12 @@ class def_dbpage extends def_page
 
 		function uri2id($id) { return $id; }
 	
-		function def_dbpage($id)
+		function __construct($id)
 		{
 			$this->db = &new DataBase($this->main_db_storage());
 			$id = $this->uri2id($id);
 			
-			parent::def_page($id);
+			parent::__construct($id);
 
 			if(!($qlist = $this->_global_queries()))
 				return;

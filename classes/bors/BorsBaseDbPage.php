@@ -11,14 +11,14 @@ class BorsBaseDbPage extends BorsBasePage
 			return array("http://{$this->match[1]}{$this->match[2]}");
 		}
 	
-		function BorsBaseDbPage($id)
+		function __construct($id)
 		{
 			if(method_exists($this, 'main_db_storage'))
 				$this->db = &new DataBase($this->main_db_storage());
 			else
 				$this->db = &new DataBase($GLOBALS['cms']['mysql_database']);
 			
-			parent::BorsBasePage($id);
+			parent::__construct($id);
 
 			if(!($qlist = $this->_global_queries()))
 				return;
