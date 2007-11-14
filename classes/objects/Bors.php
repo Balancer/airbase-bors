@@ -174,7 +174,9 @@
 				&& method_exists($obj, 'can_be_empty') 
 				&& !$obj->can_be_empty())
 			return NULL;
-		
+
+//		echo "{$class_name}($id) was loaded seccessfully} as ".get_class($obj)."<br />\n";
+
 		if($page > 1)
 			$obj->set_page($page);
 
@@ -367,7 +369,9 @@
 						
 				if($obj = pure_class_load($class_path, $id, $page, true, $host_data['bors_local']))
 				{
-					$obj->set_match($match);
+					if(!empty($match[2]))
+						$obj->set_match($match);
+						
 					$bors_data['classes_by_uri'][$url] = $obj;
 					
 					if($redirect)

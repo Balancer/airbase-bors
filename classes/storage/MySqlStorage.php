@@ -17,7 +17,7 @@ class MySqlStorage extends def_empty
 
 		function load($object)
 		{
-//			echo "Try load {$object->id()}<br />\n";
+//			echo "Try load ".get_class($object)."({$object->id()})<br />\n";
 //			static $total = 0;
 //			static $stb_total = 0;
 		
@@ -49,8 +49,7 @@ class MySqlStorage extends def_empty
 			  $data    = array();
 			  foreach($fields as $field => $value)
 			  {
-//				echo "--- load $field<br />";
-//TODO:?				if($field{0} != 's' || substr($field, 0, 4) != 'stb_')
+//				echo "--- load $field<br />\n";
 				if(!preg_match('!^stb_(.+)$!', $field, $m))
 					continue;
 					
@@ -61,8 +60,13 @@ class MySqlStorage extends def_empty
 //				echo get_class($object)."->$name<br />\n";
 
 				$field_storage_method_name = "field_{$name}_storage";
+				
+//				echo "field_storage: {$field_storage_method_name} at ".get_class($object)." check</br>\n";
+				
 				if(!method_exists($object, $field_storage_method_name))
 					continue;
+
+//				echo "field_storage: {$field_storage_method_name} ok!</br>\n";
 
 				$map = $object->$field_storage_method_name();
 //				else
