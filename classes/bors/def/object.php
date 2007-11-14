@@ -1,7 +1,7 @@
 <?
-class_include('def_empty');
+class_include('base_object');
 
-class def_object extends def_empty
+class def_object extends base_object
 {
 		var $changed_fields = array();
 		var $match;
@@ -190,10 +190,6 @@ class def_object extends def_empty
 		function owner_id() { return $this->stb_owner_id; }
 
 		function owner() { return class_load('forum_user', $this->owner_id()); }
-
-		var $stb_cr_type = NULL;
-		function set_cr_type($cr_type, $db_update) { $this->set("cr_type", $cr_type, $db_update); }
-		function cr_type() { return $this->stb_cr_type; }
 	
 		var $stb_level = NULL;
 		function set_level($level, $db_update) { $this->set("level", $level, $db_update); }

@@ -1,10 +1,10 @@
 <?php
 require_once('Bors.php');
 
-//class_include('base_');
+class_include('base_object');
 
-class BorsBaseObject
-	{
+class BorsBaseObject extends base_object
+{
 		var $id = NULL;
 		var $initial_id = NULL;
 		var $changed_fields = array();
@@ -226,10 +226,6 @@ class BorsBaseObject
 
 		function owner() { return class_load('forum_user', $this->owner_id()); }
 
-		var $stb_cr_type = NULL;
-		function set_cr_type($cr_type, $db_update) { $this->set("cr_type", $cr_type, $db_update); }
-		function cr_type() { return $this->stb_cr_type; }
-	
 		var $stb_level = NULL;
 		function set_level($level, $db_update) { $this->set("level", $level, $db_update); }
 		function level() { return $this->stb_level; }
