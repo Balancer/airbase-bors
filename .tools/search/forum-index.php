@@ -20,7 +20,7 @@
 //	$min = $db->get('SELECT MIN(class_id) FROM bors_search_titles')-1;
 
 	// 1193541:
-	for($i = $max; $i>0; $i--)
+	for($i = 56576; $i>0; $i--)
 	{
 		$obj = class_load('forum_topic', $i);
 

@@ -426,10 +426,13 @@ if (isset($_POST['form_sent']))
 			$post  = class_load('forum_post',  $new_pid);
 		}
 
+		$page = $topic->page_by_post_id($post->id());
+		$topic->set_page($page);
+
 		$topic->cache_clean();
 		
 		include_once('engines/search.php');
-		bors_search_object_index($post);
+		bors_search_object_index($topic, $cms_db, 'ignore');
 
 		// If the posting user is logged in, increment his/her post count
 		if (!$pun_user['is_guest'])
@@ -485,7 +488,14 @@ if ($tid)
 {
 	$action = $lang_post['Post a reply'];
 //	$form = '<form id="post" method="post" action="post.php?action=post&amp;tid='.$tid.'" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">';
-	$form = '<form id="post" method="post" enctype="multipart/form-data" action="post.php?action=post&amp;tid='.$tid.'" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">'; //Attachment Mod has added enctype="multipart/form-data"
+
+	$topic = class_load('forum_topic', $tid);
+	
+	$form = "";
+	if($topic->num_replies() >= 500)
+		$form = "<p style=\"color: red; font-size: 16pt; font-weight: 900; padding: 10px;\">Внимание! Слишком большой топик! Рекомендуется использовать ответ в новый топик путём установки отметки «<i>Разместить ответ как новую тему (требуется ввести заголовок)</i>» под формой ответа</p>";
+
+	$form .= '<form id="post" method="post" enctype="multipart/form-data" action="post.php?action=post&amp;tid='.$tid.'" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">'; //Attachment Mod has added enctype="multipart/form-data"
 
 	// If a quote-id was specified in the url.
 	if($qid)

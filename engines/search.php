@@ -1,6 +1,6 @@
 <?php
 
-function bors_search_object_index($object, $db = NULL, $append = 'replace')
+function bors_search_object_index($object, $db = NULL, $append = 'ignore')
 {
 	if(!$object)
 		return $object;
@@ -15,6 +15,7 @@ function bors_search_object_index($object, $db = NULL, $append = 'replace')
 
 	$class_id	= intval($object->id());
 	$class_name	= get_class($object);
+	$class_page	= intval($object->page());
 	
 	if($source)
 	{
@@ -38,7 +39,12 @@ function bors_search_object_index($object, $db = NULL, $append = 'replace')
 			$tab = "bors_search_source_{$sub}";
 
 			if($append == 'replace')
-				$db->query("DELETE FROM bors_search_source_{$sub} WHERE class_name = '{$class_name}' AND class_id = {$class_id}");
+				$db->query("
+					DELETE FROM bors_search_source_{$sub} 
+						WHERE class_name = '{$class_name}' 
+							AND class_id = {$class_id}
+							AND class_page = {$class_page}
+					");
 
 			if(!empty($buffer[$sub]))
 			{
@@ -49,6 +55,7 @@ function bors_search_object_index($object, $db = NULL, $append = 'replace')
 						'word_id' => $word_id, 
 						'class_id' => $class_id, 
 						'class_name' => $class_name, 
+						'class_page' => $class_page, 
 						'count' => $count, 
 						'object_create_time' => $object->create_time(), 
 						'object_modify_time' => $object->modify_time(),
@@ -67,7 +74,11 @@ function bors_search_object_index($object, $db = NULL, $append = 'replace')
 		$words = index_split($title);
 		
 		if($append=='replace')
-			$db->query("DELETE FROM bors_search_titles WHERE class_name = '{$class_name}' AND class_id = {$class_id}");
+			$db->query("DELETE FROM bors_search_titles 
+				WHERE class_name = '{$class_name}' 
+					AND class_id = {$class_id}
+					AND class_page = {$class_page}
+				");
 		
 		$doing = array();
 		foreach($words as $word)
@@ -84,6 +95,7 @@ function bors_search_object_index($object, $db = NULL, $append = 'replace')
 					'word_id' => $word_id, 
 					'class_id' => $class_id, 
 					'class_name' => $class_name, 
+					'class_page' => $class_page, 
 					'object_create_time' => $object->create_time(), 
 					'object_modify_time' => $object->modify_time(),
 			);
@@ -164,7 +176,7 @@ function bors_search_in_titles($query, $params = array())
 		$first = true;
 		foreach($maybe as $w)
 		{
-			$res = $db->get_array("SELECT DISTINCT class_name, class_id	FROM bors_search_titles WHERE word_id = $w $sort $lim");
+			$res = $db->get_array("SELECT DISTINCT class_name, class_id, class_page FROM bors_search_titles WHERE word_id = $w $sort $lim");
 
 			if($first)
 				$cross = $res;
@@ -176,7 +188,7 @@ function bors_search_in_titles($query, $params = array())
 	}
 
 	if($none)
-		$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_titles WHERE word_id IN (".join(",", $none).")"));
+		$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id, class_page FROM bors_search_titles WHERE word_id IN (".join(",", $none).")"));
 
 	if(!empty($params['pages']))
 		return sizeof($cross);
@@ -184,7 +196,7 @@ function bors_search_in_titles($query, $params = array())
 	$result = array();
 	
 	foreach($cross as $x)
-		$result[] = class_load($x['class_name'], $x['class_id']);
+		$result[] = class_load($x['class_name'], $x['class_id'], $x['class_page']);
 
 	return $result;
 }
@@ -251,7 +263,7 @@ function search_titles_like($title, $limit=20, $forum=0)
 		$first = true;
 		foreach($maybe as $w)
 		{
-			$res = $db->get_array("SELECT DISTINCT class_name, class_id FROM titles_map WHERE t.word_id = $w");
+			$res = $db->get_array("SELECT DISTINCT class_name, class_id, class_page FROM titles_map WHERE t.word_id = $w");
 			if($first)
 				$cross = $res;
 			else
@@ -364,7 +376,7 @@ function bors_search_in_bodies($query)
 		$first = true;
 		foreach($maybe as $w)
 		{
-			$res = $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_source_".($w%10)." WHERE word_id = $w ORDER BY object_modify_time DESC");
+			$res = $db->get_array("SELECT DISTINCT class_name, class_id, class_page FROM bors_search_source_".($w%10)." WHERE word_id = $w ORDER BY object_modify_time DESC");
 			if($first)
 				$cross = $res;
 			else
@@ -376,12 +388,12 @@ function bors_search_in_bodies($query)
 
 	if($none)
 		foreach($none as $w)
-			$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_source_".($w%10)." WHERE word_id = {$w}"));
+			$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id, class_page FROM bors_search_source_".($w%10)." WHERE word_id = {$w}"));
 
 	$result = array();
 	
 	foreach($cross as $x)
-		$result[] = class_load($x['class_name'], $x['class_id']);
+		$result[] = class_load($x['class_name'], $x['class_id'], $x['class_page']);
 
 	return $result;
 }

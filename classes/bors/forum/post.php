@@ -84,15 +84,15 @@ class forum_post extends def_dbpage
 	var $stb_answer_to_id = '';
 	function set_answer_to_id($answer_to_id, $db_update) { $this->set("answer_to_id", $answer_to_id, $db_update); }
 	function field_answer_to_id_storage() { return 'punbb.posts.answer_to(id)'; }
-		function answer_to_id() { return $this->stb_answer_to_id; }
+	function answer_to_id() { return $this->stb_answer_to_id; }
 		
-		function answer_to()
-		{
-			if($id = $this->answer_to_id())
-				return class_load('forum_post', $id);
+	function answer_to()
+	{
+		if($id = $this->answer_to_id())
+			return class_load('forum_post', $id);
 
-			return false;
-		}
+		return false;
+	}
 
 		function preShowProcess()
 		{
@@ -159,4 +159,14 @@ class forum_post extends def_dbpage
 	}
 
 	function search_source() { return $this->source(); }
+	
+	function num_replies()
+	{
+		return 0;
+		
+		$db = &new DataBase('punbb');
+		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
+	}
+
+	function num_views() { return $this->topic()->num_views(); }
 }

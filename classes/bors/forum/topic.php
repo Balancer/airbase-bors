@@ -184,9 +184,29 @@
 		foreach($posts as $pid)
 		{
 			$post = class_load('forum_post', $pid);
-			$result[] = $post->author_name().":\n---------------\n".$post->source();
+			if($post)
+				$result[] = $post->author_name().":\n---------------\n".$post->source();
 		}
 		
 		return join("\n============================\n\n", $result);
+	}
+	
+	function page_by_post_id($post_id)
+	{
+		$post_id = intval($post_id);
+	
+		$db = &new DataBase('punbb');
+
+		$posts = $db->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY posted");
+/*		if(sizeof($posts) == 0)
+		{
+			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = $post_id");
+			$archive_loaded = true;
+			$posts = $db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
+		}
+*/
+		for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
+			if($posts[$i] == $post_id)
+				return intval( $i / 25) + 1;
 	}
 }
