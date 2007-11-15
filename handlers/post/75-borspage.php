@@ -7,6 +7,7 @@
 		
 //		$GLOBALS['cms']['cache_disabled'] = true;
 		require_once("classes/objects/Bors.php");
+		require_once("classes/inc/bors.php");
 
 		if($ret = handler_bors_auto_do(class_load($uri, NULL, 1, false)))
 			return $ret;

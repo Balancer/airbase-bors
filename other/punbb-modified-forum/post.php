@@ -432,7 +432,7 @@ if (isset($_POST['form_sent']))
 		$topic->cache_clean();
 		
 		include_once('engines/search.php');
-		bors_search_object_index($topic, $cms_db, 'ignore');
+		bors_search_object_index($topic, 'replace');
 
 		// If the posting user is logged in, increment his/her post count
 		if (!$pun_user['is_guest'])

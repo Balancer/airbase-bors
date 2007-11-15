@@ -1,16 +1,16 @@
 <form method="get" action="{$main_uri}">
 <input type="text" name="q" value="{$q|addslashes}" />
-сортировать по: <select name="order">
+{* сортировать по: <select name="order">
 <option value="ud">дате крайнего ответа, убыв.</option>
 <option value="cd">дате создания, убыв.</option>
 <option value="ca">дате создания, возр.</option>
 <option value="rd">числу ответов, убыв.</option>
 <option value="vd">числу просмотров, убыв.</option>
-</select>
-искать в: <select name="type">
+</select> *}
+{* искать в: <select name="type">
 <option value="t">заголовках</option>
 <option value="m">сообщениях</option>
-</select>
+</select> *}
 <input type="submit" value="искать" />
 </form>
 {if $topics !== false}

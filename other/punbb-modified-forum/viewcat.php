@@ -19,7 +19,7 @@ require PUN_ROOT.'header.php';
 
 include_once("include/subforums.php");
 $ich = new Cache();
-if($ich->get("subforums-text-v2", $pun_config['root_uri']))
+if($ich->get("subforums-text-v3", $pun_config['root_uri']))
 	$subforums = unserialize($ich->last());
 else
 {
@@ -29,7 +29,7 @@ else
 	$ich->set(serialize($subforums), 600);
 }
 
-if($ich->get("cat_names", "all"))
+if($ich->get("cat_names-v2", "all"))
 	$cat_names = unserialize($ich->last());
 else
 {

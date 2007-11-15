@@ -169,4 +169,6 @@ class forum_post extends def_dbpage
 	}
 
 	function num_views() { return $this->topic()->num_views(); }
+
+	function class_title() { return ec("Сообщение форума"); }
 }

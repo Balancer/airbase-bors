@@ -8,7 +8,7 @@
 
     function balancer_plugins_search_topic_titles_body($uri, $m)
 	{
-		return ec("Временно закрыт");
+//		return ec("Временно закрыт");
 	
 		include_once("engines/search.php");
 		$GLOBALS['cms']['cache_disabled'] = true;
