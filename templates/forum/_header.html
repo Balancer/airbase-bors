@@ -37,6 +37,13 @@ dd, dt { height: 1%; }
 {$h}
 {/foreach}
 {/if}
+{if $meta}{foreach key=key item=value from=$meta}
+<meta name="{$key}" content="{$value|htmlspecialchars}" />
+{/foreach}{/if}
+{foreach item=s from=$head_append}
+{$s}
+{/foreach}
+
 </head>
 
 <body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg" id="body" onLoad="onLoad(this)">
@@ -53,7 +60,10 @@ dd, dt { height: 1%; }
 
 		<dl class="forumposting">
 		<dt><div class="nav">{module name="top-navs"}</div></dt>
-		<dd><h1>{$title}</h1></dd>
+		<dd>
+			<h1>{$title}</h1>
+			{$description}
+		</dd>
 		</dl>
 		{$body}
 

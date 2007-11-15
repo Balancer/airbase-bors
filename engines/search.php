@@ -1,6 +1,6 @@
 <?php
 
-function bors_search_object_index($object, $db = NULL, $append = 'ignore')
+function bors_search_object_index($object, $append = 'ignore', $db = NULL)
 {
 	if(!$object)
 		return $object;
@@ -14,8 +14,10 @@ function bors_search_object_index($object, $db = NULL, $append = 'ignore')
 		$db = &new DataBase(config('search_db'));
 
 	$class_id	= intval($object->id());
-	$class_name	= get_class($object);
+	$class_name	= intval($object->class_id());
 	$class_page	= intval($object->page());
+
+//	exit("$class_name($class_id, $class_page) => <xmp>$source</xmp>");
 	
 	if($source)
 	{
@@ -41,7 +43,7 @@ function bors_search_object_index($object, $db = NULL, $append = 'ignore')
 			if($append == 'replace')
 				$db->query("
 					DELETE FROM bors_search_source_{$sub} 
-						WHERE class_name = '{$class_name}' 
+						WHERE class_name = {$class_name}
 							AND class_id = {$class_id}
 							AND class_page = {$class_page}
 					");
@@ -52,22 +54,25 @@ function bors_search_object_index($object, $db = NULL, $append = 'ignore')
 				foreach($buffer[$sub] as $word_id => $count)
 				{
 					$db->multi_insert_add($tab, array(
-						'word_id' => $word_id, 
-						'class_id' => $class_id, 
-						'class_name' => $class_name, 
-						'class_page' => $class_page, 
-						'count' => $count, 
-						'object_create_time' => $object->create_time(), 
-						'object_modify_time' => $object->modify_time(),
+						'int word_id' => $word_id, 
+						'int class_id' => $class_id, 
+						'int class_name' => $class_name, 
+						'int class_page' => $class_page, 
+						'int count' => $count, 
+						'int object_create_time' => $object->create_time(), 
+						'int object_modify_time' => $object->modify_time(),
 					));
 				}
+//				loglevel(10);
 				if($append == 'replace')
 					$db->multi_insert_do($tab);
 				else
 					$db->multi_insert_ignore($tab);
+//				loglevel(2);
 			}
 		}
 	}
+//	exit("ok");
 
 	if($title)
 	{
@@ -75,9 +80,8 @@ function bors_search_object_index($object, $db = NULL, $append = 'ignore')
 		
 		if($append=='replace')
 			$db->query("DELETE FROM bors_search_titles 
-				WHERE class_name = '{$class_name}' 
+				WHERE class_name = {$class_name}
 					AND class_id = {$class_id}
-					AND class_page = {$class_page}
 				");
 		
 		$doing = array();
@@ -92,12 +96,11 @@ function bors_search_object_index($object, $db = NULL, $append = 'ignore')
 		
 			$doing[$word_id] = true;
 			$data = array(
-					'word_id' => $word_id, 
-					'class_id' => $class_id, 
-					'class_name' => $class_name, 
-					'class_page' => $class_page, 
-					'object_create_time' => $object->create_time(), 
-					'object_modify_time' => $object->modify_time(),
+					'int word_id' => $word_id, 
+					'int class_id' => $class_id, 
+					'int class_name' => $class_name, 
+					'int object_create_time' => $object->create_time(), 
+					'int object_modify_time' => $object->modify_time(),
 			);
 		
 			if($append == 'replace')
@@ -176,7 +179,7 @@ function bors_search_in_titles($query, $params = array())
 		$first = true;
 		foreach($maybe as $w)
 		{
-			$res = $db->get_array("SELECT DISTINCT class_name, class_id, class_page FROM bors_search_titles WHERE word_id = $w $sort $lim");
+			$res = $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_titles WHERE word_id = $w $sort $lim");
 
 			if($first)
 				$cross = $res;
@@ -188,7 +191,7 @@ function bors_search_in_titles($query, $params = array())
 	}
 
 	if($none)
-		$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id, class_page FROM bors_search_titles WHERE word_id IN (".join(",", $none).")"));
+		$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_titles WHERE word_id IN (".join(",", $none).")"));
 
 	if(!empty($params['pages']))
 		return sizeof($cross);
@@ -196,7 +199,7 @@ function bors_search_in_titles($query, $params = array())
 	$result = array();
 	
 	foreach($cross as $x)
-		$result[] = class_load($x['class_name'], $x['class_id'], $x['class_page']);
+		$result[] = object_load($x['class_name'], $x['class_id']);
 
 	return $result;
 }
@@ -393,7 +396,7 @@ function bors_search_in_bodies($query)
 	$result = array();
 	
 	foreach($cross as $x)
-		$result[] = class_load($x['class_name'], $x['class_id'], $x['class_page']);
+		$result[] = object_load($x['class_name'], $x['class_id'], $x['class_page']);
 
 	return $result;
 }

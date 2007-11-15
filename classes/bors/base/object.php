@@ -1,5 +1,7 @@
 <?php
 
+require_once('classes/inc/names.php');
+
 class_include('def_empty');
 
 class base_object extends def_empty
@@ -40,4 +42,15 @@ class base_object extends def_empty
 	var $stb_cr_type = NULL;
 	function set_cr_type($cr_type, $db_update) { $this->set("cr_type", $cr_type, $db_update); }
 	function cr_type() { return $this->stb_cr_type ? $this->stb_cr_type : 'save_cr'; }
+
+	var $_class_id;
+	function class_id()
+	{
+		if(empty($this->_class_id))
+			$this->_class_id = class_name_to_id($this);
+
+		return $this->_class_id;
+	}
+
+	function class_title() { return get_class($this); }
 }

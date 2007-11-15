@@ -17,4 +17,6 @@ class base_page_db_defaults extends base_page_db
 		else
 			return NULL;
 	}
+
+//	function template_local_vars() { return parent::template_local_vars().' owner'; }
 }

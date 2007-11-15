@@ -178,7 +178,7 @@ class BorsBaseObject extends base_object
 				
 			$this->cache_clean_self();
 			foreach($this->cache_parents() as $parent_cache)
-				if(empty($cleaned[$parent_cache->internal_uri()]))
+				if($parent_cache && empty($cleaned[$parent_cache->internal_uri()]))
 				{
 					$cleaned[$parent_cache->internal_uri()] = 1;
 					$parent_cache->cache_clean();

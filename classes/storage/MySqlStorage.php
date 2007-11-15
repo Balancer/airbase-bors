@@ -41,8 +41,21 @@ class MySqlStorage extends def_empty
 			$def_table = $object->main_table_storage();
 
 			global $MySqlStorage_data_cache;
-			$fields = get_object_vars($object);
+
+			$fields = array();
+
+			if(method_exists($object, 'fields_first')  && $field_names = $object->fields_first())
+			{
+				foreach(split(' ', $field_names) as $field_name)
+				{
+					$var_name = 'stb_'.$field_name;
+					unset($fields[$var_name]);
+					$fields[$var_name] = $object->$field_name();
+				}
+			}
 			
+			$fields = array_merge($fields, get_object_vars($object));
+		
 			$hash = md5(serialize($fields));
 			if(!($data = @$MySqlStorage_data_cache[$hash]))
 			{
@@ -133,6 +146,9 @@ class MySqlStorage extends def_empty
 				if($table == '')
 					$table = $def_table;
 
+				if($table == '')
+					$table = main_table_storage($name);
+
 				$data[$db][$table][$id_field][$field] = $name;
 			  }
 			  ksort($data);
@@ -155,7 +171,7 @@ class MySqlStorage extends def_empty
 				$x = @$MySqlStorage_queries_cache[$db_name][$hash];
 				if(!$x)
 				{					
-					ksort($tables);
+//					ksort($tables);
 //				echo "<xmp>"; print_r($tables); echo "</xmp>";
 				
 					$tab_count = 0;

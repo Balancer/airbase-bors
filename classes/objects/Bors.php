@@ -43,7 +43,7 @@
 				$storage->save($obj);
 				
 				if(config('search_autoindex') && $obj->auto_search_index())
-					bors_search_object_index($obj);
+					bors_search_object_index($obj, NULL, 'replace');
 			}
 		}
 		
@@ -195,11 +195,14 @@
 			$id = $m[1];
 	
 //		echo "class_load('$class', '$id')<br />";
-	
+
 		if(preg_match("!^(\w+)://.+!", $class, $m))
 		{
 			if(preg_match("!^http://!", $class))
 			{
+				if(preg_match('!^(.+)#(.+)$!', $class, $m))
+					echo $class = $m[1];
+	
 				if($obj = class_load_by_url($class, $page))
 					return $obj;
 
@@ -218,6 +221,8 @@
 
 	function class_load_by_url($url, $page=1)
 	{
+//		echo "Load $url<br />\n";
+	
 		if($obj = class_load_by_vhosts_url($url, $page))
 			return $obj;
 		
@@ -241,14 +246,15 @@
 			$url_pattern = trim($match[1]);
 			$class_path  = trim($match[2]);
 
-			if(preg_match("!\\\\\?!", $url_pattern))
+			if(preg_match("!\\\\\?!", $url_pattern) && !preg_match('!\?!', $url))
 				$check_url = $url."?".$_SERVER['QUERY_STRING'];
 			else
 				$check_url = $url;
 		
-//			echo "Check $url_pattern to $url for $class_path -- !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$!<br />\n";
+//			echo "Check $url_pattern to $url for $class_path as !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$! to {$check_url}<br />\n";
 			if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$url_pattern$!", $check_url, $match))
 			{
+//				echo "Ok!<br />";
 				$id = $url;
 				$page = 1;
 				
