@@ -40,24 +40,6 @@ class def_page extends borsPage
 			return template_assign_data($this->_body_template(), $data);
 		}
 
-		function add_template_data($var_name, $value)
-		{
-			return $GLOBALS['cms']['templates']['data'][$var_name] = $value;
-		}
-
-		function add_template_data_array($var_name, $value)
-		{
-			if(preg_match('!^(.+)\[(.+)\]$!', $var_name, $m))
-				$GLOBALS['cms']['templates']['data'][$m[1]][$m[2]] = $value;
-			else
-				$GLOBALS['cms']['templates']['data'][$var_name][] = $value;
-		}
-
-		function template_data($var_name)
-		{
-			return @$GLOBALS['cms']['templates']['data'][$var_name];
-		}
-
 		function _class_dir()
 		{
 			if(!method_exists($this, '_class_file'))

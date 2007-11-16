@@ -53,4 +53,15 @@ class base_object extends def_empty
 	}
 
 	function class_title() { return get_class($this); }
+
+	static function add_template_data($var_name, $value) { return $GLOBALS['cms']['templates']['data'][$var_name] = $value; }
+	static function template_data($var_name) { return @$GLOBALS['cms']['templates']['data'][$var_name]; }
+
+	static function add_template_data_array($var_name, $value)
+	{
+		if(preg_match('!^(.+)\[(.+)\]$!', $var_name, $m))
+			$GLOBALS['cms']['templates']['data'][$m[1]][$m[2]] = $value;
+		else
+			$GLOBALS['cms']['templates']['data'][$var_name][] = $value;
+	}
 }
