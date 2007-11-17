@@ -7,7 +7,11 @@
 
         function main_db_storage(){ return 'punbb'; }
 
-		function template() { return BORS_INCLUDE.'templates/forum/_header.html'; }
+		function template()
+		{
+			templates_noindex();
+			return BORS_INCLUDE.'templates/forum/_header.html';
+		}
 
 		var $user;
 	
@@ -21,10 +25,10 @@
 			return array('topics' => 'SELECT id FROM topics WHERE poster_id='.$this->id().' ORDER BY posted DESC LIMIT '.(($this->page()-1)*25).', 25');
 		}
 
-		function user_blog($id)
+		function __construct($id)
 		{
 			$this->user = class_load('forum_user', $id);
-			parent::def_dbpage($id);
+			parent::__construct($id);
 			
 			$this->add_template_data('user_id', $id);
 			$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url(1)."rss.xml\" title=\"RSS блога пользователя ".addslashes($this->user->title())."\" />");
@@ -40,7 +44,7 @@
 
 		function cache_static()
 		{
-			return 86400*30;
+			return 86400*14;
 		}
 		
 		function total_pages()
