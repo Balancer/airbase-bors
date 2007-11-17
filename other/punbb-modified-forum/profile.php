@@ -22,10 +22,15 @@
 
 ************************************************************************/
 
-
 define('PUN_ROOT', './');
 require PUN_ROOT.'include/common.php';
 
+if($_SERVER['HTTP_HOST'] != 'balancer.ru' || !preg_match('!^/forum/punbb/!', $_SERVER['REQUEST_URI']))
+{
+	include_once('funcs/navigation/go.php');
+	go("http://balancer.ru/forum/punbb/profile.php" . (empty($_SERVER['QUERY_STRING']) ? "" : "?".$_SERVER['QUERY_STRING']), true);
+	exit("Redirected");
+}
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $section = isset($_GET['section']) ? $_GET['section'] : null;
