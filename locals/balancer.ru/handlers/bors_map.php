@@ -15,6 +15,7 @@
 		'/user/(\d+)/use-topics\.html => users_UseTopics(1)',
 
 		'/user/(\d+)/? => user_main(1)',
+		'(/user/(\d+)/)test/ => user_test(2)',
 
 		'/user/(\d+)/blog/ => user_blog(1)',
 		'/user/(\d+)/blog/index.html => redirect:user_blog(1)',

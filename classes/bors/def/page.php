@@ -63,7 +63,11 @@ class def_page extends borsPage
 		function _queries() { return array(); }
 		function _global_queries() { return array(); }
 		
-		function change_time() { return max($this->create_time(), $this->modify_time()); }
+	function change_time($exactly = false)
+	{
+		$changed = max($this->create_time(true), $this->modify_time(true));
+		return $changed || $exactly ? $changed : time();
+	}
 
 	function error_message($message, $redirect = false)
 	{

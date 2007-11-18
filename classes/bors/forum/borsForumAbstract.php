@@ -1,7 +1,5 @@
 <?php
-class_include('def_dbpage');
-
-class borsForumAbstract extends def_dbpage
+class borsForumAbstract extends base_page_db
 {
 	function template()
 	{ 

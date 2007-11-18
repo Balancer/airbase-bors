@@ -38,30 +38,6 @@ class def_object extends base_object
 			$this->$field_name = $value;
 		}
 
-
-		var $stb_create_time = NULL;
-		function set_create_time($unix_time, $db_update) { $this->set("create_time", intval($unix_time), $db_update); }
-		function create_time()
-		{
-			if($this->stb_create_time)
-				return $this->stb_create_time;
-
-			if($this->stb_modify_time)
-				return $this->stb_modify_time;
-
-			return time(); 
-		}
-
-		var $stb_modify_time = NULL;
-		function set_modify_time($unix_time, $db_update) { $this->set("modify_time", $unix_time, $db_update); }
-		function modify_time()
-		{
-			if($this->stb_modify_time)
-				return $this->stb_modify_time;
-
-			return time(); 
-		}
-
 		var $stb_title = '';
 		function title() { return $this->stb_title/* ? $this->stb_title : $this->internal_uri()*/; }
 		function set_title($new_title, $db_update) { $this->set("title", $new_title, $db_update); }

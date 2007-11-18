@@ -129,5 +129,5 @@ class forum_user extends def_dbpage
 		function field_reputation_storage() { return 'punbb.users.reputation(id)'; }
 		
 		function url() { return "http://balancer.ru/user/{$this->id()}/"; }
-		function parents() { return array("http://balancer.ru/forum/users/"); }
+		function parents() { return array("http://balancer.ru/users/"); }
 }

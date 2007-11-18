@@ -132,9 +132,9 @@ if($pun_user['is_guest'])
 	$_COOKIE['user_id'] = "0";
 //	exit("Redir to ".class_load("forum_post", $pid)->url());
 	if($pid)
-		go(class_load("forum_post", $pid)->url(), 0, true);
+		go(class_load("forum_post", $pid)->url(), true);
 	else
-		go(class_load("forum_topic", $id)->url(max(1,@$_GET['p'])), 0, true);
+		go(class_load("forum_topic", $id)->url(max(1,@$_GET['p'])), true);
 }
 
 for($ii=0; $ii<2; $i++)
@@ -259,7 +259,7 @@ if($pun_user['id'] > 1)
 
 $ret = $cms_db->get("SELECT last_post, last_edit FROM topics WHERE id=".intval($id));
 $last = max($ret['last_post'], $ret['last_edit']);
-if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun_user['id']}-{$pun_user['style']}-v21", "$id:$last:$p"))
+if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun_user['id']}-{$pun_user['style']}-v23", "$id:$last:$p"))
 {
 	echo $GLOBALS['global_cache']->last();
 	$GLOBALS['global_cache'] = NULL;
@@ -352,6 +352,7 @@ include_once("funcs/lcml.php");
 
 while ($cur_post = $db->fetch_assoc($result))
 {
+//	echo $cur_post['id'].", ";
 	if(empty($GLOBALS['bors_data']['cache']['punbb_user'][$cur_post['poster_id']]))
 	{
 		$poster = $cdb->get("SELECT * FROM users  WHERE id = ".intval($cur_post['poster_id']));

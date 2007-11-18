@@ -34,9 +34,9 @@ class def_db_object extends def_empty
 
 	var $stb_modify_time = NULL;
 	function set_modify_time($unix_time, $db_update) { $this->set("modify_time", $unix_time, $db_update); }
-	function modify_time()
+	function modify_time($exactly = false)
 	{
-		if($this->stb_modify_time)
+		if($exactly || $this->stb_modify_time)
 			return $this->stb_modify_time;
 
 		return time(); 
@@ -44,9 +44,9 @@ class def_db_object extends def_empty
 
 	var $stb_create_time = NULL;
 	function set_create_time($unix_time, $db_update) { $this->set("create_time", intval($unix_time), $db_update); }
-	function create_time()
+	function create_time($exactly = false)
 	{
-		if($this->stb_create_time)
+		if($exactly || $this->stb_create_time)
 			return $this->stb_create_time;
 
 		if($this->stb_modify_time)
