@@ -31,7 +31,7 @@
 				
 			foreach($this->changed_objects as $name => $obj)
 			{
-//				echo "<b>Update $name</b><br />";
+				echo "<b>Update $name</b>, index={$obj->auto_search_index()}<br />\n";
 			
 				if(!$obj->id())
 					$obj->new_instance();
@@ -43,8 +43,10 @@
 				$storage->save($obj);
 				
 				if(config('search_autoindex') && $obj->auto_search_index())
-					bors_search_object_index($obj, NULL, 'replace');
+					bors_search_object_index($obj, 'replace');
 			}
+			
+			$this->changed_objects = false;
 		}
 		
 		function get_html($object)
@@ -120,6 +122,8 @@
 		
 		return false;
 	}
+
+	function __autoload($class_name) { class_include($class_name); }
 
 	function load_cached_object($class_name, $id, $page)
 	{

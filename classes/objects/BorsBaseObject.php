@@ -1,18 +1,13 @@
 <?php
 require_once('Bors.php');
 
-class_include('base_object');
-
 class BorsBaseObject extends base_object
 {
 		var $id = NULL;
 		var $initial_id = NULL;
 		var $changed_fields = array();
-		var $match;
 		
 //		var $methods_added = false;
-
-		function set_match($match) { $this->match = $match;	}
 
 		function id() { return $this->id; }
 		function set_id($id) { $this->id = $id; }
@@ -39,45 +34,6 @@ class BorsBaseObject extends base_object
 				if($engine = $this->storage_engine())
 					if(class_load($engine)->load($this) !== false)
 						$this->_loaded = true;
-		}
-
-		function set($field, $value, $db_update)
-		{
-			global $bors;
-			
-			$field_name = "stb_$field";
-
-			if($db_update && $this->$field_name != $value)
-			{
-				$this->changed_fields[$field] = $field_name;
-				$bors->add_changed_object($this);
-			}
-
-			$this->$field_name = $value;
-		}
-
-
-		var $stb_create_time = NULL;
-		function set_create_time($unix_time, $db_update) { $this->set("create_time", intval($unix_time), $db_update); }
-		function create_time()
-		{
-			if($this->stb_create_time)
-				return $this->stb_create_time;
-
-			if($this->stb_modify_time)
-				return $this->stb_modify_time;
-
-			return time(); 
-		}
-
-		var $stb_modify_time = NULL;
-		function set_modify_time($unix_time, $db_update) { $this->set("modify_time", $unix_time, $db_update); }
-		function modify_time()
-		{
-			if($this->stb_modify_time)
-				return $this->stb_modify_time;
-
-			return time(); 
 		}
 
 		var $stb_title = '';
@@ -192,33 +148,9 @@ class BorsBaseObject extends base_object
 			CacheStaticFile::clean($this->url());
 		}
 
-		function template_vars()
-		{
-			return 'body source';
-		}
-
-		function template_local_vars()
-		{
-			return 'create_time description id modify_time nav_name title';
-		}
-		
-		function is_cache_disabled() { return true; }
-
-		var $stb_description = NULL;
-		function set_description($description, $db_update) { $this->set("description", $description, $db_update); }
-		function description() { return $this->stb_description; }
-
-		var $stb_nav_name = NULL;
-		function set_nav_name($nav_name, $db_update) { $this->set("nav_name", $nav_name, $db_update); }
-		function nav_name() { return !empty($this->stb_nav_name) ? $this->stb_nav_name : $this->title(); }
-
 		var $stb_source = NULL;
 		function set_source($source, $db_update) { $this->set("source", $source, $db_update); }
 		function source() { return $this->stb_source; }
-
-		var $stb_template = NULL;
-		function set_template($template, $db_update) { $this->set("template", $template, $db_update); }
-        function template() { return $this->stb_template ? $this->stb_template : @$GLOBALS['cms']['default_template']; }
 
 		var $stb_owner_id = NULL;
 		function set_owner_id($owner_id, $db_update) { $this->set("owner_id", $owner_id, $db_update); }
@@ -278,7 +210,6 @@ class BorsBaseObject extends base_object
 		}
 		
 		function cacheable_body() { return ec("Содержимое страницы отсутствует"); }
-		function cache_static() { return 0; }
 
 		var $stb_type_id;
 		function type_id() { return $this->stb_type_id; }
@@ -289,11 +220,6 @@ class BorsBaseObject extends base_object
 		function class_name() { return get_class($this); }
 		function uri_name()   { return get_class($this); }
 
-		function preParseProcess()
-		{
-			return false;
-		}
-		
 	function set_fields($array, $db_update_flag, $fields_list = NULL)
 	{
 		if(!$this->id())
@@ -327,7 +253,6 @@ class BorsBaseObject extends base_object
 
 	function config_class() { return ''; }
 
-	function render_engine() { return ''; }
 	function storage_engine() { return ''; }
 	function body_engine() { return ''; }
 

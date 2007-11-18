@@ -13,40 +13,32 @@ function bors_search_object_index($object, $append = 'ignore', $db = NULL)
 	if(!$db)
 		$db = &new DataBase(config('search_db'));
 
-	$class_id	= intval($object->id());
+	$object_id	= intval($object->id());
 	$class_name	= intval($object->class_id());
-	$class_page	= intval($object->page());
+	$object_page	= intval($object->page());
 
-//	exit("$class_name($class_id, $class_page) => <xmp>$source</xmp>");
+//	exit("$class_name($object_id, $object_page) => <xmp>$source</xmp>");
 	
 	if($source)
 	{
 		$words = index_split($source);
 		
-		$buffer = array();
-		foreach($words as $word)
-		{
-			if(!$word)
-				continue;
-				
-			$word_id = bors_search_get_word_id($word, $db);
-			if(!$word_id)
-				continue;
+		$buffer = bors_search_get_word_id_array($words, $db);
 
-			@$buffer[$word_id%10][$word_id]++;
+		if($append == 'replace')
+		{
+			foreach(array_keys($buffer) as $sub)
+				$db->query("DELETE FROM bors_search_source_{$sub}
+							WHERE class_name = {$class_name}
+								AND class_id = {$object_id}
+								AND class_page = {$object_page}");
+
+			echo 0/0;
 		}
 
 		for($sub=0; $sub<10; $sub++)
 		{
 			$tab = "bors_search_source_{$sub}";
-
-			if($append == 'replace')
-				$db->query("
-					DELETE FROM bors_search_source_{$sub} 
-						WHERE class_name = {$class_name}
-							AND class_id = {$class_id}
-							AND class_page = {$class_page}
-					");
 
 			if(!empty($buffer[$sub]))
 			{
@@ -55,9 +47,9 @@ function bors_search_object_index($object, $append = 'ignore', $db = NULL)
 				{
 					$db->multi_insert_add($tab, array(
 						'int word_id' => $word_id, 
-						'int class_id' => $class_id, 
+						'int class_id' => $object_id, 
 						'int class_name' => $class_name, 
-						'int class_page' => $class_page, 
+						'int class_page' => $object_page, 
 						'int count' => $count, 
 						'int object_create_time' => $object->create_time(), 
 						'int object_modify_time' => $object->modify_time(),
@@ -81,7 +73,7 @@ function bors_search_object_index($object, $append = 'ignore', $db = NULL)
 		if($append=='replace')
 			$db->query("DELETE FROM bors_search_titles 
 				WHERE class_name = {$class_name}
-					AND class_id = {$class_id}
+					AND class_id = {$object_id}
 				");
 		
 		$doing = array();
@@ -97,7 +89,7 @@ function bors_search_object_index($object, $append = 'ignore', $db = NULL)
 			$doing[$word_id] = true;
 			$data = array(
 					'int word_id' => $word_id, 
-					'int class_id' => $class_id, 
+					'int class_id' => $object_id, 
 					'int class_name' => $class_name, 
 					'int object_create_time' => $object->create_time(), 
 					'int object_modify_time' => $object->modify_time(),
@@ -225,7 +217,7 @@ function bors_search_get_word_id($word, $db = NULL)
 
 	if(!empty($GLOBALS['bors_search_get_word_id_cache'][$word]))
 		return $GLOBALS['bors_search_get_word_id_cache'][$word];
-			
+
 	if(!$db)
 		$db = &new DataBase(config('search_db'));
 
@@ -241,6 +233,34 @@ function bors_search_get_word_id($word, $db = NULL)
 //		echo dc("{$original} => {$word}\n");
 		
 	return $GLOBALS['bors_search_get_word_id_cache'][$word] = $GLOBALS['bors_search_get_word_id_cache'][$original] = intval($word_id);
+}
+
+function bors_search_get_word_id_array($words, $db = NULL)
+{
+	$buffer = array();
+
+	if(!$db)
+		$db = &new DataBase(config('search_db'));
+
+	$list = array_map('addslashes', array_unique($words));
+	$list = array_map(create_function('$s', "return \"'\$s'\";"), $list);
+
+	$ids = array();
+	
+	foreach($db->get_array("SELECT id, word FROM bors_search_words WHERE word IN (".join(",", $list).")") as $x)
+		$ids[$x['word']] = $x['id'];
+
+	foreach($words as $word)
+	{
+		if(empty($ids[$word]))
+			$ids[$word] = bors_search_get_word_id($word, $db);
+
+		$word_id = $ids[$word];
+
+		@$buffer[$word_id%10][$word_id]++;
+	}
+		
+	return $buffer;
 }
 
 function search_titles_like($title, $limit=20, $forum=0)

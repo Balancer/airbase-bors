@@ -150,4 +150,10 @@
 		function field_num_posts_storage() { return 'punbb.forums.num_posts(id)'; }
 
 		function cache_static() { return $this->is_public_access() ? 600 : 0; }
+
+	function topic_update()
+	{
+		require_once('/var/www/balancer.ru/htdocs/cms/other/punbb-modified-forum/include/functions.php');
+//		update_
 	}
+}

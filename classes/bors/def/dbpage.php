@@ -27,32 +27,35 @@ class def_dbpage extends def_page
 
 		function uri2id($id) { return $id; }
 	
-		function __construct($id)
-		{
-			$this->db = &new DataBase($this->main_db_storage());
-			$id = $this->uri2id($id);
+	function __construct($id)
+	{
+		$driver = $this->db_driver();
+		$this->db = &new $driver($this->main_db_storage());
+		$id = $this->uri2id($id);
 			
-			parent::__construct($id);
+		parent::__construct($id);
 
-			if(!($qlist = $this->_global_queries()))
-				return;
+		if(!($qlist = $this->_global_queries()))
+			return;
 				
-			foreach($qlist as $qname => $q)
-			{
-				if(isset($GLOBALS['cms']['templates']['data'][$qname]))
-					continue;
+		foreach($qlist as $qname => $q)
+		{
+			if(isset($GLOBALS['cms']['templates']['data'][$qname]))
+				continue;
 			
-				$cache = NULL;
-				if(preg_match("!^(.+)\|(\d+)$!s", $q, $m))
-				{
-					$q		= $m[1];
-					$cache	= $m[2];
-				}
-					
-				$GLOBALS['cms']['templates']['data'][$qname] = $this->db->get_array($q, false, $cache);
+			$cache = NULL;
+			if(preg_match("!^(.+)\|(\d+)$!s", $q, $m))
+			{
+				$q		= $m[1];
+				$cache	= $m[2];
 			}
+					
+			$GLOBALS['cms']['templates']['data'][$qname] = $this->db->get_array($q, false, $cache);
 		}
-		
+	}
+
+	function db_driver() { return 'driver_mysql'; }
+	
 	function edit_link() { return $this->uri."?edit"; }
 	function storage_engine() { return 'storage_db_mysql'; }
 }
