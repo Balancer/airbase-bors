@@ -1,8 +1,6 @@
 <?php
 
-require_once("classes/bors/BorsBaseDbPage.php");
-
-class user_reputation extends BorsBaseDbPage
+class user_reputation extends base_page_db
 {
 	function _class_file() { return __FILE__; }
 
