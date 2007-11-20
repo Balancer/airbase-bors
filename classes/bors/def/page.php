@@ -81,9 +81,9 @@ class def_page extends borsPage
 		return message($message, $redirect, "", -1);
 	}
 
-	var $stb_parents;
-	function parents() { return $this->stb_parents; }
-	function set_parents($array) { return $this->stb_parents = $array; }
+//	var $stb_parents;
+//	function parents() { return array(); /*$this->stb_parents;*/ }
+//	function set_parents($array) { return $this->stb_parents = $array; }
 	
 	function set_template_data($data)
 	{
@@ -100,4 +100,8 @@ class def_page extends borsPage
 	function search_type_name() { return "";}
 
 	function auto_search_index() { return true; }
+
+	var $stb_source = NULL;
+	function set_source($source, $db_update) { $this->set("source", $source, $db_update); }
+	function source() { return $this->stb_source; }
 }

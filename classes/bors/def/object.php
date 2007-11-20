@@ -38,10 +38,6 @@ class def_object extends base_object
 			$this->$field_name = $value;
 		}
 
-		var $stb_title = '';
-		function title() { return $this->stb_title/* ? $this->stb_title : $this->internal_uri()*/; }
-		function set_title($new_title, $db_update) { $this->set("title", $new_title, $db_update); }
-
 		function base_url() { return "http://{$_SERVER['HTTP_HOST']}/"; }
 
 		//TODO: Устарело, после убирания вызовов - нафиг.
@@ -93,14 +89,7 @@ class def_object extends base_object
 			return $res;
 		}
 
-		var $loaded = false;
-		function load()
-		{
-			global $bors;
-			
-			$bors->config()->storage()->load($this);
-			$loaded = true;
-		}
+		function load() { return $GLOBALS['bors']->config()->storage()->load($this); }
 
 		function save()
 		{
@@ -145,32 +134,12 @@ class def_object extends base_object
 		
 		function is_cache_disabled() { return true; }
 
-		var $stb_description = NULL;
-		function set_description($description, $db_update) { $this->set("description", $description, $db_update); }
-		function description() { return $this->stb_description; }
-
-		var $stb_nav_name = NULL;
-		function set_nav_name($nav_name, $db_update) { $this->set("nav_name", $nav_name, $db_update); }
-		function nav_name() { return !empty($this->stb_nav_name) ? $this->stb_nav_name : $this->title(); }
-
-		var $stb_source = NULL;
-		function set_source($source, $db_update) { $this->set("source", $source, $db_update); }
-		function source() { return $this->stb_source; }
-
-		var $stb_template = NULL;
-		function set_template($template, $db_update) { $this->set("template", $template, $db_update); }
-        function template() { return $this->stb_template ? $this->stb_template : @$GLOBALS['cms']['default_template']; }
-
 		var $stb_owner_id = NULL;
 		function set_owner_id($owner_id, $db_update) { $this->set("owner_id", $owner_id, $db_update); }
 		function owner_id() { return $this->stb_owner_id; }
 
 		function owner() { return class_load('forum_user', $this->owner_id()); }
 	
-		var $stb_level = NULL;
-		function set_level($level, $db_update) { $this->set("level", $level, $db_update); }
-		function level() { return $this->stb_level; }
-
 		function preShowProcess() {	return false; }
 
 		function cache_life_time() { return 0; }
@@ -215,10 +184,6 @@ class def_object extends base_object
 		function cacheable_body() { return ec("Содержимое страницы отсутствует"); }
 		function cache_static() { return 0; }
 
-		var $stb_type_id;
-		function type_id() { return $this->stb_type_id; }
-		function set_type_id($type_id, $db_update) { $this->set("type_id", $type_id, $db_update); }
-
 		function need_access_level() { return 0; }
 	
 		function class_name() { return get_class($this); }
@@ -229,25 +194,5 @@ class def_object extends base_object
 			return false;
 		}
 		
-	function set_fields($array, $db_update_flag)
-	{
-		if(!$this->id())
-			$this->new_instance();
-		
-		foreach($array as $key => $val)
-		{
-			$method = "set_$key";
-//			echo "Set $key to $val<br />";
-			if(method_exists($this, $method))
-				$this->$method($val, $db_update_flag);
-		}
-
-		if($db_update_flag)
-		{
-			global $bors;
-			$bors->changed_save();
-		}
-	}
-
 	function config_class() { return ''; }
 }

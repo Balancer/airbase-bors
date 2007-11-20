@@ -65,18 +65,9 @@
 			}
 			else
 			{
-				foreach($_GET as $key => $val)
-				{
-					$method = "set_$key";
-//					echo "Set $key to $val<br />";
-					if(method_exists($form, $method))
-						$form->$method($val, true);
-				}
-
+				$form->set_fields($_GET, true);
 				
 				$bors->changed_save();
-
-//				print_r($form);
 
 				foreach($_GET as $key => $val)
 				{
@@ -101,9 +92,7 @@
 
 			$bors->changed_save();
 
-//			print_r($_FILES);
-//			phpinfo();
-//			exit();
+//			exit("Saved");
 
 			if(!empty($_GET['go']))
 			{

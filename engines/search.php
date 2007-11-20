@@ -33,7 +33,7 @@ function bors_search_object_index($object, $append = 'ignore', $db = NULL)
 								AND class_id = {$object_id}
 								AND class_page = {$object_page}");
 
-			echo 0/0;
+//			echo 0/0;
 		}
 
 		for($sub=0; $sub<10; $sub++)

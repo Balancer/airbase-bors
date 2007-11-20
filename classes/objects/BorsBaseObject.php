@@ -19,27 +19,6 @@ class BorsBaseObject extends base_object
 		var $_loaded = false;
 		function loaded() { return $this->_loaded; }
 
-		function BorsBaseObject($id = NULL)
-		{
-			$this->id = $this->initial_id = $id;
-			$this->page = 1;
-
-			if(!$id)
-				return;
-			
-			//TODO: убрать после введения во все классы:
-			if(!method_exists($this, 'storage_engine'))
-				echo "Not defined 'storage_engine' in class '".get_class($this)."'<br />\n";
-			else
-				if($engine = $this->storage_engine())
-					if(class_load($engine)->load($this) !== false)
-						$this->_loaded = true;
-		}
-
-		var $stb_title = '';
-		function title() { return $this->stb_title/* ? $this->stb_title : $this->internal_uri()*/; }
-		function set_title($new_title, $db_update) { $this->set("title", $new_title, $db_update); }
-
 		var $page = '';
 		function page() { return $this->page; }
 		function set_page($page) { $this->page = $page; }
@@ -78,8 +57,6 @@ class BorsBaseObject extends base_object
 			return  $this->class_name().'://'.$this->id().'/'; 
 		}
 
-		function parents() { return array(); }
-		
 		function parent()
 		{
 //			echo "Parent for ".$this->internal_uri()." is ";
@@ -148,19 +125,11 @@ class BorsBaseObject extends base_object
 			CacheStaticFile::clean($this->url());
 		}
 
-		var $stb_source = NULL;
-		function set_source($source, $db_update) { $this->set("source", $source, $db_update); }
-		function source() { return $this->stb_source; }
-
 		var $stb_owner_id = NULL;
 		function set_owner_id($owner_id, $db_update) { $this->set("owner_id", $owner_id, $db_update); }
 		function owner_id() { return $this->stb_owner_id; }
 
 		function owner() { return class_load('forum_user', $this->owner_id()); }
-
-		var $stb_level = NULL;
-		function set_level($level, $db_update) { $this->set("level", $level, $db_update); }
-		function level() { return $this->stb_level; }
 
 		function preShowProcess() {	return false; }
 
@@ -211,45 +180,10 @@ class BorsBaseObject extends base_object
 		
 		function cacheable_body() { return ec("Содержимое страницы отсутствует"); }
 
-		var $stb_type_id;
-		function type_id() { return $this->stb_type_id; }
-		function set_type_id($type_id, $db_update) { $this->set("type_id", $type_id, $db_update); }
-
 		function need_access_level() { return 0; }
 	
 		function class_name() { return get_class($this); }
 		function uri_name()   { return get_class($this); }
-
-	function set_fields($array, $db_update_flag, $fields_list = NULL)
-	{
-		if(!$this->id())
-			$this->new_instance();
-		
-		if($fields_list)
-		{
-			foreach(split(' ', $fields_list) as $key)
-			{
-				$method = "set_$key";
-				$this->$method(@$array[$key], $db_update_flag);
-			}
-		}
-		else
-		{
-			foreach($array as $key => $val)
-			{
-				$method = "set_$key";
-//			echo "Set $key to $val<br />";
-				if(method_exists($this, $method))
-					$this->$method($val, $db_update_flag);
-			}
-		}
-		
-		if($db_update_flag)
-		{
-			global $bors;
-			$bors->changed_save();
-		}
-	}
 
 	function config_class() { return ''; }
 

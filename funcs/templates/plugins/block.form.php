@@ -3,18 +3,28 @@
 	{
 		extract($params);
 	
-		if(empty($name))
+		$main_obj = $GLOBALS['bors']->main_object();
+		
+		if(empty($name) && !$main_obj)
 		{
 	        $smarty->trigger_error("form: empty parameter 'name'");
 	        return;
 		}
+		
+		$name = get_class($main_obj);
 			
 		if(empty($id))
 			$id = NULL;
 			
-		$smarty->assign('current_form_class', class_load($name, $id));
-		
-		$uri = $GLOBALS['bors']->main_object()->url();
+		$smarty->assign('current_form_class', $form = object_load($name, $id));
+
+		if($main_obj)
+			$uri = $main_obj->url();
+		else
+			$uri = NULL;
+			
+		if(!$uri)
+			$uri = $form->id();
 		
 		if($content == NULL) // Открытие формы
 		{
@@ -44,8 +54,11 @@
 
 		if(!empty($subaction))
 			echo "<input type=\"hidden\" name=\"subaction\" value=\"$subaction\" />\n";
-			
-		echo "<input type=\"hidden\" name=\"class_name\" value=\"$name\" />\n";
+	
+		if(empty($class_name))
+			$class_name = $name;
+		
+		echo "<input type=\"hidden\" name=\"class_name\" value=\"$class_name\" />\n";
 		if(!empty($id))
 			echo "<input type=\"hidden\" name=\"id\" value=\"$id\" />\n";
 		echo "</form>\n";

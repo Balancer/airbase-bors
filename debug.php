@@ -1,4 +1,12 @@
-<?
+<?php
+	function debug_exit($message)
+	{
+		echo "<xmp>";
+		debug_print_backtrace();
+		echo "</xmp>";
+		exit($message);
+	}
+
     function echolog($message,$level=3)
     {
 		$log_level = max(@$GLOBALS['log_level'], @$_GET['log_level']);
