@@ -14,11 +14,14 @@
 		echo ">\n";
 
 		if(preg_match("!^(\w+)\->(\w+)!", $list, $m))
-			$list = class_load($m[1])->$m[2]();
+			$list = object_load($m[1])->$m[2]();
 		else
 			$list = $obj->$list();
 
-		$current = $obj->$name();
+		if(empty($get))
+			$current = $obj->$name();
+		else
+			$current = $obj->$get();
 		
 		if(!$current && !empty($list['default']))
 			$current = $list['default'];

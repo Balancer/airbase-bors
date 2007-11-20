@@ -1,4 +1,5 @@
-<?
+<?php
+
 class common_date_years
 {
 	function id() { return 0; }

@@ -31,7 +31,7 @@
 				
 			foreach($this->changed_objects as $name => $obj)
 			{
-				echo "<b>Update $name</b>, index={$obj->auto_search_index()}<br />\n";
+//				echo "<b>Update $name</b>, index={$obj->auto_search_index()}<br />\n";
 			
 				if(!$obj->id())
 					$obj->new_instance();
@@ -134,7 +134,7 @@
 	function save_cached_object($object)
 	{
 //		echo "Save cache object ".get_class($object)."'(".$object->id()."', ".$object->page().")<br />\n";
-		if(method_exists($object, 'id'))
+		if(method_exists($object, 'id') && !is_object($object->id()))
 			$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][$object->page()] = $object;
 	}
 
@@ -195,7 +195,7 @@
 		if(preg_match("!^/!", $class))
 			$class = 'http://'.$_SERVER['HTTP_HOST'].$class;
 	
-		if(preg_match("!^(\d+)/$!", $id, $m))
+		if(!is_object($id) && preg_match("!^(\d+)/$!", $id, $m))
 			$id = $m[1];
 	
 //		echo "class_load('$class', '$id')<br />";

@@ -77,8 +77,4 @@ class def_db_object extends def_empty
 	function render_engine() { return 'render_page'; }
 	function template_vars() { return 'body source'; }
 	function template_local_vars() { return 'create_time description id modify_time nav_name title'; }
-
-	var $stb_description = NULL;
-	function set_description($description, $db_update) { $this->set("description", $description, $db_update); }
-	function description() { return $this->stb_description; }
 }

@@ -17,8 +17,8 @@ class MySqlStorage extends def_empty
 
 		function load($object)
 		{
-//			echo "Try load ".get_class($object)."({$object->id()})<br />\n";
 //			static $total = 0;
+//			echo "Try load ".get_class($object)."({$object->id()})<br />\n";
 //			static $stb_total = 0;
 		
 			if(!$object->id() || is_object($object->id()))
@@ -76,7 +76,7 @@ class MySqlStorage extends def_empty
 				
 //				echo "field_storage: {$field_storage_method_name} at ".get_class($object)." check</br>\n";
 				
-				if(!method_exists($object, $field_storage_method_name))
+				if(!method_exists($object, $field_storage_method_name) && !$object->autofield($name))
 					continue;
 
 //				echo "field_storage: {$field_storage_method_name} ok!</br>\n";
@@ -288,10 +288,11 @@ class MySqlStorage extends def_empty
 			foreach($object->changed_fields as $field_name => $field)
 			{
 				$field_storage_method_name = "field_{$field_name}_storage";
+				$map = @$mysql_map[$field_name];
 				if(method_exists($object, $field_storage_method_name))
 					$map = $object->$field_storage_method_name();
-				else
-					$map = @$mysql_map[$field_name];
+				elseif(method_exists($object, 'autofield') && $x = $object->autofield($field_name))
+					$map = $x;
 
 				$db = $object->main_db_storage();
 				if(!$db)

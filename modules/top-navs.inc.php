@@ -44,9 +44,10 @@
 				$link_line = array();
 				foreach(split("\|#\|", $nav) as $link)
 				{	
-					$obj = class_load($link);
+					$obj = object_load($link);
 					if($obj && $obj->nav_name())
 					{
+//						echo get_class($obj)."->".$obj->nav_name()."<br />\n";
 						$url = $obj->url();
 						$nav = $obj->nav_name();
 					}
