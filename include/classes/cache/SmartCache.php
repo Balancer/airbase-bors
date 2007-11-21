@@ -20,18 +20,21 @@
 			if($GLOBALS['cms']['cache_disabled'])
            		return ($this->last = $default);
 
-			$memcache = &new Memcache;
-			$memcache->connect('localhost') or debug_exit("Could not connect memcache");
-
-			@$GLOBALS['bors_stat_smart_cache_gets_total']++;
-			if($x = @$memcache->get('phpmv3'.$this->last_hmd))
+			if(config('memcached'))
 			{
-				@$GLOBALS['bors_stat_smart_cache_gets_memcached_hits']++;
-				return $this->last = $x;
+				$memcache = &new Memcache;
+				$memcache->connect(config('memcached')) or debug_exit("Could not connect memcache");
+
+				@$GLOBALS['bors_stat_smart_cache_gets_total']++;
+				if($x = @$memcache->get('phpmv3'.$this->last_hmd))
+				{
+					@$GLOBALS['bors_stat_smart_cache_gets_memcached_hits']++;
+					return $this->last = $x;
+				}
 			}
-			
+				
             $row = $this->dbh->get("SELECT `value`, `expire_time`, `count`, `saved_time`, `create_time` FROM `cache` WHERE `hmd`={$this->last_hmd}");
-			$this->last = unserialize($row['value']);
+			$this->last = $row['value'] ? unserialize($row['value']) : $row['value'];
 
 			$now = $GLOBALS['now'];
 
@@ -80,10 +83,13 @@
 				'float rate' => 0,
 			));
 
-			$memcache = &new Memcache;
-			$memcache->connect('localhost') or debug_exit("Could not connect memcache");
-			$memcache->set('phpmv3'.$this->last_hmd, $value, true, $time_to_expire);
-
+			if(config('memcached'))
+			{
+				$memcache = &new Memcache;
+				$memcache->connect(config('memcached')) or debug_exit("Could not connect memcache");
+				$memcache->set('phpmv3'.$this->last_hmd, $value, true, $time_to_expire);
+			}
+			
             return $this->last = $value;
         }
 
