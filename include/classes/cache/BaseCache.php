@@ -4,6 +4,7 @@
         var $last;
 		var $last_type;
 		var $last_key;
+		var $last_type_name;
 		var $last_uri;
 		var $last_hmd;
 		var $start_time;
@@ -19,6 +20,7 @@
             $this->last_hmd  = $hmd  = "0x".substr(md5("$type:$key"), -16);
 */
 
+			$this->last_type_name = $type;
 			$this->last_type = $type = "0x".md5($type);
 			$this->last_key  = $key  = "0x".md5($key);
 			$this->last_uri  = $uri  = "0x".md5($uri);

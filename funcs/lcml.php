@@ -158,5 +158,5 @@ function lcml($txt, $params = array ())
 
 	//		echo "<xmp>Out: '$txt'</xmp>";
 
-	return rest_return($ch->set($txt, 86400*3), $saved_params);
+	return rest_return($ch->set($txt, 86400*14), $saved_params);
 }

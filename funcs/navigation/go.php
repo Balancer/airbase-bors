@@ -11,7 +11,10 @@
 	            header("Status: 301 Moved Permanently");
 			else
 	            header("Status: 302 Moved Temporarily");
-            header("Location: $uri");
+			if(preg_match("!\n!", $uri))
+				echolog("cr in uri '$uri'", 1);
+				
+			header("Location: $uri");
 			if($exit)
 	            exit();
         }

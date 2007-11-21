@@ -63,24 +63,27 @@
 				if(empty($server))   $server	= 'localhost';
 
 
-				$this->dbh = 0;
-				$nnn = 0;
-				while(!$this->dbh && $nnn<2)
-				{
+//				$this->dbh = 0;
+//				$nnn = 0;
+//				while(!$this->dbh && $nnn<2)
+//				{
 //					echo "mysql_connect($server, $login, $password);\n";
 					if(config('mysql_persistent'))
 						$this->dbh = @mysql_pconnect($server, $login, $password);
 					else
 						$this->dbh = @mysql_connect($server, $login, $password);
 //					echo "NNew\[{$base}]".$this->dbh."<br>\n";
-					if(!$this->dbh)
-						sleep(2);
-					$nnn++;
-				}
+//					if(!$this->dbh)
+//						sleep(2);
+//					$nnn++;
+//				}
 
 				if(!$this->dbh)
-					echolog(__FILE__.':'.__LINE__." Query failed, error ".mysql_errno().": ".mysql_error()."<BR />", 1);
-
+				{
+//					echolog(__FILE__.':'.__LINE__." Query failed, error ".mysql_errno().": ".mysql_error()."<BR />", 1);
+					exit(" Query failed, error ".mysql_errno().": ".mysql_error()."<BR />");
+				}
+				
 				mysql_select_db($base,$this->dbh)
 					or echolog(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />", 1);
 

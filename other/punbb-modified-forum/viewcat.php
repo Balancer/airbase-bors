@@ -19,24 +19,24 @@ require PUN_ROOT.'header.php';
 
 include_once("include/subforums.php");
 $ich = new Cache();
-if($ich->get("subforums-text-v3", $pun_config['root_uri']))
-	$subforums = unserialize($ich->last());
+if($ich->get("subforums-text-v4", $pun_config['root_uri']))
+	$subforums = $ich->last();
 else
 {
 	$cms_db = &new DataBase('punbb');
 	foreach($cms_db->get_array("SELECT id FROM forums") as $iid)
 		$subforums[$iid] = get_subforums_text(punbb_get_all_subforums($iid));
-	$ich->set(serialize($subforums), 600);
+	$ich->set($subforums, 600);
 }
 
-if($ich->get("cat_names-v2", "all"))
-	$cat_names = unserialize($ich->last());
+if($ich->get("cat_names-v3", "all"))
+	$cat_names = $ich->last();
 else
 {
 	$cms_db = &new DataBase('punbb');
 	foreach($cms_db->get_array("SELECT id, cat_name, base_uri FROM categories") as $cat)
 		$cat_names[$cat['id']] = $cat['cat_name'];
-	$ich->set(serialize($cat_names), 7200);
+	$ich->set($cat_names, 7200);
 }
 
 $cms_db = &new DataBase('punbb');
