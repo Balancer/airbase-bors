@@ -1,9 +1,7 @@
-<?
-class common_date_months
-{
-	function id() { return 0; }
-	function page() { return 1; }
+<?php
 
+class common_date_months extends base_list
+{
 	function months_list_rp()
 	{
 		return array(

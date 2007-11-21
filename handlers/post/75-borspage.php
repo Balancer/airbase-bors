@@ -32,9 +32,13 @@
 		{
 //			print_r($_GET);
 			$form = class_load($_GET['class_name'], @$_GET['id']);
-//			echo get_class($form);
+//			echo $_GET['class_name']; exit();
 //			loglevel(10);
-//			
+
+			require_once('classes/inc/access.php');
+			if(!bors_check_access($form, $form->acl_edit_sections()))
+				return true;
+
 			if(method_exists($form, 'preAction'))
 			{
 				$processed = $form->preAction($_GET);

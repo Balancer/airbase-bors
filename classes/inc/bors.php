@@ -1,7 +1,8 @@
 <?php
 
-require_once("names.php");
-require_once("classes/objects/Bors.php");
+require_once('names.php');
+require_once('classes/objects/Bors.php');
+include_once('funcs/modules/messages.php');
 
 function object_load($class_id, $object_id=NULL, $page=1)
 {
