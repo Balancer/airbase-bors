@@ -31,9 +31,9 @@ class common_search extends base_page
 		return $this->where() == 'bodies' ? bors_search_in_bodies($q, $params) : bors_search_in_titles($q, $params);
 	}
 	
-	function __construct($id)
+	function __construct($id, $page)
 	{
-		parent::__construct($id);
+		parent::__construct($id, $page);
 
 		$this->add_template_data_array('meta[robots]', 'noindex');
 	

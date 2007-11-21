@@ -7,10 +7,10 @@ class def_empty
 	function id() { return $this->id; }
 	function set_id($id) { $this->id = $id; }
 	
-	function __construct($id)
+	function __construct($id, $page)
 	{
 		$this->id = $this->initial_id = $id;
-		$this->page	= 1;
+		$this->page	= $page;
 	}
 
 	var $page = '';

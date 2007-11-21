@@ -19,10 +19,6 @@ class BorsBaseObject extends base_object
 		var $_loaded = false;
 		function loaded() { return $this->_loaded; }
 
-		var $page = '';
-		function page() { return $this->page; }
-		function set_page($page) { $this->page = $page; }
-
 		function base_url() { return 'http://balancer.ru/'; }
 
 		function uri($page = NULL)

@@ -2,6 +2,9 @@
 
 class driver_mysql extends DataBase
 {
+	// "Пустой" конструктор, чтобы не передавать в DataBase параметр $page
+	function __construct($db) { parent::__construct($db); }
+
 	function select($table, $field, $where_map)
 	{
 		$where = array();

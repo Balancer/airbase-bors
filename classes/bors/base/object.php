@@ -23,9 +23,9 @@ class base_object extends def_empty
 
 	function rss_title() { return $this->title(); }
 
-	function __construct($id)
+	function __construct($id, $page=1)
 	{
-		parent::__construct($id);
+		parent::__construct($id, $page);
 	
 		if($storage_engine = $this->storage_engine())
 			if(object_load($storage_engine)->load($this) !== false || $this->can_be_empty())
@@ -67,6 +67,7 @@ class base_object extends def_empty
 	function class_title() { return get_class($this); }
 
 	static function add_template_data($var_name, $value) { return $GLOBALS['cms']['templates']['data'][$var_name] = $value; }
+	
 	static function template_data($var_name) { return @$GLOBALS['cms']['templates']['data'][$var_name]; }
 
 	static function add_template_data_array($var_name, $value)

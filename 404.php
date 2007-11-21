@@ -357,9 +357,6 @@
 
 <ul>
 <?
-
-//    echo "(ref='$ref' title='$title' && page='$page')";
-
     $query=substr($QUERY_ENCODED,1);
     if(strpos($query,"/")===false)
     {

@@ -63,20 +63,10 @@
 				if(empty($server))   $server	= 'localhost';
 
 
-//				$this->dbh = 0;
-//				$nnn = 0;
-//				while(!$this->dbh && $nnn<2)
-//				{
-//					echo "mysql_connect($server, $login, $password);\n";
-					if(config('mysql_persistent'))
-						$this->dbh = @mysql_pconnect($server, $login, $password);
-					else
-						$this->dbh = @mysql_connect($server, $login, $password);
-//					echo "NNew\[{$base}]".$this->dbh."<br>\n";
-//					if(!$this->dbh)
-//						sleep(2);
-//					$nnn++;
-//				}
+				if(config('mysql_persistent'))
+					$this->dbh = mysql_pconnect($server, $login, $password);
+				else
+					$this->dbh = mysql_connect($server, $login, $password);
 
 				if(!$this->dbh)
 				{
