@@ -3,7 +3,6 @@
 
 //	exit($_SERVER['REQUEST_URI']);
 
-
 	if($_SERVER['REQUEST_URI'] == '/cms/main.php')
 	{
 		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/main-php-referers.log", @$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
@@ -11,6 +10,13 @@
 		exit("Link error");
 	}
 
+/*	if($_SERVER['REMOTE_ADDR'] == '89.108.87.121')
+	{
+		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/main-php-89.108.87.121.log", $_SERVER['REQUEST_URI'] . "; ref=" . @$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
+		@chmod($file, 0666);
+		exit("Link error");
+	}
+*/
 	global $client;
 	$client['is_bot'] = false;
 	foreach(array(

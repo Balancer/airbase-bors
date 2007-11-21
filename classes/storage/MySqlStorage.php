@@ -1,10 +1,4 @@
-<?
-//	$_SERVER['DOCUMENT_ROOT'] = "/var/www/bal.aviaport.ru/htdocs";
-//	$_SERVER['HTTP_HOST'] = "bal.aviaport.ru";
-
-//	require_once($_SERVER['DOCUMENT_ROOT'].'/cms/config.php');
-
-class_include('def_empty');
+<?php
 
 class MySqlStorage extends def_empty
 {

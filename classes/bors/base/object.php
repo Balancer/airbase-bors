@@ -1,6 +1,7 @@
 <?php
 
 require_once('classes/inc/names.php');
+require_once('classes/inc/bors.php');
 
 class base_object extends def_empty
 {

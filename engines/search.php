@@ -27,7 +27,7 @@ function bors_search_object_index($object, $append = 'ignore', $db = NULL)
 
 		if($append == 'replace')
 		{
-			foreach(array_keys($buffer) as $sub)
+			for($sub=0; $sub<10; $sub++)
 				$db->query("DELETE FROM bors_search_source_{$sub}
 							WHERE class_name = {$class_name}
 								AND class_id = {$object_id}
