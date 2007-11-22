@@ -5,7 +5,7 @@
 		
 		$obj = $smarty->get_template_vars('current_form_class');
 		
-		$value = $obj->$name();
+		$value = is_numeric($value) ? $value : $obj->$name();
 		
 		echo "<input type=\"hidden\" name=\"$name\" value=\"".htmlspecialchars($value)."\"";
 

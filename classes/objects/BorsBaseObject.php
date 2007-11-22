@@ -73,28 +73,6 @@ class BorsBaseObject extends base_object
 			
 			$bors->config()->storage()->save($this);
 		}
-/*
-		function addMethod($code)
-		{
-			$cname = uniqid("class");
-			eval("class ${cname} { ${code} }");
-			aggregate_methods($this, $cname);
-		}
-
-		function addField($name) 
-		{
-			$cname = uniqid("class");
-			eval("class ${cname} { var \$$name; }");
-			aggregate_methods($this, $cname);
-		}
-		
-		function storage_register($var_name, $sql_field)
-		{
-			print_r($this);
-//			$this->addField("stb_$var_name");
-			$this->addMethod("function field_{$var_name}_storage() { return '$sql_field'; }");
-		}
-*/
 
 		function cache_parents() { return array(); }
 

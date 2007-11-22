@@ -11,21 +11,14 @@ class MySqlStorage extends def_empty
 
 		function load($object)
 		{
-//			static $total = 0;
 //			echo "Try load ".get_class($object)."({$object->id()})<br />\n";
-//			static $stb_total = 0;
-		
 			if(!$object->id() || is_object($object->id()))
 				return false;
 		
 			$was_loaded = false;
 			global $mysql_map;
 
-//			static $count = 0;
-//			$total += sizeof(get_object_vars($object));
 //			echo "MySqlStorage.load: <b>{$object->internal_uri()}</b>, size=".sizeof(get_object_vars($object))."; cnt=".(++$count)."<br />";
-
-//			$GLOBALS['log_level'] = 10;
 
 			$def_db = $object->main_db_storage();
 
@@ -40,11 +33,10 @@ class MySqlStorage extends def_empty
 
 			if(method_exists($object, 'fields_first')  && $field_names = $object->fields_first())
 			{
-				foreach(split(' ', $field_names) as $field_name)
+				foreach(split(' ', $field_names) as $var_name)
 				{
-					$var_name = 'stb_'.$field_name;
 					unset($fields[$var_name]);
-					$fields[$var_name] = $object->$field_name();
+					$fields[$var_name] = $object->$var_name;
 				}
 			}
 			
@@ -57,7 +49,7 @@ class MySqlStorage extends def_empty
 			  foreach($fields as $field => $value)
 			  {
 //				echo "--- load $field<br />\n";
-				if(!preg_match('!^stb_(.+)$!', $field, $m))
+				if(!preg_match('!^stba?_(.+)$!', $field, $m))
 					continue;
 					
 				$name = $m[1];
@@ -141,7 +133,7 @@ class MySqlStorage extends def_empty
 					$table = $def_table;
 
 				if($table == '')
-					$table = main_table_storage($name);
+					$table = $object->main_table_storage($name);
 
 				$data[$db][$table][$id_field][$field] = $name;
 			  }
@@ -204,7 +196,7 @@ class MySqlStorage extends def_empty
 								if(preg_match('!^(\w+)\((\w+)\)$!', $field, $m))
 									$select[] = $m[1].'('.$current_tab.'.'.$m[2].') AS `'.$name.'`';
 								else
-									$select[] = $current_tab.'.'.$field.' AS `'.$name.'`';
+									$select[] = $current_tab.'.'.($field == $name ? $field : $field.' AS `'.$name.'`');
 
 								$first_name = $name;
 							}
@@ -285,8 +277,8 @@ class MySqlStorage extends def_empty
 				$map = @$mysql_map[$field_name];
 				if(method_exists($object, $field_storage_method_name))
 					$map = $object->$field_storage_method_name();
-				elseif(method_exists($object, 'autofield') && $x = $object->autofield($field_name))
-					$map = $x;
+				else // if(method_exists($object, 'autofield') && $x = $object->autofield($field_name))
+					$map = $object->autofield($field_name);
 
 				$db = $object->main_db_storage();
 				if(!$db)
