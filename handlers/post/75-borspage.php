@@ -28,6 +28,9 @@
 		if($processed === true)
 			return true;
 
+//		if(!$obj->check_access('can_read'))
+//			return bors_message(ec('Извините, доступ к этому ресу'));
+
 		if(!empty($_GET['class_name']))
 		{
 //			print_r($_GET);

@@ -116,7 +116,18 @@ class base_object extends def_empty
 		if($setting)
 			return $this->set($field, $params[0], $params[1]);
 		else
-			return $this->{"stb_{$field}"};
+			return $this->get_property($field);
+	}
+
+	function get_property($name)
+	{
+		if(property_exists($this, $p="stba_{$name}"))
+			return $this->$p;
+
+		if(property_exists($this, $p="stb_{$name}"))
+			return $this->$p;
+		
+		debug_exit("Try to get undefined properties ".get_class($this).".$name");
 	}
 
 	function preParseProcess() { return false; }
@@ -127,6 +138,8 @@ class base_object extends def_empty
 		global $bors;
 			
 		$field_name = "stb_$field";
+		if(!property_exists($this, $field_name))
+			$field_name = "stba_$field";
 
 		if($db_update && $this->$field_name != $value)
 		{
@@ -216,6 +229,46 @@ class base_object extends def_empty
 		}
 	}
 
-	function autofield() { return NULL; }
 	function data_provider() { return NULL; }
+
+	var $_autofields;
+	function autofield($field)
+	{
+		if(method_exists($this, $method = "field_{$field}_storage"))
+			return $this->$method();
+
+		if(empty($this->_autofields))
+		{
+			$_autofields = array();
+		
+			foreach(split(' ', $this->autofields()) as $f)
+			{
+				$id	  = 'id';
+				if(preg_match('!^(\w+)\((\w+)\)(.*?)$!', $f, $match))
+				{
+					$f  = $match[1].$match[3];
+					$id = $match[2];
+				}
+
+				$name = $f;
+				if(preg_match('!^(\w+)\->(\w+)$!', $f, $match))
+				{
+					$f    = $match[1];
+					$name = $match[2];
+				}
+				$this->_autofields[$name] = "{$f}({$id})";
+			}
+		}
+		
+		if($res = @$this->_autofields[$field])
+			return $res;
+
+		if(property_exists($this, $p = "stbf_{$field}"))
+			return $this->$p;
+			
+		if(property_exists($this, "stba_{$field}"))
+			return "{$field}(id)";
+
+		return NULL;
+	}
 }

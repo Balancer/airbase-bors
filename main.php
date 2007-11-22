@@ -168,7 +168,7 @@
 		$uri = $ret;
 
 
-	echo "<pre>";
+//	echo "<pre>";
 
 	if(empty($title))
 		$title='';
@@ -176,7 +176,8 @@
 	@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/404.log", "$uri <= ".@$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
 	@chmod($file, 0666);
 
-//	return go("/404.html", true);
+	if(config('404_page_url'))
+		return go(config('404_page_url'), true);
 		
-	echo ec("Страница '$uri' не найдена. Попробуйте <a href=\"$uri?edit\">создать её</a>");
-	echo "</pre>";
+//	echo ec("Страница '$uri' не найдена. Попробуйте <a href=\"$uri?edit\">создать её</a>");
+//	echo "</pre>";

@@ -111,14 +111,6 @@ function index_split($text)
 	return preg_split(ec('![^\wа-яА-Я\-]+!'), trim($text));
 }
 
-function defval($data, $name, $default)
-{
-	if(empty($data[$name]))
-		return $default;
-	
-	return $data[$name];
-}
-
 function bors_search_in_titles($query, $params = array())
 {
 

@@ -16,7 +16,7 @@ class base_page_hts extends base_page_db
 
 	function main_table_storage() { return NULL; }
 
-	function fields_first() { return 'title source description'; }
+	function fields_first() { return 'stb_title stb_source stb_description'; }
 
 	function field_source_storage() { return 'hts_data_source.value(id)'; }
 	function field_title_storage() { return 'hts_data_title.value(id)'; }
