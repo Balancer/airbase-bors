@@ -3,6 +3,10 @@
 
     function go($uri, $permanent = false, $time = 0, $exit = true)
     {
+		global $bors;
+		if(is_object($bors))
+			$bors->changed_save();
+	
 //		echo 0/0; exit("Go to $url");
 	
         if(!headers_sent($filename, $linenum) && $time==0) 
