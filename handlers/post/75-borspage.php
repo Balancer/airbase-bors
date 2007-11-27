@@ -39,7 +39,7 @@
 //			loglevel(10);
 
 			require_once('classes/inc/access.php');
-			if(!bors_check_access($form, $form->acl_edit_sections()))
+			if(method_exists($form, 'acl_edit_sections') && !bors_check_access($form, $form->acl_edit_sections()))
 				return true;
 
 			if(method_exists($form, 'preAction'))
