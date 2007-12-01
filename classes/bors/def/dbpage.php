@@ -3,29 +3,30 @@ class_include('def_page');
 
 class def_dbpage extends def_page
 {
-		var $db;
+	var $db;
 
-		function parents()
-		{
-//			echo "match=".print_r($this->match, true)."<br />\n";
-			return array("http://{$this->match[1]}{$this->match[2]}");
-		}
+	function parents()
+	{
+//		echo "match=".print_r($this->match, true)."<br />\n";
+		return array("http://{$this->match[1]}{$this->match[2]}");
+	}
 
-		function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
+	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
+	function id_field() { return 'id'; }
 
-		function new_instance()
-		{
-			$tab = $this->main_table_storage();
-			if(!$tab)
-				exit("Try to gent new instance with empty main table in class ".__FILE__.":".__LINE__);
-			
-			$this->db->insert($tab, array());
-			$this->set_id($this->db->get_last_id());
-			$this->set_create_time(time(), true);
-			$this->set_modify_time(time(), true);
-		}
+	function new_instance()
+	{
+		$tab = $this->main_table_storage();
+		if(!$tab)
+			exit("Try to gent new instance with empty main table in class ".__FILE__.":".__LINE__);
+		
+		$this->db->insert($tab, array());
+		$this->set_id($this->db->get_last_id());
+		$this->set_create_time(time(), true);
+		$this->set_modify_time(time(), true);
+	}
 
-		function uri2id($id) { return $id; }
+	function uri2id($id) { return $id; }
 	
 	function __construct($id, $page=1)
 	{
