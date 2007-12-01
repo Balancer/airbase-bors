@@ -11,7 +11,8 @@
 	        return;
 		}
 		
-		$name = get_class($main_obj);
+		if(empty($name))
+			$name = get_class($main_obj);
 			
 		if(empty($id))
 			$id = NULL;

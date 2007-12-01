@@ -264,10 +264,16 @@ class base_object extends def_empty
 			return $res;
 
 		if(property_exists($this, $p = "stbf_{$field}"))
-			return $this->$p;
+		{
+//			echo "={$p}=<br/>\n";
+			if(preg_match('!^\w+$!', $this->$p))
+				return "{$this->$p}({$this->id_field()})";
+			else
+				return $this->$p;
+		}
 			
 		if(property_exists($this, "stba_{$field}"))
-			return "{$field}(id)";
+			return "{$field}({$this->id_field()})";
 
 		return NULL;
 	}

@@ -35,4 +35,6 @@ class base_object_db extends base_object
 
 	function select($field, $where_map) { return $this->db->select($this->main_table_storage(), $field, $where_map); }
 	function select_array($field, $where_map) { return $this->db->select_array($this->main_table_storage(), $field, $where_map); }
+
+	function can_be_empty() { return false; }
 }
