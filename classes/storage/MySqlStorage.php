@@ -368,7 +368,7 @@ class MySqlStorage
 
 		if(strpos($id_field, ' ') === false)
 		{
-			$out =  preg_replace("!(\w+)=(\w+)!", "$table.$1=$2", $id_field);
+			$out =  preg_replace("!([\w`\.]+)=([\w\`\.]+)!", "$table.$1=$2", $id_field);
 			$out =  preg_replace("!(\w+)='(\w+)'!", "$table.$1='$2'", $out);
 		}
 		else
