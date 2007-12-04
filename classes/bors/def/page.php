@@ -20,7 +20,7 @@ class def_page extends borsPage
 			{
 				foreach($qlist as $qname => $q)
 				{
-					$cache = NULL;
+					$cache = false;
 					if(preg_match("!^(.+)\|(\d+)$!s", $q, $m))
 					{
 						$q		= $m[1];

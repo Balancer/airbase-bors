@@ -129,10 +129,8 @@ class forum_post extends base_page_db
 		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
 	}
 		
-	function title()
-	{
-		return $this->topic()->title()." <small>[".$this->owner()->title().", ".strftime("%d.%m.%y", $this->create_time())."]</small>";
-	}
+	function title() { return $this->topic()->title()." <small>[".$this->nav_name()."]</small>"; }
+	function nav_name() { return $this->owner()->title().", ".strftime("%d.%m.%y", $this->create_time()); }
 
 	function base_url()
 	{
@@ -211,7 +209,7 @@ class forum_post extends base_page_db
 	
 		$this->__move_tree_to_topic($new_tid);
 		
-		print_r($GLOBALS['move_tree_to_topic_changed_topics']);
+//		print_r($GLOBALS['move_tree_to_topic_changed_topics']);
 		
 		foreach(array_keys($GLOBALS['move_tree_to_topic_changed_topics']) as $tid)
 			object_load('forum_topic', $tid)->recalculate();
@@ -222,7 +220,7 @@ class forum_post extends base_page_db
 		$GLOBALS['move_tree_to_topic_changed_topics'][$new_tid] = true;
 		$GLOBALS['move_tree_to_topic_changed_topics'][$this->topic_id()] = true;
 		
-		echo "Move {$this->id()} from {$this->topic_id()} to {$new_tid}<br />\n";
+//		echo "Move {$this->id()} from {$this->topic_id()} to {$new_tid}<br />\n";
 	
 		$this->set_topic_id($new_tid, true);
 

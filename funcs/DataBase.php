@@ -293,11 +293,12 @@
 			$ch = NULL;
 			if($cached !== false)
 			{
+//				echo 0/0;
 				$ch = &new Cache();
-				if($ch->get("DataBaseQuery:{$this->db_name}", $query))
+				if($ch->get("DataBaseQuery:{$this->db_name}-v2", $query))
 				{
 //					echo "*****arr*****$query******************";
-					return unserialize($ch->last());
+					return $ch->last();
 				}
 			}
 
@@ -317,7 +318,7 @@
 //			echo "res = ".print_r($res,true).", ch=".($ch!=NULL).",$cached";
 
 			if($ch/* && $found*/)
-				$ch->set(serialize($res), $cached);
+				$ch->set($res, $cached);
 
 			return $res;
 		}

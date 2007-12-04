@@ -45,3 +45,39 @@ function bors_message($text, $params=array())
 		
 	return true;
 }
+
+function bors_message_tpl($template, $obj, $params)
+{
+	include_once("funcs/templates/smarty.php");
+
+	$redir = defval($params, 'redirect', false);
+	$title = defval($params, 'title', ec('Ошибка!'));
+	$timeout = defval($params, 'timeout', -1);
+	
+	$params['this'] = &$obj;
+	$params['template_dir'] = $obj->_class_dir();
+	
+	require_once('funcs/templates/assign.php');
+	$body = template_assign_data($template, $params);
+
+//	print_d($params); exit($body);
+
+	$GLOBALS['page_data']['title'] = $title;
+	$GLOBALS['page_data']['source'] = $body;
+//	$GLOBALS['page_data']['template'] = 'xfile:'.$obj->template();
+
+	show_page(@$GLOBALS['main_uri']);
+
+	if($redir === true)
+	{
+		if(!empty($_POST['ref']))
+			$redir = $_POST['ref'];
+		else
+			$redir = user_data('level') > 3 ? "/admin/news/" : "/";
+	}
+		
+	if($redir && $timeout >= 0)
+		go($redir, false, $timeout);
+		
+	return true;
+}

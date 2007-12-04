@@ -29,11 +29,12 @@ class forum_topic extends borsForumAbstract
 		
 		global $bors;
 
-		$forum = class_load('forum_forum', $this->forum_id());
-		
-		if(!$forum->can_read())
+		if(!$this->forum()->can_read())
+		{
+			templates_noindex();
 			return ec("Извините, доступ к этому ресурсу закрыт для Вас");
-
+		}
+		
 		$GLOBALS['cms']['cache_disabled'] = true;
 
 		$bors->config()->set_cache_uri($this->internal_uri());

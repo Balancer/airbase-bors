@@ -218,7 +218,7 @@
         $params['nohref'] = false;
 //		$params['page'] = $GLOBALS['lcml'][''];
 
-        foreach(preg_split("!\s+!",$in) as $param)
+        foreach(preg_split("![\s\n\t]+!",$in) as $param)
         {
             if(preg_match("!^\d+x\d+$!",$param)) { $params['size']=$param; continue;}
             if(preg_match("!^\d+x$!",$param)) { $params['size']=$param; continue;}
