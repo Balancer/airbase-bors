@@ -1,7 +1,6 @@
-<?
-class_include('def_dbpage');
+<?php
 
-class forum_access extends def_dbpage
+class forum_access extends base_page_db
 {
 	var $forum_id = '';
 	var $group_id = '';

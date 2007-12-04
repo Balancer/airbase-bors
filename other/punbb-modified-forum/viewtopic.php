@@ -451,12 +451,21 @@ while ($cur_post = $db->fetch_assoc($result))
 		}
 		
 		if($is_coordinator)
+		{
 			$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warn_add/?ref=".urlencode("{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['id']}#p{$cur_post['id']}")."\" style=\"color: red;\">Выставить штраф</a>";
-
+		}
+		
 		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation.html?post://{$cur_post['id']}\">Репутация участника</a>";
 		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/blog.html\">Блог участника</a>";
 		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/use-topics.html\">Темы с его участием</a>";
 		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/posts/\">Все сообщения участника</a>";
+
+		if($is_coordinator)
+		{
+			$user_info[] = "<b>Операции над сообщением</b>";
+			$user_info[] = "<a href=\"http://balancer.ru/forums/tools/move_post_tree/{$cur_post['id']}/\">Перенести сообщение со всеми ответами в другую тему</a>";
+		}
+
 	}
 	// If the poster is a guest (or a user that has been deleted)
 	else

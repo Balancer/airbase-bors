@@ -10,6 +10,12 @@ class forum_topic_rss extends forum_topic
 
 	function render()
 	{
+		$topic = object_load('forum_topic', $this->id());
+		$forum = object_load('forum_forum', $topic->forum_id());
+		
+		if(!$forum->can_read())
+			return ec("Извините, доступ к этому ресурсу закрыт для Вас");
+
 		include("3part/feedcreator.class.php"); 
 
 		$rss = &new UniversalFeedCreator(); 

@@ -25,7 +25,7 @@
 				LEFT JOIN `users` u ON (t.poster_id = u.id) 
 				LEFT JOIN `groups` g ON (g.g_id = u.group_id) 
 			WHERE t.forum_id IN (".join(",", parse_condensed_list($forums)).")
-				AND t.forum_id NOT IN (19,1,37,39,170,108,138)
+				AND t.forum_id NOT IN (19,1,37,39,170,108,138,178)
 				AND moved_to IS  NULL 
 			ORDER BY t.posted DESC LIMIT ".intval($limit)) as $t)
 		{

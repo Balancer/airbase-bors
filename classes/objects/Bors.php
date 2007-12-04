@@ -1,4 +1,4 @@
-<?
+<?php
 	require_once('classes/objects/Config.php');
 
 	class Bors
