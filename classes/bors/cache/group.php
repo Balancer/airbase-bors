@@ -1,8 +1,6 @@
 <?php
 
-class_include('def_empty');
-
-class cache_group extends def_empty
+class cache_group extends base_empty
 {
 	var $db;
 	

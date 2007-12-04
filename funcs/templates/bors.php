@@ -26,9 +26,6 @@
 		$smarty->cache_modified_check = true;
 		$smarty->cache_lifetime = 86400*7;
 
-		if(method_exists($obj, 'config_class') && $obj->config_class())
-			pure_class_load($obj->config_class(), &$obj, 1, false)->template_init();
-
 //		$smarty->assign("views_average", sprintf("%.1f",86400*$views/($views_last-$views_first+1)));
 		$smarty->assign("main_uri", @$GLOBALS['main_uri']);
 		$smarty->assign("now", time());

@@ -3,7 +3,7 @@
 require_once('classes/inc/names.php');
 require_once('classes/inc/bors.php');
 
-class base_object extends def_empty
+class base_object extends base_empty
 {
 	var $match;
 	function set_match($match) { $this->match = $match;	}
@@ -26,7 +26,24 @@ class base_object extends def_empty
 	function __construct($id, $page=1)
 	{
 		parent::__construct($id, $page);
-	
+
+		foreach($this->fields() as $db => $tables)
+		{
+			foreach($tables as $tables => $fields)
+			{
+				foreach($fields as $property => $db_field)
+				{
+					if(is_numeric($property))
+						$property = $db_field;
+					
+					$this->{'stb_'.$property} = NULL;
+				}
+			}
+		}		
+
+		if($config = $this->config_class())
+			object_load($config, &$this, 1, false);
+
 		if($storage_engine = $this->storage_engine())
 			if(object_load($storage_engine)->load($this) !== false || $this->can_be_empty())
 				$this->_loaded = true;
@@ -105,7 +122,7 @@ class base_object extends def_empty
 		
 		$field_storage = "field_{$field}_storage";
 
-		if(!method_exists($this, $field_storage) && !$this->autofield($field))
+		if(!method_exists($this, $field_storage) && !$this->autofield($field) && !property_exists($this, "stb_{$field}"))
 		{
 			echo "<xmp>";
 			debug_print_backtrace();
@@ -131,18 +148,23 @@ class base_object extends def_empty
 	}
 
 	function preParseProcess() { return false; }
+	function preShowProcess() { return false; }
 
 	function set($field, $value, $db_update)
 	{
 //		echo "set ".get_class($this).".{$field} = $value<br/>\n";
 		global $bors;
 			
-		$field_name = "stb_$field";
+		$field_name = "stba_$field";
 		if(!property_exists($this, $field_name))
-			$field_name = "stba_$field";
+			$field_name = "stb_$field";
+
+//		if(!property_exists($this, $field_name))
+//			debug_exit("Try to set undefined properties ".get_class($this).".$field");
 
 		if($db_update && $this->$field_name != $value)
 		{
+//			echo "<xmp>Set {$field_name} from {$this->$field_name} to {$value}</xmp>\n";
 			$this->changed_fields[$field] = $field_name;
 			$bors->add_changed_object($this);
 		}
@@ -200,9 +222,6 @@ class base_object extends def_empty
 
 	function set_fields($array, $db_update_flag, $fields_list = NULL)
 	{
-		if(!$this->id())
-			$this->new_instance();
-		
 		if($fields_list)
 		{
 			foreach(split(' ', $fields_list) as $key)
@@ -221,12 +240,15 @@ class base_object extends def_empty
 					$this->$method($val, $db_update_flag);
 			}
 		}
+	}
+
+	function store()
+	{
+		if(!$this->id())
+			$this->new_instance();
 		
-		if($db_update_flag)
-		{
-			global $bors;
-			$bors->changed_save();
-		}
+		global $bors;
+		$bors->changed_save();
 	}
 
 	function data_provider() { return NULL; }
@@ -277,4 +299,15 @@ class base_object extends def_empty
 
 		return NULL;
 	}
+	
+	function fields() { return array(); }
+	
+	function storage() { return object_load($this->storage_engine()); }
+
+	var $stb_access_engine = 'access_base';
+	var $stb_config_class = NULL;
+	
+	function access()  { return object_load($this->access_engine(), $this); }
+
+	
 }

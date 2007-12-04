@@ -11,7 +11,7 @@ class BorsBaseDbPage extends BorsBasePage
 			return array("http://{$this->match[1]}{$this->match[2]}");
 		}
 	
-		function __construct($id, $page = 1)
+		function __construct(&$id, $page = 1)
 		{
 			if(method_exists($this, 'main_db_storage'))
 				$this->db = &new DataBase($this->main_db_storage());

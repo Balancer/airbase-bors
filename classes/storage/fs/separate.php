@@ -1,7 +1,6 @@
-<?
-class_include('def_empty');
+<?php
 
-class storage_fs_separate extends def_empty
+class storage_fs_separate
 {
 	function load($object)
 	{

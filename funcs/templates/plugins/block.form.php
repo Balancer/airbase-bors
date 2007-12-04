@@ -12,6 +12,9 @@
 		}
 		
 		if(empty($name))
+			$name = @$class;
+			
+		if(empty($name))
 			$name = get_class($main_obj);
 			
 		if(empty($id))
@@ -38,7 +41,7 @@
 			if($action == 'this')
 				$action = $GLOBALS['main_uri'];
 				
-			echo "<form";
+			echo "<form enctype=\"multipart/form-data\"";
 			
 			foreach(split(' ', 'act action method name class style enctype') as $p)
 				if(!empty($$p))

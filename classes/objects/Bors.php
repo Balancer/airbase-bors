@@ -33,15 +33,22 @@
 			{
 //				echo "<b>Update $name</b>, index={$obj->auto_search_index()}<br />\n";
 			
+				
 				if(!$obj->id())
 					$obj->new_instance();
 				
 				$obj->cache_clean();
 				
-				$cfg = $this->config();
-				$storage = $cfg->storage();
+				if($storage = $obj->storage_engine())
+					$storage = object_load($storage);
+				else
+					$storage = $this->config()->storage();
+
+				if(!$obj->id())
+					$storage->new_instance($obj);
+
 				$storage->save($obj);
-				
+					
 				if(config('search_autoindex') && $obj->auto_search_index())
 					bors_search_object_index($obj, 'replace');
 			}
@@ -128,14 +135,14 @@
 	function load_cached_object($class_name, $id, $page)
 	{
 //		echo "Check load for $class_name('$id',$page)<br />";
-		return @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][$page];
+		return @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][serialize($page)];
 	}
 
 	function save_cached_object($object)
 	{
 //		echo "Save cache object ".get_class($object)."'(".$object->id()."', ".$object->page().")<br />\n";
 		if(method_exists($object, 'id') && !is_object($object->id()))
-			$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][$object->page()] = $object;
+			$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][serialize($object->page())] = $object;
 	}
 
 	function class_internal_uri_load($uri)
@@ -271,7 +278,20 @@
 				else
 					$redirect = false;
 				
-				if(preg_match("!^(.+)\((\d+),(\d+)\)$!", $class_path, $m))	
+				// Формат вида aviaport_image_thumb(3,geometry=2)
+				if(preg_match("!^(.+)\((\d+),([^)]+=[^)]+)\)$!", $class_path, $m))	
+				{
+					$args = array();
+					foreach(split(',', $m[3]) as $pair)
+						if(preg_match('!^(\w+)=(.+)$!', $pair, $mm))
+							$args[$mm[1]] = $mm[2];
+
+					$class_path = $m[1];
+					$id = $match[$m[2]+1];
+					
+					$page = $args;
+				}
+				elseif(preg_match("!^(.+)\((\d+),(\d+)\)$!", $class_path, $m))	
 				{
 					$class_path = $m[1];
 					$id = $match[$m[2]+1];
