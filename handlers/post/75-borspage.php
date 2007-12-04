@@ -30,10 +30,11 @@
 
 		if(!empty($_GET['class_name']))
 		{
-//			print_r($_GET);
+//			print_d($_GET); exit();
 			$form = object_load($_GET['class_name'], @$_GET['id']);
 //			echo $_GET['class_name']; exit();
-//			set_loglevel(10);
+//			print_d($form);
+//			set_loglevel(9);
 
 			if(method_exists($form, 'preAction'))
 			{
@@ -47,14 +48,14 @@
 
 			if(!$form->id())
 				$form->new_instance(array_merge($_FILES, $_GET));
-
+			
 			if(empty($_GET['subaction']))
 				$method = 'onAction';
 			else
 				$method = 'onAction_'.$_GET['subaction'];
 
 			global $bors;
-//			print_r($form); exit();
+//			print_d($_GET);
 				
 			if(method_exists($form, $method))
 			{
@@ -65,6 +66,7 @@
 			else
 			{
 				$form->set_fields($_GET, true);
+				$form->set_modify_time(time(), true);
 				
 				$bors->changed_save();
 

@@ -23,6 +23,26 @@ class base_object extends base_empty
 
 	function rss_title() { return $this->title(); }
 
+	function has_smart_field($test_property)
+	{
+		foreach($this->fields() as $db => $tables)
+		{
+			foreach($tables as $tables => $fields)
+			{
+				foreach($fields as $property => $db_field)
+				{
+					if(is_numeric($property))
+						$property = $db_field;
+					
+					if($property == $test_property)
+						return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+
 	function __construct($id, $page=1)
 	{
 		parent::__construct($id, $page);
@@ -36,7 +56,7 @@ class base_object extends base_empty
 					if(is_numeric($property))
 						$property = $db_field;
 					
-					$this->{'stb_'.$property} = NULL;
+					$this->{'stb_'.$property} = "";
 				}
 			}
 		}		
@@ -50,6 +70,9 @@ class base_object extends base_empty
 			
 		if($data_provider = $this->data_provider())
 			object_load($data_provider, $this)->fill();
+
+		foreach($this->data_providers() as $key => $value)
+			$this->add_template_data($key, $value);
 	}
 
 	function lcml($text)
@@ -172,6 +195,21 @@ class base_object extends base_empty
 		$this->$field_name = $value;
 	}
 
+	function fset($field, $value, $db_update)
+	{
+		global $bors;
+			
+		$field_name = "stb_$field";
+
+		if($db_update && $this->$field_name != $value)
+		{
+			$this->changed_fields[$field] = $field_name;
+			$bors->add_changed_object($this);
+		}
+
+		$this->$field_name = $value;
+	}
+
 	function render_engine() { return false; }
 	function is_cache_disabled() { return true; }
 	function template_vars() { return 'body source'; }
@@ -219,6 +257,7 @@ class base_object extends base_empty
 	function cache_static() { return 0; }
 	
 	function titled_url() { return '<a href="'.$this->url($this->page())."\">{$this->title()}</a>"; }
+	function titled_admin_url() { return '<a href="'.$this->admin_url($this->page())."\">{$this->title()}</a>"; }
 
 	function set_fields($array, $db_update_flag, $fields_list = NULL)
 	{
@@ -236,7 +275,7 @@ class base_object extends base_empty
 			{
 				$method = "set_$key";
 //				echo "Set $key to $val<br />";
-				if(method_exists($this, $method) || $this->autofield($key))
+				if(method_exists($this, $method) || $this->autofield($key) || $this->has_smart_field($key))
 					$this->$method($val, $db_update_flag);
 			}
 		}
@@ -252,6 +291,7 @@ class base_object extends base_empty
 	}
 
 	function data_provider() { return NULL; }
+	function data_providers() { return array(); }
 
 	var $_autofields;
 	function autofield($field)
