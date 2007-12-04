@@ -1,8 +1,6 @@
 <?php
 
-class_include('def_empty');
-
-class def_db_object extends def_empty
+class def_db_object extends base_empty
 {
 	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
 

@@ -1,9 +1,10 @@
 <?php
 
-class def_empty
+class base_empty extends base_null
 {
 	var $id;
 	var $initial_id = NULL;
+
 	function id() { return $this->id; }
 	function set_id($id) { $this->id = $id; }
 	
@@ -15,6 +16,7 @@ class def_empty
 
 	var $page = '';
 	function page() { return $this->page; }
+	//TODO: со временем - убрать!
 	function set_page($page) { $this->page = $page; }
 
 	function storage_engine() { return ''; }

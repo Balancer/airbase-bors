@@ -1,7 +1,6 @@
 <?php
-class_include('def_object');
 
-class def_image_gif extends def_object
+class def_image_gif extends base_object
 {
 	function can_be_empty() { return true; }
 

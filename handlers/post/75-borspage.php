@@ -28,19 +28,12 @@
 		if($processed === true)
 			return true;
 
-//		if(!$obj->check_access('can_read'))
-//			return bors_message(ec('Извините, доступ к этому ресу'));
-
 		if(!empty($_GET['class_name']))
 		{
 //			print_r($_GET);
-			$form = class_load($_GET['class_name'], @$_GET['id']);
+			$form = object_load($_GET['class_name'], @$_GET['id']);
 //			echo $_GET['class_name']; exit();
-//			loglevel(10);
-
-			require_once('classes/inc/access.php');
-			if(method_exists($form, 'acl_edit_sections') && !bors_check_access($form, $form->acl_edit_sections()))
-				return true;
+//			set_loglevel(10);
 
 			if(method_exists($form, 'preAction'))
 			{
@@ -49,13 +42,12 @@
 					return true;
 			}
 
-			if(!$form->id())
-				$form->new_instance();
+			if(!$form->access()->can_action())
+				return bors_message(ec("Извините, Вы не можете производить операции с этим ресурсом (class=".get_class($form).", access=".get_class($form->access()).")"));
 
-//			$processed2 = $form->preParseProcess();
-//			if($processed2 === true)
-//				return true;
-								   			
+			if(!$form->id())
+				$form->new_instance(array_merge($_FILES, $_GET));
+
 			if(empty($_GET['subaction']))
 				$method = 'onAction';
 			else
@@ -144,6 +136,8 @@
 		if($content === false)
 			return false;
 
+		if(!$obj->access()->can_read())
+			return bors_message(ec("Извините, у Вас не доступа к этому ресурсу"));
 		
 		$last_modify = gmdate('D, d M Y H:i:s', $obj->modify_time()).' GMT';
 		header('Last-Modified: '.$last_modify);

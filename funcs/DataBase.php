@@ -92,6 +92,8 @@
 
 		function query($query, $ignore_error=false)
 		{
+//			if(preg_match('!UPDATE.*tab\d!i', $query)) { print_d($query); exit(); }
+		
 			if(!config('mysql_disable_autoselect_db'))
 				mysql_select_db($this->db_name, $this->dbh);
 			
@@ -100,7 +102,7 @@
 			
 			$GLOBALS['global_db_queries']++;
 
-			echolog("<small>query {$GLOBALS['global_db_queries']}=|".htmlspecialchars($query)."|</small>", 5);
+			echolog("<small>query {$GLOBALS['global_db_queries']}[{$this->db_name}]=|".htmlspecialchars($query)."|</small>", 5);
 
 			list($usec, $sec) = explode(" ",microtime());
 			$qstart = ((float)$usec + (float)$sec);
@@ -126,6 +128,9 @@
 				@fputs($fh,"$query\n");
 				@fclose($fh);
 			}
+
+			if(loglevel(10))
+				debug_trace();
 
 /*			if(!empty($GLOBALS['log']['mysql_queries']))
 			{
@@ -193,6 +198,11 @@
 					$this->row[$k] = quote_fix($v);
 			
 			return $this->row;
+		}
+
+		function fetch_row()
+		{
+			return $this->row = mysql_fetch_assoc($this->result);
 		}
 
 		function fetch1()
@@ -375,7 +385,8 @@
 						$value = "'".addslashes($value)."'"; // mysql_real_escape_string
 				}
 			
-			$key = "`$key`";
+			if(!preg_match('!^`!', $key))
+				$key = "`$key`";
 		}
 
 		function insert($table, $fields)
@@ -493,9 +504,4 @@
 		{
 			return new DataBase($db);
 		}
-	}
-
-	function loglevel($n)
-	{
-		$GLOBALS['log_level'] = $n;
 	}

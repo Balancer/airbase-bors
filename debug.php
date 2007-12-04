@@ -7,6 +7,18 @@
 		exit($message);
 	}
 
+	function debug_trace()
+	{
+		echo "<xmp>";
+		debug_print_backtrace();
+		echo "</xmp>";
+	}
+
+	function print_d($data) { echo "<xmp>"; print_r($data); echo "</xmp>"; }
+
+	function set_loglevel($n) { $GLOBALS['log_level'] = $_GET['log_level'] = $n; }
+	function loglevel($check) { return $check <= max(@$GLOBALS['log_level'], @$_GET['log_level']); }
+
     function echolog($message,$level=3)
     {
 		$log_level = max(@$GLOBALS['log_level'], @$_GET['log_level']);

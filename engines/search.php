@@ -55,12 +55,12 @@ function bors_search_object_index($object, $append = 'ignore', $db = NULL)
 						'int object_modify_time' => $object->modify_time(),
 					));
 				}
-//				loglevel(10);
+//				set_loglevel(10);
 				if($append == 'replace')
 					$db->multi_insert_do($tab);
 				else
 					$db->multi_insert_ignore($tab);
-//				loglevel(2);
+//				set_loglevel(2);
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 <?php
 
-class MySqlStorage extends def_empty
+class MySqlStorage
 {
 		var $dbhs;
 		var $mysql_map;
