@@ -20,6 +20,8 @@ class user_reputation extends base_page_db
 		if(!$id)
 			return ec("Не задан ID пользователя.");
 
+//		echo "id={$id}, user={$this->user->id}";
+
 		$db = &new DataBase('USERS');
 		
 		$this->add_template_data('ref', @$_SERVER['HTTP_REFERER']);

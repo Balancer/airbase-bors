@@ -207,7 +207,7 @@ class forum_post extends base_page_db
 	
 		$GLOBALS['move_tree_to_topic_changed_topics'] = array();
 	
-		$this->__move_tree_to_topic($new_tid);
+		$this->__move_tree_to_topic($new_tid, $this->topic_id());
 		
 //		print_r($GLOBALS['move_tree_to_topic_changed_topics']);
 		
@@ -215,17 +215,18 @@ class forum_post extends base_page_db
 			object_load('forum_topic', $tid)->recalculate();
 	}
 
-	private function __move_tree_to_topic($new_tid)
+	private function __move_tree_to_topic($new_tid, $old_tid)
 	{
 		$GLOBALS['move_tree_to_topic_changed_topics'][$new_tid] = true;
 		$GLOBALS['move_tree_to_topic_changed_topics'][$this->topic_id()] = true;
 		
 //		echo "Move {$this->id()} from {$this->topic_id()} to {$new_tid}<br />\n";
 	
-		$this->set_topic_id($new_tid, true);
+		if($this->topic_id() == $old_tid)
+			$this->set_topic_id($new_tid, true);
 
 		foreach($this->answers() as $answer)
-			$answer->__move_tree_to_topic($new_tid);
+			$answer->__move_tree_to_topic($new_tid, $old_tid);
 	}
 
 	function auto_search_index() { return $this->_source_changed; }

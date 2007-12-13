@@ -90,9 +90,11 @@
             $this->col_spans[$this->row][$this->col] = $col_span;
         }
 
-        function setRowSpan($rowe_span)
+        function setRowSpan($row_span)
         {
             $this->row_spans[$this->row][$this->col] = $row_span;
+			for($i=1; $i<=$row_span; $i++)
+				$this->row_spans[$this->row+$i][$this->col] = -1;
         }
 
         function setHead($head_bit=1)
@@ -108,9 +110,14 @@
                 $out .= "<tr>";
                 for($c=0; $c < $this->cols-1; $c+=@$this->col_spans[$r][$c] > 1 ? $this->col_spans[$r][$c] : 1)
                 {
+					if(@$this->row_spans[$r][$c] < 0)
+						continue;
+						
+					$data = empty($this->data[$r][$c]) ? '&nbsp;' : $this->data[$r][$c];
                     $tx = !empty($this->heads[$r][$c]) ? 'th' : 'td';
 					$colspan = @$this->col_spans[$r][$c] > 1 ? " colSpan=\"".$this->col_spans[$r][$c]."\"" : "";
-                    $out .= "<$tx$colspan>".$this->data[$r][$c]."</$tx>";
+					$rowspan = @$this->row_spans[$r][$c] > 1 ? " rowSpan=\"".$this->row_spans[$r][$c]."\"" : "";
+                    $out .= "<{$tx}{$colspan}{$rowspan}>{$data}</{$tx}>";
                 }
                 $out .= "</tr>\n";
             }
