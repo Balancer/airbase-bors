@@ -19,7 +19,7 @@
 		$caching = !$obj->is_cache_disabled()
 				&& @$GLOBALS['cms']['templates_cache_disabled'] !== true;
 			
-		$smarty->caching = true;//$caching;
+		$smarty->caching = true;// $caching;
 		$smarty->compile_check = true; 
 		$smarty->php_handling = SMARTY_PHP_QUOTE; //SMARTY_PHP_PASSTHRU;
 		$smarty->security = false;
@@ -73,8 +73,8 @@
 
 //		echo "Template=$template, caching=$caching";
 //		echo "is cached=".$smarty->is_cached($template);
-//		$out = $smarty->fetch($template, $obj->url());
-		$out = $smarty->fetch($template);
+		$out = $smarty->fetch($template, $obj->url());
+//		$out = $smarty->fetch($template);
 //		echo "is cached=".$smarty->is_cached($template);
 
 /*		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out); */
