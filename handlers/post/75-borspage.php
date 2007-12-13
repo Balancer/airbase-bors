@@ -28,6 +28,19 @@
 		if($processed === true)
 			return true;
 
+		if(!empty($_GET['act']))
+		{
+			if(!$obj->access()->can_action())
+				return bors_message(ec("Извините, Вы не можете производить операции с этим ресурсом (class=".get_class($obj).", access=".get_class($obj->access()).")"));
+
+			if(method_exists($obj, $method = "on_action_{$_GET['act']}"))
+			{
+				$result = $obj->$method($_GET);
+				if($result === true)
+					return true;
+			}
+		}
+
 		if(!empty($_GET['class_name']))
 		{
 //			print_d($_GET); exit();
@@ -65,7 +78,9 @@
 			}
 			else
 			{
-				$form->set_fields($_GET, true);
+				if(!$form->set_fields($_GET, true, NULL, true))
+					return true;
+				
 				$form->set_modify_time(time(), true);
 				
 				$bors->changed_save();
@@ -76,7 +91,7 @@
 						continue;
 						
 					$method = "remove_{$m[1]}_file";
-					if(method_exists($form, $method))
+//					if(method_exists($form, $method))
 						$form->$method(true);
 				}
 				
@@ -85,7 +100,7 @@
 					foreach($_FILES as $file => $params)
 					{
 						$method = "upload_{$file}_file";
-						if(method_exists($form, $method))
+//						if(method_exists($form, $method))
 							$form->$method($params, true);
 					}
 				}

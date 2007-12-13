@@ -5,12 +5,10 @@
 	массивов данных.
 */
 
-class_include('base_page_db');
-
 class base_page_hts extends base_page_db
 {
 	function _class_file() { return __FILE__; }
-	function can_be_empty() { echo "Class empty!"; return true; }
+	function can_be_empty() { return false; }
 
 	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
 
@@ -26,11 +24,23 @@ class base_page_hts extends base_page_db
 	function field_nav_name_storage() { return 'hts_data_nav_name.value(id)'; }
 	function field_cr_type_storage() { return 'hts_data_cr_type.value(id)'; }
 
+	function parents()
+	{
+		return $this->db->select_array('hts_data_parent', 'value', array('id=' => $this->id()));
+	}
+
 //	function template() { return 'forum/common.html'; }
 
-	function __construct($url)
+	function init()
 	{
-		parent::__construct(addslashes($url));
+//		echo "xxx".$this->called_url();
+	
+		if(!$this->id())
+			$this->set_id($this->called_url());
+
+		parent::init();
+			
+//		$this->hts = &new DataBaseHTS("http://{$this->id()}");
 	}
 
 	function static_cache() { return 600; }

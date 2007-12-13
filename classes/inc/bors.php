@@ -5,7 +5,7 @@ require_once('classes/objects/Bors.php');
 require_once('inc/messages.php');
 require_once('inc/bors/objects_array.php');
 
-function object_load($class, $object_id=NULL, $page=1)
+function object_load($class, $object_id=NULL, $page=NULL, $args=array())
 {
 	if(is_numeric($class))
 		$class = class_id_to_name($class);
@@ -15,10 +15,10 @@ function object_load($class, $object_id=NULL, $page=1)
 	if(!$class)
 		return;
 	
-	return class_load($class, $object_id, $page);
+	return class_load($class, $object_id, $page, $args);
 }
 
-function defval($data, $name, $default)
+function defval($data, $name, $default=NULL)
 {
 	if(empty($data[$name]))
 		return $default;

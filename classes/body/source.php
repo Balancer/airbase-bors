@@ -1,6 +1,6 @@
 <?php
 
-class body_source
+class body_source extends base_null
 {
 	function body($obj)
 	{

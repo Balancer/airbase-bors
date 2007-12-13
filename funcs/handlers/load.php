@@ -37,52 +37,37 @@
 
 	function handlers_load_dir($dir)
 	{
-		if(!empty ($_GET['debug']))
-			echo "<b>Load handlers from $dir</b><br/>";
+		if(preg_match('!^\.!', $dir) || $dir == 'CVS')
+			return;
+		
+//		if(!empty ($_GET['debug']))
+//			echo "<b>Load handlers from $dir</b><br/>";
 
 		if(!is_dir($dir))
 			return;
 
-		$files = array ();
+		$files = array();
 
-		if ($dh = opendir($dir))
-			while (($file = readdir($dh)) !== false)
-				if ($file{0} != '.')
+		if($dh = opendir($dir))
+			while(($file = readdir($dh)) !== false)
+				if(!preg_match('!^\.!', $file))
 					$files[] = $file;
 
 		closedir($dh);
 
 		sort($files);
 
-		foreach ($files as $file)
+		foreach($files as $file)
 		{
-			if (!empty ($_GET['debug']))
-				echo "load $dir/$file<br>\n";
+//			if (!empty ($_GET['debug']))
+//				echo "load $dir/$file<br>\n";
 
-//TODO: ?			if (substr($file, -4) == '.php')
 			if (preg_match("!\.php$!", $file))
 				include_once("$dir/$file");
 			elseif (is_dir("$dir/$file") && !preg_match("!(post|pre)$!", $file)) 
 				handlers_load_dir("$dir/$file");
 		}
 	}
-/*
-	function do_plugin_uri_handlers($uri, $match, $path)
-	{
-		if(!empty($_GET['debug']))
-			echo "*** do_plugin_uri_handlers: $path ***<br />\n";
-
-		$GLOBALS['cms_actions'] = array ();
-		$GLOBALS['cms_patterns'] = array ();
-	
-		handlers_load_dir($path);
-		// match[3] - это путь относительно базы плагинов.
-		// Там формат шаблона (/path/to/plugin/)(plugin_name)(/plugin/sub/path/)
-	//	if (!empty ($_GET['debug']))
-	//	{	echo __LINE__.":<xmp>"; print_r($GLOBALS['cms_patterns']); echo "</xmp>";}
-		return do_uri_handlers($uri, $match[3], $GLOBALS['cms_patterns']);
-	}
-*/
 
 	function plugins_load($uri, $base_dir)
     {
@@ -91,9 +76,6 @@
 
 		$path = uri2path($uri);
 
-//		if(!empty($_GET['debug']))
-//			DebugBreak();
-	
         if(!is_dir($base_dir)) 
         	return false;
         

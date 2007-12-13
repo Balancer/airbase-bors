@@ -43,9 +43,9 @@ class base_object extends base_empty
 		return false;
 	}
 
-	function __construct($id, $page=1)
+	function __construct($id)
 	{
-		parent::__construct($id, $page);
+		parent::__construct($id);
 
 		foreach($this->fields() as $db => $tables)
 		{
@@ -61,13 +61,23 @@ class base_object extends base_empty
 			}
 		}		
 
-		if($config = $this->config_class())
-			object_load($config, &$this, 1, false);
+	}
 
+	function init()
+	{
+		if($config = $this->config_class())
+		{
+			$config = object_load($config, &$this, 1, false);
+			$config->template_init();
+		}
+		
 		if($storage_engine = $this->storage_engine())
 			if(object_load($storage_engine)->load($this) !== false || $this->can_be_empty())
 				$this->_loaded = true;
 			
+//		if($this->class_name() == 'page_fs_separate')
+//			debug_exit("Init for {$this->class_name()} loaded -> {$this->_loaded}");
+	
 		if($data_provider = $this->data_provider())
 			object_load($data_provider, $this)->fill();
 
@@ -258,12 +268,18 @@ class base_object extends base_empty
 	
 	function titled_url() { return '<a href="'.$this->url($this->page())."\">{$this->title()}</a>"; }
 	function titled_admin_url() { return '<a href="'.$this->admin_url($this->page())."\">{$this->title()}</a>"; }
+	function titled_edit_url() { return '<a href="'.$this->edit_url($this->page())."\">{$this->title()}</a>"; }
 
-	function set_fields($array, $db_update_flag, $fields_list = NULL)
+	function set_fields($array, $db_update_flag, $fields_list = NULL, $check_values = false)
 	{
+		if($check_values)
+			foreach($array as $key => $val)
+				if(!$this->check_value($key, $val))
+					return false;
+				
 		if($fields_list)
 		{
-			foreach(split(' ', $fields_list) as $key)
+			foreach(explode(' ', $fields_list) as $key)
 			{
 				$method = "set_$key";
 				$this->$method(@$array[$key], $db_update_flag);
@@ -279,7 +295,35 @@ class base_object extends base_empty
 					$this->$method($val, $db_update_flag);
 			}
 		}
+		
+		return true;
 	}
+
+	function check_value($field, $value)
+	{
+		$cond = $this->check_value_conditions();
+		if(!($assert = @$cond[$field]))
+			return true;
+			
+		if(preg_match('!^(.+)\|(.+?)$!', $assert, $m))
+		{
+			$assert  = $m[1];
+			$message = $m[2];
+		}
+		else
+			$message = ec('Ошибка параметра ').$field;
+
+		eval("\$res = ('".addslashes($value)."' $assert);");
+		if(!$res)
+		{
+			bors_message($message);
+			return false;
+		}
+		
+		return true;
+	}
+
+	function check_value_conditions() { return array(); }
 
 	function store()
 	{
@@ -349,5 +393,12 @@ class base_object extends base_empty
 	
 	function access()  { return object_load($this->access_engine(), $this); }
 
+	function edit_url() { return $this->admin_url().'edit/'; }
+
+	var $_called_url;
+	function set_called_url($url) { return $this->_called_url = $url; }
+	function called_url() { return $this->_called_url; }
 	
+	var $stb_url_engine = 'url_calling';
+	function url($page=1) { return object_load($this->url_engine(), $this)->url($page); }
 }

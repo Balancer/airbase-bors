@@ -1,9 +1,11 @@
 <?php
 
+require_once('classes/inc/mysql.php');
+
 class driver_mysql extends DataBase
 {
 	// "Пустой" конструктор, чтобы не передавать в DataBase параметр $page
-	function __construct(&$db) { parent::__construct($db); }
+	function __construct($db) { parent::__construct($db); }
 
 	function select($table, $field, $where_map)
 	{
@@ -23,6 +25,11 @@ class driver_mysql extends DataBase
 		}
 		
 		return $this->get("SELECT $field FROM $table WHERE ".join(' AND ', $where)." $order LIMIT 1");
+	}
+
+	function delete($table, $where)
+	{
+		$this->query("DELETE FROM `".addslashes($table)."` ".mysql_where_compile($where));
 	}
 
 	function select_array($table, $field, $where_map)

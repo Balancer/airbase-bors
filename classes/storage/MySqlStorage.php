@@ -1,13 +1,9 @@
 <?php
 
-class MySqlStorage
+class MySqlStorage extends base_null
 {
 		var $dbhs;
 		var $mysql_map;
-
-		function MySqlStorage()
-		{
-		}
 
 		function load($object)
 		{
@@ -373,8 +369,8 @@ class MySqlStorage
 		}
 		else
 		{
-			$out =  preg_replace("!%TABLE%!", $table, $id_field);
-			$out =  preg_replace("!%ID%!", addslashes($oid), $out);
+			$out =  str_replace('%TABLE%', $table, $id_field);
+			$out =  str_replace('%ID%', addslashes($oid), $out);
 		}
 		
 		return $out;

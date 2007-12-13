@@ -12,15 +12,14 @@ class base_page extends def_page
 	function source() { return $this->stb_source; }
 
 	function items_around_page() { return 10; }
-	function pages_list()
+
+	function pages_list($css='pages_select')
 	{
 		include_once("funcs/design/page_split.php");
-//		set_loglevel(9);
-//		echo "total=".$this->total_pages();
-//		set_loglevel(2);
-		$pages = join("", pages_show($this, $this->total_pages(), $this->items_around_page()));
-		if($pages)
-			return ec('<div class="pages_select">Страницы: ').$pages.'</div>';
+		$pages = '<li>'.join('</li><li>', pages_show($this, $this->total_pages(), $this->items_around_page())).'</li>';
+
+		if($this->total_pages() > 1)
+			return '<div class="'.$css.ec('"><ul><li>Страницы:</li>').$pages.'</ul></div>';
 		else
 			return '';
 	}

@@ -171,7 +171,7 @@
 		
 //		echo $template_uri;
 
-		if($template_uri{0}=='/')
+		if(preg_match('!^/!', $template_uri))
 			if(file_exists($template_uri))
 				$template_uri = "xfile:".$template_uri;
 			else

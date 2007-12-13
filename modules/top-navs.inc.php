@@ -1,7 +1,7 @@
 <?
     function print_top_navs($uri=NULL)
     {
-//		echo "Get nav for $uri<br />";
+//		echo "\n<!--Get nav for $uri-->\n";
 	
 	    require_once("funcs/Cache.php");
         $ch = &new Cache();
@@ -40,7 +40,7 @@
 		
     	    foreach($parents as $nav)
 			{
-//				echo "$nav <br />\n";
+//				echo "<!--$nav-->\n";
 				$link_line = array();
 				foreach(split("\|#\|", $nav) as $link)
 				{	
@@ -75,7 +75,7 @@
 
     function link_line($uri)
     {
-//		echo "Link line for '$uri'<br />\n";
+//		echo "\n<!-- Link line for '$uri' -->\n";
 		
 		if($obj = class_load($uri))
 	        $parents = $obj->parents();
@@ -86,7 +86,7 @@
 			$parents = $hts->get_array('parent');
 		}
 	
-//		echo "parents for $uri (".get_class($obj)."({$obj->id()})) = ".print_r($parents, true)."<br/>";
+//		echo "\n<!--parents for $uri (".get_class($obj)."({$obj->id()})) = ".print_r($parents, true)."-->\n";
 		$links = array();
 
 		if(!is_array($parents))
