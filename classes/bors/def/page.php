@@ -1,4 +1,5 @@
-<?
+<?php
+
 require_once("classes/bors/borsPage.php");
 include_once("funcs/templates/global.php");
 

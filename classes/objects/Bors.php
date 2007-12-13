@@ -164,13 +164,16 @@
 
 //		$id = call_user_func(array($class_name, 'uri_to_id'), $uri);
 
-		return pure_class_load($class_name, $id, $page);
+		return object_init($class_name, $id, $page);
 	}
 
 	function pure_class_load($class_name, $id, $page, $use_cache = true, $local_path = NULL)
 	{
 //		echo "Pure load {$class_name}({$id})<br />\n";
 	
+		if($id == 'NULL')
+			$id = NULL;
+
 		if(!class_include($class_name, $local_path))
 			return NULL;
 
@@ -178,19 +181,6 @@
 			return $obj;
 
 		$obj = &new $class_name($id, $page);
-//		echo "Pure load {$class_name}({$id}), loaded={$obj->loaded()}, storage engine = {$obj->storage_engine()}<br />\n";
-		if($id 
-				&& method_exists($obj, 'can_be_empty')
-				&& !$obj->can_be_empty()
-				&& !$obj->loaded() 
-				&& $obj->storage_engine() 
-		)
-			return NULL;
-
-//		echo "{$class_name}($id) was loaded seccessfully} as ".get_class($obj)."<br />\n";
-
-		if($page > 1)
-			$obj->set_page($page);
 
 		if($use_cache)
 			save_cached_object($obj);
@@ -198,7 +188,7 @@
 		return $obj;
 	}
 
-	function class_load($class, $id = NULL, $page=1, $use_http = true)
+	function class_load($class, $id = NULL, $page=NULL, $use_http = true)
 	{
 		if(preg_match("!^/!", $class))
 			$class = 'http://'.$_SERVER['HTTP_HOST'].$class;
@@ -226,12 +216,12 @@
 		}
 	
 		if(preg_match("!^\w+$!", $class))
-			return pure_class_load($class, $id, $page);
+			return object_init($class, $id, $page);
 		else
 			return NULL;
 	}
 
-	function class_load_by_url($url, $page=1)
+	function class_load_by_url($url, $page=NULL)
 	{
 //		echo "Load $url<br />\n";
 	
@@ -267,7 +257,7 @@
 			if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$url_pattern$!", $check_url, $match))
 			{
 //				echo "Ok!<br />";
-				$id = $url;
+				$id = NULL;
 				$page = 1;
 				
 				if(preg_match("!^redirect:(.+)$!", $class_path, $m))
@@ -279,7 +269,7 @@
 					$redirect = false;
 				
 				// Формат вида aviaport_image_thumb(3,geometry=2)
-				if(preg_match("!^(.+)\((\d+),([^)]+=[^)]+)\)$!", $class_path, $m))	
+				if(preg_match("!^(.+)\((\d+|NULL),([^)]+=[^)]+)\)$!", $class_path, $m))	
 				{
 					$args = array();
 					foreach(split(',', $m[3]) as $pair)
@@ -291,7 +281,7 @@
 					
 					$page = $args;
 				}
-				elseif(preg_match("!^(.+)\((\d+),(\d+)\)$!", $class_path, $m))	
+				elseif(preg_match("!^(.+)\((\d+|NULL),(\d+)\)$!", $class_path, $m))	
 				{
 					$class_path = $m[1];
 					$id = $match[$m[2]+1];
@@ -310,10 +300,8 @@
 						
 //				echo "Try load {$class_path}('{$id}')<br />\n";
 			
-				if($obj = pure_class_load($class_path, $id, $page))
+				if($obj = object_init($class_path, $id, $page, array('match'=>$match, 'called_url'=>$url)))
 				{
-					$obj->set_match($match);
-					
 					if($redirect)
 					{
 						go($obj->url($page), true);
@@ -376,10 +364,23 @@
 				else
 					$redirect = false;
 			
-				$id = $url;
+				$id = NULL;
 				$page = 1;
 				
-				if(preg_match("!^(.+)\((\d+),(\d+)\)$!", $class_path, $m))	
+				// Формат вида aviaport_image_thumb(3,geometry=2)
+				if(preg_match("!^(.+)\((\d+|NULL),([^)]+=[^)]+)\)$!", $class_path, $m))	
+				{
+					$args = array();
+					foreach(split(',', $m[3]) as $pair)
+						if(preg_match('!^(\w+)=(.+)$!', $pair, $mm))
+							$args[$mm[1]] = $mm[2];
+
+					$class_path = $m[1];
+					$id = $match[$m[2]+1];
+					
+					$page = $args;
+				}
+				if(preg_match("!^(.+)\((\d+|NULL),(\d+)\)$!", $class_path, $m))	
 				{
 					$class_path = $m[1];
 					$id = $match[$m[2]+1];
@@ -398,11 +399,13 @@
 
 //				echo "$class_path($id)";
 						
-				if($obj = pure_class_load($class_path, $id, $page, true, $host_data['bors_local']))
+				if($obj = object_init($class_path, $id, $page, array(	
+						'use_cache' => true,
+						'local_path' => $host_data['bors_local'],
+						'match' => empty($match[2]) ? NULL : $match,
+						'called_url' => $url,
+					)))
 				{
-					if(!empty($match[2]))
-						$obj->set_match($match);
-						
 					$bors_data['classes_by_uri'][$url] = $obj;
 					
 					if($redirect)
@@ -418,3 +421,36 @@
 
 		return NULL;
 	}
+
+function object_init($class_name, $object_id, $object_page, $args = array())
+{
+//	echo "Pure load {$class_name}({$id}), loaded={$obj->loaded()}, storage engine = {$obj->storage_engine()}<br />\n";
+	$obj = pure_class_load($class_name, $object_id, $object_page, $use_cache = defval($args, 'use_cache'), $local_path = defval($args, 'local_path'));
+
+	if(!$obj)
+		return NULL;
+
+	if($object_page)
+		$obj->set_page($object_page);
+		
+	if($m = defval($args, 'match'))
+		$obj->set_match($m);
+
+	if($url = defval($args, 'called_url'))
+		$obj->set_called_url($url);
+
+	$obj->init();
+
+	if(($object_id || $url)
+		&& method_exists($obj, 'can_be_empty')
+		&& !$obj->can_be_empty()
+		&& !$obj->loaded() 
+		&& $obj->storage_engine() 
+	)
+		return NULL;
+
+//	echo "{$class_name}($id) was loaded seccessfully} as ".get_class($obj)."<br />\n";
+
+
+	return $obj;
+}

@@ -1,14 +1,16 @@
 <?php
 
-class storage_db_mysql_smart
+class storage_db_mysql_smart extends base_null
 {
-	function load(&$object, $common_where = '', $only_count = false)
+	function load(&$object, $common_where = NULL, $only_count = false, $args=array())
 	{
 //		echo "Try load ".get_class($object)."({$object->id()})<br />\n";
 		if(!($common_where || $only_count) && (!$object->id() || is_object($object->id())))
 			return false;
 
-		$oid = addslashes($object->id());
+		$oid = addslashes(isset($args['object_id']) ? $args['object_id'] : $object->id());
+//		if(!$oid)
+//			debug_exit('empty oid');
 		
 		$was_loaded = false;
 		$result = array();
@@ -16,6 +18,11 @@ class storage_db_mysql_smart
 //		echo "MySqlStorage.load: <b>{$object->internal_uri()}</b>, size=".sizeof(get_object_vars($object))."; cnt=".(++$count)."<br />";
 
 //		echo get_class($object); print_d($object->fields());
+
+		global $stdbms_cache;
+		
+		$hash = md5(join('!', array($object->class_name(), $common_where, $only_count)));
+//		echo "hash for ".$object->class_name()."/$common_where =$hash<Br/>\n";
 
 		foreach($object->fields() as $db => $tables)
 		{
@@ -29,9 +36,12 @@ class storage_db_mysql_smart
 
 			$dbh = &new DataBase($db);
 
-			foreach($tables as $table_name => $fields)
+			$dbhash = $hash.$db;
+			if(empty($stdbms_cache[$dbhash]))
 			{
 			
+			  foreach($tables as $table_name => $fields)
+			  {
 				if(preg_match('!^(\w+)\((\w+)\)$!', $table_name, $m))
 				{
 					$table_name	= $m[1];
@@ -68,14 +78,15 @@ class storage_db_mysql_smart
 					// -^^^^^^^^^^^^^^^-----------------^
 					$sql_func	= false;
 
+					// XXX(xxx.xxx(...))
 					if(preg_match('!^(\w+) \( ([\w\.]+\(.+\)) \)$!x', $field, $m))
 					{
 						$field		= $m[2];
 						$sql_func	= $m[1];
 					}
-
-					if(preg_match('!^(\w+) \( ([\w\.]+) \)$!x', $field, $m))
+					elseif(preg_match('!^(\w+) \( ([\w\.]+) \)$!x', $field, $m))
 					{
+						// XXX(xxx.xxx)
 						$field		= $m[2];
 						$sql_func	= $m[1];
 					}
@@ -99,10 +110,13 @@ class storage_db_mysql_smart
 						{
 							$from = 'FROM `'.$table_name.'` AS '.$current_tab;
 							if(!$where && !$only_count)
-								$where = 'WHERE '.make_id_field($current_tab, $id_field, $oid);
+							{
+								$where = 'WHERE '.make_id_field($current_tab, $id_field);
+//								echo "where=$where";
+							}	
 						}
 						else
-							$from .= ' LEFT JOIN `'.$table_name.'` AS '.$current_tab.' ON ('.make_id_field($current_tab, $id_field, $oid).')';
+							$from .= ' LEFT JOIN `'.$table_name.'` AS '.$current_tab.' ON ('.make_id_field($current_tab, $id_field).')';
 					}
 
 					if($sql_func)
@@ -110,20 +124,46 @@ class storage_db_mysql_smart
 					else
 						$select[] = "{$current_tab}.".($field == $property ? $field : "{$field} AS `{$property}{$php_func}`");
 				}
+			  }
+			
+			  if($common_where !== NULL)
+				$select[] = "`tab0`.".($main_id_name != 'id' ? "`{$main_id_name}` as id" : 'id');
+			  else
+				$where .= ' LIMIT 1';
+
+			  $stdbms_cache[$dbhash]['select'] = $select;
+			  $stdbms_cache[$dbhash]['from'] = $from;
+			  $stdbms_cache[$dbhash]['where'] = $where;
+			}
+			else
+			{
+			  $select = $stdbms_cache[$dbhash]['select'];
+			  $from = $stdbms_cache[$dbhash]['from'];
+			  $where = $stdbms_cache[$dbhash]['where'];
 			}
 			
-			if($common_where)
-				$select[] = "`tab0`.".($main_id_name != 'id' ? "`{$main_id_name}` as id" : 'id');
-
-//			set_loglevel(10);
+//			echo $where;
+			$from  = str_replace('%MySqlStorageOID%', $oid, $from);
+			$where = str_replace('%MySqlStorageOID%', $oid, $where);
+//			echo "($oid) -> $where<br />\n";
+			
+//			set_loglevel(9);
 			if($only_count)
-				return intval($dbh->get('SELECT COUNT(*) '.$from.' '.$where, false));
+			{
+//				echo 
+//				set_loglevel(9);
+				$cnt = intval($dbh->get('SELECT COUNT(*) '.$from.' '.$where, false));
+//				set_loglevel(2);
+				return $cnt;
+			}
 			else
 				$dbh->query('SELECT '.join(',', $select).' '.$from.' '.$where, false);
+
 //			set_loglevel(2);
 				
 			while($row = $dbh->fetch_row())
 			{
+//				echo "row=".print_d($row);
 				foreach($row as $name => $value)
 				{
 					if(preg_match('!^(.+)\|(.+)$!', $name, $m))
@@ -145,6 +185,9 @@ class storage_db_mysql_smart
 				}
 			}
 
+//			if($object)
+//				$result[] = $object;
+				
 			return $common_where ? $result : $was_loaded;
 		}
 	}
@@ -262,7 +305,9 @@ class storage_db_mysql_smart
 						$set["{$current_tab}.{$field}"] = $value;
 				}
 			}
-			$dbh->query($update.$dbh->make_string_set($set).' '.$where, false);
+	
+			if($update)
+				$dbh->query($update.$dbh->make_string_set($set).' '.$where, false);
 		}				
 		$object->changed_fields = array();
 //		exit();
@@ -311,7 +356,7 @@ class storage_db_mysql_smart
 						$value	= $back_functions[$m[2]]($value);
 					}
 
-//					echo "=== p: $field =|= $php_func ===</br>";
+//					echo "=== p: $field == $value ===</br>\n";
 
 					// Выделяем имя SQL-функции, передаваемом в виде
 					// 'UNIX_TIMESTAMP(WWW.News.Date(ID))
@@ -339,6 +384,12 @@ class storage_db_mysql_smart
 					}
 					else
 						$id_field = $def_id;
+
+					if($sql_func)
+					{
+						$value = $sql_func."('".addslashes($value)."')";
+						$field = "raw ".$field;
+					}
 
 					$data[$table_name][$field] = $value;
 				}						

@@ -8,13 +8,12 @@ class base_empty extends base_null
 	function id() { return $this->id; }
 	function set_id($id) { $this->id = $id; }
 	
-	function __construct($id, $page=1)
+	function __construct($id)
 	{
 		$this->id = $this->initial_id = $id;
-		$this->page	= $page;
 	}
 
-	var $page = '';
+	var $page = 1;
 	function page() { return $this->page; }
 	//TODO: со временем - убрать!
 	function set_page($page) { $this->page = $page; }

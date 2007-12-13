@@ -1,11 +1,11 @@
 <?php
 
-class storage_fs_separate
+class storage_fs_separate extends base_null
 {
 	function load($object)
 	{
-		if(!$object->id() || is_object($object->id()))
-			return;
+//		if(!$object->id() || is_object($object->id()))
+//			return;
 		
 		$dir = $object->dir();
 		
@@ -26,7 +26,7 @@ class storage_fs_separate
 				$object->$method(ec(file_get_contents("{$dir}/{$entry}")), false);
 		}
 		$d->close();
-		
+
 /*		foreach(get_object_vars($object) as $field => $value)
 		{
 			if(!preg_match('!^stb_(.+)$!', $field, $m))
@@ -40,13 +40,12 @@ class storage_fs_separate
 			elseif(file_exists($file = "{$dir}/.[{$name}].txt"))//TODO: сейчас без конвертации!
 				$object->$set(file($file), false);
 		}
-*/		
+*/
 		return true;
 	}
 	
 	function save($object)
 	{
-		echo 0/0;
-		exit("Try to save file separated format");
+		debug_exit("Try to save file separated format");
 	}
 }

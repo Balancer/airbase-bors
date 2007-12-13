@@ -18,7 +18,7 @@ class BorsBaseDbPage extends BorsBasePage
 			else
 				$this->db = &new DataBase($GLOBALS['cms']['mysql_database']);
 			
-			parent::__construct($id, $page);
+			parent::__construct($id);
 
 			if(!($qlist = $this->_global_queries()))
 				return;

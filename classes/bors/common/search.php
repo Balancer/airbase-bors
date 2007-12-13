@@ -33,7 +33,7 @@ class common_search extends base_page
 	
 	function __construct($id, $page)
 	{
-		parent::__construct($id, $page);
+		parent::__construct($id);
 
 		$this->add_template_data_array('meta[robots]', 'noindex');
 	

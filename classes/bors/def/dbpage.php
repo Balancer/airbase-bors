@@ -28,13 +28,13 @@ class def_dbpage extends def_page
 
 	function uri2id($id) { return $id; }
 	
-	function __construct($id, $page=1)
+	function __construct($id)
 	{
 		$driver = $this->db_driver();
 		$this->db = &new $driver($this->main_db_storage());
 		$id = $this->uri2id($id);
 			
-		parent::__construct($id, $page);
+		parent::__construct($id);
 
 		if(!($qlist = $this->_global_queries()))
 			return;

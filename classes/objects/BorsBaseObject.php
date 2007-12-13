@@ -14,7 +14,7 @@ class BorsBaseObject extends base_object
 		function main_db_storage(){ return ''; }
 		function main_table_storage(){ return ''; }
 
-		function new_instance() { exit("Try to get new empty instance"); }
+		function new_instance() { debug_exit("Try to get new empty instance"); }
 
 		var $_loaded = false;
 		function loaded() { return $this->_loaded; }
@@ -59,9 +59,9 @@ class BorsBaseObject extends base_object
 			$res = array();
 			foreach($this->parents() as $x)
 			{
-				if($obj = class_load($x[0], $x[1]))
+				if($obj = object_load($x[0], $x[1]))
 					$res[] = $obj->internal_uri();
-//				print_r($x);
+//				print_d($x);
 			}
 			
 			return $res;
