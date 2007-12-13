@@ -26,6 +26,7 @@
 {foreach from=$objects item=t}
 {* assign var="t" value=$o->topic() *}
 {* assign var="f" value=$t->forum() *}
+{if $t}
 <tr>
 {*	<td style="font-size: 8pt;"><a href="{$f->url()}">{$f->title()}</a></td> *}
 	<td style="font-size: 8pt;"><a href="{$t->url()}">{$t->title()}</a></td>
@@ -34,6 +35,7 @@
 	<td style="font-size: 8pt;">{$t->create_time()|airbase_time}</td>
 	<td style="font-size: 8pt;">{$t->modify_time()|airbase_time}</td>
 </tr>
+{/if}
 {foreachelse}
 <li>Не найдено</li>
 {/foreach}

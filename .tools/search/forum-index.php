@@ -1,11 +1,12 @@
 <?php
-	setlocale(LC_ALL, 'ru_RU.KOI8-R');
+//	setlocale(LC_ALL, 'ru_RU.KOI8-R');
 
 	$_SERVER['DOCUMENT_ROOT'] = "/var/www/balancer.ru/htdocs";
 	$_SERVER['HTTP_HOST'] = "balancer.ru";
 
 	require_once($_SERVER['DOCUMENT_ROOT'].'/cms/config.php');
 	require_once('funcs/DataBase.php');
+	require_once('classes/inc/bors.php');
 	
 	config_set('mysql_persistent', true);
 	config_set('mysql_disable_autoselect_db', false);
@@ -15,26 +16,52 @@
 	include_once('engines/search.php');
 
 	$db = &new DataBase(config('search_db'));
-	$pundb = &new DataBase('punbb');
-	$max = $pundb->get('SELECT MAX(id) FROM topics');
+//	$pundb = &new DataBase('punbb');
 //	$min = $db->get('SELECT MIN(class_id) FROM bors_search_titles')-1;
 
 	// 1193541:
-	for($i = 56576; $i>0; $i--)
+//	for($i = $max; $i>0; $i--)
+//	set_loglevel(9);
+	while(true)
 	{
-		$obj = class_load('forum_topic', $i);
+		$pid = $db->get('SELECT MAX(class_id) FROM bors_search_source_0 WHERE class_name=1');
+		
+		if(!$pid)
+			break;
 
-		if(!$obj)
-			continue;
-			
-		$GLOBALS['bors']->_main_obj=$obj;
-		for($p=1; $p<= $obj->total_pages(); $p++)
+		echo "pid=$pid\n";
+		
+		$post = object_load('forum_post', $pid);
+
+		if(!$post)
 		{
-			$obj->set_page($p);
-			bors_search_object_index($obj, $db, 'ignore');
-			echo dc("{$i}: {$obj->title()} [{$p}], (".sizeof($GLOBALS['bors_search_get_word_id_cache']).")\n");
+			for($sub=0; $sub<10; $sub++)
+				$db->query("DELETE FROM bors_search_source_{$sub}
+							WHERE class_name = 1
+								AND class_id = {$pid}");
+			continue;
+		}
+		
+		echo "tid=".$post->topic_id()."\n";
+
+		$topic = object_load('forum_topic', $post->topic_id());
+		echo $topic->id()."\n";
+
+		$GLOBALS['bors']->_main_obj=$topic;
+		for($p=1; $p<= $topic->total_pages(); $p++)
+		{
+			$topic->set_page($p);
+			bors_search_object_index($topic, 'ignore', $db);
+			echo dc("{$topic->id()}: {$topic->title()} [{$p}], (".sizeof($GLOBALS['bors_search_get_word_id_cache']).")\n");
 //			echo dc("{$obj->search_source()}\n\n\n");
 		}
 		if(sizeof($GLOBALS['bors_search_get_word_id_cache']) > 25000)
 			unset($GLOBALS['bors_search_get_word_id_cache']);
+
+		for($sub=0; $sub<10; $sub++)
+			$db->query("DELETE FROM bors_search_source_{$sub}
+						WHERE class_name = 1
+							AND class_id IN (".join(",", $topic->get_all_posts_id()).")");
+			
+//		echo "DELETE FROM bors_search_source_0 		                        WHERE class_name = 1 								                            AND class_id IN (".join(",", $topic->get_all_posts_id()).")";
 	}

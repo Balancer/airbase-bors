@@ -1,6 +1,9 @@
 <?
     function lcml_quote($txt)
     {
+		$txt = preg_replace('!^\s*={10,}\s*$!m',  '<hr style="height:3px; width:98%;text-align: left;" />', $txt);
+		$txt = preg_replace('!^\s*\-{10,}\s*$!m', '<hr style="height:1px; width:98%;text-align: left;" />', $txt);
+		
 		$res = "";
 		foreach(split("\n", $txt) as $s)
 		{
