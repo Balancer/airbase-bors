@@ -8,8 +8,7 @@ function objects_array($class, $args = array())
 		$class = class_id_to_name($class);
 
 	$where = mysql_where_compile(@$args['where']).' '.mysql_order_compile(@$args['order']);
-	if(!empty($args['page']) && !empty($args['per_page']))
-		$where .= ' '.mysql_limits_compile($args['page'], $args['per_page']);
+	$where .= ' '.mysql_limits_compile($args);
 
 	if(!empty($args['inner_join']))
 		foreach($args['inner_join'] as $join)

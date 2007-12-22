@@ -27,15 +27,19 @@ class base_object extends base_empty
 	{
 		foreach($this->fields() as $db => $tables)
 		{
-			foreach($tables as $tables => $fields)
+			foreach($tables as $table => $fields)
 			{
+				if(preg_match('!^\w+\((\w+)\)$!', $table, $m))
+					$id_field = $m[1];
+				else
+					$id_field = 'id';
 				foreach($fields as $property => $db_field)
 				{
 					if(is_numeric($property))
 						$property = $db_field;
 					
 					if($property == $test_property)
-						return true;
+						return array($db, $table, $id_field, $db_field);
 				}
 			}
 		}
