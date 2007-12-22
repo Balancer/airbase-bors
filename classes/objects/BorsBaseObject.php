@@ -14,7 +14,7 @@ class BorsBaseObject extends base_object
 		function main_db_storage(){ return ''; }
 		function main_table_storage(){ return ''; }
 
-		function new_instance() { debug_exit("Try to get new empty instance"); }
+		function new_instance() { debug_exit("Try to get new empty instance on ".$this->class_name()); }
 
 		var $_loaded = false;
 		function loaded() { return $this->_loaded; }

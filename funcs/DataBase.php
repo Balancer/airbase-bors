@@ -354,11 +354,17 @@
 
 		function normkeyval(&$key, &$value)
 		{
-			if(preg_match("!^\s+(.+)$!", $key, $m))
-				$key = $m[1];
+//			if(preg_match("!^\s+(.+)$!", $key, $m))
+//				$key = $m[1];
 
-			if(preg_match("!^(.+)\s+$!", $key, $m))
-				$key = $m[1];
+//			if(preg_match("!^(.+)\s+$!", $key, $m))
+//				$key = $m[1];
+
+			if(preg_match('!^int (.+)$!', $key, $m) && is_numeric($value))
+			{
+				$key = preg_match('!^`!', $m[1]) ? $m[1] : '`'.$m[1].'`';
+				return;
+			}
 				
 			@list($type, $key) = split(' ', $key);
 			if(empty($key))
@@ -374,11 +380,11 @@
 				{
 					case 'raw':
 						break;
-					case 'int':
-						if(!preg_match('!^0x[\da-fA-F]+$!', $value))
-							if(!preg_match('!^\d+$!', $value))
-								$value = intval($value);
-						break;
+//					case 'int':
+//						if(!preg_match('!^0x[\da-fA-F]+$!', $value))
+//							if(!preg_match('!^\d+$!', $value))
+//								$value = intval($value);
+//						break;
 					case 'float':
 						$value = str_replace(',', '.', floatval($value)); 
 						break;

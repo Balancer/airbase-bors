@@ -55,7 +55,7 @@ function bors_search_object_index($object, $append = 'ignore', $db = NULL)
 						'int object_modify_time' => $object->modify_time(),
 					));
 				}
-//				set_loglevel(10);
+//				set_loglevel(9);
 				if($append == 'replace')
 					$db->multi_insert_do($tab);
 				else
@@ -105,6 +105,7 @@ function bors_search_object_index($object, $append = 'ignore', $db = NULL)
 
 function index_split($text)
 {
+//	return str_word_count($text, 1);
 	if($GLOBALS['cms']['charset'] == 'utf-8')
 		return preg_split('![ -,\./:-@\[-`\{-~\s¡-¿]+!u', trim($text));
 

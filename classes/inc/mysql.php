@@ -15,10 +15,12 @@ function mysql_where_compile($conditions_array)
 		$value = str_replace('%ID%', '%MySqlStorageOID%', $value);
 //		echo "$field_cond  $value -> $val2<br/>\n";
 
-		if(!preg_match('! IN$!', $field_cond))
-			$where[] = $field_cond . '\'' . addslashes($value) . '\'';
-		else
+		if(preg_match('! IN$!', $field_cond))
 			$where[] = $field_cond . '(' . $value . ')';
+		elseif(is_numeric($field_cond))
+			$where[] = $value;
+		else
+			$where[] = $field_cond . '\'' . addslashes($value) . '\'';
 	}
 	
 	return 'WHERE '.join(' AND ', $where);
@@ -44,8 +46,16 @@ function mysql_order_compile($order_list)
 	return 'ORDER BY '.join(',', $order);
 }
 
-function mysql_limits_compile($page, $per_page)
+function mysql_limits_compile($args)
 {
+	if(!empty($args['limit']))
+		return "LIMIT {$args['limit']}";
+
+	if(empty($args['page']) && empty($args['per_page']))
+		return "";
+		
+	$page = @$args['page'];
+	$per_page = @$args['per_page'];
 	$start = (max($page,1)-1)*$per_page;
 	
 	return 'LIMIT '.$start.','.$per_page;

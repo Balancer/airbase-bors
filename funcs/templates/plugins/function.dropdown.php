@@ -17,10 +17,18 @@ function smarty_function_dropdown($params, &$smarty)
 //	echo "==={$list}===";
 
 	if(preg_match("!^(\w+)\->(\w+)!", $list, $m))
-		$list = object_load($m[1])->$m[2]();
+	{
+		if($m[1] == 'this')
+			$list = $obj->$list();
+		else
+			$list = object_load($m[1])->$m[2]();
+	}
 	else
-		$list = $obj->$list();
-
+	{
+		$list = &new $list(NULL);
+		$list = $list->named_list();
+	}
+	
 	if(empty($get))
 		$current = $obj->$name();
 	else

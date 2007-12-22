@@ -124,3 +124,20 @@ function month_name_rp($m)
 			
 		return $mms[intval($m)];
 }
+
+function make_input_time($field_name, $data)
+{
+	foreach(explode(' ', 'year month day hour min sec') as $key)
+		$$key = intval(@$data[$field_name.'_'.$key]);
+
+	if(!$day)
+		$day = 1;
+
+	if(!$month)
+		$month = 1;
+
+	if(!$year)
+		$year = strftime('%Y', time());
+
+	return strtotime("{$year}-{$month}-{$day} $hour:$min:$sec");
+}
