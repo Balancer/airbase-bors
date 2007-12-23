@@ -24,7 +24,7 @@
 //	set_loglevel(9);
 	while(true)
 	{
-		$pid = $db->get('SELECT MAX(class_id) FROM bors_search_source_0 WHERE class_name=1');
+		$pid = $db->get('SELECT MAX(class_id) FROM bors_search_source_9 WHERE class_name=1');
 		
 		if(!$pid)
 			break;
@@ -53,6 +53,7 @@
 			$topic->set_page($p);
 			bors_search_object_index($topic, 'ignore', $db);
 			echo dc("{$topic->id()}: {$topic->title()} [{$p}], (".sizeof($GLOBALS['bors_search_get_word_id_cache']).")\n");
+			usleep(300);
 //			echo dc("{$obj->search_source()}\n\n\n");
 		}
 		if(sizeof($GLOBALS['bors_search_get_word_id_cache']) > 25000)

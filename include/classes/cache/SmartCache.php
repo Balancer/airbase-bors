@@ -87,7 +87,7 @@
 			{
 				$memcache = &new Memcache;
 				$memcache->connect(config('memcached')) or debug_exit("Could not connect memcache");
-				$memcache->set('phpmv3'.$this->last_hmd, $value, true, $time_to_expire);
+				@$memcache->set('phpmv3'.$this->last_hmd, $value, true, $time_to_expire);
 			}
 			
             return $this->last = $value;

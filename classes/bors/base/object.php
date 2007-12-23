@@ -405,4 +405,37 @@ class base_object extends base_empty
 	
 	var $stb_url_engine = 'url_calling';
 	function url($page=1) { return object_load($this->url_engine(), $this)->url($page); }
+
+
+	// Признак постоянного существования объекта.
+	// Если истина, то объект создаётся не по первому запросу, а при сохранении
+	// параметров и/или сбросе кеша, удалении старого статического кеша и т.п.
+	// Применимо только при cache_static === true
+	function permanent() { return false; }
+
+	function create_static()
+	{
+		if(!config('cache_static') || !$obj->cache_static())
+			return false;
+	
+		if(!empty($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']=='del')
+			return false;
+
+		$page = $obj->page();
+		$sf = &new CacheStaticFile($obj->url($page));
+		$sf->save($content, $obj->modify_time(), $obj->cache_static());
+
+		foreach(split(' ', $obj->cache_groups()) as $group)
+			if($group)
+			{
+				$group = class_load('cache_group', $group);
+				$group->register($obj);
+			}
+				
+	    header("X-Bors: static cache maden");
+
+		if($obj->url($page) != $obj->called_url())
+			return go($obj->url($page), true);
+		
+	}
 }

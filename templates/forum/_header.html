@@ -72,10 +72,6 @@ dd, dt { height: 1%; }
 	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
 		{if $views}{* {$views}-е посещение с {$views_first|strftime:"%d.%m.%Y"}<br/> *}{/if}
 		{if $views_average}В среднем посещений в день: {$views_average}<br/>{/if}
-
-		{if $queries}Запросов к БД: {$queries}<br/>{/if}
-		{if $queries_time}Время запросов БД: {$queries_time}<br/>{/if}
-		{if $make_time}Время генерации страницы: {$make_time}<br/>{/if}
 	  </div>
 
 
@@ -140,6 +136,13 @@ var me_hash = readCookie('cookie_hash', 0)
 <!--
 === debug-info ===
 template[3] = {$template}
+queries = {$queries} 
+queries_time = {$queries_time} 
+make_time = {$make_time} 
+template = {$page_template} 
+created = {$now|strftime:"%d.%m.%Y %H:%M"} 
+{if $this}{math assign=exp equation="x+y" x=$this->cache_static() y=$now}static expire = {$exp|strftime:"%d.%m.%Y %H:%M"} 
+{/if} 
 -->
 </body>
 </html>

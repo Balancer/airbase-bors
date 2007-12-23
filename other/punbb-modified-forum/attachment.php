@@ -2,6 +2,7 @@
 
 	include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 	require_once("funcs/tools/ip_check.php");
+
 //	agava_ip_check();
 	
 /*
@@ -81,31 +82,36 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 		)
 			message("Ваш IP заблокирован в аттачах за создание очень высокого зарубежного трафика. Подробнее - http://balancer.ru/forum/punbb/viewtopic.php?pid=967737#p967737 ".$anon);
 		
-	
-		require_once "HTTP/Request.php";
+		$ch = &new Cache();
+		if(!($diff = $ch->get('stat', 'agava-rate')))
+		{
+			require_once "HTTP/Request.php";
 
-		$req = &new HTTP_Request("http://control.renter.ru/ipstat/");
-		$req->setMethod(HTTP_REQUEST_METHOD_POST);
-		$req->addHeader("Accept-Charset", 'UTF-8');
-		$req->addHeader("Accept-Encoding", 'none');
-		$req->addPostData("user", "uka");
-		$req->addPostData("pass", "imi0Ngash");
-		$req->addPostData("from", "1/".strftime("%m/%y"));
-		$req->addPostData("to", strftime("%d/%m/%y"));
-		$req->addPostData("ip", "ALL");
+			$req = &new HTTP_Request("http://control.renter.ru/ipstat/");
+			$req->setMethod(HTTP_REQUEST_METHOD_POST);
+			$req->addHeader("Accept-Charset", 'UTF-8');
+			$req->addHeader("Accept-Encoding", 'none');
+			$req->addPostData("user", "uka");
+			$req->addPostData("pass", "imi0Ngash");
+			$req->addPostData("from", "1/".strftime("%m/%y"));
+			$req->addPostData("to", strftime("%d/%m/%y"));
+			$req->addPostData("ip", "ALL");
 		
-		$resp = $req->sendRequest();
+			$resp = $req->sendRequest();
 		
-		if (!PEAR::isError($resp))
-     		$resp = $req->getResponseBody();
-	 	else 
-	    	$resp = $resp->getMessage();
+			if (!PEAR::isError($resp))
+    	 		$resp = $req->getResponseBody();
+	 		else 
+		    	$resp = $resp->getMessage();
 		
-		if(!preg_match("!Российский.+Исходящий:</td><td>([\d\.]+) Мб.+Зарубежный.+Исходящий:</td><td>([\d\.]+) Мб!us", $resp, $m))
-			exit("Ошибка: Не могу получить данные о трафике! - $resp");
+			if(!preg_match("!Российский.+Исходящий:</td><td>([\d\.]+) Мб.+Зарубежный.+Исходящий:</td><td>([\d\.]+) Мб!us", $resp, $m))
+				exit("Ошибка: Не могу получить данные о трафике! - $resp");
 
+			$diff = $m[2] - $m[1] + 3000;
+			$ch->set($diff, 7200);
+		}
 	
-		if(($diff = $m[2] - $m[1] + 3000) >= 0)
+		if($diff >= 0)
 			message($ret."<br /><br />Дефицит трафика на данный момент составляет $diff Мб. При отсутствии дефицита доступ к аттачам зарегистрированным зарубежным пользователям разрешён!".$anon);
 	}
 	

@@ -173,22 +173,22 @@ class forum_topic extends borsForumAbstract
 		$posts_per_page = 25;
 		$start_from = ($this->page() - 1) * $posts_per_page;
 
-		$query = "SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY id LIMIT $start_from, $posts_per_page";
+		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.id LIMIT $start_from, $posts_per_page";
 			
 		$posts = $db->get_array($query);
-		if(empty($posts))
-		{
-			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = {$this->id()}");
-			$posts = $db->get_array($query);
-		}
+//		if(empty($posts))
+//		{
+//			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = {$this->id()}");
+//			$posts = $db->get_array($query);
+//		}
 
 		$data['posts'] = array();
 
-		foreach($posts as $pid)
+		foreach($posts as $x)
 		{
-			$post = class_load('forum_post', $pid);
-			if($post)
-				$result[] = $post->author_name().":\n---------------\n".$post->source();
+//			$post = class_load('forum_post', $pid);
+			if($x['message'])
+				$result[] = $x['poster'].":\n---------------\n".$x['message'];
 		}
 		
 		return join("\n============================\n\n", $result);

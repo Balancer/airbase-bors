@@ -52,6 +52,8 @@
 		
 		'(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+\.html => forum_topic(2,4)',
 		'(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+ => redirect:forum_topic(2,4)',
+		'(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(\d+).* => redirect:forum_topic(2,3)',
+		'(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+).* => redirect:forum_topic(2)',
 		'(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+)\-\-.+ => forum_printable(2)',
 
 		'/forum/topic/\d+/(\d+)/ => redirect:forum_topic(1)',
