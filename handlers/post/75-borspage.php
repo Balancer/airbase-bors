@@ -173,6 +173,9 @@
 				}
 				
 		    header("X-Bors: static cache maden");
+
+			if($obj->url($page) != $obj->called_url())
+				return go($obj->url($page), true);
 			
 //			require_once('funcs/navigation/go.php');
 //			return go($obj->url($page), true, 0, false);
