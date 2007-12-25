@@ -76,8 +76,13 @@ class base_object extends base_empty
 		}
 		
 		if($storage_engine = $this->storage_engine())
-			if(object_load($storage_engine)->load($this) !== false || $this->can_be_empty())
+		{
+			$storage_engine = object_load($storage_engine);
+			if(!$storage_engine)
+				echo "Can't load {$this->storage_engine()}";
+			elseif($storage_engine->load($this) !== false || $this->can_be_empty())
 				$this->_loaded = true;
+		}
 			
 //		if($this->class_name() == 'page_fs_separate')
 //			debug_exit("Init for {$this->class_name()} loaded -> {$this->_loaded}");
@@ -438,4 +443,6 @@ class base_object extends base_empty
 			return go($obj->url($page), true);
 		
 	}
+	
+	function cache_groups() { return ''; }
 }
