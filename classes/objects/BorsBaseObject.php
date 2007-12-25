@@ -26,25 +26,6 @@ class BorsBaseObject extends base_object
 			return $this->url($page);
 		}
 		
-		function url($page = NULL)
-		{
-			if(preg_match("!^http://!", $this->id()))
-				return $this->id();
-			
-			if($page < 1)
-				$page = $this->page();
-			
-			require_once("funcs/modules/uri.php");
-			$uri = $this->base_url().strftime("%Y/%m/%d/", $this->modify_time());
-			$uri .= $this->uri_name()."-".$this->id();
-
-			if($page > 1)
-				$uri .= ",$page";
-
-			$uri .= "--".translite_uri_simple($this->title()).".html"; 
-			return $uri;
-		}
-
 		function internal_uri()
 		{
 			if(preg_match("!^http://!", $this->id()))

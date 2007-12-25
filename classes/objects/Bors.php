@@ -171,7 +171,7 @@
 	{
 //		echo "Pure load {$class_name}({$id})<br />\n";
 	
-		if($id == 'NULL')
+		if(is_string($id) && ($id == 'NULL'))
 			$id = NULL;
 
 		if(!class_include($class_name, $local_path))
