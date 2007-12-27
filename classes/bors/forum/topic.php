@@ -3,7 +3,7 @@ require_once('borsForumAbstract.php');
 
 class forum_topic extends borsForumAbstract
 {
-	function storage_engine() { return 'storage_db_mysql'; }
+	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function can_be_empty() { return false; }
 	
 	function main_db_storage() { return 'punbb'; }
@@ -11,17 +11,49 @@ class forum_topic extends borsForumAbstract
 
 	function uri_name() { return 'topic'; }
 
-	var $stb_forum_id = '';
-	function forum_id() { return $this->stb_forum_id; }
-	function set_forum_id($forum_id, $db_update) { $this->set("forum_id", $forum_id, $db_update); }
-	function field_forum_id_storage() { return 'punbb.topics.forum_id(id)'; }
-		
-	function field_title_storage() { return 'punbb.topics.subject(id)'; }
-	function field_create_time_storage() { return 'punbb.topics.posted(id)'; }
-	function field_modify_time_storage() { return 'punbb.topics.last_post(id)'; }
-	function field_owner_id_storage() { return 'punbb.topics.poster_id(id)'; }
+	function main_db_fields()
+	{
+		return array(
+			$this->main_table_storage() => $this->main_table_fields(),
+		);
+	}
 
+	function main_table_fields()
+	{
+		return array(
+			'forum_id',
+			'title'	=> 'subject',
+			'create_time'	=> 'posted',
+			'modify_time'=> 'last_post',
+			'owner_id'=> 'poster_id',
+			'poster_name' => 'last_poster',
+			'author_name' => 'poster',
+			'num_replies',
+			'num_views',
+			'first_post_id' => 'first_pid',
+			'last_post_id' => 'last_post_id',
+		);
+	}
+
+	function set_forum_id($value, $dbupd) { $this->fset('forum_id', $value, $dbupd); }
+	function set_title($value, $dbupd) { $this->fset('title', $value, $dbupd); }
+	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
+	function set_modify_time($value, $dbupd) { $this->fset('modify_time', $value, $dbupd); }
+	function set_owner_id($value, $dbupd) { $this->fset('owner_id', $value, $dbupd); }
+	function set_poster_name($value, $dbupd) { $this->fset('poster_name', $value, $dbupd); }
+	function set_author_name($value, $dbupd) { $this->fset('author_name', $value, $dbupd); }
+	function set_num_replies($num_replies, $db_update) { $this->fset('num_replies', $num_replies, $db_update); }
+	function set_num_views($num_views, $db_update) { $this->fset('num_views', $num_views, $db_update); }
+	function set_first_post_id($first_post_id, $db_update) { $this->fset('first_post_id', $first_post_id, $db_update); }
+	function set_last_post_id($last_post_id, $db_update) { $this->fset('last_post_id', $last_post_id, $db_update); }
+
+
+	function forum() { return object_load('forum_forum', $this->forum_id()); }
+	function first_post() { return object_load('forum_post', $this->first_post_id()); }
+
+		
 	function parents() { return array("forum_forum://".$this->forum_id()); }
+
 
 	function body()
 	{
@@ -45,24 +77,12 @@ class forum_topic extends borsForumAbstract
 		include_once("funcs/templates/assign.php");
 		$data = array();
 
-		$db = &new DataBase('punbb');
-
-		$posts_per_page = 25;
-		$start_from = ($this->page() - 1) * $posts_per_page;
-
-		$query = "SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY id LIMIT $start_from, $posts_per_page";
-			
-		$posts = $db->get_array($query);
-		if(empty($posts))
-		{
-			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = {$this->id()}");
-			$posts = $db->get_array($query);
-		}
-
-		$data['posts'] = array();
-
-		foreach($posts as $pid)
-			$data['posts'][] = class_load('forum_post', $pid);
+		$data['posts'] = objects_array('forum_post', array(
+			'where' => array('int topic_id' => intval($this->id())),
+			'order' => 'id',
+			'page' => $this->page(),
+			'per_page' => $this->items_per_page(),
+		));
 
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".addslashes($this->title())."'\" />");
 
@@ -71,10 +91,11 @@ class forum_topic extends borsForumAbstract
 		return template_assign_data("templates/TopicBody.html", $data);
 	}
 
+	function items_per_page() { return 25; }
+
 	function total_pages()
 	{
-		$posts_per_page = 25;
-		return intval($this->num_replies() / $posts_per_page) + 1;
+		return intval($this->num_replies() / $this->items_per_page()) + 1;
 	}
 
 	function pages_links()
@@ -95,52 +116,21 @@ class forum_topic extends borsForumAbstract
 		return join(" ", pages_show($this, $this->total_pages(), 5, false));
 	}
 
-	var $stb_last_poster_name;
-	function last_poster_name() { return $this->stb_last_poster_name; }
-	function set_last_poster_name($last_poster_name, $db_update) { $this->set("last_poster_name", $last_poster_name, $db_update); }
-	function field_last_poster_name_storage() { return 'punbb.topics.last_poster(id)'; }
 
 	function cache_parents()
 	{
 		$res = array(
-			class_load('forum_forum', $this->forum_id()),
-			class_load('forum_printable', $this->id()),
+			object_load('forum_forum', $this->forum_id()),
+			object_load('forum_printable', $this->id()),
 		);
 
 		foreach($this->all_users() as $user_id)
-			$res[] = class_load('forum_user', $user_id);
+			$res[] = object_load('forum_user', $user_id);
 			
 		return $res;
 	}
 
-	function forum() { return class_load('forum_forum', $this->forum_id()); }
 
-	var $stb_author_name = '';
-	function set_author_name($author_name, $db_update) { $this->set("author_name", $author_name, $db_update); }
-	function field_author_name_storage() { return 'punbb.topics.poster(id)'; }
-	function author_name() { return $this->stb_author_name; }
-
-	var $stb_num_replies = '';
-	function set_num_replies($num_replies, $db_update) { $this->set("num_replies", $num_replies, $db_update); }
-	function field_num_replies_storage() { return 'num_replies(id)'; }
-	function num_replies() { return $this->stb_num_replies; }
-
-	var $stb_num_views = '';
-	function set_num_views($num_views, $db_update) { $this->set("num_views", $num_views, $db_update); }
-	function field_num_views_storage() { return 'punbb.topics.num_views(id)'; }
-	function num_views() { return $this->stb_num_views; }
-
-	var $stb_first_post_id = '';
-	function set_first_post_id($first_post_id, $db_update) { $this->set("first_post_id", $first_post_id, $db_update); }
-	function field_first_post_id_storage() { return 'punbb.topics.first_pid(id)'; }
-	function first_post_id() { return $this->stb_first_post_id; }
-
-	function first_post() { return class_load('forum_post', $this->first_post_id()); }
-
-	var $stb_last_post_id = '';
-	function set_last_post_id($last_post_id, $db_update) { $this->set("last_post_id", $last_post_id, $db_update); }
-	function field_last_post_id_storage() { return 'last_post_id(id)'; }
-	function last_post_id() { return $this->stb_last_post_id; }
 		
 	function get_all_posts_id()
 	{
@@ -170,8 +160,7 @@ class forum_topic extends borsForumAbstract
 	
 		$db = &new DataBase('punbb');
 
-		$posts_per_page = 25;
-		$start_from = ($this->page() - 1) * $posts_per_page;
+		$start_from = ($this->page() - 1) * $this->items_per_page();
 
 		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.id LIMIT $start_from, $posts_per_page";
 			
