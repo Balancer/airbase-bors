@@ -2,27 +2,58 @@
 
 class forum_post extends base_page_db
 {
-	function storage_engine() { return 'storage_db_mysql'; }
+	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function can_be_empty() { return false; }
 	
 	function main_db_storage() { return 'punbb'; }
 	function main_table_storage() { return 'posts'; }
 
-	var $stb_topic_id = 0;
-	function topic_id() { return $this->stb_topic_id; }
-	function set_topic_id($topic_id, $db_update) { $this->set("topic_id", $topic_id, $db_update); }
-	function field_topic_id_storage() { return 'topic_id(id)'; }
+	function main_db_fields()
+	{
+		return array(
+			$this->main_table_storage() => $this->main_table_fields(),
+			'messages' => array(
+				'body' => 'html',
+				'source' => 'message',
+			),
+			'posts_cached_fields(post_id)' => array(
+				'flag',
+			),
+		);
+	}
 
+
+
+	function main_table_fields()
+	{
+		return array(
+			'topic_id',
+			'title'	=> 'subject',
+			'create_time'	=> 'posted',
+			'modify_time'=> 'edited',
+			'owner_id'=> 'poster_id',
+			'poster_ip',
+			'author_name' => 'poster',
+			
+			'num_replies',
+			'num_views',
+			'first_post_id' => 'first_pid',
+			'last_post_id' => 'last_post_id',
+		);
+	}
+
+	function set_topic_id($value, $dbupd) { $this->fset('topic_id', $value, $dbupd); }
+	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
+	function set_modify_time($value, $dbupd) { $this->fset('modify_time', $value, $dbupd); }
+	function set_body($body, $db_update) { $this->fset('body', $body, $db_update); }
+	function set_flag($flag, $db_update) { $this->fset('flag', $flag, $db_update); }
+	function set_owner_id($owner_id, $db_update) { $this->fset('owner_id', $owner_id, $db_update); }
+	function set_poster_ip($poster_ip, $db_update) { $this->fset('poster_ip', $poster_ip, $db_update); }
+	function set_author_name($author_name, $db_update) { $this->fset('author_name', $author_name, $db_update); }
+	
 	function topic() { return class_load('forum_topic', $this->topic_id()); }
-		
-	function field_create_time_storage() { return 'posted(id)'; }
-	function field_modify_time_storage() { return 'edited(id)'; }
-		
 	function parents() { return array("forum_topic://".$this->topic_id()); }
-
-	var $stb_body = '';
-	function set_body($body, $db_update) { $this->set("body", $body, $db_update); }
-	function field_body_storage() { return 'messages.html(id)'; }
+	function owner() { return class_load('forum_user', $this->owner_id()); }
 
 	function body()
 	{
@@ -41,18 +72,13 @@ class forum_post extends base_page_db
 	
 			$this->set_body($body, true);
 		}
+
 		return $this->stb_body; 
 	}
 
 	var $_source_changed = false;
-	var $stb_source = '';
-	function set_source($source, $db_update) { $this->set("source", $source, $db_update); $this->_source_changed |= $db_update; }
-	function field_source_storage() { return 'messages.message(id)'; }
-	function source() { return $this->stb_source; }
+	function set_source($source, $db_update) { $this->fset('source', $source, $db_update); $this->_source_changed |= $db_update; }
 
-	var $stb_flag = '';
-	function set_flag($flag, $db_update) { $this->set("flag", $flag, $db_update); }
-	function field_flag_storage() { return 'posts_cached_fields.flag(post_id)'; }
 	function flag()
 	{
 		// Вторая часть условия - проверка на баг обрезания строки.
@@ -65,22 +91,7 @@ class forum_post extends base_page_db
 		return $this->stb_flag; 
 	}
 
-	var $stb_poster_ip = '';
-	function set_poster_ip($poster_ip, $db_update) { $this->set("poster_ip", $poster_ip, $db_update); }
-	function field_poster_ip_storage() { return 'poster_ip(id)'; }
-	function poster_ip() { return $this->stb_poster_ip; }
 
-	var $stb_author_name = '';
-	function set_author_name($author_name, $db_update) { $this->set("author_name", $author_name, $db_update); }
-	function field_author_name_storage() { return 'poster(id)'; }
-	function author_name() { return $this->stb_author_name; }
-
-	var $stb_owner_id;
-	function set_owner_id($owner_id, $db_update) { $this->set("owner_id", $owner_id, $db_update); }
-	function field_owner_id_storage() { return 'poster_id(id)'; }
-	function owner_id() { return $this->stb_owner_id; }
-
-	function owner() { return class_load('forum_user', $this->owner_id()); }
 
 	var $stb_answer_to_id = '';
 	function set_answer_to_id($answer_to_id, $db_update) { $this->set("answer_to_id", $answer_to_id, $db_update); }
