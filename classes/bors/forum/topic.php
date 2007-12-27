@@ -1,7 +1,6 @@
 <?php
-require_once('borsForumAbstract.php');
 
-class forum_topic extends borsForumAbstract
+class forum_topic extends forum_abstract
 {
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function can_be_empty() { return false; }
@@ -10,6 +9,8 @@ class forum_topic extends borsForumAbstract
 	function main_table_storage() { return 'topics'; }
 
 	function uri_name() { return 'topic'; }
+
+	function fields() { return array($this->main_db_storage() => $this->main_db_fields()); }
 
 	function main_db_fields()
 	{
@@ -47,13 +48,10 @@ class forum_topic extends borsForumAbstract
 	function set_first_post_id($first_post_id, $db_update) { $this->fset('first_post_id', $first_post_id, $db_update); }
 	function set_last_post_id($last_post_id, $db_update) { $this->fset('last_post_id', $last_post_id, $db_update); }
 
-
 	function forum() { return object_load('forum_forum', $this->forum_id()); }
 	function first_post() { return object_load('forum_post', $this->first_post_id()); }
-
 		
 	function parents() { return array("forum_forum://".$this->forum_id()); }
-
 
 	function body()
 	{
@@ -77,12 +75,17 @@ class forum_topic extends borsForumAbstract
 		include_once("funcs/templates/assign.php");
 		$data = array();
 
+		set_loglevel(9);
 		$data['posts'] = objects_array('forum_post', array(
 			'where' => array('int topic_id' => intval($this->id())),
 			'order' => 'id',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
 		));
+
+		set_loglevel(2);
+		
+		print_d(count($data));
 
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".addslashes($this->title())."'\" />");
 
@@ -216,4 +219,6 @@ class forum_topic extends borsForumAbstract
 		$this->set_modify_time($last_post->create_time(true), true);
 		$this->set_last_poster_name($last_post->owner()->title(), true);
 	}
+
+	function url_engine() { return 'url_titled'; }
 }

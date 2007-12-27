@@ -1,5 +1,7 @@
 <?php
 
+require_once('classes/objects/Bors.php');
+
 class MySqlStorage extends base_null
 {
 		var $dbhs;

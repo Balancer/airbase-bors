@@ -178,4 +178,6 @@ class forum_forum extends borsForumAbstract
 		require_once('/var/www/balancer.ru/htdocs/cms/other/punbb-modified-forum/include/functions.php');
 //		update_
 	}
+
+	function url_engine() { return 'url_titled'; }
 }
