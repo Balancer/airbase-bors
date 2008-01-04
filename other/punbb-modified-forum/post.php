@@ -212,7 +212,6 @@ if (isset($_POST['form_sent']))
 				// Insert the new post
 				$tdb = &new DataBase('punbb');
 				$data = array(
-					'id' => $new_pid = new_id('post'),
 					'poster' => $username,
 					'poster_id' => $pun_user['id'], 
 					'poster_ip' => get_remote_address(), 
@@ -223,6 +222,7 @@ if (isset($_POST['form_sent']))
 				);
 				
 				$tdb->insert('posts', $data);
+				$data['id'] = $new_pid = $tdb->last_id();
 				$tdb->insert('posts_archive', $data);
 //				$db->query("INSERT INTO {$db->prefix}posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES('".$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 
@@ -239,7 +239,6 @@ if (isset($_POST['form_sent']))
 				// It's a guest. Insert the new post
 				$tdb = &new DataBase('punbb');
 				$data = array(
-					'id' => $new_pid = new_id('post'),
 					'poster' => $username, 
 					'poster_ip' => get_remote_address(), 
 					'poster_email' => ($pun_config['p_force_guest_email'] == '1' || $email != '') ? $email : '', 
@@ -249,6 +248,7 @@ if (isset($_POST['form_sent']))
 					'answer_to' => $qid,
 				);
 				$tdb->insert('posts', $data);
+				$data['id'] = $new_pid = $tdb->last_id();
 				$tdb->insert('posts_archives', $data);
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) 
 //VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
@@ -365,7 +365,6 @@ if (isset($_POST['form_sent']))
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 				$tdb = &new DataBase('punbb');
 				$data = array(
-					'id' => $new_pid = new_id('post'),
 					'poster' => $username, 
 					'poster_id' => $pun_user['id'], 
 					'poster_ip' => get_remote_address(), 
@@ -376,6 +375,7 @@ if (isset($_POST['form_sent']))
 				);
 				
 				$tdb->insert('posts', $data);
+				$data['id'] = $new_pid = $tdb->last_id();
 				$tdb->insert('posts_archive', $data);
 
 				// To subscribe or not to subscribe, that ...
@@ -387,7 +387,6 @@ if (isset($_POST['form_sent']))
 				// Create the post ("topic post")
 				$tdb = &new DataBase('punbb');
 				$data = array(
-					'id' => $new_pid = new_id('post'),
 					'poster' => $username, 
 					'poster_ip' => get_remote_address(), 
 					'poster_email' => ($pun_config['p_force_guest_email'] == '1' || $email != '') ? $email : '',
@@ -398,6 +397,7 @@ if (isset($_POST['form_sent']))
 				);
 				
 				$tdb->insert('posts', $data);
+				$data['id'] = $new_pid = $tdb->last_id();
 				$tdb->insert('posts_archive', $data);
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}

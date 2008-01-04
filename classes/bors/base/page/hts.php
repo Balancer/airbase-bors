@@ -9,6 +9,8 @@ class base_page_hts extends base_page_db
 {
 	function _class_file() { return __FILE__; }
 	function can_be_empty() { return false; }
+	function can_cached() { return false; }
+	function storage_engine() { return 'storage_db_mysql_smart'; }
 
 	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
 
@@ -16,16 +18,24 @@ class base_page_hts extends base_page_db
 
 	function fields_first() { return 'stb_title stb_source stb_description'; }
 
-	function field_source_storage() { return 'hts_data_source.value(id)'; }
-	function field_title_storage() { return 'hts_data_title.value(id)'; }
-	function field_description_storage() { return 'hts_data_description_source.value(id)'; }
-	function field_create_time_storage() { return 'hts_data_create_time.value(id)'; }
-	function field_modify_time_storage() { return 'hts_data_modify_time.value(id)'; }
-	function field_nav_name_storage() { return 'hts_data_nav_name.value(id)'; }
-	function field_cr_type_storage() { return 'hts_data_cr_type.value(id)'; }
+	function fields()
+	{
+		return array(
+			'HTS' => array(
+				'hts_data_source' => array('source' => 'value'),
+				'hts_data_title'  => array('title'  => 'value'),
+				'hts_data_description'  => array('description'  => 'value'),
+				'hts_data_create_time'  => array('create_time'  => 'value'),
+				'hts_data_modify_time'  => array('modify_time'  => 'value'),
+				'hts_data_nav_name'  => array('nav_name'  => 'value'),
+				'hts_data_cr_type'  => array('cr_type'  => 'value'),
+			),
+		);
+	}
 
 	function parents()
 	{
+//		print_d($this->db->select_array('hts_data_parent', 'value', array('id=' => $this->id())));
 		return $this->db->select_array('hts_data_parent', 'value', array('id=' => $this->id()));
 	}
 
@@ -33,17 +43,13 @@ class base_page_hts extends base_page_db
 
 	function init()
 	{
-//		echo "xxx".$this->called_url();
-	
 		if(!$this->id())
 			$this->set_id($this->called_url());
 
 		parent::init();
-			
-//		$this->hts = &new DataBaseHTS("http://{$this->id()}");
 	}
 
-	function static_cache() { return 600; }
+	function cache_static() { return 3600; }
 	function url() { return $this->id(); }
 
 /*
@@ -55,7 +61,6 @@ category - категория тикетов.
 email - ? - торг?
 fax - ? - торг?
 height -> для картинок
-images_upload -> ?
 
 child - таблица детей
 
@@ -78,18 +83,15 @@ forum_id -> comments_id
 							   hts_data_origin_uri
 							    hts_data_parent
 								 hts_data_phone
-								  hts_data_position
 								   hts_data_priority
 								    hts_data_public_time
 									 hts_data_publisher
 									  hts_data_referer
 									   hts_data_right_column
-									    hts_data_site_store
 										 hts_data_size
 										   hts_data_split_type
 										    hts_data_stop_time
 											 hts_data_style
-											  hts_data_subscribe
 											   hts_data_template
 												 hts_data_type
 												  hts_data_version

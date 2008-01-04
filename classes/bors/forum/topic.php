@@ -27,7 +27,7 @@ class forum_topic extends forum_abstract
 			'create_time'	=> 'posted',
 			'modify_time'=> 'last_post',
 			'owner_id'=> 'poster_id',
-			'poster_name' => 'last_poster',
+			'last_poster_name' => 'last_poster',
 			'author_name' => 'poster',
 			'num_replies',
 			'num_views',
@@ -41,7 +41,7 @@ class forum_topic extends forum_abstract
 	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
 	function set_modify_time($value, $dbupd) { $this->fset('modify_time', $value, $dbupd); }
 	function set_owner_id($value, $dbupd) { $this->fset('owner_id', $value, $dbupd); }
-	function set_poster_name($value, $dbupd) { $this->fset('poster_name', $value, $dbupd); }
+	function set_last_poster_name($value, $dbupd) { $this->fset('last_poster_name', $value, $dbupd); }
 	function set_author_name($value, $dbupd) { $this->fset('author_name', $value, $dbupd); }
 	function set_num_replies($num_replies, $db_update) { $this->fset('num_replies', $num_replies, $db_update); }
 	function set_num_views($num_views, $db_update) { $this->fset('num_views', $num_views, $db_update); }
@@ -75,17 +75,12 @@ class forum_topic extends forum_abstract
 		include_once("funcs/templates/assign.php");
 		$data = array();
 
-		set_loglevel(9);
 		$data['posts'] = objects_array('forum_post', array(
-			'where' => array('int topic_id' => intval($this->id())),
+			'where' => array('topic_id=' => intval($this->id())),
 			'order' => 'id',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
 		));
-
-		set_loglevel(2);
-		
-		print_d(count($data));
 
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".addslashes($this->title())."'\" />");
 
@@ -96,10 +91,7 @@ class forum_topic extends forum_abstract
 
 	function items_per_page() { return 25; }
 
-	function total_pages()
-	{
-		return intval($this->num_replies() / $this->items_per_page()) + 1;
-	}
+	function total_pages() { return intval($this->num_replies() / $this->items_per_page()) + 1; }
 
 	function pages_links()
 	{
@@ -165,7 +157,7 @@ class forum_topic extends forum_abstract
 
 		$start_from = ($this->page() - 1) * $this->items_per_page();
 
-		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.id LIMIT $start_from, $posts_per_page";
+		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.id LIMIT $start_from, ".$this->items_per_page();
 			
 		$posts = $db->get_array($query);
 //		if(empty($posts))

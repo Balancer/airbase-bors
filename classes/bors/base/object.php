@@ -445,4 +445,7 @@ class base_object extends base_empty
 	}
 	
 	function cache_groups() { return ''; }
+
+	function uid() { return md5($this->class_id().'://'.$this->id().','.$this->page()); }
+	function can_cached() { return true; }
 }

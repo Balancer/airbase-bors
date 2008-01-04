@@ -129,7 +129,7 @@
 				@fclose($fh);
 			}
 
-			if(loglevel(10))
+			if(loglevel(11))
 				debug_trace();
 
 /*			if(!empty($GLOBALS['log']['mysql_queries']))
@@ -153,11 +153,12 @@
 			{
 				if($GLOBALS['log_level'] > 5)
 				{
-					$fh = fopen("{$_SERVER['DOCUMENT_ROOT']}/hts-queries.log",'at');
-					fputs($fh,"Error: ".mysql_error($this->dbh)."\n");
-					fclose($fh);
+					$fh = @fopen("{$_SERVER['DOCUMENT_ROOT']}/hts-queries.log",'at');
+					@fputs($fh,"Error: ".mysql_error($this->dbh)."\n");
+					@fclose($fh);
 				}
 				echolog(mysql_error($this->dbh)." for DB='{$this->db_name}' in query '<tt>$query</tt>'", 1);
+				debug_exit('MySQL Error');
 			}
 
 			return false;
@@ -396,9 +397,9 @@
 				$key = "`$key`";
 		}
 
-		function insert($table, $fields)
+		function insert($table, $fields, $ignore_error = true)
 		{
-			$this->query("INSERT INTO $table ".$this->make_string_values($fields));
+			$this->query("INSERT INTO $table ".$this->make_string_values($fields), $ignore_error);
 		}
 
 		function insert_ignore($table, $fields)
