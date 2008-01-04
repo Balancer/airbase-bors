@@ -21,27 +21,29 @@ class user_reputation extends base_page_db
 			return ec("Не задан ID пользователя.");
 
 //		echo "id={$id}, user={$this->user->id}";
+	}
 
-		$db = &new DataBase('USERS');
-		
-		$this->add_template_data('ref', @$_SERVER['HTTP_REFERER']);
-		
-		$this->add_template_data('list', $db->get_array("SELECT * FROM reputation_votes WHERE user_id = $id ORDER BY time DESC"));
-
+	function data_providers()
+	{
+		$dbu = &new DataBase('USERS');
 		$dbf = &new DataBase('punbb');
-		$this->add_template_data('reputation_abs_value', sprintf("%.2f", $dbf->get("SELECT reputation FROM users WHERE id = $id")));
 		
-		$this->add_template_data('plus', $db->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = $id AND score > 0"));
-		$this->add_template_data('minus', $db->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = $id AND score < 0"));
-
-		$this->add_template_data('user_id', $id);
+		return array(
+			'ref' => @$_SERVER['HTTP_REFERER'],
+			'list' => $dbu->get_array("SELECT * FROM reputation_votes WHERE user_id = {$this->id()} ORDER BY time DESC"),
+			'reputation_abs_value' => sprintf("%.2f", $dbf->get("SELECT reputation FROM users WHERE id = {$this->id()}")),
+			'plus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score > 0"),
+			'minus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score < 0"),
+			'user_id' => $this->id(),
+		);
 	}
 
 	function url() { return "http://balancer.ru/user/".$this->id()."/reputation.html"; }
 
-	function cache_static() { return 86400*30; }
+	function cache_static() { return 600; }
 		
-	function template() { return "forum/forum.html"; }
+	function template() { return "forum/common.html"; }
 
 	function can_be_empty() { return true; }
+	function can_cached() { return false; }
 }

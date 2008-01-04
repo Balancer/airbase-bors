@@ -48,6 +48,7 @@
 					$storage->new_instance($obj);
 
 				$storage->save($obj);
+				save_cached_object($obj);
 					
 				if(config('search_autoindex') && $obj->auto_search_index())
 					bors_search_object_index($obj, 'replace');
@@ -135,14 +136,42 @@
 	function load_cached_object($class_name, $id, $page)
 	{
 //		echo "Check load for $class_name('$id',$page)<br />";
-		return @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][serialize($page)];
+		if($obj = @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][serialize($page)])
+			return $obj;
+
+		if(config('memcached') && !is_object($id))
+		{
+			$memcache = &new Memcache;
+			$memcache->connect(config('memcached')) or debug_exit("Could not connect memcache");
+			if(!is_object($page) && $page < 2)
+				$page = 1;
+				
+//			echo "got ".$class_name.'://'.$id.','.serialize($page)."<br />\n";
+
+			if($x = @$memcache->get('bors_v6_'.$class_name.'://'.$id.','.serialize($page)))
+			{
+//				echo "<b>got!</b><br />";
+				return $x;
+			}
+		}
 	}
 
 	function save_cached_object($object)
 	{
+	
 //		echo "Save cache object ".get_class($object)."'(".$object->id()."', ".$object->page().")<br />\n";
 		if(method_exists($object, 'id') && !is_object($object->id()))
+		{
+			if(config('memcached') && $object->can_cached())
+			{
+				$memcache = &new Memcache;
+				$memcache->connect(config('memcached')) or debug_exit("Could not connect memcache");
+				@$memcache->set('bors_v6_'.get_class($object).'://'.$object->id().','.serialize($object->page()), $object, true, 600);
+//				echo "memcahced [".get_class($object).'://'.$object->id().','.serialize($object->page())."]<br />";
+			}
+
 			$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][serialize($object->page())] = $object;
+		}
 	}
 
 	function class_internal_uri_load($uri)
@@ -424,8 +453,8 @@
 
 function object_init($class_name, $object_id, $object_page, $args = array())
 {
-//	echo "Pure load {$class_name}({$id}), loaded={$obj->loaded()}, storage engine = {$obj->storage_engine()}<br />\n";
-	$obj = pure_class_load($class_name, $object_id, $object_page, $use_cache = defval($args, 'use_cache'), $local_path = defval($args, 'local_path'));
+//	echo "Pure load {$class_name}(".serialize($object_id).")<br />\n";
+	$obj = pure_class_load($class_name, $object_id, $object_page, $use_cache = defval($args, 'use_cache', true), $local_path = defval($args, 'local_path'));
 
 	if(!$obj)
 		return NULL;
@@ -439,7 +468,9 @@ function object_init($class_name, $object_id, $object_page, $args = array())
 	if($url = defval($args, 'called_url'))
 		$obj->set_called_url($url);
 
-	$obj->init();
+	if(!$obj->loaded())
+		$obj->init();
+//	else echo get_class($obj)." already inited<br />";
 
 	if(($object_id || $url)
 		&& method_exists($obj, 'can_be_empty')
@@ -452,5 +483,8 @@ function object_init($class_name, $object_id, $object_page, $args = array())
 //	echo "{$class_name}($id) was loaded seccessfully} as ".get_class($obj)."<br />\n";
 
 
+	if($use_cache)
+		save_cached_object($obj);
+		
 	return $obj;
 }

@@ -62,4 +62,6 @@
 		'(/)users/warning/(\d+)/ => users_warning(2)',
 
 		'(/)(test|crazy)/ => base_page_hts',
-	);
+
+	'.* => base_page_hts',
+);

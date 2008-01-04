@@ -31,7 +31,7 @@
             if(!empty($GLOBALS['echofile']))
             {
                 $fh=fopen($GLOBALS['echofile'],"at");
-                fputs($fh,"uri: http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}\nquery: ".@$_SERVER['QUERY_STRING']."\nref: ".@$_SERVER['HTTP_REFERER']."\n$level: $message\n-------------------------------\n");
+                fputs($fh,"uri: http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}\nquery: ".@$_SERVER['QUERY_STRING']."\nref: ".@$_SERVER['HTTP_REFERER']."\n$level: $message\nbacktrace:".print_r(debug_backtrace(),true)."\b-------------------------------\n");
                 fclose($fh);
 				@chmod($GLOBALS['echofile'], 0666);
             }

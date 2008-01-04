@@ -7,6 +7,7 @@ class forum_post extends base_page_db
 	
 	function main_db_storage() { return 'punbb'; }
 	function main_table_storage() { return 'posts'; }
+	function fields() { return array($this->main_db_storage() => $this->main_db_fields()); }
 
 	function main_db_fields()
 	{
@@ -22,23 +23,15 @@ class forum_post extends base_page_db
 		);
 	}
 
-
-
 	function main_table_fields()
 	{
 		return array(
 			'topic_id',
-			'title'	=> 'subject',
 			'create_time'	=> 'posted',
 			'modify_time'=> 'edited',
 			'owner_id'=> 'poster_id',
 			'poster_ip',
 			'author_name' => 'poster',
-			
-			'num_replies',
-			'num_views',
-			'first_post_id' => 'first_pid',
-			'last_post_id' => 'last_post_id',
 		);
 	}
 
@@ -51,9 +44,9 @@ class forum_post extends base_page_db
 	function set_poster_ip($poster_ip, $db_update) { $this->fset('poster_ip', $poster_ip, $db_update); }
 	function set_author_name($author_name, $db_update) { $this->fset('author_name', $author_name, $db_update); }
 	
-	function topic() { return class_load('forum_topic', $this->topic_id()); }
+	function topic() { return object_load('forum_topic', $this->topic_id()); }
 	function parents() { return array("forum_topic://".$this->topic_id()); }
-	function owner() { return class_load('forum_user', $this->owner_id()); }
+	function owner() { return object_load('forum_user', $this->owner_id()); }
 
 	function body()
 	{
@@ -131,6 +124,7 @@ class forum_post extends base_page_db
 			}
 			
 		require_once('funcs/navigation/go.php');
+
 		return go($topic->url($page)."#p".$pid, true, 0, false);
 	}
 

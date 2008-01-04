@@ -116,7 +116,13 @@ class storage_db_mysql_smart extends base_null
 							}	
 						}
 						else
-							$from .= ' LEFT JOIN `'.$table_name.'` AS '.$current_tab.' ON ('.make_id_field($current_tab, $id_field).')';
+						{
+							if($common_where !== NULL)
+								$on = "$current_tab.`$id_field` = `tab0`.`id`";
+						 	else
+								$on	= make_id_field($current_tab, $id_field);
+							$from .= ' LEFT JOIN `'.$table_name.'` AS '.$current_tab.' ON ('.$on.')';
+						}
 					}
 
 					if($sql_func)

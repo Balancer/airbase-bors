@@ -388,7 +388,7 @@ if (isset($_REQUEST['move_topics']) || isset($_POST['move_topics_to']))
 						</select>
 						<br /></label>
 						<div class="rbox">
-							<label><input type="checkbox" name="with_redirect" value="1"<?php if ($action == 'single') echo ' checked="checked"' ?> /><?php echo $lang_misc['Leave redirect'] ?><br /></label>
+							<label><input type="checkbox" name="with_redirect" value="1" /><?php echo $lang_misc['Leave redirect'] ?><br /></label>
 						</div>
 					</div>
 				</fieldset>

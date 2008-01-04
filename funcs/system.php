@@ -20,6 +20,8 @@
 
 	function new_id($engine, $local_id = NULL, $uri = NULL)
 	{
+		debug_exit("new_id($engine)");
+	
 		$db = &new DataBase('HTS');
 
 		$local_id	= $local_id	? ", local_id = ".intval($local_id) : "";
@@ -36,6 +38,7 @@
 
 	function uri_by_global_id($id)
 	{
+		debug_exit("uri_by_global_id($id)");
 		$db = &new DataBase('HTS');
 
 		return $db->get("SELECT uri FROM global_ids WHERE id = ".intval($id));
@@ -43,6 +46,7 @@
 
 	function global_id($engine, $local_id, $register=true)
 	{
+		debug_exit("global_id($engine)");
 		$db = &new DataBase('HTS');
 
 		$id = $db->get("SELECT id FROM global_ids WHERE engine='".addslashes($engine)."' AND local_id = ".intval($local_id));
@@ -55,6 +59,7 @@
 
 	function engine_id_by_global($id)
 	{
+		debug_exit("engine_id($id)");
 		$db = &new DataBase('HTS');
 
 		$res = $db->get("SELECT engine, local_id FROM global_ids WHERE id = ".intval($id));

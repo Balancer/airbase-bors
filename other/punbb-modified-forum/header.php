@@ -80,6 +80,9 @@ if (isset($required_fields))
 	// Output JavaScript to validate form (make sure required fields are filled out)
 
 ?>
+
+
+
 <script type="text/javascript">
 <!--
 function process_form(the_form)
@@ -192,6 +195,9 @@ if ($pun_config['o_announcement'] == '1')
 	ob_start();
 
 ?>
+
+<!-- script language="JavaScript1.2" src="http://balancer.ru/js/snow.js" script -->
+
 <div id="announce" class="block">
 	<h2><span><?php echo $lang_common['Announcement'] ?></span></h2>
 	<div class="box">
