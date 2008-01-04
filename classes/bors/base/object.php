@@ -5,6 +5,9 @@ require_once('classes/inc/bors.php');
 
 class base_object extends base_empty
 {
+	var $_loaded = false;
+	function loaded() { return $this->_loaded; }
+
 	var $match;
 	function set_match($match) { $this->match = $match;	}
 
@@ -277,7 +280,7 @@ class base_object extends base_empty
 	
 	function titled_url() { return '<a href="'.$this->url($this->page())."\">{$this->title()}</a>"; }
 	function titled_admin_url() { return '<a href="'.$this->admin_url($this->page())."\">{$this->title()}</a>"; }
-	function titled_edit_url() { return '<a href="'.$this->edit_url($this->page())."\">{$this->title()}</a>"; }
+	function titled_edit_url() { return '<a href="'.$this->edit_url($this->page()).'">'.($this->title()?$this->title():'---').'</a>'; }
 
 	function set_fields($array, $db_update_flag, $fields_list = NULL, $check_values = false)
 	{
