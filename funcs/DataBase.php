@@ -17,7 +17,7 @@
 		var $row;
 		var $db_name;
 
-		function DataBase($base=NULL, $login=NULL, $password=NULL, $server=NULL) // DataBase
+		function __construct($base=NULL, $login=NULL, $password=NULL, $server=NULL) // DataBase
 		{
 			if(empty($base))
 				$base = $GLOBALS['cms']['mysql_database'];
@@ -54,7 +54,7 @@
 				if(empty($login))	$login		= @$GLOBALS['cms']['mysql'][$base]['login'];
 				if(empty($password)) $password	= @$GLOBALS['cms']['mysql'][$base]['password'];
 				if(empty($server))   $server	= @$GLOBALS['cms']['mysql'][$base]['server'];
-//				echo "$login:$server";
+//				echo "$login:$server<br/>";
 
 				if(empty($login))	$login		= @$GLOBALS['cms']['mysql_login'];
 				if(empty($password)) $password	= @$GLOBALS['cms']['mysql_pw'];
@@ -69,10 +69,7 @@
 					$this->dbh = mysql_connect($server, $login, $password);
 
 				if(!$this->dbh)
-				{
-//					echolog(__FILE__.':'.__LINE__." Query failed, error ".mysql_errno().": ".mysql_error()."<BR />", 1);
-					exit(" Query failed, error ".mysql_errno().": ".mysql_error()."<BR />");
-				}
+					debug_exit(" Query failed, error ".mysql_errno().": ".mysql_error()."<BR />");
 				
 				mysql_select_db($base,$this->dbh)
 					or echolog(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />", 1);
@@ -88,14 +85,21 @@
 				set_global_key("DataBaseHandler:$server",$base,$this->dbh);
 //				echo "new\[{$base}]=".$this->dbh."<br>\n";
 			}
+
+			if(!$this->dbh)
+				debug_exit(" NULL DBH ".mysql_errno().": ".mysql_error()."<BR />");
 		}
 
 		function query($query, $ignore_error=false)
 		{
 //			if(preg_match('!UPDATE.*tab\d!i', $query)) { print_d($query); exit(); }
+
+			if(!$this->dbh)
+				debug_exit(__FILE__.':'.__LINE__." NULL db handler");
 		
 			if(!config('mysql_disable_autoselect_db'))
-				mysql_select_db($this->db_name, $this->dbh);
+				@mysql_select_db($this->db_name, $this->dbh);
+//					 or die(__FILE__.':'.__LINE__." Could not select database '{$this->db_name}' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />");
 			
 			if(empty($GLOBALS['global_db_queries']))
 				$GLOBALS['global_db_queries'] = 0;

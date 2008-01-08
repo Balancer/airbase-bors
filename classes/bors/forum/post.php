@@ -178,12 +178,10 @@ class forum_post extends base_page_db
 	
 	function answers()
 	{
-		$result = array();
-		foreach($this->select_array('id', array('answer_to=' => $this->id())) as $id)
-			if($post = object_load('forum_post', $id))
-				$result[] = $post;
-
-		return $result;
+		return objects_array('forum_post', array(
+			'where' => array('answer_to=' => intval($this->id())),
+			'order' => 'id',
+		));
 	}
 
 	function answers_in_other_topics()
