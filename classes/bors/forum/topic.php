@@ -199,13 +199,16 @@ class forum_topic extends forum_abstract
 
 	function recalculate()
 	{
+		$this->cache_clean_self();
+	
 		global $bors;
 		$bors->changed_save();
 		
-		$num_replies = $this->db->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
+		$db = &new driver_mysql('punbb');
+		$num_replies = $db->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
 //		echo "Num repl of {$this->id()} =   $num_replies<br />\n";
 		$this->set_num_replies($num_replies, true);
-		$last_pid = $this->db->select('posts', 'MAX(id)', array('topic_id='=>$this->id()));
+		$last_pid = $db->select('posts', 'MAX(id)', array('topic_id='=>$this->id()));
 		$this->set_last_post_id($last_pid, true);
 		$last_post = object_load('forum_post', $last_pid);
 		$this->set_modify_time($last_post->create_time(true), true);
