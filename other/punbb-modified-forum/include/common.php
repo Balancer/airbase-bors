@@ -195,6 +195,3 @@ foreach($cms_db->get_array("SELECT * FROM categories ORDER BY parent, disp_posit
 
 if($cat_ids)
 	$cat_ids = join(",", $cat_ids);
-
-// Update online list
-update_users_online();
