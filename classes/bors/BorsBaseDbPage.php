@@ -45,4 +45,9 @@ class BorsBaseDbPage extends BorsBasePage
 		}
 
 	function storage_engine() { return 'storage_db_mysql'; }
+
+	public function __wakeup()
+	{
+		$this->db = &new DataBase($this->main_db_storage());
+	}
 }

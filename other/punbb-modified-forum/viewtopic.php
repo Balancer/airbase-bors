@@ -37,7 +37,11 @@ if($pid)
 {
 	$id = intval($cms_db->get("SELECT topic_id FROM posts WHERE id=$pid"));
 	if(!$id)
-		$id = intval($cms_db->get("SELECT topic_id FROM posts_archive WHERE id=$pid"));
+	{
+		for($i=0; $i<10; $i++)
+			if($id = intval($cms_db->get("SELECT topic_id FROM posts_archive_{$i} WHERE id={$pid}")))
+				break;
+	}
 	
 	if(!$id)
 	{
@@ -49,7 +53,7 @@ if($pid)
 	$posts = $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
 	if(sizeof($posts) == 0)
 	{
-		$cms_db->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = $id");
+		$cms_db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($id%10)." WHERE topic_id = $id");
 		$archive_loaded = true;
 		$posts = $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
 	}
@@ -94,7 +98,7 @@ if ($action == 'new' && !$pun_user['is_guest'])
 	$last_visit = intval($cms_db->get("SELECT last_visit FROM topic_visits WHERE user_id=".intval($pun_user['id'])." AND topic_id=$id"));
 	$first_new_post_id = intval($cms_db->get("SELECT MIN(id) FROM {$db->prefix}posts WHERE topic_id=$id AND posted>$last_visit"));
 	if(!$first_new_post_id)
-		$first_new_post_id = $cms_db->get("SELECT MIN(id) FROM {$db->prefix}posts_archive WHERE topic_id=$id AND posted>$last_visit");
+		$first_new_post_id = $cms_db->get("SELECT MIN(id) FROM {$db->prefix}posts_archive_".($id%10)." WHERE topic_id=$id AND posted>$last_visit");
 
 	if ($first_new_post_id)
 		header("Location: {$pun_config['root_uri']}/viewtopic.php?pid=$first_new_post_id#p$first_new_post_id");
@@ -111,7 +115,7 @@ else if ($action == 'last')
 	{
 		$last_post_id = $cms_db->get("SELECT MAX(id) FROM {$db->prefix}posts WHERE topic_id=$id");
 		if(!$last_post_id)
-			$last_post_id = $cms_db->get("SELECT MAX(id) FROM {$db->prefix}posts_archive WHERE topic_id=$id");
+			$last_post_id = $cms_db->get("SELECT MAX(id) FROM {$db->prefix}posts_archive_".($id%10)." WHERE topic_id=$id");
 
 		if ($last_post_id)
 		{
@@ -313,8 +317,8 @@ $cdb = &new DataBase('punbb');
 if(!$archive_loaded)
 {
 	$cnt = $cdb->get("SELECT COUNT(*) FROM posts WHERE topic_id = $id");
-	if(!$cnt || $cnt != $cdb->get("SELECT COUNT(*) FROM posts_archive WHERE topic_id = $id"))
-		$cdb->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = $id");
+	if(!$cnt || $cnt != $cdb->get("SELECT COUNT(*) FROM posts_archive_".($id%10)." WHERE topic_id = $id"))
+		$cdb->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($id%10)." WHERE topic_id = $id");
 }
 
 // Retrieve the posts
@@ -332,13 +336,10 @@ $q = "
 		p.answer_to,
 		up.posted as up_posted,
 		up.poster as up_poster,
-		m.message,
-		m.html,
 		cf.flag
 	FROM {$db->prefix}posts AS p
 		LEFT JOIN {$db->prefix}posts AS up ON (p.answer_to = up.id)
 		LEFT JOIN {$db->prefix}posts_cached_fields AS cf ON (p.id = cf.post_id)
-		LEFT JOIN {$db->prefix}messages AS m ON (p.id = m.id)
 	WHERE p.topic_id=$id 
 	ORDER BY p.id 
 	LIMIT $start_from, {$pun_user['disp_posts']}";
@@ -367,6 +368,7 @@ while ($cur_post = $db->fetch_assoc($result))
 		$cdb->insert_ignore('posts_cached_fields', array(
 			'post_id'	=> $cur_post['id'],
 			'flag'		=> $cur_post['flag'] = "".get_flag($cur_post['poster_ip']),
+			'create_time' => time(),
 		));
 	}
 	
@@ -507,6 +509,11 @@ while ($cur_post = $db->fetch_assoc($result))
 	// Switch the background color for every message.
 	$bg_switch = ($bg_switch) ? $bg_switch = false : $bg_switch = true;
 	$vtbg = ($bg_switch) ? ' roweven' : ' rowodd';
+
+	$x = $cdb->get('SELECT message, html FROM messages WHERE id='.$cur_post['id']);
+
+	$cur_post['message'] = $x['message'];
+	$cur_post['html'] = $x['html'];
 
 	// Perform the main parsing of the message (BBCode, smilies, censor words etc)
 	if(empty($cur_post['html']))

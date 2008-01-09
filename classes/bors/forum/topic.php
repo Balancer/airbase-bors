@@ -75,18 +75,29 @@ class forum_topic extends forum_abstract
 		include_once("funcs/templates/assign.php");
 		$data = array();
 
-		$data['posts'] = objects_array('forum_post', array(
-			'where' => array('topic_id=' => intval($this->id())),
-			'order' => 'id',
-			'page' => $this->page(),
-			'per_page' => $this->items_per_page(),
-		));
+		$data['posts'] = $this->posts();
+
+		if(empty($data['posts']))
+		{
+			$this->db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
+			$data['posts'] = $this->posts();
+		}
 
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".addslashes($this->title())."'\" />");
 
 		$data['this'] = $this;
 
 		return template_assign_data("templates/TopicBody.html", $data);
+	}
+
+	protected function posts()
+	{
+		return objects_array('forum_post', array(
+				'where' => array('topic_id=' => intval($this->id())),
+				'order' => 'id',
+				'page' => $this->page(),
+				'per_page' => $this->items_per_page(),
+			));
 	}
 
 	function items_per_page() { return 25; }
@@ -160,11 +171,11 @@ class forum_topic extends forum_abstract
 		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.id LIMIT $start_from, ".$this->items_per_page();
 			
 		$posts = $db->get_array($query);
-//		if(empty($posts))
-//		{
-//			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = {$this->id()}");
-//			$posts = $db->get_array($query);
-//		}
+		if(empty($posts))
+		{
+			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
+			$posts = $db->get_array($query);
+		}
 
 		$data['posts'] = array();
 
@@ -185,13 +196,13 @@ class forum_topic extends forum_abstract
 		$db = &new DataBase('punbb');
 
 		$posts = $db->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY posted");
-/*		if(sizeof($posts) == 0)
+		if(sizeof($posts) == 0)
 		{
-			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive WHERE topic_id = $post_id");
+			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($post_id%10)." WHERE topic_id = $post_id");
 			$archive_loaded = true;
 			$posts = $db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
 		}
-*/
+
 		for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
 			if($posts[$i] == $post_id)
 				return intval( $i / 25) + 1;
@@ -199,12 +210,12 @@ class forum_topic extends forum_abstract
 
 	function recalculate()
 	{
-		$this->cache_clean_self();
 	
 		global $bors;
 		$bors->changed_save();
 		
 		$db = &new driver_mysql('punbb');
+		$db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
 		$num_replies = $db->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
 //		echo "Num repl of {$this->id()} =   $num_replies<br />\n";
 		$this->set_num_replies($num_replies, true);
@@ -213,6 +224,10 @@ class forum_topic extends forum_abstract
 		$last_post = object_load('forum_post', $last_pid);
 		$this->set_modify_time($last_post->create_time(true), true);
 		$this->set_last_poster_name($last_post->owner()->title(), true);
+
+		$bors->changed_save();
+
+		$this->cache_clean_self();
 	}
 
 	function url_engine() { return 'url_titled'; }

@@ -129,7 +129,7 @@ if (isset($_POST['form_sent']))
 			or error('Unable to update post', __FILE__, __LINE__, $db->error());
 		$db->query('UPDATE '.$db->prefix.'posts SET hide_smilies=\''.$hide_smilies.'\''.$edited_sql.' WHERE id='.$id) 
 			or error('Unable to update post', __FILE__, __LINE__, $db->error());
-		$db->query('UPDATE '.$db->prefix.'posts_archive SET hide_smilies=\''.$hide_smilies.'\''.$edited_sql.' WHERE id='.$id) 
+		$db->query('UPDATE '.$db->prefix.'posts_archive_'.($cur_post['tid']%10).' SET hide_smilies=\''.$hide_smilies.'\''.$edited_sql.' WHERE id='.$id) 
 			or error('Unable to update post', __FILE__, __LINE__, $db->error());
 		$db->query("UPDATE {$db->prefix}messages SET message='".$db->escape($message)."', `html` = NULL WHERE id=$id") 
 			or error('Unable to update post', __FILE__, __LINE__, $db->error());

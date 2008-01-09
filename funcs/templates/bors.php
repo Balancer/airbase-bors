@@ -73,7 +73,7 @@
 
 //		echo "Template=$template, caching=$caching";
 //		echo "is cached=".$smarty->is_cached($template);
-		$out = $smarty->fetch($template, $obj->url());
+		$out = $smarty->fetch($template);
 //		$out = $smarty->fetch($template);
 //		echo "is cached=".$smarty->is_cached($template);
 

@@ -336,7 +336,9 @@ function update_forum($forum_id)
 {
 	global $db;
 
-	$result = $db->query('SELECT COUNT(id), SUM(num_replies) FROM '.$db->prefix.'topics WHERE moved_to IS NULL AND forum_id='.$forum_id) or error('Unable to fetch forum topic count', __FILE__, __LINE__, $db->error());
+	$result = $db->query('SELECT COUNT(id), SUM(num_replies) FROM '.$db->prefix.'topics WHERE moved_to IS NULL AND forum_id='.$forum_id)
+		or error('Unable to fetch forum topic count', __FILE__, __LINE__, $db->error());
+
 	list($num_topics, $num_posts) = $db->fetch_row($result);
 
 	$num_posts = $num_posts + $num_topics;		// $num_posts is only the sum of all replies (we have to add the topic posts)
@@ -404,6 +406,7 @@ function delete_post($post_id, $topic_id)
 
 	// Delete the post
 	$db->query('DELETE FROM '.$db->prefix.'posts WHERE id='.$post_id) or error('Unable to delete post', __FILE__, __LINE__, $db->error());
+	$db->query('DELETE FROM '.$db->prefix.'posts_archive_'.($topic_id%10).' WHERE id='.$post_id) or error('Unable to delete post', __FILE__, __LINE__, $db->error());
 	$db->query('DELETE FROM '.$db->prefix.'messages WHERE id='.$post_id) or error('Unable to delete post', __FILE__, __LINE__, $db->error());
 
 	strip_search_index($post_id);
@@ -425,6 +428,10 @@ function delete_post($post_id, $topic_id)
 	else
 		// Otherwise we just decrement the reply counter
 		$db->query('UPDATE '.$db->prefix.'topics SET num_replies='.$num_replies.' WHERE id='.$topic_id) or error('Unable to update topic', __FILE__, __LINE__, $db->error());
+
+	$topic = object_load('forum_topic', $topic_id);
+	$topic->recalculate();
+
 }
 
 
