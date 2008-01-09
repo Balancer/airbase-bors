@@ -148,7 +148,7 @@
 				
 //			echo "got ".$class_name.'://'.$id.','.serialize($page)."<br />\n";
 
-			if($x = @$memcache->get('bors_v7_'.$class_name.'://'.$id.','.serialize($page)))
+			if($x = @$memcache->get('bors_v11_'.$class_name.'://'.$id.','.serialize($page)))
 			{
 //				echo "<b>got!</b><br />";
 				return $x;
@@ -166,7 +166,7 @@
 			{
 				$memcache = &new Memcache;
 				$memcache->connect(config('memcached')) or debug_exit("Could not connect memcache");
-				@$memcache->set('bors_v7_'.get_class($object).'://'.$object->id().','.serialize($object->page()), $object, true, 600);
+				@$memcache->set('bors_v11_'.get_class($object).'://'.$object->id().','.serialize($object->page()), $object, true, 600);
 //				echo "memcahced [".get_class($object).'://'.$object->id().','.serialize($object->page())."]<br />";
 			}
 
@@ -451,6 +451,7 @@
 		return NULL;
 	}
 
+require_once('classes/inc/bors.php');
 function object_init($class_name, $object_id, $object_page, $args = array())
 {
 //	echo "Pure load {$class_name}(".serialize($object_id).")<br />\n";

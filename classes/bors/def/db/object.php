@@ -18,6 +18,11 @@ class def_db_object extends base_empty
 		parent::__construct($id);
 	}
 
+	public function __wakeup()
+	{
+		$this->db = &new DataBase($this->main_db_storage());
+	}
+
 	function new_instance()
 	{
 		$tab = $this->main_table_storage();

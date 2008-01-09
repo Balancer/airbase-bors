@@ -223,7 +223,7 @@ if (isset($_POST['form_sent']))
 				
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
-				$tdb->insert('posts_archive', $data);
+				$tdb->insert('posts_archives_'.($tid%10), $data);
 //				$db->query("INSERT INTO {$db->prefix}posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES('".$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 
 				// To subscribe or not to subscribe, that ...
@@ -249,7 +249,7 @@ if (isset($_POST['form_sent']))
 				);
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
-				$tdb->insert('posts_archives', $data);
+				$tdb->insert('posts_archives_'.($tid%10), $data);
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) 
 //VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}
@@ -376,7 +376,7 @@ if (isset($_POST['form_sent']))
 				
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
-				$tdb->insert('posts_archive', $data);
+				$tdb->insert('posts_archive_'.($new_tid%10), $data);
 
 				// To subscribe or not to subscribe, that ...
 				if ($pun_config['o_subscriptions'] == '1' && (isset($_POST['subscribe']) && $_POST['subscribe'] == '1'))
@@ -398,7 +398,7 @@ if (isset($_POST['form_sent']))
 				
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
-				$tdb->insert('posts_archive', $data);
+				$tdb->insert('posts_archive_'.($new_tid%10), $data);
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}
 

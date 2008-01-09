@@ -13,10 +13,10 @@ class forum_post extends base_page_db
 	{
 		return array(
 			$this->main_table_storage() => $this->main_table_fields(),
-			'messages' => array(
-				'body' => 'html',
-				'source' => 'message',
-			),
+//			'messages' => array(
+//				'body' => 'html',
+//				'source' => 'message',
+//			),
 			'posts_cached_fields(post_id)' => array(
 				'flag',
 			),
@@ -38,7 +38,6 @@ class forum_post extends base_page_db
 	function set_topic_id($value, $dbupd) { $this->fset('topic_id', $value, $dbupd); }
 	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
 	function set_modify_time($value, $dbupd) { $this->fset('modify_time', $value, $dbupd); }
-	function set_body($body, $db_update) { $this->fset('body', $body, $db_update); }
 	function set_flag($flag, $db_update) { $this->fset('flag', $flag, $db_update); }
 	function set_owner_id($owner_id, $db_update) { $this->fset('owner_id', $owner_id, $db_update); }
 	function set_poster_ip($poster_ip, $db_update) { $this->fset('poster_ip', $poster_ip, $db_update); }
@@ -48,11 +47,57 @@ class forum_post extends base_page_db
 	function parents() { return array("forum_topic://".$this->topic_id()); }
 	function owner() { return object_load('forum_user', $this->owner_id()); }
 
+	var $_post_source = false;
+	var $_post_body = false;
+
+	function source()
+	{
+		if($this->_post_source === false)
+		{
+			$x = $this->db->select('messages', 'message,html', array('id=' => $this->id()));
+			$this->_post_source = $x['message'];
+			$this->_post_body = $x['html'];
+		}
+		
+		return $this->_post_source;
+	}
+
+	var $_source_changed = false;
+
+	function set_source($message, $db_update)
+	{
+		if($db_update)
+		{
+			$this->db->store('messages', array(
+				'id' => $this->id(),
+				'message' => $message,
+			));
+		}
+
+		$this->_source_changed |= $db_update;
+
+		return $this->_post_source = $message;
+	}
+
+	function set_body($html, $db_update)
+	{
+		if($db_update)
+		{
+			$this->db->store('messages', 'id='.$this->id(), array(
+				'id' => $this->id(),
+				'html' => $html,
+			));
+		}
+		return $this->_post_body = $html;
+	}
+
 	function body()
 	{
-		if(empty($this->stb_body) || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
+		$this->source();
+	
+		if(empty($this->_post_body) || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
 		{
-			$body = lcml($this->source(), 
+			$body = lcml($this->source(),
 				array(
 					'cr_type' => 'save_cr',
 					'forum_type' => 'punbb',
@@ -66,11 +111,8 @@ class forum_post extends base_page_db
 			$this->set_body($body, true);
 		}
 
-		return $this->stb_body; 
+		return $this->_post_body; 
 	}
-
-	var $_source_changed = false;
-	function set_source($source, $db_update) { $this->fset('source', $source, $db_update); $this->_source_changed |= $db_update; }
 
 	function flag()
 	{

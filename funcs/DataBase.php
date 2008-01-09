@@ -10,15 +10,27 @@
 //	$global_db_resume_connections=0;
 //	$global_db_queries=0;
 
-	class DataBase
-	{
-		var $dbh;
-		var $result;
-		var $row;
-		var $db_name;
+class DataBase
+{
+	var $dbh;
+	var $result;
+	var $row;
+	var $db_name;
+	var $x1, $x2, $x3;
 
-		function __construct($base=NULL, $login=NULL, $password=NULL, $server=NULL) // DataBase
-		{
+	function reconnect()
+	{
+		if(config('mysql_persistent'))
+			$this->dbh = mysql_pconnect($this->x1, $this->x2, $this->x3);
+		else
+			$this->dbh = mysql_connect($this->x1, $this->x2, $this->x3);
+
+		if(!$this->dbh)
+			debug_exit("DB Connect failed ".mysql_errno().": ".mysql_error()."<BR />");
+	}
+
+	function __construct($base=NULL, $login=NULL, $password=NULL, $server=NULL) // DataBase
+	{
 			if(empty($base))
 				$base = $GLOBALS['cms']['mysql_database'];
 			
@@ -62,15 +74,12 @@
 
 				if(empty($server))   $server	= 'localhost';
 
+				$this->x1 = $server;
+				$this->x2 = $login;
+				$this->x3 = $password;
 
-				if(config('mysql_persistent'))
-					$this->dbh = mysql_pconnect($server, $login, $password);
-				else
-					$this->dbh = mysql_connect($server, $login, $password);
-
-				if(!$this->dbh)
-					debug_exit(" Query failed, error ".mysql_errno().": ".mysql_error()."<BR />");
-				
+				$this->reconnect();
+			
 				mysql_select_db($base,$this->dbh)
 					or echolog(__FILE__.':'.__LINE__." Could not select database '$base' (".mysql_errno($this->dbh)."): ".mysql_error($this->dbh)."<BR />", 1);
 
@@ -95,7 +104,7 @@
 //			if(preg_match('!UPDATE.*tab\d!i', $query)) { print_d($query); exit(); }
 
 			if(!$this->dbh)
-				debug_exit(__FILE__.':'.__LINE__." NULL db handler");
+				$this->reconnect();
 		
 			if(!config('mysql_disable_autoselect_db'))
 				@mysql_select_db($this->db_name, $this->dbh);

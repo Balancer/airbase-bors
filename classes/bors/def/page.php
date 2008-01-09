@@ -19,6 +19,9 @@ class def_page extends borsPage
 		
 			if($qlist = $this->_queries())
 			{
+				if(empty($this->db) || empty($this->db->dbh))
+					$this->db = &new DataBase($this->main_db_storage());
+			
 				foreach($qlist as $qname => $q)
 				{
 					$cache = false;
