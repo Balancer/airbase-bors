@@ -19,7 +19,7 @@ function smarty_function_dropdown($params, &$smarty)
 	if(preg_match("!^(\w+)\->(\w+)!", $list, $m))
 	{
 		if($m[1] == 'this')
-			$list = $obj->$list();
+			$list = $obj->$m[2]();
 		else
 			$list = object_load($m[1])->$m[2]();
 	}

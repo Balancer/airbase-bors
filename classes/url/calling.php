@@ -12,7 +12,7 @@ class url_calling extends url_base
 		if(preg_match('!^.+/\w+/$!', $url))
 			return $page == 1 ? $url : preg_replace('!/$!', ",{$page}/", $url);
 
-		return NULL;		
+		return $url;
 //		debug_exit("Unknown calling url format: '{$url}' for {$this->id()->class_name()}({$this->id()->id()})");
 	}
 }

@@ -1,9 +1,7 @@
-<?
-class common_date_days
-{
-	function id() { return 0; }
-	function page() { return 1; }
+<?php
 
+class common_date_days extends base_list
+{
 	function days_list()
 	{
 		$res = array(0=>'--');

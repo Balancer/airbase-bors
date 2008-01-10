@@ -10,7 +10,7 @@
 //	$global_db_resume_connections=0;
 //	$global_db_queries=0;
 
-class DataBase
+class DataBase extends base_object
 {
 	var $dbh;
 	var $result;
