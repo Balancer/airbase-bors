@@ -8,6 +8,7 @@
 		'(/)forum/(\d+)/ => redirect:forum_forum(2)',
 
 		'(/forums/)tools/move_post_tree/(\d+)/? => forum_tools_post_moveTree(2)',
+		'(/forums/)tools/topic/(\d+)/reload/? => forum_tools_topic_reload(2)',
 		
 		'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+ => forum_category(1)',
 		'/user/(\d+)/personal\.js => forum_js_personal(1)',

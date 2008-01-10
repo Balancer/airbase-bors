@@ -121,6 +121,7 @@
 			}
 		}
 		
+		
 		$processed = $obj->preShowProcess();
 		if($processed === true)
 			return true;
@@ -140,15 +141,18 @@
 			{
 				$re = class_load($render_engine);
 				$content = $re->render($obj);
+//				echo "Bors class contnet of ".get_class($obj)." = ". $obj->render_engine(); exit();
 			}
 			else
 			{
 			    require_once('funcs/templates/bors.php');
 				$content = template_assign_bors_object($obj);
 			}
+
 		}
 		else
 			$content = $processed;
+
 
 		if($content === false)
 			return false;
@@ -180,7 +184,8 @@
 //			require_once('funcs/navigation/go.php');
 //			return go($obj->url($page), true, 0, false);
 		}
-		
+
+	
 		echo $content;
 		return true;
 	}

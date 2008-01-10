@@ -19,7 +19,7 @@
 		$caching = !$obj->is_cache_disabled()
 				&& @$GLOBALS['cms']['templates_cache_disabled'] !== true;
 			
-		$smarty->caching = true;// $caching;
+		$smarty->caching = false;// $caching;
 		$smarty->compile_check = true; 
 		$smarty->php_handling = SMARTY_PHP_QUOTE; //SMARTY_PHP_PASSTHRU;
 		$smarty->security = false;

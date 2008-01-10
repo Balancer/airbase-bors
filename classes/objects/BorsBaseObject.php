@@ -23,14 +23,6 @@ class BorsBaseObject extends base_object
 			return $this->url($page);
 		}
 		
-		function internal_uri()
-		{
-			if(preg_match("!^http://!", $this->id()))
-				return $this->id();
-
-			return  $this->class_name().'://'.$this->id().'/'; 
-		}
-
 		function parent()
 		{
 //			echo "Parent for ".$this->internal_uri()." is ";
