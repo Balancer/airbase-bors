@@ -1,10 +1,7 @@
 <?php
 
-class common_date_years
+class common_date_years extends base_list
 {
-	function id() { return 0; }
-	function page() { return 1; }
-
 	function years_list()
 	{
 		$res = array( 0 => '----');

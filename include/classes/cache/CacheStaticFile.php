@@ -4,7 +4,7 @@
 
     class CacheStaticFile
     {
-		var $file;
+		var $_file;
 		var $uri;
 		var $page;
 		var $original_uri;
@@ -14,31 +14,12 @@
 			$this->set_name($uri, $page);
         }
 
-/*        function get_static_uri($uri)
-        {
-			$mtime = $hts->get($uri, 'modify_time');
-			$title = $hts->get($uri, 'title');
-			$md    = md5("$uri"."$mtime");
-			$path  = strftime("/%Y/%m/%d/%H/%M/%S/");
-			$file = "";//translit_uri($title).substr($md,4).".htm");
-			mkdirs($path);
-			return $path."/".$file;
-		}
-
-        function get_static_uri($uri)
-        {
-			$mtime = $hts->get($uri, 'modify_time');
-			$title = $hts->get($uri, 'title');
-			$md    = md5("$uri"."$mtime");
-			$path  = strftime("/%Y/%m/%d/%H/%M/%S/");
-			$file = "";//translit_uri($title).substr($md,4).".htm");
-			mkdirs($path);
-			return $path."/".$file;
-		}
-*/		
 		function set_name($uri, $page=1)
 		{
-//			echo "Set name '$uri'";
+			if(!$uri)
+				debug_exit('Empty uri for static cache');
+		
+//			echo "Set name '$uri'<br/>";
 			$this->uri  = $uri;
 			$this->page  = $page;
 			$this->original_uri  = $uri;
@@ -49,7 +30,7 @@
 					$this->original_uri = $cfg->cache_uri();
 			}
 			
-			$this->file = $_SERVER['DOCUMENT_ROOT'].preg_replace('!http://[^/]+!', '', $uri);
+			$this->_file = $_SERVER['DOCUMENT_ROOT'].preg_replace('!http://[^/]+!', '', $uri);
 			
 			if(preg_match("!/[^\.]+$!", $uri))
 				$uri .= "/";
@@ -62,10 +43,11 @@
 				else
 					$title = "index.html";
 
-				$this->file .= $title;
+				$this->_file .= $title;
 				$this->uri  .= $title;
 			}
 //			echo "'$uri'";
+//			echo "File = {$this->_file}<br/>";
 		}
 
 		function save(&$content, $mtime = 0, $expire_time = 0)
@@ -74,32 +56,32 @@
 			
 			@unlink($db->get("SELECT file FROM cached_files WHERE original_uri = '".addslashes($this->original_uri)."'"));
 
-//			echo "save file '{$this->file}, exp=$expire_time'";
+//			echo "save file '{$this->_file}, exp=$expire_time'<br />";
 			if($expire_time == 0)
 				return $content;
 
 			require_once("funcs/filesystem_ext.php");
-			mkpath(dirname($this->file));
+			mkpath(dirname($this->_file));
 			
-			if(!$fh = fopen($this->file, 'a+'))
-				die("Can't open write $file");
+			if(!$fh = fopen($this->_file, 'a+'))
+				die("Can't open write {$this->_file}");
 			if(!flock($fh, LOCK_EX))
-				die("Can't lock write $file");
+				die("Can't lock write {$this->_file}");
 			if(!ftruncate($fh, 0))
-				die("Can't truncate write $file");
+				die("Can't truncate write {$this->_file}");
 
 			fwrite($fh, $content);
 			fclose($fh);
 			
-			@chmod($this->file, 0664);
+			@chmod($this->_file, 0664);
 
 //			echo "mtime = ".strftime("%d.%m.%Y %H:%M<br />", $mtime);
 			if($mtime)
-				touch($this->file, $mtime);
+				touch($this->_file, $mtime);
 			
 			$db->replace('cached_files', // "original_uri = '".addslashes($this->original_uri)."'", 
 				array(
-					'file'			=> $this->file,
+						'file'			=> $this->_file,
 					'uri'			=> $this->uri,
 					'original_uri'	=> $this->original_uri,
 					'last_compile'	=> time(),

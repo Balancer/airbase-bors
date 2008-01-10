@@ -11,7 +11,7 @@ function smarty_function_bors_object_load($params, &$smarty)
 	else
 		$id = @$params['id'];
 	
-	unset($params['class'], $params['id'], $params['page'], $params['var'], $params['show']);
+	unset($params['class'], $params['id'], $params['var'], $params['show']);
 
     if(empty($class)) 
 	{
