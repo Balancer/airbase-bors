@@ -1,0 +1,34 @@
+<dl class="forumposting">
+<dt>Перемещение в одну из крайних обновившихся тем</dt>
+<dd>
+{form subaction="by_topic_id" id=$this->id()}
+{assign var="curtid" value=$this->topic|get:id}
+<select name="target_topic_id">
+{foreach from=$last_topics item="tid"}
+{bors_object_load class="forum_topic" id=$tid var="topic"}
+<option value="{$tid}"{if $tid==$curtid} selected="true"{/if}>{$topic->title()|truncate:40} [{$topic->forum()|get:title}]</option>
+{/foreach}
+</select> {submit value="Переместить"}
+{/form}
+</dd></dl>
+
+<dl class="forumposting"><dt>Перемещение по ID целевой темы:</dt>
+<dd>
+{form subaction="by_topic_id" id=$this->id()}
+ID (можно URL) целевой темы: {input name="target_topic_id"} {submit value="Переместить"}
+{/form}
+</dd></dl>
+
+
+<dl class="forumposting"><dt>Перемещение по ID любого сообщения в целевой теме:</dt>
+<dd>
+{form subaction="by_post_id" id=$this->id()}
+ID (можно URL) сообщения в целевой теме: {input name="target_post_id"} {submit value="Переместить"}
+{/form}
+</dd></dl>
+
+<dl class="forumposting"><dd>
+<ul>
+<li><a href="http://balancer.ru/forum/punbb/viewtopic.php?id=58928">Тема с обсуждением механизма переноса</a></li>
+</ul>
+</dd></dl>

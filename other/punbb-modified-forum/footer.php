@@ -91,12 +91,15 @@ if ($footer_style == 'viewforum' || $footer_style == 'viewtopic')
 
 	if (!$pun_user['is_guest'])
 	{
-		echo "\n\t\t\t<dl id=\"searchlinks\" class=\"conl\">\n\t\t\t\t<dt><strong>{$lang_common['Search links']}</strong></dt>\n\t\t\t\t<dd><a href=\"{$pun_config['root_uri']}/search.php?action=show_24h\">".$lang_common['Show recent posts'].'</a></dd>'."\n";
 		if ($footer_style == 'viewtopic')
 		{
-			echo "<dd><a href=\"".class_load('forum_topic', $id)->url($p)."\">Эта тема на новом движке</a></dd>";
+			echo "<dl class=\"conl\"><dd><a href=\"".class_load('forum_topic', $id)->url($p)."\">Эта тема на новом движке</a></dd>";
 			echo "<dd><a href=\"".class_load('forum_printable', $id)->url()."\">Версия для печати</a></dd>";
+			echo "<dd><a href=\"http://balancer.ru/forums/tools/topic/{$id}/reload/\">Пересчитать тему и сбросить кеши</a></dd>";
+			echo "</dl>";
 		}
+
+		echo "\n\t\t\t<dl id=\"searchlinks\" class=\"conl\">\n\t\t\t\t<dt><strong>{$lang_common['Search links']}</strong></dt>\n\t\t\t\t<dd><a href=\"{$pun_config['root_uri']}/search.php?action=show_24h\">".$lang_common['Show recent posts'].'</a></dd>'."\n";
 		echo "\t\t\t\t<dd><a href=\"{$pun_config['root_uri']}/search.php?action=show_unanswered\">".$lang_common['Show unanswered posts'].'</a></dd>'."\n";
 
 		if ($pun_config['o_subscriptions'] == '1')

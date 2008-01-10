@@ -414,6 +414,13 @@ class base_object extends base_empty
 	var $stb_url_engine = 'url_calling';
 	function url($page=1) { return object_load($this->url_engine(), $this)->url($page); }
 
+	function internal_uri()
+	{
+		if(preg_match("!^http://!", $this->id()))
+			return $this->id();
+
+		return  $this->class_name().'://'.$this->id().'/'; 
+	}
 
 	// Признак постоянного существования объекта.
 	// Если истина, то объект создаётся не по первому запросу, а при сохранении
