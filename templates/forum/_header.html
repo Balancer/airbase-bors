@@ -67,6 +67,10 @@ dd, dt { height: 1%; }
 		</dl>
 		{$body}
 
+		<script type="text/javascript" encoding="UTF-8">
+			createSelect("Левая колонка", "inleft.visible", "Есть:true;Нет:false", "true")
+		</script>
+
 	  <div class="copyright">
         Copyright &copy; Balancer 1997..{0|strftime:"%Y"}<br/>
 	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
