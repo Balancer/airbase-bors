@@ -43,7 +43,7 @@
 				
 			echo "<form enctype=\"multipart/form-data\"";
 			
-			foreach(split(' ', 'act action method name class style enctype') as $p)
+			foreach(split(' ', 'action method name class style enctype') as $p)
 				if(!empty($$p))
 					echo " $p=\"{$$p}\"";
 			
@@ -55,6 +55,9 @@
 		echo "<input type=\"hidden\" name=\"uri\" value=\"$uri\" />\n";
 		if(!empty($ref))
 			echo "<input type=\"hidden\" name=\"ref\" value=\"$ref\" />\n";
+
+		if(!empty($act))
+			echo "<input type=\"hidden\" name=\"act\" value=\"$act\" />\n";
 
 		if(!empty($subaction))
 			echo "<input type=\"hidden\" name=\"subaction\" value=\"$subaction\" />\n";
