@@ -464,8 +464,7 @@ while ($cur_post = $db->fetch_assoc($result))
 
 		if($is_coordinator)
 		{
-			$user_info[] = "<b>Операции над сообщением</b>";
-			$user_info[] = "<a href=\"http://balancer.ru/forums/tools/move_post_tree/{$cur_post['id']}/\">Перенести сообщение со всеми ответами в другую тему</a>";
+			$user_info[] = "<a href=\"http://balancer.ru/forums/tools/post/{$cur_post['id']}/\">Операции над сообщением</a>";
 		}
 
 	}

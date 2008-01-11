@@ -3,3 +3,17 @@
 <ul>
 <li><a href="http://balancer.ru/user/{$me_id}/use-topics.html">Ваши темы</a></li>
 </ul>
+
+Инструменты:
+<ul>
+{literal}
+<script>
+if(readCookie('class_name', '0') == 'forum_topic')
+{
+	tid = readCookie('object_id', '0')
+	document.write('<li><a href="http://balancer.ru/forum/punbb/moderate.php?fid=4&move_topics='+tid+'">Перенести тему</a></li>')
+	document.write('<li><a href="http://balancer.ru/forums/tools/topic/'+tid+'/reload/">Сбросить кеш темы</a></li>')
+}
+</script>
+{/literal}
+</ul>
