@@ -42,7 +42,7 @@
 		else
 			$res = "";
 
-		return $ch->set($res);
+		return $ch->set($res, -3600);
 	}
 
 	function get_my_flag()

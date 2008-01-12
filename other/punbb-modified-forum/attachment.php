@@ -108,7 +108,7 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 				exit("Ошибка: Не могу получить данные о трафике! - $resp");
 
 			$diff = $m[2] - $m[1] + 3000;
-			$ch->set($diff, 7200);
+			$ch->set($diff, -7200);
 		}
 	
 		if($diff >= 0)

@@ -69,7 +69,7 @@
 		}
 		
 		unset($GLOBALS['module_data']);
-		echo $ch->set(template_assign_data($tpl, array('links'=>$data)), 7200);
+		echo $ch->set(template_assign_data($tpl, array('links'=>$data)), -600);
 		return;
     }
 
