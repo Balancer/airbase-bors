@@ -17,3 +17,15 @@ function templates_noindex()
 {
 	base_object::add_template_data_array('meta[robots]', 'noindex, follow');
 }
+
+function do_php($code)
+{
+	ob_start();
+	eval($code);
+	$out = ob_get_contents();
+	ob_clean();
+	if(preg_match("!{$_SERVER['DOCUMENT_ROOT']}/cms/funcs/templates/!", $out))
+		return "$out Error in code<xmp>$code</xmp>";
+
+	return $out;
+}

@@ -58,13 +58,6 @@
     ini_set('default_charset',$GLOBALS['cms']['charset']);
     setlocale(LC_ALL, $GLOBALS['cms']['locale']);
 
-//    echo "<!--"; 
-//	print_r($_POST); 
-//	print_r($_GET); 
-//	echo "-->"; 
-								
-
-
 	if(empty($GLOBALS['cms']['only_load']) && empty($_GET) && preg_match("!^(.+?)\?(.+)$!", $_SERVER['REQUEST_URI'], $m))
 	{
 		$_SERVER['QUERY_STRING'] = $m[2];
@@ -82,71 +75,74 @@
 //	print_r($_POST);
 	require_once("funcs/templates/global.php");
 	require_once("funcs/users.php");
-    require_once("funcs/handlers.php");
+	require_once("funcs/navigation/go.php");
+	require_once("funcs/lcml.php");
+    require_once("include/classes/cache/CacheStaticFile.php");
 
-	if(empty($GLOBALS['cms']['only_load']))
-	{
-		$_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
+	require_once('engines/bors/vhosts_loader.php');
+	require_once('engines/bors/object_show.php');
 
-    	$_SERVER['REQUEST_URI'] = preg_replace("!^(.+?)\?.*?$!", "$1", $_SERVER['REQUEST_URI']);
-	}
-	
-//	if($_SERVER['HTTP_HOST'] == "la2.wrk.ru")	
-//		echo("GET='".print_r($_GET,true)."', REQUEST_URI='{$_SERVER['REQUEST_URI']}'<br><br>");
+	require_once('classes/objects/Bors.php');
+	require_once('classes/inc/bors.php');
 
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-	
-//	$uri = preg_replace("!/[^/]+\.html$!", "/", $uri);
 
-    @header("X-Bors: $uri");
-	
-	$parse = parse_url($uri);
-	
-    require_once("include/classes/cache/CacheStaticFile.php");
-	$cs = &new CacheStaticFile($uri);
-	if(!empty($GLOBALS['cms']['cache_static']) 
-		&& empty($_GET) 
-		&& empty($_POST) 
-		&& ($cs_uri = $cs->get_name($uri)) 
-		&& file_exists($cs->get_file($uri)))
+	if($ret = bors_object_show(class_load($uri, NULL, 1, false)))
 	{
-		include_once("funcs/navigation/go.php");
-		go($cs_uri); 
-		exit();
+	    @header("X-Bors-direct: $uri");
 	}
-
-//	exit($uri);
-
-//	if(preg_match("!/~page(\d+)/?$!", $parse['path'], $m))
-//		$GLOBALS['cms']['page_number'] = max(1, intval($m[1]));
-//	else
-	$GLOBALS['cms']['page_number'] = 1;
-//	$uri = "http://{$_SERVER['HTTP_HOST']}".preg_replace("!/~[\w\-]+/$!","/",$_SERVER['REQUEST_URI']);
-
-	if(empty($GLOBALS['main_uri']))
-		$GLOBALS['main_uri'] = $uri;
-
-	$GLOBALS['cms']['page_path'] = $GLOBALS['main_uri'];
-
-	$GLOBALS['ref'] = @$_SERVER['HTTP_REFERER'];
-
-	if(empty($GLOBALS['cms']['disable']['log_session']))
+	else
 	{
-		include_once("funcs/logs.php");
-		log_session_update();
-	}
+	    require_once("funcs/handlers.php");
+
+		if(empty($GLOBALS['cms']['only_load']))
+		{
+			$_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
+
+    		$_SERVER['REQUEST_URI'] = preg_replace("!^(.+?)\?.*?$!", "$1", $_SERVER['REQUEST_URI']);
+		}
 	
-	include_once("funcs/handlers.php");
+	    @header("X-Bors-obsolete: $uri");
+		$parse = parse_url($uri);
+	
+		$cs = &new CacheStaticFile($uri);
+		if(!empty($GLOBALS['cms']['cache_static']) 
+			&& empty($_GET) 
+			&& empty($_POST) 
+			&& ($cs_uri = $cs->get_name($uri)) 
+			&& file_exists($cs->get_file($uri)))
+		{
+			go($cs_uri); 
+			exit();
+		}
 
-	$GLOBALS['cms_patterns'] = array();
-	$GLOBALS['cms_actions']  = array();
+		$GLOBALS['cms']['page_number'] = 1;
 
-	handlers_load();
+		if(empty($GLOBALS['main_uri']))
+			$GLOBALS['main_uri'] = $uri;
 
-	if(!empty($GLOBALS['cms']['only_load']))
-		return;
+		$GLOBALS['cms']['page_path'] = $GLOBALS['main_uri'];
+
+		$GLOBALS['ref'] = @$_SERVER['HTTP_REFERER'];
+
+		if(empty($GLOBALS['cms']['disable']['log_session']))
+		{
+			include_once("funcs/logs.php");
+			log_session_update();
+		}
+	
+		include_once("funcs/handlers.php");
+
+		$GLOBALS['cms_patterns'] = array();
+		$GLOBALS['cms_actions']  = array();
+
+		handlers_load();
+
+		if(!empty($GLOBALS['cms']['only_load']))
+			return;
 		
-	$ret = handlers_exec();
+		$ret = handlers_exec();
+	}
 
 	global $bors;
 	if(!empty($bors) && is_object($bors))

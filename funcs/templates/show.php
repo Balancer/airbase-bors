@@ -1,15 +1,6 @@
 <?  
 //    require_once('debug.php');
 
-/*	function do_php($code)
-	{
-		ob_start();
-		eval($code);
-		$out = ob_get_contents();
-		ob_clean();
-		return $out;
-	}*/
-
 	function template_assign_and_show($uri, $template, $data=NULL)
 	{
 //		echo "($uri, $template, $data)";

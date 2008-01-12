@@ -7,18 +7,6 @@
     require_once('funcs/navigation/go.php');
     require_once('funcs/users.php');
 
-    function do_php($code)
-    {
-        ob_start();
-        eval($code);
-        $out = ob_get_contents();
-        ob_clean();
-		if(preg_match("!{$_SERVER['DOCUMENT_ROOT']}/cms/funcs/templates/smarty.php!", $out))
-        	return "$out Error in code<xmp>$code</xmp>";
-
-        return $out;
-    }
-
     function show_page($uri, $data = true)
     {
 		if(is_array($data))

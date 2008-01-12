@@ -67,27 +67,34 @@
 
         function set($value, $time_to_expire = 86400, $infinite = false)
         {
+			// Если время хранения отрицательное - используется только memcached, при его наличии.
+		
 //			echolog("Set cache {$this->last_type_name}", 1);
-			list($usec, $sec) = explode(" ",microtime());
-            $this->dbh->replace('cache', array(
-				'int hmd'	=> $this->last_hmd,
-				'int type'	=> $this->last_type,
-				'int key'	=> $this->last_key,
-				'int uri'	=> $this->last_uri,
-				'value'	=> serialize($value),
-				'int access_time' => 0,
-				'int create_time' => $infinite ? -1 : time(),
-				'int expire_time' => time() + intval($time_to_expire),
-				'int count' => 1,
-				'float saved_time' => (float)$usec + (float)$sec - $this->start_time,
-				'float rate' => 0,
-			));
-
 			if(config('memcached'))
 			{
 				$memcache = &new Memcache;
 				$memcache->connect(config('memcached')) or debug_exit("Could not connect memcache");
-				@$memcache->set('phpmv3'.$this->last_hmd, $value, true, $time_to_expire);
+				@$memcache->set('phpmv3'.$this->last_hmd, $value, true, abs($time_to_expire));
+			}
+			else
+				$time_to_expire = abs($time_to_expire);
+			
+			if($time_to_expire > 0)
+			{
+				list($usec, $sec) = explode(" ",microtime());
+    	        $this->dbh->replace('cache', array(
+					'int hmd'	=> $this->last_hmd,
+					'int type'	=> $this->last_type,
+					'int key'	=> $this->last_key,
+					'int uri'	=> $this->last_uri,
+					'value'	=> serialize($value),
+					'int access_time' => 0,
+					'int create_time' => $infinite ? -1 : time(),
+					'int expire_time' => time() + intval($time_to_expire),
+					'int count' => 1,
+					'float saved_time' => (float)$usec + (float)$sec - $this->start_time,
+					'float rate' => 0,
+				));
 			}
 			
             return $this->last = $value;

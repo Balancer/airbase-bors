@@ -134,7 +134,9 @@ if($pun_user['is_guest'])
 	$_COOKIE['cookie_hash'] = "none";
 	SetCookie("user_id", "0", 0, "/");
 	$_COOKIE['user_id'] = "0";
-//	exit("Redir to ".class_load("forum_post", $pid)->url());
+
+	require_once('funcs/navigation/go.php');
+
 	if($pid)
 		go(class_load("forum_post", intval($pid))->url(), true);
 	else
@@ -559,6 +561,8 @@ while ($cur_post = $db->fetch_assoc($result))
 		FROM {$db->prefix}attach_2_files AS af 
 		WHERE af.post_id=".intval($cur_post['id']))
 			or error('Unable to fetch if there were any attachments to the post', __FILE__, __LINE__, $db->error());
+
+	include_once('inc/attaches.php');
 
 	$attach_num = $db->num_rows($result_attach);
 	if($attach_num > 0)

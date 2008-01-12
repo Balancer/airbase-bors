@@ -38,14 +38,14 @@
     {
 		$topic = class_load('forum_topic', intval($topic_id));
 
-        return "<a href=\"".$topic->url()."\">".$topic->title()."</a>";
+        return $topic ? $topic->titled_url() : 'Unknown topic '.$topic_id;
     }
 
     function lcml_forum_post_title($post_id)
     {
 		$post = class_load('forum_post', intval($post_id));
 
-        return "<a href=\"".$post->url()."\">".$post->title()."</a>";
+        return $post ? $post->titled_url() : 'Unknown posting '.$post_id;
     }
 
     function lcml_forum_topics_post($topic,$post)
