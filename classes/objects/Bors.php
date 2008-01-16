@@ -73,7 +73,7 @@
 		function set_main_object($obj)
 		{
 			if($this->_main_obj)
-				exit("Main obj ".$obj->interal_uri()." set error. Exists object ".$this->_main_obj->internal_uri());
+				debug_exit("Main obj ".$obj->internal_uri()." set error. Exists object ".$this->_main_obj->internal_uri());
 			
 			$this->_main_obj = $obj; 
 		}
@@ -472,6 +472,9 @@ function object_init($class_name, $object_id, $object_page, $args = array())
 	if(!$obj->loaded())
 		$obj->init();
 //	else echo get_class($obj)." already inited<br />";
+
+	if($obj->is_only_tuner())
+		return NULL;
 
 	if(($object_id || $url)
 		&& method_exists($obj, 'can_be_empty')

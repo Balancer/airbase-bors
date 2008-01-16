@@ -68,8 +68,8 @@
 		}
 
 //		echo "*** queries_time = {$GLOBALS['stat']['queries_time']}<br />\n";
-		$smarty->assign("queries_time", sprintf("%.3f", $GLOBALS['stat']['queries_time']));
-		$smarty->assign("queries", $GLOBALS['global_db_queries']);
+		$smarty->assign("queries_time", sprintf("%.3f", @$GLOBALS['stat']['queries_time']));
+		$smarty->assign("queries", @$GLOBALS['global_db_queries']);
 
 //		echo "Template=$template, caching=$caching";
 //		echo "is cached=".$smarty->is_cached($template);
