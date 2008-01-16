@@ -290,7 +290,7 @@
 			
 			$hts->set_data($page, 'cache_create_time', time());
 
-		    @header("X-Recompile: Yes");
+		    @header("X-Recompile3: Yes");
         }
         else
         {

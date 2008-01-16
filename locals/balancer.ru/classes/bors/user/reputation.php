@@ -20,7 +20,7 @@ class user_reputation extends base_page_db
 		if(!$id)
 			return ec("Не задан ID пользователя.");
 
-//		echo "id={$id}, user={$this->user->id}";
+//		debug_exit("id={$id}, user={$this->user->id}, ref={$this->page()}");
 	}
 
 	function data_providers()
@@ -40,10 +40,12 @@ class user_reputation extends base_page_db
 
 	function url() { return "http://balancer.ru/user/".$this->id()."/reputation.html"; }
 
-	function cache_static() { return 600; }
+	function cache_static() { return 86400*30; }
 		
 	function template() { return "forum/common.html"; }
 
 	function can_be_empty() { return true; }
 	function can_cached() { return false; }
+
+	function cache_groups() { return "user-{$this->id()}-reputation"; }
 }

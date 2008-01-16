@@ -20,6 +20,7 @@ todo:
 
 */
 
+include_once('inc/attaches.php');
 
 function attach_rules($rules=0, $check=1){ 	//binary check if check is in rules
 	if($rules & $check && $rules != 0)return true;

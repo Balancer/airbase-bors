@@ -521,8 +521,6 @@ class DataBase extends base_object
 			return $this->get_array("SELECT * FROM `hts_keys`");
 		}
 
-		function instance($db = NULL)
-		{
-			return new DataBase($db);
-		}
-	}
+	function instance($db = NULL) { return new DataBase($db); }
+	function close() { /* mysql_close($this->dbh); $this->dbh = NULL; */ }
+}

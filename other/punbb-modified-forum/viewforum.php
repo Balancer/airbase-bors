@@ -38,8 +38,6 @@ if ($id < 1)
 // Load the viewforum.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/forum.php';
 
-$cms_db = &new DataBase('punbb');
-
 if($pun_user['id'] > 1)
 {
 	$count = intval($cms_db->get("SELECT count FROM forum_visits WHERE user_id=".intval($pun_user['id'])." AND forum_id=".intval($id))) + 1;
@@ -166,6 +164,8 @@ else
 if($pun_user['id'] > 1)
 	foreach($cms_db->get_array("SELECT topic_id, last_visit FROM topic_visits WHERE user_id=".intval($pun_user['id'])) as $row)
 		$visits[$row['topic_id']] = $row['last_visit'];
+
+$cms_db->close();
 
 $result = $db->query($sql) or error('Unable to fetch topic list', __FILE__, __LINE__, $db->error());
 

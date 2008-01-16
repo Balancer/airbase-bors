@@ -125,7 +125,7 @@
 			$smarty->assign("template_dirname", $dirname);
 			$smarty->assign("time", time());
 
-			@header("X-Recompile: Yes");
+			@header("X-Recompile4: Yes");
 		}
 
 		$smarty->assign("uri", $uri);
