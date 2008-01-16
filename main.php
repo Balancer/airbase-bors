@@ -90,15 +90,15 @@
 	require_once("funcs/lcml.php");
     require_once("include/classes/cache/CacheStaticFile.php");
 
-	require_once('engines/bors/vhosts_loader.php');
-	require_once('engines/bors/object_show.php');
 
-	require_once('classes/objects/Bors.php');
 	require_once('classes/inc/bors.php');
+	require_once('engines/bors/object_show.php');
+	require_once('engines/bors/vhosts_loader.php');
 
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
-	if($ret = bors_object_show(class_load($uri, NULL, 1, false)))
+//	if($ret = bors_object_show(class_load($uri, NULL, 1, false)))
+	if($ret = bors_object_show(object_load($uri)))
 	{
 	    @header("X-Bors-direct: $uri");
 	}

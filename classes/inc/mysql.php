@@ -60,3 +60,35 @@ function mysql_limits_compile($args)
 	
 	return 'LIMIT '.$start.','.$per_page;
 }
+
+function mysql_args_compile($args)
+{
+	$join = "";
+	if(!empty($args['inner_join']))
+	{
+		foreach($args['inner_join'] as $j)
+			$join .= "INNER JOIN {$j} ";
+
+//		unset($args['inner_join']);
+	}
+
+	$limit = "";
+	if(!empty($args['limit']))
+	{
+		$limit = mysql_limits_compile($args);
+
+//		unset($args['limit']);
+	}
+
+	$order = "";
+	if(!empty($args['order']))
+	{
+		$order = mysql_order_compile($args['order']);
+
+//		unset($args['order']);
+	}
+	
+	$where = mysql_where_compile($args['where']);
+	
+	return "{$join} {$where} {$order} {$limit}";
+}

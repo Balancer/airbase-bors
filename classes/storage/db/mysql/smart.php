@@ -60,6 +60,15 @@ class storage_db_mysql_smart extends base_null
 					if(is_numeric($property))
 						$property = $field;
 					
+/*					// Если у нас после поля идёт его описание.
+					// 
+					if(preg_match('!^(\S+)\s+(.+)$!', $field, $m))
+					{
+						$field = $m[1];
+						$object->set_property_description($property, $m[2]);
+					}
+*/					
+
 					// Выделяем имя функции постобработки, передаваемом в виде
 					// 'WWW.News.Header(ID)|html_entity_decode($str)'
 					// --------------------^^^^^^^^^^^^^^^^^^^^^^^^^-

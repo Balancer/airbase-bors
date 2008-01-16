@@ -125,6 +125,14 @@ function month_name_rp($m)
 		return $mms[intval($m)];
 }
 
+function text_date($date)
+{
+	$d = strftime('%d', $date);
+	$m = strftime('%m', $date);
+	$y = strftime('%Y', $date);
+	return $d.' '.strtolower(month_name_rp($m)).' '.$y;
+}
+
 function make_input_time($field_name, $data)
 {
 	foreach(explode(' ', 'year month day hour min sec') as $key)

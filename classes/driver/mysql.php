@@ -14,6 +14,12 @@ class driver_mysql extends DataBase
 			$order = "ORDER BY {$order}";
 			unset($where_map['order']);
 		}
+
+		if(!empty($where_map['table']))
+		{
+			$table = $where_map['table'];
+			unset($where_map['table']);
+		}
 			
 		$where = array();
 		foreach($where_map as $f => $v)

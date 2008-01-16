@@ -265,7 +265,7 @@
 		$obj = @$GLOBALS['bors_data']['classes_by_uri'][$url];
 		if(!empty($obj))
 			return $obj;
-			
+
 		if(empty($GLOBALS['bors_map']))
 			return NULL;
 
