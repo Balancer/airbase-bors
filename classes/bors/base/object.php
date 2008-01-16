@@ -458,4 +458,13 @@ class base_object extends base_empty
 
 	function uid() { return md5($this->class_id().'://'.$this->id().','.$this->page()); }
 	function can_cached() { return true; }
+
+	protected $_dbh = NULL;
+	function db()
+	{
+		if($this->_dbh === NULL)
+			$this->_dbh = &new driver_mysql($this->main_db_storage());
+			
+		return $this->_dbh;
+	}
 }
