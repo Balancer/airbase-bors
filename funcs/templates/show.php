@@ -93,7 +93,7 @@
 			$smarty->assign("page_template", $template);
 			$smarty->assign("time", time());
 
-			header("X-Recompile: Yes");
+			header("X-Recompile1: Yes");
 		}
 		else
 		{
@@ -270,7 +270,7 @@
 			$smarty->assign("time", time());
 
 			
-			header("X-Recompiled: Yes");
+			header("X-Recompiled2: Yes");
 		}
 		else
 		{

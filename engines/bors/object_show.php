@@ -110,7 +110,11 @@
 		$processed = $obj->preShowProcess();
 		if($processed === true)
 			return true;
-	
+
+		$page = $obj->page();
+		if($obj->url($page) != $obj->called_url())
+			return go($obj->url($page), true);
+
 		if($processed === false)
 		{
 			$GLOBALS['bors']->set_main_object($obj);
@@ -150,7 +154,6 @@
 	   
 		if((!empty($GLOBALS['cms']['cache_static']) || $obj->cache_static()) && (empty($_SERVER['QUERY_STRING']) || $_SERVER['QUERY_STRING']=='del'))
 		{
-			$page = $obj->page();
 //			echo "url={$obj->url_engine()}<br />";
 			$sf = &new CacheStaticFile($obj->url($page));
 			$sf->save($content, $obj->modify_time(), $obj->cache_static());
@@ -164,8 +167,6 @@
 				
 		    header("X-Bors: static cache maden");
 
-			if($obj->url($page) != $obj->called_url())
-				return go($obj->url($page), true);
 			
 //			require_once('funcs/navigation/go.php');
 //			return go($obj->url($page), true, 0, false);

@@ -245,6 +245,8 @@ class MySqlStorage extends base_null
 					if($result)
 						$was_loaded = true;
 				}
+
+				$dbh->close();
 			}
 			
 //			echo "<b>{$object->url()} loaded = {$was_loaded}</b><br />";

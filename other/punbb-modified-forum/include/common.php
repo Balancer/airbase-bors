@@ -85,6 +85,8 @@ if (!defined('PUN'))
 list($usec, $sec) = explode(' ', microtime());
 $pun_start = ((float)$usec + (float)$sec);
 
+$GLOBALS['main_uri'] = "http://{$_SERVER[HTTP_HOST]}{$_SERVER['REQUEST_URI']}";
+
 // Make sure PHP reports all errors except E_NOTICE. PunBB supports E_ALL, but a lot of scripts it may interact with, do not.
 error_reporting(E_ALL ^ E_NOTICE);
 

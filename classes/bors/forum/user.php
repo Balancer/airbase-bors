@@ -114,8 +114,8 @@ class forum_user extends def_dbpage
 		function cache_clean_self()
 		{
 			parent::cache_clean_self();
-			include_once('funcs/filesystem_ext.php');
-			rec_rmdir("/var/www/balancer.ru/htdocs/user/".$this->id());
+//			include_once('funcs/filesystem_ext.php');
+//			rec_rmdir("/var/www/balancer.ru/htdocs/user/".$this->id());
 		}
 
 		var $stb_warnings;

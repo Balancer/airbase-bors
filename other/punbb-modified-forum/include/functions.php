@@ -263,6 +263,7 @@ function generate_navlinks()
 	$db = &new DataBase('punbb');
 	foreach($db->get_array("SELECT * FROM categories WHERE base_uri != '' ORDER BY disp_position") as $c)
 		$ret .= "<li><a href=\"{$c['base_uri']}\">{$c['cat_name']}</a></li>";
+	$db->close();
 	return "$ret</ul>";
 }
 
@@ -354,6 +355,7 @@ function delete_topic($topic_id)
 		$db->query('DELETE FROM '.$db->prefix.'posts WHERE topic_id='.$topic_id) or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
 		$db->query("DELETE FROM {$db->prefix}messages WHERE id IN ($posts)") 
 			or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
+		$cms_db->close();
 	}
 
 	// Delete any subscriptions for this topic
@@ -468,6 +470,7 @@ function get_title($user)
 		$cdb = &new DataBase('punbb');
 		$group  = $cdb->get("SELECT * FROM groups WHERE g_id = ".intval($user['group_id']));
 		$GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']] = serialize($group);
+//		$cdb->close();
 	}
 	else
 		$group = unserialize($GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']]);

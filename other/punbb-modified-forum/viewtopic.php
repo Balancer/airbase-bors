@@ -69,7 +69,6 @@ if($pid)
 $sub_id	= $id % 1000;
 
 $_SERVER['REQUEST_URI'] = "/forum/topic/$sub_id/$id".(empty($_GET['p'])||$_GET['p']==1 ? "":",{$_GET['p']}")."/";
-$GLOBALS['main_uri'] = "http://{$_SERVER[HTTP_HOST]}{$_SERVER['REQUEST_URI']}";
 
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 include_once("funcs/Cache.php");
@@ -79,8 +78,6 @@ require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
 
 //print_r($GLOBALS['cms']);
-$hts = &new DataBaseHTS();
-
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
 
@@ -315,12 +312,11 @@ require PUN_ROOT.'include/parser.php';
 $bg_switch = true;	// Used for switching background color in posts
 $post_count = 0;	// Keep track of post numbers
 
-$cdb = &new DataBase('punbb');
 if(!$archive_loaded)
 {
-	$cnt = $cdb->get("SELECT COUNT(*) FROM posts WHERE topic_id = $id");
-	if(!$cnt || $cnt != $cdb->get("SELECT COUNT(*) FROM posts_archive_".($id%10)." WHERE topic_id = $id"))
-		$cdb->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($id%10)." WHERE topic_id = $id");
+	$cnt = $cms_db->get("SELECT COUNT(*) FROM posts WHERE topic_id = $id");
+	if(!$cnt || $cnt != $cms_db->get("SELECT COUNT(*) FROM posts_archive_".($id%10)." WHERE topic_id = $id"))
+		$cms_db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($id%10)." WHERE topic_id = $id");
 }
 
 // Retrieve the posts
@@ -358,7 +354,7 @@ while ($cur_post = $db->fetch_assoc($result))
 //	echo $cur_post['id'].", ";
 	if(empty($GLOBALS['bors_data']['cache']['punbb_user'][$cur_post['poster_id']]))
 	{
-		$poster = $cdb->get("SELECT * FROM users  WHERE id = ".intval($cur_post['poster_id']));
+		$poster = $cms_db->get("SELECT * FROM users  WHERE id = ".intval($cur_post['poster_id']));
 		$GLOBALS['bors_data']['cache']['punbb_user'][$cur_post['poster_id']] = serialize($poster);
 	}
 	else
@@ -367,7 +363,7 @@ while ($cur_post = $db->fetch_assoc($result))
 	if(empty($cur_post['flag']))
 	{
 		include_once('funcs/users/geoip/get_flag.php');
-		$cdb->insert_ignore('posts_cached_fields', array(
+		$cms_db->insert_ignore('posts_cached_fields', array(
 			'post_id'	=> $cur_post['id'],
 			'flag'		=> $cur_post['flag'] = "".get_flag($cur_post['poster_ip']),
 			'create_time' => time(),
@@ -511,7 +507,7 @@ while ($cur_post = $db->fetch_assoc($result))
 	$bg_switch = ($bg_switch) ? $bg_switch = false : $bg_switch = true;
 	$vtbg = ($bg_switch) ? ' roweven' : ' rowodd';
 
-	$x = $cdb->get('SELECT message, html FROM messages WHERE id='.$cur_post['id']);
+	$x = $cms_db->get('SELECT message, html FROM messages WHERE id='.$cur_post['id']);
 
 	$cur_post['message'] = $x['message'];
 	$cur_post['html'] = $x['html'];
@@ -520,7 +516,7 @@ while ($cur_post = $db->fetch_assoc($result))
 	if(empty($cur_post['html']))
 	{
 		$cur_post['message'] = parse_message($cur_post['message'], $cur_post['hide_smilies']);
-		$cdb->update('messages', "id = {$cur_post['id']}", array('html' => $cur_post['message']));
+		$cms_db->update('messages', "id = {$cur_post['id']}", array('html' => $cur_post['message']));
 	}
 	else
 		$cur_post['message'] = $cur_post['html'];
@@ -540,7 +536,7 @@ while ($cur_post = $db->fetch_assoc($result))
 						'html_disable' => true,
 				));
 
-			$cdb->update('users', "id = {$poster['id']}", array('signature_html' => $signature));
+			$cms_db->update('users', "id = {$poster['id']}", array('signature_html' => $signature));
 		}
 		else
 			$signature = $poster['signature_html'];

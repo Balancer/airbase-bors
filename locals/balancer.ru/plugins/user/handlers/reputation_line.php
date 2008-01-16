@@ -39,7 +39,7 @@
 			$plus  = $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = $user_id AND score > 0");
 			$minus = $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = $user_id AND score < 0");
 
-			$line = $ch->set("<a href=\"http://balancer.ru/user/$user_id/reputation/%ref%\" title=\"Репутация: ".sprintf("%.1f", $reputation_value)." [+$plus / -$minus]. \nНажмите для подробного просмотра.\"	class=\"hoverable_link\">$reputation</a>", 3600);
+			$line = $ch->set("<a href=\"http://balancer.ru/user/$user_id/reputation/?%ref%\" title=\"Репутация: ".sprintf("%.1f", $reputation_value)." [+$plus / -$minus]. \nНажмите для подробного просмотра.\"	class=\"hoverable_link\">$reputation</a>", 3600);
 		}
 
 		$ref=@$m[2];

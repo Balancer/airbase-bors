@@ -160,6 +160,7 @@ class storage_db_mysql_smart extends base_null
 //				set_loglevel(9);
 				$cnt = intval($dbh->get('SELECT COUNT(*) '.$from.' '.$where, false));
 //				set_loglevel(2);
+				$dbh->close();
 				return $cnt;
 			}
 			else
@@ -193,9 +194,11 @@ class storage_db_mysql_smart extends base_null
 
 //			if($object)
 //				$result[] = $object;
-				
-			return $common_where ? $result : $was_loaded;
+
+			$dbh->close();
 		}
+
+		return $common_where ? $result : $was_loaded;
 	}
 
 	function do_func($func, $str)

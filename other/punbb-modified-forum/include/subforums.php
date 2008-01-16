@@ -164,6 +164,7 @@
 			else
 				$subforums[] = "<a href=\"{$pun_config['root_uri']}/viewforum.php?id=$fid\">".htmlspecialchars($cur_forum['forum_name'])."</a>";
 		}
-		
+
+		$db->close();		
 		return "<div class=\"subforums\"><b>Подфорумы:</b> ".join(", ", $subforums)."</div>\n";
 	}

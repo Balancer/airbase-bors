@@ -33,17 +33,6 @@
 		}
 	}
 
-//	if($client['is_bot'] && rand(0,100) < 30)
-//	{
-//		header('HTTP/1.1 503 Service Temporarily Unavailable');
-//		header('Status: 503 Service Temporarily Unavailable');
-//		header('Retry-After: 600');
-
-//		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/blocked-bots.log", $_SERVER['REQUEST_URI']."/".@$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
-//		@chmod($file, 0666);
-//		exit("Service Temporarily Unavailable");
-//	}
-	
     list($usec, $sec) = explode(" ",microtime());
     $GLOBALS['stat']['start_microtime'] = ((float)$usec + (float)$sec);
 
@@ -52,6 +41,28 @@
     ini_set('log_errors', 'On');
 
     require_once("config.php");
+    require_once("funcs/Cache.php");
+
+	if($client['is_bot'])
+	{
+		$cache = &new Cache();
+		if(!($load_avg = $cache->get('system', 'load-average-v2')))
+		{
+			$uptime=explode(" ", exec("uptime"));
+			$cache->set($load_avg = floatval($uptime[13]), -120);
+		}
+
+		if($load_avg > 5)
+		{
+#			header('HTTP/1.1 503 Service Temporarily Unavailable');
+			header('Status: 503 Service Temporarily Unavailable');
+			header('Retry-After: 600');
+
+			@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/blocked-bots.log", $_SERVER['REQUEST_URI']."/".@$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."; LA={$load_avg}\n", FILE_APPEND);
+			@chmod($file, 0666);
+			exit("Service Temporarily Unavailable");
+		}
+	}
 
     @header("Content-Type: text/html; charset={$GLOBALS['cms']['charset']}");
     @header('Content-Language: ru');

@@ -1,7 +1,5 @@
 <?php
 
-class_include('def_image_gif');
-
 class user_image_reputation extends def_image_gif
 {
     function image()
@@ -62,7 +60,7 @@ class user_image_reputation extends def_image_gif
 	
 	function url() { return "http://balancer.ru/user/{$this->id()}/rep.gif"; }
 	
-	function cache_static() { return 3600*57; }
+	function cache_static() { return 3600*30; }
 	
 	function cache_groups() { return "user-{$this->id()}-reputation"; }
 }
