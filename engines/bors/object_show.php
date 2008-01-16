@@ -130,7 +130,7 @@
 			{
 				$re = class_load($render_engine);
 				$content = $re->render($obj);
-//				echo "Bors class contnet of ".get_class($obj)." = ". $obj->render_engine(); exit();
+//				echo "Bors class content of ".get_class($obj)." with render engine ". $obj->render_engine() . " = " . $content; exit();
 			}
 			else
 			{
