@@ -33,6 +33,9 @@ if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
 
 
+if($is_banned)
+	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%d-%m %H:%M", 30*86400+$ban_expire));
+
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id < 1)
 	message($lang_common['Bad request']);
