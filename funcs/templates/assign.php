@@ -79,6 +79,8 @@
 			$template_uri = "xfile:$caller_path/".$assign_template;
 		if(!$smarty->template_exists($template_uri))
 			$template_uri = "xfile:".$assign_template;
+		if(!$smarty->template_exists($template_uri))
+			$template_uri = "xfile:{$GLOBALS['cms']['base_dir']}/templates/$assign_template";
 
 //		echo "==$template_uri==";
 			
@@ -104,8 +106,8 @@
 			foreach($GLOBALS['cms']['smarty'] as $key => $val)
 				$smarty->assign($key, $val);
 		
-		if(!$caching || !$smarty->is_cached($template_uri, $uri))
-		{
+//		if(!$caching || !$smarty->is_cached($template_uri, $uri))
+//		{
 			foreach($data as $key => $val)
 			{
 //				echo "$key -> ".print_r($val,true)."<br />\n";
@@ -113,10 +115,6 @@
 				$smarty->assign($key, $val);
 			}
 	
-			if(!empty($GLOBALS['cms']['templates']['data']))
-	            foreach($GLOBALS['cms']['templates']['data'] as $key => $value)
-        	        $smarty->assign($key, $value);
-
 			$smarty->assign("page_template", $assign_template);
 			$smarty->assign("template_uri", $template_uri);
 			$dirname = dirname($template_uri);
@@ -125,8 +123,8 @@
 			$smarty->assign("template_dirname", $dirname);
 			$smarty->assign("time", time());
 
-			@header("X-Recompile4: Yes");
-		}
+//			@header("X-Recompile4: Yes");
+//		}
 
 		$smarty->assign("uri", $uri);
 		$smarty->assign("now", time());
@@ -143,12 +141,17 @@
 		if(preg_match('!^http://!',$template_uri))
 			$template_uri = "hts:".$template_uri;
 
+		if(!empty($GLOBALS['cms']['templates']['data']))
+            foreach($GLOBALS['cms']['templates']['data'] as $key => $value)
+       	        $smarty->assign($key, $value);
+
 		foreach(split(' ', 'host_name main_host_uri') as $key)
 			$smarty->assign($key, @$GLOBALS['cms'][$key]);
 
 		global $bors;
 		if(!empty($bors) && ($obj = $bors->main_object()))
 		{
+			$smarty->assign('bors_main_object', $obj);
 			foreach(split(' ', $obj->template_local_vars()) as $var)
 			{
 //				echo "Assign $var to {$obj->$var()}<br />";
@@ -178,9 +181,9 @@
 				$template_uri = "hts:http://{$_SERVER['HTTP_HOST']}$template_uri";
 
 		if(!$caching)
-			$smarty->clear_cache($template_uri, $uri);
+			$smarty->clear_cache($template_uri);
 
-		$out = $smarty->fetch($template_uri, $uri);
+		$out = $smarty->fetch($template_uri);
 
 		$out = preg_replace("!<\?php(.+?)\?>!es", "do_php(stripslashes('$1'))", $out);
 

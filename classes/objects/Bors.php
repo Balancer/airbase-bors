@@ -111,7 +111,7 @@
 			$class_file = $m[2];
 		}
 
-		foreach(array(BORS_INCLUDE_LOCAL, BORS_INCLUDE.'/vhosts/'.$_SERVER['HTTP_HOST'], BORS_INCLUDE, $local_path) as $dir)
+		foreach(array(BORS_INCLUDE_LOCAL, BORS_INCLUDE.'/vhosts/'.@$_SERVER['HTTP_HOST'], BORS_INCLUDE, $local_path) as $dir)
 		{
 			if(file_exists($file_name = "$dir/classes/$class_path$class_file.php"))
 			{
@@ -480,7 +480,7 @@ function object_init($class_name, $object_id, $object_page, $args = array())
 		&& method_exists($obj, 'can_be_empty')
 		&& !$obj->can_be_empty()
 		&& !$obj->loaded() 
-		&& $obj->storage_engine() 
+//		&& $obj->storage_engine() 
 	)
 		return NULL;
 

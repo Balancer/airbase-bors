@@ -72,13 +72,7 @@ function mysql_args_compile($args)
 //		unset($args['inner_join']);
 	}
 
-	$limit = "";
-	if(!empty($args['limit']))
-	{
-		$limit = mysql_limits_compile($args);
-
-//		unset($args['limit']);
-	}
+	$limit = mysql_limits_compile($args);
 
 	$order = "";
 	if(!empty($args['order']))

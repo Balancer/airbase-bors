@@ -1,4 +1,5 @@
-<?
+<?php
+
     // from PHP script
     // put these function somewhere in your application
 
@@ -12,12 +13,24 @@
 			return true;
 		}
 
-		if(file_exists($smarty->template_dir."/".$tpl_name))
+		if(file_exists($fn = $smarty->template_dir."/".$tpl_name))
 		{
-			$tpl_source = ec(file_get_contents($smarty->template_dir."/".$tpl_name));
+			$tpl_source = ec(file_get_contents($fn));
 			return true;
 		}
 
+		if(file_exists($fn = $GLOBALS['cms']['base_dir'].'/templates/'.$tpl_name))
+		{
+			$tpl_source = ec(file_get_contents($fn));
+			return true;
+		}
+
+/*		if(file_exists($fn = $GLOBALS['cms']['base_dir'].'/templates/aviaport/'.$tpl_name))
+		{
+			$tpl_source = ec(file_get_contents($fn));
+			return true;
+		}
+*/
         return false;
     }
     
@@ -31,11 +44,26 @@
 			$found = true;
 		}
 
-		if(file_exists($smarty->template_dir."/".$tpl_name))
+		if(file_exists($fn = $smarty->template_dir."/".$tpl_name))
 		{
-			$tpl_timestamp = filemtime($smarty->template_dir."/".$tpl_name);
+			$tpl_timestamp = filemtime($fn);
 			$found = true;
 		}
+
+		if(file_exists($fn = $GLOBALS['cms']['base_dir'].'/templates/'.$tpl_name))
+		{
+			$tpl_timestamp = filemtime($fn);
+			$found = true;
+		}
+
+//        if(!$found && preg_match('!_head!', $tpl_name)) { echo "$tpl_name => ".$found; debug_trace(); print_d($smarty); }
+
+/*		if(file_exists($fn = $GLOBALS['cms']['base_dir'].'/templates/aviaport/'.$tpl_name))
+		{
+			$tpl_timestamp = filemtime($fn);
+			$found = true;
+		}
+*/
 
 		if(!$found)
 			return false;
@@ -56,4 +84,3 @@
     {
         // not used for templates
     }
-?>
