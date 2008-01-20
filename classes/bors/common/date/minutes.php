@@ -1,5 +1,6 @@
-<?
-class common_date_minutes
+<?php
+
+class common_date_minutes extends base_null
 {
 	function id() { return 0; }
 	function page() { return 1; }

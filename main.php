@@ -1,4 +1,7 @@
-<?
+<?php
+
+	header('X-Bors: begin');
+
 //	ini_set("xdebug.profiler_enable", "1");
 
 //	exit($_SERVER['REQUEST_URI']);
@@ -39,6 +42,7 @@
     error_reporting(E_ALL);
     ini_set('display_errors', 'On');
     ini_set('log_errors', 'On');
+
 
     require_once("config.php");
     require_once("funcs/Cache.php");
@@ -98,12 +102,15 @@
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
 //	if($ret = bors_object_show(class_load($uri, NULL, 1, false)))
-	if($ret = bors_object_show(object_load($uri)))
+
+	$object = object_load($uri);
+	if($ret = bors_object_show($object))
 	{
-	    @header("X-Bors-direct: $uri");
+    	@header("X-Bors-direct: $uri");
 	}
 	else
 	{
+	    @header("X-Bors-obsolete: $uri");
 	    require_once("funcs/handlers.php");
 
 		if(empty($GLOBALS['cms']['only_load']))
@@ -113,7 +120,6 @@
     		$_SERVER['REQUEST_URI'] = preg_replace("!^(.+?)\?.*?$!", "$1", $_SERVER['REQUEST_URI']);
 		}
 	
-	    @header("X-Bors-obsolete: $uri");
 		$parse = parse_url($uri);
 	
 		$cs = &new CacheStaticFile($uri);

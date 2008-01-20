@@ -1,5 +1,5 @@
 <?php  
-	function template_assign_bors_object($obj)
+	function template_assign_bors_object($obj, $template = NULL)
 	{
 	
 		require_once('Smarty/Smarty.class.php');
@@ -32,7 +32,7 @@
 		$smarty->assign("ref", @$_SERVER['HTTP_REFERER']);
 		$smarty->assign("this", $obj);
 
-		//TODO: убрать user_id и user_nameв старых шаблонах.
+		//TODO: убрать user_id и user_name в старых шаблонах.
 		$me = &new User();
 		$smarty->assign("me", $me);
 		$smarty->assign("me_id", $me->get('id'));
@@ -46,7 +46,7 @@
 			$smarty->assign($var, $obj->$var());
 		
 		require_once("bors_smarty_common.php");
-		$template = smarty_template($obj->template());
+		$template = smarty_template($template ? $template : $obj->template());
 		$smarty->template_dir = dirname(preg_replace("!^xfile:!", "", $template));
 		$smarty->assign("page_template", $template);
 		

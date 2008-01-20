@@ -19,6 +19,13 @@ function objects_array($class, $args = array())
 	return $init->storage()->load($init, $where, false, $cargs);
 }
 
+function objects_first($class, $args = array())
+{
+	$args['limit'] = 1;
+	$objs = objects_array($class, $args);
+	return $objs[0];
+}
+
 function objects_count($class, $args = array())
 {
 	if(is_numeric($class))

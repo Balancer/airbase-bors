@@ -112,7 +112,8 @@
 			return true;
 
 		$page = $obj->page();
-		if($obj->url($page) != $obj->called_url())
+//		exit($obj->url($page) .'!='. $obj->called_url());
+		if(!preg_match('!\Q'.$obj->url($page).'\E$!', $obj->called_url()))
 			return go($obj->url($page), true);
 
 		if($processed === false)
@@ -147,7 +148,7 @@
 			return false;
 
 		if(!$obj->access()->can_read())
-			return bors_message(ec("Извините, у Вас не доступа к этому ресурсу"));
+			return empty($GLOBALS['cms']['error_show']) ? bors_message(ec("Извините, у Вас не доступа к этому ресурсу")) : true;
 		
 		$last_modify = gmdate('D, d M Y H:i:s', $obj->modify_time()).' GMT';
 		header('Last-Modified: '.$last_modify);

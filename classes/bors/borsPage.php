@@ -27,5 +27,5 @@ class borsPage extends BorsBaseObject
 		return $_SERVER['DOCUMENT_ROOT'].preg_replace('!^http://[^/]+!', '', $this->called_url());
 	}
 
-	function can_be_empty()		{ return false; }
+	function can_be_empty()		{ return true; }
 }

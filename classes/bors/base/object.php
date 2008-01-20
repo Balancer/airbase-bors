@@ -75,7 +75,10 @@ class base_object extends base_empty
 		if($config = $this->config_class())
 		{
 			$config = object_load($config, &$this, 1, false);
-			$config->template_init();
+			if($config)
+				$config->template_init();
+			else
+				debug_exit("Can't load config ".$this->config_class());
 		}
 		
 		if($storage_engine = $this->storage_engine())
