@@ -74,6 +74,8 @@
 			'comment'		=> $_POST['comment'],
 		));
 
+		@unlink("/var/www/balancer.ru/htdocs/user/{$uid}/warnings.gif");
+
 		include_once("funcs/navigation/go.php");
 		if(!empty($_POST['ref']))
 			go($_POST['ref']);

@@ -658,7 +658,7 @@ if($attach_allowed){
 					<legend><?php echo $lang_attach['Attachment'] ?></legend>
 					<div class="infldset">
 						<div class="rbox">
-							<input type="hidden" name="MAX_FILE_SIZE" value="8192000" /><input type="file" name="attached_file" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
+							<input type="hidden" name="MAX_FILE_SIZE" value="524288" /><input type="file" name="attached_file" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
 							<?php echo $lang_attach['Note'];/*"*/ ?>
 						</div>
 					</div>
