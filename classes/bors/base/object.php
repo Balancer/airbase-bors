@@ -470,4 +470,6 @@ class base_object extends base_empty
 			
 		return $this->_dbh;
 	}
+
+	function main_table_fields() { return array(); }
 }

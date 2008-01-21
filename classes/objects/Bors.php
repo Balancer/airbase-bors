@@ -232,7 +232,7 @@
 			if(preg_match("!^http://!", $class))
 			{
 				if(preg_match('!^(.+)#(.+)$!', $class, $m))
-					echo $class = $m[1];
+					$class = $m[1];
 	
 				if($obj = class_load_by_url($class, $page))
 					return $obj;
@@ -277,15 +277,17 @@
 			$url_pattern = trim($match[1]);
 			$class_path  = trim($match[2]);
 
-			if(preg_match("!\\\\\?!", $url_pattern) && !preg_match('!\?!', $url))
+//			echo "Initial url=$url<br/>;";
+
+			if(preg_match('!\\\?!', $url_pattern) && !preg_match('!\?!', $url))
 				$check_url = $url."?".$_SERVER['QUERY_STRING'];
 			else
 				$check_url = $url;
 		
-//			echo "Check $url_pattern to $url for $class_path as !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$! to {$check_url}<br />\n";
+			//echo "Check $url_pattern to $url for $class_path as !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$! to {$check_url}<br />\n";
 			if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$url_pattern$!", $check_url, $match))
 			{
-//				echo "Ok!<br />";
+				//echo "Ok!<br />";
 				$id = NULL;
 				$page = 1;
 				
@@ -484,7 +486,7 @@ function object_init($class_name, $object_id, $object_page, $args = array())
 	)
 		return NULL;
 
-//	echo "{$class_name}($id) was loaded seccessfully} as ".get_class($obj)."<br />\n";
+//	echo "{$class_name}($id) was loaded seccessfully} as ".get_class($obj)."<br />\n"; exit();
 
 
 	if($use_cache)

@@ -68,7 +68,7 @@ function is_today($time)
 	function airbase_time($time)
 	{
 		if(is_today($time))
-			return strftime("сегодня, %H:%M",$time);
+			return ec(strftime("сегодня, %H:%M",$time));
 	
 		if(time() - $time < 2*86400 && strftime("%d",$time) == strftime("%d",time()-86400))
 			return ec("вчера, ").strftime("%H:%M",$time);

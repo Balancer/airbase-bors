@@ -1,10 +1,17 @@
 <?php
-
 	header('X-Bors: begin');
 
 //	ini_set("xdebug.profiler_enable", "1");
 
-//	exit($_SERVER['REQUEST_URI']);
+
+	if(preg_match('!^(.+?)\?(.+)$!', $_SERVER['REQUEST_URI'], $m))
+	{
+		$_SERVER['REQUEST_URI'] = $m[1];
+		if(empty($_SERVER['QUERY_STRING']))
+			$_SERVER['QUERY_STRING'] = $m[2];
+	}
+
+//	echo('<xmp>'); print_r($_SERVER); echo('</xmp>'); exit();
 
 	if($_SERVER['REQUEST_URI'] == '/cms/main.php')
 	{
@@ -67,6 +74,7 @@
 			exit("Service Temporarily Unavailable");
 		}
 	}
+
 
     @header("Content-Type: text/html; charset={$GLOBALS['cms']['charset']}");
     @header('Content-Language: ru');

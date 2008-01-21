@@ -7,7 +7,7 @@ class driver_mysql extends DataBase
 	// "Пустой" конструктор, чтобы не передавать в DataBase параметр $page
 	function __construct($db) { parent::__construct($db); }
 
-	function select($table, $field, $where_map)
+	function select($table, $field, $where_map = array())
 	{
 		if($order = @$where_map['order'])
 		{
@@ -30,7 +30,12 @@ class driver_mysql extends DataBase
 				$where[] = $f . '\'' . addslashes($v) . '\'';
 		}
 		
-		return $this->get("SELECT $field FROM $table WHERE ".join(' AND ', $where)." $order LIMIT 1");
+		if($where)
+			$where = "WHERE ".join(' AND ', $where);
+		else
+			$where = "";
+		
+		return $this->get("SELECT $field FROM $table $where $order LIMIT 1");
 	}
 
 	function delete($table, $where)
