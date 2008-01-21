@@ -39,6 +39,7 @@ class storage_db_mysql_smart extends base_null
 			$dbhash = $hash.$db;
 			if(empty($stdbms_cache[$dbhash]))
 			{
+			  $is_one_table = (count($tables) == 1) && !preg_match('!JOIN!i', $common_where);
 			
 			  foreach($tables as $table_name => $fields)
 			  {
@@ -114,10 +115,20 @@ class storage_db_mysql_smart extends base_null
 					{
 						$added[$table_name.'-'.$id_field] = true;
 						
-						$current_tab = "`tab".($tab_count++)."`";
+						if($is_one_table)
+						{
+							$current_tab = '';
+							$current_tab_prefix = '';
+						}
+						else
+						{
+							$current_tab = "`tab".($tab_count++)."`";
+							$current_tab_prefix = "{$current_tab}.";
+						}
+						
 						if(empty($from))
 						{
-							$from = 'FROM `'.$table_name.'` AS '.$current_tab;
+							$from = $is_one_table ? "FROM `{$table_name}`" : "FROM `{$table_name}` AS {$current_tab}";
 							if(!$where && !$only_count)
 							{
 								$where = 'WHERE '.make_id_field($current_tab, $id_field);
@@ -135,14 +146,16 @@ class storage_db_mysql_smart extends base_null
 					}
 
 					if($sql_func)
-						$select[] = "{$sql_func}({$current_tab}.{$field}) AS `{$property}{$php_func}`";
+						$select[] = "{$sql_func}({$current_tab_prefix}{$field}) AS `{$property}{$php_func}`";
 					else
-						$select[] = "{$current_tab}.".($field == $property ? $field : "{$field} AS `{$property}{$php_func}`");
+						$select[] = $current_tab_prefix.($field == $property ? $field : "{$field} AS `{$property}{$php_func}`");
 				}
 			  }
 			
 			  if($common_where !== NULL)
-				$select[] = "`tab0`.".($main_id_name != 'id' ? "`{$main_id_name}` as id" : 'id');
+			  {
+				$select[] = ($is_one_table ? '' : "`tab0`.").($main_id_name != 'id' ? "`{$main_id_name}` as id" : 'id');
+			  }
 			  else
 				$where .= ' LIMIT 1';
 
