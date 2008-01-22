@@ -175,7 +175,7 @@ class storage_db_mysql_smart extends base_null
 			$where = str_replace('%MySqlStorageOID%', $oid, $where);
 //			echo "($oid) -> $where<br />\n";
 			
-//			set_loglevel(9);
+//			set_loglevel(10);
 			if($only_count)
 			{
 //				echo 
@@ -189,6 +189,9 @@ class storage_db_mysql_smart extends base_null
 				$dbh->query('SELECT '.join(',', $select).' '.$from.' '.$where, false);
 
 //			set_loglevel(2);
+//			@$GLOBALS['cnt']++;
+//			if($GLOBALS['cnt'] > 2)
+//				debug_exit('stop');
 				
 			while($row = $dbh->fetch_row())
 			{
@@ -200,6 +203,8 @@ class storage_db_mysql_smart extends base_null
 						$name	= $m[1];
 						$value = $this->do_func($m[2], $value);
 					}
+					
+//					echo "set_$name<br />";
 					
 					$object->{"set_$name"}($value, false);
 

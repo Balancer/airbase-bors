@@ -44,9 +44,6 @@
 			if(!$form->access()->can_action())
 				return bors_message(ec("Извините, Вы не можете производить операции с этим ресурсом (class=".get_class($form).", access=".get_class($form->access()).")"));
 
-			if(!$form->id())
-				$form->new_instance(array_merge($_FILES, $_GET));
-			
 			if(empty($_GET['subaction']))
 				$method = 'onAction';
 			else
@@ -63,14 +60,18 @@
 			}
 			else
 			{
-				if(!$form->set_fields($_GET, true, NULL, true))
+				$data = array_merge($_FILES, $_GET);
+			
+				if($form->check_data($data) === true)
 					return true;
-				
-				$form->set_modify_time(time(), true);
-				
-				$bors->changed_save();
+			
+				if(!$form->id())
+					$form->new_instance();
 
-				foreach($_GET as $key => $val)
+				if(!$form->id())
+					debug_exit('Empty for '.$form->class_name());
+
+				foreach($data as $key => $val)
 				{
 					if(!$val || !preg_match("!^file_(\w+)_delete_do$!", $key, $m))
 						continue;
@@ -79,16 +80,24 @@
 //					if(method_exists($form, $method))
 						$form->$method(true);
 				}
-				
+
 				if(!empty($_FILES))
 				{
 					foreach($_FILES as $file => $params)
 					{
-						$method = "upload_{$file}_file";
-//						if(method_exists($form, $method))
-							$form->$method($params, true);
+						if($params)
+						{
+							$method = "upload_{$file}_file";
+//							if(method_exists($form, $method))
+								$form->$method($params, true);
+						}
 					}
 				}
+			
+				if(!$form->set_fields($data, true))
+					return true;
+				
+				$form->set_modify_time(time(), true);
 			}
 
 			$bors->changed_save();
@@ -136,6 +145,7 @@
 			else
 			{
 			    require_once('funcs/templates/bors.php');
+				$obj->template_data_fill();
 				$content = template_assign_bors_object($obj);
 			}
 

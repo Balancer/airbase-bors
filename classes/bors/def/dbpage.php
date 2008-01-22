@@ -14,22 +14,18 @@ class def_dbpage extends def_page
 	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
 	function id_field() { return 'id'; }
 
-	function new_instance($id = false)
+	function new_instance()
 	{
 		$tab = $this->main_table_storage();
 		if(!$tab)
 			exit("Try to gent new instance with empty main table in class ".__FILE__.":".__LINE__);
 		
-		if($id === false)
-		{
-			$this->db->insert($tab, array());
-			$this->set_id($this->db->get_last_id());
-		}
-		else
-			$this->db->insert($tab, array('id' => $id));
+		$this->db->insert($tab, array());
+		$this->set_id($this->db->get_last_id());
 
 		$this->set_create_time(time(), true);
 		$this->set_modify_time(time(), true);
+		
 	}
 
 	function uri2id($id) { return $id; }
@@ -65,4 +61,13 @@ class def_dbpage extends def_page
 	
 	function edit_link() { return $this->uri."?edit"; }
 	function storage_engine() { return 'storage_db_mysql'; }
+
+	function fields() { return array($this->main_db_storage() => $this->main_db_fields()); }
+	function main_db_fields()
+	{
+		return array(
+			$this->main_table_storage() => $this->main_table_fields(),
+		);
+	}
 }
+

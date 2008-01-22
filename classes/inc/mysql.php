@@ -82,7 +82,10 @@ function mysql_args_compile($args)
 //		unset($args['order']);
 	}
 	
-	$where = mysql_where_compile($args['where']);
+	if(empty($args['where']))
+		$where = "";
+	else
+		$where = mysql_where_compile($args['where']);
 	
 	return "{$join} {$where} {$order} {$limit}";
 }

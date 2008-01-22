@@ -64,7 +64,6 @@ function bors_message_tpl($template, $obj, $params)
 
 	$GLOBALS['page_data']['title'] = $title;
 	$GLOBALS['page_data']['source'] = $body;
-//	$GLOBALS['page_data']['template'] = 'xfile:'.$obj->template();
 
 	show_page(@$GLOBALS['main_uri']);
 

@@ -410,7 +410,7 @@ class DataBase extends base_object
 				$key = "`$key`";
 		}
 
-		function insert($table, $fields, $ignore_error = true)
+		function insert($table, $fields, $ignore_error = false)
 		{
 			$this->query("INSERT INTO $table ".$this->make_string_values($fields), $ignore_error);
 		}

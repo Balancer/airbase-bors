@@ -23,8 +23,8 @@
 
         $page = $hts->normalize_uri($uri);
 
-        if($page != $uri && empty($GLOBALS['title']))
-            go($page);
+//        if($page != $uri && empty($GLOBALS['title']))
+//            go($page);
 
 		foreach(split(' ', 'source body title') as $key)
 			if(empty($data[$key]))

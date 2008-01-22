@@ -1,13 +1,13 @@
 <?
 //    require_once('debug.php');
 
-    function go($uri, $permanent = false, $time = 0, $exit = true)
+    function go($uri, $permanent = false, $time = 0, $exit = false)
     {
 		global $bors;
 		if(is_object($bors))
 			$bors->changed_save();
 	
-//		echo 0/0; exit("Go to $url");
+//		debug_exit("Go to $uri");
 	
         if(!headers_sent($filename, $linenum) && $time==0) 
         {
@@ -19,6 +19,7 @@
 				echolog("cr in uri '$uri'", 1);
 				
 			header("Location: $uri");
+
 			if($exit)
 	            exit();
         }
@@ -32,6 +33,7 @@
 
 		if($exit)
 	        exit();
+
 		return true;
     }
 
