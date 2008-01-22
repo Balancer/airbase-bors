@@ -32,10 +32,12 @@
 			foreach($this->changed_objects as $name => $obj)
 			{
 //				echo "<b>Update $name</b>, index={$obj->auto_search_index()}<br />\n";
-			
 				
+//				if(!$obj->id())
+//					$obj->new_instance();
+
 				if(!$obj->id())
-					$obj->new_instance();
+					debug_exit('emtpy id for changed object '.$obj->class_name());
 				
 				$obj->cache_clean();
 				
@@ -44,9 +46,7 @@
 				else
 					$storage = $this->config()->storage();
 
-				if(!$obj->id())
-					$storage->new_instance($obj);
-
+				
 				$storage->save($obj);
 				save_cached_object($obj);
 					
@@ -60,6 +60,7 @@
 		function get_html($object)
 		{
 			require_once('funcs/templates/bors.php');
+			$object->template_data_fill();
 			return template_assign_bors_object($object);
 		}
 		
@@ -135,10 +136,15 @@
 
 	function load_cached_object($class_name, $id, $page)
 	{
-//		echo "Check load for $class_name('$id',$page)<br />";
-		if($obj = @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][serialize($page)])
+		if(is_object($id))
+			return NULL;
+			
+//		echo "Check load for <b>$class_name</b>('$id',$page)<br />";
+		if($obj = @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][serialize(max($page,1))])
+		{
 			return $obj;
-
+		}
+		
 		if(config('memcached') && !is_object($id))
 		{
 			$memcache = &new Memcache;
@@ -154,12 +160,13 @@
 				return $x;
 			}
 		}
+		
+		return NULL;
 	}
 
 	function save_cached_object($object)
 	{
 	
-//		echo "Save cache object ".get_class($object)."'(".$object->id()."', ".$object->page().")<br />\n";
 		if(method_exists($object, 'id') && !is_object($object->id()))
 		{
 			if(config('memcached') && $object->can_cached())
@@ -171,6 +178,7 @@
 			}
 
 			$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][serialize($object->page())] = $object;
+//			echo "Save cache object <b>".get_class($object)."</b>('".$object->id()."', ".$object->page().")<br />\n";
 		}
 	}
 

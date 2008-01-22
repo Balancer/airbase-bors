@@ -96,8 +96,6 @@ class base_object extends base_empty
 		if($data_provider = $this->data_provider())
 			object_load($data_provider, $this)->fill();
 
-		foreach($this->data_providers() as $key => $value)
-			$this->add_template_data($key, $value);
 	}
 
 	function lcml($text)
@@ -279,18 +277,31 @@ class base_object extends base_empty
 	function set_template($template, $db_update) { $this->set("template", $template, $db_update); }
 	function template() { return $this->stb_template ? $this->stb_template : @$GLOBALS['cms']['default_template']; }
 
+	function template_data_fill()
+	{
+		foreach($this->data_providers() as $key => $value)
+			$this->add_template_data($key, $value);
+	}
+
 	function cache_static() { return 0; }
 	
 	function titled_url() { return '<a href="'.$this->url($this->page())."\">{$this->title()}</a>"; }
-	function titled_admin_url() { return '<a href="'.$this->admin_url($this->page())."\">{$this->title()}</a>"; }
+	function titled_admin_url() { return '<a href="'.$this->admin_url($this->page()).'">'.($this->title()?$this->title():'---').'</a>'; }
 	function titled_edit_url() { return '<a href="'.$this->edit_url($this->page()).'">'.($this->title()?$this->title():'---').'</a>'; }
+
+	function check_data(&$data)
+	{
+		foreach($data as $key => $val)
+			if(!$this->check_value($key, $val))
+				return true;
+
+		return false;
+	}
 
 	function set_fields($array, $db_update_flag, $fields_list = NULL, $check_values = false)
 	{
-		if($check_values)
-			foreach($array as $key => $val)
-				if(!$this->check_value($key, $val))
-					return false;
+		if($check_values && $this->check_data($data) === true)
+			return false;
 				
 		if($fields_list)
 		{
@@ -310,7 +321,7 @@ class base_object extends base_empty
 					$this->$method($val, $db_update_flag);
 			}
 		}
-		
+
 		return true;
 	}
 

@@ -133,11 +133,15 @@ function text_date($date)
 	return $d.' '.strtolower(month_name_rp($m)).' '.$y;
 }
 
-function make_input_time($field_name, $data)
+function make_input_time($field_name, &$data)
 {
 	foreach(explode(' ', 'year month day hour min sec') as $key)
-		$$key = intval(@$data[$field_name.'_'.$key]);
-
+	{
+		$name = $field_name.'_'.$key;
+		$$key = intval(@$data[$name]);
+		unset($data[$name]);
+	}
+	
 	if(!$day)
 		$day = 1;
 
@@ -147,5 +151,5 @@ function make_input_time($field_name, $data)
 	if(!$year)
 		$year = strftime('%Y', time());
 
-	return strtotime("{$year}-{$month}-{$day} $hour:$min:$sec");
+	return $data[$field_name] = strtotime("{$year}-{$month}-{$day} $hour:$min:$sec");
 }

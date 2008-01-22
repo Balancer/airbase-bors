@@ -8,8 +8,10 @@ function bors_check_access($object, $access_list, $user=NULL)
 //	debug_exit($access_list);
 
 	foreach($access_list as $section => $need_level)
-		if(!$user->check_access($section, $need_level, true))
-			return false;
+		if($user->check_access($section, $need_level, false))
+			return true;
 	
-	return true;
+//	bors_message(ec("Недостаточный уровень доступа"));
+	
+	return false;
 }
