@@ -11,7 +11,6 @@
 			$_SERVER['QUERY_STRING'] = $m[2];
 	}
 
-//	echo('<xmp>'); print_r($_SERVER); echo('</xmp>'); exit();
 
 	if($_SERVER['REQUEST_URI'] == '/cms/main.php')
 	{
@@ -50,7 +49,6 @@
     ini_set('display_errors', 'On');
     ini_set('log_errors', 'On');
 
-
     require_once("config.php");
     require_once("funcs/Cache.php");
 
@@ -60,7 +58,7 @@
 		if(!($load_avg = $cache->get('system', 'load-average-v2')))
 		{
 			$uptime=explode(" ", exec("uptime"));
-			$cache->set($load_avg = floatval($uptime[13]), -120);
+			$cache->set($load_avg = floatval($uptime[10]), -120);
 		}
 
 		if($load_avg > 5)
@@ -81,11 +79,9 @@
     ini_set('default_charset',$GLOBALS['cms']['charset']);
     setlocale(LC_ALL, $GLOBALS['cms']['locale']);
 
-	if(empty($GLOBALS['cms']['only_load']) && empty($_GET) && preg_match("!^(.+?)\?(.+)$!", $_SERVER['REQUEST_URI'], $m))
+	if(empty($GLOBALS['cms']['only_load']) && empty($_GET) && !empty($_SERVER['QUERY_STRING']))
 	{
-		$_SERVER['QUERY_STRING'] = $m[2];
-		$_SERVER['REQUEST_URI'] = $m[1];
-		foreach(split("&", $m[2]) as $pair)
+		foreach(split("&", $_SERVER['QUERY_STRING']) as $pair)
 		{
 			@list($var, $val) = split("=", $pair);
 			$_GET[$var] = "$val";
@@ -94,6 +90,8 @@
 	}
 
 	$_GET = array_merge($_GET, $_POST);
+
+//	echo('<xmp>'); print_r($_SERVER); print_r($_GET); echo('</xmp>'); exit();
 
 //	print_r($_POST);
 	require_once("funcs/templates/global.php");

@@ -28,16 +28,38 @@ class forum_post extends base_page_db
 		return array(
 			'topic_id',
 			'create_time'	=> 'posted',
-			'modify_time'=> 'edited',
+			'edited',
 			'owner_id'=> 'poster_id',
 			'poster_ip',
 			'author_name' => 'poster',
 		);
 	}
 
+	function init()
+	{
+		parent::init();
+		if(!$this->loaded())
+		{
+			$tid = 0;
+			for($i=0; $i<10; $i++)
+			{
+				$tid = intval($this->db()->select('posts_archive_'.$i, 'topic_id', array('id='=>$this->id())));
+				if($tid)
+					break;
+			}
+
+			if(!$tid)
+				return false;
+
+			$this->db()->query("INSERT IGNORE posts SELECT * FROM posts_archive_{$i} WHERE topic_id = {$tid}");
+			
+			return parent::init();
+		}
+	}
+
 	function set_topic_id($value, $dbupd) { $this->fset('topic_id', $value, $dbupd); }
 	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
-	function set_modify_time($value, $dbupd) { $this->fset('modify_time', $value, $dbupd); }
+	function set_edited($value, $dbupd) { $this->fset('edited', $value, $dbupd); }
 	function set_flag($flag, $db_update) { $this->fset('flag', $flag, $db_update); }
 	function set_owner_id($owner_id, $db_update) { $this->fset('owner_id', $owner_id, $db_update); }
 	function set_poster_ip($poster_ip, $db_update) { $this->fset('poster_ip', $poster_ip, $db_update); }
@@ -126,8 +148,6 @@ class forum_post extends base_page_db
 		return $this->stb_flag; 
 	}
 
-
-
 	var $stb_answer_to_id = '';
 	function set_answer_to_id($answer_to_id, $db_update) { $this->set("answer_to_id", $answer_to_id, $db_update); }
 	function field_answer_to_id_storage() { return 'answer_to(id)'; }
@@ -141,7 +161,23 @@ class forum_post extends base_page_db
 		return false;
 	}
 
-	function preShowProcess()
+//	function preShowProcess()
+//	{
+//		return go($this->url_in_topic());
+//	}
+
+	function cache_static() { return 86400; }
+
+	function template() { return 'empty.html'; }
+	function render() { return 'render_fullpage'; }
+
+	function empty_body()
+	{
+		require_once('funcs/templates/assign.php');
+		return template_assign_data('post.html', array('this' => $this));
+	}
+	
+	function url_in_topic()
 	{
 		$tid = $this->topic_id();
 		$pid = $this->id();
@@ -165,9 +201,15 @@ class forum_post extends base_page_db
 				break;
 			}
 			
-		require_once('funcs/navigation/go.php');
+		return $topic->url($page)."#p".$pid;
+	}
 
-		return go($topic->url($page)."#p".$pid, true, 0, false);
+	function modify_time()
+	{
+		if($time = $this->edited())
+			return $time;
+
+		return $this->create_time();
 	}
 
 	function url() 

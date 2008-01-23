@@ -117,7 +117,7 @@ class user_reputation extends base_page_db
 		class_load('cache_group', "user-{$uid}-reputation")->clean();
 		
 		include_once("funcs/navigation/go.php");
-		go("http://balancer.ru/user/$uid/reputation/");
+		go("http://balancer.ru/user/$uid/reputation.html?");
 	}
 	
 	function access() { return $this; }
