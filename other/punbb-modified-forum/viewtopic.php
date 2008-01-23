@@ -462,7 +462,7 @@ while ($cur_post = $db->fetch_assoc($result))
 
 		if($is_coordinator)
 		{
-			$user_info[] = "<a href=\"http://balancer.ru/forums/tools/post/{$cur_post['id']}/\">Операции над сообщением</a>";
+			$user_info[] = "<a href=\"http://balancer.ru/forum/tools/post/{$cur_post['id']}/\">Операции над сообщением</a>";
 		}
 
 	}

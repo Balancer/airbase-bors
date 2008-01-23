@@ -10,7 +10,7 @@ function object_load($class, $object_id=NULL, $page=NULL, $args=array())
 	if(is_numeric($class))
 		$class = class_id_to_name($class);
 	
-//	echo "Load {$class}({$object_id})<br />\n";
+//	echo "Load {$class}({$object_id})<br />\n"; exit();
 	
 	if(!$class)
 		return;

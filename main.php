@@ -61,7 +61,7 @@
 			$cache->set($load_avg = floatval($uptime[10]), -120);
 		}
 
-		if($load_avg > 5)
+		if($load_avg > config('bot_lavg_limit'))
 		{
 #			header('HTTP/1.1 503 Service Temporarily Unavailable');
 			header('Status: 503 Service Temporarily Unavailable');
@@ -110,11 +110,8 @@
 //	if($ret = bors_object_show(class_load($uri, NULL, 1, false)))
 
 	$object = object_load($uri);
-	if($ret = bors_object_show($object))
-	{
-    	@header("X-Bors-direct: $uri");
-	}
-	else
+   	@header("X-Bors-loaded: ".$object->class_name());
+	if(!($ret = bors_object_show($object)))
 	{
 	    @header("X-Bors-obsolete: $uri");
 	    require_once("funcs/handlers.php");

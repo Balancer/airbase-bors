@@ -95,7 +95,7 @@ if ($footer_style == 'viewforum' || $footer_style == 'viewtopic')
 		{
 			echo "<dl class=\"conl\"><dd><a href=\"".class_load('forum_topic', $id)->url($p)."\">Эта тема на новом движке</a></dd>";
 			echo "<dd><a href=\"".class_load('forum_printable', $id)->url()."\">Версия для печати</a></dd>";
-			echo "<dd><a href=\"http://balancer.ru/forums/tools/topic/{$id}/reload/\">Пересчитать тему и сбросить кеши</a></dd>";
+			echo "<dd><a href=\"http://balancer.ru/forum/tools/topic/{$id}/reload/\">Пересчитать тему и сбросить кеши</a></dd>";
 			echo "</dl>";
 		}
 
