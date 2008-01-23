@@ -251,7 +251,7 @@
 			elseif($obj = class_internal_uri_load($class))
 				return $obj;
 		}
-	
+
 		if(preg_match("!^\w+$!", $class))
 			return object_init($class, $id, $page);
 		else
@@ -495,7 +495,6 @@ function object_init($class_name, $object_id, $object_page, $args = array())
 		return NULL;
 
 //	echo "{$class_name}($id) was loaded seccessfully} as ".get_class($obj)."<br />\n"; exit();
-
 
 	if($use_cache)
 		save_cached_object($obj);

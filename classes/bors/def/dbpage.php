@@ -1,7 +1,6 @@
-<?
-class_include('def_page');
+<?php
 
-class def_dbpage extends def_page
+class def_dbpage extends base_page
 {
 	var $db;
 
