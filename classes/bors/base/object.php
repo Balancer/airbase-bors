@@ -32,8 +32,11 @@ class base_object extends base_empty
 		{
 			foreach($tables as $table => $fields)
 			{
-				if(preg_match('!^\w+\((\w+)\)$!', $table, $m))
-					$id_field = $m[1];
+				if(preg_match('!^(\w+)\((\w+)\)$!', $table, $m))
+				{
+					$table = $m[1];
+					$id_field = $m[2];
+				}
 				else
 					$id_field = 'id';
 				foreach($fields as $property => $db_field)

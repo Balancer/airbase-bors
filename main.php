@@ -52,7 +52,7 @@
     require_once("config.php");
     require_once("funcs/Cache.php");
 
-	if($client['is_bot'])
+	if($client['is_bot'] && config('bot_lavg_limit'))
 	{
 		$cache = &new Cache();
 		if(!($load_avg = $cache->get('system', 'load-average-v2')))
