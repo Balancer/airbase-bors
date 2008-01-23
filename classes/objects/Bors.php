@@ -287,15 +287,15 @@
 
 //			echo "Initial url=$url<br/>;";
 
-			if(preg_match('!\\\?!', $url_pattern) && !preg_match('!\?!', $url))
+			if(preg_match('!\\\?!', $url_pattern) && !preg_match('!\?!', $url) && !empty($_SERVER['QUERY_STRING']))
 				$check_url = $url."?".$_SERVER['QUERY_STRING'];
 			else
 				$check_url = $url;
 		
-			//echo "Check $url_pattern to $url for $class_path as !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$! to {$check_url}<br />\n";
+//			echo "Check $url_pattern to $url for $class_path as !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$! to {$check_url}<br />\n";
 			if(preg_match("!^http://({$_SERVER['HTTP_HOST']})$url_pattern$!", $check_url, $match))
 			{
-				//echo "Ok!<br />";
+//				echo "<b>Ok!</b><br />";
 				$id = NULL;
 				$page = 1;
 				
