@@ -46,6 +46,7 @@
 			$smarty->assign($var, $obj->$var());
 		
 		require_once("bors_smarty_common.php");
+
 		$template = smarty_template($template ? $template : $obj->template());
 		$smarty->template_dir = dirname(preg_replace("!^xfile:!", "", $template));
 		$smarty->assign("page_template", $template);

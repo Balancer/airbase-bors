@@ -41,7 +41,7 @@
 		'/user/(\d+)/reputation/ => user_reputation(1)',
 		'/user/(\d+)/reputation/(.+) => user_reputation(1,2)',
 		'/user/(\d+)/reputation\.html => user_reputation(1)',
-		'/user/(\d+)/reputation\.html(.+) => user_reputation(1,2)',
+		'/user/(\d+)/reputation\.html?(.*) => user_reputation(1,2)',
 
 #		'/user/(\d+)/reputation.* => forum_main',
 
