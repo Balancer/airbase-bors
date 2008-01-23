@@ -109,10 +109,12 @@
 
 //	if($ret = bors_object_show(class_load($uri, NULL, 1, false)))
 
-	$object = object_load($uri);
-   	@header("X-Bors-loaded: ".$object->class_name());
-	if(!($ret = bors_object_show($object)))
+	if($object = object_load($uri))
+		@header("X-Bors-loaded: ".$object->class_name());
+
+	if(!$object || ($ret = bors_object_show($object))!== true)
 	{
+	
 	    @header("X-Bors-obsolete: $uri");
 	    require_once("funcs/handlers.php");
 
