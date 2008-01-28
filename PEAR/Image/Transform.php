@@ -22,7 +22,7 @@
  * @author     Philippe Jausions <Philippe.Jausions@11abacus.com>
  * @copyright  2002-2007 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: Transform.php,v 1.42 2007/04/19 16:17:57 dufuz Exp $
+ * @version    CVS: $Id: Transform.php,v 1.1.2.1 2008/01/28 19:27:44 balancer Exp $
  * @link       http://pear.php.net/package/Image_Transform
  */
 

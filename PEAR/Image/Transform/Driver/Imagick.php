@@ -18,7 +18,7 @@
  * @author     Peter Bowyer <peter@mapledesign.co.uk>
  * @copyright  2002-2005 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: Imagick.php,v 1.9 2007/04/19 16:36:09 dufuz Exp $
+ * @version    CVS: $Id: Imagick.php,v 1.1.2.1 2008/01/28 19:27:44 balancer Exp $
  * @deprecated
  * @link       http://pear.php.net/package/Image_Transform
  */

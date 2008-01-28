@@ -14,7 +14,7 @@
 // +----------------------------------------------------------------------+
 // | Authors: Jason Rust <jrust@rustyparts.com>                           |
 // +----------------------------------------------------------------------+
-// $Id: Imlib.php,v 1.6 2007/04/19 16:36:09 dufuz Exp $
+// $Id: Imlib.php,v 1.1.2.1 2008/01/28 19:27:44 balancer Exp $
 // {{{ requires
 
 require_once 'Image/Transform.php';

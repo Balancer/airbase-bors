@@ -24,7 +24,7 @@ require_once 'Image/Transform/Driver/GD.php';
  * @package
  * @author NAWAL ASWAN
  * @copyright Copyright (c) 2003
- * @version $Id: GD1.php,v 1.5 2007/04/19 16:36:09 dufuz Exp $
+ * @version $Id: GD1.php,v 1.1.2.1 2008/01/28 19:27:44 balancer Exp $
  * @access public
  **/
 Class Image_Transform_Driver_GD1 extends Image_Transform_Driver_GD

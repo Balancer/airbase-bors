@@ -1,4 +1,4 @@
-<?php
+<?
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 	require_once("funcs/filesystem_ext.php");
 	require_once('inc/images.php');
@@ -16,6 +16,7 @@
 	$need_height = @$m[2];
 	
 	$source_image = preg_replace("!/cache(.+)/\d*x\d*/([^/]+\.(jpe?g|png|gif))$!i", "$1/$2", $_SERVER['REQUEST_URI']);
+	$source_image_url = preg_replace("!/cache(.+)/\d*x\d*/([^/]+\.(jpe?g|png|gif))$!i", "http://{$_SERVER['HTTP_HOST']}$1/$2", $_SERVER['REQUEST_URI']);
 
 	$source_file = $_SERVER['DOCUMENT_ROOT'].$source_image;
 	$target_file = $dir."/".basename($_SERVER['REQUEST_URI']);
@@ -23,10 +24,10 @@
 	if(!file_exists($source_file))
 		exit(ec("Ошибка! Отсутствует изображение $source_image"));
 
-	if(@filesize($source_file) == 0)
+	if(!config('pics_base_safemodded') && @filesize($source_file) == 0)
 		exit(ec("Ошибка! Нулевой размер файла $source_image"));
 	
-	$imd = getimagesize($source_file);
+	$imd = getimagesize(config('pics_base_safemodded') ? $source_image_url : $source_file);
 
 //	echo "<xmp>"; print_r($imd); echo "</xmp>";
 
@@ -42,10 +43,15 @@
 	if($need_height && !$need_width)
 		$need_width = intval($source_width*$need_height/$source_height+0.5);
 
+	$resize = ($need_width<$source_width || $need_height<$source_height);
+
 	if(!$need_width || !$need_height)
 		exit(ec("Не могу определить нужные размеры изображения $source_image"));
 
-	image_file_scale($source_file, $target_file, $need_width, $need_height);
+	if(config('pics_base_safemodded'))
+		image_file_scale($source_image_url, $target_file, $need_width, $need_height);
+	else
+		image_file_scale($source_file, $target_file, $need_width, $need_height);
 
 	@chmod($target_file, 0666);
 		
