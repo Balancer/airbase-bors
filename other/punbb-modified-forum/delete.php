@@ -84,9 +84,14 @@ if (isset($_POST['delete']))
 	}
 	else
 	{
+		if($blog = object_load('forum_blog', $id))
+			$blog->delete();
+
 		attach_delete_post($id);	// Attachment Mod , delete the attachments in this post (orphan check is checked in this function)
 		// Delete just this one post
 		delete_post($id, $cur_post['tid']);
+
+
 		update_forum($cur_post['fid']);
 
 		redirect('viewtopic.php?id='.$cur_post['tid'], $lang_delete['Post del redirect']);

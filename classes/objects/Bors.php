@@ -45,7 +45,6 @@
 					$storage = object_load($storage);
 				else
 					$storage = $this->config()->storage();
-
 				
 				$storage->save($obj);
 				save_cached_object($obj);
@@ -140,7 +139,7 @@
 			return NULL;
 			
 //		echo "Check load for <b>$class_name</b>('$id',$page)<br />";
-		if($obj = @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][serialize(max($page,1))])
+		if($obj = @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][serialize($page)])
 		{
 			return $obj;
 		}
@@ -149,8 +148,6 @@
 		{
 			$memcache = &new Memcache;
 			$memcache->connect(config('memcached')) or debug_exit("Could not connect memcache");
-			if(!is_object($page) && $page < 2)
-				$page = 1;
 				
 //			echo "got ".$class_name.'://'.$id.','.serialize($page)."<br />\n";
 
@@ -164,7 +161,12 @@
 		return NULL;
 	}
 
-	function save_cached_object($object)
+	function delete_cached_object($object)
+	{
+		return save_cached_object($object, true);
+	}
+
+	function save_cached_object($object, $delete = false)
 	{
 	
 		if(method_exists($object, 'id') && !is_object($object->id()))
@@ -173,11 +175,20 @@
 			{
 				$memcache = &new Memcache;
 				$memcache->connect(config('memcached')) or debug_exit("Could not connect memcache");
-				@$memcache->set('bors_v11_'.get_class($object).'://'.$object->id().','.serialize($object->page()), $object, true, 600);
+				
+				$hash = 'bors_v11_'.get_class($object).'://'.$object->id().','.serialize($object->page());
+				
+				if($delete)
+					@$memcache->delete($hash);
+				else
+					@$memcache->set($hash, $object, true, 600);
 //				echo "memcahced [".get_class($object).'://'.$object->id().','.serialize($object->page())."]<br />";
 			}
 
-			$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][serialize($object->page())] = $object;
+			if($delete)
+				unset($GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][serialize($object->page())]);
+			else
+				$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][serialize($object->page())] = $object;
 //			echo "Save cache object <b>".get_class($object)."</b>('".$object->id()."', ".$object->page().")<br />\n";
 		}
 	}
@@ -192,7 +203,7 @@
 		$class_name = $m[1];
 
 		$id = $m[2];
-		$page = 1;
+		$page = 0;
 		if(preg_match("!^(.+),(\d+)$!", $id, $m))
 		{
 			$id = $m[1];
@@ -297,7 +308,7 @@
 			{
 //				echo "<b>Ok!</b><br />";
 				$id = NULL;
-				$page = 1;
+				$page = 0;
 				
 				if(preg_match("!^redirect:(.+)$!", $class_path, $m))
 				{
@@ -324,7 +335,7 @@
 				{
 					$class_path = $m[1];
 					$id = $match[$m[2]+1];
-					$page = max(@$match[$m[3]+1], 1);
+					$page = intval(@$match[$m[3]+1]);
 				}
 				elseif(preg_match("!^(.+)\((\d+)\)$!", $class_path, $class_match))	
 				{
@@ -404,7 +415,7 @@
 					$redirect = false;
 			
 				$id = NULL;
-				$page = 1;
+				$page = 0;
 				
 				// Формат вида aviaport_image_thumb(3,geometry=2)
 				if(preg_match("!^(.+)\((\d+|NULL),([^)]+=[^)]+)\)$!", $class_path, $m))	
@@ -423,7 +434,7 @@
 				{
 					$class_path = $m[1];
 					$id = $match[$m[2]+1];
-					$page = max(@$match[$m[3]+1], 1);
+					$page = intval(@$match[$m[3]+1]);
 				}
 				elseif(preg_match("!^(.+)\((\d+)\)$!", $class_path, $class_match))	
 				{

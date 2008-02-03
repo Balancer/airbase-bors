@@ -47,6 +47,7 @@ if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
 
 $cur_post = $db->fetch_assoc($result);
+$blog = object_load('forum_blog', $id);
 
 $cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($id));
 
@@ -144,8 +145,26 @@ if (isset($_POST['form_sent']))
 		$page = $topic->page_by_post_id($post->id());
 		$topic->set_page($page);
 
+		if(empty($_POST['as_blog']))
+		{
+			if($blog)
+				$blog->delete();
+		}
+		else
+		{
+			if(!$blog)
+			{
+				$blog = &new forum_blog($post->id());
+				$blog->new_instance();
+			}
+				
+			$blog->set_owner_id($pun_user['id'], true);
+			$blog->set_forum_id($topic->forum_id(), true);
+			$blog->cache_clean();
+		}
+
 		$topic->cache_clean();
-			
+	
 		include_once('engines/search.php');
 		bors_search_object_index($topic, 'replace');
 
@@ -415,6 +434,10 @@ if ($is_admmod)
 	else
 		$checkboxes[] = '<label><input type="checkbox" name="silent" value="1" tabindex="'.($cur_index++).'" />&nbsp;'.$lang_post['Silent edit'];
 }
+
+//print_d($blog);
+
+$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\"".($blog ? ' checked="true"' : '')." />Разместить сообщение в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
 
 if (!empty($checkboxes))
 {

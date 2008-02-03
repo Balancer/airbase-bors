@@ -15,14 +15,14 @@
 	$need_width  = @$m[1];
 	$need_height = @$m[2];
 	
-	$source_image = preg_replace("!/cache(.+)/\d*x\d*/([^/]+\.(jpe?g|png|gif))$!i", "$1/$2", $_SERVER['REQUEST_URI']);
+	$source_image = preg_replace("!/cache(.+)/\d*x\d*/([^/]+(\.jpe?g|\.png|\.gif|))$!i", "$1/$2", $_SERVER['REQUEST_URI']);
 	$source_image_url = preg_replace("!/cache(.+)/\d*x\d*/([^/]+\.(jpe?g|png|gif))$!i", "http://{$_SERVER['HTTP_HOST']}$1/$2", $_SERVER['REQUEST_URI']);
 
 	$source_file = $_SERVER['DOCUMENT_ROOT'].$source_image;
 	$target_file = $dir."/".basename($_SERVER['REQUEST_URI']);
 	
 	if(!file_exists($source_file))
-		exit(ec("Ошибка! Отсутствует изображение $source_image"));
+		exit(ec("Ошибка! Отсутствует изображение $source_image [{$source_file}]"));
 
 	if(!config('pics_base_safemodded') && @filesize($source_file) == 0)
 		exit(ec("Ошибка! Нулевой размер файла $source_image"));

@@ -1,8 +1,10 @@
-<?
-	require_once('funcs/DataBaseHTS.php');
+<?php
+
+require_once('inc/urls.php');
 
 	function lt_img($params) 
 	{ 
+//		print_d($params); exit();
 
 		if(empty($params['size']))
 			$params['size'] = '468x468';
@@ -15,13 +17,10 @@
 			// Заменим ссылку в кеш на полную картинку
 			$uri = secure_path(abs_path_from_relative(preg_replace("!^(.+?)/cache/(.+)/\d*x\d*/(.+?)$!", "$1/$2/$3", $uri), $GLOBALS['lcml']['uri']));
 
-			$hts = &new DataBaseHTS();
-			$data = $hts->parse_uri($uri);
+			$data = url_parse($uri);
 //			echo $GLOBALS['lcml']['level'];
 //			exit(print_r($GLOBALS['lcml']['uri'],true));
 //			exit(print_r($data,true));
-
-
 
 		   	$fp = preg_replace("!^(.*?)/([^/]+)$!", "$1/img/$2", $data['local_path']);
 			if(file_exists($fp))
@@ -43,7 +42,7 @@
 
 //			$uri = $hts->normalize_uri($uri, $GLOBALS['lcml']['uri']);
 
-			$data = $hts->parse_uri($uri);
+			$data = url_parse($uri);
 
 			if(!file_exists($path) && $data['local'])
 			{
@@ -71,6 +70,8 @@
 						$path .= "index";
 				}
 
+//				exit($path);
+
 				if(!file_exists($path) || filesize($path)==0)
 				{
 					require_once('HTTP/Request.php');
@@ -79,6 +80,8 @@
 						'maxRedirects' => 2,
 						'timeout' => 5,
 					));
+					
+//					exit("down {$params['url']}");
 						
 					$req->addHeader('Content-Encoding', 'gzip');
 					$req->addHeader('Referer', $params['url']);
@@ -117,15 +120,21 @@
 					$remote = $uri;
 					$uri = str_replace($GLOBALS['cms']['sites_store_path'], $GLOBALS['cms']['sites_store_uri'], $path);
 					$data['local'] = true;
-					if(!$hts->get_data($uri,'origin_uri'))
-						$hts->set_data($uri, 'origin_uri', $remote);
-					if(!$hts->get_data($uri,'local_path'))
-						$hts->set_data($uri, 'local_path', $path);
+					
+					$db = &new driver_mysql('BORS');
+					
+					$id = intval($db->select('images', 'id', array('original_url=' => $remote)));
+					if(!$id)
+					{
+						$db->store('images', 'original_url=\''.addslashes($remote).'\'', array('original_url' => $remote));
+						$id = $db->last_id();
+					}
+
+					$db->update('images', 'id='.$id, array('local_path' => $path));
 				}
 			}
 
 			$need_upload = false;
-
 
 			if($data['local'])
 			{
@@ -140,7 +149,10 @@
 				$img_ico_uri  = preg_replace("!^(http://[^/]+)(.*?)(/[^/]+)$!", "$1/cache$2/{$params['size']}$3", $uri);
 //				return "ico=$img_ico_uri; uri=$uri; params=".str_replace(" ","_",print_r($params,true))."<br/>\n";
 //				return "_$path, _$uri, _$img_ico_uri<br />\n";
-				$img_page_uri = preg_replace("!^(http://.+?)(\.[^\.]+)$!", "$1.htm", $uri);
+				if(preg_match('!\.[^/+]$!', $uri))
+					$img_page_uri = preg_replace("!^(http://.+?)(\.[^\.]+)$!", "$1.htm", $uri);
+				else
+					$img_page_uri = $uri.'.htm';
 //				return "_$local_uri<br />_$img_ico_uri<br />";
 
 				require_once('HTTP/Request.php');
@@ -168,8 +180,8 @@
 ((!empty($response) && PEAR::isError($response))?("responce=".$response->getMessage()."\n"):'').
 "[/spoiler]\n");*/
 
-				if(!empty($GLOBALS['main_uri']))
-					$hts->nav_link($GLOBALS['main_uri'], $uri);
+//				if(!empty($GLOBALS['main_uri']))
+//					$hts->nav_link($GLOBALS['main_uri'], $uri);
 				require_once("funcs/images/fill.php");
 				fill_image_data($uri);
 			   
@@ -194,8 +206,7 @@ __EOT__;
 
 				$description = stripslashes(!empty($params['description']) ? "<div align=\"center\"><small>".lcml($params['description'])."</small></div>" : '');
 
-//				print_r($params);
-//				exit();
+//				print_r($params); exit();
 
 				$a_href_b = "";
 				$a_href_e = "";
@@ -217,4 +228,3 @@ __EOT__;
 			}
 		}
 	}
-?>

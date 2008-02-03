@@ -53,8 +53,6 @@ function check_cookie(&$pun_user)
 
 		$pun_user = $db->fetch_assoc($result);
 
-//		echo "<xmp>"; print_r($pun_user); exit("</xmp>");
-
 		if(!$pun_user)
 		{
 			set_default_user();
@@ -126,7 +124,7 @@ function set_default_user()
 			WHERE u.id=1") or error('Unable to fetch guest information for '.$remote_addr, __FILE__, __LINE__, $db->error());
 
 	if (!$db->num_rows($result))
-		exit('Unable to fetch guest information for '.$remote_addr.'. The table \''.$db->prefix.'users\' must contain an entry with id = 1 that represents anonymous users.');
+		pun_exit('Unable to fetch guest information for '.$remote_addr.'. The table \''.$db->prefix.'users\' must contain an entry with id = 1 that represents anonymous users.');
 
 	$pun_user = $db->fetch_assoc($result);
 
@@ -816,7 +814,7 @@ function maintenance_message()
 	// Close the db connection (and free up any result data)
 	$db->close();
 
-	exit($tpl_maint);
+	pun_exit($tpl_maint);
 }
 
 
@@ -911,7 +909,7 @@ function redirect($destination_url, $message)
 	// Close the db connection (and free up any result data)
 	$db->close();
 
-	exit($tpl_redir);
+	pun_exit($tpl_redir);
 }
 
 
@@ -1185,3 +1183,12 @@ function dump()
 
 		return array($os, $browser);
 	}
+
+function pun_exit($message = 0)
+{
+	global $bors;
+	if(!empty($bors) && is_object($bors))
+		$bors->changed_save();
+
+	exit($message);
+}

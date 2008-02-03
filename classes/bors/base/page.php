@@ -1,7 +1,5 @@
 <?php
 
-class_include('def_page');
-
 class base_page extends def_page
 {
 	function render_engine() { return 'render_page'; }

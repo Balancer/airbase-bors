@@ -60,6 +60,9 @@ class storage_db_mysql_smart extends base_null
 				{
 					if(is_numeric($property))
 						$property = $field;
+
+					if($property == 'id')
+						$main_id_name = $def_id = $field;
 					
 /*					// Если у нас после поля идёт его описание.
 					// 
@@ -277,6 +280,9 @@ class storage_db_mysql_smart extends base_null
 				{
 					if(is_numeric($property))
 						$property = $field;
+
+					if($property == 'id')
+						$def_id = $field;
 
 					if(empty($object->changed_fields[$property]))
 						continue;
