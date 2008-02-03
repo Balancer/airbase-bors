@@ -191,7 +191,7 @@
                 $size=$w."x".$h;
                 mkdirs("$DOCUMENT_ROOT/cache$data[1]/$data[2]",0777);
                 @chmod("$DOCUMENT_ROOT/cache$data[1]/$data[2]",0777);
-                `/usr/local/bin/convert -geometry $size $DOCUMENT_ROOT$data[1]/$data[3] $DOCUMENT_ROOT$QUERY_ENCODED`;
+                `/usr/local/bin/convert -filter Cubic -geometry $size $DOCUMENT_ROOT$data[1]/$data[3] $DOCUMENT_ROOT$QUERY_ENCODED`;
                 @chmod("$DOCUMENT_ROOT$QUERY_ENCODED",0666);
                 header("Location: $REQUEST_URI");
                 exit();
@@ -213,7 +213,7 @@
             }
             @mkdir("$DOCUMENT_ROOT$data[1]/$data[2]",0777);
             @chmod("$DOCUMENT_ROOT$data[1]/$data[2]",0777);
-            `/usr/local/bin/convert -geometry $size $DOCUMENT_ROOT$data[1]/$data[3] $DOCUMENT_ROOT$QUERY_ENCODED`;
+            `/usr/local/bin/convert -filter Cubic -geometry $size $DOCUMENT_ROOT$data[1]/$data[3] $DOCUMENT_ROOT$QUERY_ENCODED`;
             @chmod("$DOCUMENT_ROOT$QUERY_ENCODED",0666);
             header("Location: $REQUEST_URI");
             exit();

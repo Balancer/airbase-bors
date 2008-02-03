@@ -10,14 +10,22 @@ class base_empty extends base_null
 	
 	function __construct($id)
 	{
+		$this->page = $this->default_page();
 		$this->id = $this->initial_id = $id;
 	}
 
-	var $page = 1;
+	var $page;
 	function page() { return $this->page; }
 	//TODO: со временем - убрать!
-	function set_page($page) { $this->page = $page; }
+	function set_page($page)
+	{
+		if(!$page && $this->default_page())
+			$this->page = $this->default_page();
+		else
+			$this->page = $page;
+	}
 
+	function default_page() { return 1; }
 	function storage_engine() { return ''; }
 	function body_engine() { return ''; }
 	function loaded() { return true; }

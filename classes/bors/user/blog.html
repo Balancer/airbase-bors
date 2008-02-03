@@ -1,12 +1,16 @@
 {if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
 
-{foreach from=$topics item=topic_id}
-{bors_class_load class="forum_topic" id=$topic_id var="t"}
+{foreach from=$blog_records item=r}
+{bors_class_load class="forum_post"  id=$r->id() var="p"}
+{if $p}
+{bors_class_load class="forum_topic" id=$p->topic_id() var="t"}
+{if $t}
 {assign var="f" value=$t->forum()}
-{assign var="p" value=$t->first_post()}
+{* assign var="p" value=$t->first_post() *}
 {if $f->is_public_access()}
 {include file="xfile:templates/forum/post.html" show_title=$t->title_url() strip="8192"}
 {/if}
+{/if}{/if}
 {/foreach}
 
 {if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}

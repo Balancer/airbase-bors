@@ -262,13 +262,6 @@ if (isset($_POST['form_sent']))
 
 			$num_replies = $db->result($result, 0) - 1;
 
-			// Update topic
-			if(!$new_pid)
-			{
-				echo 1/0;
-				message("Ошибка получения new id");
-			}
-			
 			$db->query('UPDATE '.$db->prefix.'topics SET num_replies='.$num_replies.', last_post='.$now.', last_post_id='.$new_pid.', last_poster=\''.$db->escape($username).'\' WHERE id='.$tid) 
 				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
@@ -410,12 +403,6 @@ if (isset($_POST['form_sent']))
 
 			// Update the topic with last_post_id
 
-			if(!$new_pid)
-			{
-				echo 1/0;
-				message("Ошибка получения new id");
-			}
-
 			$db->query('UPDATE '.$db->prefix.'topics SET last_post_id='.$new_pid.' WHERE id='.$new_tid) 
 				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
@@ -428,9 +415,18 @@ if (isset($_POST['form_sent']))
 
 		$page = $topic->page_by_post_id($post->id());
 		$topic->set_page($page);
-
 		$topic->cache_clean();
-		
+
+		if(!empty($_POST['as_blog']))
+		{
+			$blog = &new forum_blog($post->id());
+			$blog->new_instance();
+			$blog->set_owner_id($post->owner_id(), true);
+			$blog->set_forum_id($topic->forum_id(), true);
+			$blog->store();
+			$blog->cache_clean();
+		}
+			
 		include_once('engines/search.php');
 		bors_search_object_index($topic, 'replace');
 
@@ -677,7 +673,16 @@ if (!$pun_user['is_guest'])
 		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['subscribe']) ? ' checked="checked"' : '').' />'.$lang_post['Subscribe'];
 
 //	$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTMLval = this.checked ? '' : '".addslashes("<label><strong>Заголовок</strong><br /><input class=\"longinput\" type=\"text\" name=\"req_subject\" value=\"\" size=\"80\" maxlength=\"255\" tabindex=\"1\" /><br /></label>")."'\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
-	$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTML = this.checked ? '".addslashes("<label><strong>{$lang_common['Subject']}</strong><br /><input class='longinput' type='text' name='req_subject' value='".(@$_POST['req_subject'])."' size='80' maxlength='255' /><br /></label>")."' : ''\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
+
+	if($tid) // Ответ
+	{
+		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\"/>Разместить ответ в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTML = this.checked ? '".addslashes("<label><strong>{$lang_common['Subject']}</strong><br /><input class='longinput' type='text' name='req_subject' value='".(@$_POST['req_subject'])."' size='80' maxlength='255' /><br /></label>")."' : ''\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
+	}
+	else
+	{
+		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\" checked=\"checked\" />Разместить тему в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+	}
 }
 else if ($pun_config['o_smilies'] == '1')
 	$checkboxes[] = '<label><input type="checkbox" name="hide_smilies" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['hide_smilies']) ? ' checked="checked"' : '').' />'.$lang_post['Hide smilies'];

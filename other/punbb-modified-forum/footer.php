@@ -171,4 +171,4 @@ while (preg_match('#<pun_include "([^/\\\\]*?)">#', $tpl_main, $cur_include))
 $db->close();
 
 // Spit out the page
-exit($tpl_main);
+pun_exit($tpl_main);

@@ -16,14 +16,14 @@
 		return join(' ', $res);
 	}
 
-	function lp_param($dummy, $params)
+	function lt_param($params)
 	{
-		return "<param ".make_enabled_params($params, 'name value')."></param>";
+		return "<param ".make_enabled_params($params, 'name value')." />";
 	}
 
 	function lp_embed($inner, $params)
 	{
-		return "<embed ".make_enabled_params($params, 'src type wmode width height').">".lcml($inner)."</embed>";
+		return "<embed ".make_enabled_params($params, 'src type wmode width height scale salign allowFullScreen allowSriptAccess').">".lcml($inner)."</embed>";
 	}
 
 	function lp_object($inner, $params)

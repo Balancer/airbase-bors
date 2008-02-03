@@ -149,6 +149,7 @@
         if(file_exists("$img.JPEG"))    show_image("$url.JPEG");
         if(file_exists("$img.PNG"))     show_image("$url.PNG");
         if(file_exists("$img.GIF"))     show_image("$url.GIF");
+        if(file_exists($img))     show_image($url);
     }
 
     // Иконки картинок
@@ -177,7 +178,7 @@
    	            mkpath("{$_SERVER['DOCUMENT_ROOT']}/cache$data[1]/$data[2]",0777);
        	        @chmod("{$_SERVER['DOCUMENT_ROOT']}/cache$data[1]/$data[2]",0777);
 				if($h0>$h || $w0>$w)
-                	`/usr/local/bin/convert -geometry $size $image0 $image`;
+                	`/usr/local/bin/convert -filter Cubic -geometry $size $image0 $image`;
 				else
 					copy($image0, $image);
                 @chmod("{$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED",0666);
@@ -201,7 +202,7 @@
             }
             @mkdir("{$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[2]",0777);
             @chmod("{$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[2]",0777);
-            `/usr/local/bin/convert -geometry $size {$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[3] {$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED`;
+            `/usr/local/bin/convert -filter Cubic -geometry $size {$_SERVER['DOCUMENT_ROOT']}$data[1]/$data[3] {$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED`;
             @chmod("{$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED",0666);
             header("Location: {$_SERVER['REQUEST_URI']}");
             exit();

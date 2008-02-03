@@ -32,6 +32,8 @@ function rest_return($ret_val, $saved_params)
 
 function lcml($txt, $params = array ())
 {
+//	debug_exit(0);
+
 	$txt = preg_replace("!^\n+!", "", $txt);
 	$txt = preg_replace("!\n+$!", "\n", $txt);
 
@@ -67,7 +69,7 @@ function lcml($txt, $params = array ())
 	$ch = &new Cache();
 
 	if($ch->get($ch_type, $ch_key, $params['uri'])
-				&& empty ($params['cache_disable']) 
+				&& empty ($params['cache_disable'])
 				&& $GLOBALS['lcml']['level'] < 2
 			)
 		return rest_return($ch->last(), $saved_params);

@@ -51,3 +51,19 @@ function url_truncate($url, $max_length)
 	
 	return join('/', $left).'/.../'.join('/',$right);
 }
+
+function url_parse($url)
+{
+	$data = parse_url($url);
+
+	if(empty ($data['host']))
+		$data['host'] = $_SERVER['HTTP_HOST'];
+
+	if(preg_match("!^{$_SERVER['HTTP_HOST']}$!", $data['host']))
+		$data['root'] = $_SERVER['DOCUMENT_ROOT'];
+
+	$data['local'] = !empty ($data['root']);
+	$data['local_path'] = $data['root'].str_replace('http://'.$data['host'], '', $uri);
+	$data['uri'] = "http://".@ $data['host'].@ $data['path'];
+	return $data;
+}

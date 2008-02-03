@@ -40,7 +40,7 @@
 
 		include_once('funcs/design/page_split.php');
 																		
-		$page = max(intval($GLOBALS['cms']['page_number']), 1);
+		$page = intval($GLOBALS['cms']['page_number']);
 
 		$pages = join(" ", pages_select($uri, $page, ($total-1)/$items_per_page+1));
 																						
