@@ -69,21 +69,22 @@ function mysql_args_compile($args)
 		foreach($args['inner_join'] as $j)
 			$join .= "INNER JOIN {$j} ";
 
-//		unset($args['inner_join']);
+		unset($args['inner_join']);
 	}
 
 	$limit = mysql_limits_compile($args);
+	unset($args['limit']);
 
 	$order = "";
 	if(!empty($args['order']))
 	{
 		$order = mysql_order_compile($args['order']);
 
-//		unset($args['order']);
+		unset($args['order']);
 	}
 	
 	if(empty($args['where']))
-		$where = "";
+		$where = mysql_where_compile($args);
 	else
 		$where = mysql_where_compile($args['where']);
 	

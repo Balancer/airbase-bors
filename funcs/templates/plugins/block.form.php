@@ -48,6 +48,9 @@
 					echo " $p=\"{$$p}\"";
 			
 			echo ">\n";
+			
+			base_object::add_template_data('form_checkboxes', array());
+			
 			return;
 		}
 		
@@ -68,5 +71,9 @@
 		echo "<input type=\"hidden\" name=\"class_name\" value=\"$class_name\" />\n";
 		if(!empty($id))
 			echo "<input type=\"hidden\" name=\"id\" value=\"$id\" />\n";
+
+		if($cbs = base_object::template_data('form_checkboxes'))
+			echo "<input type=\"hidden\" name=\"checkboxes\" value=\"".join(',', $cbs)."\" />\n";
+
 		echo "</form>\n";
 	}

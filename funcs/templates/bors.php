@@ -14,7 +14,7 @@
 		if(!file_exists($smarty->compile_dir))
 			mkdir($smarty->compile_dir, 0775, true);
 		if(!file_exists($smarty->cache_dir))
-			mkdir($smarty->cache_dir, 0775, true);
+			@mkdir($smarty->cache_dir, 0775, true);
 
 		$caching = !$obj->is_cache_disabled()
 				&& @$GLOBALS['cms']['templates_cache_disabled'] !== true;

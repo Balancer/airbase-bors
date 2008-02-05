@@ -138,10 +138,11 @@
 		if(is_object($id))
 			return NULL;
 			
-//		echo "Check load for <b>$class_name</b>('$id',$page)<br />";
 		if($obj = @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][serialize($page)])
 		{
-			return $obj;
+	//		if($class_name == 'aviaport_image_thumb') {	echo "Check load for <b>$class_name</b>('$id',".serialize($page)."<br />"; exit(); }
+			if($obj->can_cached())
+				return $obj;
 		}
 		
 		if(config('memcached') && !is_object($id))
@@ -154,7 +155,8 @@
 			if($x = @$memcache->get('bors_v11_'.$class_name.'://'.$id.','.serialize($page)))
 			{
 //				echo "<b>got!</b><br />";
-				return $x;
+				if($x->can_cached())
+					return $x;
 			}
 		}
 		
@@ -236,7 +238,7 @@
 		return $obj;
 	}
 
-	function class_load($class, $id = NULL, $page=NULL, $use_http = true)
+	function class_load($class, $id = NULL, $page=NULL, $args=array())
 	{
 		if(preg_match("!^/!", $class))
 			$class = 'http://'.$_SERVER['HTTP_HOST'].$class;
@@ -244,8 +246,6 @@
 		if(!is_object($id) && preg_match("!^(\d+)/$!", $id, $m))
 			$id = $m[1];
 	
-//		echo "class_load('$class', '$id')<br />";
-
 		if(preg_match("!^(\w+)://.+!", $class, $m))
 		{
 			if(preg_match("!^http://!", $class))
@@ -256,7 +256,7 @@
 				if($obj = class_load_by_url($class, $page))
 					return $obj;
 
-				if($use_http && $obj = class_internal_uri_load($class))
+				if($obj = class_internal_uri_load($class))
 					return $obj;
 			}
 			elseif($obj = class_internal_uri_load($class))
@@ -264,7 +264,7 @@
 		}
 
 		if(preg_match("!^\w+$!", $class))
-			return object_init($class, $id, $page);
+			return object_init($class, $id, $page, $args);
 		else
 			return NULL;
 	}
@@ -475,7 +475,6 @@
 require_once('classes/inc/bors.php');
 function object_init($class_name, $object_id, $object_page, $args = array())
 {
-//	echo "Pure load {$class_name}(".serialize($object_id).")<br />\n";
 	$obj = pure_class_load($class_name, $object_id, $object_page, $use_cache = defval($args, 'use_cache', true), $local_path = defval($args, 'local_path'));
 
 	if(!$obj)
@@ -483,6 +482,11 @@ function object_init($class_name, $object_id, $object_page, $args = array())
 
 	if($object_page)
 		$obj->set_page($object_page);
+
+	unset($args['local_path']);
+	unset($args['use_cache']);
+	if(method_exists($obj, 'set_args'))
+		$obj->set_args($args);
 		
 	if($m = defval($args, 'match'))
 		$obj->set_match($m);

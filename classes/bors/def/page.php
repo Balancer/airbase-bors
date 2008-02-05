@@ -40,6 +40,7 @@ class def_page extends borsPage
 			$data['template_dir'] = $this->_class_dir();
 			$data['this'] = $this;
 
+			$this->template_data_fill();
 			require_once('funcs/templates/assign.php');
 			return template_assign_data($this->_body_template(), $data);
 		}

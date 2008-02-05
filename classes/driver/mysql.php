@@ -9,33 +9,8 @@ class driver_mysql extends DataBase
 
 	function select($table, $field, $where_map = array())
 	{
-		if($order = @$where_map['order'])
-		{
-			$order = "ORDER BY {$order}";
-			unset($where_map['order']);
-		}
-
-		if(!empty($where_map['table']))
-		{
-			$table = $where_map['table'];
-			unset($where_map['table']);
-		}
-			
-		$where = array();
-		foreach($where_map as $f => $v)
-		{
-			if(preg_match('!^\((\w+)\)(.+)$!', $f, $m))
-				$where[] = $m[1] . $m[2] . $v;
-			else
-				$where[] = $f . '\'' . addslashes($v) . '\'';
-		}
-		
-		if($where)
-			$where = "WHERE ".join(' AND ', $where);
-		else
-			$where = "";
-		
-		return $this->get("SELECT $field FROM $table $where $order LIMIT 1");
+		$where_map['limit'] = 1;
+		return $this->get("SELECT $field FROM $table ".mysql_args_compile($where_map));
 	}
 
 	function delete($table, $where)
@@ -60,7 +35,9 @@ class driver_mysql extends DataBase
 		$where = array();
 		foreach($where_map as $f => $v)
 		{
-			if(preg_match('!^\((\w+)\)(.+)$!', $f, $m))
+			if(is_numeric($f))
+				$where[] = $v;
+			elseif(preg_match('!^\((\w+)\)(.+)$!', $f, $m))
 				$where[] = $m[1] . $m[2] . $v;
 			else
 				$where[] = $f . '\'' . addslashes($v) . '\'';

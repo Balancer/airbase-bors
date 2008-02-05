@@ -148,10 +148,14 @@ class storage_db_mysql_smart extends base_null
 						}
 					}
 
+					$qfield = $field;
+					if(preg_match('!^\w+$!', $field))
+						$qfield = "`{$field}`";
+
 					if($sql_func)
-						$select[] = "{$sql_func}({$current_tab_prefix}{$field}) AS `{$property}{$php_func}`";
+						$select[] = "{$sql_func}({$current_tab_prefix}{$qfield}) AS `{$property}{$php_func}`";
 					else
-						$select[] = $current_tab_prefix.($field == $property ? $field : "{$field} AS `{$property}{$php_func}`");
+						$select[] = $current_tab_prefix.($field == $property ? $qfield : "{$field} AS `{$property}{$php_func}`");
 				}
 			  }
 			

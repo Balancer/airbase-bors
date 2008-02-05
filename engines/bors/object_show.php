@@ -15,7 +15,7 @@
 
 		if(!empty($_GET['act']))
 		{
-			if(!$obj->access()->can_action())
+			if(!$obj->access()->can_action($_GET['act']))
 				return bors_message(ec("Извините, Вы не можете производить операции с этим ресурсом (class=".get_class($obj).", access=".get_class($obj->access()).")"));
 
 			if(method_exists($obj, $method = "on_action_{$_GET['act']}"))
@@ -122,7 +122,7 @@
 
 		$page = $obj->page();
 //		exit($obj->url($page) .'!='. $obj->called_url());
-		if(!preg_match('!\Q'.$obj->url($page).'\E$!', $obj->called_url()))
+		if($obj->called_url() && !preg_match('!\Q'.$obj->url($page).'\E$!', $obj->called_url()))
 			return go($obj->url($page), true);
 
 		if($processed === false)
@@ -163,7 +163,7 @@
 		$last_modify = gmdate('D, d M Y H:i:s', $obj->modify_time()).' GMT';
 		header('Last-Modified: '.$last_modify);
 	   
-		if((!empty($GLOBALS['cms']['cache_static']) || $obj->cache_static()) && (empty($_SERVER['QUERY_STRING']) || $_SERVER['QUERY_STRING']=='del'))
+		if((!empty($GLOBALS['cms']['cache_static']) || $obj->cache_static()) && (empty($_SERVER['QUERY_STRING']) || $_SERVER['QUERY_STRING']=='del' || @$_GET['act'] == 'del'))
 		{
 //			echo "url={$obj->url_engine()}<br />";
 			$sf = &new CacheStaticFile($obj->url($page));
