@@ -2,6 +2,8 @@
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 	require_once("funcs/filesystem_ext.php");
 	require_once('inc/images.php');
+
+//	echo "<xmp>"; print_r($_SERVER); echo "</xmp>";
 	
 	$dir = $_SERVER['DOCUMENT_ROOT'].dirname($_SERVER['REQUEST_URI']);
 	

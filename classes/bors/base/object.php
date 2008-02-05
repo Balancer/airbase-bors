@@ -486,4 +486,14 @@ class base_object extends base_empty
 	}
 
 	function main_table_fields() { return array(); }
+
+	function set_checkboxes($check_list, $db_up)
+	{
+		foreach(split(',', $check_list) as $name)
+			$this->{'set_'.$name}(empty($_GET[$name]) ? 0 : 1, $db_up);
+	}
+
+	private $args = array();
+	function set_args($args) { $this->args = $args; }
+	function args($name) { return @$this->args[$name]; }
 }

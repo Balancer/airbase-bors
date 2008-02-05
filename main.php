@@ -107,14 +107,19 @@
 
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
-//	if($ret = bors_object_show(class_load($uri, NULL, 1, false)))
-
-	if($object = object_load($uri))
-		@header("X-Bors-loaded: ".$object->class_name());
+	if($_SERVER['QUERY_STRING'] == 'del')
+	{
+		$_SERVER['QUERY_STRING'] = 'act=del';
+		$_GET['act'] = 'del';
+	}
+	
+	$object = NULL;
+	if(!preg_match('!^\w+($|&)!', $_SERVER['QUERY_STRING']))
+		if($object = object_load($uri))
+			@header("X-Bors-loaded: ".$object->class_name());
 
 	if(!$object || ($ret = bors_object_show($object))!== true)
 	{
-	
 	    @header("X-Bors-obsolete: $uri");
 	    require_once("funcs/handlers.php");
 

@@ -7,7 +7,8 @@
 		if(is_object($bors))
 			$bors->changed_save();
 	
-//		debug_exit("Go to $uri");
+		if(config('debug_redirect'))
+			debug_exit("Go to <a href=\"{$uri}\">{$uri}</a>");
 	
         if(!headers_sent($filename, $linenum) && $time==0) 
         {
