@@ -33,7 +33,23 @@
 	<td style="background-color: #{if $i.score>0}cfc{else}fcc{/if}; font-size: 8pt;">{if $i.score > 0}+{/if}{$i.score}</td>
 {*	<td style="background-color: #{if $i.score>0}cfc{else}fcc{/if}; font-size: 8pt;"><a href="http://balancer.ru/user/{$i.voter_id}/reputation/">{$i.voter_id|user_data:"name"}</a><br /><script src="http://airbase.ru/js/include/http://balancer.ru/user/{$i.voter_id}/reputation_line/"></script></td> *}
 	<td style="background-color: #{if $i.score>0}cfc{else}fcc{/if}; font-size: 8pt;"><a href="http://balancer.ru/user/{$i.voter_id}/reputation/">{$i.voter_id|user_data:"name"}</a><br /><img src="http://balancer.ru/user/{$i.voter_id}/rep.gif" width="100" height="16" /></td> 
-	<td style="background-color: #{if $i.score>0}cfc{else}fcc{/if}; font-size: 8pt;">{$i.comment|pun_lcml}{if $i.uri}<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За: <a href="{$i.uri}">{$i.uri}</a></div>{/if}
+	<td style="background-color: #{if $i.score>0}cfc{else}fcc{/if}; font-size: 8pt;">{$i.comment|pun_lcml}{if $i.uri}
+		<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За:
+			{assign var="obj" value=0}
+			{if $i.uri|regex_match:"^post://(\d+)"}
+				{assign var="post_id" value=$i.uri|regex_replace:"!^post://(\d+).*!":"\\1"}
+				{bors_object_load var="obj" class="forum_post" id=$post_id}
+			{/if}
+			{if $i.uri|regex_match:"^topic://(\d+)"}
+				{assign var="topic_id" value=$i.uri|regex_replace:"!^topic://(\d+).*!":"\\1"}
+				{bors_object_load var="obj" class="forum_topic" id=$topic_id}
+			{/if}
+			{if $obj}
+				<a href="{$obj->url()}">{$obj->title()}</a>
+			{else}
+				<a href="{$i.uri}">{$i.uri}</a>
+			{/if}
+		</div>{/if}
 	</td>
 </tr>
 {/section}
