@@ -9,6 +9,12 @@ class driver_mysql extends DataBase
 
 	function select($table, $field, $where_map = array())
 	{
+		if(!empty($where_map['table']))
+		{
+			$table = $where_map['table'];
+			unset($where_map['table']);
+		}
+	
 		$where_map['limit'] = 1;
 		return $this->get("SELECT $field FROM $table ".mysql_args_compile($where_map));
 	}
@@ -20,29 +26,12 @@ class driver_mysql extends DataBase
 
 	function select_array($table, $field, $where_map)
 	{
-		if($order = @$where_map['order'])
+		if(!empty($where_map['table']))
 		{
-			$order = "ORDER BY {$order}";
-			unset($where_map['order']);
+			$table = $where_map['table'];
+			unset($where_map['table']);
 		}
 
-		if($limit = @$where_map['limit'])
-		{
-			$limit = "LIMIT {$limit}";
-			unset($where_map['limit']);
-		}
-		
-		$where = array();
-		foreach($where_map as $f => $v)
-		{
-			if(is_numeric($f))
-				$where[] = $v;
-			elseif(preg_match('!^\((\w+)\)(.+)$!', $f, $m))
-				$where[] = $m[1] . $m[2] . $v;
-			else
-				$where[] = $f . '\'' . addslashes($v) . '\'';
-		}
-
-		return $this->get_array("SELECT $field FROM $table WHERE ".join(' AND ', $where)." $order $limit", false);
+		return $this->get_array("SELECT $field FROM $table ".mysql_args_compile($where_map), false);
 	}
 }

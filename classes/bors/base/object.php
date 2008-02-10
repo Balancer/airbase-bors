@@ -282,6 +282,12 @@ class base_object extends base_empty
 
 	function template_data_fill()
 	{
+		static $called = false; //TODO: в будущем снести вторые вызовы.
+		if($called)
+			return;
+
+		$called = true;
+		
 		foreach($this->data_providers() as $key => $value)
 			$this->add_template_data($key, $value);
 	}

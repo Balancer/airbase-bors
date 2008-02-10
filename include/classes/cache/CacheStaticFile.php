@@ -52,6 +52,9 @@
 
 		function save(&$content, $mtime = 0, $expire_time = 0)
 		{
+			if(config('static_cache_disabled'))
+				return $content;
+		
             $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
 			
 			@unlink($db->get("SELECT file FROM cached_files WHERE original_uri = '".addslashes($this->original_uri)."'"));

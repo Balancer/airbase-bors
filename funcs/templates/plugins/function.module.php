@@ -2,6 +2,7 @@
 
 function smarty_function_module($params, &$smarty)
 {
+	
 	if(empty($params['name']))
 	{
 		foreach(explode(' ', 'class id page') as $name)
@@ -15,7 +16,7 @@ function smarty_function_module($params, &$smarty)
 			return "Can't load module '$class'";
 		return $obj->body();
 	}
-	
+
 	$name = $params['name'].".php";
 	foreach($params as $key=>$val)
 		$GLOBALS['module_data'][$key] = $val;

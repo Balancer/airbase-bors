@@ -130,7 +130,7 @@ function text_date($date)
 	$d = strftime('%d', $date);
 	$m = strftime('%m', $date);
 	$y = strftime('%Y', $date);
-	return $d.' '.strtolower(month_name_rp($m)).' '.$y;
+	return intval($d).' '.strtolower(month_name_rp($m)).' '.$y;
 }
 
 function make_input_time($field_name, &$data)

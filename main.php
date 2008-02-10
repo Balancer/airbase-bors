@@ -112,13 +112,16 @@
 		$_SERVER['QUERY_STRING'] = 'act=del';
 		$_GET['act'] = 'del';
 	}
-	
+
+	if($_SERVER['QUERY_STRING'] == 'fromlist')
+		$_SERVER['QUERY_STRING'] = '';
+
 	$object = NULL;
 	if(!preg_match('!^\w+($|&)!', $_SERVER['QUERY_STRING']))
 		if($object = object_load($uri))
 			@header("X-Bors-loaded: ".$object->class_name());
 
-	if(!$object || ($ret = bors_object_show($object))!== true)
+	if(!$object || preg_match('!^\w+$!', $_SERVER['QUERY_STRING']) || ($ret = bors_object_show($object))!== true)
 	{
 	    @header("X-Bors-obsolete: $uri");
 	    require_once("funcs/handlers.php");
