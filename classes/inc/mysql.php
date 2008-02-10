@@ -74,6 +74,8 @@ function mysql_args_compile($args)
 
 	$limit = mysql_limits_compile($args);
 	unset($args['limit']);
+	unset($args['page']);
+	unset($args['per_page']);
 
 	$order = "";
 	if(!empty($args['order']))

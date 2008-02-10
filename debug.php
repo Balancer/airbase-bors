@@ -1,23 +1,36 @@
 <?php
 	function debug_exit($message)
 	{
-		echo "<xmp>";
-		debug_print_backtrace();
-		echo "</xmp>";
+//		echo "<xmp>";
+//		debug_print_backtrace();
+		echo DBG_GetBacktrace();
+//		echo "</xmp>";
 		exit($message);
 	}
 
 	function debug_trace()
 	{
-		echo "<xmp>";
-		debug_print_backtrace();
-		echo "</xmp>";
+//		echo "<xmp>";
+//		debug_print_backtrace();
+		echo DBG_GetBacktrace();
+//		echo "</xmp>";
 	}
 
 	function print_d($data) { echo "<xmp>"; print_r($data); echo "</xmp>"; }
 
 	function set_loglevel($n) { $GLOBALS['log_level'] = $_GET['log_level'] = $n; }
 	function loglevel($check) { return $check <= max(@$GLOBALS['log_level'], @$_GET['log_level']); }
+
+	function debug_only_one_time($mark, $trace=true, $times = 1)
+	{
+		if(@$GLOBALS['debug']['onetime'][$mark] >= $times)
+			debug_exit('Second call of '.$mark);
+		
+		@$GLOBALS['debug']['onetime'][$mark]++;
+		
+		if($trace)
+			debug_trace();
+	}
 
     function echolog($message,$level=3)
     {
@@ -38,7 +51,7 @@
             else
             {
                 if($level<3) echo '<span style="color: red;">';
-                echo "<span style=\"font-size: 6pt;\">".substr($message,0,2048).(strlen($message)>2048?"...":"")."</span><br />";
+                echo "<span style=\"font-size: 8pt;\">".substr($message,0,2048).(strlen($message)>2048?"...":"")."</span><br />";
                 if($level<3) echo "</span>\n";
             }
             if($level==1)
@@ -70,35 +83,41 @@
         $MAXSTRLEN = 64;
    
         $s = '<pre align=left>';
+		
         $traceArr = debug_backtrace();
         array_shift($traceArr);
-        $tabs = sizeof($traceArr)-1;
-        foreach($traceArr as $arr)
+        $tabs = 0; //sizeof($traceArr)-1;
+        for($pos=0; $pos<sizeof($traceArr); $pos++)
         {
-            for ($i=0; $i < $tabs; $i++) $s .= ' &nbsp; ';
-            $tabs -= 1;
+			$arr = $traceArr[sizeof($traceArr)-$pos-1];
+            for ($i=0; $i < $tabs; $i++)
+				$s .= '&nbsp;';
+            $tabs++;
             $s .= '<font face="Courier New,Courier">';
-            if (isset($arr['class'])) $s .= $arr['class'].'.';
+            if(isset($arr['class']))
+				$s .= $arr['class'].'.';
             $args = array();
-            if(!empty($arr['args'])) foreach($arr['args'] as $v)
-            {
-                if (is_null($v)) $args[] = 'null';
-                else if (is_array($v)) $args[] = 'Array['.sizeof($v).']';
-                else if (is_object($v)) $args[] = 'Object:'.get_class($v);
-                else if (is_bool($v)) $args[] = $v ? 'true' : 'false';
-                else
-                { 
-                    $v = (string) @$v;
-                    $str = htmlspecialchars(substr($v,0,$MAXSTRLEN));
-                    if (strlen($v) > $MAXSTRLEN) $str .= '...';
-                    $args[] = "\"".$str."\"";
-                }
-            }
+            if(!empty($arr['args']))
+			{
+				foreach($arr['args'] as $v)
+    	        {
+        	        if (is_null($v)) $args[] = 'null';
+            	    else if (is_array($v)) $args[] = 'Array['.sizeof($v).']';
+                	else if (is_object($v)) $args[] = 'Object:'.get_class($v);
+	                else if (is_bool($v)) $args[] = $v ? 'true' : 'false';
+    	            else
+        	        { 
+            	        $v = (string) @$v;
+                	    $str = htmlspecialchars(substr($v,0,$MAXSTRLEN));
+                    	if (strlen($v) > $MAXSTRLEN) $str .= '...';
+	                    $args[] = "\"".$str."\"";
+    	            }
+        	    }
+			}
             $s .= $arr['function'].'('.implode(', ',$args).')</font>';
             $Line = (isset($arr['line'])? $arr['line'] : "unknown");
             $File = (isset($arr['file'])? $arr['file'] : "unknown");
-            $s .= sprintf("<font color=#808080 size=-1> # line %4d, file: <a href=\"file:/%s\">%s</a></font>",
-            $Line, $File, $File);
+            $s .= sprintf("<span style=\"font-size: 8pt;\">[<a href=\"file:/%s\">%s</a>:%d]</span>", $File, $File, $Line);
             $s .= "\n";
         }    
         $s .= '</pre>';
