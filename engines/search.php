@@ -149,22 +149,22 @@ function bors_search_in_titles($query, $params = array())
 		if(!$word)
 			continue;
 		
-//		if($word{0} == '+')
-//			$must[] = bors_search_get_word_id(substr($word, 1));
 		if($word{0} == '-')
 			$none[] = bors_search_get_word_id(substr($word, 1));
+//		elseif($word{0} == '+')
+//			$must[] = bors_search_get_word_id(substr($word, 1));
 		else
-			$maybe[] = bors_search_get_word_id($word);
+			$must[] = bors_search_get_word_id($word);
 	}
 		
 	$cross = array();
 
-	if($maybe)
+	if($must)
 	{
 		$first = true;
-		foreach($maybe as $w)
+		foreach($must as $w)
 		{
-			$res = $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_titles WHERE word_id = $w $sort $lim");
+			$res = $db->get_array("SELECT DISTINCT CONCAT(`class_name`, '://', `class_id`) FROM bors_search_titles WHERE word_id = $w $sort $lim");
 
 			if($first)
 				$cross = $res;
@@ -176,7 +176,7 @@ function bors_search_in_titles($query, $params = array())
 	}
 
 	if($none)
-		$cross = array_diff($cross, $db->get_array("SELECT DISTINCT class_name, class_id FROM bors_search_titles WHERE word_id IN (".join(",", $none).")"));
+		$cross = array_diff($cross, $db->get_array("SELECT DISTINCT CONCAT(`class_name`, '://', `class_id`) FROM bors_search_titles WHERE word_id IN (".join(",", $none).")"));
 
 	if(!empty($params['pages']))
 		return sizeof($cross);
@@ -184,8 +184,11 @@ function bors_search_in_titles($query, $params = array())
 	$result = array();
 	
 	foreach($cross as $x)
-		$result[] = object_load($x['class_name'], $x['class_id']);
-
+	{
+		list($class_name, $object_id) = explode('://', $x);
+		$result[] = object_load($class_name, $object_id);
+	}
+	
 	return $result;
 }
 

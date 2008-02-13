@@ -11,6 +11,7 @@
 if(readCookie('class_name', '0') == 'forum_topic')
 {
 	tid = readCookie('object_id', '0')
+	document.write('<li><a href="http://balancer.ru/2000/01/01/printable-'+tid+'--.html">Версия для печати</a></li>')
 	document.write('<li><a href="http://balancer.ru/forum/punbb/moderate.php?fid=4&move_topics='+tid+'">Перенести тему</a></li>')
 	document.write('<li><a href="http://balancer.ru/forum/tools/topic/'+tid+'/reload/">Сбросить кеш темы</a></li>')
 }
