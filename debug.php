@@ -16,7 +16,23 @@
 //		echo "</xmp>";
 	}
 
-	function print_d($data) { echo "<xmp>"; print_r($data); echo "</xmp>"; }
+	function debug_xmp($text)
+	{
+		if(!empty($_SERVER['HTTP_HOST']))
+			echo "<xmp>{$text}</xmp>\n";
+		else
+			echo $text;
+	}
+
+	function debug_pre($text)
+	{
+		if(!empty($_SERVER['HTTP_HOST']))
+			echo "<xmp>{$text}</xmp>\n";
+		else
+			echo $text;
+	}
+	
+	function print_d($data) { debug_xmp(print_r($data, true)); }
 
 	function set_loglevel($n) { $GLOBALS['log_level'] = $_GET['log_level'] = $n; }
 	function loglevel($check) { return $check <= max(@$GLOBALS['log_level'], @$_GET['log_level']); }
@@ -32,7 +48,7 @@
 			debug_trace();
 	}
 
-    function echolog($message,$level=3)
+    function echolog($message, $level=3)
     {
 		$log_level = max(@$GLOBALS['log_level'], @$_GET['log_level']);
 	
@@ -49,18 +65,36 @@
 				@chmod($GLOBALS['echofile'], 0666);
             }
             else
-            {
-                if($level<3) echo '<span style="color: red;">';
-                echo "<span style=\"font-size: 8pt;\">".substr($message,0,2048).(strlen($message)>2048?"...":"")."</span><br />";
-                if($level<3) echo "</span>\n";
-            }
+			{
+				if($level<3)
+				{
+					if(!empty($_SERVER['HTTP_HOST']))
+						echo '<span style="color: red;">';
+					else
+						echo "=== ";
+				}
+		
+				if(!empty($_SERVER['HTTP_HOST']))
+	                echo "<span style=\"font-size: 8pt;\">".substr($message,0,2048).(strlen($message)>2048?"...":"")."</span><br />\n";
+				else
+	                echo substr($message,0,2048).(strlen($message)>2048?"...":"")."\n";
+
+				if($level<3)
+				{
+					if(!empty($_SERVER['HTTP_HOST']))
+						echo "</span>\n";
+					else
+						echo " ===\n";
+				}
+			}
             if($level==1)
             {
-                echo "Backtrace error:<br>";
+                echo "Backtrace error:<br/ >\n";
                 echo DBG_GetBacktrace();
             }
+
             if(empty($GLOBALS['echofile']))
-                echo "<hr>";
+                echo "<hr />";
         }
     }
 
@@ -79,10 +113,12 @@
 
     function DBG_GetBacktrace()
     {
-        $s = '';
         $MAXSTRLEN = 64;
    
-        $s = '<pre align=left>';
+		if(!empty($_SERVER['HTTP_HOST']))
+			$s = '<pre align="left">';
+		else
+	        $s = '';
 		
         $traceArr = debug_backtrace();
         array_shift($traceArr);
@@ -91,9 +127,10 @@
         {
 			$arr = $traceArr[sizeof($traceArr)-$pos-1];
             for ($i=0; $i < $tabs; $i++)
-				$s .= '&nbsp;';
+				$s .= empty($_SERVER['HTTP_HOST']) ? ' ' : '&nbsp;';
             $tabs++;
-            $s .= '<font face="Courier New,Courier">';
+			if(!empty($_SERVER['HTTP_HOST']))
+	            $s .= '<font face="Courier New,Courier">';
             if(isset($arr['class']))
 				$s .= $arr['class'].'.';
             $args = array();
@@ -114,13 +151,21 @@
     	            }
         	    }
 			}
-            $s .= $arr['function'].'('.implode(', ',$args).')</font>';
+            $s .= $arr['function'].'('.implode(', ',$args).')';
+			if(!empty($_SERVER['HTTP_HOST']))
+				$s .= '</font>';
             $Line = (isset($arr['line'])? $arr['line'] : "unknown");
             $File = (isset($arr['file'])? $arr['file'] : "unknown");
-            $s .= sprintf("<span style=\"font-size: 8pt;\">[<a href=\"file:/%s\">%s</a>:%d]</span>", $File, $File, $Line);
+			if(!empty($_SERVER['HTTP_HOST']))
+    	        $s .= sprintf("<span style=\"font-size: 8pt;\">[<a href=\"file:/%s\">%s</a>:%d]</span>", $File, $File, $Line);
+			else
+    	        $s .= sprintf("[%s:%d]", $File, $Line);
             $s .= "\n";
         }    
-        $s .= '</pre>';
+
+		if(!empty($_SERVER['HTTP_HOST']))
+	        $s .= '</pre>';
+
         return $s;
     }
 
