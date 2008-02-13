@@ -1,5 +1,5 @@
-<?
-	class_include('forum_topic');
+<?php
+
 	class forum_printable extends forum_topic
 	{
 		function uri_name() { return 'printable'; }
@@ -26,8 +26,14 @@
 			$db = &new DataBase('punbb');
 
 			$query = "SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY id";
-			
+
+		$posts = $db->get_array($query);
+
+		if(empty($posts))
+		{
+			$this->db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
 			$posts = $db->get_array($query);
+		}
 
 			$data['posts'] = array();
 

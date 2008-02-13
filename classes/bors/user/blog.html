@@ -1,5 +1,6 @@
 {if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
 
+{assign var="skip_author_name" value=1}
 {foreach from=$blog_records item=r}
 {bors_class_load class="forum_post"  id=$r->id() var="p"}
 {if $p}

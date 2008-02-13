@@ -228,6 +228,9 @@ class forum_topic extends forum_abstract
 		$bors->changed_save();
 
 		$this->cache_clean_self();
+		
+		if($printable = object_load('forum_printable', $this->id()))
+			$printable->cache_clean_self();
 	}
 
 	function url_engine() { return 'url_titled'; }

@@ -79,7 +79,7 @@
 		
 		if($obj = class_load($uri))
 	        $parents = $obj->parents();
-		else
+		elseif(class_exists('DataBaseHTS'))
 		{
 //			echo "Can't load class '$uri'<br/>\n";
 			$hts = &new DataBaseHTS($uri);
