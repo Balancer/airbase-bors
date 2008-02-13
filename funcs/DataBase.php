@@ -1,4 +1,4 @@
-<?
+<?php
 //	if($_SERVER['REMOTE_ADDR']!='83.237.205.36')
 //		exit("Temporary downed (~ to 14:30)");
 
