@@ -5,15 +5,18 @@ function mysql_where_compile($conditions_array)
 //	if(isset($conditions_array['where']))
 //		$conditions_array = $conditions_array['where'];
 
+	if(isset($conditions_array['where']))
+		$conditions_array = $conditions_array['where'];
+
 	if(empty($conditions_array))
 		return '';
-		
+	
 	$where = array();
 	foreach($conditions_array as $field_cond => $value)
 	{
 
 		$value = str_replace('%ID%', '%MySqlStorageOID%', $value);
-//		echo "$field_cond  $value -> $val2<br/>\n";
+//		echo "$field_cond  $value<br/>\n";
 
 		if(preg_match('! IN$!', $field_cond))
 			$where[] = $field_cond . '(' . $value . ')';

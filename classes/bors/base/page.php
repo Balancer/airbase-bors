@@ -38,4 +38,6 @@ class base_page extends def_page
 	}
 
 	function total_pages() { return  intval(($this->total_items() - 1)/$this->items_per_page()) + 1; }
+
+	function items_per_page() { return 25; }
 }
