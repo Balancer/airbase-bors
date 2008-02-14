@@ -502,4 +502,6 @@ class base_object extends base_empty
 	private $args = array();
 	function set_args($args) { $this->args = $args; }
 	function args($name) { return @$this->args[$name]; }
+
+	function __toString() { return $this->class_name().'://'.$this->id(); }
 }

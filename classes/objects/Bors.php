@@ -46,6 +46,7 @@
 				else
 					$storage = $this->config()->storage();
 				
+//				echo "storage->save({$obj})<br />\n";
 				$storage->save($obj);
 				save_cached_object($obj);
 					
@@ -404,7 +405,7 @@
 				$check_url = $url;
 
 //			echo "Check vhost $url_pattern to $url for $class_path -- !^http://({$_SERVER['HTTP_HOST']}){$url_pattern}\$!<br />\n";
-			if(preg_match("!^http://({$data['host']})$url_pattern$!", $check_url, $match))
+			if(preg_match("!^http://(\Q{$data['host']}\E)$url_pattern$!", $check_url, $match))
 			{
 				if(preg_match("!^redirect:(.+)$!", $class_path, $m))
 				{

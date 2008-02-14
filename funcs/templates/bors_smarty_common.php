@@ -16,10 +16,10 @@ function smarty_template($template_name)
 
 
 	if(file_exists($file = BORS_INCLUDE_LOCAL.'templates/'.$template_name))
-		return $file;
+		return 'xfile:'.$file;
 
 	if(file_exists($file = BORS_INCLUDE.'templates/'.$template_name))
-		return $file;
+		return 'xfile:'.$file;
 		
 	return $GLOBALS['cms']['default_template'];
 }
