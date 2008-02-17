@@ -132,13 +132,13 @@
 			if(empty($GLOBALS['main_uri']))
 				$GLOBALS['main_uri'] = $obj->url();
 			
-			$my_user = class_load(config('user_class'), -1);
+			$my_user = object_load(config('user_class'), -1);
 			if($my_user && $my_user->id())
 				def_page::add_template_data('my_user', $my_user);
 	
 			if($render_engine = $obj->render_engine())
 			{
-				$re = class_load($render_engine);
+				$re = object_load($render_engine);
 				$content = $re->render($obj);
 //				echo "Bors class content of ".get_class($obj)." with render engine ". $obj->render_engine() . " = " . $content; exit();
 			}
@@ -172,7 +172,7 @@
 			foreach(split(' ', $obj->cache_groups()) as $group)
 				if($group)
 				{
-					$group = class_load('cache_group', $group);
+					$group = object_load('cache_group', $group);
 					$group->register($obj);
 				}
 				

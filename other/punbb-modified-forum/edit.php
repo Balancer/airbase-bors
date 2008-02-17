@@ -148,7 +148,11 @@ if (isset($_POST['form_sent']))
 		if(empty($_POST['as_blog']))
 		{
 			if($blog)
+			{
 				$blog->delete();
+				include_once('engines/blogs/livejournal.com.php');
+				bors_blog_livejournal_com_delete($post->owner_id(), $post);
+			}
 		}
 		else
 		{
@@ -161,6 +165,9 @@ if (isset($_POST['form_sent']))
 			$blog->set_owner_id($pun_user['id'], true);
 			$blog->set_forum_id($topic->forum_id(), true);
 			$blog->cache_clean();
+
+			include_once('engines/blogs/livejournal.com.php');
+			bors_blog_livejournal_com_edit($post->owner_id(), $topic, $topic->first_post()->id() == $post->id() ? $topic : $post, $post, $topic->forum());
 		}
 
 		$topic->cache_clean();

@@ -12,6 +12,8 @@ class base_page_hts extends base_page_db
 	function can_cached() { return false; }
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 
+	function loaded() { return $this->title(); }
+
 	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
 
 	function main_table_storage() { return NULL; }
@@ -45,6 +47,10 @@ class base_page_hts extends base_page_db
 
 	function init()
 	{
+		$host = $this->args('host');
+		if($host && preg_match('!/!', $this->id()))
+			$this->set_id('http://'.$host.$this->id());
+	
 		if(!$this->id())
 			$this->set_id($this->called_url());
 

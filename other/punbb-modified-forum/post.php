@@ -425,6 +425,9 @@ if (isset($_POST['form_sent']))
 			$blog->set_forum_id($topic->forum_id(), true);
 			$blog->store();
 			$blog->cache_clean();
+
+			include_once('engines/blogs/livejournal.com.php');
+			bors_blog_livejournal_com_post($post->owner_id(), $topic, $topic->first_post()->id() == $post->id() ? $topic : $post, $post, $topic->forum());
 		}
 			
 		include_once('engines/search.php');

@@ -1,3 +1,4 @@
+<?php
     /**
      * Count the number of bytes of a given string.
      * Input string is expected to be ASCII or UTF-8 encoded.
@@ -8,7 +9,7 @@
      *
      * @return The length in bytes of the given string.
      */
-    function utf8_strlen_bytes($str)
+    function utf8_strbytes($str)
     {
       // STRINGS ARE EXPECTED TO BE IN ASCII OR UTF-8 FORMAT
       

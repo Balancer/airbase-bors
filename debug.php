@@ -34,7 +34,15 @@
 	
 	function print_d($data) { debug_xmp(print_r($data, true)); }
 
-	function set_loglevel($n) { $GLOBALS['log_level'] = $_GET['log_level'] = $n; }
+	function set_loglevel($n, $file=false)
+	{
+		$GLOBALS['log_level'] = $_GET['log_level'] = $n;
+		if($file === false)
+			return;
+		
+		$GLOBALS['echofile'] = $file;
+	}
+	
 	function loglevel($check) { return $check <= max(@$GLOBALS['log_level'], @$_GET['log_level']); }
 
 	function debug_only_one_time($mark, $trace=true, $times = 1)
