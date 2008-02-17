@@ -92,6 +92,8 @@ class forum_topic extends forum_abstract
 
 	protected function posts()
 	{
+//		echo "page=".$this->page();
+	
 		return objects_array('forum_post', array(
 				'where' => array('topic_id=' => intval($this->id())),
 				'order' => 'id',

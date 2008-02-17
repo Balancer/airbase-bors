@@ -134,12 +134,12 @@
 
 	function __autoload($class_name) { class_include($class_name); }
 
-	function load_cached_object($class_name, $id, $page)
+	function load_cached_object($class_name, $id, $args)
 	{
 		if(is_object($id))
 			return NULL;
 			
-		if($obj = @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][serialize($page)])
+		if($obj = @$GLOBALS['bors_data']['cached_objects'][$class_name][$id][serialize($args)])
 		{
 	//		if($class_name == 'aviaport_image_thumb') {	echo "Check load for <b>$class_name</b>('$id',".serialize($page)."<br />"; exit(); }
 			if($obj->can_cached())
@@ -153,7 +153,7 @@
 				
 //			echo "got ".$class_name.'://'.$id.','.serialize($page)."<br />\n";
 
-			if($x = @$memcache->get('bors_v11_'.$class_name.'://'.$id.','.serialize($page)))
+			if($x = @$memcache->get('bors_v11_'.$class_name.'://'.$id.','.serialize($args)))
 			{
 //				echo "<b>got!</b><br />";
 				if($x->can_cached())
@@ -179,7 +179,7 @@
 				$memcache = &new Memcache;
 				$memcache->connect(config('memcached')) or debug_exit("Could not connect memcache");
 				
-				$hash = 'bors_v11_'.get_class($object).'://'.$object->id().','.serialize($object->page());
+				$hash = 'bors_v11_'.get_class($object).'://'.$object->id().','.serialize($object->args());
 				
 				if($delete)
 					@$memcache->delete($hash);
@@ -189,9 +189,9 @@
 			}
 
 			if($delete)
-				unset($GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][serialize($object->page())]);
+				unset($GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][serialize($object->args())]);
 			else
-				$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][serialize($object->page())] = $object;
+				$GLOBALS['bors_data']['cached_objects'][get_class($object)][$object->id()][serialize($object->args())] = $object;
 //			echo "Save cache object <b>".get_class($object)."</b>('".$object->id()."', ".$object->page().")<br />\n";
 		}
 	}
@@ -206,7 +206,7 @@
 		$class_name = $m[1];
 
 		$id = $m[2];
-		$page = 0;
+		$page = NULL;
 		if(preg_match("!^(.+),(\d+)$!", $id, $m))
 		{
 			$id = $m[1];
@@ -215,10 +215,10 @@
 
 //		$id = call_user_func(array($class_name, 'uri_to_id'), $uri);
 
-		return object_init($class_name, $id, $page);
+		return object_init($class_name, $id, array('page'=>$page));
 	}
 
-	function pure_class_load($class_name, $id, $page, $use_cache = true, $local_path = NULL)
+	function pure_class_load($class_name, $id, $args, $local_path = NULL)
 	{
 //		echo "Pure load {$class_name}({$id})<br />\n";
 	
@@ -228,18 +228,13 @@
 		if(!class_include($class_name, $local_path))
 			return NULL;
 
-		if($use_cache && $obj = load_cached_object($class_name, $id, $page))
+		if(!empty($args['use_cache']) && $obj = load_cached_object($class_name, $id, $args))
 			return $obj;
 
-		$obj = &new $class_name($id, $page);
-
-		if($use_cache)
-			save_cached_object($obj);
-			
-		return $obj;
+		return new $class_name($id);
 	}
 
-	function class_load($class, $id = NULL, $page=NULL, $args=array())
+	function class_load($class, $id = NULL, $args=array())
 	{
 		if(preg_match("!^/!", $class))
 			$class = 'http://'.$_SERVER['HTTP_HOST'].$class;
@@ -254,7 +249,7 @@
 				if(preg_match('!^(.+)#(.+)$!', $class, $m))
 					$class = $m[1];
 	
-				if($obj = class_load_by_url($class, $page))
+				if($obj = class_load_by_url($class))
 					return $obj;
 
 				if($obj = class_internal_uri_load($class))
@@ -265,22 +260,22 @@
 		}
 
 		if(preg_match("!^\w+$!", $class))
-			return object_init($class, $id, $page, $args);
+			return object_init($class, $id, $args);
 		else
 			return NULL;
 	}
 
-	function class_load_by_url($url, $page=NULL)
+	function class_load_by_url($url)
 	{
 //		echo "Load $url<br />\n";
 	
-		if($obj = class_load_by_vhosts_url($url, $page))
+		if($obj = class_load_by_vhosts_url($url))
 			return $obj;
 		
-		return class_load_by_local_url($url, $page);
+		return class_load_by_local_url($url);
 	}
 
-	function class_load_by_local_url($url, $page)
+	function class_load_by_local_url($url)
 	{
 		$obj = @$GLOBALS['bors_data']['classes_by_uri'][$url];
 		if(!empty($obj))
@@ -289,6 +284,7 @@
 		if(empty($GLOBALS['bors_map']))
 			return NULL;
 
+//		print_d($GLOBALS['bors_map']);
 		foreach($GLOBALS['bors_map'] as $pair)
 		{
 			if(!preg_match('!^(.*)\s*=>\s*(.+)$!', $pair, $match))
@@ -309,7 +305,7 @@
 			{
 //				echo "<b>Ok!</b><br />";
 				$id = NULL;
-				$page = 0;
+				$page = NULL;
 				
 				if(preg_match("!^redirect:(.+)$!", $class_path, $m))
 				{
@@ -368,7 +364,7 @@
 		return NULL;
 	}
 
-	function class_load_by_vhosts_url($url, $page)
+	function class_load_by_vhosts_url($url)
 	{
 		$data = parse_url($url);
 		
@@ -384,7 +380,7 @@
 		if(!empty($obj))
 			return $obj;
 			
-//		echo "<xmp>"; print_r($data); print_r($bors_data['vhosts']); echo "</xmp>";
+//		print_d($data); print_d($bors_data['vhosts']);
 
 		if(empty($bors_data['vhosts'][$data['host']]))
 			return NULL;
@@ -419,13 +415,14 @@
 				$page = 0;
 				
 				// Формат вида aviaport_image_thumb(3,geometry=2)
-				if(preg_match("!^(.+)\((\d+|NULL),([^)]+=[^)]+)\)$!", $class_path, $m))	
+				if(preg_match("!^(.+) \( (\d+|NULL)( , [^)]+=[^)]+ )+ \)$!x", $class_path, $m))	
 				{
 					$args = array();
 					foreach(split(',', $m[3]) as $pair)
-						if(preg_match('!^(\w+)=(.+)$!', $pair, $mm))
-							$args[$mm[1]] = $mm[2];
-
+						if($pair)
+							if(preg_match('!^(\w+)=(.+)$!', $pair, $mm))
+								$args[$mm[1]] = $match[$mm[2]+1];
+					
 					$class_path = $m[1];
 					$id = $match[$m[2]+1];
 					
@@ -474,18 +471,23 @@
 	}
 
 require_once('classes/inc/bors.php');
-function object_init($class_name, $object_id, $object_page, $args = array())
+function object_init($class_name, $object_id, $args = array())
 {
-	$obj = pure_class_load($class_name, $object_id, $object_page, $use_cache = defval($args, 'use_cache', true), $local_path = defval($args, 'local_path'));
+	if(!is_array($args))
+		$args = array('page' => $args);
+
+	$obj = pure_class_load($class_name, $object_id, $args, $local_path = defval($args, 'local_path'));
 
 	if(!$obj)
 		return NULL;
 
-	if($object_page)
-		$obj->set_page($object_page);
+	if(method_exists($obj, 'set_page'))
+		$obj->set_page(@$args['page']);
 
+	$use_cache = defval($args, 'use_cache', true);
 	unset($args['local_path']);
 	unset($args['use_cache']);
+
 	if(method_exists($obj, 'set_args'))
 		$obj->set_args($args);
 		
@@ -510,7 +512,7 @@ function object_init($class_name, $object_id, $object_page, $args = array())
 	)
 		return NULL;
 
-//	echo "{$class_name}($id) was loaded seccessfully} as ".get_class($obj)."<br />\n"; exit();
+//	echo "{$class_name}($object_id) was loaded seccessfully} as ".get_class($obj)."<br />\n"; // exit();
 
 	if($use_cache)
 		save_cached_object($obj);

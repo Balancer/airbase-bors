@@ -23,6 +23,11 @@ class forum_forum extends borsForumAbstract
 
 	function category() { return class_load('forum_category', $this->category_id()); }
 
+	var $stb_keywords_string = '';
+	function keywords_string() { return $this->stb_keywords_string; }
+	function set_keywords_string($keywords_string, $db_update) { $this->set("keywords_string", $keywords_string, $db_update); }
+	function field_keywords_string_storage() { return 'punbb.forums.keywords(id)'; }
+
 	function parents()
 	{
 		if($this->parent_forum_id())

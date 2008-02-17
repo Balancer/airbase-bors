@@ -131,6 +131,6 @@ class user_blog extends base_page
 		$stop = $this->total_pages();
 
 		for($page = $start; $page <= $stop; $page++)
-			unlink('/var/www/balancer.ru/htdocs/user/'.$this->id().'/blog/'.$page.'.html');
+			@unlink('/var/www/balancer.ru/htdocs/user/'.$this->id().'/blog/'.$page.'.html');
 	}
 }
