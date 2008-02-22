@@ -14,6 +14,8 @@ class forum_topic extends forum_abstract
 
 	function main_db_fields()
 	{
+//		set_loglevel(10, NULL);
+	
 		return array(
 			$this->main_table_storage() => $this->main_table_fields(),
 		);
@@ -90,16 +92,102 @@ class forum_topic extends forum_abstract
 		return template_assign_data("templates/TopicBody.html", $data);
 	}
 
+	private $__posts = NULL;
+	private $__posts_ids = NULL;
 	protected function posts()
 	{
+		if($this->__posts !== NULL)
+			return $this->__posts;
+	
 //		echo "page=".$this->page();
 	
-		return objects_array('forum_post', array(
+		$this->__posts = objects_array('forum_post', array(
 				'where' => array('topic_id=' => intval($this->id())),
 				'order' => 'id',
 				'page' => $this->page(),
 				'per_page' => $this->items_per_page(),
 			));
+		
+		$post_ids = array();
+		$user_ids = array();
+		$answ_ids = array();
+		$posts = array();
+		for($i = 0; $i < count($this->__posts); $i++)
+		{
+			$post = &$this->__posts[$i];
+			$pid = $post->id();
+			$post_ids[] = $pid;
+			$posts[$pid] = &$post;
+
+			$user_ids[] = $post->owner_id();
+			$answ_ids[] = $post->answer_to_id();
+		}
+
+		$this->__posts_ids = $post_ids;
+
+		$answ_ins = array();
+		$answer_ids = array();
+		foreach($answ_ids as $aid)
+		{
+			if(!$aid)
+				continue;
+
+			$answer_id[] = $aid;
+
+			if(!in_array($aid, $post_ids))
+				$answ_ins[] = $aid;
+		}
+		
+		$post_ids = 'id IN('.join(',', $post_ids).')';
+		$user_ids = 'id IN('.join(',', $user_ids).')';
+		$answ_ins = 'id IN('.join(',', $answ_ids).')';
+
+		$users = objects_array('forum_user', array($user_ids));
+		$users_map = array();
+		for($i = 0; $i < count($users); $i++)
+		{
+			$user = &$users[$i];
+			$uid = $user->id();
+			$users_map[$uid] = &$user;
+		}
+
+		if($answ_ins != 'id IN()')
+			$answers = objects_array('forum_post', array($answ_ins));
+		else
+			$answers = array();
+			
+		$answers_map = array();
+		for($i = 0; $i < count($answers); $i++)
+		{
+			$answer = &$answers[$i];
+			$aid = $answer->id();
+			$answers_map[$aid] = &$answer;
+		}
+
+		foreach($this->db($this->main_db_storage())->select_array('messages', 'id,message,html', array($post_ids)) as $x)
+		{
+			$post = &$posts[$x['id']];
+			$post->set_source($x['message'], false);
+			$post->set_body($x['html'], false);
+		}
+
+		for($i = 0; $i < count($this->__posts); $i++)
+		{
+			$post = &$this->__posts[$i];
+			$pid = $post->id();
+			$uid = $post->owner_id();
+			$post->set_owner($users_map[$uid], false);
+			if($aid = $post->answer_to_id())
+			{
+				$answer = @$answers_map[$aid];
+				if(!$answer)
+					$answer = $posts[$aid];
+
+				$post->set_answer_to($answer, false);
+			}
+		}
+		
+		return $this->__posts;
 	}
 
 	function items_per_page() { return 25; }
@@ -112,7 +200,7 @@ class forum_topic extends forum_abstract
 			return "";
 
 		include_once('funcs/design/page_split.php');
-		return join(" ", pages_show($this, $this->total_pages(), 20));
+		return join(" ", pages_show($this, $this->total_pages(), 16));
 	}
 
 	function title_pages_links()
@@ -142,8 +230,10 @@ class forum_topic extends forum_abstract
 		
 	function get_all_posts_id()
 	{
-		$db = &new DataBase('punbb');
-		return $db->get_array("SELECT id FROM posts WHERE topic_id={$this->id} ORDER BY posted");
+		if($this->__posts_ids === NULL)
+			$this->posts();
+
+		return $this->__posts_ids;
 	}
 
 	function all_users()
