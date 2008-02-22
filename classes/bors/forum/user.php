@@ -37,7 +37,7 @@ class forum_user extends base_object_db
 		)));
 	}
 
-	function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
+	function group() { class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
 
 	var $_title = NULL;
 	function group_title()
@@ -48,8 +48,8 @@ class forum_user extends base_object_db
 		if($this->_title = $this->user_title())
 			return $this->_title;
 				
-		if($this->_title = $this->group()->user_title())
-			return $this->_title;
+//		if($this->_title = $this->group()->user_title())
+//			return $this->_title;
 
 		$this->_title = $this->rank();
 

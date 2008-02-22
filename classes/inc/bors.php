@@ -22,8 +22,18 @@ function object_new($class) { return object_load($class); }
 
 function defval($data, $name, $default=NULL)
 {
-	if(empty($data[$name]))
+	if(!isset($data[$name]))
 		return $default;
 	
 	return $data[$name];
+}
+
+
+$GLOBALS['bors_global'] = NULL;
+function bors()
+{
+	if($GLOBALS['bors_global'] == NULL)
+		$GLOBALS['bors_global'] = &new bors_global(NULL);
+
+	return $GLOBALS['bors_global'];
 }

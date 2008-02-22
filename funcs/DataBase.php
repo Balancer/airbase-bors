@@ -153,7 +153,7 @@ class DataBase extends base_object
 				fclose($fh);
 			}
 */
-			echolog("<xmp>result=|".print_r($this->result, true)."|</xmp>",6);
+			echolog("<xmp>result=|".print_r($this->result, true)."|</xmp>", 6);
 
 			//   @mysql_num_rows(), ..	SELECT!
 			if($this->result)

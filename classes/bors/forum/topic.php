@@ -14,7 +14,8 @@ class forum_topic extends forum_abstract
 
 	function main_db_fields()
 	{
-//		set_loglevel(10, NULL);
+		if(bors()->user()->id() == 10000)
+			set_loglevel(10);
 	
 		return array(
 			$this->main_table_storage() => $this->main_table_fields(),
@@ -93,37 +94,58 @@ class forum_topic extends forum_abstract
 	}
 
 	private $__posts = NULL;
+	private $__posts_map = NULL;
+	private $__raw_posts = NULL;
 	private $__posts_ids = NULL;
-	protected function posts()
+
+	private function raw_posts()
 	{
-		if($this->__posts !== NULL)
+		if($this->__raw_posts !== NULL)
 			return $this->__posts;
-	
-//		echo "page=".$this->page();
-	
-		$this->__posts = objects_array('forum_post', array(
+
+		return $this->__raw_posts = objects_array('forum_post', array(
 				'where' => array('topic_id=' => intval($this->id())),
 				'order' => 'id',
 				'page' => $this->page(),
 				'per_page' => $this->items_per_page(),
 			));
-		
+	}
+
+	function get_all_posts_id()
+	{
+		if($this->__posts_ids !== NULL)
+			return $this->__posts_ids;
+
 		$post_ids = array();
-		$user_ids = array();
-		$answ_ids = array();
-		$posts = array();
-		for($i = 0; $i < count($this->__posts); $i++)
+		$this->raw_posts();
+
+		for($i = 0; $i < count($this->__raw_posts); $i++)
 		{
-			$post = &$this->__posts[$i];
+			$post = &$this->__raw_posts[$i];
 			$pid = $post->id();
 			$post_ids[] = $pid;
-			$posts[$pid] = &$post;
+			$this->__posts_map[$pid] = &$post;
+		}
+
+		return $this->__posts_ids = $post_ids;
+	}
+
+
+	protected function posts()
+	{
+		if($this->__posts !== NULL)
+			return $this->__posts;
+	
+		$user_ids = array();
+		$answ_ids = array();
+
+		foreach($this->get_all_posts_id() as $pid)
+		{
+			$post = &$this->__posts_map[$pid];
 
 			$user_ids[] = $post->owner_id();
 			$answ_ids[] = $post->answer_to_id();
 		}
-
-		$this->__posts_ids = $post_ids;
 
 		$answ_ins = array();
 		$answer_ids = array();
@@ -134,13 +156,13 @@ class forum_topic extends forum_abstract
 
 			$answer_id[] = $aid;
 
-			if(!in_array($aid, $post_ids))
+			if(!in_array($aid, $this->__posts_ids))
 				$answ_ins[] = $aid;
 		}
 		
-		$post_ids = 'id IN('.join(',', $post_ids).')';
+		$post_ids = 'id IN('.join(',', $this->__posts_ids).')';
 		$user_ids = 'id IN('.join(',', $user_ids).')';
-		$answ_ins = 'id IN('.join(',', $answ_ids).')';
+		$answ_ins = 'id IN('.join(',', $answer_ids).')';
 
 		$users = objects_array('forum_user', array($user_ids));
 		$users_map = array();
@@ -166,7 +188,7 @@ class forum_topic extends forum_abstract
 
 		foreach($this->db($this->main_db_storage())->select_array('messages', 'id,message,html', array($post_ids)) as $x)
 		{
-			$post = &$posts[$x['id']];
+			$post = &$this->__posts_map[$x['id']];
 			$post->set_source($x['message'], false);
 			$post->set_body($x['html'], false);
 		}
@@ -187,7 +209,7 @@ class forum_topic extends forum_abstract
 			}
 		}
 		
-		return $this->__posts;
+		return $this->__posts = $this->__raw_posts;
 	}
 
 	function items_per_page() { return 25; }
@@ -224,16 +246,6 @@ class forum_topic extends forum_abstract
 			$res[] = object_load('forum_user', $user_id);
 			
 		return $res;
-	}
-
-
-		
-	function get_all_posts_id()
-	{
-		if($this->__posts_ids === NULL)
-			$this->posts();
-
-		return $this->__posts_ids;
 	}
 
 	function all_users()
