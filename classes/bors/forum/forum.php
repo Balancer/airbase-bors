@@ -184,5 +184,6 @@ class forum_forum extends borsForumAbstract
 //		update_
 	}
 
-	function url_engine() { return 'url_titled'; }
+//	function url_engine() { return 'url_titled'; }
+	function url() { return 'http://balancer.ru/forum/punbb/viewforum.php?id='.$this->id(); }
 }

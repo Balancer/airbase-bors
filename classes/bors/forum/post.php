@@ -32,6 +32,7 @@ class forum_post extends base_page_db
 			'owner_id'=> 'poster_id',
 			'poster_ip',
 			'author_name' => 'poster',
+			'answer_to_id' => 'answer_to',
 		);
 	}
 
@@ -67,7 +68,20 @@ class forum_post extends base_page_db
 	
 	function topic() { return object_load('forum_topic', $this->topic_id()); }
 	function parents() { return array("forum_topic://".$this->topic_id()); }
-	function owner() { return object_load('forum_user', $this->owner_id()); }
+
+	private $__owner = NULL;
+	function owner()
+	{
+		if($this->__owner === NULL)
+			$this->__owner =  object_load('forum_user', $this->owner_id());
+
+		return $this->__owner;
+	}
+
+	function set_owner($owner, $dbup)
+	{
+		$this->__owner = $owner;
+	}
 
 	var $_post_source = false;
 	var $_post_body = false;
@@ -148,23 +162,22 @@ class forum_post extends base_page_db
 		return $this->stb_flag; 
 	}
 
-	var $stb_answer_to_id = '';
-	function set_answer_to_id($answer_to_id, $db_update) { $this->set("answer_to_id", $answer_to_id, $db_update); }
-	function field_answer_to_id_storage() { return 'answer_to(id)'; }
-	function answer_to_id() { return $this->stb_answer_to_id; }
-		
+	private $__answer_to = 0;
 	function answer_to()
 	{
+		if($this->__answer_to !== 0)
+			return $this->__answer_to;
+	
 		if($id = $this->answer_to_id())
-			return class_load('forum_post', $id);
+			return $this->__answer_to =  class_load('forum_post', $id);
 
-		return false;
+		return $this->__answer_to = false;
 	}
 
-//	function preShowProcess()
-//	{
-//		return go($this->url_in_topic());
-//	}
+	function set_answer_to($post, $dbup)
+	{
+		return $this->__answer_to = $post;
+	}
 
 	function cache_static() { return 86400; }
 
