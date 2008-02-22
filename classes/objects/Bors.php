@@ -169,7 +169,7 @@
 		return save_cached_object($object, true);
 	}
 
-	function save_cached_object($object, $delete = false)
+	function save_cached_object(&$object, $delete = false)
 	{
 	
 		if(method_exists($object, 'id') && !is_object($object->id()))

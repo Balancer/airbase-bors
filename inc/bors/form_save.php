@@ -5,7 +5,6 @@ function form_save()
 //	print_r($_GET);
 	$form = class_load($_GET['class_name'], @$_GET['id']);
 //	echo $_GET['class_name']; exit();
-//	set_loglevel(10);
 
 	require_once('classes/inc/access.php');
 	if(method_exists($form, 'acl_edit_sections') && !bors_check_access($form, $form->acl_edit_sections()))

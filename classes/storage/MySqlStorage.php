@@ -210,13 +210,11 @@ class MySqlStorage extends base_null
 					list($query, $first_name) = $x;
 //					echo "Cached: <b>$query</b><br />";
 				}
-//				$GLOBALS['log_level'] = 10;
+
 //				if(empty($select))
 //					return;
 					
 				$result = $dbh->get(str_replace('%MySqlStorageOID%', $oid, $query), false);
-//				$GLOBALS['log_level'] = 2;
-//				echo "res = "; print_r($result); echo "<br />";
 					
 				if(count($result) > 1)
 				{

@@ -32,7 +32,6 @@
 			$form = object_load($_GET['class_name'], @$_GET['id']);
 //			echo $_GET['class_name']; exit();
 //			print_d($form);
-//			set_loglevel(9);
 
 			if(method_exists($form, 'preAction'))
 			{

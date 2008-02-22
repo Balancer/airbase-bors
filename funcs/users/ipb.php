@@ -264,10 +264,6 @@
 				return false;
 			}
 			
-//			$GLOBALS['log_level']=9;
-//			echo "salt=".user_data('salt', $member_id);
-//			$GLOBALS['log_level']=2;
-
 			$lp = user_data('converge_pass_hash', $user);
 			$pass_hash = $this->generate_compiled_passhash(user_data('salt', $member_id), md5($password));
 

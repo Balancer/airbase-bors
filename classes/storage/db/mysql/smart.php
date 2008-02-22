@@ -182,20 +182,15 @@ class storage_db_mysql_smart extends base_null
 			$where = str_replace('%MySqlStorageOID%', $oid, $where);
 //			echo "($oid) -> $where<br />\n";
 			
-//			set_loglevel(10);
 			if($only_count)
 			{
-//				echo 
-//				set_loglevel(9);
 				$cnt = intval($dbh->get('SELECT COUNT(*) '.$from.' '.$where, false));
-//				set_loglevel(2);
 				$dbh->close();
 				return $cnt;
 			}
 			else
 				$dbh->query('SELECT '.join(',', $select).' '.$from.' '.$where, false);
 
-//			set_loglevel(2);
 //			@$GLOBALS['cnt']++;
 //			if($GLOBALS['cnt'] > 2)
 //				debug_exit('stop');
@@ -221,6 +216,7 @@ class storage_db_mysql_smart extends base_null
 				if($common_where)
 				{
 					$result[] = $object;
+//					save_cached_object($object);
 					$class = get_class($object);
 					$object = &new $class(NULL);
 				}
@@ -232,6 +228,7 @@ class storage_db_mysql_smart extends base_null
 			$dbh->close();
 		}
 
+//		save_cached_object($object);
 		return $common_where ? $result : $was_loaded;
 	}
 

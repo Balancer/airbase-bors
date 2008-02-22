@@ -53,7 +53,6 @@ class def_cross extends def_dbpage
 	
 	function in_to_cross_ids($to_id)
 	{
-//		$GLOBALS['log_level'] = 10;
 //		if($to_id == 154)
 //			exit(print_r($this->to_cross_ids(), true));
 		
