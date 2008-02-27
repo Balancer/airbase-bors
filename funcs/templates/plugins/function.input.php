@@ -6,6 +6,11 @@
 		$obj = $smarty->get_template_vars('current_form_class');
 		
 		$value = $obj->$name();
+		if(empty($value) && !empty($def))
+			$value = $def;
+		
+		if(empty($max_length))
+			$max_length = 255;
 		
 		echo "<input type=\"text\" name=\"$name\" value=\"".htmlspecialchars($value)."\"";
 

@@ -11,8 +11,6 @@ class BorsBaseObject extends base_object
 
 		function id() { return $this->id; }
 		function set_id($id) { $this->id = $id; }
-		function main_db_storage(){ return ''; }
-		function main_table_storage(){ return ''; }
 
 //		function new_instance() { debug_exit("Try to get new empty instance on ".$this->class_name()); }
 

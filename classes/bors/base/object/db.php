@@ -4,7 +4,6 @@ class base_object_db extends base_object
 {
 	var $db;
 
-	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
 	function storage_engine() { return 'storage_db_mysql'; }
 	function db_driver() { return 'driver_mysql'; }
 	function can_be_empty() { return false; }
