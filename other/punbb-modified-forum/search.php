@@ -559,9 +559,13 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 			or error("Unable to fetch search results: '$sql'", __FILE__, __LINE__, $db->error());
 
 		$search_set = array();
+		$topic_ids = array();
 		while ($row = $db->fetch_assoc($result))
+		{
 			$search_set[] = $row;
-
+			$topic_ids[] = $row['tid'];
+		}
+		
 		$db->free_result($result);
 
 		$page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_search['Search results'];
@@ -608,9 +612,14 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		$forum_list = array();
 		while ($forum_list[] = $db->fetch_row($result));
 
+		$topics = objects_array('forum_topic', array('id IN('.join(',', $topic_ids).')', 'by_id' => true));
+
 		// Finally, lets loop through the results and output them
 		for ($i = 0; $i < count($search_set); ++$i)
 		{
+			$topic_id = $search_set[$i]['tid'];
+			$topic = $topics[$topic_id];
+		
 			@reset($forum_list);
 			while (list(, $temp) = @each($forum_list))
 			{
@@ -689,7 +698,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 				$icon_type = 'icon';
 
 
-				$subject = "<a href=\"{$pun_config['root_uri']}/viewtopic.php?id={$search_set[$i]['tid']}\">".pun_htmlspecialchars($search_set[$i]['subject']).'</a> <span class="byuser">'.$lang_common['by'].'&nbsp;'.pun_htmlspecialchars($search_set[$i]['poster']).'</span>';
+				$subject = $topic->titled_url() /* "<a href=\"{$pun_config['root_uri']}/viewtopic.php?id={$search_set[$i]['tid']}\">".pun_htmlspecialchars($search_set[$i]['subject']).'</a>*/ . ' <span class="byuser">'.$lang_common['by'].'&nbsp;'.pun_htmlspecialchars($search_set[$i]['poster']).'</span>';
 
 				if ($search_set[$i]['closed'] != '0')
 				{
@@ -707,7 +716,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 					$item_status .= ' inew';
 					$icon_type = 'icon inew';
 					$subject = '<strong>'.$subject.'</strong>';
-					$subject_new_posts = "<span class=\"newtext\">[&nbsp;<a href=\"{$pun_config['root_uri']}/viewtopic.php?id={$search_set[$i]['tid']}&amp;action=new\" title=\"{$lang_common['New posts info']}\">".$lang_common['New posts'].'</a>&nbsp;]</span>';
+					$subject_new_posts = "<span class=\"newtext\">[&nbsp;<a href=\"{$topic->url('new')}\" title=\"{$lang_common['New posts info']}\">".$lang_common['New posts'].'</a>&nbsp;]</span>';
 				}
 				else
 					$subject_new_posts = null;
@@ -716,6 +725,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 
 				if ($num_pages_topic > 1)
 					$subject_multipage = '[ '.paginate($num_pages_topic, -1, 'viewtopic.php?id='.$search_set[$i]['tid']).' ]';
+//					$subject_multipage = '[ '.$topic->title_pages_links().' ]';
 				else
 					$subject_multipage = null;
 
@@ -743,7 +753,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 <?php
 
 			}
-		}
+		} // end loop by rows
 
 		if ($show_as == 'topics')
 			echo "\t\t\t".'</tbody>'."\n\t\t\t".'</table>'."\n\t\t".'</div>'."\n\t".'</div>'."\n".'</div>'."\n\n";

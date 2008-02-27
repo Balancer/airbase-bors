@@ -262,7 +262,7 @@ if (isset($_POST['form_sent']))
 
 			$num_replies = $db->result($result, 0) - 1;
 
-			$db->query('UPDATE '.$db->prefix.'topics SET num_replies='.$num_replies.', last_post='.$now.', last_post_id='.$new_pid.', last_poster=\''.$db->escape($username).'\' WHERE id='.$tid) 
+			$db->query('UPDATE '.$db->prefix.'topics SET num_replies='.$num_replies.', last_post_id='.$new_pid.', last_poster=\''.$db->escape($username).'\' WHERE id='.$tid) 
 				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
 			update_forum($cur_posting['id']);
@@ -342,8 +342,7 @@ if (isset($_POST['form_sent']))
 			}
 
 			include_once("classes/objects/Bors.php");
-			$topic = class_load('forum_topic', $tid);
-			$post  = class_load('forum_post', $new_pid);
+			$topic = class_load('forum_topic', $tid, array('no_load_cache' => true));
 		}
 		// If it's a new topic
 		else if ($fid)
@@ -409,9 +408,15 @@ if (isset($_POST['form_sent']))
 			update_forum($fid);
 
 			include_once("classes/objects/Bors.php");
-			$topic = class_load('forum_topic', $new_tid);
-			$post  = class_load('forum_post',  $new_pid);
+			$topic = class_load('forum_topic', $new_tid, array('no_load_cache' => true));
 		}
+
+		$post  = class_load('forum_post',  $new_pid, array('no_load_cache' => true));
+		
+		$topic->set_modify_time(time(), true);
+		$post->set_modify_time(time(), true);
+		$topic->store();
+		$post->store();
 
 		$page = $topic->page_by_post_id($post->id());
 		$topic->set_page($page);
@@ -442,41 +447,13 @@ if (isset($_POST['form_sent']))
 
 		// Attachment Mod Block Start
 		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))
-		{
-			//fetch the rules for this forum for this group
-
-//			$attach_result = $db->query("SELECT rules,size,file_ext FROM {$db->prefix}attach_2_rules WHERE group_id={$pun_user['g_id']} AND (forum_id={$cur_posting['id']} OR forum_id=0) ORDER BY forum_id DESC LIMIT 1")
-//				or error('Unable to fetch attachment rules',__FILE__,__LINE__,$db->error());	
-
-//			if($db->num_rows($attach_result)!=0 || $pun_user['g_id']==PUN_ADMIN)
-//			{
-//				$attach_rules=0; $attach_size=0; $attach_file_ext=''; // just some defaults to get the parser to stop nagging me if it's an admin :D
-//				if($db->num_rows($attach_result)!=0)
-//					list($attach_rules,$attach_size,$attach_file_ext)=$db->fetch_row($attach_result);
-					
-				//check so that the user is allowed to upload
-//				if(attach_allow_upload($attach_rules,$attach_size,$attach_file_ext,$_FILES['attached_file']['size'],$_FILES['attached_file']['name']))
-//				{
-					// ok we're allowed to post ... time to fix everything... 
-					if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
-					{
-						error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
-					}
-//				}
-//				else
-//				{
-					// no output ... but if you want, enable this error (you really shouldn't need to as this will only happen if someone try to go around the restrictions
-//					error('Not allowed to post attachments: error1');
-//				}
-//			}
-//			else
-//			{
-//				// no output ... but if you want, enable this error (you really shouldn't need to as this will only happen if someone try to go around the restrictions
-//				error('Not allowed to post attachments: error2');
-//			}
-		}
+			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
+				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
 		// Attachment Mod Block End
 
+		require_once('funcs/navigation/go.php');
+		go($post->url_in_topic($topic));
+		pun_exit();
 		redirect('viewtopic.php?pid='.$new_pid.'#p'.$new_pid, $lang_post['Post redirect']);
 	}
 }

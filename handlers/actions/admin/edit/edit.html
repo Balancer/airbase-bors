@@ -1,6 +1,6 @@
 <form method="post" action="{$main_uri}?edit-save" enctype="multipart/form-data">
 <table cellSpacing="0" class="btab">
-{if !$me_id}<tr><td>Логин: <input name="login"></td><td>Пароль: <input name="password" type="password"></td></tr>{/if}
+{if !$my_id}<tr><td>Логин: <input name="login"></td><td>Пароль: <input name="password" type="password"></td></tr>{/if}
 <tr><td colSpan="2"><textarea cols="64" rows="25" name="source">{$source|htmlspecialchars}</textarea></td></tr>
 <tr><td>&nbsp;</td><td>
 <input type="submit" value="Сохранить"></td></tr>
@@ -8,4 +8,4 @@
 <input type="hidden" name="uri" value="{$main_uri}">
 </table>
 </form>
-<center><i>Уровень доступа: {$me->get('level', 1)}</i></center>
+<center><i>Уровень доступа: $me->get('level', 1)</i></center>

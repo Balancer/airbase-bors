@@ -9,7 +9,7 @@ class base_page extends def_page
 	function set_source($source, $db_update) { $this->set("source", $source, $db_update); }
 	function source() { return $this->stb_source; }
 
-	function items_around_page() { return 10; }
+	function items_around_page() { return 8; }
 
 	function pages_links($css='pages_select')
 	{

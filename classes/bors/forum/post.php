@@ -190,20 +190,24 @@ class forum_post extends base_page_db
 		return template_assign_data('post.html', array('this' => $this));
 	}
 	
-	function url_in_topic()
+	function url_in_topic($topic = NULL)
 	{
-		$tid = $this->topic_id();
 		$pid = $this->id();
-
-		if(!$tid)
+		
+		if(!$topic)
 		{
-			$this->set_body(ec("Указанный Вами топик [{$this->topic_id()}/{$this->id()}] не найден"), false);
-			return false;
+			$tid = $this->topic_id();
+
+			if(!$tid)
+			{
+				$this->set_body(ec("Указанный Вами топик [{$this->topic_id()}/{$this->id()}] не найден"), false);
+				return false;
+			}
+
+			$topic = object_load('forum_topic', $tid);
 		}
 	
-		$topic = class_load('forum_topic', $tid);
-	
-		$posts = $topic->get_all_posts_id();
+		$posts = $topic->all_posts_ids();
 
 		$page = 1;
 
@@ -214,7 +218,7 @@ class forum_post extends base_page_db
 				break;
 			}
 			
-		return $topic->url($page)."#p".$pid;
+		return $topic->url($page)."?#p".$pid;
 	}
 
 	function modify_time()
@@ -239,8 +243,7 @@ class forum_post extends base_page_db
 		return $this->topic()->forum()->category()->category_base_full();
 	}
 
-	var $_attach_ids = false;
-
+	private $_attach_ids = false;
 	function attach_ids()
 	{
 		if($this->_attach_ids !== false)
@@ -250,13 +253,22 @@ class forum_post extends base_page_db
 		return $this->_attach_ids = $db->get_array("SELECT id FROM attach_2_files WHERE post_id = ".$this->id());
 	}
 		
+	private $_attaches = NULL;
 	function attaches()
 	{
+		if($this->_attaches !== NULL)
+			return $this->_attaches;
+			
 		$result = array();
 		foreach($this->attach_ids() as $attach_id)
 			$result[] = class_load('forum_attach', $attach_id);
 
-		return $result;
+		return $this->_attaches = $result;
+	}
+
+	function set_attaches($attaches)
+	{
+		return $this->_attaches = $attaches;
 	}
 
 	function search_source() { return $this->source(); }
@@ -269,7 +281,7 @@ class forum_post extends base_page_db
 		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
 	}
 
-	function num_views() { return $this->topic()->num_views(); }
+	function visits() { return $this->topic()->num_views(); }
 
 	function class_title() { return ec("Сообщение форума"); }
 	

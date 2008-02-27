@@ -14,9 +14,6 @@ class forum_topic extends forum_abstract
 
 	function main_db_fields()
 	{
-		if(bors()->user()->id() == 10000)
-			set_loglevel(10);
-	
 		return array(
 			$this->main_table_storage() => $this->main_table_fields(),
 		);
@@ -33,9 +30,13 @@ class forum_topic extends forum_abstract
 			'last_poster_name' => 'last_poster',
 			'author_name' => 'poster',
 			'num_replies',
-			'num_views',
+			'visits' => 'num_views',
 			'first_post_id' => 'first_pid',
 			'last_post_id' => 'last_post_id',
+			'first_visit_time' => 'first_visit',
+			'last_visit_time' => 'last_visit',
+			'sticky',
+			'closed',
 		);
 	}
 
@@ -47,27 +48,67 @@ class forum_topic extends forum_abstract
 	function set_last_poster_name($value, $dbupd) { $this->fset('last_poster_name', $value, $dbupd); }
 	function set_author_name($value, $dbupd) { $this->fset('author_name', $value, $dbupd); }
 	function set_num_replies($num_replies, $db_update) { $this->fset('num_replies', $num_replies, $db_update); }
-	function set_num_views($num_views, $db_update) { $this->fset('num_views', $num_views, $db_update); }
+	function set_visits($num_views, $db_update) { $this->fset('visits', $num_views, $db_update); }
 	function set_first_post_id($first_post_id, $db_update) { $this->fset('first_post_id', $first_post_id, $db_update); }
 	function set_last_post_id($last_post_id, $db_update) { $this->fset('last_post_id', $last_post_id, $db_update); }
 
 	function forum() { return object_load('forum_forum', $this->forum_id()); }
 	function first_post() { return object_load('forum_post', $this->first_post_id()); }
+	function last_post() { return object_load('forum_post', $this->last_post_id()); }
 		
 	function parents() { return array("forum_forum://".$this->forum_id()); }
 
-	function body()
+	function is_sticky() { return $this->sticky() ? true : false; }
+	function is_closed() { return $this->closed() ? true : false; }
+
+	function preParseProcess()
 	{
-//			$this->cache_clean_self();
-		
-		global $bors;
+		if($this->page() == 'new')
+		{
+			if(!bors()->user() || bors()->user()->id() < 2)
+				return bors_message(ec('Вы не авторизованы на этом домене. Авторизуйтесь, пожалуйста. Если не поможет - попробуйте стереть cookies вашего браузера.'), array('login_form' => true, 'login_referer' => $this->url($this->page())));
+
+			$uid = bors()->user()->id();
+			$x = $this->db()->select('topic_visits', 'last_visit, last_post_id', array('user_id='=>$uid, 'topic_id='=>$this->id()));
+			$first_new_post_id = @$x['last_post_id'];
+//			if(!$first_new_post_id)
+			{
+				$last_visit = $x['last_visit'];
+				$where = array('topic_id='=>$this->id(), 'posted>' => $last_visit);
+//				set_loglevel(10,NULL);
+				$first_new_post_id = intval($this->db()->select('posts', 'MIN(id)', $where));
+				if(!$first_new_post_id)
+					$first_new_post_id = intval($this->db()->select('posts_archive_'.($this->id()%10), 'MIN(id)', $where));
+//				set_loglevel(2);
+//				exit();
+			}
+					
+			if($first_new_post_id)
+			{
+				$post = object_load('forum_post', $first_new_post_id);
+				if($post)
+					return go($post->url_in_topic());
+			}
+
+			$this->set_page('last');
+		}
+
+		if($this->page() == 'last')
+			return go($this->url($this->total_pages()));
 
 		if(!$this->forum()->can_read())
 		{
 			templates_noindex();
-			return ec("Извините, доступ к этому ресурсу закрыт для Вас");
+			return bors_message("Извините, доступ к этому ресурсу закрыт для Вас");
 		}
 		
+		return false;
+	}
+
+	function body()
+	{
+		global $bors;
+
 		$GLOBALS['cms']['cache_disabled'] = true;
 
 		$bors->config()->set_cache_uri($this->internal_uri());
@@ -80,12 +121,6 @@ class forum_topic extends forum_abstract
 
 		$data['posts'] = $this->posts();
 
-		if(empty($data['posts']))
-		{
-			$this->db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
-			$data['posts'] = $this->posts();
-		}
-
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".addslashes($this->title())."'\" />");
 
 		$data['this'] = $this;
@@ -93,77 +128,138 @@ class forum_topic extends forum_abstract
 		return template_assign_data("templates/TopicBody.html", $data);
 	}
 
-	private $__posts = NULL;
 	private $__posts_map = NULL;
-	private $__raw_posts = NULL;
-	private $__posts_ids = NULL;
+	private $__pages_loades = array();
+	private $__add_posts = NULL;
+	private $__add_post_ids = array();
+	private $__add_posts_map = array();
 
 	private function raw_posts()
 	{
-		if($this->__raw_posts !== NULL)
-			return $this->__posts;
+		$page_id = $this->page().','.$this->items_per_page();
+		if(isset($this->__pages_loaded[$page_id]))
+			return $this->__pages_loaded[$page_id];
 
-		return $this->__raw_posts = objects_array('forum_post', array(
-				'where' => array('topic_id=' => intval($this->id())),
-				'order' => 'id',
-				'page' => $this->page(),
-				'per_page' => $this->items_per_page(),
-			));
+		$where = array(
+			'where' => array('topic_id=' => intval($this->id())),
+			'order' => 'id',
+			'page' => $this->page(),
+			'per_page' => $this->items_per_page(),
+		);
+
+		$this->__pages_loaded[$page_id] = objects_array('forum_post', $where);
+		
+		if(empty($this->__all_posts_ids))
+		{
+			$this->archive_restore();
+			$this->__pages_loaded[$page_id] = objects_array('forum_post', $where);
+		}
+		
+		return $this->__pages_loaded[$page_id];
 	}
 
-	function get_all_posts_id()
+	private function add_post($pid)
 	{
-		if($this->__posts_ids !== NULL)
-			return $this->__posts_ids;
+		if(!in_array($pid, $this->__posts_ids))
+			$this->__add_post_ids[] = $pid;
+	}
+
+	private function add_posts()
+	{
+		if($this->__add_posts !== NULL)
+			return $this->__add_posts;
+
+		if(!$this->__add_post_ids)
+			return $this->__add_posts = array();
+
+		$this->__add_posts = objects_array('forum_post', array(
+				'where' => array('post_id IN('.join(',', array_unique($this->__add_post_ids)).')'),
+				'order' => 'id',
+		));
+		
+		for($i = 0; $i<count($this->__add_posts); $i++)
+		{
+			$post = &$this->__add_posts[$i];
+			$this->__add_posts_map[$post->id()] = &$post;
+		}
+		
+		return $this->__add_posts;
+	}
+
+	private $__all_posts_ids;
+	function all_posts_ids()
+	{
+		if(isset($this->__all_posts_ids))
+			return $this->__all_posts_ids;
+		
+		$this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id='=>$this->id(), 'order' => 'posted'));
+		if(empty($this->__all_posts_ids))
+		{
+			$this->archive_restore();
+			$this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id='=>$this->id(), 'order' => 'posted'));
+		}
+		
+		return $this->__all_posts_ids;
+	}
+
+	function archive_restore()
+	{
+		$this->db()->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
+	}
+
+	private $__posts_ids;
+	function posts_ids()
+	{
+		$page_id = $this->page_id();
+		if(isset($this->__posts_ids[$page_id]))
+			return $this->__posts_ids[$page_id];
 
 		$post_ids = array();
-		$this->raw_posts();
+		$posts = $this->raw_posts();
 
-		for($i = 0; $i < count($this->__raw_posts); $i++)
+		for($i = 0; $i < count($posts); $i++)
 		{
-			$post = &$this->__raw_posts[$i];
+			$post = &$posts[$i];
 			$pid = $post->id();
 			$post_ids[] = $pid;
 			$this->__posts_map[$pid] = &$post;
 		}
 
-		return $this->__posts_ids = $post_ids;
+		return $this->__posts_ids[$page_id] = $post_ids;
 	}
 
+	function page_id() { return $this->page().','.$this->items_per_page(); }
 
+	private $__posts;
 	protected function posts()
 	{
-		if($this->__posts !== NULL)
-			return $this->__posts;
-	
-		$user_ids = array();
-		$answ_ids = array();
+		$page_id = $this->page_id();
+		if(isset($this->__posts[$page_id]))
+			return $this->__posts[$page_id];
 
-		foreach($this->get_all_posts_id() as $pid)
+		$user_ids = array();
+
+		foreach($this->posts_ids() as $pid)
 		{
 			$post = &$this->__posts_map[$pid];
 
 			$user_ids[] = $post->owner_id();
-			$answ_ids[] = $post->answer_to_id();
+			$this->add_post($post->answer_to_id());
 		}
 
-		$answ_ins = array();
-		$answer_ids = array();
-		foreach($answ_ids as $aid)
+		if(empty($this->__posts_ids[$page_id]))
+			return array();
+
+		$post_ids = 'id IN('.join(',', $this->__posts_ids[$page_id]).')';
+
+		foreach($this->db($this->main_db_storage())->select_array('messages', 'id,message,html', array($post_ids)) as $x)
 		{
-			if(!$aid)
-				continue;
-
-			$answer_id[] = $aid;
-
-			if(!in_array($aid, $this->__posts_ids))
-				$answ_ins[] = $aid;
+			$post = &$this->__posts_map[$x['id']];
+			$post->set_source($x['message'], false);
+			$post->set_body($x['html'], false);
 		}
-		
-		$post_ids = 'id IN('.join(',', $this->__posts_ids).')';
-		$user_ids = 'id IN('.join(',', $user_ids).')';
-		$answ_ins = 'id IN('.join(',', $answer_ids).')';
 
+		$user_ids = 'id IN('.join(',', array_unique($user_ids)).')';
 		$users = objects_array('forum_user', array($user_ids));
 		$users_map = array();
 		for($i = 0; $i < count($users); $i++)
@@ -173,43 +269,35 @@ class forum_topic extends forum_abstract
 			$users_map[$uid] = &$user;
 		}
 
-		if($answ_ins != 'id IN()')
-			$answers = objects_array('forum_post', array($answ_ins));
-		else
-			$answers = array();
-			
-		$answers_map = array();
-		for($i = 0; $i < count($answers); $i++)
-		{
-			$answer = &$answers[$i];
-			$aid = $answer->id();
-			$answers_map[$aid] = &$answer;
-		}
+		$attaches_map = array();
+		foreach(objects_array('forum_attach', array('post_'.$post_ids)) as $a)
+			$attaches_map[$a->post_id()][] = $a;
 
-		foreach($this->db($this->main_db_storage())->select_array('messages', 'id,message,html', array($post_ids)) as $x)
+		$this->add_posts();
+		
+		$posts = $this->raw_posts();
+		for($i = 0; $i < count($posts); $i++)
 		{
-			$post = &$this->__posts_map[$x['id']];
-			$post->set_source($x['message'], false);
-			$post->set_body($x['html'], false);
-		}
-
-		for($i = 0; $i < count($this->__posts); $i++)
-		{
-			$post = &$this->__posts[$i];
+			$post = &$posts[$i];
 			$pid = $post->id();
 			$uid = $post->owner_id();
-			$post->set_owner($users_map[$uid], false);
+//			$post->set_owner($users_map[$uid], false);
+			
+			$attaches = @$attaches_map[$pid];
+			$post->set_attaches($attaches ? $attaches : array(), false);
+				
 			if($aid = $post->answer_to_id())
 			{
-				$answer = @$answers_map[$aid];
-				if(!$answer)
-					$answer = $posts[$aid];
+				$answer = @$this->__add_posts_map[$aid];
+//				if(!$answer)
+//					$answer = $this->__posts_map[$aid];
 
-				$post->set_answer_to($answer, false);
+				if($answer)
+					$post->set_answer_to($answer, false);
 			}
 		}
-		
-		return $this->__posts = $this->__raw_posts;
+
+		return $this->__posts[$page_id] = $this->raw_posts();
 	}
 
 	function items_per_page() { return 25; }
@@ -222,7 +310,7 @@ class forum_topic extends forum_abstract
 			return "";
 
 		include_once('funcs/design/page_split.php');
-		return join(" ", pages_show($this, $this->total_pages(), 16));
+		return join(" ", pages_show($this, $this->total_pages(), 15));
 	}
 
 	function title_pages_links()
@@ -254,6 +342,7 @@ class forum_topic extends forum_abstract
 		return $db->get_array("SELECT DISTINCT poster_id FROM posts WHERE topic_id={$this->id}");
 	}
 		
+//	function cache_static() { return $this->forum()->is_public_access() && !debug_test() ? 86400*30 : 0; }
 	function cache_static() { return $this->forum()->is_public_access() ? 86400*30 : 0; }
 	function base_url() { return $this->forum()->category()->category_base_full(); }
 		
@@ -338,4 +427,29 @@ class forum_topic extends forum_abstract
 	}
 
 	function url_engine() { return 'url_titled'; }
+
+	function touch($user_id)
+	{
+		$visits = intval($this->db()->select('topic_visits', 'count', array('user_id=' => $user_id, 'topic_id=' => $this->id()))) + 1;
+
+		$data = array(
+			'topic_id' => $this->id(),
+			'user_id' => $user_id,
+			'count' => $visits,
+			'last_visit' => time(),
+			'last_post_id' => $this->last_post_id(),
+		);
+
+		if($visits == 1)
+		{
+			$data['first_visit'] = time();
+			$this->db()->replace('topic_visits', $data);
+		}
+		else
+			$this->db()->update('topic_visits', "user_id=".intval($user_id)." AND topic_id=".intval($this->id()), $data);
+	}
+
+	function visits_counting() { return true; }
+
+	function visits_per_day() { return (86400.0*$this->visits())/($this->last_visit_time() - $this->first_visit_time() + 1); }
 }

@@ -62,6 +62,9 @@ function url_parse($url)
 	if(preg_match("!^{$_SERVER['HTTP_HOST']}$!", $data['host']))
 		$data['root'] = $_SERVER['DOCUMENT_ROOT'];
 
+//	if(empty($data['root']))
+//		$data['root'] = $_SERVER['DOCUMENT_ROOT'];
+
 	$data['local'] = !empty ($data['root']);
 	$data['local_path'] = $data['root'].str_replace('http://'.$data['host'], '', $uri);
 	$data['uri'] = "http://".@ $data['host'].@ $data['path'];

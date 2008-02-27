@@ -2,6 +2,8 @@
 
 class user_blog extends base_page
 {
+	private $user;
+	
 	function _class_file() { return __FILE__; }
 
 	function main_db_storage(){ return 'punbb'; }
@@ -11,19 +13,21 @@ class user_blog extends base_page
 		templates_noindex();
 		return BORS_INCLUDE.'templates/forum/_header.html';
 	}
-
-	var $user;
 	
 	function title() { return $this->user->title().ec(": Блог"); }
 	function nav_name() { return ec("блог"); }
 
 	function parents() { return array("forum_user://".$this->id()); }
 
-	private $data = NULL;
+	private $data = array();
 	function data_providers()
 	{
-		if($this->data === NULL)
-			$this->data = array(
+		$page_id = $this->page().','.$this->items_per_page();
+	
+		if(isset($this->data[$page_id]))
+			return $this->data[$page_id];
+
+		$this->data[$page_id] = array(
 				'blog_records' => array_reverse(objects_array('forum_blog', array(
 					'where' => array('owner_id=' => $this->id()),
 					'order' => 'blogged_time',
@@ -32,7 +36,7 @@ class user_blog extends base_page
 				)))
 			);
 		
-		return $this->data;
+		return $this->data[$page_id];
 	}
 
 	function default_page() { return $this->total_pages(); }

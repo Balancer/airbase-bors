@@ -7,15 +7,23 @@
 		if(is_object($bors))
 			$bors->changed_save();
 	
-		if(config('debug_redirect'))
+		if(config('debug_redirect') && debug_test())
+		{
+//			print_d($_SERVER);
 			debug_exit("Go to <a href=\"{$uri}\">{$uri}</a>");
-	
+		}
+		
         if(!headers_sent($filename, $linenum) && $time==0) 
         {
 			if($permanent)
 	            header("Status: 301 Moved Permanently");
 			else
+			{
 	            header("Status: 302 Moved Temporarily");
+				header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+				header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+			}
+			
 			if(preg_match("!\n!", $uri))
 				echolog("cr in uri '$uri'", 1);
 				

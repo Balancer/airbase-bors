@@ -25,6 +25,18 @@
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $pid = isset($_GET['pid']) ? intval($_GET['pid']) : 0;
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
+bors_init();
+
+$qs = @$_SERVER['QUERY_STRING'];
+if(preg_match('!^id=(\d+)&p=(\d+)$!', $qs, $m))
+	return go(object_load('forum_topic', $m[1])->url($m[2]), true);
+if(preg_match('!^id=(\d+)$!', $qs, $m))
+	return go(object_load('forum_topic', $m[1])->url(), true);
+if(preg_match('!^id=(\d+)&action=(new|last)$!', $qs, $m))
+	return go(object_load('forum_topic', $m[1])->url($m[2]), true);
+if(preg_match('!^pid=(\d+)$!', $qs, $m))
+	return go(object_load('forum_post', $m[1])->url_in_topic(), true);
+
 include_once("funcs/DataBase.php");
 $cms_db = &new DataBase('punbb');
 

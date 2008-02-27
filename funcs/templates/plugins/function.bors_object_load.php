@@ -24,7 +24,6 @@ function smarty_function_bors_object_load($params, &$smarty)
 	elseif(empty($params))
 		$params = 1;
 
-//	echo "object_load({$params['class']}, {$params['id']}, $args))";
 	$obj = object_load($class, $id, $params);
 
 	if($var)

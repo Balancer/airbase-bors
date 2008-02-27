@@ -16,6 +16,8 @@
 		function set_category_base($category_base, $db_update) { $this->set("category_base", $category_base, $db_update); }
 		function field_category_base_storage() { return 'punbb.categories.base_uri(id)'; }
 
+		function url() { return $this->category_base_full(); }
+	
 		function category_base_full()
 		{
 			$cat = $this;
@@ -29,7 +31,7 @@
 		{
 //			echo "Get parents for cat ".$this->id();
 			if($this->parent_category_id())
-				return array("forum.forumCategory://". $this->parent_category_id());
+				return array("forum_category://". $this->parent_category_id());
 
 			return array("http://balancer.ru/forum/");
 		}

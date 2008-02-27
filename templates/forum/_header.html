@@ -59,7 +59,7 @@ dd, dt { height: 1%; }
 
 	<div class="center"><div class="incenter" id="incenter">
 
-		<dl class="forumposting">
+		<dl class="box">
 		<dt><div class="nav">{module name="top-navs"}</div></dt>
 		<dd>
 			<h1>{$title}</h1>
@@ -68,10 +68,10 @@ dd, dt { height: 1%; }
 		</dl>
 		{$body}
 
-{*		<script type="text/javascript" encoding="UTF-8">
-			createSelect("Левая колонка", "inleft.display", "block;none", "block")
-		</script>
-*}
+		<dl class="box">
+		<dt><div class="nav">{module name="top-navs"}</div></dt>
+		</dl>
+
 	  <div class="copyright">
         Copyright &copy; Balancer 1997..{0|strftime:"%Y"}<br/>
 	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
@@ -115,16 +115,29 @@ var me_hash = readCookie('cookie_hash', 0)
 			if(me_id < 2 || !me_hash)
 				document.writeln("<"+"script  type=\"text/javascript\" src=\"/templates/login.js\"></"+"script>")
 			else
+{literal}
+			{
+{/literal}
 				document.writeln("<"+"script  type=\"text/javascript\" src=\"http://balancer.ru/user/"+me_id+"/personal.js\"></"+"script>")
+				document.writeln("<"+"script  type=\"text/javascript\" src=\"http://balancer.ru/js/users/touch.js?{$this->class_name()}://{$this->id()}\"></"+"script>")
+{literal}
+			}
+{/literal}
 			</script>
 			<noscript>Не работает без JavaScript</noscript>
 		</dd>
 		</dl>
 
-		<dl class="box w200">
-		<dt>Новости сайта</dt>
+		<dl class="box w200"><dt>Новости сайта</dt>
 		<dd>
 		{module name="forums/sitenews"}
+		</dd>
+		</dl>
+
+		<dl class="box w200"><dt>Популярные темы</dt>
+		<dd>
+			<script type="text/javascript" src="http://balancer.ru/js/forum/topvisits.js"></script>
+			<noscript>Не работает без JavaScript</noscript>
 		</dd>
 		</dl>
 
@@ -140,6 +153,7 @@ var me_hash = readCookie('cookie_hash', 0)
 </div></div>
 <!--
 === debug-info ===
+class = {$this->class_name()}
 template[3] = {$template}
 queries = {$queries} 
 queries_time = {$queries_time} 
@@ -149,5 +163,10 @@ created = {$now|strftime:"%d.%m.%Y %H:%M"}
 {if $this}{math assign=exp equation="x+y" x=$this->cache_static() y=$now}static expire = {$exp|strftime:"%d.%m.%Y %H:%M"} 
 {/if} 
 -->
+
+		<script type="text/javascript" encoding="UTF-8">
+			createSelect("Левая колонка", "inleft.display", "block;none", "block")
+		</script>
+
 </body>
 </html>

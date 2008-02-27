@@ -65,7 +65,7 @@ if (!defined('PUN_ALLOW_INDEX'))
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/colors.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css';/*"*/?>" />
-<link rel="stylesheet" type="text/css" href="/cms/templates/forum/main.css" />
+<link rel="stylesheet" type="text/css" href="/cms/templates/forum/main3.css" />
 <?php
 	global $header;
 	if(!empty($header))

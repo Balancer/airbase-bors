@@ -33,12 +33,14 @@
 		$smarty->assign("this", $obj);
 
 		//TODO: убрать user_id и user_name в старых шаблонах.
-		$me = &new User();
+		$me = bors()->user();
 		$smarty->assign("me", $me);
-		$smarty->assign("me_id", $me->get('id'));
-		$smarty->assign("user_id", $me->get('id'));
-		$smarty->assign("user_name", $me->get('name'));
-
+		if($me)
+		{
+			$smarty->assign("my_id", $me->id());
+			$smarty->assign("my_name", $me->title());
+		}
+		
 		foreach(split(' ', $obj->template_vars()) as $var)
 			$smarty->assign($var, $obj->$var());
 		

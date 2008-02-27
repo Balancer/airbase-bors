@@ -9,10 +9,10 @@ class storage_db_mysql_smart extends base_null
 			return false;
 
 		$oid = addslashes(isset($args['object_id']) ? $args['object_id'] : $object->id());
+		$by_id = !empty($args['by_id']);
 //		if(!$oid)
 //			debug_exit('empty oid');
 		
-		$was_loaded = false;
 		$result = array();
 
 //		echo "MySqlStorage.load: <b>{$object->internal_uri()}</b>, size=".sizeof(get_object_vars($object))."; cnt=".(++$count)."<br />";
@@ -195,6 +195,7 @@ class storage_db_mysql_smart extends base_null
 //			if($GLOBALS['cnt'] > 2)
 //				debug_exit('stop');
 				
+			$was_loaded = false;
 			while($row = $dbh->fetch_row())
 			{
 //				echo "row=".print_d($row);
@@ -213,10 +214,16 @@ class storage_db_mysql_smart extends base_null
 					$was_loaded = true;
 				}
 
+				$object->set_loaded($was_loaded);
+
 				if($common_where)
 				{
-					$result[] = $object;
-//					save_cached_object($object);
+					if($by_id)
+						$result[$object->id()] = $object;
+					else
+						$result[] = $object;
+
+					save_cached_object($object);
 					$class = get_class($object);
 					$object = &new $class(NULL);
 				}
@@ -228,7 +235,7 @@ class storage_db_mysql_smart extends base_null
 			$dbh->close();
 		}
 
-//		save_cached_object($object);
+		save_cached_object($object);
 		return $common_where ? $result : $was_loaded;
 	}
 

@@ -5,7 +5,6 @@ class user_reputation extends base_page_db
 	function _class_file() { return __FILE__; }
 
 	var $user;
-	var $ref;
 	
 	function title() { return $this->user->title().ec(": Репутация"); }
 	function nav_name() { return ec("репутация"); }
@@ -21,6 +20,14 @@ class user_reputation extends base_page_db
 			return ec("Не задан ID пользователя.");
 
 //		debug_exit("id={$id}, user={$this->user->id}, ref={$this->page()}");
+	}
+
+	function preParseProcess($get)
+	{
+		if(!bors()->user() && !empty($get))
+			return go($this->url());
+
+		return false;
 	}
 
 	function data_providers()

@@ -101,7 +101,9 @@ class DataBase extends base_object
 
 		function query($query, $ignore_error=false)
 		{
-//			if(preg_match('!UPDATE.*tab\d!i', $query)) { print_d($query); exit(); }
+			if(!empty($GLOBALS['me']) && $GLOBALS['me']->id == 10000
+					&& preg_match("!\QFROM attach_2_files WHERE post_id = 1440498\E$!", $query))
+				debug_trace();
 
 			if(!$this->dbh)
 				$this->reconnect();

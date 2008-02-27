@@ -92,7 +92,7 @@ function createSelect(title, element, values, def)
 
 function onLoad()
 {
-	cookie_vars = "body.fontSize body.fontFamily main_column.width".split(" ");
+	cookie_vars = "body.fontSize body.fontFamily main_column.width inleft.display".split(" ");
 	for(var i in cookie_vars)
 	{
 		name = cookie_vars[i]

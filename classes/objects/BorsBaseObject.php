@@ -62,13 +62,6 @@ class BorsBaseObject extends base_object
 				}
 		}
 
-		function cache_clean_self()
-		{
-			include_once('include/classes/cache/CacheStaticFile.php');
-			CacheStaticFile::clean($this->internal_uri());
-			CacheStaticFile::clean($this->url());
-		}
-
 		var $stb_owner_id = NULL;
 		function set_owner_id($owner_id, $db_update) { $this->set("owner_id", $owner_id, $db_update); }
 		function owner_id() { return $this->stb_owner_id; }

@@ -2,6 +2,8 @@
 
 function bors_message($text, $params=array())
 {
+	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 	include_once("funcs/templates/smarty.php");
 
 	$redir = defval($params, 'redirect', false);
@@ -21,8 +23,11 @@ function bors_message($text, $params=array())
 	}
 		
 	$data = array();
-	foreach(split(' ', 'title text link_text link_url') as $key)
+	foreach(explode(' ', 'title text link_text link_url') as $key)
 		$data[$key] = $$key;
+
+	foreach(explode(' ', 'login_form login_referer') as $key)
+		$data[$key] = @$params[$key];
 
 	require_once('funcs/templates/assign.php');
 	$body = template_assign_data("xfile:messages.html", $data);

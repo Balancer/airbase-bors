@@ -6,15 +6,8 @@ class forum_user extends base_object_db
 
 	function __construct($id)
 	{
-//		echo "user($id)<br />";
 		if($id == -1)
-		{
-			global $me;
-			if(empty($me) || !is_object($me))
-				$me = &new User();
-			$id = $me->get('id');
-//			echo "Current user id = $id<br />";
-		}
+			debug_exit('Try to get user "-1"');
 			
 		parent::__construct($id);
 	}
@@ -37,7 +30,7 @@ class forum_user extends base_object_db
 		)));
 	}
 
-	function group() { class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
+	function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
 
 	var $_title = NULL;
 	function group_title()
@@ -48,18 +41,29 @@ class forum_user extends base_object_db
 		if($this->_title = $this->user_title())
 			return $this->_title;
 				
-//		if($this->_title = $this->group()->user_title())
-//			return $this->_title;
+		if($this->_title = $this->group()->user_title())
+			return $this->_title;
 
 		$this->_title = $this->rank();
 
 		return $this->_title;
 	}
 
+	private $__rank = NULL;
 	function rank()
 	{
-		$db = &new DataBase('punbb');
-		return $db->get("SELECT rank FROM ranks WHERE min_posts < ".intval($this->num_posts())." ORDER BY min_posts DESC LIMIT 1");
+		if($this->__rank !== NULL)
+			return $this->__rank;
+		
+		global $bors_forum_user_ranks;
+		if($bors_forum_user_ranks === NULL)
+			$bors_forum_user_ranks = $this->db('punbb')->select_array('ranks', 'rank, min_posts', array('order' => '-min_posts'));
+
+		foreach($bors_forum_user_ranks as $x)
+			if($this->num_posts() >= $x['min_posts'])
+				return $this->__rank = $x['rank'];
+		
+		return $this->__rank = 'Unknown';
 	}
 
 	function signature_html()

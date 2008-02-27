@@ -199,3 +199,9 @@ blockquote {
 	border: 1px solid #858F9E;
 	background: #ddd;
 }
+
+.box {
+	border: 1px solid #858F9E;
+	padding: 4px;
+	margin: 0 8px 8px 8px;
+}

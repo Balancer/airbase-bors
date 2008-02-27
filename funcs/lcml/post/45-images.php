@@ -12,7 +12,6 @@
 		$n=50;
 		while(preg_match("!\[([\w/]+.(jpg|jpeg|gif|png))([^\]]*)\]!ie", $txt, $m) && $n-->0)
 			$txt = str_replace($m[0], lcml("[img \"{$m[1]}\" noflow {$m[3]}]"), $txt);
-	
+
 		return $txt;
 	}
-?>
