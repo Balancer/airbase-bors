@@ -97,7 +97,12 @@ class def_page extends borsPage
 			if(preg_match('!^(.+?)\[(.+?)\]\s*=(.+)$!', $pair, $m))
 				$this->add_template_data_array(trim($m[1]).'['.trim($m[2]).']', trim($m[3]));
 			else if(preg_match('!^(.+?)=(.+)$!', $pair, $m))
-				$this->add_template_data(trim($m[1]), trim($m[2]));
+			{
+				if(preg_match('!^array\((.+)\)$!', trim($m[2]), $mm))
+					$this->add_template_data(trim($m[1]), explode(',', trim($mm[1])));
+				else
+					$this->add_template_data(trim($m[1]), trim($m[2]));
+			}
 		}
 	}
 

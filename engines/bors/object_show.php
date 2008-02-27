@@ -33,6 +33,10 @@
 //			echo $_GET['class_name']; exit();
 //			print_d($form);
 
+			$processed = $form->pre_action($_GET);
+			if($processed === true)
+				return true;
+
 			if(method_exists($form, 'preAction'))
 			{
 				$processed = $form->preAction($_GET);

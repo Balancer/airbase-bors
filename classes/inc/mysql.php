@@ -57,9 +57,9 @@ function mysql_limits_compile($args)
 	if(empty($args['page']) && empty($args['per_page']))
 		return "";
 		
-	$page = @$args['page'];
+	$page = intval(@$args['page']);
 	$per_page = @$args['per_page'];
-	$start = (max($page,1)-1)*$per_page;
+	$start = (max($page,1)-1)*intval($per_page);
 	
 	return 'LIMIT '.$start.','.$per_page;
 }
@@ -87,11 +87,18 @@ function mysql_args_compile($args)
 
 		unset($args['order']);
 	}
+
+	$group = "";
+	if(!empty($args['group']))
+	{
+		$group = "GROUP BY {$args['group']}";
+		unset($args['group']);
+	}
 	
 	if(empty($args['where']))
 		$where = mysql_where_compile($args);
 	else
 		$where = mysql_where_compile($args['where']);
 	
-	return "{$join} {$where} {$order} {$limit}";
+	return "{$join} {$where} {$group} {$order} {$limit}";
 }

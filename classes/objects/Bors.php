@@ -37,7 +37,8 @@
 //					$obj->new_instance();
 
 				if(!$obj->id())
-					debug_exit('emtpy id for changed object '.$obj->class_name());
+					continue;
+//					debug_exit('emtpy id for changed object '.$obj->class_name());
 				
 				$obj->cache_clean();
 				
@@ -76,7 +77,7 @@
 			if($this->_main_obj)
 				debug_exit("Main obj ".$obj->internal_uri()." set error. Exists object ".$this->_main_obj->internal_uri());
 			
-			$this->_main_obj = $obj; 
+			return $this->_main_obj = $obj; 
 		}
 
 		function real_uri($uri)
@@ -238,7 +239,12 @@ function save_cached_object(&$object, $delete = false)
 //			$obj->cache_clean_self();
 		}
 
-		return new $class_name($id);
+		$obj = &new $class_name($id, $page);
+		
+		if($use_cache)
+			save_cached_object($obj);
+			
+		return $obj;
 	}
 
 	function class_load($class, $id = NULL, $args=array())
@@ -432,10 +438,16 @@ function save_cached_object(&$object, $delete = false)
 				{
 					$args = array();
 					foreach(split(',', $m[3]) as $pair)
+<<<<<<< .mine
+						if(preg_match('!^(\w+)=(.+)$!', $pair, $mm))
+							$args[$mm[1]] = $match[$mm[2]+1];
+
+=======
 						if($pair)
 							if(preg_match('!^(\w+)=(.+)$!', $pair, $mm))
 								$args[$mm[1]] = $match[$mm[2]+1];
 					
+>>>>>>> .r597
 					$class_path = $m[1];
 					$id = $match[$m[2]+1];
 					
@@ -495,8 +507,16 @@ function object_init($class_name, $object_id, $args = array())
 	if(!$obj)
 		return NULL;
 
+<<<<<<< .mine
+	if(is_array($object_page))
+		$args = array_merge($args, $object_page);
+
+	if($object_page)
+		$obj->set_page($object_page);
+=======
 	if(method_exists($obj, 'set_page'))
 		$obj->set_page(@$args['page']);
+>>>>>>> .r597
 
 	$use_cache = defval($args, 'use_cache', true);
 	unset($args['local_path']);

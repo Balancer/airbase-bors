@@ -10,7 +10,7 @@ class base_object extends base_empty
 	function set_loaded($value = true) { return $this->_loaded = $value; }
 
 	var $match;
-	function set_match($match) { $this->match = $match;	}
+	function set_match($match) { return $this->match = $match;	}
 
 	function parents() { return array("http://{$this->match[1]}{$this->match[2]}"); }
 
@@ -219,7 +219,7 @@ class base_object extends base_empty
 			$bors->add_changed_object($this);
 		}
 
-		$this->$field_name = $value;
+		return $this->$field_name = $value;
 	}
 
 	function fset($field, $value, $db_update)
@@ -310,6 +310,18 @@ class base_object extends base_empty
 
 	function set_fields($array, $db_update_flag, $fields_list = NULL, $check_values = false)
 	{
+		//TODO: заюзать make_input_time? (funcs/datetime.php)
+		if(!empty($array['time_vars']))
+		{
+			foreach(explode(',', $array['time_vars']) as $var)
+			{
+				$array[$var] = mktime (@$array["{$var}_hour"], @$array["{$var}_minute"], @$array["{$var}_second"], @$array["{$var}_month"], @$array["{$var}_day"], @$array["{$var}_year"]);
+				if(empty($array["{$var}_year"]))
+					$array[$var] = NULL;
+				unset($array["{$var}_hour"], $array["{$var}_minute"], $array["{$var}_second"], $array["{$var}_month"], $array["{$var}_day"], $array["{$var}_year"]);
+			}
+		}	
+
 		if($check_values && $this->check_data($data) === true)
 			return false;
 				
@@ -492,6 +504,8 @@ class base_object extends base_empty
 		return $this->_dbh;
 	}
 
+	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
+	function main_table_storage(){ return $this->class_name(); }
 	function main_table_fields() { return array(); }
 
 	function set_checkboxes($check_list, $db_up)
@@ -531,4 +545,6 @@ class base_object extends base_empty
 		$this->set_visits($this->visits() + $inc, true);
 		$this->set_last_visit_time($time, true);
 	}
+
+	function pre_action() { return false; }
 }

@@ -10,7 +10,6 @@ class def_dbpage extends base_page
 		return array("http://{$this->match[1]}{$this->match[2]}");
 	}
 
-	function main_db_storage() { return $GLOBALS['cms']['mysql_database']; }
 	function id_field() { return 'id'; }
 
 	function new_instance()

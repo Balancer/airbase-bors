@@ -45,6 +45,42 @@ class def_tree extends def_dbpage
 		return $result;
 	}
 
+	private $tree = NULL;
+	private $names = NULL;
+
+	private function db_load()
+	{
+		$this->tree = array();
+		$this->names = array();
+		
+		foreach($this->db->get_array("
+				SELECT `".$this->tree_table_id()."` AS `id`, `".$this->tree_table_title()."` AS `title`, `".$this->tree_parent_id()."` AS `parent`
+					FROM `".$this->main_table_storage()."`
+					ORDER BY ".$this->tree_order()) as $x)
+		{
+			$this->tree[$x['parent']][] = $x;
+			$this->names[$x['id']] = $x['name'];
+		}
+	}
+
+	function all_tree()
+	{
+		if($this->tree == NULL)
+			$this->db_load();
+
+		
+		return $this->tree;
+	}
+
+	function id_to_name($id)
+	{
+		if($this->names == NULL)
+			$this->db_load();
+
+		
+		return @$this->names[$id];
+	}
+
 	function children_ids()
 	{
 		$result = array();

@@ -4,7 +4,8 @@ class storage_db_mysql_smart extends base_null
 {
 	function load(&$object, $common_where = NULL, $only_count = false, $args=array())
 	{
-//		echo "Try load ".get_class($object)."({$object->id()})<br />\n";
+//		echo "Try load ".get_class($object)."({$object->id()}); common_where=$common_where; only_count=$only_count<br />\n";
+
 		if(!($common_where || $only_count) && (!$object->id() || is_object($object->id())))
 			return false;
 
