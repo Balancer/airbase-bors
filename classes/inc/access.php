@@ -3,7 +3,7 @@
 function bors_check_access($object, $access_list, $user=NULL)
 {
 	if(!$user)
-		$user = object_load('aviaport_user', -1);
+		$user = bors()->user();
 
 //	debug_exit($access_list);
 

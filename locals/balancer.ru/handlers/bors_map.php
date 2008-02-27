@@ -1,6 +1,4 @@
 <?php
-	$forums = '(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)';
-
     $map = array(
 
 		'/\d{4}/\d{1,2}/\d{1,2}/forum\-(\d+)(,(\d+))?\-\-.+ => forum_forum(1,3)',
@@ -9,13 +7,16 @@
 
 		'(/forum/)tools/move_post_tree/(\d+)/? => forum_tools_post_moveTree(2)',
 		'(/forum/)tools/topic/(\d+)/reload/? => forum_tools_topic_reload(2)',
-		'(/forum/tools/topic/)(\d+)/? => forum_tools_topic(2)',
-		'(/forum/tools/post/)(\d+)/? => forum_tools_post(2)',
+		'(/forum/tools/topic/)(\d+)/ => forum_tools_topic(2)',
+		'(/forum/tools/post/)(\d+)/ => forum_tools_post(2)',
+
+		'/js/users/touch.js\?(.+) => user_js_touch(1)',
+		'/js/forum/topvisits.js => forum_js_topvisits',
 		
 		'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+ => forum_category(1)',
 		'/user/(\d+)/personal\.js => forum_js_personal(1)',
 		'/user/(\d+)/warnings\.js => user_js_warnings(1)',
-		'/forum\-new/ => forum_main',
+		'(/)forum/ => forum_main',
 		'/user/(\d+)/warnings\.gif => forum_images_warnings(1)',
 		'/user/(\d+)/use-topics\.html => users_UseTopics(1)',
 
@@ -48,23 +49,9 @@
 		'(/)users/? => users_main',
 		'(/users/)toprep/? => users_toprep',
 
-		'(/forum/)topic/\d+/(\d+),new/ => forum_topic(2)',
-
-		'/\d{4}/\d{1,2}/\d{1,2}/post\-(\d+)\.html => forum_post(1)',
-		"{$forums}forum/punbb/viewtopic\.php\?pid=(\d+) => forum_post(2)",
-		
-		'(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+\.html => forum_topic(2,4)',
-		'(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+ => redirect:forum_topic(2,4)',
-		'(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(\d+).* => redirect:forum_topic(2,3)',
-		'(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+).* => redirect:forum_topic(2)',
-		'(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/)\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+)\-\-.+ => forum_printable(2)',
-
-		'/forum/topic/\d+/(\d+)/ => redirect:forum_topic(1)',
-		'/forum/topic/\d+/(\d+),(\d+)/ => redirect:forum_topic(1,2)',
-
 		'(/)users/warning/(\d+)/ => users_warning(2)',
 
 		'(/)(test|crazy)/ => base_page_hts',
 
-	'.* => base_page_hts',
+//	'.* => base_page_hts',
 );

@@ -13,13 +13,13 @@ class forum_tools_post_moveTree extends base_page
 	function post() { return $this->post; }
 	function topic() { return $this->topic; }
 	
-	function __construct($id, $args)
+	function __construct($id)
 	{
 		$this->db = &new driver_mysql($this->main_db_storage());
 		
 		$this->post = object_load('forum_post', intval($id));
 		$this->topic = $this->post()->topic();
-		return parent::__construct($id, $args);
+		return parent::__construct($id);
 	}
 
 //	var $db;

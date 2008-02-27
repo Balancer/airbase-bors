@@ -1,5 +1,4 @@
-<?
-class_load("def_dbpage");
+<?php
 
 class def_js extends def_dbpage
 {

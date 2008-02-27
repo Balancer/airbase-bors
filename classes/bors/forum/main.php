@@ -1,6 +1,6 @@
 <?php
 
-class forum_main extends forum_abstract
+class forum_main extends base_page
 {
 	function _class_file() { return __FILE__; }
 	
@@ -20,4 +20,6 @@ class forum_main extends forum_abstract
 	function storage_engine() { return ''; }
 	
 //	function cache_static() { return 300; }
+
+	function url() { return 'http://balancer.ru/forum/'; }
 }

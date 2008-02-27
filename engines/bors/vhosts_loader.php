@@ -2,6 +2,8 @@
 	global $bors_data;
 	$bors_data['vhost_handlers'] = array();
 
+	function bors_vhosts() { return array_keys($GLOBALS['bors_data']['vhosts']); }
+
 	function register_vhost($host, $documents_root=NULL, $bors_local=NULL)
 	{
 		global $bors_data;

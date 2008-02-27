@@ -3,6 +3,9 @@
 	require_once("funcs/filesystem_ext.php");
 	require_once('inc/images.php');
 
+    header("HTTP/1.1 200 OK\n");
+    header("Status: 200 OK\n");
+
 //	echo "<xmp>"; print_r($_SERVER); echo "</xmp>";
 	
 	$dir = $_SERVER['DOCUMENT_ROOT'].dirname($_SERVER['REQUEST_URI']);

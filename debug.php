@@ -1,4 +1,10 @@
 <?php
+
+function debug_test()
+{
+	return bors()->user() && bors()->user()->id() == 10000;
+}
+
 	function debug_exit($message)
 	{
 //		echo "<xmp>";
@@ -68,13 +74,13 @@
             if(!empty($GLOBALS['echofile']))
             {
                 $fh=fopen($GLOBALS['echofile'],"at");
-				$txt = "uri: http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}\n";
-				$txt .= "query: ".@$_SERVER['QUERY_STRING']."\n";
-				$txt .= "ref: ".@$_SERVER['HTTP_REFERER']."\n";
-				$txt .= "$level: $message\n";
-				if($log_level > 10)
-					$txt .= "backtrace:".print_r(debug_backtrace(),true)."\n";
-				$txt .= "-------------------------------\n";
+//				$txt = "uri: http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}\n";
+//				$txt. = "query: ".@$_SERVER['QUERY_STRING']."\n";
+//				$txt .= "ref: ".@$_SERVER['HTTP_REFERER']."\n";
+				$txt = "$level: $message\n";
+//				if($log_level > 10)
+//					$txt .= "backtrace:".print_r(debug_backtrace(),true)."\n";
+//				$txt .= "-------------------------------\n";
                 fputs($fh, $txt);
                 fclose($fh);
 				@chmod($GLOBALS['echofile'], 0666);

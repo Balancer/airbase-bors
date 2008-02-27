@@ -1,7 +1,15 @@
 {assign var="owner" value=$this->owner()}
 Здравствуйте, {$owner->title()}!
 <ul>
-<li><a href="http://balancer.ru/user/{$me_id}/use-topics.html">Ваши темы</a></li>
+<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/blog/">Ваш блог</a></li>
+<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/use-topics.html">Ваши темы</a></li>
+<li><a href="/actions/do-logout/">Выход</a></li>
+</ul>
+
+Форум:
+<ul>
+<li><a href="http://balancer.ru/forum/punbb/search.php?action=show_24h">За сутки</a></li>
+<li><a href="http://balancer.ru/forum/punbb/search.php?action=show_new">Новое</a></li>
 </ul>
 
 Инструменты:
@@ -12,7 +20,7 @@ if(readCookie('class_name', '0') == 'forum_topic')
 {
 	tid = readCookie('object_id', '0')
 	document.write('<li><a href="http://balancer.ru/2000/01/01/printable-'+tid+'--.html">Версия для печати</a></li>')
-	document.write('<li><a href="http://balancer.ru/forum/punbb/moderate.php?fid=4&move_topics='+tid+'">Перенести тему</a></li>')
+	document.write('<li><a href="http://balancer.ru/forum/tools/topic/'+tid+'/">Инструменты темы</a></li>')
 	document.write('<li><a href="http://balancer.ru/forum/tools/topic/'+tid+'/reload/">Сбросить кеш темы</a></li>')
 }
 </script>

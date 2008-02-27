@@ -19,3 +19,17 @@
 	global $hts;
 	include_once("funcs/DataBaseHTS.php");
 	$hts = &new DataBaseHTS();
+
+function bors_init()
+{
+	require_once("funcs/templates/global.php");
+	require_once("funcs/users.php");
+	require_once("funcs/navigation/go.php");
+	require_once("funcs/lcml.php");
+    require_once("include/classes/cache/CacheStaticFile.php");
+
+
+	require_once('classes/inc/bors.php');
+	require_once('engines/bors/object_show.php');
+	require_once('engines/bors/vhosts_loader.php');
+}

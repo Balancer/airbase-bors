@@ -57,7 +57,9 @@
 		
             $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
 			
-			@unlink($db->get("SELECT file FROM cached_files WHERE original_uri = '".addslashes($this->original_uri)."'"));
+//			print_d($this->original_uri);
+//			@unlink($db->get("SELECT file FROM cached_files WHERE original_uri = '".addslashes($this->original_uri)."'"));
+			@unlink($db->get("SELECT file FROM cached_files WHERE uri = '".addslashes($this->uri)."'"));
 
 //			echo "save file '{$this->_file}, exp=$expire_time'<br />";
 			if($expire_time == 0)
@@ -84,7 +86,7 @@
 			
 			$db->replace('cached_files', // "original_uri = '".addslashes($this->original_uri)."'", 
 				array(
-						'file'			=> $this->_file,
+					'file'			=> $this->_file,
 					'uri'			=> $this->uri,
 					'original_uri'	=> $this->original_uri,
 					'last_compile'	=> time(),

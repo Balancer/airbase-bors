@@ -8,3 +8,13 @@
     }
 
     function lp_cr_as_br($text) { return preg_replace("!\n!", " <br>\n", $text); }
+
+function lp_p($text, $params)
+{
+	return "<p ".make_enabled_params($params, 'style').">".lcml($text)."</p>\n";
+}
+
+function lt_p($params)
+{
+	return "<p ".make_enabled_params($params, 'style')." />";
+}

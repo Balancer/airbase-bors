@@ -131,7 +131,7 @@
 			if(empty($GLOBALS['main_uri']))
 				$GLOBALS['main_uri'] = $obj->url();
 			
-			$my_user = object_load(config('user_class'), -1);
+			$my_user = bors()->user();
 			if($my_user && $my_user->id())
 				def_page::add_template_data('my_user', $my_user);
 	
@@ -164,7 +164,7 @@
 	   
 		if((!empty($GLOBALS['cms']['cache_static']) || $obj->cache_static()) && (empty($_SERVER['QUERY_STRING']) || $_SERVER['QUERY_STRING']=='del' || @$_GET['act'] == 'del'))
 		{
-//			echo "url={$obj->url_engine()}<br />";
+//			echo "url_engine={$obj->url_engine()}<br />"; echo "url=".$obj->url($page)."<br />\n";
 			$sf = &new CacheStaticFile($obj->url($page));
 			$sf->save($content, $obj->modify_time(), $obj->cache_static());
 

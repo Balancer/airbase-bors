@@ -1,12 +1,10 @@
 <?php
 
-require_once('borsForumAbstract.php');
-class forum_forum extends borsForumAbstract
+class forum_forum extends base_page_db
 {
 	function _class_file() { return __FILE__; }
-
 	function main_table_storage() { return 'forums'; }
-	
+
 	function field_title_storage() { return 'punbb.forums.forum_name(id)'; }
 
 	function uri_name() { return 'forum'; }
@@ -21,21 +19,34 @@ class forum_forum extends borsForumAbstract
 	function set_category_id($category_id, $db_update) { $this->set("category_id", $category_id, $db_update); }
 	function field_category_id_storage() { return 'punbb.forums.cat_id(id)'; }
 
-	function category() { return class_load('forum_category', $this->category_id()); }
+	private $__category = 0;
+	function category()
+	{
+		if($this->__category !== 0)
+			return $this->__category;
+	
+		$f = $this;
+		while($f->category_id() == 0)
+			$f = object_load('forum_forum', $f->parent_forum_id());
+
+		return $this->__category = object_load('forum_category', $f->category_id());
+	}
 
 	var $stb_keywords_string = '';
 	function keywords_string() { return $this->stb_keywords_string; }
 	function set_keywords_string($keywords_string, $db_update) { $this->set("keywords_string", $keywords_string, $db_update); }
 	function field_keywords_string_storage() { return 'punbb.forums.keywords(id)'; }
 
-	function parents()
-	{
-		if($this->parent_forum_id())
-			return array("forum_forum://" . $this->parent_forum_id());
-		else
-			return array("http://balancer.ru/forum-new/");
-//				return array(array('forumCategory', $this->category_id() ));
-	}
+function parents()
+{
+	if($this->parent_forum_id())
+		return array("forum_forum://" . $this->parent_forum_id());
+		
+	if($this->category())
+		return array("forum_category://" . $this->category_id());
+		
+	return array("http://balancer.ru/forum/");
+}
 
 	function body()
 	{
@@ -83,7 +94,7 @@ class forum_forum extends borsForumAbstract
 
 	function can_read()
 	{
-		$user = class_load('forum_user', -1);
+		$user = bors()->user();
 		$gid = $user ? $user->group_id() : 3;
 		if(!$gid)
 			$gid = 3;
@@ -185,5 +196,5 @@ class forum_forum extends borsForumAbstract
 	}
 
 //	function url_engine() { return 'url_titled'; }
-	function url() { return 'http://balancer.ru/forum/punbb/viewforum.php?id='.$this->id(); }
+	function url() { return $this->category()->category_base_full().'viewforum.php?id='.$this->id(); }
 }

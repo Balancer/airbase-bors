@@ -7,6 +7,7 @@ class base_object extends base_empty
 {
 	var $_loaded = false;
 	function loaded() { return $this->_loaded; }
+	function set_loaded($value = true) { return $this->_loaded = $value; }
 
 	var $match;
 	function set_match($match) { $this->match = $match;	}
@@ -77,7 +78,7 @@ class base_object extends base_empty
 	{
 		if($config = $this->config_class())
 		{
-			$config = object_load($config, &$this, 1, false);
+			$config = object_load($config, &$this);
 			if($config)
 				$config->template_init();
 			else
@@ -483,10 +484,10 @@ class base_object extends base_empty
 	function can_cached() { return true; }
 
 	protected $_dbh = NULL;
-	function db()
+	function db($database_name = NULL)
 	{
 		if($this->_dbh === NULL)
-			$this->_dbh = &new driver_mysql($this->main_db_storage());
+			$this->_dbh = &new driver_mysql($database_name ? $database_name : $this->main_db_storage());
 			
 		return $this->_dbh;
 	}
@@ -503,5 +504,31 @@ class base_object extends base_empty
 	function set_args($args) { $this->args = $args; }
 	function args($name=false) { return $name ? @$this->args[$name] : $this->args; }
 
-	function __toString() { return $this->class_name().'://'.$this->id(); }
+	function __toString() { return $this->class_name().'://'.$this->id().($this->page() > 1 ? ','.$this->page() : ''); }
+
+	function cache_clean_self()
+	{
+		include_once('include/classes/cache/CacheStaticFile.php');
+		CacheStaticFile::clean($this->internal_uri());
+		CacheStaticFile::clean($this->url());
+		delete_cached_object($this);
+	}
+
+	function touch() { }
+
+	function visits_counting() { return false; }
+	function visits_inc($inc = 1, $time = NULL)
+	{
+		if(!$this->visits_counting())
+			return;
+	
+		if($time === NULL)
+			$time = time();
+			
+		if(!$this->first_visit_time())
+			$this->set_first_visit_time($time, true);
+
+		$this->set_visits($this->visits() + $inc, true);
+		$this->set_last_visit_time($time, true);
+	}
 }

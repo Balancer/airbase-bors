@@ -54,29 +54,11 @@ if (isset($_POST['form_sent']) && $action == 'in')
 		$us = &new User();
 		$errno = $us->do_login($form_username, $form_password, false);
 		$authorized = !$errno;
-
-//		exit("Login $form_username: $authorized");
-/*	
-		$sha1_in_db = (strlen($db_password_hash) == 40) ? true : false;
-		$sha1_available = (function_exists('sha1') || function_exists('mhash')) ? true : false;
-
-		$form_password_hash = pun_hash($form_password);	// This could result in either an SHA-1 or an MD5 hash (depends on $sha1_available)
-
-		if ($sha1_in_db && $sha1_available && $db_password_hash == $form_password_hash)
-			$authorized = true;
-		else if (!$sha1_in_db && $db_password_hash == md5($form_password))
-		{
-			$authorized = true;
-
-			if ($sha1_available)	// There's an MD5 hash in the database, but SHA1 hashing is available, so we update the DB
-				$db->query('UPDATE '.$db->prefix.'users SET password=\''.$form_password_hash.'\' WHERE id='.$user_id) or error('Unable to update user password', __FILE__, __LINE__, $db->error());
-		}
-*/
 	}
 
 	$user_id = $us->data('id');
 
-	if (!$authorized)
+	if(!$authorized)
 		message($lang_login['Wrong user/pass']." <a href=\"{$pun_config['root_uri']}/login.php?action=forget\">".$lang_login['Forgotten pass'].'</a>');
 
 	// Update the status if this is the first time the user logged in
@@ -102,12 +84,8 @@ if (isset($_POST['form_sent']) && $action == 'in')
 	// Remove this users guest entry from the online list
 	$db->query('DELETE FROM '.$db->prefix.'online WHERE ident=\''.$db->escape(get_remote_address()).'\'') or error('Unable to delete from online list', __FILE__, __LINE__, $db->error());
 
-//	$me = new User($user_id);
-//	$me->cookie_hash_update($save_pass ? -1 : 0);
-
 	redirect(htmlspecialchars($_POST['redirect_url']), $lang_login['Login redirect']);
 }
-
 
 else if ($action == 'out')
 {

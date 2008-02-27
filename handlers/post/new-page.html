@@ -1,6 +1,6 @@
 <form method="post" action="{$main_uri}?create-page" enctype="multipart/form-data">
 <table class="btab" cellSpacing="0">
-{if !$me_id}
+{if !$my_id}
 	<tr><td>Логин: <input name="login"></td><td>Пароль: <input name="password" type="password"></td></tr>
 {/if}
 {if !$title}
@@ -24,4 +24,4 @@
 </table>
 <input type="hidden" name="create-page" value="1">
 </form>
-<center><i>Уровень доступа: {$me->get('level', 1)}</i></center>
+<center><i>Уровень доступа: $me->get('level', 1)</i></center>
