@@ -83,9 +83,6 @@
 
 	$_GET = array_merge($_GET, $_POST);
 
-//	echo('<xmp>'); print_r($_SERVER); print_r($_GET); echo('</xmp>'); exit();
-
-//	print_r($_POST);
 	bors_init();
 
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
@@ -177,8 +174,6 @@
 		$uri = $ret;
 
 
-//	echo "<pre>";
-
 	if(empty($title))
 		$title='';
 
@@ -187,6 +182,3 @@
 
 	if(config('404_page_url'))
 		return go(config('404_page_url'), true);
-		
-//	echo ec("Страница '$uri' не найдена. Попробуйте <a href=\"$uri?edit\">создать её</a>");
-//	echo "</pre>";
