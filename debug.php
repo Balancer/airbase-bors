@@ -13,10 +13,7 @@ function debug_test()
 
 	function debug_trace()
 	{
-//		echo "<xmp>";
-//		debug_print_backtrace();
 		echo DBG_GetBacktrace();
-//		echo "</xmp>";
 	}
 
 	function debug_xmp($text)
