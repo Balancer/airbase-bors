@@ -7,10 +7,7 @@ function debug_test()
 
 	function debug_exit($message)
 	{
-//		echo "<xmp>";
-//		debug_print_backtrace();
 		echo DBG_GetBacktrace();
-//		echo "</xmp>";
 		exit($message);
 	}
 
