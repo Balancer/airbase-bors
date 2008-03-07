@@ -63,10 +63,6 @@
 
 		$dbf->query("UPDATE users SET reputation = '".str_replace(",",".",$total)."' WHERE id = $uid");
 
-		include_once("funcs/Cache.php");
-		$ch = &new Cache();
-		$ch->clear_by_id("http://balancer.ru/user/$uid/avatarblock/");
-		
 		class_load('forum_user', $uid)->cache_clean_self();
 		class_load('cache_group', "user-{$uid}-reputation")->clean();
 		
