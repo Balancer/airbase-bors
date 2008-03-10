@@ -64,14 +64,12 @@ class def_db_object extends base_empty
 
 	function set($field, $value, $db_update)
 	{
-		global $bors;
-			
 		$field_name = "stb_$field";
 
 		if($db_update && $this->$field_name != $value)
 		{
 			$this->changed_fields[$field] = $field_name;
-			$bors->add_changed_object($this);
+			bors()->add_changed_object($this);
 		}
 
 		$this->$field_name = $value;

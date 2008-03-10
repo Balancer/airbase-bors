@@ -31,12 +31,10 @@
 		function name() { return $this->stb_name; }
 		function set_name($new_name) { $this->set("name", $new_name); }
 
-		function load() { return $bors->config()->storage()->load($this); }
+		function load() { return bors()->config()->storage()->load($this); }
 
 		function save()
 		{
-			global $bors;
-			
-			$bors->config()->storage()->save($this);
+			bors()->config()->storage()->save($this);
 		}
 	}

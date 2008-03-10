@@ -1,6 +1,6 @@
 <?
 	require_once ("DataBase.php");
-	require_once ("classes/objects/Bors.php");
+	require_once ("engines/bors.php");
 	require_once ("global-data.php");
 
 	define('DBHPROTOMASK', '!^([\w/]+)://(.*[^/])/?$!');

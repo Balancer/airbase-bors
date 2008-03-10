@@ -1,6 +1,6 @@
 <?  
 //    require_once('debug.php');
-    require_once('Smarty/Smarty.class.php');
+    require_once(config('smarty_path').'/Smarty.class.php');
     require_once('funcs/DataBaseHTS.php');
     require_once('actions/recompile.php');
     require_once('funcs/lcml.php');

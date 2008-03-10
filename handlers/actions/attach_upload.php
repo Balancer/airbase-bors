@@ -47,7 +47,7 @@
 			'location' => "$sub1/$sub2/".$unique_name,
 			'size' => $size));
 
-	 	include_once('Smarty/Smarty.class.php');
+	 	include_once(config('smarty_path').'/Smarty.class.php');
         $smarty = new Smarty;
         $smarty->compile_dir = $GLOBALS['cms']['cache_dir'].'/smarty-templates_c/';
         $smarty->plugins_dir = $GLOBALS['cms']['base_dir'].'/funcs/templates/plugins/';

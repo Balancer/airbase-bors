@@ -145,8 +145,8 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 		$cdb = &new DataBase('punbb');
 		if($attach_post_id == "".intval($attach_post_id))
 		{
-			$topic_id = $cdb->get("SELECT topic_id FROM posts WHERE id = $attach_post_id");
-			$title = $cdb->get("SELECT subject FROM topics WHERE id = $topic_id");
+			$post = object_load('forum_post', $attach_post_id);
+			$title = $post->title();
 		}
 		else
 		{
