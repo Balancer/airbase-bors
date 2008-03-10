@@ -1,7 +1,5 @@
 <?php
 
-require_once('classes/objects/Bors.php');
-
 class MySqlStorage extends base_null
 {
 		var $dbhs;
@@ -358,32 +356,3 @@ class MySqlStorage extends base_null
 		global $mysq_map;
 		$mysql_map[$key] = $map;
 	}
-
-	function make_id_field($table, $id_field, $oid = '%MySqlStorageOID%')
-	{
-		if($table)
-			$table = "{$table}.";
-	
-		if(strpos($id_field, '=') === false)
-			return "{$table}{$id_field} = '".addslashes($oid)."'";
-
-		if(strpos($id_field, ' ') === false)
-		{
-			$out =  preg_replace("!([\w`\.]+)=([\w\`\.]+)!", "{$table}$1=$2", $id_field);
-			$out =  preg_replace("!(\w+)='(\w+)'!", "{$table}$1='$2'", $out);
-		}
-		else
-		{
-			$out =  str_replace('%TABLE%.', $table, $id_field);
-			$out =  str_replace('%ID%', addslashes($oid), $out);
-		}
-		
-		return $out;
-	}
-
-	global $back_functions;
-	$back_functions = array(
-		'html_entity_decode' => 'htmlspecialchars',
-		'UNIX_TIMESTAMP' => 'FROM_UNIXTIME',
-	);
-

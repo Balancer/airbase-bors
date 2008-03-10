@@ -66,6 +66,8 @@ if ((($tid && (($cur_posting['post_replies'] == '' && $pun_user['g_post_replies'
 	!$is_admmod)
 	message($lang_common['No permission']);
 
+echo $cur_posting['closed'];
+
 // Load the post.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/post.php';
 

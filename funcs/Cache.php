@@ -1,2 +1,2 @@
 <?
-	include_once("include/classes/cache/{$GLOBALS['cms']['cache_engine']}.php");
+	include_once("include/classes/cache/".config('cache_engine').".php");

@@ -7,6 +7,9 @@ class url_titled extends url_base
 {
 	function url($page=NULL)
 	{
+		if(!$this->id())
+			debug_exit("Empty ID for url");
+	
 		global $bors_url_titled_cache;
 	
 		if(preg_match("!^http://!", $this->id()->id()))

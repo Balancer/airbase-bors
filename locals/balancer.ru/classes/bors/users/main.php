@@ -1,7 +1,5 @@
 <?
-	class_include('def_page');
-
-	class users_main extends def_page
+	class users_main extends base_page
 	{
 		function _class_file() { return __FILE__; }
 

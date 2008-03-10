@@ -23,12 +23,9 @@
 			$this->uri  = $uri;
 			$this->page  = $page;
 			$this->original_uri  = $uri;
-			if(!empty($GLOBALS['bors']))
-			{
-				$cfg = $GLOBALS['bors']->config();
-				if($cfg->cache_uri())
-					$this->original_uri = $cfg->cache_uri();
-			}
+			
+			if(bors()->main_object())
+				$this->original_uri = bors()->main_object()->internal_uri();
 			
 			$this->_file = $_SERVER['DOCUMENT_ROOT'].preg_replace('!http://[^/]+!', '', $uri);
 			
@@ -84,6 +81,7 @@
 			if($mtime)
 				touch($this->_file, $mtime);
 			
+//			set_loglevel(10, NULL);
 			$db->replace('cached_files', // "original_uri = '".addslashes($this->original_uri)."'", 
 				array(
 					'file'			=> $this->_file,
@@ -93,6 +91,7 @@
 					'int expire_time'	=> $expire_time > 0 ? time() + $expire_time : -1,
 				)
 			);
+//			set_loglevel(2);
 			
 			return $content;
 		}
@@ -113,9 +112,11 @@
 		
 		function clean($original_uri)
 		{
+//			echo "Static cache clean for $original_uri [{$GLOBALS['cms']['mysql_cache_database']}]<br />";
             $db = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
 			
 			$files = $db->get_array("SELECT file FROM cached_files WHERE original_uri = '".addslashes($original_uri)."'");
+//			print_d($files);
 			$db->query("DELETE FROM cached_files WHERE original_uri = '".addslashes($original_uri)."'");
 			foreach($files as $file)
 			{
