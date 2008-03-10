@@ -18,7 +18,7 @@ class user_js_touch extends base_page
 		
 		$obj->touch(bors()->user()->id());
 		
-		echo "true;";
+		bors_exit("true;");
 	}
 
 	function __wakeup()

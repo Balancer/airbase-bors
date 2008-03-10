@@ -343,7 +343,7 @@ if (isset($_POST['form_sent']))
 				}
 			}
 
-			include_once("classes/objects/Bors.php");
+			include_once("engines/bors.php");
 			$topic = class_load('forum_topic', $tid, array('no_load_cache' => true));
 		}
 		// If it's a new topic
@@ -409,7 +409,7 @@ if (isset($_POST['form_sent']))
 
 			update_forum($fid);
 
-			include_once("classes/objects/Bors.php");
+			include_once("engines/bors.php");
 			$topic = class_load('forum_topic', $new_tid, array('no_load_cache' => true));
 		}
 
