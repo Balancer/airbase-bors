@@ -1,6 +1,4 @@
 <?
-    require_once("funcs/DataBaseHTS.php");
-
     // from PHP script
     // put these function somewhere in your application
     function db_get_template($tpl_name, &$tpl_source, &$smarty_obj)
