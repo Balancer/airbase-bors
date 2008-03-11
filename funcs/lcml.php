@@ -15,7 +15,7 @@ $GLOBALS['cms']['images_dir'] = "{$_SERVER['DOCUMENT_ROOT']}/images";
 $GLOBALS['cms']['sites_store_path'] = "{$GLOBALS['cms']['main_host_dir']}/sites";
 $GLOBALS['cms']['sites_store_url'] = "{$GLOBALS['cms']['main_host_uri']}/sites";
 
-ext_load(dirname(__FILE__).'/lcml/tags');
+ext_load($GLOBALS['cms']['base_dir'].'/funcs/lcml/tags');
 
 function lcml_out($txt)
 {

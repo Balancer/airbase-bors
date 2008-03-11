@@ -1,6 +1,7 @@
 <?php
+class_include('def_dbpage');
 
-class forum_group extends base_page_db
+class forum_group extends def_dbpage
 {
 	function main_db_storage() { return 'punbb'; }
 	function main_table_storage() { return 'groups'; }

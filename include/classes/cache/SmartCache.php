@@ -1,4 +1,5 @@
 <?
+    require_once("funcs/DataBase.php");
     require_once("BaseCache.php");
 
     class Cache extends BaseCache

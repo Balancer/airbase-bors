@@ -6,7 +6,7 @@
 
 		unset($GLOBALS['module_data']);
 
-		require_once(config('smarty_path').'/Smarty.class.php');
+		require_once('Smarty/Smarty.class.php');
 		$smarty = &new Smarty;
 		require('mysql-smarty.php');
 		require('smarty-register.php');
@@ -148,7 +148,8 @@
 		foreach(split(' ', 'host_name main_host_uri') as $key)
 			$smarty->assign($key, @$GLOBALS['cms'][$key]);
 
-		if($obj = bors()->main_object())
+		global $bors;
+		if(!empty($bors) && ($obj = $bors->main_object()))
 		{
 			$smarty->assign('bors_main_object', $obj);
 			foreach(split(' ', $obj->template_local_vars()) as $var)

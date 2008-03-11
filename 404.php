@@ -1,10 +1,4 @@
-<?
-//    if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
-//         xdebug_start_profiling();
-    
-//    if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
-//        echo __FILE__.__LINE__." ".$GLOBALS['REQUEST_URI']."<br />\n";
-
+<?php
     require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 
     header("Content-Type: text/html; charset={$GLOBALS['cms']['charset']}");

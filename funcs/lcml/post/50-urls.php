@@ -1,4 +1,5 @@
 <?
+    include_once('funcs/DataBaseHTS.php');
     include_once('funcs/Cache.php');
 
     // URLs processing

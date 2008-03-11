@@ -1,6 +1,7 @@
 <?
+class_include('def_dbpage');
 	
-class def_tree extends base_page_db
+class def_tree extends def_dbpage
 {
 
 	var $stb_parent_id;

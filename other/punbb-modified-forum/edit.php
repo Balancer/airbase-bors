@@ -138,7 +138,7 @@ if (isset($_POST['form_sent']))
 		$db->query("UPDATE {$db->prefix}messages SET message='".$db->escape($message)."', `html` = NULL WHERE id=$id") 
 			or error('Unable to update post', __FILE__, __LINE__, $db->error());
 
-		include_once("engines/bors.php");
+		include_once("classes/objects/Bors.php");
 		$topic = class_load('forum_topic', $cur_post['tid']);
 		$post  = class_load('forum_post',  $id);
 
@@ -162,7 +162,7 @@ if (isset($_POST['form_sent']))
 				$blog->new_instance();
 			}
 				
-			$blog->set_owner_id($post->owner_id(), true);
+			$blog->set_owner_id($pun_user['id'], true);
 			$blog->set_forum_id($topic->forum_id(), true);
 			$blog->cache_clean();
 
@@ -170,7 +170,7 @@ if (isset($_POST['form_sent']))
 			bors_blog_livejournal_com_edit($post->owner_id(), $topic, $topic->first_post()->id() == $post->id() ? $topic : $post, $post, $topic->forum());
 		}
 
-		$topic->cache_clean_self();
+		$topic->cache_clean();
 	
 		include_once('engines/search.php');
 		bors_search_object_index($topic, 'replace');

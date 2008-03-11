@@ -1,6 +1,6 @@
 <?
-    require_once('engines/smarty/smarty-resource-file.php');
-    require_once('engines/smarty/smarty-resource-bors.php');
+    require_once("smarty-resource-file.php");
+    require_once("smarty-resource-bors.php");
 
     $smarty->register_resource("xfile", array("smarty_resource_file_get_template",
                                        "smarty_resource_file_get_timestamp",
