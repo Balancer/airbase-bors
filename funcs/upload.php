@@ -8,7 +8,7 @@
 	{
 		require_once("actions/recompile.php");
 
-		require_once("funcs/filesystem_ext.php");
+		require_once("inc/filesystem_ext.php");
 		require_once("funcs/users.php");
 
 		$hts = new DataBaseHTS;		
