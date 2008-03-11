@@ -1,4 +1,10 @@
-<?php
+<?
+//    if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
+//         xdebug_start_profiling();
+    
+//    if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
+//        echo __FILE__.__LINE__." ".$GLOBALS['REQUEST_URI']."<br />\n";
+
     require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 
     header("Content-Type: text/html; charset={$GLOBALS['cms']['charset']}");
@@ -221,7 +227,6 @@
 
     // Ключевые слова
 
-    require_once('funcs/DataBaseHTS.php');
     $hts = &new DataBaseHTS();
 
     $_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);

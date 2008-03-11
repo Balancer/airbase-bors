@@ -1,6 +1,5 @@
 <?
     require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-    require_once('funcs/DataBaseHTS.php');
     require_once('funcs/users.php');
     require_once("funcs/images/fill.php");
     ini_set('default_charset','utf-8');

@@ -1,6 +1,5 @@
 <?
     require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-    require_once('funcs/DataBaseHTS.php');
     ini_set('default_charset','utf-8');
     @header('Content-Type: text/html; charset=utf-8');
     setlocale(LC_ALL, "ru_RU.utf8");
@@ -46,7 +45,7 @@
             $date=strftime("%Y.%m.%d %H:%M",$post['post_date']);
             $nick=$post['author_name'];
 
-            require_once("funcs/texts.php");
+            require_once("inc/texts.php");
 
             if($max_post>0 && strlen($message)>$max_post)
                 $message=strip_text($message, $max_post)." <font size=\"-3\">[ <a href=\"http://forums.airbase.ru/index.php?showtopic=$tid&view=findpost&p={$post['pid']}\">дальше...</a> (ещё символов: ".(strlen($message)-$max_post).") ]</font>";

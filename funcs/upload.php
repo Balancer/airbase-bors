@@ -6,8 +6,6 @@
 
 	function upload($page)
 	{
-		require_once("funcs/DataBaseHTS.php");
-//		require_once("funcs/navigation/go.php");
 		require_once("actions/recompile.php");
 
 		require_once("funcs/filesystem_ext.php");

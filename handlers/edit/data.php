@@ -1,5 +1,4 @@
 <?
-    require_once('funcs/DataBaseHTS.php');
     require_once('funcs/templates/smarty.php');
 
     register_action('edit-data', 		'handler_edit_data');
@@ -59,8 +58,6 @@
 		require_once("funcs/upload.php");
 		upload($edit_uri);
 	
-	    require_once("funcs/DataBaseHTS.php");
-	    require_once("funcs/Cache.php");
     	require_once("funcs/users.php");
 	    require_once("funcs/navigation/go.php");
     	require_once("actions/recompile.php");

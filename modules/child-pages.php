@@ -6,8 +6,6 @@ li.document{margin-bottom: 2px; list-style-image: URL("/img/design/icons/documen
 <?
 
 //    require_once("/home/airbase/html/inc/config.php");
-    require_once("funcs/DataBaseHTS.php");
-    require_once("funcs/Cache.php");
 
     function print_child_pages($uri=NULL, $limit, $depth=1)
     {

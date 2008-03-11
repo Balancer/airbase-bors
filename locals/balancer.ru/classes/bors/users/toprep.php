@@ -1,8 +1,6 @@
 <?php
 
-class_include('def_dbpage');
-
-class users_toprep extends def_dbpage
+class users_toprep extends base_page_db
 {
 	function _class_file() { return __FILE__; }
 

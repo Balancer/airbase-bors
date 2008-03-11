@@ -3,7 +3,6 @@
 define('PUN_ROOT', './');
 
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-include_once("funcs/Cache.php");
 
 require PUN_ROOT.'include/common.php';
 

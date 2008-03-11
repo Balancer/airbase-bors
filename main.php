@@ -3,6 +3,7 @@
 
 //	ini_set("xdebug.profiler_enable", "1");
 
+
 	if(preg_match('!^(.+?)\?(.+)$!', $_SERVER['REQUEST_URI'], $m))
 	{
 		$_SERVER['REQUEST_URI'] = $m[1];
@@ -18,6 +19,13 @@
 		exit("Link error");
 	}
 
+/*	if($_SERVER['REMOTE_ADDR'] == '89.108.87.121')
+	{
+		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/main-php-89.108.87.121.log", $_SERVER['REQUEST_URI'] . "; ref=" . @$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
+		@chmod($file, 0666);
+		exit("Link error");
+	}
+*/
 	global $client;
 	$client['is_bot'] = false;
 	foreach(array(
@@ -42,7 +50,6 @@
     ini_set('log_errors', 'On');
 
     require_once("config.php");
-    require_once("funcs/Cache.php");
 
 	if($client['is_bot'] && config('bot_lavg_limit'))
 	{
@@ -83,6 +90,9 @@
 
 	$_GET = array_merge($_GET, $_POST);
 
+//	echo('<xmp>'); print_r($_SERVER); print_r($_GET); echo('</xmp>'); exit();
+
+//	print_r($_POST);
 	bors_init();
 
 	$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
@@ -154,9 +164,7 @@
 		$ret = handlers_exec();
 	}
 
-	global $bors;
-	if(!empty($bors) && is_object($bors))
-		$bors->changed_save();
+	bors()->changed_save();
 
     list($usec, $sec) = explode(" ",microtime());
     $time = ((float)$usec + (float)$sec) - $GLOBALS['stat']['start_microtime'];
@@ -174,6 +182,8 @@
 		$uri = $ret;
 
 
+//	echo "<pre>";
+
 	if(empty($title))
 		$title='';
 
@@ -182,3 +192,6 @@
 
 	if(config('404_page_url'))
 		return go(config('404_page_url'), true);
+		
+//	echo ec("Страница '$uri' не найдена. Попробуйте <a href=\"$uri?edit\">создать её</a>");
+//	echo "</pre>";

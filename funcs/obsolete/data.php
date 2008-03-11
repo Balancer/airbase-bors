@@ -1,7 +1,5 @@
 <?
     require_once("funcs/obsolete/hts.php");
-    require_once("funcs/DataBase.php");
-    require_once("funcs/DataBaseHTS.php");
     require_once("debug.php");
 
     $GLOBALS['transferred_fields']='body source title description forum_id type cr_type split_type template create_time copyright style color logdir flags nav_name';

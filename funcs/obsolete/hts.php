@@ -171,7 +171,6 @@ function _obsolete_hts_save($hts_file)
     if($flags) $hts.="#flags $flags\n";
     if($forum_id) $hts.="#forum_id $forum_id\n";
 
-    require_once("funcs/DataBaseHTS.php");
 
     $db=new DataBaseHTS();
 

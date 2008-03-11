@@ -1,6 +1,5 @@
 <?
     require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/config.site.php");
-    require_once('funcs/DataBaseHTS.php');
     ini_set('default_charset','utf-8');
     @header('Content-Type: text/html; charset=utf-8');
     setlocale(LC_ALL, "ru_RU.utf8");

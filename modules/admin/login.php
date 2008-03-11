@@ -4,8 +4,6 @@
     ini_set('display_errors', 'On');
     ini_set('log_errors', 'On');
 
-    require_once("funcs/DataBaseHTS.php");
-    require_once("funcs/Cache.php");
     require_once("funcs/users.php");
     require_once("funcs/navigation/go.php");
 

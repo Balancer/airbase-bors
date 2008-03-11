@@ -37,7 +37,6 @@ if(preg_match('!^id=(\d+)&action=(new|last)$!', $qs, $m))
 if(preg_match('!^pid=(\d+)$!', $qs, $m))
 	return go(object_load('forum_post', $m[1])->url_in_topic(), true);
 
-include_once("funcs/DataBase.php");
 $cms_db = &new DataBase('punbb');
 
 $archive_loaded = false;
@@ -83,7 +82,6 @@ $sub_id	= $id % 1000;
 $_SERVER['REQUEST_URI'] = "/forum/topic/$sub_id/$id".(empty($_GET['p'])||$_GET['p']==1 ? "":",{$_GET['p']}")."/";
 
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-include_once("funcs/Cache.php");
 $GLOBALS['global_cache'] = &new Cache();
 
 require PUN_ROOT.'include/common.php';
@@ -359,8 +357,6 @@ $result   = $db->query($q, false)
 
 
 include_once($_SERVER['DOCUMENT_ROOT']."/cms/config.php");
-include_once("funcs/lcml.php");
-
 while ($cur_post = $db->fetch_assoc($result))
 {
 //	echo $cur_post['id'].", ";

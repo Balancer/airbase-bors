@@ -1,7 +1,6 @@
 <?
-class_include('def_dbpage');
 	
-class def_cross extends def_dbpage
+class def_cross extends base_page_db
 {
 	var $cross_ids  = NULL;
 	var $cross_objs = NULL;

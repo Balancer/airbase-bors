@@ -1,7 +1,4 @@
 <?
-    require_once("funcs/DataBaseHTS.php");
-    require_once("funcs/lcml.php");
-
 //	if(intval(user_data('level')) > 2)
 //		echo "<a href=\"http://balancer.ru/forums/post.php?fid=8\">Новое сообщение</a>";
 

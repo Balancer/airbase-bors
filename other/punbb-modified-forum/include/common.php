@@ -66,7 +66,7 @@ if (!defined('PUN_ROOT'))
 ini_set('include_path', ini_get('include_path') . ":/var/www/balancer.ru/htdocs/forum/punbb");
 
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-include_once("funcs/users.php");
+bors_init();
 
 // Load the functions script
 require PUN_ROOT.'include/functions.php';

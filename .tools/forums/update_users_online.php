@@ -3,7 +3,6 @@
 $_SERVER['DOCUMENT_ROOT'] = '/var/www/balancer.ru/htdocs';
 
 require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-require_once('funcs/DataBase.php');
 require_once('funcs/js.php');
 
 update_users_online();
