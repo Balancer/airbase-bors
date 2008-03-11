@@ -24,7 +24,7 @@
 
     require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
     require_once("funcs/navigation/go.php");
-    require_once("funcs/filesystem_ext.php");
+    require_once("inc/filesystem_ext.php");
 
     require_once("funcs/strings.php");
     $QUERY_ENCODED=$query;
