@@ -101,8 +101,6 @@ class DataBase extends base_object
 
 		function query($query, $ignore_error=false)
 		{
-//			echo $query;
-		
 			if(!empty($GLOBALS['me']) && $GLOBALS['me']->id == 10000
 					&& preg_match("!\QFROM attach_2_files WHERE post_id = 1440498\E$!", $query))
 				debug_trace();

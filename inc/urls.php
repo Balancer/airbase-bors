@@ -66,7 +66,7 @@ function url_parse($url)
 //		$data['root'] = $_SERVER['DOCUMENT_ROOT'];
 
 	$data['local'] = !empty ($data['root']);
-	$data['local_path'] = $data['root'].str_replace('http://'.$data['host'], '', $url);
+	$data['local_path'] = $data['root'].str_replace('http://'.$data['host'], '', $uri);
 	$data['uri'] = "http://".@ $data['host'].@ $data['path'];
 	return $data;
 }

@@ -1,6 +1,6 @@
 <?php
 
-class def_js extends base_page_db
+class def_js extends def_dbpage
 {
 	function preShowProcess()
 	{

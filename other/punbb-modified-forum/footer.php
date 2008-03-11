@@ -117,8 +117,6 @@ if ($footer_style == 'viewforum' || $footer_style == 'viewtopic')
 	}
 
 ?>
-<a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" border="0" /></a>
-
 			<p class="conr">Powered by <a href="http://balancer.ru/cms/">Balancer's CMS</a> and modified <a href="http://www.punbb.org/">PunBB</a><?php if ($pun_config['o_show_version'] == '1') echo ' '.$pun_config['o_cur_version']; ?><br />
 			&copy; Copyright 1998&#8211;2006 Balancer<br />
 			&copy; Copyright 2002&#8211;2005 Rickard Andersson</p>

@@ -1,6 +1,7 @@
 <?
+class_include('def_dbpage');
 	
-class common_keyword extends base_page_db
+class common_keyword extends def_dbpage
 {
 	function main_db_storage(){ return 'common'; }
 	function main_table_storage(){ return 'keywords'; }
