@@ -27,7 +27,6 @@
 define('PUN_ADMIN_CONSOLE', 1);
 
 include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-include_once("funcs/Cache.php");
 if(!empty($_POST))
 {
 	$ich = new Cache();

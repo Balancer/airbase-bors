@@ -44,7 +44,7 @@ class forum_topic_rss extends forum_topic
 			$html = $post->body();
 			if(strlen($html) > 1024)
 			{
-				include_once("funcs/texts.php");
+				include_once("inc/texts.php");
 				$html = strip_text($html, 1024);
 				$html .= "<br /><br /><a href=\"".$post->url(1).ec("\">Дальше »»»");
 			}

@@ -1,8 +1,5 @@
 <?
-    require_once("funcs/DataBaseHTS.php");
-    require_once("funcs/Cache.php");
-    require_once("include/classes/cache/CacheStaticFile.php");
-    require_once("funcs/lcml.php");
+//    require_once("include/classes/cache/CacheStaticFile.php");
     require_once("funcs/templates/smarty.php");
 
     function recompile($uri, $update_parents = true)
@@ -19,8 +16,8 @@
 			return;
 			
         $ch = &new Cache();
-        $ch->clear_by_id($uri);
-        $ch->clear_by_uri($uri);
+//        $ch->clear_by_id($uri);
+  //      $ch->clear_by_uri($uri);
 
 		if(!empty($GLOBALS['cms']['cache_static']))
 		{
@@ -37,7 +34,7 @@
 
         if($source || $body)
         {
-			$ch->clear_by_id(md5($source));
+//			$ch->clear_by_id(md5($source));
 
             $hts->set_data($uri, 'compile_time', time());
 

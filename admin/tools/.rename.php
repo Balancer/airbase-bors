@@ -3,7 +3,6 @@
 	$_SERVER['DOCUMENT_ROOT'] = '/home/kra61882/public_html';
 	
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-	require_once("funcs/DataBaseHTS.php");
 
 	$hts = new DataBaseHTS();
 

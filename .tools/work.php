@@ -3,7 +3,6 @@
     $_SERVER['DOCUMENT_ROOT'] = '/var/www/bal.aviaport.ru/htdocs';
 
     require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-    require_once("funcs/DataBaseHTS.php");
 
     $hts = new DataBaseHTS();
 

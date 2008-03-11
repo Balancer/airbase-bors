@@ -24,7 +24,6 @@
 			$limit = 20;
 			
 		include_once("inc.php");
-		include_once("funcs/Cache.php");
 		$ch = new Cache();
 		if($ch->get("punbb_all_subforums", $forum_id))
 			$forums = unserialize($ch->last());

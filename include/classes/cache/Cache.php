@@ -1,5 +1,4 @@
 <?
-    require_once("funcs/DataBase.php");
 
     class Cache
     {
@@ -11,7 +10,7 @@
         
         function Cache()
         {
-            $this->dbh = &new DataBase($GLOBALS['cms']['mysql_cache_database']);
+            $this->dbh = &new DataBase(config('cache_database'));
         }
 
         function get($type, $key, $uri='', $default=NULL)

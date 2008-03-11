@@ -20,7 +20,7 @@
 				$template = $GLOBALS['cms']['default_template'];
 		}
 		
-		require_once('Smarty/Smarty.class.php');
+		require_once(config('smarty_path').'/Smarty.class.php');
 		$smarty = &new Smarty;
 		require('mysql-smarty.php');
 		require('smarty-register.php');
@@ -168,7 +168,7 @@
 
 	function smarty_init()
 	{
-		require_once('Smarty/Smarty.class.php');
+		require_once(config('smarty_path').'/Smarty.class.php');
 
 		$smarty = &new Smarty;
 

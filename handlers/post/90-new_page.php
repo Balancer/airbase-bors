@@ -1,5 +1,4 @@
 <?
-    require_once('funcs/DataBaseHTS.php');
     require_once('funcs/templates/smarty.php');
 
 	if(empty($GLOBALS['cms']['only_load']))

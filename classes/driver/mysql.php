@@ -1,6 +1,6 @@
 <?php
 
-require_once('classes/inc/mysql.php');
+require_once('inc/mysql.php');
 
 class driver_mysql extends DataBase
 {

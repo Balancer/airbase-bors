@@ -4,10 +4,9 @@
 @header("Pragma: no-cache");
 
 require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-require_once('funcs/DataBaseHTS.php');
 require_once('funcs/datetime.php');
 require_once('funcs/users.php');
-require_once('funcs/texts.php');
+require_once('inc/texts.php');
 
 foreach(split(" ", "lines time show t forum ignore_forums") as $var)
 	$$var = @$_GET[$var];

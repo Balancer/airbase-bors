@@ -1,6 +1,4 @@
 <?
-	include_once("funcs/lcml.php");
-
 	hts_data_posthandler_add("!.*!", 'body', 'cms_default_body');
 	function cms_default_body($uri, $m)
 	{	
