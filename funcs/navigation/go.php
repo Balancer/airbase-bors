@@ -3,7 +3,8 @@
 
     function go($uri, $permanent = false, $time = 0, $exit = false)
     {
-		bors()->changed_save();
+		if(function_exists('bors'))
+			bors()->changed_save();
 	
 		if(function_exists('config') && config('debug_redirect') && debug_test())
 		{
