@@ -1,9 +1,4 @@
 <?
-
-
-//    require_once("funcs/DataBaseHTS.php");
-require_once ("debug.php");
-
 require_once ("funcs/Cache.php");
 require_once ("lcml/funcs.php");
 require_once ("lcml/extentions.php");
