@@ -1,4 +1,5 @@
 <?
+    require_once("funcs/DataBaseHTS.php");
 
     // from PHP script
     // put these function somewhere in your application

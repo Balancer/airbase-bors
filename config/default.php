@@ -1,11 +1,32 @@
 <?php
 
+function config_set($key, $value) { $GLOBALS['cms']['config'][$key] = $value; }
+function config($key) { return @$GLOBALS['cms']['config'][$key]; }
+
 $GLOBALS['log_level'] = 2;
 
-if(!function_exists('file_put_contents'))
-	include_once('include/php4/file_put_contents.php');
+	if(!defined("BORS_INCLUDE"))
+		define("BORS_INCLUDE", "{$_SERVER['DOCUMENT_ROOT']}/cms/");
 
-	require_once('engines/bors.php');
+	if(!defined("BORS_INCLUDE_LOCAL"))
+		define("BORS_INCLUDE_LOCAL", "{$_SERVER['DOCUMENT_ROOT']}/cms-local/");
+
+	$includes = array(
+		BORS_INCLUDE_LOCAL,
+		BORS_INCLUDE."vhosts/{$_SERVER['HTTP_HOST']}",
+		BORS_INCLUDE,
+		"{$_SERVER['DOCUMENT_ROOT']}/include",
+		BORS_INCLUDE.'PEAR'
+	);
+
+	$delim = empty($_ENV['windir']) ? ":" : ";";
+
+    ini_set('include_path', ini_get('include_path') . $delim . join($delim, $includes));
+
+	if(!function_exists('file_put_contents'))
+		include_once('include/php4/file_put_contents.php');
+
+	require_once('classes/objects/Bors.php');
 
     $GLOBALS['cms'] = array(
 		'sites_store_path' => "{$_SERVER['DOCUMENT_ROOT']}/sites",

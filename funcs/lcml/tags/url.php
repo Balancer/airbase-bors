@@ -1,4 +1,6 @@
 <?
+	require_once('funcs/DataBaseHTS.php');
+
 	function lt_url($params) 
 	{ 
 		$url = $params['url'];

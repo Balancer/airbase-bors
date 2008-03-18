@@ -1,4 +1,5 @@
 <?
+    require_once('funcs/DataBaseHTS.php');
 
 	if(empty($GLOBALS['cms']['only_load']))
 		register_handler('!^http://([^/]+)(.*)!', 'handler_pages_on_fs');

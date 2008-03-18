@@ -71,7 +71,7 @@ class user_blog extends base_page
 		{
 			$data = $this->data_providers();
 			$records = $data['blog_records'];
-			$this->first_post = count($records) > 1 ? object_load('forum_post', $records[count($records)-1]->id()) : NULL;
+			$this->first_post = object_load('forum_post', $records[count($records)-1]->id());
 		}
 		
 		return $this->first_post;

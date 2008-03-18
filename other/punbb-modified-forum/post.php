@@ -66,8 +66,6 @@ if ((($tid && (($cur_posting['post_replies'] == '' && $pun_user['g_post_replies'
 	!$is_admmod)
 	message($lang_common['No permission']);
 
-echo $cur_posting['closed'];
-
 // Load the post.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/post.php';
 
@@ -343,7 +341,7 @@ if (isset($_POST['form_sent']))
 				}
 			}
 
-			include_once("engines/bors.php");
+			include_once("classes/objects/Bors.php");
 			$topic = class_load('forum_topic', $tid, array('no_load_cache' => true));
 		}
 		// If it's a new topic
@@ -409,7 +407,7 @@ if (isset($_POST['form_sent']))
 
 			update_forum($fid);
 
-			include_once("engines/bors.php");
+			include_once("classes/objects/Bors.php");
 			$topic = class_load('forum_topic', $new_tid, array('no_load_cache' => true));
 		}
 

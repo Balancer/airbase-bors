@@ -1,6 +1,7 @@
 <?
     function modules_top_max_main()
     {
+        include_once('funcs/DataBase.php');
         $hts = new DataBase('l2jdb','la2', 'la2kkk');
         $max1 = $hts->get("select * from online order by count desc, date asc limit 1;");
         $max2 = $hts->get("select * from online order by count desc, date desc limit 1;");

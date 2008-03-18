@@ -238,6 +238,7 @@
 
     // Ключевые слова
 
+    require_once('funcs/DataBaseHTS.php');
     $hts = new DataBaseHTS();
 
     $_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);

@@ -7,6 +7,7 @@
 
 		$res = "";
 
+        include_once('funcs/DataBase.php');
         $hts = new DataBase($db,'la2', 'la2kkk');
         $list = $hts->get_array("
 			SELECT * 

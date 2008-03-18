@@ -5,6 +5,7 @@
 	$_SERVER['HTTP_HOST'] = "balancer.ru";
 
 	require_once($_SERVER['DOCUMENT_ROOT'].'/cms/config.php');
+	require_once('funcs/DataBase.php');
 	require_once('classes/inc/bors.php');
 	
 	config_set('mysql_persistent', true);

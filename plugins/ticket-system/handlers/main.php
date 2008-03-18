@@ -130,6 +130,7 @@
     function plugins_ticket_system_new_ticket_post($uri, $action, $m, $plugin_data)
 	{
 		include_once('funcs/mail.php');
+		include_once('funcs/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
@@ -185,6 +186,7 @@
     function plugins_ticket_system_comment_add($uri, $action, $match, $plugin_data)
 	{
 		include_once('funcs/mail.php');
+		include_once('funcs/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
@@ -226,6 +228,7 @@
     function plugins_ticket_system_ticket_close($uri, $action, $match, $plugin_data)
 	{
 		include_once('funcs/mail.php');
+		include_once('funcs/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
@@ -247,6 +250,7 @@
     function plugins_ticket_system_ticket_open($uri, $action)
 	{
 		include_once('funcs/mail.php');
+		include_once('funcs/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');

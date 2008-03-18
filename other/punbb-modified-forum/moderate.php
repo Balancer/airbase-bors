@@ -493,13 +493,7 @@ else if (isset($_REQUEST['open']) || isset($_REQUEST['close']))
 		if (empty($topics))
 			message($lang_misc['No topics selected']);
 
-		foreach($topics as $topic_id)
-		{
-			$topic = class_load('forum_topic', $topic_id);
-			$topic->set_closed($action, true);
-		}
-		
-//		$db->query('UPDATE '.$db->prefix.'topics SET closed='.$action.' WHERE id IN('.implode(',', $topics).')') or error('Unable to close topics', __FILE__, __LINE__, $db->error());
+		$db->query('UPDATE '.$db->prefix.'topics SET closed='.$action.' WHERE id IN('.implode(',', $topics).')') or error('Unable to close topics', __FILE__, __LINE__, $db->error());
 
 		$redirect_msg = ($action) ? $lang_misc['Close topics redirect'] : $lang_misc['Open topics redirect'];
 		redirect('moderate.php?fid='.$fid, $redirect_msg);
@@ -510,12 +504,10 @@ else if (isset($_REQUEST['open']) || isset($_REQUEST['close']))
 		confirm_referrer('viewtopic.php');
 
 		$topic_id = ($action) ? intval($_GET['close']) : intval($_GET['open']);
-		
 		if ($topic_id < 1)
 			message($lang_common['Bad request']);
 
-		$topic = class_load('forum_topic', $topic_id);
-		$topic->set_closed($action, true);
+		$db->query('UPDATE '.$db->prefix.'topics SET closed='.$action.' WHERE id='.$topic_id) or error('Unable to close topic', __FILE__, __LINE__, $db->error());
 
 		$redirect_msg = ($action) ? $lang_misc['Close topic redirect'] : $lang_misc['Open topic redirect'];
 		redirect('viewtopic.php?id='.$topic_id, $redirect_msg);
@@ -532,8 +524,7 @@ else if (isset($_GET['stick']))
 	if ($stick < 1)
 		message($lang_common['Bad request']);
 
-	$topic = class_load('forum_topic', $stick);
-	$topic->set_sticky(1, true);
+	$db->query('UPDATE '.$db->prefix.'topics SET sticky=\'1\' WHERE id='.$stick) or error('Unable to stick topic', __FILE__, __LINE__, $db->error());
 
 	redirect('viewtopic.php?id='.$stick, $lang_misc['Stick topic redirect']);
 }
@@ -548,8 +539,7 @@ else if (isset($_GET['unstick']))
 	if ($unstick < 1)
 		message($lang_common['Bad request']);
 
-	$topic = class_load('forum_topic', $unstick);
-	$topic->set_sticky(0, true);
+	$db->query('UPDATE '.$db->prefix.'topics SET sticky=\'0\' WHERE id='.$unstick) or error('Unable to unstick topic', __FILE__, __LINE__, $db->error());
 
 	redirect('viewtopic.php?id='.$unstick, $lang_misc['Unstick topic redirect']);
 }

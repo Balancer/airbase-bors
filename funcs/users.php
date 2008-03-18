@@ -19,6 +19,6 @@
         return join('|', $addrs);
     }
 
-    require_once("funcs/users/".config('user_engine').".php");
+    require_once("funcs/users/{$GLOBALS['cms']['user_engine']}.php");
 
 	$GLOBALS['me'] = &new User();

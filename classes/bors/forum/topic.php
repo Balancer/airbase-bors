@@ -111,7 +111,7 @@ class forum_topic extends forum_abstract
 
 		$GLOBALS['cms']['cache_disabled'] = true;
 
-//		$bors->config()->set_cache_uri($this->internal_uri());
+		$bors->config()->set_cache_uri($this->internal_uri());
 			
 //		if($this->id() == 32510)
 //			$GLOBALS['bors_data']['lcml_cache_disabled'] = true;
@@ -403,7 +403,9 @@ class forum_topic extends forum_abstract
 
 	function recalculate()
 	{
-		bors()->changed_save();
+	
+		global $bors;
+		$bors->changed_save();
 		
 		$db = &new driver_mysql('punbb');
 		$db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
@@ -416,7 +418,7 @@ class forum_topic extends forum_abstract
 		$this->set_modify_time($last_post->create_time(true), true);
 		$this->set_last_poster_name($last_post->owner()->title(), true);
 
-		bors()->changed_save();
+		$bors->changed_save();
 
 		$this->cache_clean_self();
 		

@@ -9,6 +9,8 @@
 
         function body()
 		{
+			global $bors;
+
 			$forum = class_load('forum_forum', $this->forum_id());
 		
 			if(!$forum->can_read())
@@ -16,6 +18,8 @@
 
 			$GLOBALS['cms']['cache_disabled'] = true;
 
+			$bors->config()->set_cache_uri($this->internal_uri());
+			
 			include_once("funcs/templates/assign.php");
 			$data = array();
 

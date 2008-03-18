@@ -1,5 +1,6 @@
 <?php
     require_once("config.php");
+    require_once('funcs/DataBaseHTS.php');
 
     function smarty_function_page_css($params, &$smarty)
     {
