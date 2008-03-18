@@ -37,7 +37,7 @@ class user_blog_rss extends user_blog
 			$html = $topic->first_post()->body();
 			if(strlen($html) > 1024)
 			{
-				include_once("inc/texts.php");
+				include_once("funcs/texts.php");
 				$html = strip_text($html, 1024);
 				$html .= "<br /><br /><a href=\"".$topic->url(1).ec("\">Дальше »»»");
 			}

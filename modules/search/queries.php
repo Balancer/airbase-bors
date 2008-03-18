@@ -1,4 +1,6 @@
 <?
+    include_once('funcs/DataBase.php');
+
     function lcml_module_search_queries()
     {
         $db = new DataBase('mnoGoSearch','mnogo','mnogokuku');

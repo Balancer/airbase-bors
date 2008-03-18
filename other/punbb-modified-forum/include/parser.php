@@ -44,7 +44,8 @@ function preparse_bbcode($text, &$errors, $is_signature = false)
 }
 
 include_once($_SERVER['DOCUMENT_ROOT']."/cms/config.php");
-include_once("engines/lcml.php");
+//include_once("funcs/Cache.php");
+include_once("funcs/lcml.php");
 
 //
 // Parse message text

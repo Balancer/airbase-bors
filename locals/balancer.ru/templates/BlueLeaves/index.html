@@ -7,9 +7,6 @@
 	<meta name="description" content="{$description|htmlspecialchars}" />	
 	<meta http-equiv="imagetoolbar" content="no" />
 	<link href="/cms-local/templates/BlueLeaves/bl-stylesheet.css" rel="stylesheet" type="text/css" />
-{if $meta}{foreach key=key item=value from=$meta}
-<meta name="{$key}" content="{$value|htmlspecialchars}" />
-{/foreach}{/if}
 </head>
 
 <body>
@@ -43,7 +40,7 @@
 			Design by <a href="http://www.growldesign.co.uk">growldesign</a> |
 Courtesy <a href="http://www.openwebdesign.org" target="_blank">Open Web Design</a><br />
 <span style="font-size: 6pt;">
-{*	<script>document.write(admin_menu)</script> *}
+	<script>document.write(admin_menu)</script>
 <noscript>
 	Редактировать: <a href="{$main_uri}?edit">страницу</a>
 	| <a href="{$main_uri}?edit-data">параметры</a>

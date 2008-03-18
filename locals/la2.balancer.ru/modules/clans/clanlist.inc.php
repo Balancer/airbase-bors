@@ -8,6 +8,7 @@
 		$res = "";
 
         include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
+        include_once('funcs/DataBase.php');
         $db = &new DataBase('l2jdb','la2', 'la2kkk');
 
     	if(!intval($clan_id) || intval($clan_id) < 1000000)

@@ -9,6 +9,7 @@
     setlocale(LC_ALL, "ru_RU.utf8");
 
     require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/config.site.php");
+    require_once('funcs/DataBaseHTS.php');
     require_once('funcs/users.php');
 
 //    $log_level = 9;

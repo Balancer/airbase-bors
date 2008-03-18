@@ -7,6 +7,7 @@
 	function update()
 	{
 		include("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
+		include_once("funcs/DataBase.php");
 	
 		$dbf = new DataBase('punbb');
 		$dbu1 = new DataBase('USERS');

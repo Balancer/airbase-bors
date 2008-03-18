@@ -1,4 +1,6 @@
 <?
+    require_once("funcs/DataBaseHTS.php");
+    require_once("funcs/Cache.php");
 
     function show_titles_like($title,$limit=20, $forum=0)
     {

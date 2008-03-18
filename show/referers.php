@@ -5,6 +5,9 @@
     setlocale(LC_ALL, "ru_RU.utf8");
 
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
+    require_once("funcs/DataBase.php");
+    require_once("funcs/DataBaseHTS.php");
+    require_once("funcs/Cache.php");
 
     referers_add();
     referers_show();

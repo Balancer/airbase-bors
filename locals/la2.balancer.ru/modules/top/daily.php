@@ -1,6 +1,8 @@
 <?
     function modules_top_daily_main($days)
     {
+        include_once('funcs/DataBase.php');
+        include_once('funcs/Cache.php');
 		
 		$ch = &new Cache();
 

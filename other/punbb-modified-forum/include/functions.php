@@ -646,8 +646,8 @@ function confirm_referrer($script)
 {
 	global $pun_config, $lang_common;
 
-//	if (!preg_match('#^'.preg_quote(str_replace('www.', '', $pun_config['o_base_url']).'/'.$script, '#').'#i', str_replace('www.', '', (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''))))
-//		message($lang_common['Bad referrer']);
+	if (!preg_match('#^'.preg_quote(str_replace('www.', '', $pun_config['o_base_url']).'/'.$script, '#').'#i', str_replace('www.', '', (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''))))
+		message($lang_common['Bad referrer']);
 }
 
 
@@ -820,7 +820,7 @@ function maintenance_message()
 
 //
 // Display $message and redirect user to $destination_url
-// "
+//
 function redirect($destination_url, $message)
 {
 	global $db, $pun_config, $lang_common, $pun_user;
@@ -828,8 +828,14 @@ function redirect($destination_url, $message)
 	if ($destination_url == '')
 		$destination_url = 'index.php';
 
+	// If the delay is 0 seconds, we might as well skip the redirect all together
+	if ($pun_config['o_redirect_delay'] == '0')
+		header('Location: '.str_replace('&amp;', '&', $destination_url));
+
+
 	// Load the redirect template
 	$tpl_redir = trim(file_get_contents(PUN_ROOT.'include/template/redirect.tpl'));
+
 
 	// START SUBST - <pun_content_direction>
 	$tpl_redir = str_replace('<pun_content_direction>', $lang_common['lang_direction'], $tpl_redir);
@@ -850,7 +856,7 @@ function redirect($destination_url, $message)
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/colors.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css' ?>" />
-<?php /*"*/
+<?php
 
 	$tpl_temp = trim(ob_get_contents());
 	$tpl_redir = str_replace('<pun_head>', $tpl_temp, $tpl_redir);
@@ -903,11 +909,7 @@ function redirect($destination_url, $message)
 	// Close the db connection (and free up any result data)
 	$db->close();
 
-	// If the delay is 0 seconds, we might as well skip the redirect all together
-//	if ($pun_config['o_redirect_delay'] == '0')
-//		header('Location: '.str_replace('&amp;', '&', $destination_url));
-
-	pun_exit($tpl_redir, $pun_config['o_redirect_delay'] ? false : $destination_url);
+	pun_exit($tpl_redir);
 }
 
 
@@ -1182,13 +1184,11 @@ function dump()
 		return array($os, $browser);
 	}
 
-function pun_exit($message = 0, $redirect = false)
+function pun_exit($message = 0)
 {
-	bors()->changed_save();
-
-	// If the delay is 0 seconds, we might as well skip the redirect all together
-	if($redirect)
-		header('Location: '.str_replace('&amp;', '&', $redirect));
+	global $bors;
+	if(!empty($bors) && is_object($bors))
+		$bors->changed_save();
 
 	exit($message);
 }

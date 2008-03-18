@@ -5,6 +5,7 @@
 	{
 		include_once("3part/geoip/geoip.inc");
 		include_once("3part/geoip/geoipcity.inc");
+		include_once("funcs/Cache.php");
 		
 		$ch = &new Cache();
 		if($ch->get("country_flag-v7", $ip))

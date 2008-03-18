@@ -5,6 +5,7 @@
 		if($ch->get("la2", "top-money"))
 			return $ch->last;
 
+        include_once('funcs/DataBase.php');
         $hts = new DataBase('l2jdb','la2', 'la2kkk');
         $max = $hts->get("SELECT MAX(t.sum) FROM `total` t LEFT JOIN `characters` p ON (t.owner_id = p.obj_Id) WHERE p.accesslevel>=0 AND p.accesslevel < 30;");
         $list = $hts->get_array("SELECT t.*, p.* FROM `total` t LEFT JOIN `characters` p ON (t.owner_id = p.obj_Id) WHERE p.accesslevel>=0 AND p.accesslevel < 30 ORDER BY `sum` DESC LIMIT 50;");

@@ -1,4 +1,5 @@
 <?
+    require_once("funcs/DataBaseHTS.php");
 
     function include_source($uri)
     {

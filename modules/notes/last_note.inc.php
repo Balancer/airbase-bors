@@ -1,5 +1,6 @@
 <?
     require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/config.site.php");
+    require_once('funcs/DataBaseHTS.php');
 
     function show_last_note()
     {

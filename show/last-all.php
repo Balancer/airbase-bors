@@ -10,6 +10,8 @@ setlocale(LC_ALL, "ru_RU.utf8");
 
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 
+	require_once("funcs/DataBaseHTS.php");
+	require_once("funcs/Cache.php");
 
 $ch = new Cache();
 //$ch->clear_check('last_all','all',120);
@@ -57,7 +59,7 @@ $q="SELECT p.pid, p.post, p.author_name, p.post_date, t.forum_id, p.topic_id, p.
 //echo "q='$q'";
 $query = mysql_query ($q) or  die (__FILE__.':'.__LINE__." Query '$q' failed, error ".mysql_errno().": ".mysql_error()."<BR>");
 
-require_once("inc/texts.php");
+require_once("funcs/texts.php");
 
 $to_echo='';
 
