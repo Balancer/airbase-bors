@@ -5,7 +5,7 @@
 	{
 		function preShowProcess()
 		{
-			include_once("funcs/js.php");
+			include_once("inc/js.php");
 			header("Content-type", "text/javascript");
 			return str2js($this->cacheable_body());
 		}
