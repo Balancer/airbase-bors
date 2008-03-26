@@ -94,7 +94,7 @@
 //			echo "Dir: $base_dir/$dir/main.uri<br/>";
             if(file_exists("$base_dir/$dir/main.uri"))
 			{
-				include_once("funcs/templates/assign.php");
+				include_once("engines/smarty/assign.php");
 				
 				foreach(file("$base_dir/$dir/main.uri") as $pattern)
 				{

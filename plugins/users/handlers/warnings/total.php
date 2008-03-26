@@ -13,7 +13,7 @@
 		
 		$data['active_warnings'] = $db->get_array("SELECT * FROM warnings WHERE time > ".(time()-86400*30)." ORDER BY time DESC");
 
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
         return template_assign_data("total.html", $data);
 	}
 ?>

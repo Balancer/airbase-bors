@@ -64,7 +64,7 @@
 		$data['tickets'] = $tickets;
 		$data['plugin'] = $plugin_data;
 		
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
         return template_assign_data("tickets-list.htm", $data);
 	}
 
@@ -106,7 +106,7 @@
 		$data['posts'] = $posts;
 		$data['plugin'] = $plugin_data;
 
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
         return template_assign_data("ticket.htm", $data);
 	}
 
@@ -122,7 +122,7 @@
 		$data['base_uri'] = $plugin_data['base_uri'];
 		$data['plugin'] = $plugin_data;
 
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
         return template_assign_data("new_ticket.htm", $data);
 	}
 
@@ -130,7 +130,7 @@
     function plugins_ticket_system_new_ticket_post($uri, $action, $m, $plugin_data)
 	{
 		include_once('funcs/mail.php');
-		include_once('funcs/DataBaseHTS.php');
+		include_once('obsolete/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
@@ -186,7 +186,7 @@
     function plugins_ticket_system_comment_add($uri, $action, $match, $plugin_data)
 	{
 		include_once('funcs/mail.php');
-		include_once('funcs/DataBaseHTS.php');
+		include_once('obsolete/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
@@ -228,7 +228,7 @@
     function plugins_ticket_system_ticket_close($uri, $action, $match, $plugin_data)
 	{
 		include_once('funcs/mail.php');
-		include_once('funcs/DataBaseHTS.php');
+		include_once('obsolete/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');
@@ -250,7 +250,7 @@
     function plugins_ticket_system_ticket_open($uri, $action)
 	{
 		include_once('funcs/mail.php');
-		include_once('funcs/DataBaseHTS.php');
+		include_once('obsolete/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');

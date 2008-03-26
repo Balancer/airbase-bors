@@ -12,7 +12,7 @@
 		$hts = new DataBaseHTS;
 		$uri = $hts->normalize_uri($uri);
 
-		include_once("funcs/templates/assign.php");
+		include_once("engines/smarty/assign.php");
 
 		$data = array(
 			'body'  =>  template_assign_data("xfile:".dirname(__FILE__)."/news-form.htm", array('main_uri' => $uri)),

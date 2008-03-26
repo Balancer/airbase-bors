@@ -19,7 +19,7 @@
 		
 		$hts = &new DataBaseHTS;
 	
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
 
 		$data['category'] = $category;
 
@@ -48,7 +48,7 @@
 
 	function plugins_tools_categories_editor_parent($uri, $match)
 	{
-//		include_once('funcs/DataBaseHTS.php');
+//		include_once('obsolete/DataBaseHTS.php');
 		
 //		$category = "category://{$_SERVER['HTTP_HOST']}/".@$match[2];
 //		$hts = new DataBaseHTS;
@@ -59,7 +59,7 @@
 
     function plugins_tools_categories_editor_category_add($uri, $action, $match, $plugin_data)
 	{
-		include_once('funcs/DataBaseHTS.php');
+		include_once('obsolete/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
 		require_once('funcs/system.php');
 		require_once('funcs/modules/messages.php');

@@ -42,6 +42,6 @@
 
 		$data['topics'] = $topics;
 		
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
         return template_assign_data("forum-updates-make.htm", $data);
 	}

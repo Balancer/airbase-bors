@@ -38,7 +38,7 @@
 
 		$data['user_name'] = $us->data('name');
 
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
         return template_assign_data("warn_add.html", $data);
 	}
 

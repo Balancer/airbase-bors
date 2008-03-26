@@ -13,7 +13,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		include_once("funcs/templates/assign.php");
+		include_once("engines/smarty/assign.php");
 		
 
 		$hts = &new DataBaseHTS();

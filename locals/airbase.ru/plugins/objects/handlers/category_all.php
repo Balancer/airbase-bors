@@ -24,7 +24,7 @@
 		
 		$data['category'] = $name;
 		
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
         return template_assign_data("category_all.html", $data);
 	}
 

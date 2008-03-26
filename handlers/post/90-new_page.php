@@ -19,7 +19,7 @@
 			'title'  => $title = $hts->get('title'),
 		);
 
-		include_once("funcs/templates/assign.php");
+		include_once("engines/smarty/assign.php");
 		$data = array(
 			'body' => template_assign_data("new-page.html", $data),
 			'title' => $title ? $title : ec('Создание новой страницы'),

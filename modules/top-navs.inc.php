@@ -19,7 +19,7 @@
 
 		$hts = &new DataBaseHTS();
 
-		include_once("funcs/templates/assign.php");
+		include_once("engines/smarty/assign.php");
 		$tpl = "top-navs.html";
 		if(!empty($GLOBALS['module_data']['template']))
 			$tpl = $GLOBALS['module_data']['template'];

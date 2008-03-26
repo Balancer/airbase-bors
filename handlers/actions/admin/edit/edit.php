@@ -14,7 +14,7 @@
 			'source' => $hts->get('source'),
 		);
 
-		include_once("funcs/templates/assign.php");
+		include_once("engines/smarty/assign.php");
 		$GLOBALS['page_data']['body'] = template_assign_data("edit.html", $data);
 
 		show_page($uri);

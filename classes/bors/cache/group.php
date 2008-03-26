@@ -7,7 +7,7 @@ class cache_group extends base_empty
 	function __construct($group)
 	{
 		parent::__construct($group);
-		$this->db = new DataBase($GLOBALS['cms']['mysql_cache_database']);
+		$this->db = &new DataBase(config('cache_database'));
 	}
 
 	function register($obj)

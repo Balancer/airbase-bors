@@ -1,0 +1,20 @@
+{if $subforums}
+<table class="btab small w100p" cellSpacing="0">
+<tr><th>Подфорум</th><th>Тем</th><th>Сообщений</th></tr>
+{foreach from=$subforums item=f}
+<tr>
+	<td><a href="{$f->url()}">{$f->title()}</a>
+	{assign var=subsub value=$f->all_subforums()}
+{if $subsub}
+<div class="subsubforums">Подфорумы: 
+{foreach from=$subsub item=ss}
+<a href="{$ss->url()}">{$ss->title()}</a>
+{/foreach}
+</div>
+	{/if}
+	<td align="center">{$f->num_topics()}</td>
+	<td align="center">{$f->num_posts()	}</td>
+</tr>
+{/foreach}
+</table>
+{/if}

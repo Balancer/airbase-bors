@@ -73,7 +73,7 @@
 		$data['title'] = ec("Архив за $year год");
 		$data['year'] = $year;
 
-		include_once("funcs/templates/assign.php");
+		include_once("engines/smarty/assign.php");
 		return template_assign_data("archives-year.htm", $data);
     }
 ?>
