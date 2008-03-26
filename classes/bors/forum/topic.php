@@ -65,10 +65,12 @@ class forum_topic extends forum_abstract
 	{
 		if($this->page() == 'new')
 		{
-			if(!bors()->user() || bors()->user()->id() < 2)
+			$me = bors()->user();
+		
+			if(!$me || $me->id() < 2)
 				return bors_message(ec('Вы не авторизованы на этом домене. Авторизуйтесь, пожалуйста. Если не поможет - попробуйте стереть cookies вашего браузера.'), array('login_form' => true, 'login_referer' => $this->url($this->page())));
 
-			$uid = bors()->user()->id();
+			$uid = $me->id();
 			$x = $this->db()->select('topic_visits', 'last_visit, last_post_id', array('user_id='=>$uid, 'topic_id='=>$this->id()));
 			$first_new_post_id = @$x['last_post_id'];
 //			if(!$first_new_post_id)
@@ -86,6 +88,7 @@ class forum_topic extends forum_abstract
 			if($first_new_post_id)
 			{
 				$post = object_load('forum_post', $first_new_post_id);
+
 				if($post)
 					return go($post->url_in_topic());
 			}
@@ -107,16 +110,9 @@ class forum_topic extends forum_abstract
 
 	function body()
 	{
-		global $bors;
-
 		$GLOBALS['cms']['cache_disabled'] = true;
 
-		$bors->config()->set_cache_uri($this->internal_uri());
-			
-//		if($this->id() == 32510)
-//			$GLOBALS['bors_data']['lcml_cache_disabled'] = true;
-
-		include_once("funcs/templates/assign.php");
+		require_once("engines/smarty/assign.php");
 		$data = array();
 
 		$data['posts'] = $this->posts();
@@ -403,9 +399,7 @@ class forum_topic extends forum_abstract
 
 	function recalculate()
 	{
-	
-		global $bors;
-		$bors->changed_save();
+		bors()->changed_save();
 		
 		$db = &new driver_mysql('punbb');
 		$db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
@@ -418,7 +412,7 @@ class forum_topic extends forum_abstract
 		$this->set_modify_time($last_post->create_time(true), true);
 		$this->set_last_poster_name($last_post->owner()->title(), true);
 
-		$bors->changed_save();
+		bors()->changed_save();
 
 		$this->cache_clean_self();
 		

@@ -52,17 +52,11 @@ function parents()
 	{
 //			$this->cache_clean_self();
 		
-		global $bors;
-
-			
 		if(!$this->can_read())
 			return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
+		include_once("engines/smarty/assign.php");
 
-		include_once("funcs/templates/assign.php");
-
-		$bors->config()->set_cache_uri($this->internal_uri());
-			
 		$data = array();
 
 		$db = &new DataBase('punbb');

@@ -44,7 +44,7 @@
 					$result[$tid] = $obj;*/
 		}
 		
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
 		return template_assign_data("topics.html", array('objects'=>@$objects, 'q'=>$query, 'type' => @$_GET['type']));
 	}
 

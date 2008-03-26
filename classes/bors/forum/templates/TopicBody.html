@@ -1,0 +1,75 @@
+{if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
+
+{foreach from=$posts item=p}
+{if $p->id()}
+<a name="p{$p->id()}"></a>
+<dl class="forumposting posted_by_{$p->owner_id()}">
+<dt>{$p->flag()} {$p->author_name()}, <a href="{$p->url()}">{$p->create_time()|full_time}</a>
+{if $p->answer_to_id()}
+{assign var=a value=$p->answer_to()}
+<span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>
+{/if}
+</dt>
+<dd>
+
+{assign var="owner" value=$p->owner()}
+{assign var="ref" value=$p->url()}
+<div class="avatar_block">{include file="xfile:templates/post-avatar.html"}</div>
+
+{$p->body()}
+{if $owner->signature()}<div class="postsignature">{$owner->signature_html()}</div>{/if}
+{if $p->attaches()}
+<hr />
+Прикреплённые файлы:
+<ul>
+{foreach from=$p->attaches() item="attach"}
+<div class="box float_left center" style="width: 300px; ">{$attach->thumbnail_link('300x300')}<a href="{$attach->url()}">{$attach->title()}</a> [{$attach->size()|smart_size}, {$attach->downloads()} {$attach->downloads()|sklon:'загрузка':'загрузки':'загрузок'}]</div>
+{/foreach}
+</ul>
+{/if}
+<ul class="postfooter">
+<li><a href="http://balancer.ru/user/{$p->owner_id()}/reputation.html?{$p->url()}">Репутация автору</a></li>
+<li>|</li>
+<li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
+<li class="postdelete"><a href="http://balancer.ru/forum/tools/post/{$p->id()}/">Инструменты</a></li>
+<li class="postedit"><a href="http://balancer.ru/forum/punbb/edit.php?id={$p->id()}">Редактировать</a></li>
+<li class="postquote"><a href="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}">Цитировать</a></li>
+</ul>
+</dd>
+</dl>
+{/if}
+{/foreach}
+
+{if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
+
+<div class="pages_select right">
+<a href="http://balancer.ru/forum/punbb/post.php?tid={$this->id()}" class="select_page">Ответ в эту тему</a>
+<a href="http://balancer.ru/forum/punbb/post.php?fid={$this->forum()|get:id}" class="select_page">Создать новую тему</a>
+</div>
+
+{if not $p}
+{0|debug_trace}
+{else}
+<dl class="forumposting quickform">
+<dt>Форма быстрого ответа</dt>
+<dd>
+<form method="post" action="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}" onsubmit="{literal}this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}{/literal}">
+	<div class="inform">
+	<fieldset>
+		<legend>Напишите ваше сообщение и нажмите отправить</legend>
+		<div class="infldset txtarea">
+			<input type="hidden" name="form_sent" value="1" />
+			<label><textarea class="quickreplyform" name="req_message" rows="7" cols="60" tabindex="1"></textarea></label>
+			<ul class="postfooter">
+				<li><a href="http://balancer.ru/forum/punbb/help.php#bbcode" onclick="window.open(this.href); return false;">BBCode</a>: включён</li>
+				<li><a href="http://balancer.ru/forum/punbb/help.php#img" onclick="window.open(this.href); return false;">[img] тег</a>: включён</li>
+				<li><a href="http://balancer.ru/forum/punbb/help.php#smilies" onclick="window.open(this.href); return false;">Смайлики</a>: включён</li>
+			</ul>
+		</div>
+	</fieldset>
+	</div>
+	<p><input type="submit" name="submit" tabindex="2" value="Отправить" accesskey="s" /></p>
+</form>
+</dd>
+</dl>
+{/if}

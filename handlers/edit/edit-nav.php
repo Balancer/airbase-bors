@@ -74,7 +74,7 @@
 			);
 
 
-		include_once("funcs/templates/assign.php");
+		include_once("engines/smarty/assign.php");
 
 		$data = array(
 			'body'  =>  template_assign_data("xfile:".dirname(__FILE__)."/edit-nav.htm", $data),

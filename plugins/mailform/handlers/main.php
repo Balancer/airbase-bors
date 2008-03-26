@@ -7,7 +7,7 @@
 
 	function plugins_mailform_main_body($uri, $m)
 	{
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
         return template_assign_data("form.html");
 	}
 

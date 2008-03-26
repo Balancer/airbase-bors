@@ -17,13 +17,13 @@
     require_once("localization/main.php");
 
 	global $hts;
-	include_once("funcs/DataBaseHTS.php");
+	include_once("obsolete/DataBaseHTS.php");
 	$hts = &new DataBaseHTS();
 
 function bors_init()
 {
 	require_once("funcs/templates/global.php");
-	require_once("funcs/users.php");
+	require_once("obsolete/users.php");
 	require_once("funcs/navigation/go.php");
 	require_once("funcs/lcml.php");
     require_once("include/classes/cache/CacheStaticFile.php");

@@ -55,7 +55,7 @@
 		if(preg_match('!^\d+!', $width))	$width  .= "px";
 		if(preg_match('!^\d+!', $height))	$height .= "px";
 
-		include_once("funcs/templates/assign.php");
+		include_once("engines/smarty/assign.php");
 		return template_assign_data("news.htm", array(
 			'records'=>$records, 
 			'width'=>$width, 

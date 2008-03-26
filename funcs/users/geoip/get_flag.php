@@ -1,11 +1,9 @@
-<?
-	include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
+<?php
 
-	function get_flag($ip)
-	{
+function get_flag($ip)
+{
 		include_once("3part/geoip/geoip.inc");
 		include_once("3part/geoip/geoipcity.inc");
-		include_once("funcs/Cache.php");
 		
 		$ch = &new Cache();
 		if($ch->get("country_flag-v7", $ip))
@@ -43,7 +41,7 @@
 			$res = "";
 
 		return $ch->set($res, -3600);
-	}
+}
 
 	function get_my_flag()
 	{

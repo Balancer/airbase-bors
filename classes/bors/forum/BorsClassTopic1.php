@@ -19,7 +19,7 @@
 
         function body()
 		{
-			include_once("funcs/templates/assign.php");
+			include_once("engines/smarty/assign.php");
 			$data = array();
 
 			$db = &new DataBase('punbb');

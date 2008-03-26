@@ -34,7 +34,7 @@
 			$data['template_dir'] = $this->_class_dir();
 			$data['this'] = $this;
 
-			require_once('funcs/templates/assign.php');
+			require_once('engines/smarty/assign.php');
 			return template_assign_data($this->_body_template(), $data);
 		}
 

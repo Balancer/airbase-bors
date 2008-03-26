@@ -21,7 +21,7 @@
 		$data['active_warnings'] = $db->get_array("SELECT * FROM warnings WHERE user_id = $uid AND time > ".(time()-86400*30)." ORDER BY time DESC");
 		$data['passive_warnings'] = $db->get_array("SELECT * FROM warnings WHERE user_id = $uid AND time < ".(time()-86400*30)." ORDER BY time DESC");
 
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
         return template_assign_data("show.html", $data);
 	}
 

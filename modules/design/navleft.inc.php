@@ -8,7 +8,7 @@
 		if($ch->get('modules-design-navleft-v9', $uri))
 			return $ch->last();
 	
-		include_once("funcs/templates/assign.php");
+		include_once("engines/smarty/assign.php");
 
 		$hts = &new DataBaseHTS();
 

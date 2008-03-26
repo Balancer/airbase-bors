@@ -186,7 +186,7 @@ class forum_post extends base_page_db
 
 	function empty_body()
 	{
-		require_once('funcs/templates/assign.php');
+		require_once('engines/smarty/assign.php');
 		return template_assign_data('post.html', array('this' => $this));
 	}
 	

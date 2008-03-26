@@ -1,5 +1,5 @@
 <?
-    require_once("funcs/DataBaseHTS.php");
+    require_once("obsolete/DataBaseHTS.php");
     require_once("funcs/Cache.php");
     require_once("funcs/users.php");
     require_once("funcs/navigation/go.php");

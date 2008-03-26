@@ -12,6 +12,6 @@
 		
 		$data['list'] = $db->get_array("SELECT name FROM obj_param WHERE selectable ORDER BY name");
 
-        include_once("funcs/templates/assign.php");
+        include_once("engines/smarty/assign.php");
         return template_assign_data("main.html",$data);
 	}
