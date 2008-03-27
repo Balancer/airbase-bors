@@ -1,7 +1,7 @@
 <?
     require_once('funcs/DataBaseHTS.php');
     require_once('funcs/users.php');
-    require_once('funcs/filesystem_ext.php');
+    require_once('inc/filesystem.php');
 
     function fill_image_data($image, $page = NULL)
     {
@@ -61,7 +61,7 @@
 				if(!preg_match("!image!",$content_type))
 					return lcml("Non-image content type ('$content_type') image ={$image}= error.");
 
-				require_once('funcs/filesystem_ext.php');
+				require_once('inc/filesystem.php');
 				mkpath(dirname($path));
 				$fh = fopen($path,'wb');
 				fwrite($fh, $data);

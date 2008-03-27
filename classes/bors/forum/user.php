@@ -89,7 +89,7 @@ class forum_user extends base_object_db
 	function cache_clean_self()
 	{
 		parent::cache_clean_self();
-//			include_once('funcs/filesystem_ext.php');
+//			include_once('inc/filesystem.php');
 //			rec_rmdir("/var/www/balancer.ru/htdocs/user/".$this->id());
 	}
 

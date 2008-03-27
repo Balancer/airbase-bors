@@ -28,7 +28,7 @@ class airbase_top_logo extends def_image_png
 		$this->PutS($img, 8, sprintf("%4d", $rate), $text);
 
 		$path = "/var/www/airbase.ru/htdocs/top/logos";
-		include_once("funcs/filesystem_ext.php");
+		include_once("inc/filesystem.php");
 		mkpath($path, 0775);
 		imagepng($img, "$path/$id.png");
 		chmod("$path/$id.png", 0664);
