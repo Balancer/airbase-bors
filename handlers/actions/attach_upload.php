@@ -19,7 +19,7 @@
 		$tmp_name = @$_FILES['attached_file']['tmp_name'];
 		$post_id = @$GLOBALS['main_uri'];
 	
-		include_once("funcs/modules/uri.php");
+		include_once("inc/urls.php");
 		$unique_name = md5($name.$post_id.$size)."-".translite_uri_simple($name);
 
 		$sub1 = substr($unique_name, 0, 2);

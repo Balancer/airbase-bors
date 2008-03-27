@@ -232,7 +232,7 @@ class forum_post extends base_page_db
 
 	function url() 
 	{ 
-		require_once("funcs/modules/uri.php");
+		require_once("inc/urls.php");
 		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
 	}
 		
