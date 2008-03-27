@@ -3,7 +3,6 @@
     {
 //		echo "\n<!--Get nav for $uri-->\n";
 	
-	    require_once("funcs/Cache.php");
         $ch = &new Cache();
         if($ch->get('top_navs-v7', $uri) && false)
         {

@@ -11,7 +11,7 @@ class user_blog extends base_page
 	function template()
 	{
 		templates_noindex();
-		return BORS_INCLUDE.'templates/forum/_header.html';
+		return 'forum/_header.html';
 	}
 	
 	function title() { return $this->user->title().ec(": Блог"); }

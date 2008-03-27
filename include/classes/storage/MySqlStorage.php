@@ -93,9 +93,3 @@
 	
 	$mysql_map['create_time']	= 'WWW.hts_data_create_time.value(id)';
 	$mysql_map['name'] 			= 'WWW.hts_data_title.value(id)';
-
-	function mysql_storage_map($class, $key, $map)
-	{
-		global $mysq_map;
-		$mysql_map[$key] = $map;
-	}

@@ -8,7 +8,7 @@ class forum_topic extends forum_abstract
 	function main_db_storage() { return 'punbb'; }
 	function main_table_storage() { return 'topics'; }
 
-	function uri_name() { return 'topic'; }
+	function uri_name() { return 't'; }
 
 	function fields() { return array($this->main_db_storage() => $this->main_db_fields()); }
 
@@ -22,6 +22,7 @@ class forum_topic extends forum_abstract
 	function main_table_fields()
 	{
 		return array(
+			'id',
 			'forum_id',
 			'title'	=> 'subject',
 			'create_time'	=> 'posted',

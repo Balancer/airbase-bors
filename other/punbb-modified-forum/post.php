@@ -484,7 +484,7 @@ if ($tid)
 		$q_message = pun_htmlspecialchars($q_message);
 
 		include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-		include_once("funcs/design/make_quote.php");
+		include_once('inc/design/make_quote.php');
 
 		$quote = make_quote($q_poster, $q_message)."\n";
 	}

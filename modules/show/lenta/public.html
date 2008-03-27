@@ -5,7 +5,7 @@
 <small><strong>{$t.poster}, {$t.posted|strftime:"%Y-%m-%d %H:%M"}</strong>, <i><a href="http://balancer.ru/forum/{$t.forum_id}/">{$t.forum_name}</a></i>.</small>
 {bors_class_load var="p" class="forum_user" id=$t.owner_id}
 {bors_class_load var="owner" class="forum_user" id=$t.owner_id}
-<div class="avatar_block">{include file="xfile:/var/www/balancer.ru/htdocs/cms/classes/bors/forum/templates/post-avatar.html"}</div>
+<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>
 <br/>
 <br/>
 

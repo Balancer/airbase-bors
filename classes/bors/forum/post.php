@@ -26,6 +26,7 @@ class forum_post extends base_page_db
 	function main_table_fields()
 	{
 		return array(
+			'id',
 			'topic_id',
 			'create_time'	=> 'posted',
 			'edited',

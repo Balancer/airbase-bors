@@ -1,8 +1,8 @@
 <?
 	function modules_design_navleft_get($uri)
 	{
-		require_once("classes/objects/Bors.php");
-		include_once("funcs/Cache.php");
+		return "";
+	
 		$ch = &new Cache();
 		
 		if($ch->get('modules-design-navleft-v9', $uri))
@@ -131,11 +131,10 @@
 
 	function modules_design_navleft_fill($uri, $indent)
 	{
-		require_once("classes/objects/Bors.php");
 		$hts = &new DataBaseHTS();
 	
 		return array(
-				'uri' => Bors::real_uri($uri),
+				'uri' => bors()->real_uri($uri),
 				'title' => $hts->get_data($uri, 'nav_name'),
 				'indent' => $indent,
 				'children' => $hts->get_data_array_size($uri, 'child'),
