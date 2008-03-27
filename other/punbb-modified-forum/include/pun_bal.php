@@ -1,6 +1,6 @@
 <?
-	include_once($_SERVER['DOCUMENT_ROOT']."/cms/config.php");
-	include_once("funcs/lcml.php");
+	include_once(BORS_CORE.'/config.php');
+	include_once("engines/lcml.php");
 
 	function pun_lcml($text)
 	{

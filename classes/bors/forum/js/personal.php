@@ -1,7 +1,6 @@
-<?
-class_include("def_js");
+<?php
 
-class forum_js_personal extends def_js
+class forum_js_personal extends base_js
 {
 	var $owner;
 
