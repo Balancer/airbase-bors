@@ -7,8 +7,8 @@
 			$uri_pattern = "!.*!";
 		}
 
-		if(!empty ($_GET['debug']))
-			echo "Register uri '$uri_pattern' handler: $func<br/>";
+//		if(!empty ($_GET['debug']))
+//			echo "Register uri '$uri_pattern' handler: $func<br/>";
 
 		if(!empty($GLOBALS['cms']['plugin_data']['base_uri']))
 		{

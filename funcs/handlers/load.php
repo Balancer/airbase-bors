@@ -4,7 +4,7 @@
 
 	function handlers_load()
 	{
-		$_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
+		$_SERVER['HTTP_HOST'] = preg_replace('!:\d+!', '', $_SERVER['HTTP_HOST']);
     	$_SERVER['REQUEST_URI'] = preg_replace("!^(.+?)\?.*?$!", "$1", $_SERVER['REQUEST_URI']);
 
 		$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
@@ -34,6 +34,8 @@
 
 	function handlers_load_dir($dir)
 	{
+//		echo "handlers_load_dir($dir)<br />\n";
+	
 		if(preg_match('!^\.!', $dir) || $dir == 'CVS')
 			return;
 		
@@ -109,7 +111,7 @@
 						{
 							$data['base_path']	= $m[1].$m[2]."/";
 							$data['pattern']	= $pattern;
-						$data['matches'] = $m;
+							$data['matches'] = $m;
 
 							$data['parent_uri']	= preg_replace("!$pattern!", $m[1], $uri);
 							$data['base_uri']	= $data['parent_uri'].$m[2]."/";
@@ -136,7 +138,7 @@
 						error_reporting($errrep_save);
 
 						$GLOBALS['cms']['plugin_data'] = $data;
-//						echo ("$base_dir/$dir/handlers/");
+//						echo ("$base_dir/$dir/handlers/<br/>\n");
 						handlers_load_dir("$base_dir/$dir/handlers/");
 						$GLOBALS['cms']['plugin_data'] = false;
 					}
