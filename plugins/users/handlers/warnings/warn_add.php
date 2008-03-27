@@ -8,8 +8,6 @@
 
 	function plugins_users_warn_add_body($uri, $m)
 	{
-		require_once('funcs/modules/messages.php');
-
 		$uid = $data['user_id']	= intval($m[2]);
 		if(!$uid)
 			return ec("Не задан ID пользователя.");
