@@ -2,7 +2,10 @@
 
 $_SERVER['DOCUMENT_ROOT'] = '/var/www/balancer.ru/htdocs';
 
-require_once("/var/www/.bors/bors-core/config.php");
+define('BORS_CORE', '/var/www/.bors/bors-core');
+define('BORS_LOCAL', '/var/www/.bors/bors-airbase');
+require_once(BORS_CORE.'/config.php');
+
 require_once('obsolete/DataBase.php');
 require_once('inc/js.php');
 

@@ -24,12 +24,9 @@
 
 		foreach(array('/pre', '', '/post') as $stage)
 		{
-			foreach(array($GLOBALS['cms']['local_dir'],
-					"{$GLOBALS['cms']['base_dir']}/vhosts/{$_SERVER['HTTP_HOST']}",
-					$GLOBALS['cms']['base_dir']) as $base_path)
+			foreach(bors_dirs() as $base_path)
 			{
 				plugins_load($uri, "$base_path/plugins$stage");
-				
 				handlers_load_dir("$base_path/handlers$stage");
 			}
 		}

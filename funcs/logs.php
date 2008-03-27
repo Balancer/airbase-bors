@@ -1,9 +1,9 @@
 <?
 	function log_action($type, $uri, $text = NULL)
 	{
-		$owner = user_data('id', NULL);
+		$owner = bors()->user()->id();
 		
-		$db = new DataBase();
+		$db = &new DataBase('HTS');
 		$db->query("INSERT INTO `hts_logs` SET
 			`type` = '".addslashes($type)."',
 			`uri` = '".addslashes($uri)."',
@@ -18,14 +18,18 @@
 	{
 		$session_max_time = 60*10; // 10 минут
 	
-		$owner = user_data('id', NULL);
-		if(!$owner)
+		if(!($owner = bors()->user()))
 			return;
-		if($owner != intval($owner))
+
+		if(!($owner = $owner->id()))
 			return;
+
+		if(!is_numeric($owner))
+			return;
+
 		$owner = intval($owner);
 		
-		$db = new DataBase();
+		$db = &new DataBase('HTS');
 		$query = "
 			SELECT `record_id`, `time`
 			FROM `hts_logs`
