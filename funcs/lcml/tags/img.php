@@ -105,7 +105,7 @@ require_once('inc/urls.php');
 						return $params['url'];
 //						return lcml("Non-image content type ('$content_type') image ={$uri}= error.");
 
-					require_once('funcs/filesystem_ext.php');
+					require_once('inc/filesystem.php');
 					mkpath(dirname($path));
 					$fh = fopen($path,'wb');
 					fwrite($fh, $data);
