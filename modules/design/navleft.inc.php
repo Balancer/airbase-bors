@@ -1,12 +1,11 @@
 <?
 	function modules_design_navleft_get($uri)
 	{
-		return "";
-	
 		$ch = &new Cache();
 		
 		if($ch->get('modules-design-navleft-v9', $uri))
-			return $ch->last();
+			1;
+//			return $ch->last();
 	
 		include_once("engines/smarty/assign.php");
 
@@ -22,7 +21,7 @@
 			foreach($children as $child)
 				if($hts->get_data($child, 'nav_name'))
 					$data[$child] = array(
-						'uri' => Bors::real_uri($child),
+						'uri' => bors()->real_uri($child),
 						'title' => $hts->get_data($child, 'nav_name'),
 						'children' => $hts->get_data_array_size($child, 'child'),
 						'indent' => 0,
