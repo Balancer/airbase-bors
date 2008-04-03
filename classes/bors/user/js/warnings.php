@@ -1,7 +1,5 @@
 <?
-	class_include("def_js");
-
-	class user_js_warnings extends def_js
+	class user_js_warnings extends base_js
 	{
 		function cacheable_body()
 		{

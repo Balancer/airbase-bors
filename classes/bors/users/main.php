@@ -2,12 +2,10 @@
 
 class users_main extends base_page
 {
-	function _class_file() { return __FILE__; }
-
 	function template()
 	{
 		templates_noindex();
-		return 'forum/main.html';
+		return 'forum/common.html';
 	}
 
 		function title() { return ec("Пользователи Balancer.ru"); }

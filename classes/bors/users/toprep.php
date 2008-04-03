@@ -1,11 +1,7 @@
 <?php
 
-class_include('def_dbpage');
-
-class users_toprep extends def_dbpage
+class users_toprep extends base_page_db
 {
-	function _class_file() { return __FILE__; }
-
 	function main_db_storage(){ return 'punbb'; }
 
 	function template()

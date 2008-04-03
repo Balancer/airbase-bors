@@ -40,17 +40,20 @@
 		'/user/(\d+)/rep\.gif => user_image_reputation(1)',
 
 		'/user/(\d+)/reputation/ => user_reputation(1)',
-		'/user/(\d+)/reputation/(.+) => user_reputation(1,ref=2)',
 		'/user/(\d+)/reputation\.html => user_reputation(1)',
+		'/user/(\d+)/reputation,(\d+)\.html => user_reputation(1,2)',
 		'/user/(\d+)/reputation,(\d+)\.html\?(.*) => user_reputation(1,page=2,ref=3)',
 		'/user/(\d+)/reputation\.html\?(.*) => user_reputation(1,ref=2)',
-
+		'/user/(\d+)/reputation/(.+) => user_reputation(1,ref=2)',
+		
 #		'/user/(\d+)/reputation.* => forum_main',
 
 		'(/)users/? => users_main',
 		'(/users/)toprep/? => users_toprep',
 
-		'(/)users/warning/(\d+)/ => users_warning(2)',
+		'(/user/(\d+)/)warnings/ => airbase_user_warnings(2)',
+		'(/user/(\d+)/)warnings\.html => airbase_user_warnings(2)',
+		'(/user/(\d+)/)warnings,(\d+)\.html => airbase_user_warnings(2,3)',
 
 		'(/)(test|crazy)/ => base_page_hts',
 

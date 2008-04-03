@@ -1,61 +1,65 @@
 <?php
 
-class user_image_reputation extends def_image_gif
+class user_image_reputation extends base_image_gif
 {
-    function image()
+    function show_image()
 	{
 		$func1 = "imagecreatefromgif";
 		$func2 = "imagegif";
 
-		$ww = 100;
-		$hh = 16;
-
-		$img = imagecreatetruecolor($ww, $hh);
-		
-		$white = imagecolorallocate($img, 255, 255, 255);
-		$grey  = imagecolorallocate($img, 128, 128, 192);
-
-		imagefill($img, 0, 0, $white);
-		
 		$db = &new DataBase('punbb');
-
 		$reputation_value = $db->get("SELECT reputation FROM users WHERE id = ".intval($this->id()));
-		
-		$reputation_abs = intval(0.99 + 20*atan($reputation_value*$reputation_value/200)/pi())/2;
 
-		if($reputation_value > 0)
+		if($reputation_value >= 0)
 		{
-			$star  = imagecreatefromgif("/var/www/balancer.ru/htdocs/img/web/star.gif");
-			$star_half  = imagecreatefromgif("/var/www/balancer.ru/htdocs/img/web/star-half.gif");
+			$star  = imagecreatefromgif("/var/www/balancer.ru/htdocs/img/web/stars/2/star.gif");
+			$star_empty  = imagecreatefromgif("/var/www/balancer.ru/htdocs/img/web/stars/star-empty.gif");
 		}
 		else
 		{
-			$star = imagecreatefromgif("/var/www/balancer.ru/htdocs/img/web/bstar.gif");
-			$star_half  = imagecreatefromgif("/var/www/balancer.ru/htdocs/img/web/bstar-half.gif");
+			$star = imagecreatefromgif("/var/www/balancer.ru/htdocs/img/web/stars/2/star-black.gif");
+			$star_empty  = imagecreatefromgif("/var/www/balancer.ru/htdocs/img/web/stars/star-black-empty.gif");
 		}
 		
 		$sx = imagesx($star);
 		$sy = imagesy($star);
+
+		$ww = 100;
+		$hh = $sy;
+
+		$offset = intval((100 - $sx*5)/2);
+
+		$min_rep = 8;
+		$reputation_abs = intval($min_rep + 0.9 + ($sx*5-$min_rep)*atan($reputation_value*$reputation_value/200)*2/pi());
+
+		$img  = imagecreatetruecolor($ww, $hh);
+		$img_filled = imagecreatetruecolor($ww, $hh);
+		
+		$white = imagecolorallocate($img, 255, 255, 255);
+		$grey  = imagecolorallocate($img, 128, 128, 192);
+
+		$transparent = imagecolorallocate($img, 255,99,140);
+	    imagecolortransparent($img, $transparent);
+
+		imagefill($img, 0, 0, $transparent);
+		imagefill($img_filled, 0, 0, $transparent);
+		
+		// Заполняем пустыми звёздами
+//		for($i=0; $i<5; $i++)
+//			imagecopy($img, $star_empty, $offset + $i*$sx, 0, 0, 0, imagesx($star), imagesy($star));
+
+		// Заполняем полными звёздами
+		for($i=0; $i<5; $i++)
+			imagecopy($img_filled, $star, $offset + $i*$sx, 0, 0, 0, imagesx($star), imagesy($star));
 		
 		if($reputation_abs)
-		{
-			for($i=0; $i<intval($reputation_abs); $i++)
-				imagecopy($img, $star, 10+$i*$sx, 0, 0, 0, imagesx($star), imagesy($star));
+			imagecopy($img, $img_filled, 0, 0, 0, 0, $offset + $reputation_abs, 20);
 
-			if($reputation_abs != intval($reputation_abs))
-				imagecopy($img, $star_half, 10+intval($reputation_abs)*$sx, 0, 0, 0, imagesx($star), imagesy($star));
-		}
-
-		ob_start();
 		imagegif($img);
-		$result = ob_get_contents();
-		ob_end_clean();
 
 		imagedestroy($img);
 		imagedestroy($star);
-		imagedestroy($star_half);
-
-		return $result;
+		imagedestroy($star_empty);
 	}
 	
 	function url() { return "http://balancer.ru/user/{$this->id()}/rep.gif"; }

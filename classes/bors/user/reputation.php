@@ -2,7 +2,7 @@
 
 class user_reputation extends base_page_db
 {
-	function _class_file() { return __FILE__; }
+	function storage_engine() { return 'storage_db_mysql'; }
 
 	var $user;
 	
@@ -19,9 +19,11 @@ class user_reputation extends base_page_db
 		if(!$id)
 			return ec("Не задан ID пользователя.");
 
-//		debug_exit("id={$id}, user={$this->user->id}, ref={$this->page()}");
+//		debug_exit("id={$id}, user={$this->user->id}, page={$this->page()}");
 	}
 
+	function default_page() { return $this->total_pages(); }
+	
 	function preParseProcess($get)
 	{
 		if(!bors()->user() && !empty($get))
@@ -37,7 +39,7 @@ class user_reputation extends base_page_db
 		
 		return array(
 			'ref' => @$_SERVER['HTTP_REFERER'],
-			'list' => $dbu->get_array("SELECT * FROM reputation_votes WHERE user_id = {$this->id()} ORDER BY time DESC"),
+			'list' => array_reverse(objects_array('airbase_user_reputation', array('user_id=' => $this->id(), 'order' => 'time', 'page'=> $this->page(), 'per_page' => $this->items_per_page()))),
 			'reputation_abs_value' => sprintf("%.2f", $dbf->get("SELECT reputation FROM users WHERE id = {$this->id()}")),
 			'plus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score > 0"),
 			'minus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score < 0"),
@@ -45,7 +47,23 @@ class user_reputation extends base_page_db
 		);
 	}
 
-	function url($page=1) { return "http://balancer.ru/user/".$this->id()."/reputation".($page && $page != 1 ? ','.$page : '').".html"; }
+	private $total;
+	function total_items()
+	{
+		if($this->total == NULL)
+			$this->total = intval(objects_count('airbase_user_reputation', array('where' => array('user_id=' => $this->id()))));
+
+		return $this->total;
+	}
+
+//	function url($page=1) { return "http://balancer.ru/user/".$this->id()."/reputation".($page && $page != 1 ? ','.$page : '').".html"; }
+	function url($page = 0)
+	{	
+		if($page == 0 || $this->total_pages() == 1)
+			return "http://balancer.ru/user/".$this->id()."/reputation.html"; 
+		else
+			return "http://balancer.ru/user/".$this->id()."/reputation,{$page}.html"; 
+	}
 
 	function cache_static() { return 86400*30; }
 		
@@ -60,21 +78,24 @@ class user_reputation extends base_page_db
 	{
 		$uid = intval($_POST['user_id']);
 		if(!$uid)
-			return error_message(ec("Не задан ID пользователя."));
+			return bors_message(ec("Не задан ID пользователя."));
 
-		$me = &new User();
+		$me = bors()->user();
 		$dbf = &new DataBase('punbb');
 		$dbu = &new DataBase('USERS');
-		$me_id = $me->get('id');
+		$me_id = $me->id();
 		
 		if($me_id == 1)
-			return error_message(ec("Голосование возможно только для авторизованных пользователей."));
+			return bors_message(ec("Голосование возможно только для авторизованных пользователей."));
+
+		if($me->is_banned())
+			return bors_message(ec('Вы не можете изменять репутацию  по причине запрета общения на форуме.'));
 
 		if($me_id == $uid)
-			return error_message(ec("Нельзя ставить репутацию самому себе."));
+			return bors_message(ec("Нельзя ставить репутацию самому себе."));
 		
 		if($dbf->get("SELECT num_posts FROM users WHERE id=$me_id") < 50)
-			return error_message(ec("Репутацию выставлять могут только участники, имеющие более 50 сообщений на форуме."));
+			return bors_message(ec("Репутацию выставлять могут только участники, имеющие более 50 сообщений на форуме."));
 
 		$dbu->insert('reputation_votes', array(
 			'user_id'		=> $uid,

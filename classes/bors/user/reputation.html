@@ -8,6 +8,9 @@
 </i>
 </p>
 
+{if $me->is_banned()}
+<p style="color:red"><b>Вы не можете изменять репутацию пользователей по причине запрета общения на форуме.</b><p>
+{else}
 <table width="100%"><tr>
 <td width="90%">
 <form method="post" action="{$this->url()}?act=reputation_add_do" name="rep">
@@ -21,53 +24,53 @@
 </td>
 <td>
 {bors_class_load var=owner class="forum_user" id=$user_id}
-<div class="avatar_block">{include file="xfile:/var/www/balancer.ru/htdocs/cms/classes/bors/forum/templates/post-avatar.html"}</div>
+<div class="avatar_block">{include file="xfile:templates/forum/post-avatar.html"}</div>
 </td>
 </tr></table>
+{/if}
 
 <script>document.forms['rep'].elements['uri'].value = document.location.search.substring(1) ? document.location.search.substring(1) : document.referrer </script>
 
 {if $list}
-{$this->pages_links()}
+{$this->pages_links_nul()}
 
 <table cellSpacing="0" class="btab">
 <tr><th>Дата</th><th>Вид</th><th>От кого</th><th>Комментарий</th></tr>
-{section loop=$list name=l}
-{assign var=i value=$list[l]}
-{bors_object_load var=u class="forum_user" id=$i.voter_id}
+{foreach from=$list item=r}
+{bors_object_load var=u class="forum_user" id=$r->voter_id()}
 
-{if $i.score>0}
+{if $r->score()>0}
 {assign var="backcolor" value="pos_reputation"}
 {else}
 {assign var="backcolor" value="neg_reputation"}
 {/if}
 <tr>
-	<td class="{$backcolor}">{$i.time|full_time}</td>
-	<td class="{$backcolor}">{if $i.score > 0}+{/if}{$i.score}</td>
+	<td class="{$backcolor}">{$r->create_time()|full_time}</td>
+	<td class="{$backcolor}">{if $r->score() > 0}+{/if}{$r->score()}</td>
 	<td class="{$backcolor}">
-		<a href="http://balancer.ru/user/{$i.voter_id}/">{$u->title()}</a><br />
-		<a href="http://balancer.ru/user/{$i.voter_id}/reputation/"><img src="http://balancer.ru/user/{$i.voter_id}/rep.gif" width="100" height="16" /></a></td> 
-	<td class="{$backcolor}">{$i.comment|truncate:500|pun_lcml}{if $i.uri}
+		<a href="http://balancer.ru/user/{$r->voter_id()}/">{$u->title()}</a><br />
+		<a href="http://balancer.ru/user/{$r->voter_id()}/reputation/"><img src="http://balancer.ru/user/{$r->voter_id()}/rep.gif" width="100" height="16" /></a></td> 
+	<td class="{$backcolor}">{$r->comment()|truncate:500|pun_lcml}{if $r->refer()}
 		<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За:
 			{assign var="obj" value=0}
-			{if $i.uri|regex_match:"^post://(\d+)"}
-				{assign var="post_id" value=$i.uri|regex_replace:"!^post://(\d+).*!":"\\1"}
+			{if $r->refer()|regex_match:"^post://(\d+)"}
+				{assign var="post_id" value=$r->refer()|regex_replace:"!^post://(\d+).*!":"\\1"}
 				{bors_object_load var="obj" class="forum_post" id=$post_id}
 			{/if}
-			{if $i.uri|regex_match:"^topic://(\d+)"}
-				{assign var="topic_id" value=$i.uri|regex_replace:"!^topic://(\d+).*!":"\\1"}
+			{if $r->refer()|regex_match:"^topic://(\d+)"}
+				{assign var="topic_id" value=$r->refer()|regex_replace:"!^topic://(\d+).*!":"\\1"}
 				{bors_object_load var="obj" class="forum_topic" id=$topic_id}
 			{/if}
 			{if $obj}
 				<a href="{$obj->url()}">{$obj->title()}</a>
 			{else}
-				<a href="{$i.uri}">{$i.uri}</a>
+				<a href="{$r->refer()}">{$r->refer()}</a>
 			{/if}
 		</div>{/if}
 	</td>
 </tr>
-{/section}
+{/foreach}
 </table>
 
-{$this->pages_links()}
+{$this->pages_links_nul()}
 {/if}
