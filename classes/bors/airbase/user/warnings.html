@@ -1,0 +1,35 @@
+{$this->pages_links_nul()}
+
+{if $active_warnings}
+<h2>Активные штрафы</h2>
+<table class="btab w100p">
+<tr><th>Дата</th><th>От кого</th><th>Комментарий</th></tr>
+{foreach from=$active_warnings item="w"}
+<tr>
+	<td style="color: {if $w->score()>0}red{else}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
+	<td>{$w->moderator_name()}</td>
+	<td>{$w->source()|pun_lcml}{if $w->referer()}<br />
+<small>// За: {$w->referer()|pun_lcml}</small>{/if}	
+	</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
+{if $passive_warnings}
+<h2>Истёкшие штрафы</h2>
+<table class="btab w100p">
+<tr><th>Дата</th><th>От кого</th><th>Комментарий</th></tr>
+{foreach from=$passive_warnings item="w"}
+<tr>
+	<td style="color: {if $w->score()>0}red{else}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
+	<td>{$w->moderator_name()}</td>
+	<td>{$w->source()|pun_lcml}{if $w->referer()}<br />
+<small>// За: {$w->referer()|pun_lcml}</small>{/if}	
+	</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
+{$this->pages_links_nul()}

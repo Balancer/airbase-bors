@@ -1,5 +1,5 @@
 {assign var="owner" value=$this->owner()}
-Здравствуйте, {$owner->title()}!
+Здравствуйте, {$owner->titled_url()}!
 <ul>
 <li><a href="http://balancer.ru/user/{$this->owner()|get:id}/blog/">Ваш блог</a></li>
 <li><a href="http://balancer.ru/user/{$this->owner()|get:id}/use-topics.html">Ваши темы</a></li>
