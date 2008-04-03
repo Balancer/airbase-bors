@@ -44,23 +44,20 @@
 
     function plugins_users_warn_add_do($uri, $action)
 	{
-
-		require_once('funcs/modules/messages.php');
-
 		$uid = intval($_POST['user_id']);
 		if(!$uid)
-			return error_message(ec("Не задан ID пользователя."));
+			return bors_message(ec("Не задан ID пользователя."));
 
 		class_load('forum_user', $uid)->cache_clean_self();
 
 		$me = new User();
 		if(!in_array($me->data('group'), array(1,2,5,21)))
-			return error_message(ec("У Вас недостаточно прав доступа"));
+			return bors_message(ec("У Вас недостаточно прав доступа"));
 			
 		$db = new DataBase('punbb');
 		$count = $db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $uid AND moderator_id = ".intval($me->data('id'))." AND time > ".(time()-86400));
 		if($count>=3)
-			return error_message(ec("Не больше 3 штрафов в день от одного модератора!"));
+			return bors_message(ec("Не больше 3 штрафов в день от одного модератора!"));
 
 		$db = new DataBase('punbb');
 		$db->insert('warnings', array(

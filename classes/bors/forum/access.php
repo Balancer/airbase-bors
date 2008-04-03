@@ -7,6 +7,7 @@ class forum_access extends base_page_db
 
 	function main_db_storage() { return 'punbb'; }
 	function main_table_storage() { return 'forum_perms'; }
+	function storage_engine() { return 'storage_db_mysql'; }
 
 	function __construct($id)
 	{

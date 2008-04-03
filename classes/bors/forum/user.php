@@ -95,4 +95,16 @@ class forum_user extends base_object_db
 
 	function url() { return "http://balancer.ru/user/{$this->id()}/"; }
 	function parents() { return array("http://balancer.ru/users/"); }
+
+	private $is_banned;
+	function is_banned()
+	{
+		if($this->is_banned !== NULL)
+			return $this->is_banned;
+	
+		if($ban = forum_ban::ban_by_username($this->title()))
+			return $this->is_banned = $ban;
+			
+		return $this->is_banned = false;
+	}
 }
