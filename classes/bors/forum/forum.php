@@ -2,6 +2,8 @@
 
 class forum_forum extends base_page_db
 {
+	function storage_engine() { return 'storage_db_mysql'; }
+	
 	function _class_file() { return __FILE__; }
 	function main_table_storage() { return 'forums'; }
 

@@ -2,7 +2,6 @@
 
 class forum_tools_post_moveTree extends base_page
 {
-	function _class_file() { return __FILE__; }
 	function can_be_empty() { return true; }
 
 	function parents() { return array('forum_post://'.$this->post()->id()); }

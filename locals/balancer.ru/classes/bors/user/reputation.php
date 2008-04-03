@@ -2,7 +2,7 @@
 
 class user_reputation extends base_page_db
 {
-	function _class_file() { return __FILE__; }
+	function storage_engine() { return 'storage_db_mysql'; }
 
 	var $user;
 	
@@ -60,21 +60,26 @@ class user_reputation extends base_page_db
 	{
 		$uid = intval($_POST['user_id']);
 		if(!$uid)
-			return error_message(ec("Не задан ID пользователя."));
+			return bors_message(ec("Не задан ID пользователя."));
 
 		$me = &new User();
 		$dbf = &new DataBase('punbb');
 		$dbu = &new DataBase('USERS');
 		$me_id = $me->get('id');
-		
-		if($me_id == 1)
-			return error_message(ec("Голосование возможно только для авторизованных пользователей."));
+
+		if($me_id < 2)
+			return bors_message(ec("Голосование возможно только для авторизованных пользователей."));
+
+		exit($me->username());
+//		$ban = forum_ban::ban_by_username($me->)
 
 		if($me_id == $uid)
-			return error_message(ec("Нельзя ставить репутацию самому себе."));
+			return bors_message(ec("Нельзя ставить репутацию самому себе."));
 		
 		if($dbf->get("SELECT num_posts FROM users WHERE id=$me_id") < 50)
-			return error_message(ec("Репутацию выставлять могут только участники, имеющие более 50 сообщений на форуме."));
+			return bors_message(ec("Репутацию выставлять могут только участники, имеющие более 50 сообщений на форуме."));
+
+
 
 		$dbu->insert('reputation_votes', array(
 			'user_id'		=> $uid,

@@ -1,8 +1,8 @@
 <?
-	class_include('forum_abstract');
 	class forum_category extends forum_abstract
 	{
 		function field_title_storage() { return 'punbb.categories.cat_name(id)'; }
+	function storage_engine() { return 'storage_db_mysql'; }
 
 		function uri_name() { return 'category'; }
 

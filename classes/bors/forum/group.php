@@ -4,6 +4,7 @@ class forum_group extends base_page_db
 {
 	function main_db_storage() { return 'punbb'; }
 	function main_table_storage() { return 'groups'; }
+	function storage_engine() { return 'storage_db_mysql'; }
 	
 	function field_title_storage() { return 'punbb.groups.g_title(g_id)'; }
 
