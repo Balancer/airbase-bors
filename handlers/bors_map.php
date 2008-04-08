@@ -36,4 +36,8 @@ $map = array(
 
 	'/forum/topic/\d+/(\d+)/ => redirect:forum_topic(1)',
 	'/forum/topic/\d+/(\d+),(\d+)/ => redirect:forum_topic(1,2)',
+
+	'(.+\.htm) => airbase_images_show(1)',
+
+	'/test/ => airbase_main',
 );
