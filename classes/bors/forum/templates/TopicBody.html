@@ -7,7 +7,10 @@
 <dt>{$p->flag()} {$p->author_name()}, <a href="{$p->url()}">{$p->create_time()|full_time}</a>
 {if $p->answer_to_id()}
 {assign var=a value=$p->answer_to()}
+{if $a}
 <span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>
+{else}Ответ на удалённое сообщение post_id={$p->answer_to_id()}
+{/if}
 {/if}
 </dt>
 <dd>

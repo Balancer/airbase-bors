@@ -65,6 +65,7 @@
 			'time'			=> time(),
 			'score'			=> 1,
 			'moderator_id'	=> $me->data('id'),
+			'moderator_name'=> bors()->user()->title(),
 			'uri'			=> $_POST['uri'],
 			'comment'		=> $_POST['comment'],
 		));
