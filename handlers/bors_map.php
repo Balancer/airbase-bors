@@ -25,7 +25,8 @@ $map = array(
 	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-\-.+\.html\?? => forum_topic(2,4)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+ => redirect:forum_topic(2,4)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(\d+).* => redirect:forum_topic(2,3)",
-	"{$forums}\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+)\-\-.+ => forum_printable(2)",
+	"{$forums}\d{4}/\d{1,2}/printable\-(\d+)\-\-.* => forum_printable(2)",
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+)\-\-.* => redirect:forum_printable(2)",
 
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(last|new).* => forum_topic(2,3)",
 	"{$forums}\d{4}/\d{1,2}/topic\-(\d+),(last|new).* => forum_topic(2,3)",
