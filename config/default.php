@@ -86,5 +86,4 @@ $GLOBALS['log_level'] = 2;
 		'gpc' => get_magic_quotes_gpc(),
 	);
 
-config_set('search_db', 'BORS_SEARCH');
 config_set('search_autoindex', true);

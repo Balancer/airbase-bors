@@ -112,7 +112,7 @@ class user_blog extends base_page
 			return "";
 
 		include_once('funcs/design/page_split.php');
-		return join(" ", pages_show($this, $this->total_pages(), 16));
+		return join(" ", pages_show($this, $this->total_pages(), 12));
 	}
 
 	function num_blog() { return $this->db->get('SELECT COUNT(*) FROM topics WHERE poster_id='.$this->id()); }

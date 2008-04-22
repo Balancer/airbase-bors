@@ -1,5 +1,5 @@
 <?
-	require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
+	require_once(BORS_CORE.'/config.php');
 	require_once("inc/filesystem.php");
 	require_once('inc/images.php');
 
@@ -15,7 +15,7 @@
 	$type = basename($dir);
 	
 	if(!preg_match("!^(\d*)x(\d*)$!", $type, $m))
-		exit(ec("Ошибка! Неверный type=$type для ссылки {$_SERVER['REQUEST_URI']}"));
+		bors_exit(ec("Ошибка! Неверный type=$type для ссылки {$_SERVER['REQUEST_URI']}"));
 		
 	$need_width  = @$m[1];
 	$need_height = @$m[2];
@@ -24,10 +24,16 @@
 	$source_image_url = preg_replace("!/cache(.+)/\d*x\d*/([^/]+\.(jpe?g|png|gif))$!i", "http://{$_SERVER['HTTP_HOST']}$1/$2", $_SERVER['REQUEST_URI']);
 
 	$source_file = $_SERVER['DOCUMENT_ROOT'].$source_image;
-	$target_file = $dir."/".basename($_SERVER['REQUEST_URI']);
+	if(!defined('BORS_IMG_CACHE_TARGET'))
+		$target_file = $dir."/".basename($_SERVER['REQUEST_URI']);
+	else
+	{
+		mkpath(BORS_IMG_CACHE_TARGET.dirname($_SERVER['REQUEST_URI']));
+		$target_file = BORS_IMG_CACHE_TARGET.$_SERVER['REQUEST_URI'];
+	}
 	
 	if(!file_exists($source_file))
-		exit(ec("Ошибка! Отсутствует изображение $source_image [{$source_file}]"));
+		bors_exit(ec("Ошибка! Отсутствует изображение $source_image [{$source_file}]"));
 
 	if(!config('pics_base_safemodded') && @filesize($source_file) == 0)
 		exit(ec("Ошибка! Нулевой размер файла $source_image"));
