@@ -15,9 +15,7 @@
 		
 		'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+ => forum_category(1)',
 		'/user/(\d+)/personal\.js => forum_js_personal(1)',
-		'/user/(\d+)/warnings\.js => user_js_warnings(1)',
 		'(/)forum/ => forum_main',
-		'/user/(\d+)/warnings\.gif => forum_images_warnings(1)',
 		'/user/(\d+)/use-topics\.html => users_UseTopics(1)',
 
 		'/user/(\d+)/? => user_main(1)',
@@ -49,6 +47,8 @@
 		'(/)users/? => users_main',
 		'(/users/)toprep/? => users_toprep',
 
+		'/user/(\d+)/warnings\.js => user_js_warnings(1)',
+		'/user/(\d+)/warnings\.gif => forum_images_warnings(1)',
 		'(/)users/warning/(\d+)/ => users_warning(2)',
 
 		'(/)(test|crazy)/ => base_page_hts',
