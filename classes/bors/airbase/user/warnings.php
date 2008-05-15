@@ -27,7 +27,7 @@ class airbase_user_warnings extends base_page
 			'ref' => urldecode(@$_GET['ref']) or @$_SERVER['HTTP_REFERER'],
 			'passive_warnings' => array_reverse(objects_array('airbase_user_warning', array(
 				'user_id=' => $this->id(),
-				'time<=' => time()-86400*30,
+				'time<=' => time()-86400*WARNING_DAYS,
 				'order' => 'time',
 				'page' => $this->page(),
 				'per_page' => $this->items_per_page(),
@@ -35,7 +35,7 @@ class airbase_user_warnings extends base_page
 		);
 		
 		if(!$this->page() || $this->page() == $this->total_pages())
-			$data['active_warnings']  = array_reverse(objects_array('airbase_user_warning', array('user_id=' => $this->id(), 'time>' => time()-86400*30, 'order' => 'time')));
+			$data['active_warnings']  = array_reverse(objects_array('airbase_user_warning', array('user_id=' => $this->id(), 'time>' => time()-86400*WARNING_DAYS, 'order' => 'time')));
 
 		return $data;
 	}
@@ -46,7 +46,7 @@ class airbase_user_warnings extends base_page
 	
 	function parents() { return array($this->user()); }
 	
-	function total_items() { return objects_count('airbase_user_warning', array('user_id=' => $this->id(), 'time<=' => time()-86400*30)); }
+	function total_items() { return objects_count('airbase_user_warning', array('user_id=' => $this->id(), 'time<=' => time()-86400*WARNING_DAYS)); }
 	function default_page() { return $this->total_pages(); }
 
 	function url($page = NULL)

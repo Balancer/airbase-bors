@@ -7,9 +7,14 @@ class forum_user extends base_object_db
 	function __construct($id)
 	{
 		if($id == -1)
-			debug_exit('Try to get user "-1"');
-			
+			$id = $this->check_cookie();
+		
 		parent::__construct($id);
+	}
+
+	function loaded()
+	{
+		return parent::loaded() && $this->id() > 1;
 	}
 
 	function fields()
@@ -26,7 +31,10 @@ class forum_user extends base_object_db
 			'signature',
 			'signature_html',
 			'warnings',
+			'warnings_total',
 			'reputation',
+			'create_time' => 'registered',
+			'last_post_time' => 'last_post',
 		)));
 	}
 
@@ -106,5 +114,18 @@ class forum_user extends base_object_db
 			return $this->is_banned = $ban;
 			
 		return $this->is_banned = false;
+	}
+
+    function check_cookie()
+	{
+		if(!$user_hash_password = @$_COOKIE['cookie_hash'])
+			return 0;
+			
+		return intval($this->db('punbb')->select('users', 'id', array('user_cookie_hash=' => $user_hash_password)));
+	}
+
+	function warnings_rate($period)
+	{
+		return $period * 86400 * $this->warnings_total() / ($this->last_post_time() - $this->create_time() + 1);
 	}
 }
