@@ -12,6 +12,8 @@
 {include file="xfile:templates/forum/post.html" show_title=$t->title_url() strip="8192"}
 {/if}
 {/if}{/if}
+{foreachelse}
+<dl class="box"><dd>У данного пользователя нет записей в блоге.</dd></dl>
 {/foreach}
 
 {if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}

@@ -8,6 +8,7 @@
 
 //	echo "<xmp>"; print_r($_SERVER); echo "</xmp>";
 	
+	$_SERVER['REQUEST_URI'] = preg_replace('!^/[0-9a-f]{32}/!', '/', $_SERVER['REQUEST_URI']);
 	$dir = $_SERVER['DOCUMENT_ROOT'].dirname($_SERVER['REQUEST_URI']);
 	
 	mkpath($dir);

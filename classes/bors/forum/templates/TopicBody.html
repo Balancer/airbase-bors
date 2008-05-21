@@ -17,10 +17,10 @@
 
 {assign var="owner" value=$p->owner()}
 {assign var="ref" value=$p->url()}
-<div class="avatar_block">{include file="xfile:templates/post-avatar.html"}</div>
+<div class="avatar_block">{if $owner}{include file="xfile:templates/post-avatar.html"}{/if}</div>
 
 {$p->body()}
-{if $owner->signature()}<div class="postsignature">{$owner->signature_html()}</div>{/if}
+{if $owner and $owner->signature()}<div class="postsignature">{$owner->signature_html()}</div>{/if}
 {if $p->attaches()}
 <hr />
 Прикреплённые файлы:

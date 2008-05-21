@@ -104,16 +104,16 @@ function parents()
 		return $can_read;
 	}
 
-	function cache_parents()
+	function cache_children()
 	{ 
-		$parent_caches = array();
+		$children_caches = array();
 		if($this->parent_forum_id())
-			$parent_caches[] = class_load('forum_forum', $this->parent_forum_id());
+			$children_caches[] = class_load('forum_forum', $this->parent_forum_id());
 
 		if($this->category_id())
-			$parent_caches[] = class_load('forum_category', $this->category_id());
+			$children_caches[] = class_load('forum_category', $this->category_id());
 			
-		return $parent_caches;
+		return $children_caches;
 	}
 		
 /*		function subforums_html()

@@ -11,9 +11,8 @@
 
 		$db = new DataBase('punbb');
 		
-		$data['active_warnings'] = $db->get_array("SELECT * FROM warnings WHERE time > ".(time()-86400*30)." ORDER BY time DESC");
+		$data['active_warnings'] = $db->get_array("SELECT * FROM warnings WHERE time > ".(time()-86400*WARNING_DAYS)." ORDER BY time DESC");
 
         include_once("engines/smarty/assign.php");
         return template_assign_data("total.html", $data);
 	}
-?>

@@ -6,11 +6,11 @@
 
     function handler_check_admin_access($uri, $m=array())
 	{
-		require_once('funcs/modules/messages.php');
+		if(!bors()->user())
+			return bors_message(__FILE__.ec(': Вы не авторизованы'));
 
-		if(user_data('level') < 3)
-			return bors_message(__FILE__.ec("Извините, у вас недостаточный уровень доступа для просмотра этой страницы. Ваш уровень " . intval(user_data('level'))));
+		if(bors()->user()->level() < 3)
+			return bors_message(__FILE__.ec(": Извините, у вас недостаточный уровень доступа для просмотра этой страницы. Ваш уровень " . bors()->user()->level()));
 
 		return $uri;
     }
-?>
