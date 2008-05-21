@@ -1,7 +1,5 @@
 <?php
 
-class_include('forum_topic');
-
 class forum_topic_rss extends forum_topic
 {
 	function render_engine() { return 'render_self'; }
@@ -44,7 +42,7 @@ class forum_topic_rss extends forum_topic
 			$html = $post->body();
 			if(strlen($html) > 1024)
 			{
-				include_once("funcs/texts.php");
+				include_once("inc/texts.php");
 				$html = strip_text($html, 1024);
 				$html .= "<br /><br /><a href=\"".$post->url(1).ec("\">Дальше »»»");
 			}
@@ -61,6 +59,4 @@ class forum_topic_rss extends forum_topic
 		header("Content-Type: ".$rss->contentType."; charset=".$rss->encoding);
 		return $result;
 	}
-	
-	function cache_static() { return 600; }
 }
