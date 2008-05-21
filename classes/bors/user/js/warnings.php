@@ -1,4 +1,5 @@
 <?
+
 	class user_js_warnings extends base_js
 	{
 		function cacheable_body()
@@ -9,7 +10,7 @@
 				return "";
 				
 			$db = &new DataBase('punbb');
-			$warn_count = intval($db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $user_id AND time > ".(time()-30*86400)));
+			$warn_count = intval($db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $user_id AND time > ".(time()-WARNING_DAYS*86400)));
 			if($warn_count > 10)
 				$warn_count = 10;
 
@@ -39,7 +40,7 @@
 			{
 				$w = $db->get_array("SELECT time FROM warnings WHERE user_id = {$user_id} ORDER BY time DESC LIMIT 10");
 				$w = $w[9];
-				$result .= ec('<div style="color:red; font-size:6pt;">бан до '.strftime("%d.%m.%Y", $w+30*86400).'</div>');
+				$result .= ec('<div style="color:red; font-size:6pt;">бан до '.strftime("%d.%m.%Y", $w+WARNING_DAYS*86400).'</div>');
 			}
 			
 			return $result;
@@ -47,5 +48,5 @@
 
 		function url() { return "http://balancer.ru/user/".$this->id()."/warnings.js"; }
 		
-		function cache_static() { return 86400*30; }
+		function cache_static() { return 86400; }
 	}

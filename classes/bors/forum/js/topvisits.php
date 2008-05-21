@@ -3,13 +3,15 @@
 class forum_js_topvisits extends base_js
 {
 	function can_be_empty() { return true; }
-	function class_file() { return __FILE__; }
 
-	function init()
+	function pre_show()
 	{
+		$ret = parent::pre_show();
 		header("Content-type", "text/javascript");
         $expire = gmdate('D, d M Y H:i:s', time()+7200).' GMT';
 		header("Expires: {$expire}"); 
+		
+		return $ret;
 	}
 
 	function data_providers()
@@ -24,6 +26,6 @@ class forum_js_topvisits extends base_js
 		return array('top' => $top);
 	}
 
-	function cache_static() { return 7200; }
+	function cache_static() { return 3600; }
 	function url_engine() { return 'url_calling'; }
 }

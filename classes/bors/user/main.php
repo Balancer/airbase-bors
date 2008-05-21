@@ -2,8 +2,6 @@
 
 	class user_main extends base_page
 	{
-		function _class_file() { return __FILE__; }
-
 		function template()
 		{
 			templates_noindex();
@@ -34,4 +32,10 @@
 		{
 			return 86400*14;
 		}
+
+	function data_providers()
+	{
+		return array('owner' => $this->user(), );
 	}
+}
+

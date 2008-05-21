@@ -13,7 +13,7 @@ class forum_images_warnings extends def_image_gif
 		if($user_id)
 		{
 			$db = &new DataBase('punbb');
-			$warn_count = min(10, intval($db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $user_id AND time > ".(time()-30*86400))));
+			$warn_count = min(10, intval($db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $user_id AND time > ".(time()-WARNING_DAYS*86400))));
 		}
 		else
 			$warn_count = 0;
@@ -56,7 +56,7 @@ class forum_images_warnings extends def_image_gif
 			$black = imagecolorallocate($img,   0,   0,   0);
 			$white = imagecolorallocate($img, 255, 255, 255);
 
-			$text = ec('бан до '.strftime("%d.%m.%Y", $this->expired = $w+30*86400));
+			$text = ec('бан до '.strftime("%d.%m.%Y", $this->expired = $w+WARNING_DAYS*86400));
 
 			$x = 0;
 			$y = 8;
