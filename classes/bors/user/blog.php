@@ -52,33 +52,39 @@ class user_blog extends base_page
 		return $this->total;
 	}
 
-	private $last_post = NULL;
+	private $last_post = false;
 	function last_post()
 	{
-		if($this->last_post === NULL)
+		if($this->last_post === false)
 		{
 			$data = $this->data_providers();
-			$this->last_post = object_load('forum_post', $data['blog_records'][0]->id());
+			if(count($data['blog_records']))
+				$this->last_post = object_load('forum_post', $data['blog_records'][0]->id());
+			else
+				$this->last_post = NULL;
 		}
 		
 		return $this->last_post;
 	}
 
-	private $first_post = NULL;
+	private $first_post = false;
 	function first_post()
 	{
-		if($this->first_post === NULL)
+		if($this->first_post === false)
 		{
 			$data = $this->data_providers();
 			$records = $data['blog_records'];
-			$this->first_post = object_load('forum_post', $records[count($records)-1]->id());
+			if(count($records))
+				$this->first_post = object_load('forum_post', $records[count($records)-1]->id());
+			else
+				$this->first_post = NULL;
 		}
 		
 		return $this->first_post;
 	}
 	
-	function create_time() { return $this->first_post()->create_time();	}
-	function modify_time() { return $this->last_post()->modify_time();	}
+	function create_time() { return $this->first_post() ? $this->first_post()->create_time() : 0; }
+	function modify_time() { return $this->last_post() ? $this->last_post()->modify_time() : 0;	}
 
 	function total_pages() { return intval(($this->total_items()-1) / $this->items_per_page()) + 1; }
 

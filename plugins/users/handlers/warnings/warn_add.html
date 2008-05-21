@@ -12,15 +12,15 @@
 <table cellSpacing="0" class="btab">
 <caption>Активные штрафы</caption>
 <tr><th>Дата</th><th>От кого</th><th>Комментарий</th></tr>
-{section loop=$active_warnings name=i}
+{foreach from=$active_warnings item="w"}
 <tr>
-	<td style="color: {if $active_warnings[i].score>0}red{else}green{/if};">{$active_warnings[i].time|short_time}</td>
-	<td>{$active_warnings[i].moderator_id|user_data:"name"}</td>
-	<td>{$active_warnings[i].comment|pun_lcml}{if $active_warnings[i].uri}<br />
-<small>// За: {$active_warnings[i].uri|pun_lcml}</small>{/if}	
+	<td style="color: {if $w->score() >0 }red{else}green{/if};">{$w->create_time()|short_time}</td>
+	<td>{$w->moderator()|get:"title"}</td>
+	<td>{$w->source()|pun_lcml}{if $w->referer()}<br />
+<small>// За: {$w->referer()|pun_lcml}</small>{/if}	
 	</td>
 </tr>
-{/section}
+{/foreach}
 </table>
 {/if}
 
@@ -28,15 +28,15 @@
 <table cellSpacing="0" class="btab">
 <caption>Истёкшие штрафы</caption>
 <tr><th>Дата</th><th>От кого</th><th>Комментарий</th></tr>
-{section loop=$passive_warnings name=i}
+{foreach from=$passive_warnings item="w"}
 <tr>
-	<td style="color: {if $passive_warnings[i].score>0}red{else}green{/if};">{$passive_warnings[i].time|short_time}</td>
-	<td>{$passive_warnings[i].moderator_id|user_data:"name"}</td>
-	<td>{$passive_warnings[i].comment|pun_lcml}{if $passive_warnings[i].uri}<br />
-<small>// За: {$passive_warnings[i].uri|pun_lcml}</small>{/if}	
+	<td style="color: {if $w->score()>0}red{else}green{/if};">{$w->create_time()|short_time}</td>
+	<td>{$w->moderator()|get:"title"}</td>
+	<td>{$w->source()|pun_lcml}{if $w->referer()}<br />
+<small>// За: {$w->referer()|pun_lcml}</small>{/if}	
 	</td>
 </tr>
-{/section}
+{/foreach}
 </table>
 {/if}
 

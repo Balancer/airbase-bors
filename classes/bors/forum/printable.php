@@ -1,51 +1,40 @@
 <?php
 
-	class forum_printable extends forum_topic
+class forum_printable extends forum_topic
+{
+	function uri_name() { return 'printable'; }
+
+    function parents() { return array("forum_topic://".$this->id()); }
+    function nav_name() { return ec('Версия для печати'); }
+
+	function body()
 	{
-		function uri_name() { return 'printable'; }
-
-        function parents() { return array("forum_topic://".$this->id()); }
-        function nav_name() { return ec('Версия для печати'); }
-
-        function body()
-		{
-			$forum = class_load('forum_forum', $this->forum_id());
+		$forum = class_load('forum_forum', $this->forum_id());
 		
-			if(!$forum->can_read())
-				return ec("Извините, доступ к этому ресурсу закрыт для Вас");
+		if(!$forum->can_read())
+			return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
-			$GLOBALS['cms']['cache_disabled'] = true;
+		$GLOBALS['cms']['cache_disabled'] = true;
 
-			include_once("engines/smarty/assign.php");
-			$data = array();
+		include_once("engines/smarty/assign.php");
+		$data = array();
 
-			$db = &new DataBase('punbb');
+		$db = &new DataBase('punbb');
 
-			$query = "SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY id";
+		$query = "SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY id";
 
 		$posts = $db->get_array($query);
 
-		if(empty($posts))
-		{
-			$this->db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
-			$posts = $db->get_array($query);
-		}
+		$data['posts'] = array();
 
-			$data['posts'] = array();
+		foreach($posts as $pid)
+			$data['posts'][] = class_load('forum_post', $pid);
 
-			foreach($posts as $pid)
-				$data['posts'][] = class_load('forum_post', $pid);
-
-			return template_assign_data("templates/printable.html", $data);
-		}
-		
-		function template()
-		{
-			return "forum/printable.html";
-		}
-
-		function cache_static()
-		{
-			return class_load('forum_forum', $this->forum_id())->is_public_access() ? 86400*30 : 0;
-		}
+		return template_assign_data("templates/printable.html", $data);
 	}
+		
+	function template()
+	{
+		return "forum/printable.html";
+	}
+}

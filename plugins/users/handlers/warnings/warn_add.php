@@ -1,9 +1,10 @@
 <?
+
 	hts_data_prehandler("()(\d+)/warn_add/", array(
 			'body'		=> 'plugins_users_warn_add_body',
 			'title'		=> ec("Выставить штраф"),
 			'nav_name'	=> ec("штраф"),
-			'template'	=> "{$_SERVER['DOCUMENT_ROOT']}/cms/templates/forum/forum.html",
+			'template'	=> "forum/forum.html",
 		));
 
 	function plugins_users_warn_add_body($uri, $m)
@@ -12,18 +13,22 @@
 		if(!$uid)
 			return ec("Не задан ID пользователя.");
 
-		$me = new User();
-		if(!in_array($me->data('group'), array(1,2,5,21)))
+		$me = bors()->user();
+		if(!in_array($me->group_id(), array(1,2,5,21)))
 			return ec("У Вас недостаточно прав доступа");
 			
-		$us = new User($uid);
+		$us = object_load('forum_user', $uid);
 //		if(in_array($us->data('group'), array(1,2)))
 //			return ec("Эта группа пользователей защищена от штрафования");
 		
 		$db = new DataBase('punbb');
-		$count = $db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $uid AND moderator_id = ".intval($me->data('id'))." AND time > ".(time()-86400));
+		$count = $db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $uid AND moderator_id = ".intval($me->id())." AND time > ".(time()-86400));
 		if($count>=3)
 			return ec("Не больше 3 штрафов в день от одного модератора!");
+
+		$count = $db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $uid AND moderator_id = ".intval($me->id())." AND time > ".(time()-86400*WARNING_DAYS));
+		if($count>=4)
+			return ec("Не больше 4 штрафов от одного модератора!");
 			
 //		if(check_access($us));
 	
@@ -31,10 +36,10 @@
 		
 		$data['ref'] = urldecode(@$_GET['ref']) or @$_SERVER['HTTP_REFERER'];
 		
-		$data['active_warnings'] = $db->get_array("SELECT * FROM warnings WHERE user_id = $uid AND time > ".(time()-86400*30)." ORDER BY time DESC");
-		$data['passive_warnings'] = $db->get_array("SELECT * FROM warnings WHERE user_id = $uid AND time < ".(time()-86400*30)." ORDER BY time DESC");
+		$data['active_warnings'] = objects_array('airbase_user_warning', array('user_id=' => $uid, 'time>' => time()-86400*WARNING_DAYS, 'order' => '-time'));
+		$data['passive_warnings'] = objects_array('airbase_user_warning', array('user_id=' => $uid, 'time<=' => time()-86400*WARNING_DAYS, 'order' => '-time'));
 
-		$data['user_name'] = $us->data('name');
+		$data['user_name'] = $us->title();
 
         include_once("engines/smarty/assign.php");
         return template_assign_data("warn_add.html", $data);
@@ -50,22 +55,26 @@
 
 		class_load('forum_user', $uid)->cache_clean_self();
 
-		$me = new User();
-		if(!in_array($me->data('group'), array(1,2,5,21)))
+		$me = bors()->user();
+		if(!in_array($me->group_id(), array(1,2,5,21)))
 			return bors_message(ec("У Вас недостаточно прав доступа"));
 			
 		$db = new DataBase('punbb');
-		$count = $db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $uid AND moderator_id = ".intval($me->data('id'))." AND time > ".(time()-86400));
+		$count = $db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $uid AND moderator_id = ".intval($me->id())." AND time > ".(time()-86400));
 		if($count>=3)
 			return bors_message(ec("Не больше 3 штрафов в день от одного модератора!"));
+
+		$count = $db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $uid AND moderator_id = ".intval($me->id())." AND time > ".(time()-86400*WARNING_DAYS));
+		if($count>=4)
+			return bors_message(ec("Не больше 4 штрафов от одного модератора!"));
 
 		$db = new DataBase('punbb');
 		$db->insert('warnings', array(
 			'user_id'		=> intval($_POST['user_id']),
 			'time'			=> time(),
 			'score'			=> 1,
-			'moderator_id'	=> $me->data('id'),
-			'moderator_name'=> bors()->user()->title(),
+			'moderator_id'	=> $me->id(),
+			'moderator_name'=> $me->title(),
 			'uri'			=> $_POST['uri'],
 			'comment'		=> $_POST['comment'],
 		));

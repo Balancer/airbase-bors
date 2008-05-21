@@ -80,8 +80,6 @@ class forum_topic extends forum_abstract
 				$where = array('topic_id='=>$this->id(), 'posted>' => $last_visit);
 //				set_loglevel(10,NULL);
 				$first_new_post_id = intval($this->db()->select('posts', 'MIN(id)', $where));
-				if(!$first_new_post_id)
-					$first_new_post_id = intval($this->db()->select('posts_archive_'.($this->id()%10), 'MIN(id)', $where));
 //				set_loglevel(2);
 //				exit();
 			}
@@ -146,12 +144,6 @@ class forum_topic extends forum_abstract
 
 		$this->__pages_loaded[$page_id] = objects_array('forum_post', $where);
 		
-		if(empty($this->__all_posts_ids))
-		{
-			$this->archive_restore();
-			$this->__pages_loaded[$page_id] = objects_array('forum_post', $where);
-		}
-		
 		return $this->__pages_loaded[$page_id];
 	}
 
@@ -197,11 +189,6 @@ class forum_topic extends forum_abstract
 		}
 		
 		return $this->__all_posts_ids;
-	}
-
-	function archive_restore()
-	{
-		$this->db()->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
 	}
 
 	private $__posts_ids;
@@ -320,11 +307,12 @@ class forum_topic extends forum_abstract
 	}
 
 
-	function cache_parents()
+	function cache_children()
 	{
 		$res = array(
 			object_load('forum_forum', $this->forum_id()),
 			object_load('forum_printable', $this->id()),
+			object_load('forum_topic_rss', $this->id()),
 		);
 
 		foreach($this->all_users() as $user_id)
@@ -339,7 +327,6 @@ class forum_topic extends forum_abstract
 		return $db->get_array("SELECT DISTINCT poster_id FROM posts WHERE topic_id={$this->id}");
 	}
 		
-//	function cache_static() { return $this->forum()->is_public_access() && !debug_test() ? 86400*30 : 0; }
 	function cache_static() { return $this->forum()->is_public_access() ? 86400*30 : 0; }
 	function base_url() { return $this->forum()->category()->category_base_full(); }
 		
@@ -348,7 +335,7 @@ class forum_topic extends forum_abstract
 		return "<a href=\"".$this->url()."\">".$this->title()."</a>";
 	}
 
-	function rss_url() { return $this->base_url().strftime("%Y/%m/%d/", $this->modify_time())."topic-".$this->id()."-rss.xml"; }
+	function rss_url() { return $this->base_url().strftime("%Y/%m/", $this->modify_time())."topic-".$this->id()."-rss.xml"; }
 
 	function search_source()
 	{
@@ -361,11 +348,6 @@ class forum_topic extends forum_abstract
 		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.id LIMIT $start_from, ".$this->items_per_page();
 			
 		$posts = $db->get_array($query);
-		if(empty($posts))
-		{
-			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
-			$posts = $db->get_array($query);
-		}
 
 		$data['posts'] = array();
 
@@ -386,12 +368,6 @@ class forum_topic extends forum_abstract
 		$db = &new DataBase('punbb');
 
 		$posts = $db->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY posted");
-		if(sizeof($posts) == 0)
-		{
-			$db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($post_id%10)." WHERE topic_id = $post_id");
-			$archive_loaded = true;
-			$posts = $db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
-		}
 
 		for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
 			if($posts[$i] == $post_id)
@@ -403,7 +379,6 @@ class forum_topic extends forum_abstract
 		bors()->changed_save();
 		
 		$db = &new driver_mysql('punbb');
-		$db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($this->id()%10)." WHERE topic_id = {$this->id()}");
 		$num_replies = $db->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
 //		echo "Num repl of {$this->id()} =   $num_replies<br />\n";
 		$this->set_num_replies($num_replies, true);
