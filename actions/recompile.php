@@ -18,10 +18,6 @@
 		if(!empty($GLOBALS['cms']['recompiled_uris'][$uri]))
 			return;
 			
-        $ch = &new Cache();
-        $ch->clear_by_id($uri);
-        $ch->clear_by_uri($uri);
-
 		if(!empty($GLOBALS['cms']['cache_static']))
 		{
 			$sf = &new CacheStaticFile($uri);
@@ -37,8 +33,6 @@
 
         if($source || $body)
         {
-			$ch->clear_by_id(md5($source));
-
             $hts->set_data($uri, 'compile_time', time());
 
             if(!empty($GLOBALS['cms_images']))
