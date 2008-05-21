@@ -2,7 +2,11 @@
 
 class airbase_user_warnings extends base_page
 {
-	function template() { return 'forum/common.html'; }
+	function template()
+	{
+		templates_noindex();
+		return 'forum/common.html';
+	}
 
 	private $user;
 	function user()

@@ -37,28 +37,6 @@ class forum_post extends base_page_db
 		);
 	}
 
-	function init()
-	{
-		parent::init();
-		if(!$this->loaded())
-		{
-			$tid = 0;
-			for($i=0; $i<10; $i++)
-			{
-				$tid = intval($this->db()->select('posts_archive_'.$i, 'topic_id', array('id='=>$this->id())));
-				if($tid)
-					break;
-			}
-
-			if(!$tid)
-				return false;
-
-			$this->db()->query("INSERT IGNORE posts SELECT * FROM posts_archive_{$i} WHERE topic_id = {$tid}");
-			
-			return parent::init();
-		}
-	}
-
 	function set_topic_id($value, $dbupd) { $this->fset('topic_id', $value, $dbupd); }
 	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
 	function set_edited($value, $dbupd) { $this->fset('edited', $value, $dbupd); }
@@ -237,7 +215,7 @@ class forum_post extends base_page_db
 	}
 		
 	function title() { return $this->topic()->title()." <small>[".$this->nav_name()."]</small>"; }
-	function nav_name() { return $this->owner()->title().", ".strftime("%d.%m.%y", $this->create_time()); }
+	function nav_name() { return ($this->owner() ? $this->owner()->title() : 'Unknown').", ".strftime("%d.%m.%y", $this->create_time()); }
 
 	function base_url()
 	{
