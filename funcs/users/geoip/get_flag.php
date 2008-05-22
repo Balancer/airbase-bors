@@ -1,57 +1,79 @@
 <?php
 
-function get_flag($ip)
+global $GEOIP_REGION_NAME;
+
+include_once('geoip/geoip.inc');
+include_once('geoip/geoipcity.inc');
+include_once('geoip/geoipregionvars.php');
+
+function get_flag($ip, $owner = NULL)
 {
-		include_once("3part/geoip/geoip.inc");
-		include_once("3part/geoip/geoipcity.inc");
+	global $GEOIP_REGION_NAME;
 		
-		$ch = &new Cache();
-		if($ch->get("country_flag-v7", $ip))
-			return $ch->last();
+	$ch = &new Cache();
+	if($ch->get("country_flag-v13", $ip))
+		return $ch->last();
 
-		$gi = geoip_open("/var/www/balancer.ru/htdocs/cms/3part/geoip/GeoIPCity.dat", GEOIP_STANDARD);
 
-		$record = geoip_record_by_addr($gi, $ip);
-		$cc = $record->country_code;
-		$cn = $record->country_name;
-		$cin = $record->city;
+	$gi = geoip_open(BORS_3RD_PARTY.'/geoip/GeoLiteCity.dat', GEOIP_STANDARD);
+
+	$record = geoip_record_by_addr($gi, $ip);
+	$country_code = $record->country_code;
+	$country_name = $record->country_name;
+	$city_name = $record->city;
+	$region_code = $record->region;
+	geoip_close($gi);
+		
+	if(!$country_code)
+	{
+		$gi = geoip_open(BORS_3RD_PARTY.'/geoip/GeoIPCity.dat', GEOIP_STANDARD);
+		$country_code = geoip_country_code_by_addr($gi, $ip);
+		$country_name = geoip_country_name_by_addr($gi, $ip);
+		$region_code = geoip_region_by_addr($gi, $ip);
+		$city_name = "";
 		geoip_close($gi);
+	}
+
+	$region_name = @$GEOIP_REGION_NAME[$country_code][$region_code];
+
+	if($country_code)
+	{
+		$alt = array();
 		
-		if(!$cc)
-		{
-			$gi = geoip_open("/usr/share/GeoIP/GeoIP.dat", GEOIP_STANDARD);
-			$cc = geoip_country_code_by_addr($gi, $ip);
-			$cn = geoip_country_name_by_addr($gi, $ip);
-			$cin = "";
-			geoip_close($gi);
-		}
+		if($owner && $owner->id() == 10000) //Fun :)
+			$alt[] = 'Earth';
+		
+		if($country_name)
+			$alt[] = $country_name;
+		if($region_name && $region_name != $city_name && $region_name != $city_name.' City')
+			$alt[] = $region_name.' region';
+		if($city_name)
+			$alt[] = $city_name;
 
-		if($cc)
-		{
-			$alt = "$cn";
-			if($cin)
-				$alt .= ", $cin";
+//		$alt[] = "cc=$country_code, rc=$region_code, $region_name";
 
-			$file = strtolower($cc).".gif";
-			if(!file_exists("/var/www/balancer.ru/htdocs/img/flags/$file"))
-				$file = "-.gif";
-			$res = '<img src="http://balancer.ru/img/flags/'.$file.'" width="20" height="12" border="0" align="absmiddle" title="'.addslashes($alt).'" alt="'.$cc.'"/>';
-		}
-		else
-			$res = "";
+		$alt = join(', ', $alt);
 
-		return $ch->set($res, -3600);
+		$file = strtolower($country_code).".gif";
+		if(!file_exists("/var/www/balancer.ru/htdocs/img/flags/$file"))
+			$file = "-.gif";
+		$res = '<img src="http://balancer.ru/img/flags/'.$file.'" width="20" height="12" border="0" align="absmiddle" title="'.htmlspecialchars($alt).'" alt="'.$country_code.'"/>';
+	}
+	else
+		$res = "";
+
+	return $ch->set($res, -3600);
 }
 
-	function get_my_flag()
-	{
-		$outher = get_flag($_SERVER['REMOTE_ADDR']);
-		if(!$_SERVER['HTTP_X_FORWARDED_FOR'])
-			return $outher;
+function get_my_flag()
+{
+	$outher = get_flag($_SERVER['REMOTE_ADDR']);
+	if(!$_SERVER['HTTP_X_FORWARDED_FOR'])
+		return $outher;
 			
-		$inner = get_flag($_SERVER['HTTP_X_FORWARDED_FOR']);
-		if($inner && $inner != $outher)
-			return "$outher/$inner";
-		else
-			return $outher;
-	}
+	$inner = get_flag($_SERVER['HTTP_X_FORWARDED_FOR']);
+	if($inner && $inner != $outher)
+		return "$outher/$inner";
+	else
+		return $outher;
+}

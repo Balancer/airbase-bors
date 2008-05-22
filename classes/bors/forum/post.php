@@ -18,7 +18,7 @@ class forum_post extends base_page_db
 //				'source' => 'message',
 //			),
 			'posts_cached_fields(post_id)' => array(
-				'flag',
+				'flag_db' => 'flag',
 			),
 		);
 	}
@@ -40,7 +40,7 @@ class forum_post extends base_page_db
 	function set_topic_id($value, $dbupd) { $this->fset('topic_id', $value, $dbupd); }
 	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
 	function set_edited($value, $dbupd) { $this->fset('edited', $value, $dbupd); }
-	function set_flag($flag, $db_update) { $this->fset('flag', $flag, $db_update); }
+	function set_flag_db($flag, $db_update) { $this->fset('flag_db', $flag, $db_update); }
 	function set_owner_id($owner_id, $db_update) { $this->fset('owner_id', $owner_id, $db_update); }
 	function set_poster_ip($poster_ip, $db_update) { $this->fset('poster_ip', $poster_ip, $db_update); }
 	function set_author_name($author_name, $db_update) { $this->fset('author_name', $author_name, $db_update); }
@@ -132,13 +132,14 @@ class forum_post extends base_page_db
 	function flag()
 	{
 		// Вторая часть условия - проверка на баг обрезания строки.
-		if(empty($this->stb_flag) || !preg_match("!>$!", $this->stb_flag))
+		if(!$this->flag_db() || !preg_match("!>$!", $this->flag_db()))
 		{
 			include_once('funcs/users/geoip/get_flag.php');
-			$this->set_flag(get_flag($this->poster_ip()), true);
+			$this->db()->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
+			$this->set_flag_db(get_flag($this->poster_ip(), $this->owner()), true);
 		}
 		
-		return $this->stb_flag; 
+		return $this->flag_db();
 	}
 
 	private $__answer_to = 0;
@@ -158,7 +159,7 @@ class forum_post extends base_page_db
 		return $this->__answer_to = $post;
 	}
 
-	function cache_static() { return 86400; }
+	function cache_static() { return rand(86400*7, 86400*8); }
 
 	function template() { return 'empty.html'; }
 	function render() { return 'render_fullpage'; }
