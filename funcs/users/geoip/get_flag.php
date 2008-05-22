@@ -11,7 +11,7 @@ function get_flag($ip, $owner = NULL)
 	global $GEOIP_REGION_NAME;
 		
 	$ch = &new Cache();
-	if($ch->get("country_flag-v13", $ip))
+	if($ch->get("country_flag-v14", $ip))
 		return $ch->last();
 
 
@@ -46,7 +46,7 @@ function get_flag($ip, $owner = NULL)
 		if($country_name)
 			$alt[] = $country_name;
 		if($region_name && $region_name != $city_name && $region_name != $city_name.' City')
-			$alt[] = $region_name.' region';
+			$alt[] = $region_name.(preg_match('!of$!', $region_name)?'':' region');
 		if($city_name)
 			$alt[] = $city_name;
 
