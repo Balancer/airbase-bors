@@ -13,7 +13,7 @@ class forum_images_warnings extends def_image_gif
 		if($user_id)
 		{
 			$db = &new DataBase('punbb');
-			$warn_count = min(10, intval($db->get("SELECT COUNT(*) FROM warnings WHERE user_id = $user_id AND time > ".(time()-WARNING_DAYS*86400))));
+			$warn_count = min(10, intval($db->get("SELECT SUM(score) FROM warnings WHERE user_id = $user_id AND time > ".(time()-WARNING_DAYS*86400))));
 		}
 		else
 			$warn_count = 0;
@@ -48,15 +48,24 @@ class forum_images_warnings extends def_image_gif
 
 		if($warn_count >= 10)
 		{
-			$w = $db->get_array("SELECT time FROM warnings WHERE user_id = {$user_id} ORDER BY time DESC LIMIT 10");
-			$w = $w[9];
+			$total = 0;
+			$time  = 0;
+			foreach($db->get_array("SELECT score, time FROM warnings WHERE user_id = {$user_id} ORDER BY time DESC LIMIT 20") as $w)
+			{
+				$total += $w['score'];
+				if($total >= 10)
+				{
+					$time = $w['time'];
+					break;
+				}
+			}
 
 			$font = '/usr/share/fonts/corefonts/verdana.ttf';
 			$red   = imagecolorallocate($img, 255,   0,   0);
 			$black = imagecolorallocate($img,   0,   0,   0);
 			$white = imagecolorallocate($img, 255, 255, 255);
 
-			$text = ec('бан до '.strftime("%d.%m.%Y", $this->expired = $w+WARNING_DAYS*86400));
+			$text = ec('бан до '.strftime("%d.%m.%Y", $this->expired = $time+WARNING_DAYS*86400));
 
 			$x = 0;
 			$y = 8;

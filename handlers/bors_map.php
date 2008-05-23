@@ -59,5 +59,8 @@
 
 		'(/)(test|crazy)/ => base_page_hts',
 
+		'(/admin/users/(\d+)/)warnings.html => airbase_user_admin_warnings(2)',
+		'(/admin/users/(\d+)/)warnings.html\?object=(.+) => airbase_user_admin_warnings(2,object=3)',
+
 //	'.* => base_page_hts',
 );
