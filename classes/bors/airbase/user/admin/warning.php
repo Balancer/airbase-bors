@@ -14,8 +14,6 @@ class airbase_user_admin_warning extends airbase_user_warning
 		if(!$object)
 			return bors_message(ec('Неизвестный объект ').$data['object']);
 
-		unset($data['object']);
-
 		if($data['user_id'] != $object->owner_id())
 			return bors_message(ec('Попытка выставить штраф пользователю, не являющемуся автором сообщения'));
 
@@ -34,7 +32,6 @@ class airbase_user_admin_warning extends airbase_user_warning
 		$data['moderator_name'] = bors()->user()->title();
 		$data['warn_class_id'] = $object->class_id();
 		$data['warn_object_id'] = $object->id();
-
 
 		return parent::check_data($data);
 	}
@@ -57,5 +54,11 @@ class airbase_user_admin_warning extends airbase_user_warning
 		$user->set_warnings_total($warnings_total, true);
 		$user->cache_clean();
 		object_load('users_topwarnings')->cache_clean();
+
+		$object = object_load($data['object']);
+		$object->set_warning_id($this->id(), true);
+		$object->cache_clean();
+		
+		unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
 	}
 }

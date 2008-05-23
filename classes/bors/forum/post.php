@@ -345,4 +345,13 @@ class forum_post extends base_page_db
 		$this->set_warning_id($warn ? $warn->id() : -1, true);
 		return $this->warning = $warn ? $warn : NULL;
 	}
+
+	function cache_children()
+	{
+		$res = array(
+			object_load('forum_topic', $this->topic_id()),
+		);
+			
+		return $res;
+	}
 }
