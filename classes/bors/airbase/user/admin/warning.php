@@ -56,5 +56,6 @@ class airbase_user_admin_warning extends airbase_user_warning
 		$user->set_warnings($warnings, true);
 		$user->set_warnings_total($warnings_total, true);
 		$user->cache_clean();
+		object_load('users_topwarnings')->cache_clean();
 	}
 }
