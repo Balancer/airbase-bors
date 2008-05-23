@@ -8,6 +8,8 @@ class airbase_user_warnings extends base_page
 		return 'forum/common.html';
 	}
 
+	function class_file() { return __FILE__; }
+
 	private $user;
 	function user()
 	{
@@ -25,21 +27,27 @@ class airbase_user_warnings extends base_page
 		return false;
 	}
 
-	function data_providers()
+	function data_providers($skip_passive = false)
 	{
 		$data = array(
 			'ref' => urldecode(@$_GET['ref']) or @$_SERVER['HTTP_REFERER'],
-			'passive_warnings' => array_reverse(objects_array('airbase_user_warning', array(
+		);
+		
+		if(!$skip_passive)
+			$data['passive_warnings'] = array_reverse(objects_array('airbase_user_warning', array(
 				'user_id=' => $this->id(),
 				'time<=' => time()-86400*WARNING_DAYS,
 				'order' => 'time',
 				'page' => $this->page(),
 				'per_page' => $this->items_per_page(),
-			))),
-		);
+			)));
 		
 		if(!$this->page() || $this->page() == $this->total_pages())
-			$data['active_warnings']  = array_reverse(objects_array('airbase_user_warning', array('user_id=' => $this->id(), 'time>' => time()-86400*WARNING_DAYS, 'order' => 'time')));
+			$data['active_warnings']  = array_reverse(objects_array('airbase_user_warning', array(
+				'user_id=' => $this->id(), 
+				'time>' => time()-86400*WARNING_DAYS, 
+				'order' => 'time',
+			)));
 
 		return $data;
 	}
@@ -60,4 +68,6 @@ class airbase_user_warnings extends base_page
 		else
 			return "http://balancer.ru/user/".$this->id()."/warnings,{$page}.html"; 
 	}
+
+	function cache_static() { return rand(80000, 90000); }
 }
