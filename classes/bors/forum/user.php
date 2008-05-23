@@ -101,6 +101,16 @@ class forum_user extends base_object_db
 //			rec_rmdir("/var/www/balancer.ru/htdocs/user/".$this->id());
 	}
 
+	function cache_children()
+	{
+		$res = array(
+			object_load('airbase_user_warnings', $this->id()),
+		);
+			
+		return $res;
+	}
+
+
 	function url() { return "http://balancer.ru/user/{$this->id()}/"; }
 	function parents() { return array("http://balancer.ru/users/"); }
 

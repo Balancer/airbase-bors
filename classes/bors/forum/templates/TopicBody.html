@@ -46,7 +46,7 @@
 {if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
 
 <div class="pages_select right">
-<a href="http://balancer.ru/forum/punbb/post.php?tid={$this->id()}" class="select_page">{if $this->is_closed()}Тема закрыта{else}Ответ в эту тему{/if}</a>
+{if $this->is_closed()}Тема закрыта{else}<a href="http://balancer.ru/forum/punbb/post.php?tid={$this->id()}" class="select_page">Ответ в эту тему</a>{/if}
 <a href="http://balancer.ru/forum/punbb/post.php?fid={$this->forum()|get:id}" class="select_page">Создать новую тему</a>
 </div>
 
