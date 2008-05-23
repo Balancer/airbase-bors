@@ -11,7 +11,7 @@ class airbase_user_warning extends base_object_db
 			'id',
 			'user_id',
 			'create_time' => 'time',
-			'score',
+			'score_db' => 'score',
 			'type_id',
 			'moderator_id',
 			'moderator_name',
@@ -43,5 +43,14 @@ class airbase_user_warning extends base_object_db
 		}
 		
 		return "<a href=\"{$this->referer()}\">{$this->referer()}</a>";
+	}
+
+	function score()
+	{
+		$score = $this->score_db();
+		if($score > 0)
+			$score = '+'.$score;
+		
+		return $score;
 	}
 }
