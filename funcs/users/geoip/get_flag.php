@@ -26,7 +26,7 @@ function get_flag($ip, $owner = NULL)
 		
 	if(!$country_code)
 	{
-		$gi = geoip_open(BORS_3RD_PARTY.'/geoip/GeoIPCity.dat', GEOIP_STANDARD);
+		$gi = geoip_open(BORS_3RD_PARTY.'/geoip/GeoIP.dat', GEOIP_STANDARD);
 		$country_code = geoip_country_code_by_addr($gi, $ip);
 		$country_name = geoip_country_name_by_addr($gi, $ip);
 		$region_code = geoip_region_by_addr($gi, $ip);

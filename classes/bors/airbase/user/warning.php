@@ -53,4 +53,6 @@ class airbase_user_warning extends base_object_db
 		
 		return $score;
 	}
+
+	function set_score($value, $dbup) { return $this->set_score_db($value, $dbup); }
 }
