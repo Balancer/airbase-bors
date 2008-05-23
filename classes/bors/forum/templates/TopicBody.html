@@ -30,6 +30,11 @@
 {/foreach}
 </ul>
 {/if}
+{if $p->warning()}
+<div class="warning_note"
+>За это сообщение пользователь получил предупреждение в {$p->warning()|get:score} {$p->warning()|get:score|sklon:"балл":"балла":"баллов"}
+{if $p->warning()|get:type_id} по категории «<b>{$p->warning()|get:type_id|bors_list_item_name:"airbase_user_warning_type"}</b>»{/if}.</div>
+{/if}
 <ul class="postfooter">
 <li><a href="http://balancer.ru/user/{$p->owner_id()}/reputation.html?{$p->url()}">Репутация автору</a></li>
 <li>|</li>

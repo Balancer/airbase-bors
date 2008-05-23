@@ -17,7 +17,7 @@
 {if $active_warnings}
 <h2>Активные штрафы</h2>
 <table class="btab w100p">
-<tr><th>Дата</th><th>Вес, типа</th><th>От кого</th><th>Комментарий</th></tr>
+<tr><th>Дата</th><th>Вес, причина</th><th>От кого</th><th>Комментарий</th></tr>
 {foreach from=$active_warnings item="w"}
 <tr>
 	<td style="color: {if $w->score()>0}red{else}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
@@ -32,7 +32,7 @@
 {if $passive_warnings}
 <h2>Истёкшие штрафы</h2>
 <table class="btab w100p">
-<tr><th>Дата</th><th>Вес, типа</th><th>От кого</th><th>Комментарий</th></tr>
+<tr><th>Дата</th><th>Вес, причина</th><th>От кого</th><th>Комментарий</th></tr>
 {foreach from=$passive_warnings item="w"}
 <tr>
 	<td style="color: {if $w->score()>0}red{else}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>

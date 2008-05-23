@@ -19,6 +19,7 @@ class forum_post extends base_page_db
 //			),
 			'posts_cached_fields(post_id)' => array(
 				'flag_db' => 'flag',
+				'warning_id',
 			),
 		);
 	}
@@ -322,4 +323,26 @@ class forum_post extends base_page_db
 	}
 
 	function auto_search_index() { return $this->_source_changed; }
+
+	private $warning = false;
+	function warning()
+	{
+		if($this->warning !== false)
+			return $this->warning;
+	
+		if($this->warning_id() == -1)
+			return $this->warning = NULL;
+			
+		if($this->warning_id())
+			return $this->warning = object_load('airbase_user_warning', $this->warning_id());
+			
+		$warn = objects_first('airbase_user_warning', array(
+			'warn_class_id=' => $this->class_id(),
+			'warn_object_id='=>$this->id(),
+			'order' => '-time'));
+			
+		$this->db()->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
+		$this->set_warning_id($warn ? $warn->id() : -1, true);
+		return $this->warning = $warn ? $warn : NULL;
+	}
 }
