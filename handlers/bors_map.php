@@ -50,7 +50,7 @@
 		'(/users/)toprep/? => users_toprep',
 		'(/users/)warnings/ => users_topwarnings',
 
-		'/user/(\d+)/warnings\.js => user_js_warnings(1)',
+//		'/user/(\d+)/warnings\.js => user_js_warnings(1)',
 		'/user/(\d+)/warnings\.gif => forum_images_warnings(1)',
 		'(/user/(\d+)/)warnings/ => airbase_user_warnings(2)',
 		'(/users/(\d+)/)warnings/ => airbase_user_warnings(2)',
