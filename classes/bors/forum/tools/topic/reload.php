@@ -7,6 +7,9 @@ class forum_tools_topic_reload extends base_object
 	function preParseProcess($data)
 	{
 		$topic = object_load('forum_topic', $this->id());
+		
+		$this->db('punbb')->query('UPDATE messages SET html=\'\' WHERE id IN (' . join(',', $topic->all_posts_ids()) . ')');
+		
 		$topic->recalculate();
 		return go($topic->url());
 	}
