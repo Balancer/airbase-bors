@@ -1,0 +1,37 @@
+{if $p}
+<a name="p{$p->id()}"></a>
+<dl class="forumposting posted_by_{$p->owner_id()}">
+<dt>{$p->flag()}{if $show_title} {$show_title},{/if}{if not $skip_author_name} {$p->author_name()}{/if} <a href="{$p->url()}">{$p->create_time()|full_time}</a>
+{if $p->answer_to_id()}
+{assign var=a value=$p->answer_to()}
+<span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>
+{/if}
+{if $forum}
+<br />
+<small>// Форум: {$forum->titled_url()}</small>
+{/if}
+</dt>
+<dd>
+{assign var="owner" value=$p->owner()}
+{if $owner}<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>{/if}
+{if $strip}
+{assign var="body" value=$p->body()}
+{$body|strip_text:$strip}
+{if strlen($body) >= $strip}
+<br /><br /><a href="{$p->url()}">Дальше »»»</a>
+{/if}
+{else}
+{$p->body()}
+{/if}
+{if $owner->signature()}<div class="postsignature">{$owner->signature_html()}</div>{/if}
+<ul class="postfooter">
+<li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
+<li class="postdelete"><a href="http://balancer.ru/forum/tools/post/{$p->id()}/">Инструменты</a></li>
+<li class="postedit"><a href="http://balancer.ru/forum/punbb/edit.php?id={$p->id()}">Редактировать</a></li>
+<li class="postquote"><a href="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}">Цитировать</a></li>
+</ul>
+</dd>
+</dl>
+{else}
+Error: Unknown post.
+{/if}
