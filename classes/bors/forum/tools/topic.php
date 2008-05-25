@@ -2,7 +2,6 @@
 
 class forum_tools_topic extends base_page
 {
-//	function _class_file() { return __FILE__; }
 	function can_be_empty() { return true; }
 
 	function parents() { return array('forum_topic://'.$this->id()); }

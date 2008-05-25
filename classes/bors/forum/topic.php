@@ -41,6 +41,11 @@ class forum_topic extends forum_abstract
 		);
 	}
 
+	function forum_id() { return $this->stb_forum_id; }
+	function owner_id() { return $this->stb_owner_id; }
+	function last_poster_name() { return $this->stb_last_poster_name; }
+	function num_replies() { return $this->stb_num_replies; }
+
 	function set_forum_id($value, $dbupd) { $this->fset('forum_id', $value, $dbupd); }
 	function set_title($value, $dbupd) { $this->fset('title', $value, $dbupd); }
 	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
@@ -50,10 +55,23 @@ class forum_topic extends forum_abstract
 	function set_author_name($value, $dbupd) { $this->fset('author_name', $value, $dbupd); }
 	function set_num_replies($num_replies, $db_update) { $this->fset('num_replies', $num_replies, $db_update); }
 	function set_visits($num_views, $db_update) { $this->fset('visits', $num_views, $db_update); }
+	function set_first_visit_time($value, $db_update) { $this->fset('first_visit_time', $value, $db_update); }
+	function set_last_visit_time($value, $db_update) { $this->fset('last_visit_time', $value, $db_update); }
 	function set_first_post_id($first_post_id, $db_update) { $this->fset('first_post_id', $first_post_id, $db_update); }
 	function set_last_post_id($last_post_id, $db_update) { $this->fset('last_post_id', $last_post_id, $db_update); }
 
-	function forum() { return object_load('forum_forum', $this->forum_id()); }
+	function set_sticky($value, $db_update) { $this->fset('sticky', $value, $db_update); }
+	function set_closed($value, $db_update) { $this->fset('closed', $value, $db_update); }
+
+	private $forum = false;
+	function forum()
+	{
+		if($this->forum === false)
+			$this->forum = object_load('forum_forum', $this->forum_id()); 
+			
+		return $this->forum;
+	}
+	
 	function first_post() { return object_load('forum_post', $this->first_post_id()); }
 	function last_post() { return object_load('forum_post', $this->last_post_id()); }
 		
@@ -422,4 +440,13 @@ class forum_topic extends forum_abstract
 	function visits_counting() { return true; }
 
 	function visits_per_day() { return (86400.0*$this->visits())/($this->last_visit_time() - $this->first_visit_time() + 1); }
+
+	private $owner = false;
+	function owner()
+	{
+		if($this->owner === false)	
+			$this->owner = object_load('bors_user', $this->owner_id());
+		
+		return $this->owner;
+	}
 }
