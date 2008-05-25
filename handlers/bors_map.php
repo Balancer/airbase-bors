@@ -16,7 +16,8 @@
 		'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+ => forum_category(1)',
 		'/user/(\d+)/personal\.js => forum_js_personal(1)',
 		'(/)forum/ => forum_main',
-		'/user/(\d+)/use-topics\.html => users_UseTopics(1)',
+		'(/user/(\d+)/)use\-topics\.html => airbase_user_topics(2)',
+		'(/user/(\d+)/)use\-topics,(\d+)\.html => airbase_user_topics(2,3)',
 
 		'/user/(\d+)/? => user_main(1)',
 		'(/user/(\d+)/)test/ => user_test(2)',
