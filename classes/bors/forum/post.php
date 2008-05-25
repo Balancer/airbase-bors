@@ -70,7 +70,7 @@ class forum_post extends base_page_db
 	{
 		if($this->_post_source === false)
 		{
-			$x = $this->db->select('messages', 'message,html', array('id=' => $this->id()));
+			$x = $this->db()->select('messages', 'message,html', array('id=' => $this->id()));
 			$this->_post_source = $x['message'];
 			$this->_post_body = $x['html'];
 		}
@@ -199,7 +199,7 @@ class forum_post extends base_page_db
 				break;
 			}
 			
-		return $topic->url($page)."?#p".$pid;
+		return $topic->url($page)."#p".$pid;
 	}
 
 	function modify_time()
