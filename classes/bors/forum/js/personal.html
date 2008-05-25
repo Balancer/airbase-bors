@@ -1,8 +1,11 @@
 {assign var="owner" value=$this->owner()}
-Здравствуйте, {$owner->titled_url()}!
+<p><b>Здравствуйте, {$owner->titled_url()}!</b></p>
+
+Ваши:
 <ul>
-<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/blog/">Ваш блог</a></li>
-<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/use-topics.html">Ваши темы</a></li>
+<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/blog/">Блог</a></li>
+<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/use-topics.html">Темы</a></li>
+<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/reputation/">Репутация</a></li>
 <li><a href="/actions/do-logout/">Выход</a></li>
 </ul>
 

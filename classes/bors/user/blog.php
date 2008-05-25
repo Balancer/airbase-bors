@@ -4,8 +4,6 @@ class user_blog extends base_page
 {
 	private $user;
 	
-	function _class_file() { return __FILE__; }
-
 	function main_db_storage(){ return 'punbb'; }
 
 	function template()
@@ -43,10 +41,10 @@ class user_blog extends base_page
 
 	function items_per_page() { return 20; }
 	
-	private $total = NULL;
+	private $total = false;
 	function total_items()
 	{
-		if($this->total == NULL)
+		if($this->total === false)
 			$this->total = intval(objects_count('forum_blog', array('where' => array('owner_id=' => $this->id()))));
 
 		return $this->total;
@@ -133,7 +131,7 @@ class user_blog extends base_page
 
  	function cache_clean_self($pid = 0)
 	{
-		if($pid == 0)
+		if($pid == 0 || !is_numeric($pid))
 			$start = $this->total_pages();
 		else
 			$start = $this->page_by_pid($pid - 1);

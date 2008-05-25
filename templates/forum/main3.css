@@ -175,6 +175,16 @@ a.select_page:hover {
 	font-size: 1.0em;
 }
 
+.topic_pages_links {
+	font-size: 0.8em;
+	white-space: nowrap;
+}
+
+small a.current_page, small a.select_page {
+	padding: 0px 1px;
+	margin: 1px 0px;
+}
+
 .avatar_block {
 	width: 100px; 
 	float: right; 
@@ -356,8 +366,6 @@ ul.postfooter li a {
 
 .answer { font-size: 0.8em; }
 
-
-.topic_pages_links { font-size: 0.8em; }
 
 .w100p { width: 100%; }
 .center { text-align: center; }

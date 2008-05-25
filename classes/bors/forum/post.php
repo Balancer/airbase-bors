@@ -350,6 +350,7 @@ class forum_post extends base_page_db
 	{
 		$res = array(
 			object_load('forum_topic', $this->topic_id()),
+			object_load('airbase_user_topics', $this->owner_id()),
 		);
 			
 		return $res;
