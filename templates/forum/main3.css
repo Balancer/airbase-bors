@@ -439,11 +439,11 @@ div.warning_note {
 
 div.edited_note {
 	clear: both;
-	border: 1px solid #ffff80;
-	padding: 2px;
+	border: 1px solid #9bd;
+	padding: 1px;
 	margin: 2px 0;
-	background-color: #ffffe0;
+	background-color: #def;
 	font-size: xx-small;
-	color: #880;
+	color: #9bd;
 	text-align: right;
 }
