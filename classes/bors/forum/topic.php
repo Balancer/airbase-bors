@@ -199,14 +199,7 @@ class forum_topic extends forum_abstract
 		if(isset($this->__all_posts_ids))
 			return $this->__all_posts_ids;
 		
-		$this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id='=>$this->id(), 'order' => 'posted'));
-		if(empty($this->__all_posts_ids))
-		{
-			$this->archive_restore();
-			$this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id='=>$this->id(), 'order' => 'posted'));
-		}
-		
-		return $this->__all_posts_ids;
+		return $this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id='=>$this->id(), 'order' => 'posted'));
 	}
 
 	private $__posts_ids;

@@ -1,10 +1,11 @@
 <?
 	function access_check($uri, $us = NULL)
 	{
-		if(!$us)
-			$us = new User;
+		exit(__FILE__.':'.__LINE__.' Access denied');
+	
+		$us = bors()->user();
 
-		if(!$us->data('id'))
+		if($us->id() < 2)
 		{
 			$GLOBALS['page_data']['title'] = tr('Error');
 			$GLOBALS['page_data']['source'] = tr('You are not logged in');
@@ -27,9 +28,11 @@
 
     function check_action_access($level=3, $redir=false)
 	{
-		$us = &new User();
+		exit(__FILE__.':'.__LINE__.' Access denied');
+		
+		$us = bors()->user();
 
-		if($us->data('level') < $level)
+		if($us->level() < $level)
 		{
 			if($redir)
 			{
@@ -37,7 +40,7 @@
 			}
 			else
 			{
-				$GLOBALS['page_data']['source'] = ec("Доступ запрещён. Требуется $level при наличии ".$us->data('level'));
+				$GLOBALS['page_data']['source'] = ec("Доступ запрещён. Требуется $level при наличии ".$us->level());
 				show_page($GLOBALS['main_uri']);
 			}
 			

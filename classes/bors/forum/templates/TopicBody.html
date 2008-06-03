@@ -59,9 +59,7 @@
 <a href="http://balancer.ru/forum/punbb/post.php?fid={$this->forum()|get:id}" class="select_page">Создать новую тему</a>
 </div>
 
-{if not $p}
-{0|debug_trace}
-{else}
+{if $p}
 {if not $this->is_closed()}
 <dl class="forumposting quickform">
 <dt>Форма быстрого ответа</dt>
