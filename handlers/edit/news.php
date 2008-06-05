@@ -46,7 +46,7 @@
 		if(empty($_POST['description']) && empty($_POST['text']))
 			return error_message(ec("Вы должны указать текст новости или её описание", false));
 
-		include_once("funcs/system.php");
+		include_once("inc/system.php");
 		$year_uri  = $uri.strftime("%Y/");
 		$month_uri = $year_uri.strftime("%m/");
 		$day_uri   = $month_uri.strftime("%d/");

@@ -61,7 +61,7 @@
 	{
 		include_once('obsolete/DataBaseHTS.php');
 		include_once('funcs/templates/smarty.php');
-		require_once('funcs/system.php');
+		require_once('inc/system.php');
 		require_once('funcs/modules/messages.php');
 
 		$hts = &new DataBaseHTS;

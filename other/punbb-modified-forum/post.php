@@ -72,7 +72,7 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/post.php';
 // Start with a clean slate
 $errors = array();
 
-include_once("funcs/system.php");
+include_once("inc/system.php");
 
 $qid = 0;
 if(isset($_GET['qid']))
