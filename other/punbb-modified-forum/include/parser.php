@@ -50,12 +50,12 @@ include_once("funcs/lcml.php");
 //
 // Parse message text
 //
-function parse_message($text, $hide_smilies)
+function parse_message($text, $hide_smilies, $nocache=false)
 {
 	global $pun_config, $lang_common, $pun_user, $cur_post;
 
 	$ch = &new Cache();
-	if($ch->get("lcml-compiled", $text, "post://{$cur_post['id']}/"))
+	if($ch->get("lcml-compiled", $text, "post://{$cur_post['id']}/") && !$nocache && !config('cache_disable'))
 		return $ch->last();
 	
 	$post_id    = intval(@$cur_post['id']);
