@@ -101,6 +101,11 @@ class forum_user extends base_object_db
 //			rec_rmdir("/var/www/balancer.ru/htdocs/user/".$this->id());
 	}
 
+	function user_dir()
+	{
+		return "/var/www/balancer.ru/htdocs/user/".$this->id();
+	}
+
 	function cache_children()
 	{
 		$res = array(
