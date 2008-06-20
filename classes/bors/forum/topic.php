@@ -67,7 +67,10 @@ class forum_topic extends forum_abstract
 	function forum()
 	{
 		if($this->forum === false)
-			$this->forum = object_load('forum_forum', $this->forum_id()); 
+			if(!$this->forum_id())
+				debug_exit('Empty forum_id for topic '.$this->id());
+			else
+				$this->forum = object_load('forum_forum', $this->forum_id()); 
 			
 		return $this->forum;
 	}

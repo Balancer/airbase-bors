@@ -38,6 +38,45 @@ class forum_user extends base_object_db
 		)));
 	}
 
+	function set_title($value, $dbupd) { $this->fset('title', $value, $dbupd); }
+	function title() { return $this->stb_title; }
+
+	function set_group_id($value, $dbupd) { $this->fset('group_id', $value, $dbupd); }
+	function group_id() { return $this->stb_group_id; }
+
+	function set_user_title($value, $dbupd) { $this->fset('user_title', $value, $dbupd); }
+	function user_title() { return $this->stb_user_title; }
+	
+	function set_use_avatar($value, $dbupd) { $this->fset('use_avatar', $value, $dbupd); }
+	function use_avatar() { return $this->stb_use_avatar; }
+	
+	function set_avatar_width($value, $dbupd) { $this->fset('avatar_width', $value, $dbupd); }
+	function avatar_width() { return $this->stb_avatar_width; }
+
+	function set_avatar_height($value, $dbupd) { $this->fset('avatar_height', $value, $dbupd); }
+	function avatar_height() { return $this->stb_avatar_height; }
+
+	function set_num_posts($value, $dbupd) { $this->fset('num_posts', $value, $dbupd); }
+	function num_posts() { return $this->stb_num_posts; }
+	
+	function set_signature($value, $dbupd) { $this->fset('signature', $value, $dbupd); }
+	function signature() { return $this->stb_signature; }
+	
+	function set_warnings($value, $dbupd) { $this->fset('warnings', $value, $dbupd); }
+	function warnings() { return $this->stb_warnings; }
+
+	function set_warnings_total($value, $dbupd) { $this->fset('warnings_total', $value, $dbupd); }
+	function warnings_total() { return $this->stb_warnings_total; }
+	
+	function set_reputation($value, $dbupd) { $this->fset('reputation', $value, $dbupd); }
+	function reputation() { return $this->stb_reputation; }
+
+	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
+	function create_time() { return $this->stb_create_time; }
+
+	function set_last_post_time($value, $dbupd) { $this->fset('last_post_time', $value, $dbupd); }
+	function last_post_time() { return $this->stb_last_post_time; }
+
 	function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
 
 	var $_title = NULL;

@@ -9,6 +9,22 @@ class forum_forum extends base_page_db
 
 	function field_title_storage() { return 'punbb.forums.forum_name(id)'; }
 
+	function __construct($id)
+	{
+		if(!$id)
+			debug_exit('Try to load empty forum');
+			
+		parent::__construct($id);
+	}
+
+	function init()
+	{
+		if(!$this->id())
+			debug_exit('Try to init empty forum');
+			
+		return parent::init();
+	}
+
 	function uri_name() { return 'forum'; }
 
 	var $stb_parent_forum_id = '';
