@@ -41,11 +41,20 @@ class forum_post extends base_page_db
 	function set_topic_id($value, $dbupd) { $this->fset('topic_id', $value, $dbupd); }
 	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
 	function set_edited($value, $dbupd) { $this->fset('edited', $value, $dbupd); }
+	function edited() { return $this->stb_edited; }
 	function set_flag_db($flag, $db_update) { $this->fset('flag_db', $flag, $db_update); }
+	function flag_db() { $this->stb_flag_db; }
 	function set_owner_id($owner_id, $db_update) { $this->fset('owner_id', $owner_id, $db_update); }
+	function owner_id() { return $this->stb_owner_id; }
 	function set_poster_ip($poster_ip, $db_update) { $this->fset('poster_ip', $poster_ip, $db_update); }
 	function set_author_name($author_name, $db_update) { $this->fset('author_name', $author_name, $db_update); }
-	
+	function author_name() { return $this->stb_author_name; }
+	function set_answer_to_id($value, $db_update) { $this->fset('answer_to_id', $value, $db_update); }
+	function answer_to_id() { return $this->stb_answer_to_id; }
+
+	function set_warning_id($value, $db_update) { $this->fset('warning_id', $value, $db_update); }
+	function warning_id() { return $this->stb_warning_id; }
+
 	function topic() { return object_load('forum_topic', $this->topic_id()); }
 	function parents() { return array("forum_topic://".$this->topic_id()); }
 
