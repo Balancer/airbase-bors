@@ -11,6 +11,7 @@
 		'(/forum/tools/post/)(\d+)/ => forum_tools_post(2)',
 
 		'/js/users/touch.js\?(.+) => user_js_touch(1)',
+		'/js/users/reputation,(\d+)\.js => user_js_reputation(1,2)',
 		'/js/forum/topvisits\.js => forum_js_topvisits',
 		
 		'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+ => forum_category(1)',

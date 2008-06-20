@@ -32,7 +32,7 @@ class user_reputation extends base_page_db
 		return false;
 	}
 
-	function data_providers()
+	function local_template_data_set()
 	{
 		$dbu = &new DataBase('USERS');
 		$dbf = &new DataBase('punbb');
@@ -137,7 +137,12 @@ class user_reputation extends base_page_db
 
 		$dbf->query("UPDATE users SET reputation = '".str_replace(",",".",$total)."' WHERE id = $uid");
 
-		class_load('forum_user', $uid)->cache_clean_self();
+		$target_user = class_load('forum_user', $uid);
+
+		foreach (glob($target_user->user_dir().'/reputation*.html') as $filename)
+			unlink($filename);
+
+		$target_user->cache_clean_self();
 		class_load('cache_group', "user-{$uid}-reputation")->clean();
 		
 		include_once("inc/navigation.php");
