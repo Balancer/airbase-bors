@@ -43,7 +43,8 @@ class forum_post extends base_page_db
 	function set_edited($value, $dbupd) { $this->fset('edited', $value, $dbupd); }
 	function edited() { return $this->stb_edited; }
 	function set_flag_db($flag, $db_update) { $this->fset('flag_db', $flag, $db_update); }
-	function flag_db() { $this->stb_flag_db; }
+	//TODO: странно, при прямом вызове пропадают флаги.
+//	function flag_db() { return $this->stb_flag_db; }
 	function set_owner_id($owner_id, $db_update) { $this->fset('owner_id', $owner_id, $db_update); }
 	function owner_id() { return $this->stb_owner_id; }
 	function set_poster_ip($poster_ip, $db_update) { $this->fset('poster_ip', $poster_ip, $db_update); }
