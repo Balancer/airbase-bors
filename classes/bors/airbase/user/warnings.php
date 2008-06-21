@@ -2,13 +2,12 @@
 
 class airbase_user_warnings extends base_page
 {
+	function class_file() { return __FILE__; } // Не сносить, так как есть класс-наследник с этим же шаблоном!
+
 	function template()
 	{
-		templates_noindex();
 		return 'forum/common.html';
 	}
-
-	function class_file() { return __FILE__; }
 
 	private $user;
 	function user()
@@ -19,16 +18,18 @@ class airbase_user_warnings extends base_page
 		return $this->user;
 	}
 
-	function preParseProcess()
+/*	function preParseProcess()
 	{
 //		if(!$this->id() || !$this->user())
 //			return go('/users/');
 			
 		return false;
 	}
-
-	function data_providers($skip_passive = false)
+*/
+	function local_template_data_set($skip_passive = false)
 	{
+		templates_noindex();
+		
 		$data = array(
 			'ref' => urldecode(@$_GET['ref']) or @$_SERVER['HTTP_REFERER'],
 		);
