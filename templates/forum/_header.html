@@ -4,15 +4,24 @@
 	<title>{$title}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
-	<link rel="stylesheet" type="text/css" href="http://forums.balancer.ru/tpl/default/css/main3.css" />
 	<script  type="text/javascript" src="http://forums.balancer.ru/tpl/default/js/tune.js"></script>
-	<script type="text/javascript">createCookie('class_name', '{$this->class_name()}');createCookie('object_id', '{$this->id()}')</script>
+	<script type="text/javascript"><!--
+		var size = clientSize();
+if(size[0] < 640)
+	document.write('<link rel="stylesheet" type="text/css" href="http://forums.balancer.ru/tpl/default/css/lowres.css" />')
+else
+	document.write('<link rel="stylesheet" type="text/css" href="http://forums.balancer.ru/tpl/default/css/main3.css" />')
+--></script>
+	<script type="text/javascript"><!--
+createCookie('class_name', '{$this->class_name()}');createCookie('object_id', '{$this->id()}')
+--></script>
+
 {if $type == 'topic' and $id}
-<script type="text/javascript">
+<script type="text/javascript"><!--
 var readed = readCookie('readedTopics', "").split(' ')
 if(!inArray(readed, {$id}) && readed.length < 40) readed.push({$id})
 createCookie('readedTopics', readed.join(' '), 3)
-</script>
+--></script>
 {/if}
 {literal}
 <!--[if IE]><style>
@@ -32,6 +41,7 @@ dd, dt { height: 1%; }
 	position: relative;
 }
 </style><![endif]-->
+
 {/literal}
 {if $header}
 {foreach from=$header item="h"}
@@ -171,10 +181,6 @@ created = {$now|strftime:"%d.%m.%Y %H:%M"}
 {if $this}{math assign=exp equation="x+y" x=$this->cache_static() y=$now}static expire = {$exp|strftime:"%d.%m.%Y %H:%M"} 
 {/if} 
 -->
-
-		<script type="text/javascript" encoding="UTF-8">
-			createSelect("Левая колонка", "inleft.display", "block;none", "block")
-		</script>
 
 </body>
 </html>
