@@ -1,5 +1,7 @@
 <?php
 
+include_once('engines/lcml.php');
+
 class forum_post extends base_page_db
 {
 	function storage_engine() { return 'storage_db_mysql_smart'; }

@@ -1,18 +1,14 @@
 <?php
 
-class cache_group extends base_empty
+class cache_group extends base_object_db
 {
-	var $db;
-	
-	function __construct($group)
-	{
-		parent::__construct($group);
-		$this->db = &new DataBase(config('cache_database'));
-	}
+	function main_db_storage() { return config('cache_database'); }
+	function main_table_storage() { return 'cache_groups'; }
+	function main_table_fields() { return array('id', 'cache_group', 'object_class_id' => 'class_name', 'object_id' => 'class_id', 'create_time'); }
 
 	function register($obj)
 	{
-		$this->db->replace('cache_groups', array(
+		$this->db()->replace('cache_groups', array(
 			'cache_group' => $this->id(),
 			'class_name' => get_class($obj),
 			'class_id' => $obj->id(),
