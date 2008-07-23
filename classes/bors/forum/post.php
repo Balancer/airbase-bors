@@ -201,6 +201,7 @@ class forum_post extends base_page_db
 		}
 	
 		$posts = $topic->all_posts_ids();
+//		print_d($posts); exit();
 
 		$page = 1;
 
@@ -210,6 +211,8 @@ class forum_post extends base_page_db
 				$page = intval( $i / 25) + 1;
 				break;
 			}
+
+//		print_d($topic->url($page)."#p".$pid); exit();
 			
 		return $topic->url($page)."#p".$pid;
 	}

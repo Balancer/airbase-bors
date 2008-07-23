@@ -85,16 +85,21 @@ class forum_topic extends forum_abstract
 
 	function preParseProcess()
 	{
+//		$_SERVER['HTTP_HOST'] = ''; debug_trace();
 		if($this->page() == 'new')
 		{
 			$me = bors()->user();
 		
 			if(!$me || $me->id() < 2)
-				return bors_message(ec('Вы не авторизованы на этом домене. Авторизуйтесь, пожалуйста. Если не поможет - попробуйте стереть cookies вашего браузера.'), array('login_form' => true, 'login_referer' => $this->url($this->page())));
-
+			{
+				$ref = $this->url($this->page());
+				return bors_message(ec('Вы не авторизованы на этом домене. Авторизуйтесь, пожалуйста. Если не поможет - попробуйте стереть cookies вашего браузера.'), array('login_form' => true, 'login_referer' => $ref));
+			}
+			
 			$uid = $me->id();
 			$x = $this->db()->select('topic_visits', 'last_visit, last_post_id', array('user_id='=>$uid, 'topic_id='=>$this->id()));
 			$first_new_post_id = @$x['last_post_id'];
+//			exit($first_new_post_id);
 //			if(!$first_new_post_id)
 			{
 				$last_visit = $x['last_visit'];
@@ -105,6 +110,7 @@ class forum_topic extends forum_abstract
 //				exit();
 			}
 					
+//			exit("f=".$first_new_post_id);
 			if($first_new_post_id)
 			{
 				$post = object_load('forum_post', $first_new_post_id);
@@ -113,8 +119,12 @@ class forum_topic extends forum_abstract
 					return go($post->url_in_topic());
 			}
 
+//			exit('lkmnj');
+
 			$this->set_page('last');
 		}
+
+//		exit('tp='.$this->total_pages());
 
 		if($this->page() == 'last')
 			return go($this->url($this->total_pages()));
