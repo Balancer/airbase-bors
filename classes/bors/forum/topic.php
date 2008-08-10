@@ -168,7 +168,7 @@ class forum_topic extends forum_abstract
 
 		$where = array(
 			'where' => array('topic_id=' => intval($this->id())),
-			'order' => 'id',
+			'order' => '`order`,id',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
 		);
@@ -194,7 +194,7 @@ class forum_topic extends forum_abstract
 
 		$this->__add_posts = objects_array('forum_post', array(
 				'where' => array('post_id IN('.join(',', array_unique($this->__add_post_ids)).')'),
-				'order' => 'id',
+				'order' => '`order`,id',
 		));
 		
 		for($i = 0; $i<count($this->__add_posts); $i++)
@@ -212,7 +212,7 @@ class forum_topic extends forum_abstract
 		if(isset($this->__all_posts_ids))
 			return $this->__all_posts_ids;
 		
-		return $this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id='=>$this->id(), 'order' => 'posted'));
+		return $this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id='=>$this->id(), 'order' => '`order`,posted'));
 	}
 
 	private $__posts_ids;
@@ -369,7 +369,7 @@ class forum_topic extends forum_abstract
 
 		$start_from = ($this->page() - 1) * $this->items_per_page();
 
-		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.id LIMIT $start_from, ".$this->items_per_page();
+		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.`order`, posts.id LIMIT $start_from, ".$this->items_per_page();
 			
 		$posts = $db->get_array($query);
 
@@ -391,7 +391,7 @@ class forum_topic extends forum_abstract
 	
 		$db = &new DataBase('punbb');
 
-		$posts = $db->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY posted");
+		$posts = $db->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY `order`,posted");
 
 		for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
 			if($posts[$i] == $post_id)
@@ -418,6 +418,19 @@ class forum_topic extends forum_abstract
 		
 		if($printable = object_load('forum_printable', $this->id()))
 			$printable->cache_clean_self();
+	}
+
+	function cache_dir()
+	{
+		return dirname($this->static_file());
+	}
+
+	function cache_clean_self()
+	{
+		parent::cache_clean_self();
+		//TODO: подумать на тему неполной чистки.
+		foreach(glob($this->cache_dir().'/t'.$this->id().'*.html') as $f)
+			@unlink($f);
 	}
 
 	function url_engine() { return 'url_titled'; }

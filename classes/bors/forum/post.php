@@ -172,7 +172,7 @@ class forum_post extends base_page_db
 		return $this->__answer_to = $post;
 	}
 
-	function cache_static() { return rand(86400*7, 86400*8); }
+	function cache_static() { return rand(86400, 86400*2); }
 
 	function template() { return 'empty.html'; }
 	function render() { return 'render_fullpage'; }
@@ -335,6 +335,19 @@ class forum_post extends base_page_db
 
 		foreach($this->answers() as $answer)
 			$answer->__move_tree_to_topic($new_tid, $old_tid);
+	}
+
+	function move_to_topic($new_tid)
+	{
+		$old_tid = $this->topic_id();
+	
+		if($new_tid == $old_tid)
+			return;
+
+		$this->set_topic_id($new_tid, true);
+
+		object_load('forum_topic', $old_tid)->recalculate();
+		object_load('forum_topic', $new_tid)->recalculate();
 	}
 
 	function auto_search_index() { return $this->_source_changed; }
