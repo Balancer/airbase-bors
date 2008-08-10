@@ -4,6 +4,8 @@ class forum_tools_post_moveTree extends base_page
 {
 	function can_be_empty() { return true; }
 
+	function dont_move_tree() { return false; }
+
 	function parents() { return array('forum_post://'.$this->post()->id()); }
 	
 	function main_db_storage() { return 'punbb'; }
@@ -59,7 +61,10 @@ class forum_tools_post_moveTree extends base_page
 
 		$this->topic = $new_topic;
 			
-		$this->post()->move_tree_to_topic($new_topic->id());
+		if(empty($data['dont_move_tree']))
+			$this->post()->move_tree_to_topic($new_topic->id());
+		else
+			$this->post()->move_to_topic($new_topic->id());
 	   
 		return bors_message_tpl("xfile:moveTree.has_moved.html", $this, array(
 			'title' => ec('Сообщения успешно перенесены'),

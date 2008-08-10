@@ -9,6 +9,7 @@
 <option value="{$tid}"{if $tid==$curtid} selected="true"{/if}>{$topic->title()|truncate:40} [{$topic->forum()|get:title}]</option>
 {/foreach}
 </select> {submit value="Переместить"}
+<br />{checkbox name="dont_move_tree"}&nbsp;Не перемещать ответы на это сообщение
 {/form}
 </dd></dl>
 
@@ -16,6 +17,7 @@
 <dd>
 {form subaction="by_topic_id" id=$this->id()}
 ID (можно URL) целевой темы: {input name="target_topic_id"} {submit value="Переместить"}
+<br />{checkbox name="dont_move_tree"}&nbsp;Не перемещать ответы на это сообщение
 {/form}
 </dd></dl>
 
@@ -25,6 +27,11 @@ ID (можно URL) целевой темы: {input name="target_topic_id"} {sub
 {form subaction="by_post_id" id=$this->id()}
 ID (можно URL) сообщения в целевой теме: {input name="target_post_id"} {submit value="Переместить"}
 {/form}
+</dd></dl>
+
+<dl class="forumposting">
+<dt>Сообщение</dt>
+<dd>{$this->post()|get:source|truncate:256}
 </dd></dl>
 
 <dl class="forumposting"><dd>
