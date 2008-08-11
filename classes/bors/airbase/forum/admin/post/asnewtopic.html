@@ -1,0 +1,14 @@
+{form id=$this->id()}
+<table class="btab">
+<tr><th>Целевой форум</th><td>{dropdown name="target_forum_id" list="airbase_forum_list" class="w100p"}</td></tr>
+<tr><th>Заголовок новой темы</th><td>{input name="new_topic_title" class="w100p"}</td></tr>
+<tr><th>Метки</th><td>
+	{checkbox name="dont_move_with_tree"}&nbsp;Не переносить ответы<br />
+</td></tr>
+<tr><th colSpan="2">{submit value="Создать тему"}</th></tr>
+</table>
+{/form}
+<dl class="forumposting">
+<dt>Сообщение</dt>
+<dd>{$this->post()|get:source}</dd>
+</dl>

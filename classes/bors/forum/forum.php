@@ -189,6 +189,31 @@ function parents()
 		return $forums;
 	}
 
+	private $all_public_subforums_ids = false;
+	function all_public_subforum_ids(&$processed = array(), $root = true)
+	{
+		if($root && $this->all_public_subforums_ids !== false)
+			return $this->all_public_subforums_ids;
+			
+		$forums = array($this->id());
+			
+		foreach($this->direct_subforums_ids() as $forum_id)
+		{
+			if(in_array($forum_id, $processed))
+				continue;
+
+			$processed[] = $forum_id;
+			$subforum = object_load('forum_forum', $forum_id);
+			if($subforum && $subforum->is_public_access())
+				$forums = array_merge($forums, $subforum->all_readable_subforum_ids(&$processed, false));
+		}
+			
+		if($root)
+			$this->all_public_subforums_ids = $forums;
+
+		return $forums;
+	}
+
 	var $stb_num_topics = '';
 	function num_topics() { return $this->stb_num_topics; }
 	function set_num_topics($num_topics, $db_update) { $this->set("num_topics", $num_topics, $db_update); }
