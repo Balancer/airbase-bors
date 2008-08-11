@@ -1,0 +1,17 @@
+{$this->pages_links_nul()}
+
+{assign var="skip_message_footer" value=1}
+{foreach from=$topics item=t}
+{assign var="p" value=$t->first_post()}
+{if $p}
+{if $t}
+{assign var="f" value=$t->forum()}
+{if $f->is_public_access()}
+{include file="xfile:forum/post.html" show_title=$t->title_url() strip="8192"}
+{/if}
+{/if}{/if}
+{foreachelse}
+<dl class="box"><dd>В данном форуме нет записей.</dd></dl>
+{/foreach}
+
+{$this->pages_links_nul()}

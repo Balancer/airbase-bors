@@ -334,10 +334,12 @@ class forum_topic extends forum_abstract
 	function cache_children()
 	{
 		$res = array(
-			object_load('forum_forum', $this->forum_id()),
 			object_load('forum_printable', $this->id()),
 			object_load('forum_topic_rss', $this->id()),
 		);
+
+		if($this->forum_id())
+			$res[] = object_load('forum_forum', $this->forum_id());
 
 		foreach($this->all_users() as $user_id)
 			$res[] = object_load('forum_user', $user_id);
@@ -351,8 +353,8 @@ class forum_topic extends forum_abstract
 		return $db->get_array("SELECT DISTINCT poster_id FROM posts WHERE topic_id={$this->id}");
 	}
 		
-	function cache_static() { return $this->forum()->is_public_access() ? 86400*30 : 0; }
-	function base_url() { return $this->forum()->category()->category_base_full(); }
+	function cache_static() { return ($this->forum_id() && $this->forum()->is_public_access()) ? 86400*30 : 0; }
+	function base_url() { return $this->forum_id() ? $this->forum()->category()->category_base_full() : '/'; }
 		
 	function title_url()
 	{
@@ -406,6 +408,12 @@ class forum_topic extends forum_abstract
 		$num_replies = $db->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
 //		echo "Num repl of {$this->id()} =   $num_replies<br />\n";
 		$this->set_num_replies($num_replies, true);
+		$first_pid = $db->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));
+		$this->set_first_post_id($first_pid, true);
+		$first_post = object_load('forum_post', $first_pid);
+		$this->set_create_time($first_post->create_time(true), true);
+		$this->set_author_name($first_post->owner()->title(), true);
+		$this->set_owner_id($first_post->owner()->id(), true);
 		$last_pid = $db->select('posts', 'MAX(id)', array('topic_id='=>$this->id()));
 		$this->set_last_post_id($last_pid, true);
 		$last_post = object_load('forum_post', $last_pid);
