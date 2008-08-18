@@ -28,13 +28,13 @@ class airbase_forum_news extends base_page
 		);
 	}
 
-	private $_total = false;
+	private $_total_items = false;
 	function total_items()
 	{
-		if($this->_total === false)
-			$this->_total = intval(objects_count('forum_topic', array('forum_id IN' => $this->forum()->all_public_subforum_ids())));
+		if($this->_total_items === false)
+			$this->_total_items = intval(objects_count('forum_topic', array('forum_id IN' => $this->forum()->all_public_subforum_ids())));
 
-		return $this->_total;
+		return $this->_total_items;
 	}
 
 	function default_page() { return $this->total_pages(); }
@@ -48,6 +48,7 @@ class airbase_forum_news extends base_page
 	}
 	
 	function url_engine() { return 'url_calling2'; }
-	function cache_static() { return rand(100,500); }
+	function cache_static() { return $this->page() != $this->default_page() ? rand(3600, 7200) : rand(100,500); }
+	function can_cached() { return false; }
 }
 

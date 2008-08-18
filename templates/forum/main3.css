@@ -447,3 +447,13 @@ div.edited_note {
 	color: #9bd;
 	text-align: right;
 }
+
+
+li.postquote {
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+dl dd li.postquote a {
+	color: blue;
+}

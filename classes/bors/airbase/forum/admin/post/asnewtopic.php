@@ -13,6 +13,9 @@ class airbase_forum_admin_post_asnewtopic extends base_page
 	
 	function pre_action($data)
 	{
+		if($data['original_topic_id'] != $this->post()->topic_id())
+			return bors_message(ec('Это сообщение уже было перенесено, пока Вы готовились к той же операции'));
+	
 		if($this->check_data($data) === true)
 			return true;
 			
