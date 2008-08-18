@@ -10,7 +10,13 @@
 
 <table width="100%"><tr>
 <td width="90%">
-<script src="http://balancer.ru/js/users/reputation,{$user_id}.js?ref={$ref}"></script>
+
+<script type="text/javascript">
+{* for(i in document.location)
+	document.write(i + '=' + document.location[i] + '<br />')
+*}
+document.write('<s'+'cript type="text/javascript" src="http://balancer.ru/js/users/reputation,{$user_id}.js?ref='+(document.location.search.substring(1) ? document.location.search.substring(1) : document.referrer)+'"></s'+'cript>')
+</script>
 <td>
 {bors_class_load var=owner class="forum_user" id=$user_id}
 <div class="avatar_block">{include file="xfile:templates/forum/post-avatar.html"}</div>

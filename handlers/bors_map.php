@@ -1,6 +1,10 @@
 <?php
     $map = array(
 
+		'(/)blog/ => balancer_blog',
+		'(/)blog/index.html => redirect:balancer_blog',
+		'(/)blog/(\d+).html => balancer_blog(NULL,2)',
+
 		'/\d{4}/\d{1,2}/\d{1,2}/forum\-(\d+)(,(\d+))?\-\-.+ => forum_forum(1,3)',
 		'/\d{4}/\d{1,2}/\d{1,2}/forum\-(\d+)/? => forum_forum(1,3)',
 		'(/)forum/(\d+)/ => redirect:forum_forum(2)',
@@ -17,6 +21,8 @@
 		'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+ => forum_category(1)',
 		'/user/(\d+)/personal\.js => forum_js_personal(1)',
 		'(/)forum/ => forum_main',
+		'(/forum/(\d+)/)news/ => airbase_forum_news(2)',
+		'(/forum/(\d+)/)news/(\d+)\.html => airbase_forum_news(2,3)',
 		'(/user/(\d+)/)use\-topics\.html => airbase_user_topics(2)',
 		'(/user/(\d+)/)use\-topics,(\d+)\.html => airbase_user_topics(2,3)',
 
@@ -45,6 +51,8 @@
 		'/user/(\d+)/reputation,(\d+)\.html\?(.*) => user_reputation(1,page=2,ref=3)',
 		'/user/(\d+)/reputation\.html\?(.*) => user_reputation(1,ref=2)',
 		'/user/(\d+)/reputation/(.+) => user_reputation(1,ref=2)',
+
+		'(/user/(\d+)/)aliases\.html => airbase_user_aliases(2)',
 		
 #		'/user/(\d+)/reputation.* => forum_main',
 
@@ -56,13 +64,14 @@
 		'/user/(\d+)/warnings\.gif => forum_images_warnings(1)',
 		'(/user/(\d+)/)warnings/ => airbase_user_warnings(2)',
 		'(/users/(\d+)/)warnings/ => airbase_user_warnings(2)',
+//		'(/user/(\d+)/)warnings\.html/?object=.* => airbase_user_warnings(2)',
 		'(/user/(\d+)/)warnings\.html => airbase_user_warnings(2)',
 		'(/user/(\d+)/)warnings,(\d+)\.html => airbase_user_warnings(2,3)',
 
 		'(/)(test|crazy)/ => base_page_hts',
 
-		'(/admin/users/(\d+)/)warnings.html => airbase_user_admin_warnings(2)',
 		'(/admin/users/(\d+)/)warnings.html\?object=(.+) => airbase_user_admin_warnings(2,object=3)',
-
+		'(/admin/users/(\d+)/)warnings.html => airbase_user_admin_warnings(2)',
+		'(/admin/forum/post/(\d+)/)as-new-topic/ => airbase_forum_admin_post_asnewtopic(2)',
 //	'.* => base_page_hts',
 );

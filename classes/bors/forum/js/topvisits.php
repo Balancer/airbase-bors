@@ -26,6 +26,6 @@ class forum_js_topvisits extends base_js
 		return array('top' => $top);
 	}
 
-	function cache_static() { return 3600; }
+	function cache_static() { return rand(3600,7200); }
 	function url_engine() { return 'url_calling'; }
 }

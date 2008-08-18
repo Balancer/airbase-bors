@@ -34,6 +34,8 @@ class user_reputation extends base_page_db
 
 	function local_template_data_set()
 	{
+		templates_noindex();
+	
 		$dbu = &new DataBase('USERS');
 		$dbf = &new DataBase('punbb');
 		
@@ -72,7 +74,7 @@ class user_reputation extends base_page_db
 	function can_be_empty() { return true; }
 	function can_cached() { return false; }
 
-	function cache_groups() { return "user-{$this->id()}-reputation"; }
+	function cache_groups_parent() { return "user-{$this->id()}-reputation"; }
 
 	function on_action_reputation_add_do($data)
 	{
@@ -143,7 +145,7 @@ class user_reputation extends base_page_db
 			unlink($filename);
 
 		$target_user->cache_clean_self();
-		class_load('cache_group', "user-{$uid}-reputation")->clean();
+//		class_load('cache_group', "user-{$uid}-reputation")->clean();
 		
 		include_once("inc/navigation.php");
 		go("http://balancer.ru/user/$uid/reputation.html?");
