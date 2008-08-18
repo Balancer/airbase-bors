@@ -7,6 +7,7 @@
 </td></tr>
 <tr><th colSpan="2">{submit value="Создать тему"}</th></tr>
 </table>
+{hidden name="original_topic_id" value=$this->post()|get:topic_id}
 {/form}
 <dl class="forumposting">
 <dt>Сообщение</dt>
