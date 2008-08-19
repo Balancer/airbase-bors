@@ -103,6 +103,7 @@ class forum_post extends base_page_db
 		}
 
 		$this->_source_changed |= $db_update;
+		$this->set_body(NULL, $db_update);
 
 		return $this->_post_source = $message;
 	}
@@ -382,5 +383,10 @@ class forum_post extends base_page_db
 		);
 			
 		return $res;
+	}
+
+	function cache_clean_self()
+	{
+		$this->set_body(NULL, true);
 	}
 }
