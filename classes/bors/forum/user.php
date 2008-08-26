@@ -33,6 +33,7 @@ class forum_user extends base_object_db
 			'warnings',
 			'warnings_total',
 			'reputation',
+			'pure_reputation',
 			'create_time' => 'registered',
 			'last_post_time' => 'last_post',
 		)));

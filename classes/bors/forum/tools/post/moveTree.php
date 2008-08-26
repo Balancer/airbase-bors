@@ -39,7 +39,7 @@ class forum_tools_post_moveTree extends base_page
 
 	function target_post_id() { return $this->post()->id(); }
 
-	function url() { return 'http://balancer.ru/forum/tools/move_post_tree/'.$this->id().'/'; }
+	function url() { return 'http://balancer.ru/admin/forum/post/'.$this->id().'/move-tree'; }
 
 	function template() { return "forum/_header.html"; }
 
