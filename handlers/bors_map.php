@@ -41,4 +41,7 @@ $map = array(
 	'(.+\.htm) => airbase_images_show(1)',
 
 	'/test/ => airbase_main',
+
+	'/user/(\d+)/personal\.js => forum_js_personal(1)',
+	'/js/users/touch.js\?(.+) => user_js_touch(1)',
 );

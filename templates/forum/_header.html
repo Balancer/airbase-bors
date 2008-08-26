@@ -5,14 +5,21 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
-	<script  type="text/javascript" src="http://forums.balancer.ru/tpl/default/js/funcs.js"></script>
-	<script  type="text/javascript" src="http://forums.balancer.ru/tpl/default/js/tune.js"></script>
+	<script  type="text/javascript" src="/bors-shared/js/funcs.js"></script>
+	<script  type="text/javascript" src="/bors-shared/js/tune.js"></script>
 <noscript>
-<link rel="stylesheet" type="text/css" href="http://forums.balancer.ru/tpl/default/css/main3.css" />
+<link rel="stylesheet" type="text/css" href="/bors-shared/css/main3.css" />
 </noscript>
 
 	<script type="text/javascript"><!--
 createCookie('class_name', '{$this->class_name()}');createCookie('object_id', '{$this->id()}')
+
+var me_id = readCookie('user_id', 0)
+var me_hash = readCookie('cookie_hash', 0)
+if(me_id > 1 && me_hash) {ldelim}
+	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/setvars.js\"></"+"script>")
+{rdelim}
+
 --></script>
 
 {if $type == 'topic' and $id}
@@ -121,19 +128,12 @@ dd, dt { height: 1%; }
 		<dt>Персональное</dt>
 		<dd>
 			<script type="text/javascript">
-var me_id = readCookie('user_id', 0)
-var me_hash = readCookie('cookie_hash', 0)
 			if(me_id < 2 || !me_hash)
 				document.writeln("<"+"script  type=\"text/javascript\" src=\"/templates/login.js\"></"+"script>")
-			else
-{literal}
-			{
-{/literal}
-				document.writeln("<"+"script  type=\"text/javascript\" src=\"http://balancer.ru/user/"+me_id+"/personal.js\"></"+"script>")
-				document.writeln("<"+"script  type=\"text/javascript\" src=\"http://balancer.ru/js/users/touch.js?{$this->class_name()}://{$this->id()}\"></"+"script>")
-{literal}
-			}
-{/literal}
+			else {ldelim}
+				document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
+				document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?{$this->class_name()}://{$this->id()}\"></"+"script>")
+			{rdelim}
 			</script>
 			<noscript>Не работает без JavaScript</noscript>
 		</dd>
