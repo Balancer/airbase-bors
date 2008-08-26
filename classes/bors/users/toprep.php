@@ -1,9 +1,7 @@
 <?php
 
-class users_toprep extends base_page_db
+class users_toprep extends base_page
 {
-	function main_db_storage(){ return 'punbb'; }
-
 	function template()
 	{
 		templates_noindex();
@@ -15,26 +13,18 @@ class users_toprep extends base_page_db
 
 	function parents() { return array("http://balancer.ru/users/"); }
 
-	function _queries()
+	function local_template_data_set()
 	{
 		return array(
-			'high' => 'SELECT * FROM users ORDER BY reputation DESC LIMIT 50',
-			'low' => 'SELECT * FROM users ORDER BY reputation LIMIT 50',
+			'high' => objects_array('bors_user', array('order' => '-reputation', 'limit' => 50)),
+			'low' => objects_array('bors_user', array('order' => 'reputation', 'limit' => 50)),
 
-			'pure_high' => 'SELECT * FROM users ORDER BY pure_reputation DESC LIMIT 20',
-			'pure_low' => 'SELECT * FROM users ORDER BY pure_reputation LIMIT 20',
+			'pure_high' => objects_array('bors_user', array('order' => '-pure_reputation', 'limit' => 50)),
+			'pure_low' => objects_array('bors_user', array('order' => 'pure_reputation', 'limit' => 50)),
 		);
 	}
 
-	function url()
-	{	
-		return "http://balancer.ru/users/toprep/"; 
-	}
+	function url() { return "http://balancer.ru/users/toprep/"; }
 
-	function cache_static()
-	{
-		return 3600;
-	}
-	
-	function can_be_empty() { return true; }
+	function cache_static() { return 3600; }
 }
