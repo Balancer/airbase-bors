@@ -6,10 +6,11 @@ class forum_access_move extends access_base
 	{
 		$me = bors()->user();
 	
-		if($this->id()->post()->owner()->id() == $me->id())
+		$post = $this->id()->post();
+		if($post && $post->owner()->id() == $me->id())
 			return true;
 
-		return $me->group()->can_move();
+		return $me && $me->group()->can_move();
 	}
 
 	function can_read() { return $this->can_edit(); }
