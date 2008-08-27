@@ -11,13 +11,20 @@
 <link rel="stylesheet" type="text/css" href="/bors-shared/css/main3.css" />
 </noscript>
 
-	<script type="text/javascript"><!--
+<script type="text/javascript"><!--
 createCookie('class_name', '{$this->class_name()}');createCookie('object_id', '{$this->id()}')
 
 var me_id = readCookie('user_id', 0)
 var me_hash = readCookie('cookie_hash', 0)
 if(me_id > 1 && me_hash) {ldelim}
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/setvars.js\"></"+"script>")
+{rdelim}
+--></script>
+
+<script type="text/javascript"><!--
+if(me_is_coordinator) {ldelim}
+	document.writeln('<link rel="stylesheet" type="text/css" href="/bors-shared/css/coordinators.css" />')
+	document.writeln('<'+'script  type="text/javascript" src="/bors-shared/js/coordinators.js"></'+'script>')
 {rdelim}
 
 --></script>
@@ -63,7 +70,7 @@ dd, dt { height: 1%; }
 
 </head>
 
-<body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg" id="body">
+<body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg" id="body" onLoad="onLoadPage()">
 
 <div class="minwidth"><div class="wrapper">
 

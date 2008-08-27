@@ -39,6 +39,7 @@
 За это сообщение пользователь получил предупреждение в {$p->warning()|get:score} {$p->warning()|get:score|sklon:"балл":"балла":"баллов"}
 {if $p->warning()|get:type_id} по категории «<b>{$p->warning()|get:type_id|bors_list_item_name:"airbase_user_warning_type"}</b>»{/if}.
 </div>{/if}
+
 <ul class="postfooter">
 <li><a href="http://balancer.ru/user/{$p->owner_id()}/reputation.html?{$p->url()}">Репутация автору</a></li>
 <li>|</li>
@@ -48,6 +49,13 @@
 <li>|</li>
 <li class="postquote"><a href="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}">Ответить на сообщение</a></li>
 </ul>
+
+<ul class="postfooter coordinators">
+<li>Групповые операции:</li>
+<li><input type="checkbox" id="_chkbx_p{$p->id()}" onClick="return apfgp(this, {$p->id()})"><label for="_chkbx_p{$p->id()}">&nbsp;отметить</label></li>
+<li> | <a href="/admin/forum/posts/move-tree">перенос в другую тему</a></li>
+</ul>
+
 </dd>
 </dl>
 {/if}

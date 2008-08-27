@@ -36,4 +36,6 @@ class forum_group extends base_page_db
 	function can_move() { return $this->stb_can_move; }
 	function set_can_move($can_move, $db_update) { $this->set("can_move", $can_move, $db_update); }
 	function field_can_move_storage() { $this->id(); return 'can_move(g_id)'; }
+
+	function is_coordinator() { return $this->can_move(); }
 }

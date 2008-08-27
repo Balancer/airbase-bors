@@ -48,7 +48,7 @@ class forum_tools_post_moveTree extends base_page
 	function onAction_by_topic_id(&$data)
 	{
 		$tid = @$data['target_topic_id'];
-		if(preg_match('!topic\-(\d+)\-\-!', $tid, $m))
+		if(preg_match('!\d+/t(\d+)\-\-!', $tid, $m))
 			$tid = $m[1];
 		elseif(preg_match('!\?id=(\d+)!', $tid, $m))
 			$tid = $m[1];

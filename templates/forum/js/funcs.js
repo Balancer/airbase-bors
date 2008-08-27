@@ -93,13 +93,22 @@ function createSelect(title, element, values, def)
 	document.write("</select><br />")
 }
 
-function inArray(array, value)
-{
+function inArray(array, value) {
 	for(var i in array)
 		if(array[i] == value) 
 			 return true
 
     return false
+}
+
+function removeArrayItems(array, item) {
+	var i = 0;
+	while (i < array.length)
+		if (array[i] == item)
+			array.splice(i, 1)
+		else
+			i++
+	return array;
 }
 
 function process_form(the_form)
@@ -150,3 +159,5 @@ function clientSize()
 
 	return new Array(myWidth, myHeight)
 }
+
+function is_numeric( mixed_var ) { return !isNaN( mixed_var ); }

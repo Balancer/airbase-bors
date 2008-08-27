@@ -332,8 +332,11 @@ class forum_post extends base_page_db
 //		echo "Move {$this->id()} from {$this->topic_id()} to {$new_tid}<br />\n";
 	
 		if($this->topic_id() == $old_tid)
+		{
 			$this->set_topic_id($new_tid, true);
-
+			cache_static::drop($this);
+		}
+		
 		foreach($this->answers() as $answer)
 			$answer->__move_tree_to_topic($new_tid, $old_tid);
 	}
@@ -349,6 +352,8 @@ class forum_post extends base_page_db
 
 		object_load('forum_topic', $old_tid)->recalculate();
 		object_load('forum_topic', $new_tid)->recalculate();
+		
+		cache_static::drop($this);
 	}
 
 	function auto_search_index() { return $this->_source_changed; }
@@ -388,5 +393,6 @@ class forum_post extends base_page_db
 	function cache_clean_self()
 	{
 		$this->set_body(NULL, true);
+		parent::cache_clean_self();
 	}
 }

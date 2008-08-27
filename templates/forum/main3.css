@@ -457,3 +457,7 @@ li.postquote {
 dl dd li.postquote a {
 	color: blue;
 }
+
+.coordinators {
+	visibility: hidden;
+}

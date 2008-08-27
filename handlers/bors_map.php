@@ -44,4 +44,6 @@ $map = array(
 
 	'/user/(\d+)/personal\.js => forum_js_personal(1)',
 	'/js/users/touch.js\?(.+) => user_js_touch(1)',
+
+	'(/admin/forum/posts/)move-tree => airbase_forum_admin_posts_movetree',
 );
