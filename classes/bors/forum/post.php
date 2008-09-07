@@ -233,7 +233,7 @@ class forum_post extends base_page_db
 	}
 		
 	function title() { return $this->topic()->title()." <small>[".$this->nav_name()."]</small>"; }
-	function nav_name() { return ($this->owner() ? $this->owner()->title() : 'Unknown').", ".strftime("%d.%m.%y", $this->create_time()); }
+	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown')).", ".strftime("%d.%m.%y", $this->create_time()); }
 
 	function base_url()
 	{

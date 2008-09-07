@@ -1,15 +1,21 @@
+{*
+	переменные:
+	$p - сам постинг
+	$forum - форум, если нужно показать ссылку на него
+	$no_show_answers = true, если не показывать ответы.
+	$show_title = true, если нужна печать заголовка.
+	$skip_author_name
+	$skip_date
+*}
 {if $p}
 <a name="p{$p->id()}"></a>
 <dl class="forumposting posted_by_{$p->owner_id()}">
-<dt>{$p->flag()}{if $show_title} {$show_title},{/if}{if not $skip_author_name} {$p->author_name()}{/if} <a href="{$p->url()}">{$p->create_time()|full_time}</a>
-{if $p->answer_to_id()}
+<dt>{$p->flag()} {if $show_title}{$show_title} {/if}{if not $skip_author_name}{$p->author_name()}{/if}{if not $skip_date} <a href="{$p->url()}">{$p->create_time()|full_time}</a>{/if}
+{if not $no_show_answers and $p->answer_to_id()}
 {assign var=a value=$p->answer_to()}
 <span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>
 {/if}
-{if $forum}
-<br />
-<small>// Форум: {$forum->titled_url()}</small>
-{/if}
+{if $forum} <small>// {$forum->titled_url()}</small>{/if}
 </dt>
 <dd>
 {assign var="owner" value=$p->owner()}
