@@ -30,7 +30,7 @@
 {$p->body()}
 {/if}
 {if not $skip_message_footer}
-{if $owner->signature()}<div class="postsignature">{$owner->signature_html()}</div>{/if}
+{if $owner and $owner->signature()}<div class="postsignature">{$owner->signature_html()}</div>{/if}
 <ul class="postfooter">
 <li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
 <li class="postdelete"><a href="http://balancer.ru/forum/tools/post/{$p->id()}/">Инструменты</a></li>

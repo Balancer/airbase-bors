@@ -183,4 +183,12 @@ class forum_user extends base_object_db
 	{
 		return $period * 86400 * $this->warnings_total() / ($this->last_post_time() - $this->create_time() + 1);
 	}
+
+    function do_logout()
+	{
+		SetCookie('user_id', '', 0, '/');
+		SetCookie('cookie_hash', '', 0, '/');
+		unset($_COOKIE['user_id']);
+		unset($_COOKIE['cookie_hash']);
+	}
 }
