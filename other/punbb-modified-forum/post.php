@@ -435,8 +435,8 @@ if (isset($_POST['form_sent']))
 			bors_blog_livejournal_com_post($post->owner_id(), $topic, $topic->first_post()->id() == $post->id() ? $topic : $post, $post, $topic->forum());
 		}
 			
-		include_once('engines/search.php');
-		bors_search_object_index($topic, 'replace');
+//		include_once('engines/search.php');
+//		bors_search_object_index($topic, 'replace');
 
 		// If the posting user is logged in, increment his/her post count
 		if (!$pun_user['is_guest'])

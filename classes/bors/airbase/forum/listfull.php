@@ -4,7 +4,11 @@ class airbase_forum_listfull extends base_list
 {
 	function named_list()
 	{
-		$forums = objects_array('airbase_forum_forum', array('order' => 'cat_id, disp_position', 'by_id' => true));
+		$forums = objects_array('airbase_forum_forum', array(
+			'order' => 'cat_id, disp_position',
+			'by_id' => true,
+			'redirect_url IS NULL',
+		));
 		$cat_ids = array();
 		foreach($forums as $id => $f)
 			if(!in_array($cat_id = $f->category_id(), $cat_ids))
@@ -14,7 +18,8 @@ class airbase_forum_listfull extends base_list
 		
 		$result = array(0 => ' ');
 		foreach($forums as $id => $f)
-			$result[$id] = $f->full_name($forums, $cats);
+			if($f->can_read())
+				$result[$id] = $f->full_name($forums, $cats);
 		
 		asort($result);
 

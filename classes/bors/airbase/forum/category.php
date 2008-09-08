@@ -96,6 +96,6 @@ class airbase_forum_category extends base_object_db
 				$current_cat = $cats ? $cats[$parent] : object_load('airbase_forum_category', $parent);
 		} while($parent);
 
-		return join(' » ', array_reverse($result));
+		return join(' « ', $result);
 	}
 }
