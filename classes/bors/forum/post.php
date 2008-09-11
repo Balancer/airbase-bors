@@ -1,6 +1,7 @@
 <?php
 
 include_once('engines/lcml.php');
+include_once('inc/browsers.php');
 
 class forum_post extends base_page_db
 {
@@ -35,6 +36,7 @@ class forum_post extends base_page_db
 			'edited',
 			'owner_id'=> 'poster_id',
 			'poster_ip',
+			'poster_ua',
 			'author_name' => 'poster',
 			'answer_to_id' => 'answer_to',
 		);
@@ -154,6 +156,55 @@ class forum_post extends base_page_db
 		}
 		
 		return $this->flag_db();
+	}
+
+	function owner_user_agent()
+	{
+		if(!$this->poster_ua())
+			return NULL;
+			
+		list($os, $browser) = get_browser_info($this->poster_ua());
+		
+		$out_os = '';
+		switch($os)
+		{
+			case 'Linux':
+				$out_os = '<img src="/bors-shared/images/os/linux.gif" width="16" height="16" border="0" alt="Windows" />';
+				break;
+			case 'PocketPC':
+			case 'J2ME':
+				break;
+			case 'WindowsVista':
+			case 'WindowsXP':
+			case 'Windows2000':
+			case 'Windows98':
+			case 'Windows98':
+			case 'Windows':
+				$out_os = '<img src="/bors-shared/images/os/windows.gif" width="16" height="16" border="0" alt="Linux" />';
+				break;
+			default:
+		}
+
+		$out_browser = '';
+		switch($browser)
+		{
+			case 'Opera':
+				$out_browser = '<img src="/bors-shared/images/browsers/opera.gif" width="16" height="16" border="0" alt="Opera" />';
+				break;
+			case 'Konqueror':
+			case 'SeaMonkey':
+			case 'Firefox':
+				$out_browser = '<img src="/bors-shared/images/browsers/firefox.gif" width="16" height="16" border="0" alt="Firefox" />';
+				break;
+			case 'Gecko':
+				break;
+			case 'MSIE':
+				$out_browser = '<img src="/bors-shared/images/browsers/ie6.gif" width="16" height="16" border="0" alt="IE" />';
+				break;
+			default:
+		}
+		
+		return '<div style="width:40px height:16px float: right; display: inline;" title="'.htmlspecialchars($this->poster_ua()).'">'.$out_browser.$out_os.'</div>';
 	}
 
 	private $__answer_to = 0;
