@@ -118,7 +118,7 @@ class forum_user extends base_object_db
 	{
 		if(empty($this->stb_signature_html) || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
 		{
-			$body = lcml($this->signature(), 
+			$body = lcml(preg_replace("!\n+$!", '', $this->signature()),
 				array(
 					'cr_type' => 'save_cr',
 					'forum_type' => 'punbb',

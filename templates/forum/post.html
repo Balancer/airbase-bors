@@ -16,6 +16,7 @@
 <span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>
 {/if}
 {if $forum} <small>// {$forum->titled_url()}</small>{/if}
+{$p->owner_user_agent()}
 </dt>
 <dd>
 {assign var="owner" value=$p->owner()}
