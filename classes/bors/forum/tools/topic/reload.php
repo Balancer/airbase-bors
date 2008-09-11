@@ -7,11 +7,12 @@ class forum_tools_topic_reload extends base_object
 	function pre_parse($data)
 	{
 		$topic = object_load('forum_topic', $this->id());
-		
-		if($posts = $topic->all_posts_ids())
-			$this->db('punbb')->query('UPDATE messages SET html=\'\' WHERE id IN (' . join(',', $posts) . ')');
+		if(preg_match('!/t\d+,(\d+)!', @$_SERVER['HTTP_REFERER'], $m))
+			$page = $m[1];
+		else
+			$page = 1;
 		
 		$topic->recalculate();
-		return go($topic->url());
+		return go($topic->url($page));
 	}
 }
