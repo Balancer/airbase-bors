@@ -32,6 +32,7 @@ class forum_post extends base_page_db
 		return array(
 			'id',
 			'topic_id',
+			'topic_page' => 'page',
 			'create_time'	=> 'posted',
 			'edited',
 			'owner_id'=> 'poster_id',
@@ -169,7 +170,13 @@ class forum_post extends base_page_db
 		switch($os)
 		{
 			case 'Linux':
-				$out_os = '<img src="/bors-shared/images/os/linux.gif" width="16" height="16" border="0" alt="Windows" />';
+				$out_os = '<img src="/bors-shared/images/os/linux.gif" width="16" height="16" border="0" alt="Linux" />';
+				break;
+			case 'MacOSX':
+				$out_os = '<img src="/bors-shared/images/os/macos.gif" width="16" height="16" border="0" alt="Mac OS X" />';
+				break;
+			case 'Symbian':
+				$out_os = '<img src="/bors-shared/images/os/symbian.gif" width="16" height="16" border="0" alt="Symbian" />';
 				break;
 			case 'PocketPC':
 			case 'J2ME':
@@ -180,7 +187,7 @@ class forum_post extends base_page_db
 			case 'Windows98':
 			case 'Windows98':
 			case 'Windows':
-				$out_os = '<img src="/bors-shared/images/os/windows.gif" width="16" height="16" border="0" alt="Linux" />';
+				$out_os = '<img src="/bors-shared/images/os/windows.gif" width="16" height="16" border="0" alt="Windows" />';
 				break;
 			default:
 		}
@@ -450,9 +457,9 @@ class forum_post extends base_page_db
 		return $res;
 	}
 
-	function cache_clean_self()
+	function cache_clean_self($page = NULL)
 	{
 		$this->set_body(NULL, true);
-		parent::cache_clean_self();
+		parent::cache_clean_self($page);
 	}
 }

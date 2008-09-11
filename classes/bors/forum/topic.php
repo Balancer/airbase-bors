@@ -31,6 +31,7 @@ class forum_topic extends forum_abstract
 			'last_poster_name' => 'last_poster',
 			'author_name' => 'poster',
 			'num_replies',
+			'is_repaged',
 			'visits' => 'num_views',
 			'first_post_id' => 'first_pid',
 			'last_post_id' => 'last_post_id',
@@ -140,6 +141,9 @@ class forum_topic extends forum_abstract
 
 	function body()
 	{
+//		if(!$this->is_repaged())
+//			$this->repaging_posts();
+	
 		$GLOBALS['cms']['cache_disabled'] = true;
 
 		require_once("engines/smarty/assign.php");
@@ -154,158 +158,55 @@ class forum_topic extends forum_abstract
 		return template_assign_data("templates/TopicBody.html", $data);
 	}
 
-	private $__posts_map = NULL;
-	private $__pages_loades = array();
-	private $__add_posts = NULL;
-	private $__add_post_ids = array();
-	private $__add_posts_map = array();
-
-	private function raw_posts()
-	{
-		$page_id = $this->page().','.$this->items_per_page();
-		if(isset($this->__pages_loaded[$page_id]))
-			return $this->__pages_loaded[$page_id];
-
-		$where = array(
-			'where' => array('topic_id=' => intval($this->id())),
-			'order' => '`order`,id',
-			'page' => $this->page(),
-			'per_page' => $this->items_per_page(),
-		);
-
-		$this->__pages_loaded[$page_id] = objects_array('forum_post', $where);
-		
-		return $this->__pages_loaded[$page_id];
-	}
-
-	private function add_post($pid)
-	{
-		if(!in_array($pid, $this->__posts_ids))
-			$this->__add_post_ids[] = $pid;
-	}
-
-	private function add_posts()
-	{
-		if($this->__add_posts !== NULL)
-			return $this->__add_posts;
-
-		if(!$this->__add_post_ids)
-			return $this->__add_posts = array();
-
-		$this->__add_posts = objects_array('forum_post', array(
-				'where' => array('post_id IN('.join(',', array_unique($this->__add_post_ids)).')'),
-				'order' => '`order`,id',
-		));
-		
-		for($i = 0; $i<count($this->__add_posts); $i++)
-		{
-			$post = &$this->__add_posts[$i];
-			$this->__add_posts_map[$post->id()] = &$post;
-		}
-		
-		return $this->__add_posts;
-	}
-
 	private $__all_posts_ids;
 	function all_posts_ids()
 	{
 		if(isset($this->__all_posts_ids))
 			return $this->__all_posts_ids;
 		
-		return $this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id='=>$this->id(), 'order' => '`order`,posted'));
+		return $this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id' => $this->id(), 'order' => '`order`,posted'));
 	}
 
-	private $__posts_ids;
-	function posts_ids()
+	protected function posts_ids($page = NULL)
 	{
-		$page_id = $this->page_id();
-		if(isset($this->__posts_ids[$page_id]))
-			return $this->__posts_ids[$page_id];
+		if(!$page)
+			$page = $this->page();
 
-		$post_ids = array();
-		$posts = $this->raw_posts();
-
-		for($i = 0; $i < count($posts); $i++)
-		{
-			$post = &$posts[$i];
-			$pid = $post->id();
-			$post_ids[] = $pid;
-			$this->__posts_map[$pid] = &$post;
-		}
-
-		return $this->__posts_ids[$page_id] = $post_ids;
-	}
-
-	function page_id() { return $this->page().','.$this->items_per_page(); }
-
-	private $__posts;
-	protected function posts()
-	{
-		$page_id = $this->page_id();
-		if(isset($this->__posts[$page_id]))
-			return $this->__posts[$page_id];
-
-		$user_ids = array();
-
-		foreach($this->posts_ids() as $pid)
-		{
-			$post = &$this->__posts_map[$pid];
-
-			$user_ids[] = $post->owner_id();
-			$this->add_post($post->answer_to_id());
-		}
-
-		if(empty($this->__posts_ids[$page_id]))
-			return array();
-
-		$post_ids = 'id IN('.join(',', $this->__posts_ids[$page_id]).')';
-
-		foreach($this->db($this->main_db_storage())->select_array('messages', 'id,message,html', array($post_ids)) as $x)
-		{
-			$post = &$this->__posts_map[$x['id']];
-			$post->set_source($x['message'], false);
-			$post->set_body($x['html'], false);
-		}
-
-		$user_ids = 'id IN('.join(',', array_unique($user_ids)).')';
-		$users = objects_array('forum_user', array($user_ids));
-		$users_map = array();
-		for($i = 0; $i < count($users); $i++)
-		{
-			$user = &$users[$i];
-			$uid = $user->id();
-			$users_map[$uid] = &$user;
-		}
-
-		$attaches_map = array();
-		foreach(objects_array('forum_attach', array('post_'.$post_ids)) as $a)
-			$attaches_map[$a->post_id()][] = $a;
-
-		$this->add_posts();
+		$data = array(
+			'topic_id' => $this->id(),
+			'order' => '`order`,posted',
+		);
 		
-		$posts = $this->raw_posts();
-		for($i = 0; $i < count($posts); $i++)
+		if($this->is_repaged())
+			$data['`page` = '] = intval($page);
+		else
 		{
-			$post = &$posts[$i];
-			$pid = $post->id();
-			$uid = $post->owner_id();
-//			$post->set_owner($users_map[$uid], false);
-			
-			$attaches = @$attaches_map[$pid];
-			$post->set_attaches($attaches ? $attaches : array(), false);
-				
-			if($aid = $post->answer_to_id())
-			{
-				$answer = @$this->__add_posts_map[$aid];
-//				if(!$answer)
-//					$answer = $this->__posts_map[$aid];
-
-				if($answer)
-					$post->set_answer_to($answer, false);
-			}
+			$data['page'] = $page;
+			$data['per_page'] = $this->items_per_page();
 		}
+			
+		return $this->db()->select_array('posts', 'id', array($data));
+	}
 
-		return $this->__posts[$page_id] = $this->raw_posts();
+	protected function posts($page = NULL)
+	{
+		if(!$page)
+			$page = $this->page();
+
+		$data = array(
+			'topic_id' => $this->id(),
+			'order' => '`order`,posted',
+		);
+		
+		if($this->is_repaged())
+			$data['`page` = '] = intval($page);
+		else
+		{
+			$data['page'] = $page;
+			$data['per_page'] = $this->items_per_page();
+		}
+			
+		return objects_array('forum_post', $data);
 	}
 
 	function items_per_page() { return 25; }
@@ -400,6 +301,18 @@ class forum_topic extends forum_abstract
 				return intval( $i / 25) + 1;
 	}
 
+	function recalculate_on_change($start_page = NULL)
+	{
+		if(!$start_page)
+			$start_page = 1;
+		elseif($start_page == -1)
+			$start_page = $this->total_pages();
+			
+		$this->repaging_posts($page);
+		
+//		$this->recalculate();
+	}
+
 	function recalculate()
 	{
 		bors()->changed_save();
@@ -433,9 +346,13 @@ class forum_topic extends forum_abstract
 		return dirname($this->static_file());
 	}
 
-	function cache_clean_self()
+	function cache_clean_self($page = NULL)
 	{
-		parent::cache_clean_self();
+		parent::cache_clean_self($page);
+		
+		if($posts = $this->all_posts_ids())
+			$this->db('punbb')->query('UPDATE messages SET html=\'\' WHERE id IN (' . join(',', $posts) . ')');
+		
 		//TODO: подумать на тему неполной чистки.
 		foreach(glob($this->cache_dir().'/t'.$this->id().'*.html') as $f)
 			@unlink($f);
@@ -475,5 +392,24 @@ class forum_topic extends forum_abstract
 			$this->owner = object_load('bors_user', $this->owner_id());
 		
 		return $this->owner;
+	}
+
+	private function repaging_posts($page = NULL)
+	{
+		if(!$page || !$this->is_repaged())
+			$page = 1;
+		elseif($page == -1)
+			$page = $this->total_pages();
+	
+		while($page <= $this->total_pages())
+		{
+			foreach($this->posts($page) as $post)
+				$post->set_topic_page($page, true);
+				
+			bors()->changed_save();
+			$page++;
+		}
+		
+		$this->set_is_repaged(true, true);
 	}
 }
