@@ -20,9 +20,10 @@ class airbase_forum_admin_post_asnewtopic extends base_page
 			return true;
 			
 		$old_topic = $this->post()->topic();
-		$new_topic = object_new_instance('forum_topic');
+		$new_topic = object_new('forum_topic');
 		$new_topic->set_forum_id($data['target_forum_id'], true);
 		$new_topic->set_title($data['new_topic_title'], true);
+		$new_topic->new_instance();
 		$new_topic->store();
 
 		if(empty($data['dont_move_with_tree']))

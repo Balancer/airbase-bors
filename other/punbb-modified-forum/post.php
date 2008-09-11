@@ -425,9 +425,9 @@ if (isset($_POST['form_sent']))
 		if(!empty($_POST['as_blog']))
 		{
 			$blog = &new forum_blog($post->id());
-			$blog->new_instance();
 			$blog->set_owner_id($post->owner_id(), true);
 			$blog->set_forum_id($topic->forum_id(), true);
+			$blog->new_instance();
 			$blog->store();
 			$blog->cache_clean();
 
