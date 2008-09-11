@@ -193,6 +193,10 @@ class forum_post extends base_page_db
 				break;
 			case 'Konqueror':
 			case 'SeaMonkey':
+				break;
+			case 'Google Chrome':
+				$out_browser = '<img src="/bors-shared/images/browsers/chrome.png" width="16" height="16" border="0" alt="Google Chrome" />';
+				break;
 			case 'Firefox':
 				$out_browser = '<img src="/bors-shared/images/browsers/firefox.gif" width="16" height="16" border="0" alt="Firefox" />';
 				break;

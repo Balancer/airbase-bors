@@ -20,9 +20,12 @@
 <div class="avatar_block">{if $owner}{include file="xfile:templates/post-avatar.html"}{/if}</div>
 
 {$p->body()}
-{if $owner and $owner->signature()}<div class="postsignature">{$owner->signature_html()}
+
+<div class="postsignature">
+{if $owner and $owner->signature()}{$owner->signature_html()}{/if}
 {$p->owner_user_agent()}
-</div>{/if}
+</div>
+
 {if $p->attaches()}
 <hr />
 Прикреплённые файлы:
