@@ -203,6 +203,9 @@ class forum_post extends base_page_db
 				break;
 			default:
 		}
+
+		if((!$out_browser || !$out_os) && $this->poster_ua())
+			debug_hidden_log("Unknown user agent: ".$this->poster_ua());
 		
 		return '<div style="width:40px height:16px float: right; display: inline;" title="'.htmlspecialchars($this->poster_ua()).'">'.$out_browser.$out_os.'</div>';
 	}
