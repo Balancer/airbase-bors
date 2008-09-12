@@ -23,6 +23,8 @@ class forum_tools_post_moveTree extends base_page
 		return parent::__construct($id);
 	}
 
+	function can_cache() { return false; }
+
 //	var $db;
 
 	function _queries()

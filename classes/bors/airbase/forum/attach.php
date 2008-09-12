@@ -1,6 +1,6 @@
 <?php
 
-class forum_attach extends base_object_db
+class airbase_forum_attach extends base_object_db
 {
 	function main_db_storage(){ return 'punbb'; }
 	function main_table_storage(){ return 'attach_2_files'; }
@@ -57,5 +57,4 @@ class forum_attach extends base_object_db
 			return "<br /><a href=\"{$this->url()}\"><img src=\"http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/$geometry/$1", $this->location())."\"></a>";
 		return '';
 	}
-
 }

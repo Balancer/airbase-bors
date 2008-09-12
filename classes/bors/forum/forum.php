@@ -77,12 +77,12 @@ function parents()
 
 		$data = array();
 
-		$db = &new DataBase('punbb');
+//		$db = &new DataBase('punbb');
 
 		$topics_per_page = 50;
 		$start_from = ($this->page() - 1) * $topics_per_page;
 			
-		$data['topics'] = $db->get_array("SELECT id FROM topics WHERE forum_id IN (".join(",", $this->all_readable_subforum_ids()).") ORDER BY last_post DESC LIMIT $start_from, $topics_per_page");
+		$data['topics'] = $this->db()->get_array("SELECT id FROM topics WHERE forum_id IN (".join(",", $this->all_readable_subforum_ids()).") ORDER BY last_post DESC LIMIT $start_from, $topics_per_page");
 
 //			foreach($topics as $tid)
 //				$data['topics'][] = class_load('forum/borsForumTopic', $tid);
@@ -142,9 +142,9 @@ function parents()
 	function direct_subforums_ids()
 	{
 		// Получаем одни forum_id для дочерних форумов первого уровня
-		$db = &new DataBase('punbb');
+//		$db = &new DataBase('punbb');
 			
-		return $db->get_array("SELECT id FROM forums WHERE parent = {$this->id()}");
+		return $this->db()->get_array("SELECT id FROM forums WHERE parent = {$this->id()}");
 	}
 
 	function direct_subforums()
