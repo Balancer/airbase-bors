@@ -39,9 +39,9 @@
 		function direct_subcats_ids()
 		{
 			// Получаем одни cat_id для дочерних категорий первого уровня
-			$db = &new DataBase('punbb');
+//			$db = &new DataBase('punbb');
 			
-			return $db->get_array("SELECT id FROM categories WHERE parent = {$this->id()}");
+			return $this->db()->get_array("SELECT id FROM categories WHERE parent = {$this->id()}");
 		}
 
 		function direct_subcats()
@@ -72,9 +72,9 @@
 		function direct_subforums_ids()
 		{
 			// Получаем одни forum_id для дочерних форумов первого уровня
-			$db = &new DataBase('punbb');
+//			$db = &new DataBase('punbb');
 			
-			return $db->get_array("SELECT id FROM forums WHERE cat_id = {$this->id()}");
+			return $this->db()->get_array("SELECT id FROM forums WHERE cat_id = {$this->id()}");
 		}
 
 		function direct_subforums()

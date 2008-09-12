@@ -32,11 +32,14 @@ class storage_db_mysql extends base_null
 				foreach(split(' ', $field_names) as $var_name)
 				{
 					unset($fields[$var_name]);
-					$fields[$var_name] = $object->$var_name;
+					if(!is_object($object->$var_name))
+						$fields[$var_name] = &$object->$var_name;
 				}
 			}
 			
-			$fields = array_merge($fields, get_object_vars($object));
+			foreach(get_object_vars($object) as $var => $value)
+				if(!is_object($value))
+					$fields[$var] = &$value;
 		
 			$hash = md5(serialize($fields));
 			if(!($data = @$MySqlStorage_data_cache[$hash]))

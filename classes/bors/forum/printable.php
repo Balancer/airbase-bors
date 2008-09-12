@@ -19,11 +19,11 @@ class forum_printable extends forum_topic
 		include_once("engines/smarty/assign.php");
 		$data = array();
 
-		$db = &new DataBase('punbb');
+//		$db = &new DataBase('punbb');
 
 		$query = "SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY id";
 
-		$posts = $db->get_array($query);
+		$posts = $this->db()->get_array($query);
 
 		$data['posts'] = array();
 

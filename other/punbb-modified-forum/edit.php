@@ -272,20 +272,12 @@ if($pun_user['g_id']==PUN_ADMIN){
 	$attach_allow_size=$pun_config['attach_max_size'];
 	$attach_per_post=-1;
 }else{
-	$result_attach=$db->query('SELECT ar.rules,ar.size,ar.per_post,COUNT(f.id) FROM '.$db->prefix.'attach_2_rules AS ar, '.$db->prefix.'attach_2_files AS f, '.$db->prefix.'posts AS p, '.$db->prefix.'topics AS t WHERE group_id=\''.intval($pun_user['g_id']).'\' AND p.id = \''.intval($id).'\' AND t.id = p.topic_id AND (ar.forum_id = t.forum_id OR ar.forum_id=0) GROUP BY f.post_id ORDER BY ar.forum_id DESC LIMIT 1')
-		or error('Unable to fetch attachment rules and current number of attachments in post (#2)',__FILE__,__LINE__,$db->error());	
-	if($db->num_rows($result_attach)==1){
-		list($attach_rules,$attach_allow_size,$attach_per_post,$attach_num_attachments)=$db->fetch_row($result_attach);
-		//may the user delete others attachments?
-		$attach_allow_delete = attach_rules($attach_rules,ATTACH_DELETE);
-		//may the user delete his/her own attachments?
-		$attach_allow_owner_delete = attach_rules($attach_rules,ATTACH_OWNER_DELETE);
-		//may the user upload new files?
-		$attach_allow_upload = attach_rules($attach_rules,ATTACH_UPLOAD);
-	}else{
-		//no rules set, so nothing allowed
-	}
+	$attaches = objects_array('airbase_forum_attach', array('post_id' => $id));
+	$attach_allow_delete = false; //attach_rules($attach_rules,ATTACH_DELETE);
+	$attach_allow_owner_delete = true; // attach_rules($attach_rules,ATTACH_OWNER_DELETE);
+	$attach_allow_upload = true; //attach_rules($attach_rules,ATTACH_UPLOAD);
 }
+
 $attach_output = '';
 $attach_output_two = '';
 //check if this post has attachments, if so make the appropiate output

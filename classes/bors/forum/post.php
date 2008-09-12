@@ -16,10 +16,6 @@ class forum_post extends base_page_db
 	{
 		return array(
 			$this->main_table_storage() => $this->main_table_fields(),
-//			'messages' => array(
-//				'body' => 'html',
-//				'source' => 'message',
-//			),
 			'posts_cached_fields(post_id)' => array(
 				'flag_db' => 'flag',
 				'warning_id',
@@ -35,11 +31,17 @@ class forum_post extends base_page_db
 			'topic_page' => 'page',
 			'create_time'	=> 'posted',
 			'edited',
+			'edited_by',
 			'owner_id'=> 'poster_id',
 			'poster_ip',
 			'poster_ua',
 			'author_name' => 'poster',
 			'answer_to_id' => 'answer_to',
+			'post_source' => 'source',
+			'post_body' => 'source_html',
+			'hide_smilies',
+			'have_attach',
+			'have_cross',
 		);
 	}
 
@@ -64,6 +66,14 @@ class forum_post extends base_page_db
 	function topic() { return object_load('forum_topic', $this->topic_id()); }
 	function parents() { return array("forum_topic://".$this->topic_id()); }
 
+	function set_topic_page($page, $dbupd)
+	{
+		if($page && gettype($page) != 'integer')
+			debug_hidden_log('type-mismatch-page', 'Set topic_page to '.gettype($page).'('.$page.')');
+
+		$this->fset('topic_page', $page, $dbupd);
+	}
+
 	private $__owner = NULL;
 	function owner()
 	{
@@ -78,72 +88,54 @@ class forum_post extends base_page_db
 		$this->__owner = $owner;
 	}
 
-	var $_post_source = false;
-	var $_post_body = false;
-
 	function source()
 	{
-		if($this->_post_source === false)
+		if(!$this->post_source())
 		{
 			$x = $this->db()->select('messages', 'message,html', array('id=' => $this->id()));
-			$this->_post_source = $x['message'];
-			$this->_post_body = $x['html'];
+			$this->set_post_source($x['message'], true);
+			$this->set_post_body($x['html'], true);
+			$this->store();
+			$this->db()->select('messages', 'message,html', array('id=' => $this->id()));
 		}
 		
-		return $this->_post_source;
+		return $this->post_source();
 	}
 
 	var $_source_changed = false;
 
 	function set_source($message, $db_update)
 	{
-		if($db_update)
-		{
-			$this->db->store('messages', array(
-				'id' => $this->id(),
-				'message' => $message,
-			));
-		}
-
+		$this->set_post_source($message, $db_update);
 		$this->_source_changed |= $db_update;
-		$this->set_body(NULL, $db_update);
+		$this->set_post_body(NULL, $db_update);
 
 		return $this->_post_source = $message;
 	}
 
-	function set_body($html, $db_update)
-	{
-		if($db_update)
-		{
-			$this->db->store('messages', 'id='.$this->id(), array(
-				'id' => $this->id(),
-				'html' => $html,
-			));
-		}
-		return $this->_post_body = $html;
-	}
+	function set_body($html, $dbup) { return $this->set_post_body($html, $dbup); }
 
 	function body()
 	{
 		$this->source();
 	
-		if(empty($this->_post_body) || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
+		if(!$this->post_body() || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
 		{
-			$body = lcml($this->source(),
+			$body = lcml($this->post_source(),
 				array(
 					'cr_type' => 'save_cr',
 					'forum_type' => 'punbb',
 					'forum_base_uri' => 'http://balancer.ru/forum',
 					'sharp_not_comment' => true,
 					'html_disable' => true,
-					'uri' => "post://{$this->id()}/",
+					'uri' => $this->internal_uri(),
 				)
 			);
 	
-			$this->set_body($body, true);
+			$this->set_post_body($body, true);
 		}
 
-		return $this->_post_body; 
+		return $this->post_body();
 	}
 
 	function flag()
@@ -218,7 +210,7 @@ class forum_post extends base_page_db
 		}
 
 		if((!$out_browser || !$out_os) && $this->poster_ua())
-			debug_hidden_log("Unknown user agent: ".$this->poster_ua());
+			debug_hidden_log("user_agent", "Unknown user agent: ".$this->poster_ua());
 		
 		return '<div style="width:40px height:16px float: right; display: inline;" title="'.htmlspecialchars($this->poster_ua()).'">'.$out_browser.$out_os.'</div>';
 	}
@@ -312,9 +304,27 @@ class forum_post extends base_page_db
 	{
 		if($this->_attach_ids !== false)
 			return $this->_attach_ids;
+			
+		if($this->have_attach() === NULL)
+		{
+			$ids = $this->db()->select_array('attach_2_files', 'id', array('post_id' => $this->id()));
+			if($this->_attach_ids = $ids)
+			{
+				if(count($ids) > 1)
+					$this->set_have_attach(-1, true);
+				else
+					$this->set_have_attach($ids[0], true);
+			}
+			else
+				$this->set_have_attach(0, true);
+			
+			return $ids;
+		}
 
-		$db = &new DataBase('punbb');
-		return $this->_attach_ids = $db->get_array("SELECT id FROM attach_2_files WHERE post_id = ".$this->id());
+		if(!$this->have_attach())
+			return $this->_attach_ids = array();
+
+		return $this->_attach_ids = array($this->have_attach());
 	}
 		
 	private $_attaches = NULL;
@@ -322,12 +332,33 @@ class forum_post extends base_page_db
 	{
 		if($this->_attaches !== NULL)
 			return $this->_attaches;
-			
-		$result = array();
-		foreach($this->attach_ids() as $attach_id)
-			$result[] = class_load('forum_attach', $attach_id);
 
-		return $this->_attaches = $result;
+		if($this->have_attach() === NULL)
+		{
+			$attaches = objects_array('airbase_forum_attach', array('post_id' => $this->id()));
+
+			if($this->_attaches = $attaches)
+			{
+				if(count($attaches) > 1)
+				{
+					$this->set_have_attach(-1, true);
+				}
+				else
+					$this->set_have_attach($attaches[0]->id(), true);
+			}
+			else
+				$this->set_have_attach(0, true);
+
+			return $attaches;
+		}
+
+		if(!$this->have_attach())
+			return $this->_attaches = array();
+
+		if($this->have_attach() == -1)
+			return $this->_attaches = objects_array('airbase_forum_attach', array('post_id' => $this->id()));
+			
+		return $this->_attaches = array(object_load('airbase_forum_attach', $this->have_attach()));
 	}
 
 	function set_attaches($attaches)
@@ -341,8 +372,8 @@ class forum_post extends base_page_db
 	{
 		return 0;
 		
-		$db = &new DataBase('punbb');
-		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
+//		$db = &new DataBase('punbb');
+//		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
 	}
 
 	function visits() { return $this->topic()->num_views(); }

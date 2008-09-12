@@ -37,6 +37,7 @@ class forum_topic extends forum_abstract
 			'last_post_id' => 'last_post_id',
 			'first_visit_time' => 'first_visit',
 			'last_visit_time' => 'last_visit',
+			'last_edit_time' => 'last_edit',
 			'sticky',
 			'closed',
 		);
@@ -84,9 +85,8 @@ class forum_topic extends forum_abstract
 	function is_sticky() { return $this->sticky() ? true : false; }
 	function is_closed() { return $this->closed() ? true : false; }
 
-	function preParseProcess()
+	function pre_parse()
 	{
-//		$_SERVER['HTTP_HOST'] = ''; debug_trace();
 		if($this->page() == 'new')
 		{
 			$me = bors()->user();
@@ -141,8 +141,8 @@ class forum_topic extends forum_abstract
 
 	function body()
 	{
-//		if(!$this->is_repaged())
-//			$this->repaging_posts();
+		if(!$this->is_repaged() && rand(0,5) == 0)
+			$this->repaging_posts();
 	
 		$GLOBALS['cms']['cache_disabled'] = true;
 
@@ -188,7 +188,7 @@ class forum_topic extends forum_abstract
 		return $this->db()->select_array('posts', 'id', array($data));
 	}
 
-	protected function posts($page = NULL)
+	protected function posts($page = NULL, $paging = true)
 	{
 		if(!$page)
 			$page = $this->page();
@@ -198,7 +198,7 @@ class forum_topic extends forum_abstract
 			'order' => '`order`,posted',
 		);
 		
-		if($this->is_repaged())
+		if($paging && $this->is_repaged())
 			$data['`page` = '] = intval($page);
 		else
 		{
@@ -232,29 +232,13 @@ class forum_topic extends forum_abstract
 	}
 
 
-	function cache_children()
-	{
-		$res = array(
-			object_load('forum_printable', $this->id()),
-			object_load('forum_topic_rss', $this->id()),
-		);
-
-		if($this->forum_id())
-			$res[] = object_load('forum_forum', $this->forum_id());
-
-		foreach($this->all_users() as $user_id)
-			$res[] = object_load('forum_user', $user_id);
-			
-		return $res;
-	}
-
 	function all_users()
 	{
-		$db = &new DataBase('punbb');
-		return $db->get_array("SELECT DISTINCT poster_id FROM posts WHERE topic_id={$this->id}");
+//		$db = &new DataBase('punbb');
+		return $this->db()->get_array("SELECT DISTINCT poster_id FROM posts WHERE topic_id={$this->id}");
 	}
 		
-	function cache_static() { return ($this->forum_id() && $this->forum()->is_public_access()) ? 86400*30 : 0; }
+	function cache_static() { return ($this->forum_id() && $this->forum()->is_public_access()) ? rand(86400*7, 86400*30): 0; }
 	function base_url() { return $this->forum_id() ? $this->forum()->category()->category_base_full() : '/'; }
 		
 	function title_url()
@@ -268,13 +252,13 @@ class forum_topic extends forum_abstract
 	{
 		$result = array();
 	
-		$db = &new DataBase('punbb');
+//		$db = &new DataBase('punbb');
 
 		$start_from = ($this->page() - 1) * $this->items_per_page();
 
 		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.`order`, posts.id LIMIT $start_from, ".$this->items_per_page();
 			
-		$posts = $db->get_array($query);
+		$posts = $this->db()->get_array($query);
 
 		$data['posts'] = array();
 
@@ -292,9 +276,9 @@ class forum_topic extends forum_abstract
 	{
 		$post_id = intval($post_id);
 	
-		$db = &new DataBase('punbb');
+//		$db = &new DataBase('punbb');
 
-		$posts = $db->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY `order`,posted");
+		$posts = $this->db()->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY `order`,posted");
 
 		for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
 			if($posts[$i] == $post_id)
@@ -315,31 +299,45 @@ class forum_topic extends forum_abstract
 
 	function recalculate()
 	{
-		bors()->changed_save();
+		$this->store(false);
 		
-		$db = &new driver_mysql('punbb');
-		$num_replies = $db->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
-//		echo "Num repl of {$this->id()} =   $num_replies<br />\n";
+		$num_replies = $this->db()->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
 		$this->set_num_replies($num_replies, true);
-		$first_pid = $db->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));
+		$first_pid = $this->db()->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));
 		$this->set_first_post_id($first_pid, true);
 		$first_post = object_load('forum_post', $first_pid);
 		$this->set_create_time($first_post->create_time(true), true);
 		$this->set_author_name($first_post->owner()->title(), true);
 		$this->set_owner_id($first_post->owner()->id(), true);
-		$last_pid = $db->select('posts', 'MAX(id)', array('topic_id='=>$this->id()));
+		$last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id()));
 		$this->set_last_post_id($last_pid, true);
 		$last_post = object_load('forum_post', $last_pid);
 		$this->set_modify_time($last_post->create_time(true), true);
 		$this->set_last_poster_name($last_post->owner()->title(), true);
 
-		bors()->changed_save();
+		$this->repaging_posts(1);
+		$this->store(false);
 
 		$this->cache_clean_self();
-		
-		if($printable = object_load('forum_printable', $this->id()))
-			$printable->cache_clean_self();
 	}
+
+	function cache_children()
+	{
+		$res = array(
+			object_load('forum_printable', $this->id()),
+			object_load('forum_topic_rss', $this->id()),
+		);
+
+		if($this->forum_id())
+			$res[] = object_load('forum_forum', $this->forum_id());
+
+//		TODO: убедиться, что модифицируется только автор сообщения при постинге: блоги, все сообщения и т.п.
+//		foreach($this->all_users() as $user_id)
+//			$res[] = object_load('forum_user', $user_id);
+			
+		return $res;
+	}
+
 
 	function cache_dir()
 	{
@@ -350,8 +348,9 @@ class forum_topic extends forum_abstract
 	{
 		parent::cache_clean_self($page);
 		
-		if($posts = $this->all_posts_ids())
-			$this->db('punbb')->query('UPDATE messages SET html=\'\' WHERE id IN (' . join(',', $posts) . ')');
+//		$this->db('punbb')->query('UPDATE posts SET source_html=NULL WHERE topic_id = '.$this->id());
+//		if($posts = $this->all_posts_ids())
+//			$this->db('punbb')->query('UPDATE messages SET html=\'\' WHERE id IN (' . join(',', $posts) . ')');
 		
 		//TODO: подумать на тему неполной чистки.
 		foreach(glob($this->cache_dir().'/t'.$this->id().'*.html') as $f)
@@ -403,13 +402,13 @@ class forum_topic extends forum_abstract
 	
 		while($page <= $this->total_pages())
 		{
-			foreach($this->posts($page) as $post)
+			foreach($this->posts($page, false) as $post)
 				$post->set_topic_page($page, true);
 				
-			bors()->changed_save();
+			$this->store(false);
 			$page++;
 		}
 		
-		$this->set_is_repaged(true, true);
+		$this->set_is_repaged(1, true);
 	}
 }
