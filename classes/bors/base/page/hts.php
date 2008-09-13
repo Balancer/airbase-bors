@@ -9,6 +9,7 @@ class base_page_hts extends base_page_db
 {
 	function can_cached() { return false; }
 	function storage_engine() { return 'storage_db_mysql_smart'; }
+	function config_class() { return config('admin_config_class'); }
 
 	function loaded() { return $this->title(); }
 
