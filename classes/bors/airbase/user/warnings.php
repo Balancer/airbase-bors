@@ -18,14 +18,6 @@ class airbase_user_warnings extends base_page
 		return $this->user;
 	}
 
-/*	function preParseProcess()
-	{
-//		if(!$this->id() || !$this->user())
-//			return go('/users/');
-			
-		return false;
-	}
-*/
 	function local_template_data_set($skip_passive = false)
 	{
 		templates_noindex();

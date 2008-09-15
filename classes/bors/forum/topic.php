@@ -318,6 +318,9 @@ class forum_topic extends forum_abstract
 		$this->repaging_posts(1);
 		$this->store(false);
 
+		foreach($this->posts() as $p)
+			$p->set_body(NULL, true);
+
 		$this->cache_clean_self();
 	}
 

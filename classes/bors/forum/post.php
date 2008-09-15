@@ -49,7 +49,10 @@ class forum_post extends base_page_db
 	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
 	function set_edited($value, $dbupd) { $this->fset('edited', $value, $dbupd); }
 	function edited() { return $this->stb_edited; }
+	function flag_db() { return $this->stb_flag_db; }
 	function set_flag_db($flag, $db_update) { $this->fset('flag_db', $flag, $db_update); }
+	function post_body() { return $this->stb_post_body; }
+	function set_post_body($value, $dbupd) { $this->fset('post_body', $value, $dbupd); }
 	//TODO: странно, при прямом вызове пропадают флаги.
 //	function flag_db() { return $this->stb_flag_db; }
 	function set_owner_id($owner_id, $db_update) { $this->fset('owner_id', $owner_id, $db_update); }
@@ -96,7 +99,7 @@ class forum_post extends base_page_db
 			$this->set_post_source($x['message'], true);
 			$this->set_post_body($x['html'], true);
 			$this->store();
-			$this->db()->select('messages', 'message,html', array('id=' => $this->id()));
+			$this->db()->delete('messages', array('id=' => $this->id()));
 		}
 		
 		return $this->post_source();
@@ -129,6 +132,7 @@ class forum_post extends base_page_db
 					'sharp_not_comment' => true,
 					'html_disable' => true,
 					'uri' => $this->internal_uri(),
+					'nocache' => true,
 				)
 			);
 	
@@ -210,7 +214,7 @@ class forum_post extends base_page_db
 		}
 
 		if((!$out_browser || !$out_os) && $this->poster_ua())
-			debug_hidden_log("user_agent", "Unknown user agent: ".$this->poster_ua());
+			debug_hidden_log("user_agent", "Unknown user agent: ".$this->poster_ua()." in post ".$this->id());
 		
 		return '<div style="width:40px; height:16px; float:right; display:inline;" title="'.htmlspecialchars($this->poster_ua()).'">'.$out_browser.$out_os.'</div>';
 	}
@@ -252,29 +256,20 @@ class forum_post extends base_page_db
 			$tid = $this->topic_id();
 
 			if(!$tid)
-			{
-				$this->set_body(ec("Указанный Вами топик [{$this->topic_id()}/{$this->id()}] не найден"), false);
-				return false;
-			}
+				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
 
 			$topic = object_load('forum_topic', $tid);
 		}
 	
-		$posts = $topic->all_posts_ids();
-//		print_d($posts); exit();
-
-		$page = 1;
-
-		for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
-			if ($posts[$i] == $pid)
-			{
-				$page = intval( $i / 25) + 1;
-				break;
-			}
-
-//		print_d($topic->url($page)."#p".$pid); exit();
-			
-		return $topic->url($page)."#p".$pid;
+		if(!$topic->is_repaged())
+		{
+			$topic->repaging_posts();
+			$post = object_load($this->class_name(), $this->id());
+		}
+		else
+			$post = $this;
+		
+		return $topic->url($post->topic_page())."#p".$post->id();
 	}
 
 	function modify_time()
@@ -357,8 +352,13 @@ class forum_post extends base_page_db
 
 		if($this->have_attach() == -1)
 			return $this->_attaches = objects_array('airbase_forum_attach', array('post_id' => $this->id()));
-			
-		return $this->_attaches = array(object_load('airbase_forum_attach', $this->have_attach()));
+
+		if(!($attach = object_load('airbase_forum_attach', $this->have_attach())))
+		{
+			debug_hidden_log('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
+			return array();
+		}
+		return $this->_attaches = array($attach);
 	}
 
 	function set_attaches($attaches)

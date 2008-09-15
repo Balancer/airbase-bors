@@ -3,7 +3,7 @@
 
 	class BorsPageJS extends BorsBaseDbPage
 	{
-		function preShowProcess()
+		function pre_show()
 		{
 			include_once("inc/js.php");
 			header("Content-type", "text/javascript");
