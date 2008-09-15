@@ -43,7 +43,7 @@ class airbase_forum_admin_posts_movetree extends base_page
 	function access_engine() { return "forum_access_move"; }
 	function post() { return 0; }
 
-	function onAction_by_topic_id(&$data)
+	function on_action_by_topic_id(&$data)
 	{
 		$tid = @$data['target_topic_id'];
 		if(preg_match('!\d+/t(\d+)\-\-!', $tid, $m))

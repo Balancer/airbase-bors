@@ -8,7 +8,7 @@
 			parent::BorsBasePage($id);
 		}
 
-		function preShowProcess()
+		function pre_show()
 		{
 			$uri = $this->make_image();
 			if(!$uri)

@@ -22,7 +22,7 @@ class user_reputation extends base_page_db
 //		debug_exit("id={$id}, user={$this->user->id}, ref={$this->page()}");
 	}
 
-	function preParseProcess($get)
+	function pre_parse($get)
 	{
 		if(!bors()->user() && !empty($get))
 			return go($this->url());

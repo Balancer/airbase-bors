@@ -47,7 +47,7 @@ class forum_tools_post_moveTree extends base_page
 
 	function access_engine() { return "forum_access_move"; }
 
-	function onAction_by_topic_id(&$data)
+	function on_action_by_topic_id(&$data)
 	{
 		$tid = @$data['target_topic_id'];
 		if(preg_match('!\d+/t(\d+)\-\-!', $tid, $m))
@@ -73,7 +73,7 @@ class forum_tools_post_moveTree extends base_page
 		)); 
 	}
 
-	function onAction_by_post_id(&$data)
+	function on_action_by_post_id(&$data)
 	{
 		$pid = @$data['target_post_id'];
 		if(preg_match('!post\-(\d+)!', $pid, $m))
@@ -88,6 +88,6 @@ class forum_tools_post_moveTree extends base_page
 			return bors_message(ec('Сообщение с номером ').$pid.ec(' не существует'));
 
 		$data['target_topic_id'] = $new_post->topic()->id();
-		return $this->onAction_by_topic_id($data);
+		return $this->on_action_by_topic_id($data);
 	}
 }
