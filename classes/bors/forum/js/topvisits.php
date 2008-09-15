@@ -16,6 +16,8 @@ class forum_js_topvisits extends base_js
 
 	function data_providers()
 	{
+		return array();
+	
 		$top = objects_array('forum_topic', array(
 				'num_views>=' => 10,
 				'last_visit - first_visit > 600',
