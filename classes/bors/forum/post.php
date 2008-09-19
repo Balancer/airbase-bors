@@ -96,6 +96,12 @@ class forum_post extends base_page_db
 		if(!$this->post_source())
 		{
 			$x = $this->db()->select('messages', 'message,html', array('id=' => $this->id()));
+			if(!$x || !$x['message'])
+			{
+				debug_hidden_log('messages-lost', 'Empty post source!');
+				return '';
+			}
+			
 			$this->set_post_source($x['message'], true);
 			$this->set_post_body($x['html'], true);
 			$this->store();
@@ -109,6 +115,12 @@ class forum_post extends base_page_db
 
 	function set_source($message, $db_update)
 	{
+		if(!$message)
+		{
+			debug_hidden_log('data-lost', 'Set to empty post source!');
+			bors_exit('Set to empty post source!');
+		}
+	
 		$this->set_post_source($message, $db_update);
 		$this->_source_changed |= $db_update;
 		$this->set_post_body(NULL, $db_update);
@@ -168,11 +180,20 @@ class forum_post extends base_page_db
 			case 'Linux':
 				$out_os = '<img src="/bors-shared/images/os/linux.gif" width="16" height="16" border="0" alt="Linux" />';
 				break;
+			case 'FreeBSD':
+				$out_os = '<img src="/bors-shared/images/os/freebsd.png" width="16" height="16" border="0" alt="FreeBSD" />';
+				break;
 			case 'MacOSX':
 				$out_os = '<img src="/bors-shared/images/os/macos.gif" width="16" height="16" border="0" alt="Mac OS X" />';
 				break;
+			case 'iPhone':
+				$out_os = '<img src="/bors-shared/images/os/iphone.gif" width="16" height="16" border="0" alt="iPhone" />';
+				break;
 			case 'Symbian':
 				$out_os = '<img src="/bors-shared/images/os/symbian.gif" width="16" height="16" border="0" alt="Symbian" />';
+				break;
+			case 'J2ME':
+				$out_os = '<img src="/bors-shared/images/os/java.gif" width="16" height="16" border="0" alt="J2ME" />';
 				break;
 			case 'PocketPC':
 			case 'J2ME':
@@ -205,7 +226,11 @@ class forum_post extends base_page_db
 			case 'Firefox':
 				$out_browser = '<img src="/bors-shared/images/browsers/firefox.gif" width="16" height="16" border="0" alt="Firefox" />';
 				break;
+			case 'Safari':
+				$out_browser = '<img src="/bors-shared/images/browsers/safari.png" width="16" height="16" border="0" alt="Safari" />';
+				break;
 			case 'Gecko':
+				$out_browser = '<img src="/bors-shared/images/browsers/mozilla.gif" width="16" height="16" border="0" alt="Mozilla" />';
 				break;
 			case 'MSIE':
 				$out_browser = '<img src="/bors-shared/images/browsers/ie6.gif" width="16" height="16" border="0" alt="IE" />';

@@ -396,7 +396,7 @@ class forum_topic extends forum_abstract
 		return $this->owner;
 	}
 
-	private function repaging_posts($page = NULL)
+	function repaging_posts($page = NULL)
 	{
 		if(!$page || !$this->is_repaged())
 			$page = 1;

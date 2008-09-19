@@ -111,11 +111,14 @@ function parents()
 		if(!$gid)
 			$gid = 3;
 
-		$can_read = class_load('forum_access', "{$this->id()}:$gid")->can_read();
-//		exit("gid = $gid, can_read = ".print_r($can_read, true));
+		$can_read = object_load('forum_access', "{$this->id()}:$gid", array('no_load_cache' => true))->can_read();
 
 		if($can_read === NULL)
-			$can_read = class_load('forum_group', $gid)->can_read();
+		{
+			$group = object_load('forum_group', $gid, array('no_load_cache' => true));
+			if($group)
+				$can_read = $group->can_read();
+		}
 
 		return $can_read;
 	}

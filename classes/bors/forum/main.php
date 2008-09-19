@@ -2,8 +2,6 @@
 
 class forum_main extends base_page
 {
-	function _class_file() { return __FILE__; }
-	
 	function title() { return ec("Форумы Balancer'а"); }
 	function nav_name() { return ec('форумы'); }
 	function parents() { return array('http://balancer.ru/'); }
