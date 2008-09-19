@@ -8,9 +8,6 @@ $map = array(
 //	'.* => base_page_hts',
 //	'.* => page_fs_separate', - Временно отключено по причине ошибок определения загруженности страницы.
 		
-	'/do\-login/ => common_do_login',
-	'/actions/do\-logout/ => common_do_logout',
-		
 	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => forum_topic(1,2)',
 	'.*viewtopic\.php\?id=(\d+).* => forum_topic(1)',
 	'.*viewforum\.php\?id=(\d+).* => forum_forum(1)',

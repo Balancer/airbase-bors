@@ -12,7 +12,7 @@ class forum_access extends base_page_db
 	function __construct($id)
 	{
 //		echo "forum_access($id)<br />";
-		list($this->forum_id, $this->group_id) = split(':', $id);
+		list($this->forum_id, $this->group_id) = explode(':', $id);
 		parent::__construct($id);
 	}
 
@@ -22,7 +22,7 @@ class forum_access extends base_page_db
 		if($this->stb_can_read !== NULL)
 			return $this->stb_can_read;
 
-		return class_load('forum_group', $this->group_id)->can_read();
+		return object_load('forum_group', $this->group_id)->can_read();
 	}
 		
 	function set_can_read($can_read, $db_update) { $this->set("can_read", $can_read, $db_update); }

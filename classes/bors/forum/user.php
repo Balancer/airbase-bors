@@ -3,6 +3,7 @@
 class forum_user extends base_object_db
 {
 	function storage_engine() { return 'storage_db_mysql_smart'; }
+	function main_db_storage() { return 'punbb'; }
 
 	function __construct($id)
 	{
@@ -33,6 +34,9 @@ class forum_user extends base_object_db
 			'warnings',
 			'warnings_total',
 			'reputation',
+			'salt',
+			'saltp' => 'password',
+			'saltu' => 'user_cookie_hash',
 			'pure_reputation',
 			'create_time' => 'registered',
 			'last_post_time' => 'last_post',
@@ -184,11 +188,81 @@ class forum_user extends base_object_db
 		return $period * 86400 * $this->warnings_total() / ($this->last_post_time() - $this->create_time() + 1);
 	}
 
+    function check_password($password, $handle_errors = true)
+   	{
+		$sha_password = sha1(strtolower($this->title()) . $password);
+		$user_sha_password = $this->saltp();
+	
+		if(!$handle_errors)
+			return ($password != '') && ($user_sha_password == $sha_password);
+
+       	if(!$password)
+        {
+   	        $nick = user_data('nick');
+       	    echo "<h3><span style=\"text-color: red;\">Пароль пользователя $nick ($member_id) не может быть пустой!</span></h3>Залогиниться, зарегистрироваться или сменить аккаунт можно <a href=\"http://forums.airbase.ru/\">форуме Авиабазы</a>.<br><span style=\"font-size: xx-small;\">Внимание! Вместо старой системы регистрации теперь будет использоваться новая, объединённая с регистрацией на форумах!";
+            die();
+        }
+
+   	    if($sha_password != $user_sha_password)
+       	{
+           	$nick=user_data('nick');
+            echo "<h3><span style=\"text-color: red;\">Ошибка пароля или логина пользователя $nick! ($member_id)</span></h3>Залогиниться, зарегистрироваться или сменить аккаунт можно <a href=\"http://forums.airbase.ru/\">форуме Авиабазы</a>.<br><span style=\"font-size: xx-small;\">Внимание! Вместо старой системы регистрации теперь будет использоваться новая, объединённая с регистрацией на форумах!";
+   	        die();
+       	}
+    }
+
+	function cookie_hash()
+	{
+		return sha1(strtolower($this->salt()) . $this->saltp());
+	}
+
+	function cookie_hash_update($expired = -1)
+	{
+		if($expired == -1)
+			$expired = time()+86400*365;
+
+		$salt = sha1(rand());
+		$this->set_salt($salt, true);
+		$this->set_saltu($this->cookie_hash(), true);
+
+		SetCookie("user_id", $this->id(), $expired, "/", '.'.$_SERVER['HTTP_HOST']);
+		SetCookie("cookie_hash", $this->saltu(), $expired, "/", '.'.$_SERVER['HTTP_HOST']);
+			
+		$_COOKIE['user_id'] = $this->id();
+		$_COOKIE['cookie_hash'] = $this->saltu();
+		return $this->saltu();
+	}
+
+	static function do_login($user, $password, $handle_error = true)
+   	{
+		$check_user = objects_first('forum_user', array('username' => $user));
+	
+		if(!$check_user)
+			return ec("Неизвестный пользователь '").$user."'";
+			
+		$test = $check_user->check_password($password, $handle_error);
+		if(!$test)
+			return ec("Ошибка пароля пользователя '").$user."'";
+
+		if(!$check_user->saltu())
+			$check_user->cookie_hash_update();
+
+		SetCookie("user_id", $check_user->id(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
+		SetCookie("cookie_hash", $check_user->saltu(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
+			
+		return $check_user;
+	}
+
     function do_logout()
 	{
+//		print_d($_COOKIE);
+		SetCookie('cookie_hash', '', 0, '/', $_SERVER['HTTP_HOST']);
 		SetCookie('user_id', '', 0, '/');
-		SetCookie('cookie_hash', '', 0, '/');
+		SetCookie('do_logout', 1, time()+3, '/', $_SERVER['HTTP_HOST']);
 		unset($_COOKIE['user_id']);
+		$_COOKIE['do_logout'] = 1;
 		unset($_COOKIE['cookie_hash']);
+//		print_d($_COOKIE);
+//		exit();
 	}
 }

@@ -12,7 +12,7 @@
 		
         $hts = new DataBaseHTS();
 
-		$data = $hts->parse_uri($image2);
+		$data = url_parse($image2);
 
 		if(!$data['local'])
 		{
@@ -85,7 +85,7 @@
 			$image2 = $image;
 		}
 
-		$data = $hts->parse_uri($page);
+		$data = url_parse($page);
 
         if(!file_exists(preg_replace("!http://{$data['host']}!",$data['root'], $image2)))
             $image2 = abs_path_from_relative($image, $page);
