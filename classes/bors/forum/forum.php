@@ -4,7 +4,6 @@ class forum_forum extends base_page_db
 {
 	function storage_engine() { return 'storage_db_mysql'; }
 	
-	function _class_file() { return __FILE__; }
 	function main_table_storage() { return 'forums'; }
 
 	function field_title_storage() { return 'punbb.forums.forum_name(id)'; }

@@ -43,4 +43,6 @@ $map = array(
 	'/js/users/touch.js\?(.+) => user_js_touch(1)',
 
 	'(/admin/forum/posts/)move-tree => airbase_forum_admin_posts_movetree',
+
+	'(/forum/)latest/ => airbase_board_show_latest',
 );
