@@ -360,16 +360,12 @@ class forum_post extends base_page_db
 			if($this->_attaches = $attaches)
 			{
 				if(count($attaches) > 1)
-				{
 					$this->set_have_attach(-1, true);
-				}
 				else
 					$this->set_have_attach($attaches[0]->id(), true);
 			}
 			else
 				$this->set_have_attach(0, true);
-
-			return $attaches;
 		}
 
 		if(!$this->have_attach())

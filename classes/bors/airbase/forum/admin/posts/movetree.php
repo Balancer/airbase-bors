@@ -19,7 +19,10 @@ class airbase_forum_admin_posts_movetree extends base_page
 	function posts()
 	{	
 		if($this->posts === false)
-			$this->posts = objects_array('forum_post', array('id IN' => $this->post_ids(), 'order' => 'create_time')); 
+			if($this->post_ids())
+				$this->posts = objects_array('forum_post', array('id IN' => $this->post_ids(), 'order' => 'create_time')); 
+			else
+				$this->posts = array();
 
 		return $this->posts;
 	}
