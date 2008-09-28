@@ -195,8 +195,8 @@ small a.current_page, small a.select_page {
 	padding: 0 1px;
 	margin: 0 1px;
 	font-size: 8pt;
+	border: none;
 }
-
 
 div.avatar_block {
 	width: 100px; 
@@ -503,7 +503,7 @@ img.flag {
 	width: 20px;
 	height: 12px;
 	border: none;
-	vertical-align: absmiddle;
+	vertical-align: middle;
 }
 
 img.smile, img.nob {
