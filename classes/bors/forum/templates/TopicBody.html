@@ -17,7 +17,7 @@
 
 {assign var="owner" value=$p->owner()}
 {assign var="ref" value=$p->url()}
-<div class="avatar_block">{if $owner}{include file="xfile:templates/post-avatar.html"}{/if}</div>
+<div class="avatar_block">{if $owner}{include file="xfile:templates/post-avatar.html"}{else}<div><img src="http://www.gravatar.com/avatar/{$p->poster_ip()|md5}?d=wavatar" width="100" height="100" alt="" /></div><h4>{$p->author_name()}</h4><h5>Гость</h5>{/if}</div>
 
 {$p->body()}
 
@@ -29,11 +29,9 @@
 {if $p->attaches()}
 <hr />
 Прикреплённые файлы:
-<ul>
 {foreach from=$p->attaches() item="attach"}
 <div class="box float_left center" style="width: 300px; ">{$attach->thumbnail_link('300x300')}<a href="{$attach->url()}">{$attach->title()}</a> [{$attach->size()|smart_size}, {$attach->downloads()} {$attach->downloads()|sklon:'загрузка':'загрузки':'загрузок'}]</div>
 {/foreach}
-</ul>
 {/if}
 
 {if $p->edited() && $p->edited() > $p->create_time() + 300}<div class="edited_note">
@@ -57,7 +55,7 @@
 
 <ul class="postfooter coordinators">
 <li>Групповые операции:</li>
-<li><input type="checkbox" id="_chkbx_p{$p->id()}" onClick="return apfgp(this, {$p->id()})"><label for="_chkbx_p{$p->id()}">&nbsp;отметить</label></li>
+<li><input type="checkbox" id="_chkbx_p{$p->id()}" onclick="return apfgp(this, {$p->id()})" /><label for="_chkbx_p{$p->id()}">&nbsp;отметить</label></li>
 <li> | <a href="/admin/forum/posts/move-tree">перенос в другую тему</a></li>
 </ul>
 

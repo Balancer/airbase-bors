@@ -9,7 +9,7 @@
 
 	function load_icons()
 	{
-		$tools = array('delete' => '<img src="http://www.aviaport.ru/images/tools/b_drop.png" width="16" height="16" border="0" alt="del" title="'.ec("Удалить").'">');
+		$tools = array('delete' => '<img src="http://www.aviaport.ru/images/tools/b_drop.png" width="16" height="16" alt="del" title="'.ec("Удалить").'">');
 
 		return array('tools' => $tools);
 	}

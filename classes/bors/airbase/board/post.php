@@ -179,22 +179,22 @@ class airbase_board_post extends base_page_db
 		switch($os)
 		{
 			case 'Linux':
-				$out_os = '<img src="/bors-shared/images/os/linux.gif" width="16" height="16" border="0" alt="Linux" />';
+				$out_os = '<img src="/bors-shared/images/os/linux.gif" width="16" height="16" alt="Linux" />';
 				break;
 			case 'FreeBSD':
-				$out_os = '<img src="/bors-shared/images/os/freebsd.png" width="16" height="16" border="0" alt="FreeBSD" />';
+				$out_os = '<img src="/bors-shared/images/os/freebsd.png" width="16" height="16" alt="FreeBSD" />';
 				break;
 			case 'MacOSX':
-				$out_os = '<img src="/bors-shared/images/os/macos.gif" width="16" height="16" border="0" alt="Mac OS X" />';
+				$out_os = '<img src="/bors-shared/images/os/macos.gif" width="16" height="16" alt="Mac OS X" />';
 				break;
 			case 'iPhone':
-				$out_os = '<img src="/bors-shared/images/os/iphone.gif" width="16" height="16" border="0" alt="iPhone" />';
+				$out_os = '<img src="/bors-shared/images/os/iphone.gif" width="16" height="16" alt="iPhone" />';
 				break;
 			case 'Symbian':
-				$out_os = '<img src="/bors-shared/images/os/symbian.gif" width="16" height="16" border="0" alt="Symbian" />';
+				$out_os = '<img src="/bors-shared/images/os/symbian.gif" width="16" height="16" alt="Symbian" />';
 				break;
 			case 'J2ME':
-				$out_os = '<img src="/bors-shared/images/os/java.gif" width="16" height="16" border="0" alt="J2ME" />';
+				$out_os = '<img src="/bors-shared/images/os/java.gif" width="16" height="16" alt="J2ME" />';
 				break;
 			case 'PocketPC':
 			case 'J2ME':
@@ -205,7 +205,7 @@ class airbase_board_post extends base_page_db
 			case 'Windows98':
 			case 'Windows98':
 			case 'Windows':
-				$out_os = '<img src="/bors-shared/images/os/windows.gif" width="16" height="16" border="0" alt="Windows" />';
+				$out_os = '<img src="/bors-shared/images/os/windows.gif" width="16" height="16" alt="Windows" />';
 				break;
 			default:
 		}
@@ -214,27 +214,27 @@ class airbase_board_post extends base_page_db
 		switch($browser)
 		{
 			case 'Opera':
-				$out_browser = '<img src="/bors-shared/images/browsers/opera.gif" width="16" height="16" border="0" alt="Opera" />';
+				$out_browser = '<img src="/bors-shared/images/browsers/opera.gif" width="16" height="16" alt="Opera" />';
 				break;
 			case 'Konqueror':
 				break;
 			case 'SeaMonkey':
-				$out_browser = '<img src="/bors-shared/images/browsers/seamonkey.gif" width="16" height="16" border="0" alt="SeaMonkey" />';
+				$out_browser = '<img src="/bors-shared/images/browsers/seamonkey.gif" width="16" height="16" alt="SeaMonkey" />';
 				break;
 			case 'Google Chrome':
-				$out_browser = '<img src="/bors-shared/images/browsers/chrome.png" width="16" height="16" border="0" alt="Google Chrome" />';
+				$out_browser = '<img src="/bors-shared/images/browsers/chrome.png" width="16" height="16" alt="Google Chrome" />';
 				break;
 			case 'Firefox':
-				$out_browser = '<img src="/bors-shared/images/browsers/firefox.gif" width="16" height="16" border="0" alt="Firefox" />';
+				$out_browser = '<img src="/bors-shared/images/browsers/firefox.gif" width="16" height="16" alt="Firefox" />';
 				break;
 			case 'Safari':
-				$out_browser = '<img src="/bors-shared/images/browsers/safari.png" width="16" height="16" border="0" alt="Safari" />';
+				$out_browser = '<img src="/bors-shared/images/browsers/safari.png" width="16" height="16" alt="Safari" />';
 				break;
 			case 'Gecko':
-				$out_browser = '<img src="/bors-shared/images/browsers/mozilla.gif" width="16" height="16" border="0" alt="Mozilla" />';
+				$out_browser = '<img src="/bors-shared/images/browsers/mozilla.gif" width="16" height="16" alt="Mozilla" />';
 				break;
 			case 'MSIE':
-				$out_browser = '<img src="/bors-shared/images/browsers/ie6.gif" width="16" height="16" border="0" alt="IE" />';
+				$out_browser = '<img src="/bors-shared/images/browsers/ie6.gif" width="16" height="16" alt="IE" />';
 				break;
 			default:
 		}

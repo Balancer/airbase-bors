@@ -93,14 +93,11 @@ function parents()
 
 	function is_public_access()
 	{
-		$can_read = class_load('forum_access', "{$this->id()}:3")->can_read();
-//		print_r($can_read);
-//		exit();
+		$access = object_load('airbase_forum_access', "{$this->id()}:3");
+		if($access)
+			return $access->can_read();
 
-		if($can_read === NULL)
-			$can_read = class_load('forum_group', 3)->can_read();
-
-		return $can_read;
+		return object_load('forum_group', 3)->can_read();
 	}
 
 	function can_read()
@@ -110,16 +107,11 @@ function parents()
 		if(!$gid)
 			$gid = 3;
 
-		$can_read = object_load('forum_access', "{$this->id()}:$gid", array('no_load_cache' => true))->can_read();
+		$access = object_load('airbase_forum_access', "{$this->id()}:{$gid}");
+		if($access)
+			return $access->can_read();
 
-		if($can_read === NULL)
-		{
-			$group = object_load('forum_group', $gid, array('no_load_cache' => true));
-			if($group)
-				$can_read = $group->can_read();
-		}
-
-		return $can_read;
+		return object_load('forum_group', $gid)->can_read();
 	}
 
 	function cache_children()
@@ -146,7 +138,7 @@ function parents()
 		// Получаем одни forum_id для дочерних форумов первого уровня
 //		$db = &new DataBase('punbb');
 			
-		return $this->db()->get_array("SELECT id FROM forums WHERE parent = {$this->id()}");
+		return $this->db('punbb')->get_array("SELECT id FROM forums WHERE parent = {$this->id()}");
 	}
 
 	function direct_subforums()

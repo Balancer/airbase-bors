@@ -7,9 +7,6 @@
 
 	<script  type="text/javascript" src="/bors-shared/js/funcs.js"></script>
 	<script  type="text/javascript" src="/bors-shared/js/tune.js"></script>
-<noscript>
-<link rel="stylesheet" type="text/css" href="/bors-shared/css/main3.css" />
-</noscript>
 
 <script type="text/javascript"><!--
 createCookie('class_name', '{$this->class_name()}');createCookie('object_id', '{$this->id()}')
@@ -70,7 +67,7 @@ dd, dt { height: 1%; }
 
 </head>
 
-<body text="#003366" bgColor="#e0e0e8" backGround="http://airbase.ru/images/web/sky-back.jpg" id="body" onLoad="onLoadPage()">
+<body onload="onLoadPage()">
 
 <div class="minwidth"><div class="wrapper">
 
@@ -83,7 +80,7 @@ dd, dt { height: 1%; }
 	<div class="tpl_column_center"><div class="incenter" id="incenter">
 
 		<dl class="box">
-		<dt><div class="nav">{module name="top-navs"}</div></dt>
+		<dt class="nav">{module name="top-navs"}</dt>
 		<dd>
 			<h1>{$title}</h1>
 			{$description}
@@ -92,7 +89,7 @@ dd, dt { height: 1%; }
 		{$body}
 
 		<dl class="box">
-		<dt><div class="nav">{module name="top-navs"}</div></dt>
+		<dt class="nav">{module name="top-navs"}</dt>
 		</dl>
 
 	  <div class="copyright">
@@ -110,60 +107,63 @@ dd, dt { height: 1%; }
 		<dl class="box w200">
 		<dt>Поиск</dt>
 		<dd>
-			<form method="get" action="http://balancer.ru/tools/search/result/">
+			<form method="get" action="http://balancer.ru/tools/search/result/"><div>
 			<input type="text" class="text" name="q" value="Су-27" />
 			<input type="submit" class="submit" value="искать" />
-			</form>
+			</div></form>
 		</dd>
 		</dl>
 		
-		<center><a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" border="0" /></a></center>
+<span><!--<center><a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a></center>--></span>
 
 		<dl class="box w200">
 		<dt>Настройки</dt>
 		<dd>
-			<script type="text/javascript" encoding="UTF-8">
+			<script type="text/javascript">
 				createSelect("Шрифт", "fontFamily", "default(Verdana):Verdana;Georgia;sans-serif;serif;monospace", "Verdana")
 				createSelect("Размер", "fontSize", "8pt;default(10pt):10pt;12pt;14pt;16pt;20pt;24pt", "10pt")
 				createSelect("Расстояние до монитора", "incenter.width", "auto;30cm:14cm;45cm:20cm;70cm:30cm", "auto")
 			</script>
-			<noscript>Не работает без JavaScript</noscript>
+			<noscript><p>Не работает без JavaScript</p></noscript>
 		</dd>
 		</dl>
 
-		<dl class="box w200">
-		<dt>Персональное</dt>
-		<dd>
-			<script type="text/javascript">
-			if(me_id < 2 || !me_hash)
-				document.writeln("<"+"script  type=\"text/javascript\" src=\"/templates/login.js\"></"+"script>")
-			else {ldelim}
-				document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
-				document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?{$this->class_name()}://{$this->id()}\"></"+"script>")
-			{rdelim}
-			</script>
-			<noscript>Не работает без JavaScript</noscript>
-		</dd>
-		</dl>
+<dl class="box w200">
+<dt>Персональное</dt>
+<dd>
+<script type="text/javascript"><!--
+if(me_id < 2 || !me_hash)
+	document.writeln("<"+"script  type=\"text/javascript\" src=\"/templates/login.js\"></"+"script>")
+else {ldelim}
+	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
+	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?{$this->class_name()}://{$this->id()}\"></"+"script>")
+{rdelim}
+--></script>
+<noscript><p>Не работает без JavaScript</p></noscript>
+</dd></dl>
 
-		<dl class="box w200"><dt>Новости сайта</dt>
-		<dd>
-		{module name="forums/sitenews"}
-		</dd>
-		</dl>
+<dl class="box w200"><dt>Новости сайта</dt>
+<dd>{module name="forums/sitenews"}</dd>
+</dl>
 
-		<dl class="box w200"><dt>Популярные темы</dt>
-		<dd>
-			<script type="text/javascript" src="http://balancer.ru/js/forum/topvisits.js"></script>
-			<noscript>Не работает без JavaScript</noscript>
-		</dd>
-		</dl>
+<dl class="box w200"><dt>Популярные темы</dt>
+<dd><script type="text/javascript" src="http://balancer.ru/js/forum/topvisits.js"></script></dd>
+</dl>
 
-		<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
-		<script type="text/javascript">
-			_uacct = "UA-3907196-1";
-			urchinTracker();
-		</script>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+<script type="text/javascript">
+_uacct = "UA-3907196-1";
+urchinTracker();
+</script>
+
+<dl class="box w200"><dt>География форума</dt>
+<dd>
+<script type="text/javascript"><!--
+kod = 2537;
+width = 190;
+document.write('<span><!-'+'-<a href="http://www.mapyourvisitors.com/map' + kod + '.php"><img src="http://www.mapyourvisitors.com/' + width + '/' + kod + '.jpg?r=' + escape(document.referrer) + '&u=' + escape(document.URL) + '" alt="MapYourVisitors.COM - Нанесите на карту ваших посетителей" /></a>-'+'-></span>');
+--></script>
+</dd></dl>
 
 	</div></div> <!-- end left div -->
 

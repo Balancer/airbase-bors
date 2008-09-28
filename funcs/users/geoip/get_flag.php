@@ -57,7 +57,7 @@ function get_flag($ip, $owner = NULL)
 		$file = strtolower($country_code).".gif";
 		if(!file_exists("/var/www/balancer.ru/htdocs/img/flags/$file"))
 			$file = "-.gif";
-		$res = '<img src="http://balancer.ru/img/flags/'.$file.'" width="20" height="12" border="0" align="absmiddle" title="'.htmlspecialchars($alt).'" alt="'.$country_code.'"/>';
+		$res = '<img src="http://balancer.ru/img/flags/'.$file.'" class="flag" title="'.htmlspecialchars($alt).'" alt="'.$country_code.'"/>';
 	}
 	else
 		$res = "";
