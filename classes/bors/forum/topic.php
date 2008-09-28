@@ -151,7 +151,7 @@ class forum_topic extends forum_abstract
 
 		$data['posts'] = $this->posts();
 
-		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".addslashes($this->title())."'\" />");
+		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");
 
 		$data['this'] = $this;
 
@@ -307,13 +307,13 @@ class forum_topic extends forum_abstract
 		$this->set_first_post_id($first_pid, true);
 		$first_post = object_load('forum_post', $first_pid);
 		$this->set_create_time($first_post->create_time(true), true);
-		$this->set_author_name($first_post->owner()->title(), true);
-		$this->set_owner_id($first_post->owner()->id(), true);
+		$this->set_author_name($first_post->author_name(), true);
+		$this->set_owner_id($first_post->owner() ? $first_post->owner()->id() : NULL, true);
 		$last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id()));
 		$this->set_last_post_id($last_pid, true);
 		$last_post = object_load('forum_post', $last_pid);
 		$this->set_modify_time($last_post->create_time(true), true);
-		$this->set_last_poster_name($last_post->owner()->title(), true);
+		$this->set_last_poster_name($last_post->author_name(), true);
 
 		$this->repaging_posts(1);
 		$this->store(false);
