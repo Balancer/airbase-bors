@@ -25,6 +25,7 @@ class forum_topic extends forum_abstract
 			'id',
 			'forum_id',
 			'title'	=> 'subject',
+			'description',
 			'create_time'	=> 'posted',
 			'modify_time'=> 'last_post',
 			'owner_id'=> 'poster_id',
