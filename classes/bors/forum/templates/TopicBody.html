@@ -39,8 +39,10 @@
 </div>{/if}
 
 {if $p->warning()}<div class="warning_note">
-За это сообщение пользователь получил предупреждение в {$p->warning()|get:score} {$p->warning()|get:score|sklon:"балл":"балла":"баллов"}
-{if $p->warning()|get:type_id} по категории «<b>{$p->warning()|get:type_id|bors_list_item_name:"airbase_user_warning_type"}</b>»{/if}.
+<b>{$p->warning()|get:moderator_name}:</b> предупреждение ({$p->warning()|get:score})
+{if $p->warning()|get:type_id} по категории «<b>{$p->warning()|get:type_id|bors_list_item_name:"airbase_user_warning_type"}</b>»
+{if $p->warning()|get:source}(<i>{$p->warning()|get:source}</i>){/if}
+{/if}.
 </div>{/if}
 
 <ul class="postfooter">

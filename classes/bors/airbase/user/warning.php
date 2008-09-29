@@ -34,8 +34,9 @@ class airbase_user_warning extends base_object_db
 		{
 			if($obj = object_load($this->referer()))
 			{
-				$this->set_warn_class_id($obj->class_id(), true);
-				$this->set_warn_object_id($obj->id(), true);
+				$has = objects_first('airbase_user_warning', array('warn_class_id' => $obj->class_id(), 'warn_object_id' => $obj->id()));
+				$this->set_warn_class_id($obj->class_id(), !$has);
+				$this->set_warn_object_id($obj->id(), !$has);
 				return $obj->titled_url();
 			}
 

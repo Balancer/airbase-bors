@@ -8,6 +8,7 @@ class airbase_forum_admin_post_asnewtopic extends base_page
 	function post() { return object_load('forum_post', $this->id()); }
 	function target_forum_id() { return $this->post()->topic()->forum_id(); }
 	function new_topic_title() { return $this->post()->topic()->title(); }
+	function new_topic_description() { return ec('Перенос из темы «').$this->post()->topic()->title().ec('»'); }
 	function dont_move_with_tree() { return false; }
 	function access_engine() { return 'airbase_forum_admin_access_split'; }
 	
@@ -23,6 +24,7 @@ class airbase_forum_admin_post_asnewtopic extends base_page
 		$new_topic = object_new('forum_topic');
 		$new_topic->set_forum_id($data['target_forum_id'], true);
 		$new_topic->set_title($data['new_topic_title'], true);
+		$new_topic->set_description($data['new_topic_description'], true);
 		$new_topic->new_instance();
 		$new_topic->store();
 
