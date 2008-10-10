@@ -53,7 +53,7 @@ class forum_post extends base_page_db
 	function flag_db() { return $this->stb_flag_db; }
 	function set_flag_db($flag, $db_update) { $this->fset('flag_db', $flag, $db_update); }
 	function post_body() { return $this->stb_post_body; }
-	function set_post_body($value, $dbupd) { $this->fset('post_body', $value, $dbupd); }
+	function set_post_body($value, $dbupd) { if(!$value && $dbupd) debug_hidden_log('body', 'Set empty body'); $this->fset('post_body', $value, $dbupd); }
 	//TODO: странно, при прямом вызове пропадают флаги.
 //	function flag_db() { return $this->stb_flag_db; }
 	function set_owner_id($owner_id, $db_update) { $this->fset('owner_id', $owner_id, $db_update); }
@@ -124,7 +124,9 @@ class forum_post extends base_page_db
 	
 		$this->set_post_source($message, $db_update);
 		$this->_source_changed |= $db_update;
-		$this->set_post_body(NULL, $db_update);
+
+		if($db_update)
+			$this->set_post_body(NULL, $db_update);
 
 		return $this->_post_source = $message;
 	}
@@ -508,11 +510,5 @@ class forum_post extends base_page_db
 		);
 			
 		return $res;
-	}
-
-	function cache_clean_self($page = NULL)
-	{
-		$this->set_body(NULL, true);
-		parent::cache_clean_self($page);
 	}
 }

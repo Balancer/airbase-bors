@@ -1,0 +1,13 @@
+{assign var="skip_author_name" value=1}
+{assign var="skip_message_footer" value=1}
+{foreach from=$blog_records item=r}
+{bors_class_load class="forum_post"  id=$r->id() var="p"}
+{if $p}
+{bors_class_load class="forum_topic" id=$p->topic_id() var="t"}
+{if $t}
+{assign var="f" value=$t->forum()}
+{if $f->is_public_access()}
+{include file="xfile:templates/forum/post.html" show_title=$t->title_url() strip="8192"}
+{/if}
+{/if}{/if}
+{/foreach}
