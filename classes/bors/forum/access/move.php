@@ -7,7 +7,7 @@ class forum_access_move extends access_base
 		$me = bors()->user();
 	
 		$post = $this->id()->post();
-		if($post && $post->owner()->id() == $me->id())
+		if($post && $post->owner() && $post->owner()->id() == $me->id())
 			return true;
 
 		return $me && $me->group()->can_move();

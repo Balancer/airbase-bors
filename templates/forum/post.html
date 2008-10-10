@@ -5,7 +5,9 @@
 	$no_show_answers = true, если не показывать ответы.
 	$show_title = true, если нужна печать заголовка.
 	$skip_author_name
+	$skip_avatar_block
 	$skip_date
+	$skip_message_footer
 *}
 {if $p}
 <a name="p{$p->id()}"></a>
@@ -16,11 +18,10 @@
 <span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>
 {/if}
 {if $forum} <small>// {$forum->titled_url()}</small>{/if}
-{$p->owner_user_agent()}
 </dt>
 <dd>
 {assign var="owner" value=$p->owner()}
-{if $owner}<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>{/if}
+{if $owner and not $skip_avatar_block}<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>{/if}
 {if $strip}
 {assign var="body" value=$p->body()}
 {$body|strip_text:$strip}
@@ -31,7 +32,12 @@
 {$p->body()}
 {/if}
 {if not $skip_message_footer}
-{if $owner and $owner->signature()}<div class="postsignature">{$owner->signature_html()}</div>{/if}
+
+<div class="postsignature">
+{if $owner and $owner->signature()}{$owner->signature_html()}{/if}
+ {$p->owner_user_agent()}
+</div>
+
 <ul class="postfooter">
 <li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
 <li class="postdelete"><a href="http://balancer.ru/forum/tools/post/{$p->id()}/">Инструменты</a></li>
