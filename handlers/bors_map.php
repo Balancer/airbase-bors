@@ -1,5 +1,7 @@
 <?php
     $map = array(
+    	'(/) => balancer_main',
+    
 		'(/admin/users/(\d+)/)warnings.html\?object=(.+) => airbase_user_admin_warnings(2,object=3)',
 		'(/admin/users/(\d+)/)warnings.html => airbase_user_admin_warnings(2)',
 		'(/admin/forum/post/(\d+)/)as-new-topic => airbase_forum_admin_post_asnewtopic(2)',
@@ -16,6 +18,8 @@
 		'/\d{4}/\d{1,2}/\d{1,2}/forum\-(\d+)(,(\d+))?\-\-.+ => forum_forum(1,3)',
 		'/\d{4}/\d{1,2}/\d{1,2}/forum\-(\d+)/? => forum_forum(1,3)',
 		'(/)forum/(\d+)/ => redirect:forum_forum(2)',
+
+		'/forum/viewtopic\.php\?pid=(\d+) => redirect:forum_post(1)',
 
 		'/js/users/reputation,(\d+)\.js => user_js_reputation(1,2)',
 		'/js/forum/topvisits\.js => forum_js_topvisits',

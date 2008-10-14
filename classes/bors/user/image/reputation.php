@@ -30,7 +30,7 @@ class user_image_reputation extends base_image_gif
 		$offset = intval((100 - $sx*5)/2);
 
 		$min_rep = 8;
-		$reputation_abs = intval($min_rep + 0.9 + ($sx*5-$min_rep)*atan($reputation_value*$reputation_value/200)*2/pi());
+		$reputation_abs = intval($min_rep + 0.9 + ($sx*5-$min_rep)*atan($reputation_value*$reputation_value/($reputation_value >= 0 ? 300 : 100))*2/pi());
 
 		$img  = imagecreatetruecolor($ww, $hh);
 		$img_filled = imagecreatetruecolor($ww, $hh);
@@ -64,7 +64,7 @@ class user_image_reputation extends base_image_gif
 	
 	function url() { return "http://balancer.ru/user/{$this->id()}/rep.gif"; }
 	
-	function cache_static() { return 3600*30; }
+	function cache_static() { return rand(3600*10, 3600*30); }
 	
 	function cache_groups() { return "user-{$this->id()}-reputation"; }
 }

@@ -67,7 +67,7 @@ class user_reputation extends base_page_db
 			return "http://balancer.ru/user/".$this->id()."/reputation,{$page}.html"; 
 	}
 
-	function cache_static() { return 86400*30; }
+	function cache_static() { return rand(86400*7, 86400*30); }
 		
 	function template() { return "forum/common.html"; }
 
@@ -78,6 +78,8 @@ class user_reputation extends base_page_db
 
 	function on_action_reputation_add_do($data)
 	{
+		require_once('inc/users.php');
+	
 		$uid = intval($_POST['user_id']);
 		if(!$uid)
 			return bors_message(ec("Не задан ID пользователя."));
@@ -120,7 +122,7 @@ class user_reputation extends base_page_db
 		$total = 0;
 		foreach($dbu->get_array("SELECT voter_id as id, SUM(score) as sum FROM `reputation_votes` WHERE user_id = $uid GROUP BY voter_id") as $v)
 		{
-			$reput = (atan($dbf->get("SELECT reputation FROM users WHERE id={$v['id']}"))*2/pi() + 1)/2;
+			$reput = bors_user_reputation_weight($dbf->get("SELECT reputation FROM users WHERE id={$v['id']}"));
 			$group = $dbf->get("SELECT group_id FROM users WHERE id={$v['id']}");
 				
 			$weight = @$grw[$group];

@@ -43,7 +43,7 @@ document.write('<s'+'cript type="text/javascript" src="http://balancer.ru/js/use
 	<td class="{$backcolor}">{if $r->score() > 0}+{/if}{$r->score()}</td>
 	<td class="{$backcolor}">
 		<a href="http://balancer.ru/user/{$r->voter_id()}/">{$u->title()}</a><br />
-		<a href="http://balancer.ru/user/{$r->voter_id()}/reputation/"><img src="http://balancer.ru/user/{$r->voter_id()}/rep.gif" width="100" height="16" /></a></td> 
+		<a href="http://balancer.ru/user/{$r->voter_id()}/reputation/"><img src="http://balancer.ru/user/{$r->voter_id()}/rep.gif" width="100" height="16" border="0" /></a></td> 
 	<td class="{$backcolor}">{$r->comment()|truncate:500|pun_lcml}{if $r->refer()}
 		<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За:
 			{assign var="obj" value=0}
