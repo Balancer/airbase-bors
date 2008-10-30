@@ -1,7 +1,6 @@
 <?
     require_once("obsolete/DataBaseHTS.php");
     require_once("funcs/Cache.php");
-    require_once("include/classes/cache/CacheStaticFile.php");
     require_once("funcs/lcml.php");
     require_once("funcs/templates/smarty.php");
 
@@ -18,12 +17,6 @@
 		if(!empty($GLOBALS['cms']['recompiled_uris'][$uri]))
 			return;
 			
-		if(!empty($GLOBALS['cms']['cache_static']))
-		{
-			$sf = &new CacheStaticFile($uri);
-			$sf->save(show_page($uri, false));
-		}
-		
         $hts = &new DataBaseHTS;
 
 		$source = $hts->get_data($uri, 'source');
