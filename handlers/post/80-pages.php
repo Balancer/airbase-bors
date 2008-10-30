@@ -13,13 +13,6 @@
 
 		if($hts->get('source') || $hts->get('body'))
 		{
-			if(!empty($GLOBALS['cms']['cache_static']))
-			{
-				$sf = &new CacheStaticFile($uri);
-				echo $sf->save(show_page($uri, false));
-				return true;
-			}
-
 			require_once('obsolete/smarty.php');
 			show_page($uri);
 			return true;
