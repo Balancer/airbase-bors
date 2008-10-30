@@ -1,5 +1,10 @@
-<ul>
+{if $years}
+<table class="btab">
+<tr><th>Год</th><th>Число сообщений</th></tr>
 {foreach from=$years item="count" key="year"}
-<li><a href="{$year}/">{$year}</a></li>
+<tr><td><a href="{$year}/">{$year}</a></td><td>{$count}</td></tr>
 {/foreach}
-</ul>
+</table>
+{else}
+Сообщений не найдено
+{/if}

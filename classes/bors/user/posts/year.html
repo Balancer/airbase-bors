@@ -1,0 +1,10 @@
+{if $month}
+<table class="btab">
+<tr><th>Месяц</th><th>Число сообщений</th></tr>
+{foreach from=$month item="count" key="m"}
+<tr><td><a href="{$m}/">{$m|month_name}</a></td><td>{$count}</td></tr>
+{/foreach}
+</table>
+{else}
+Сообщений не найдено
+{/if}
