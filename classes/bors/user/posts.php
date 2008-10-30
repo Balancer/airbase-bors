@@ -2,7 +2,7 @@
 
 class user_posts extends base_page
 {
-	function cache_static() { return 86400; }
+	function cache_static() { return 600; }
 
 	function template()
 	{
@@ -37,8 +37,8 @@ class user_posts extends base_page
 		{
 			$d0 = strtotime("$y-01-01 00:00:00");
 			$d9 = strtotime("$y-12-31 23:59:59")+1;
-			if($cnt = $this->db('punbb')->select('posts', 'id', array('poster_id' => $this->id(), "posted BETWEEN $d0 AND $d9")))
-				$years[$y] = 1;//$cnt;
+			if($cnt = $this->db('punbb')->select('posts', 'count(*)', array('poster_id' => $this->id(), "posted BETWEEN $d0 AND $d9")))
+				$years[$y] = $cnt;
 		}
 		
 		return array('years' => $years);
