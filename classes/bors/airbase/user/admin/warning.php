@@ -59,6 +59,6 @@ class airbase_user_admin_warning extends airbase_user_warning
 		$object->set_warning_id($this->id(), true);
 		$object->cache_clean();
 		
-		unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
+		@unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
 	}
 }

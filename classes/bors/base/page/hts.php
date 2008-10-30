@@ -10,6 +10,8 @@ class base_page_hts extends base_page_db
 	function can_cached() { return false; }
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function config_class() { return config('admin_config_class'); }
+	function html_disable() { return false; }
+	function lcml_tags_enabled() { return NULL; }
 
 	function loaded() { return $this->title(); }
 
@@ -35,8 +37,6 @@ class base_page_hts extends base_page_db
 			),
 		);
 	}
-
-	function html_disable() { return false; }
 
 	function parents()
 	{
@@ -71,6 +71,14 @@ class base_page_hts extends base_page_db
 
 	function admin_url() { return '/admin/?object='.$this->internal_uri(); }
 	function edit_url() { return '/admin/edit/?object='.$this->internal_uri(); }
+
+	function editor_fields_list()
+	{
+		return array(
+			ec('Заголовок:') => 'title',
+			ec('Тело страницы:') => 'source|textarea=20',
+		);
+	}
 
 /*
 hts__aliases	- будет использоваться таблица bors_uris (uri -> class(id))

@@ -7,6 +7,7 @@ $map = array(
 	'.*/\d{4}/\d{1,2}/topic\-(\d+)\-rss\.xml => forum_topic_rss(1)',
 //	'.* => base_page_hts',
 //	'.* => page_fs_separate', - Временно отключено по причине ошибок определения загруженности страницы.
+	'.*/ => airbase_page_hts_plain',
 		
 	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => forum_topic(1,2)',
 	'.*viewtopic\.php\?id=(\d+).* => forum_topic(1)',
