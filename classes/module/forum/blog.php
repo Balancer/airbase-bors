@@ -5,7 +5,7 @@ class module_forum_blog extends base_page
 	function main_db_storage(){ return 'punbb'; }
 
 	private $data = array();
-	function data_providers()
+	function local_template_data_set()
 	{
 		$limit = $this->args('limit', 25);
 //		$page  = $this->args('limit', 25);
@@ -20,7 +20,9 @@ class module_forum_blog extends base_page
 					'order' => '-blogged_time',
 					'page' => max(1,$this->page()),
 					'per_page' => $limit,
-				))
+				)),
+				'no_show_answers' => true,
+				'skip_message_footer' => true,
 			);
 		
 		return $this->data[$page_id];

@@ -23,7 +23,7 @@
 	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
 	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</td>
 	<td>{$w->moderator_name()}</td>
-	<td>{$w->source()|pun_lcml}<br /><small>// За: {$w->referer_titled_url()}</small></td>
+	<td>{$w->source()|pun_lcml}<br /><small>// За: {$w->referer_titled_url()} [{$w->id()}]</small></td>
 </tr>
 {/foreach}
 </table>
@@ -38,7 +38,7 @@
 	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
 	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</td>
 	<td>{$w->moderator_name()}</td>
-	<td>{$w->source()|pun_lcml}<br /><small>// За: {$w->referer_titled_url()}</small></td>
+	<td>{$w->source()|pun_lcml}<br /><small>// За: {$w->referer_titled_url()} [{$w->id()}]</small></td>
 </tr>
 {/foreach}
 </table>

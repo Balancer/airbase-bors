@@ -1,3 +1,5 @@
+.clear { clear: both; }
+
 div.avatar_block {
 	width: 100px; 
 	float: right; 

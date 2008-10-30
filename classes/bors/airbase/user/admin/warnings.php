@@ -2,18 +2,20 @@
 
 class airbase_user_admin_warnings extends airbase_user_warnings
 {
+	function object() { return ($obj=$this->args('object')) ? object_load($obj) : NULL; }
+
 	function data_providers()
 	{
 		return array_merge(parent::data_providers(true), array(
 			'show_form' => true,
 			'passive_warnings' => array(),
-			'object' => object_load($this->args('object')),
+			'object' => $this->object(),
 		));
 	}
 	
 	function cache_static() { return 0; }
 	
-	function url() { return '/admin/users/'.$this->id().'/warnings.html'; }
+	function url() { return '/admin/users/'.$this->id().'/warnings.html'.(($obj=$this->args('object'))?"?object=$obj":''); }
 
 	function total_items() { return 0; }
 

@@ -28,6 +28,7 @@
 
     function check_action_access($level=3, $redir=false)
 	{
+		debug_trace();
 		exit(__FILE__.':'.__LINE__.' Access denied');
 		
 		$us = bors()->user();

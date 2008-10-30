@@ -515,3 +515,5 @@ img.rep, img.warn {
 	height: 16px;
 	border: none;
 }
+
+td.now { font-weight: bold; }
