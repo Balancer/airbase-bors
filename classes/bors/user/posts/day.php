@@ -16,7 +16,7 @@ class user_posts_day extends base_page
 
 	function is_today()
 	{
-		return $this->year == date('Y') && $this->month == date('n') && $this->day == date('j');
+		return strtotime("{$this->year}-{$this->month}-{$this->day}") + 2*86400 > time();
 	}
 
 	function template()
@@ -116,7 +116,7 @@ class user_posts_day extends base_page
 
 		$list	= array();
 
-		for($day=1; $day<$days; $day++)
+		for($day=1; $day<=$days; $day++)
 		{
 			$time9	= $time0 + 86400;
 			$total = objects_count('forum_post', array('poster_id' => $this->id(), "posted BETWEEN $time0 AND $time9"));

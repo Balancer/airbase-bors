@@ -1,11 +1,12 @@
 var size = clientSize();
 with(document)
 {
+/*
 	if(size[0] < 640)
 		write('<link rel="stylesheet" type="text/css" href="http://forums.balancer.ru/tpl/default/css/lowres.css" />')
 	else
 		write('<link rel="stylesheet" type="text/css" href="http://forums.balancer.ru/tpl/default/css/main3.css" />')
-
+*/
 	write('<style>')
 	if(ff=readCookie('body.fontFamily'))
 		write('body {font-family: '+ff+'}')
@@ -18,7 +19,7 @@ with(document)
 
 function onLoadPage()
 {
-	if(me_is_coordinator)
+	if(top.me_is_coordinator)
 	{
 		posts = readCookie('selected_posts', '').split(/,/)
 		for(i in posts)

@@ -48,7 +48,7 @@ class storage_db_mysql extends base_null
 			  foreach($fields as $field => $value)
 			  {
 //				echo "--- load $field<br />\n";
-				if(!preg_match('!^stba?_(.+)$!', $field, $m))
+				if(!preg_match('!^stb_(.+)$!', $field, $m))
 					continue;
 					
 				$name = $m[1];
