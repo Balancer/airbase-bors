@@ -2,26 +2,27 @@
 
 class forum_topic_rss extends forum_topic
 {
-	function render_engine() { return 'render_self'; }
+	function render_engine() { return 'forum_topic_rss'; }
 	
 	function url() { return $this->rss_url(); }
-
-	function render()
+//	function use_temporary_static_file() { return false; }
+	
+	function render($object)
 	{
-		$topic = object_load('forum_topic', $this->id());
+		$topic = object_load('forum_topic', $object->id());
 		$forum = object_load('forum_forum', $topic->forum_id());
 		
 		if(!$forum->can_read())
 			return ec("Извините, доступ к этому ресурсу закрыт для Вас");
 
-		include("3part/feedcreator.class.php"); 
+		require_once("feedcreator.class.php"); 
 
 		$rss = &new UniversalFeedCreator(); 
 		$rss->encoding = 'utf-8'; 
-		$rss->title = $this->title();
-		$rss->description = ec("Ответы в топик ").$this->title();
+		$rss->title = $object->title();
+		$rss->description = ec("Ответы в топик ").$object->title();
 		$rss->link = parent::url(1);
-		$rss->syndicationURL = $this->url(); 
+		$rss->syndicationURL = $object->url(); 
 
 /*		$image = new FeedImage(); 
 		$image->title = "dailyphp.net logo"; 
@@ -32,11 +33,11 @@ class forum_topic_rss extends forum_topic
 */
 		// get your news items from somewhere, e.g. your database: 
 //		$db = &new DataBase('punbb');
-		foreach($this->db()->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY posted DESC LIMIT 50") as $post_id)
+		foreach($object->db()->get_array("SELECT id FROM posts WHERE topic_id={$object->id()} ORDER BY posted DESC LIMIT 50") as $post_id)
 		{		
 		    $item = &new FeedItem();
 			$post = class_load('forum_post', $post_id);
-	    	$item->title = $this->title();
+	    	$item->title = $object->title();
 		    $item->link = $post->url(); 
 			
 			$html = $post->body();
