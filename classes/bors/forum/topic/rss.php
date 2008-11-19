@@ -51,7 +51,10 @@ class forum_topic_rss extends forum_topic
 			$item->description = $html;
 			$item->date = $post->create_time(); 
 			$item->source = "http://balancer.ru/forum/";
-			$item->author = $post->owner()->title();
+			if($post->owner())
+				$item->author = $post->owner()->title();
+			else
+				debug_hidden_log('lost-data', 'Unknown author for '.$post);
 							     
 			$rss->addItem($item); 
 		} 
