@@ -9,12 +9,14 @@ class storage_fs_hts extends base_null
     	if(!$new_name)
         	$new_name = $key;
 			
-		if(!preg_match("!^#$key\s+(.*?)$!m", $this->hts, $m))
+		if(preg_match("!^#$key +(.*?)$!m", $this->hts, $m))
+			$this->hts = preg_replace("!(^|\n)#$key +.*?(\n|$)!", '$1$2', $this->hts);
+		elseif(preg_match("!^#$key()$!m", $this->hts, $m))
+			$this->hts = preg_replace("!(^|\n)#$key(\n|$)!", '$1$2', $this->hts);
+		else
 			return;
 
 //		echo "Extracted for ($key,$new_name) = '{$m[1]}'<br>";
-
-		$this->hts = preg_replace("!(^|\n)#$key\s+.*?(\n|$)!", '$1$2', $this->hts);
 
 		if($new_name == '-')
 			return $m[1];
@@ -36,6 +38,8 @@ class storage_fs_hts extends base_null
 		if(!($hts = @file_get_contents($file)))
 			return $object->set_loaded(false);
 
+		$hts = str_replace("\r", "", $hts);
+
 		$hts = iconv('WINDOWS-1251','UTF-8', $hts);
 
 		$this->obj = &$object;
@@ -43,7 +47,7 @@ class storage_fs_hts extends base_null
 		$old = false;
 		$this->hts = $hts;
 
-    	list($title, $h1, $h2, $h3) = explode('|', $this->ext('head', '-'));
+    	@list($title, $h1, $h2, $h3) = explode('|', $this->ext('head', '-'));
 
     	$this->ext('copyr','copyright');
     	$this->ext('type');
@@ -73,6 +77,7 @@ class storage_fs_hts extends base_null
 
 	    for($i=0; $i<sizeof($hts); $i++)
     	{
+//			echo "<tt>$i:[".htmlspecialchars($hts[$i])."]</tt><br />";
 	        if(preg_match("!^#nav!",$hts[$i]))
 			{
 	            $nav_open = true;
@@ -86,7 +91,7 @@ class storage_fs_hts extends base_null
 			}
 			elseif($nav_open)
         	{
-				list($url, $title) = explode(',', $hts[$i]);
+				list($url, $nav_title) = explode(',', $hts[$i]);
 				$hts[$i] = '';
 				$last = $url;
 	        }

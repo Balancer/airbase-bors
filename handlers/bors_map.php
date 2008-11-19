@@ -8,6 +8,7 @@ $map = array(
 //	'.* => base_page_hts',
 //	'.* => page_fs_separate', - Временно отключено по причине ошибок определения загруженности страницы.
 	'.*/ => airbase_page_hts_plain',
+	'.*/\w+\.phtml => airbase_page_hts_plain',
 		
 	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => forum_topic(1,2)',
 	'.*viewtopic\.php\?id=(\d+).* => forum_topic(1)',
