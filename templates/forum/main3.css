@@ -434,6 +434,8 @@ a tt.warnings small {
 
 .btab td.pos_reputation { background-color: #efe; color: #060; }
 .btab td.neg_reputation { background-color: #fee; color: #900; }
+.btab tr.pos_reputation td { background-color: #efe; color: #060; }
+.btab tr.neg_reputation td { background-color: #fee; color: #900; }
 
 .w200 ul {
 	font: 8pt Verdana;
