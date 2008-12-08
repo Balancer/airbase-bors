@@ -34,10 +34,11 @@ class forum_user extends base_object_db
 			'warnings',
 			'warnings_total',
 			'reputation',
+			'pure_reputation',
+			'karma',
 			'salt',
 			'saltp' => 'password',
 			'saltu' => 'user_cookie_hash',
-			'pure_reputation',
 			'create_time' => 'registered',
 			'last_post_time' => 'last_post',
 		)));
@@ -264,5 +265,29 @@ class forum_user extends base_object_db
 		unset($_COOKIE['cookie_hash']);
 //		print_d($_COOKIE);
 //		exit();
+	}
+	
+	function reputation_titled_url() { return "<a href=\"http://balancer.ru/user/{$this->id()}/reputation/\">{$this->title()}</a>"; }
+
+	function weight()
+	{
+		$_group_weights = array(
+				1 => 8, // admin
+				2 => 6, // moder
+				3 => 0, // guest
+				5 => 4, // coordin
+				6 => 2, // старожилы
+				21 => 4, // координатор-литератор
+		);
+
+		$weight = @$this->_group_weights[$group];
+		if(!$weight)
+			$weight = 1;
+
+		if($this->id() == 10000) // Balancer ;)
+			$weight = 10;
+					
+		if($this->num_posts() < 50 || $this->create_time() > time() - 86400*2)
+			$weight = 0;
 	}
 }
