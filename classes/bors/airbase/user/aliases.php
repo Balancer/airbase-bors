@@ -9,7 +9,7 @@ class airbase_user_aliases extends base_page
 	function loaded() { $this->init(); return $this->user(); }
 	function local_template_data_set()
 	{
-		$last_post = $this->db('punbb')->select('posts', 'MAX(posted)', array('poster_id' => $this->id()));
+		$last_post = $this->db('punbb')->select('posts', 'MAX(posted)', array('poster_id' => $this->id())) + 1;
 		$depth = $last_post-86400*30;
 
 		$ips = $this->db('punbb')->select_array('posts', 'distinct(poster_ip)', array('poster_id' => $this->id(), "posted BETWEEN $depth AND $last_post"));
