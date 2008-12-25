@@ -235,7 +235,6 @@ class forum_topic extends forum_abstract
 
 	function all_users()
 	{
-//		$db = &new DataBase('punbb');
 		return $this->db()->get_array("SELECT DISTINCT poster_id FROM posts WHERE topic_id={$this->id}");
 	}
 		
@@ -253,8 +252,6 @@ class forum_topic extends forum_abstract
 	{
 		$result = array();
 	
-//		$db = &new DataBase('punbb');
-
 		$start_from = ($this->page() - 1) * $this->items_per_page();
 
 		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.`order`, posts.id LIMIT $start_from, ".$this->items_per_page();
@@ -277,8 +274,6 @@ class forum_topic extends forum_abstract
 	{
 		$post_id = intval($post_id);
 	
-//		$db = &new DataBase('punbb');
-
 		$posts = $this->db()->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY `order`,posted");
 
 		for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)

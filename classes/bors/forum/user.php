@@ -292,4 +292,6 @@ class forum_user extends base_object_db
 		if($this->num_posts() < 50 || $this->create_time() > time() - 86400*2)
 			$weight = 0;
 	}
+
+	function set_last_visit_time() { }
 }

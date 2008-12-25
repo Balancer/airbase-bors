@@ -32,7 +32,6 @@ class forum_topic_rss extends forum_topic
 		$rss->image = $image; 
 */
 		// get your news items from somewhere, e.g. your database: 
-//		$db = &new DataBase('punbb');
 		foreach($object->db()->get_array("SELECT id FROM posts WHERE topic_id={$object->id()} ORDER BY posted DESC LIMIT 50") as $post_id)
 		{		
 		    $item = &new FeedItem();

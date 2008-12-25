@@ -73,8 +73,9 @@ class airbase_forum_category extends base_object_db
 	{
 		// Получаем одни forum_id для дочерних форумов первого уровня
 		$db = &new DataBase('punbb');
-			
-		return $this->db()->select_array('forums', 'id', array('cat_id' => $this->id()));
+		$result = $this->db()->select_array('forums', 'id', array('cat_id' => $this->id()));
+		$db->close();
+		return $result;
 	}
 
 	function direct_subforums()

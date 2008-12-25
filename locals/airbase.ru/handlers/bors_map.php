@@ -7,6 +7,5 @@ $map = array(
 	'(/forums/)index\.php\?showtopic=(\d+) => redirect:forum_topic(2)',
 //	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => forum_topic(1,2)',
 //	'.*viewtopic\.php\?id=(\d+).* => forum_topic(1)',
-//	'(.*) => base_page_hts(1,host=0)',
 //	'(.*) => airbase_page(1,host=0)',
 );

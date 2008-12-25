@@ -50,8 +50,4 @@
 		'/user/(\d+)/warnings\.js => user_js_warnings(1)',
 		'/user/(\d+)/warnings\.gif => forum_images_warnings(1)',
 		'(/)users/warning/(\d+)/ => users_warning(2)',
-
-		'(/)(test|crazy)/ => base_page_hts',
-
-//	'.* => base_page_hts',
 );

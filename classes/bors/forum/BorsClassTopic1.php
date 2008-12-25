@@ -77,6 +77,7 @@ _EOT_;
 				$data['posts'][] = $p;
 			}
 
+			$db->close();
 			return template_assign_data("BorsClassTopicBody.html", $data);
 		}
 	}

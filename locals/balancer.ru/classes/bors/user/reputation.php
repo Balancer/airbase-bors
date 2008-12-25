@@ -35,7 +35,7 @@ class user_reputation extends base_page_db
 		$dbu = &new DataBase('USERS');
 		$dbf = &new DataBase('punbb');
 		
-		return array(
+		$result = array(
 			'ref' => @$_SERVER['HTTP_REFERER'],
 			'list' => $dbu->get_array("SELECT * FROM reputation_votes WHERE user_id = {$this->id()} ORDER BY time DESC"),
 			'reputation_abs_value' => sprintf("%.2f", $dbf->get("SELECT reputation FROM users WHERE id = {$this->id()}")),
@@ -43,6 +43,11 @@ class user_reputation extends base_page_db
 			'minus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score < 0"),
 			'user_id' => $this->id(),
 		);
+		
+		$dbu->close();
+		$dbf->close();
+		
+		return $result;
 	}
 
 	function url() { return "http://balancer.ru/user/".$this->id()."/reputation.html"; }
