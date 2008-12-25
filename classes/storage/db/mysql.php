@@ -340,9 +340,11 @@ class storage_db_mysql extends base_null
 				{
 					$dbh->insert($table, array($db_field => $value));
 					
-					$object->set_id($dbh->get_last_id());
-//					echo "Set id to ".$dbh->get_last_id()."<br />";
+					$object->set_id($dbh->last_id());
+//					echo "Set id to ".$dbh->last_id()."<br />";
 				}
+				
+				$dbh->close();
 			}
 
 			$object->changed_fields = array();

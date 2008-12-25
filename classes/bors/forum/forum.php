@@ -76,8 +76,6 @@ function parents()
 
 		$data = array();
 
-//		$db = &new DataBase('punbb');
-
 		$topics_per_page = 50;
 		$start_from = ($this->page() - 1) * $topics_per_page;
 			
@@ -136,8 +134,6 @@ function parents()
 	function direct_subforums_ids()
 	{
 		// Получаем одни forum_id для дочерних форумов первого уровня
-//		$db = &new DataBase('punbb');
-			
 		return $this->db('punbb')->get_array("SELECT id FROM forums WHERE parent = {$this->id()}");
 	}
 
@@ -228,4 +224,5 @@ function parents()
 
 //	function url_engine() { return 'url_titled'; }
 	function url() { return $this->category()->category_base_full().'viewforum.php?id='.$this->id(); }
+	function cache_static_can_be_dropped() { return false; }
 }
