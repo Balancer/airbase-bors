@@ -17,3 +17,9 @@ Name={input name="author_name"}
 Сменить можно только гостя.
 {/form}
 </td></tr></table>
+
+<h2>Информация</h2>
+<ul>
+<li>IP адрес: {$this->post()|get:poster_ip}</li>
+<li>User-Agent: {$this->post()|get:poster_ua}</li>
+</ul>

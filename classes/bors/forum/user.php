@@ -107,11 +107,16 @@ class forum_user extends base_object_db
 	{
 		if($this->__rank !== NULL)
 			return $this->__rank;
+
 		
 		global $bors_forum_user_ranks;
 		if($bors_forum_user_ranks === NULL)
-			$bors_forum_user_ranks = $this->db('punbb')->select_array('ranks', 'rank, min_posts', array('order' => '-min_posts'));
-
+		{
+			$db = new driver_mysql('punbb');
+			$bors_forum_user_ranks = $db->select_array('ranks', 'rank, min_posts', array('order' => '-min_posts'));
+			$db->close();
+		}
+		
 		foreach($bors_forum_user_ranks as $x)
 			if($this->num_posts() >= $x['min_posts'])
 				return $this->__rank = $x['rank'];
@@ -181,7 +186,10 @@ class forum_user extends base_object_db
 		if(!$user_hash_password = @$_COOKIE['cookie_hash'])
 			return 0;
 			
-		return intval($this->db('punbb')->select('users', 'id', array('user_cookie_hash=' => $user_hash_password)));
+		$db = new driver_mysql('punbb');
+		$result = intval($db->select('users', 'id', array('user_cookie_hash=' => $user_hash_password)));
+		$db->close();
+		return $result;
 	}
 
 	function warnings_rate($period)
