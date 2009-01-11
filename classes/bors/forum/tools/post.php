@@ -27,7 +27,7 @@ class forum_tools_post extends base_page
 
 	function access() { return $this; }
 
-	function can_read() { templates_noindex(); return bors()->user() && bors()->user()->id() > 1; }
+	function can_read() { templates_noindex(); return $this->can_action(); }
 
 	function can_action()
 	{
@@ -41,13 +41,10 @@ class forum_tools_post extends base_page
 		if(!$me->group()->can_move())
 			return false;
 	
-		if($this->post()->owner_id() > 1)
-			return false;
-
-		if(in_array(@$_GET['act'], array('owner_change', '')))
-			return true;
+		if(in_array(@$_GET['act'], array('owner_change')))
+			return $this->post()->owner_id() == 1;
 		
-		return false;
+		return true;
 	}
 
 	function on_action_owner_change($data)

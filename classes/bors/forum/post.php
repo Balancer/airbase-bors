@@ -96,7 +96,8 @@ class forum_post extends base_page_db
 	{
 		if(!$this->post_source())
 		{
-			$x = $this->db()->select('messages', 'message,html', array('id=' => $this->id()));
+			$db = new driver_mysql('punbb');
+			$x = $db->select('messages', 'message,html', array('id=' => $this->id()));
 			if(!$x || !$x['message'])
 			{
 				debug_hidden_log('messages-lost', 'Empty post source!');
@@ -106,7 +107,8 @@ class forum_post extends base_page_db
 			$this->set_post_source($x['message'], true);
 			$this->set_post_body($x['html'], true);
 			$this->store();
-			$this->db()->delete('messages', array('id=' => $this->id()));
+			$db->delete('messages', array('id=' => $this->id()));
+			$db->close();
 		}
 		
 		return $this->post_source();
@@ -163,8 +165,10 @@ class forum_post extends base_page_db
 		if(!$this->flag_db() || !preg_match("!>$!", $this->flag_db()))
 		{
 			include_once('funcs/users/geoip/get_flag.php');
-			$this->db()->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
+			$db = new driver_mysql('punbb');
+			$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
 			$this->set_flag_db(get_flag($this->poster_ip(), $this->owner()), true);
+			$db->close();
 		}
 		
 		return $this->flag_db();
@@ -330,7 +334,9 @@ class forum_post extends base_page_db
 			
 		if($this->have_attach() === NULL)
 		{
-			$ids = $this->db()->select_array('attach_2_files', 'id', array('post_id' => $this->id()));
+			$db = new driver_mysql('punbb');
+			$ids = $db->select_array('attach_2_files', 'id', array('post_id' => $this->id()));
+			$db->close();
 			if($this->_attach_ids = $ids)
 			{
 				if(count($ids) > 1)
@@ -497,7 +503,9 @@ class forum_post extends base_page_db
 			'warn_object_id='=>$this->id(),
 			'order' => '-time'));
 			
-		$this->db()->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
+		$db = new driver_mysql('punbb');
+		$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
+		$db->close();
 		$this->set_warning_id($warn ? $warn->id() : -1, true);
 		return $this->warning = $warn ? $warn : NULL;
 	}
