@@ -210,6 +210,14 @@ class forum_topic extends forum_abstract
 		return objects_array('forum_post', $data);
 	}
 
+	protected function all_posts()
+	{
+		return objects_array('forum_post', array(
+			'topic_id' => $this->id(),
+			'order' => '`order`,posted',
+		));
+	}
+
 	function items_per_page() { return 25; }
 
 	function total_pages() { return intval($this->num_replies() / $this->items_per_page()) + 1; }
@@ -394,20 +402,19 @@ class forum_topic extends forum_abstract
 
 	function repaging_posts($page = NULL)
 	{
+		$total = $this->total_pages();
+	
 		if(!$page || !$this->is_repaged())
 			$page = 1;
 		elseif($page == -1)
-			$page = $this->total_pages();
-	
-		while($page <= $this->total_pages())
-		{
-			foreach($this->posts($page, false) as $post)
+			$page = $total;
+
+		$posts = $this->all_posts();
+
+		for($page; $page <= $total; $page++)
+			foreach(array_slice($posts, ($page - 1) * $this->items_per_page(), $this->items_per_page()) as $post)
 				$post->set_topic_page($page, true);
-				
-			$this->store(false);
-			$page++;
-		}
-		
+
 		$this->set_is_repaged(1, true);
 	}
 }
