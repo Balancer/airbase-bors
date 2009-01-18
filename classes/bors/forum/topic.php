@@ -296,12 +296,12 @@ class forum_topic extends forum_abstract
 		elseif($start_page == -1)
 			$start_page = $this->total_pages();
 			
-		$this->repaging_posts($page);
+		$this->repaging_posts($start_page);
 		
 //		$this->recalculate();
 	}
 
-	function recalculate()
+	function recalculate($full_repaging = true)
 	{
 		$this->store(false);
 		
@@ -319,11 +319,12 @@ class forum_topic extends forum_abstract
 		$this->set_modify_time($last_post->create_time(true), true);
 		$this->set_last_poster_name($last_post->author_name(), true);
 
-		$this->repaging_posts(1);
-		$this->store(false);
+		$this->repaging_posts($full_repaging ? 1 : -1);
 
 		foreach($this->posts() as $p)
 			$p->set_body(NULL, true);
+
+		$this->store(false);
 
 		$this->cache_clean_self();
 	}
@@ -411,10 +412,18 @@ class forum_topic extends forum_abstract
 
 		$posts = $this->all_posts();
 
-		for($page; $page <= $total; $page++)
-			foreach(array_slice($posts, ($page - 1) * $this->items_per_page(), $this->items_per_page()) as $post)
+		if($page == $total)
+		{
+			foreach($this->posts($page, false) as $post)
 				$post->set_topic_page($page, true);
-
+ 		}
+		else
+		{
+			for($page; $page <= $total; $page++)
+				foreach(array_slice($posts, ($page - 1) * $this->items_per_page(), $this->items_per_page()) as $post)
+					$post->set_topic_page($page, true);
+		}
+		
 		$this->set_is_repaged(1, true);
 	}
 }
