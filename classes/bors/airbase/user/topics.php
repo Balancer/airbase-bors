@@ -6,24 +6,26 @@ class airbase_user_topics extends base_page
 	function main_db_storage() { return 'punbb'; }
 	function template() { return 'forum/_header.html'; }
 
-	private $ids = array();
-	private function topics_ids($page)
+	private $ids = false;
+	private function topics_ids()
 	{
-		if(empty($this->ids[$page]))
-			$this->ids[$page] = $this->db()->select_array('posts', 'DISTINCT topic_id', array('poster_id=' => $this->id(), 'order' => 'topic_id', 'per_page'=>$this->items_per_page(), 'page'=>$page));
+		if($this->ids === false)
+			$this->ids  = $this->db()->select_array('posts', 'DISTINCT topic_id', array(
+				'poster_id=' => $this->id(),
+				'posted > ' => time()-86400*31,
+			));
 
-		return $this->ids[$page];
+		return $this->ids;
 	}
 
-	function data_providers()
+	function url() { return "http://balancer.ru/user/".$this->id()."/use-topics.html"; }
+
+	function local_template_data_set()
 	{
-		$ids = $this->topics_ids($this->page());
-
-		$data = array();
-		if($ids)
-			$data['topics'] = objects_array('forum_topic', array('id IN ('.join(',', $ids).')', 'order' => '-id'));
-
-		return $data;
+		return array('topics' => objects_array('forum_topic', array(
+				'id IN' => $this->topics_ids(), 
+				'order' => '-last_post',
+		)));
 	}
 
 	function pre_show()
@@ -33,55 +35,14 @@ class airbase_user_topics extends base_page
 		return false;
 	}
 
-	function url($page = 1) { return "http://balancer.ru/user/".$this->id()."/use-topics".($page == 0 ? '' : ",$page").".html"; }
-	
 	private $user = false;
 	function user() { if($this->user === false) $this->user = object_load('bors_user', $this->id()); return $this->user; }
-	function title() { return $this->user()->title().ec(': темы с участием'); }
-	function nav_name() { return ec('темы с участием'); }
+	function title() { return $this->user()->title().ec(': темы с участием за месяц'); }
+	function nav_name() { return ec('темы с участием за месяц'); }
 
-	function default_page() { return $this->total_pages(); }
-
-	function items_per_page() { return 100; }
-
-	private $total = false;
-	function total_items()
-	{
-		if($this->total === false)
-			$this->total = intval($this->db()->select('posts', 'COUNT(DISTINCT topic_id)', array('poster_id=' => $this->id())));
-
-		return $this->total;
-	}
-	
 	function body_template() { return 'airbase/forum/forum.html'; }
 
 	function cache_static() { return rand(86400*7, 14*86400); }
 
- 	function cache_clean_self($object)
-	{
-		$topic_id = 0;
-		if($object->class_name() == 'forum_topic')
-			$topic_id = $object->id();
-		elseif($object->class_name() == 'forum_post')
-			$topic_id = $object->topic_id();
-	
-		$start = 1;
-		$stop = $this->total_pages();
-		
-		if($topic_id)
-		{
-			for($page=$this->total_pages(); $page > 0; $page--)
-				if(in_array($topic_id, $this->topics_ids($page)))
-				{
-					$start = $page;
-					break;
-				}		
-
-			if(objects_count('forum_post', array('topic_id=' => $topic_id, 'poster_id='=>$this->id())) > 1)
-				$stop = $start;
-		}
-		
-		for($page = $start; $page <= $stop; $page++)
-			@unlink("/var/www/balancer.ru/htdocs/user/{$this->id()}/use-topics,{$page}.html");
-	}
+	function pages_links_nul() { return ""; }
 }

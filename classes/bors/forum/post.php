@@ -49,6 +49,7 @@ class forum_post extends base_page_db
 	function set_topic_id($value, $dbupd) { $this->fset('topic_id', $value, $dbupd); }
 	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
 	function set_edited($value, $dbupd) { $this->fset('edited', $value, $dbupd); }
+	function set_edited_by($value, $dbupd) { $this->fset('edited_by', $value, $dbupd); }
 	function edited() { return $this->stb_edited; }
 	function flag_db() { return $this->stb_flag_db; }
 	function set_flag_db($flag, $db_update) { $this->fset('flag_db', $flag, $db_update); }
@@ -59,6 +60,12 @@ class forum_post extends base_page_db
 	function set_owner_id($owner_id, $db_update) { $this->fset('owner_id', $owner_id, $db_update); }
 	function owner_id() { return $this->stb_owner_id; }
 	function set_poster_ip($poster_ip, $db_update) { $this->fset('poster_ip', $poster_ip, $db_update); }
+	function set_poster_email($value, $db_update) { $this->fset('poster_email', $value, $db_update); }
+	function set_poster_ua($value, $db_update) { $this->fset('poster_ua', $value, $db_update); }
+	function set_hide_smilies($value, $db_update) { $this->fset('hide_smilies', $value, $db_update); }
+	function set_have_attach($value, $db_update) { $this->fset('have_attach', $value, $db_update); }
+	function set_have_cross($value, $db_update) { $this->fset('have_cross', $value, $db_update); }
+	function set_post_source($value, $db_update) { $this->fset('post_source', $value, $db_update); }
 	function set_author_name($author_name, $db_update) { $this->fset('author_name', $author_name, $db_update); }
 	function author_name() { return $this->stb_author_name; }
 	function set_answer_to_id($value, $db_update) { $this->fset('answer_to_id', $value, $db_update); }
