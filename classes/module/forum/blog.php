@@ -20,7 +20,7 @@ class module_forum_blog extends base_page
 					'order' => '-blogged_time',
 					'page' => max(1,$this->page()),
 					'per_page' => $limit,
-					'forum_id NOT IN' => array(102),
+					'forum_id NOT IN' => array(19, 37, 102, 138, 170),
 				)),
 				'no_show_answers' => true,
 				'skip_message_footer' => true,

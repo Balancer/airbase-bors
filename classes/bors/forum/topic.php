@@ -426,4 +426,6 @@ class forum_topic extends forum_abstract
 		
 		$this->set_is_repaged(1, true);
 	}
+
+	function cache_groups_parent() { return parent::cache_groups_parent()." airbase-forum-topic-".$this->id(); }
 }

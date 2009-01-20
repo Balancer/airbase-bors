@@ -5,7 +5,7 @@
 {if $t}
 {assign var="forum" value=$t->forum()}
 {if $forum->is_public_access()}
-{include file="xfile:forum/post.html" show_title=$t->title_url() strip="1024"}
+{include file="xfile:forum/post.html" show_title=$t->title_url() strip="1500"}
 {/if}
 {/if}{/if}
 {/foreach}

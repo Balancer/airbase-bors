@@ -41,6 +41,18 @@ class forum_user extends base_object_db
 			'saltu' => 'user_cookie_hash',
 			'create_time' => 'registered',
 			'last_post_time' => 'last_post',
+			'www' => 'url',
+			'realname',
+			'location',
+			'jabber',
+			'icq',
+			'msn',
+			'aim',
+			'yahoo',
+			'timezone',
+			'language',
+			'admin_note',
+			'email',
 		)));
 	}
 
@@ -54,7 +66,29 @@ class forum_user extends base_object_db
 	function user_title() { return $this->stb_user_title; }
 	
 	function set_use_avatar($value, $dbupd) { $this->fset('use_avatar', $value, $dbupd); }
-	function use_avatar() { return $this->stb_use_avatar; }
+
+	function use_avatar()
+	{
+		if(!$this->stb_use_avatar)
+			return $this->stb_use_avatar;
+			
+		if(preg_match('/^\d+\.\w+/', $this->stb_use_avatar))
+			return $this->stb_use_avatar;
+
+		$avatars_dir = '/var/www/balancer.ru/htdocs/forum/punbb/img/avatars';
+		$id = $this->id();
+		
+		if($img_size = @getimagesize("$avatars_dir/$id.gif"))
+			$user_avatar = "$id.gif";
+		elseif($img_size = @getimagesize("$avatars_dir/$id.png"))
+			$user_avatar = "$id.png";
+		elseif($img_size = @getimagesize("$avatars_dir/$id.jpg"))
+			$user_avatar = "$id.jpg";
+		else
+			$user_avatar = "";
+
+		return $this->set_use_avatar($user_avatar, true);
+	}
 	
 	function set_avatar_width($value, $dbupd) { $this->fset('avatar_width', $value, $dbupd); }
 	function avatar_width() { return $this->stb_avatar_width; }
