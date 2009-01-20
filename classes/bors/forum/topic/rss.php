@@ -62,4 +62,6 @@ class forum_topic_rss extends forum_topic
 		header("Content-Type: ".$rss->contentType."; charset=".$rss->encoding);
 		return $result;
 	}
+
+	function cache_groups() { return parent::cache_groups()." airbase-forum-topic-".$this->id(); }
 }
