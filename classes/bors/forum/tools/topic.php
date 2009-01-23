@@ -21,12 +21,18 @@ class forum_tools_topic extends base_page
         if(!$me || !$me->id())
             return false;
 	
-//		if($me->id() == 10000)
-//			return true;
-	
-//		if(!$me->group()->can_move())
-//			return false;
+		if(!$me->group()->can_move())
+			return false;
 	
 		return true;
+	}
+	
+	function on_action_topic_edit($data)
+	{
+		foreach(explode(' ', 'description keywords_string title') as $key)
+			$this->topic()->{"set_$key"}($data[$key], true);
+
+		$this->topic()->cache_clean();
+		return go($this->topic()->url());
 	}
 }
