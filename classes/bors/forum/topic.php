@@ -41,6 +41,7 @@ class forum_topic extends forum_abstract
 			'last_edit_time' => 'last_edit',
 			'sticky',
 			'closed',
+			'keywords_string_db' => 'keywords_string',
 		);
 	}
 
@@ -65,6 +66,8 @@ class forum_topic extends forum_abstract
 
 	function set_sticky($value, $db_update) { $this->fset('sticky', $value, $db_update); }
 	function set_closed($value, $db_update) { $this->fset('closed', $value, $db_update); }
+
+	function set_keywords_string_db($value, $db_update) { $this->fset('keywords_string_db', $value, $db_update); }
 
 	private $forum = false;
 	function forum()
@@ -428,4 +431,19 @@ class forum_topic extends forum_abstract
 	}
 
 	function cache_groups_parent() { return parent::cache_groups_parent()." airbase-forum-topic-".$this->id(); }
+
+	function keywords_string()
+	{
+		if($kws = $this->keywords_string_db())
+			return $kws;
+		else
+			return $this->forum()->keywords_string();
+	}
+
+	function set_keywords_string($words, $db_update)
+	{
+		$this->set_keywords_string_db($words, $db_update);
+		if($db_update)
+			common_keyword_bind::add($this);
+	}
 }
