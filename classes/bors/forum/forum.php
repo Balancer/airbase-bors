@@ -230,4 +230,7 @@ function parents()
 //	function url_engine() { return 'url_titled'; }
 	function url() { return $this->category()->category_base_full().'viewforum.php?id='.$this->id(); }
 	function cache_static_can_be_dropped() { return false; }
+
+	function cache_groups_parent() { return parent::cache_groups_parent().
+		" airbase-board-forum-{$this->id()}"; }
 }

@@ -87,6 +87,7 @@ dd, dt { height: 1%; }
 		<dd>
 			<h1>{$title}</h1>
 			{$description}
+{* if $this->keywords_string()}<br /><i>Ключевые слова: {$this->keywords_string()}</i>{/if *}
 		</dd>
 		</dl>
 		{$body}
