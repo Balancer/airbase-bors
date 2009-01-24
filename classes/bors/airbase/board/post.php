@@ -46,25 +46,25 @@ class airbase_board_post extends base_page_db
 		);
 	}
 
-	function set_topic_id($value, $dbupd) { $this->fset('topic_id', $value, $dbupd); }
-	function set_create_time($value, $dbupd) { $this->fset('create_time', $value, $dbupd); }
-	function set_edited($value, $dbupd) { $this->fset('edited', $value, $dbupd); }
+	function set_topic_id($value, $dbupd) { return $this->fset('topic_id', $value, $dbupd); }
+	function set_create_time($value, $dbupd) { return $this->fset('create_time', $value, $dbupd); }
+	function set_edited($value, $dbupd) { return $this->fset('edited', $value, $dbupd); }
 	function edited() { return $this->stb_edited; }
 	function flag_db() { return $this->stb_flag_db; }
-	function set_flag_db($flag, $db_update) { $this->fset('flag_db', $flag, $db_update); }
+	function set_flag_db($flag, $db_update) { return $this->fset('flag_db', $flag, $db_update); }
 	function post_body() { return $this->stb_post_body; }
-	function set_post_body($value, $dbupd) { $this->fset('post_body', $value, $dbupd); }
+	function set_post_body($value, $dbupd) { return $this->fset('post_body', $value, $dbupd); }
 	//TODO: странно, при прямом вызове пропадают флаги.
 //	function flag_db() { return $this->stb_flag_db; }
-	function set_owner_id($owner_id, $db_update) { $this->fset('owner_id', $owner_id, $db_update); }
+	function set_owner_id($owner_id, $db_update) { return $this->fset('owner_id', $owner_id, $db_update); }
 	function owner_id() { return $this->stb_owner_id; }
-	function set_poster_ip($poster_ip, $db_update) { $this->fset('poster_ip', $poster_ip, $db_update); }
-	function set_author_name($author_name, $db_update) { $this->fset('author_name', $author_name, $db_update); }
+	function set_poster_ip($poster_ip, $db_update) { return $this->fset('poster_ip', $poster_ip, $db_update); }
+	function set_author_name($author_name, $db_update) { return $this->fset('author_name', $author_name, $db_update); }
 	function author_name() { return $this->stb_author_name; }
-	function set_answer_to_id($value, $db_update) { $this->fset('answer_to_id', $value, $db_update); }
+	function set_answer_to_id($value, $db_update) { return $this->fset('answer_to_id', $value, $db_update); }
 	function answer_to_id() { return $this->stb_answer_to_id; }
 
-	function set_warning_id($value, $db_update) { $this->fset('warning_id', $value, $db_update); }
+	function set_warning_id($value, $db_update) { return $this->fset('warning_id', $value, $db_update); }
 	function warning_id() { return $this->stb_warning_id; }
 
 	function topic() { return object_load('airbase_board_topic', $this->topic_id()); }
