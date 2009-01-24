@@ -22,31 +22,31 @@ class airbase_forum_attach extends base_object_db
 		)));
 	}
 
-	function set_post_id($value, $db_update) { $this->fset('post_id', $value, $db_update); }
+	function set_post_id($value, $db_update) { return $this->fset('post_id', $value, $db_update); }
 	function post_id() { return $this->stb_post_id; }
 
-	function set_owner_id($value, $db_update) { $this->fset('owner_id', $value, $db_update); }
+	function set_owner_id($value, $db_update) { return $this->fset('owner_id', $value, $db_update); }
 	function owner_id() { return $this->stb_owner_id; }
 
-	function set_title($value, $db_update) { $this->fset('title', $value, $db_update); }
+	function set_title($value, $db_update) { return $this->fset('title', $value, $db_update); }
 	function title() { return $this->stb_title; }
 
-	function set_filename($value, $db_update) { $this->fset('filename', $value, $db_update); }
+	function set_filename($value, $db_update) { return $this->fset('filename', $value, $db_update); }
 	function filename() { return $this->stb_filename; }
 
-	function set_extension($value, $db_update) { $this->fset('extension', $value, $db_update); }
+	function set_extension($value, $db_update) { return $this->fset('extension', $value, $db_update); }
 	function extension() { return $this->stb_extension; }
 
-	function set_mime($value, $db_update) { $this->fset('mime', $value, $db_update); }
+	function set_mime($value, $db_update) { return $this->fset('mime', $value, $db_update); }
 	function mime() { return $this->stb_mime; }
 
-	function set_size($value, $db_update) { $this->fset('size', $value, $db_update); }
+	function set_size($value, $db_update) { return $this->fset('size', $value, $db_update); }
 	function size() { return $this->stb_size; }
 
-	function set_downloads($value, $db_update) { $this->fset('downloads', $value, $db_update); }
+	function set_downloads($value, $db_update) { return $this->fset('downloads', $value, $db_update); }
 	function downloads() { return $this->stb_downloads; }
 
-	function set_location($value, $db_update) { $this->fset('location', $value, $db_update); }
+	function set_location($value, $db_update) { return $this->fset('location', $value, $db_update); }
 	function location() { return $this->stb_location; }
 
 	function url() { return "http://balancer.ru/forum/punbb/attachment.php?item=".$this->id(); }
