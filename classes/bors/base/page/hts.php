@@ -13,7 +13,7 @@ class base_page_hts extends base_page_db
 	function html_disable() { return false; }
 	function lcml_tags_enabled() { return NULL; }
 
-	function loaded() { return $this->title(); }
+	function loaded() { return $this->title() || $this->source(); }
 
 	function main_db_storage() { return config('mysql_database'); }
 
@@ -62,15 +62,24 @@ class base_page_hts extends base_page_db
 			$this->set_id($this->called_url());
 
 		return parent::init();
-		
-//		echo "tpl={$this->template()}<br />";
 	}
 
-	function cache_static() { return 3600; }
+	function cache_static() { return rand(3600, 7200); }
 	function url() { return $this->id(); }
 
-	function admin_url() { return '/admin/?object='.$this->internal_uri(); }
-	function edit_url() { return '/admin/edit/?object='.$this->internal_uri(); }
+	function post_set($data)
+	{
+		config_set('cache_disabled', true);
+		$text = lcml($data['source'],
+			array(
+				'cr_type' => $this->cr_type(),
+				'nocache' => true,
+				'sharp_not_comment' => $this->sharp_not_comment(),
+				'html_disable' => $this->html_disable(),
+		));
+
+		$this->set_body($text, true);
+	}
 
 	function editor_fields_list()
 	{

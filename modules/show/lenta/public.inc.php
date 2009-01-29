@@ -2,7 +2,7 @@
     function module_show_lenta_public($forums, $limit = 15)
     {
 //		include_once("funcs/texts.php");
-		include_once("inc/data/lists.php");
+		include_once("inc/lists.php");
 		include_once("other/punbb-modified-forum/include/pun_bal.php");
 	
 		$db = &new DataBase('punbb');

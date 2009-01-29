@@ -1,0 +1,28 @@
+{foreach from=$topics item=t}
+<div class="lenta_record">
+<h3><a href="{$t->post()|get:url}">{$t->title()}</a></h3>
+<div class="lenta_record_content">
+<small><strong>{$t->owner()|get:title}, {$t->topic()|get:create_time|strftime:"%Y-%m-%d %H:%M"}</strong>, <i>{$t->forum()|get:titled_url}</i>.</small>
+{assign var="owner" value=$t->owner()}
+{* if $owner}<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>{/if *}
+<br/>
+<br/>
+
+<div class="lenta_record_message">
+{assign var="body" value=$t->post()->body()}
+<p>{$body|truncate:1024}</p>
+</div>
+
+{if strlen($body) > 1024}<div align="right"><i><a href="{$t->post()|get:url}">Дальше &#187;&#187;&#187;</a></i></div>{/if}
+<div style="font-size: xx-small; border-top: 1px solid; margin-top: 16px;">
+<a href="{$t->url()}">Ссылка</a> -
+{$t->topic()|get:num_replies} {$t->topic()|get:num_replies|sklon:"комментарий":"комментария":"комментариев"}
+{* $t->num_views()} {$t->num_views()|sklon:"просмотр":"просмотра":"просмотров" *}.
+</div>
+
+</div>
+</div>
+
+<div style="clear: both;">&nbsp;</div>
+
+{/foreach}
