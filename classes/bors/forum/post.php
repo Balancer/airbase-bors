@@ -209,6 +209,9 @@ class forum_post extends base_page_db
 			case 'J2ME':
 				$out_os = '<img src="/bors-shared/images/os/java.gif" width="16" height="16" alt="J2ME" />';
 				break;
+			case 'OS/2':
+				$out_os = '<img src="/bors-shared/images/os/os2.gif" width="16" height="16" alt="OS/2" />';
+				break;
 			case 'PocketPC':
 			case 'J2ME':
 				break;

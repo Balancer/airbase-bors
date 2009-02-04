@@ -157,8 +157,6 @@ dl.forumposting dt a {color: #ffffd0;}
 	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
 		{if $views}{* {$views}-е посещение с {$views_first|strftime:"%d.%m.%Y"}<br/> *}{/if}
 		{if $views_average}В среднем посещений в день: {$views_average}<br/>{/if}
-		{if $queries}Запросов к БД: {$queries}<br/>{/if}
-		{if $queries_time}Время запросов БД: {$queries_time}<br/>{/if}
 		{if $make_time}Время генерации страницы: {$make_time}<br/>{/if}
 	  </div>
 	</td>

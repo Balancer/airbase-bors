@@ -215,13 +215,15 @@ if(11<js)d.write('--'+'>')//--></script><!--/COUNTER-->
 class = {$this->class_name()}
 class_file = {$this->class_file()}
 template[3] = {$template}
-queries = {$queries} 
-queries_time = {$queries_time} 
 make_time = {$make_time} 
 template = {$page_template} 
 created = {$now|strftime:"%d.%m.%Y %H:%M"} 
 {if $this}{math assign=exp equation="x+y" x=$this->cache_static() y=$now}static expire = {$exp|strftime:"%d.%m.%Y %H:%M"} 
 {/if} 
+=== counts ===
+{0|debug_count_info_all}
+=== timing ===
+{0|debug_timing_info_all}
 -->
 
 </body>

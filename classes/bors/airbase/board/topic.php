@@ -14,6 +14,7 @@ class airbase_board_topic extends base_page_db
 				'id',
 				'forum_id',
 				'title'	=> 'subject',
+				'description',
 				'create_time'	=> 'posted',
 				'modify_time'=> 'last_post',
 				'owner_id'=> 'poster_id',
