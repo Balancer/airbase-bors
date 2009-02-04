@@ -128,7 +128,7 @@ if (defined('PUN_DEBUG'))
 	// Calculate script generation time
 	list($usec, $sec) = explode(' ', microtime());
 	$time_diff = sprintf('%.3f', ((float)$usec + (float)$sec) - $pun_start);
-	echo "\t\t\t".'<p class="conr">[ Generated in '.$time_diff.' seconds, '.($db->get_num_queries()+$GLOBALS['global_db_queries']).' queries executed ]</p>'."\n";
+	echo "\t\t\t".'<p class="conr">[ Generated in '.$time_diff.' seconds, '.($db->get_num_queries()+debug_count('mysql_queries')).' queries executed ]</p>'."\n";
 }
 
 ?>

@@ -11,6 +11,7 @@
 	<th>&nbsp;</th>
 	<th>Тема</th>
 	<th>Ответов</th>
+	<th>Создано</th>
 	<th>Обновлено</th>
 </tr>
 {foreach from=$topics item=t}
@@ -18,11 +19,13 @@
 {assign var=o value=$t->owner()}
 <tr class="tr_forum_{$f->id()}">
 	<td><div class="visited_topic" id="vtl_{$t->id()}">&nbsp;</div></td>
-	<td id="vtt_{$t->id()}"><a href="{$t->url()}">{$t->title()}</a> 
+	<td id="vtt_{$t->id()}">
+		{$t->titled_url()}{if $t->description()}<br /><small><i>{$t->description}</i></small>{/if}
 		{if $t->total_pages() > 1}<small><span class="topic_pages_links">{$t->title_pages_links()}</span></small>{/if}
 		(<a href="{$f->url()}">{$f->title()}</a>, {$t->create_time()|airbase_time})</td>
 	<td class="small aligncenter">{$t->num_replies()}</td>
-	<td class="small">{$t->modify_time()|airbase_time} <small>({$t->last_poster_name()})</small></td>
+	<td class="small">{$t->create_time()|airbase_time}<br /><small>{$t->author_name()}</small></td>
+	<td class="small">{$t->modify_time()|airbase_time}<Br /><small>{$t->last_poster_name()}</small></td>
 </tr>
 {/foreach}
 </table>
