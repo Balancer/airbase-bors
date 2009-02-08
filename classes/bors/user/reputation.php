@@ -40,7 +40,7 @@ class user_reputation extends base_page_db
 		$dbf = &new DataBase('punbb');
 		
 		return array(
-			'ref' => @$_SERVER['HTTP_REFERER'],
+			'ref' => $this->ref() ? $this->ref() : @$_SERVER['HTTP_REFERER'],
 			'list' => array_reverse(objects_array('airbase_user_reputation', array('user_id=' => $this->id(), 'order' => 'time', 'page'=> $this->page(), 'per_page' => $this->items_per_page()))),
 			'reputation_abs_value' => sprintf("%.2f", $dbf->get("SELECT reputation FROM users WHERE id = {$this->id()}")),
 			'plus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score > 0"),
@@ -58,13 +58,30 @@ class user_reputation extends base_page_db
 		return $this->total;
 	}
 
+	function ref()
+	{
+		if($ref = $this->args('ref'))
+			return $ref;
+		
+		$keys = array_keys($_GET);
+		if(!empty($keys[0]) && preg_match('/^http:/', $keys[0]))
+			return $keys[0];
+		
+		return NULL;
+	}
+
 //	function url($page=1) { return "http://balancer.ru/user/".$this->id()."/reputation".($page && $page != 1 ? ','.$page : '').".html"; }
 	function url($page = 0)
-	{	
+	{
 		if($page == 0 || $this->total_pages() == 1)
-			return "http://balancer.ru/user/".$this->id()."/reputation.html"; 
+			$url = "http://balancer.ru/user/".$this->id()."/reputation.html";
 		else
-			return "http://balancer.ru/user/".$this->id()."/reputation,{$page}.html"; 
+			$url = "http://balancer.ru/user/".$this->id()."/reputation,{$page}.html";
+			
+		if($this->ref())
+			$url .= '?'.$this->ref();
+			
+		return $url;
 	}
 
 	function cache_static() { return rand(86400*7, 86400*30); }
