@@ -43,6 +43,7 @@ class forum_post extends base_page_db
 			'hide_smilies',
 			'have_attach',
 			'have_cross',
+			'have_answers',
 		);
 	}
 
@@ -529,4 +530,20 @@ class forum_post extends base_page_db
 			
 		return $res;
 	}
+
+	function is_edit_disable()
+	{
+		if($this->id() == $this->topic()->first_post_id())
+			return false;
+			
+		if(($me = bors()->user()) && $me->group()->is_coordinator())
+			return false;
+		
+		if($this->create_time() < time() - 86400)
+			return ec("Вы не можете редактировать это сообщение, так как прошло более суток с момента его создания");
+
+		return false;
+	}
+
+	function edit_url() { return "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}"; }
 }

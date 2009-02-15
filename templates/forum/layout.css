@@ -55,3 +55,21 @@ dl.forumposting dd {
 img {
 	border: none;
 }
+
+div.img_468x468 {
+	width: 468px;
+	border: 1px solid;
+	padding: 10px;
+	margin: 10px 0 20px 0;
+	text-align: center;
+}
+
+div.img_200x200 {
+	width: 200px;
+	border: 1px solid;
+	padding: 5px;
+	margin: 5px;
+	text-align: center;
+	display: inline;
+	float: left;
+}

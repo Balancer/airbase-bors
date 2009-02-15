@@ -32,6 +32,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 		$data['moderator_name'] = bors()->user()->title();
 		$data['warn_class_id'] = $object->class_id();
 		$data['warn_object_id'] = $object->id();
+		$data['create_time'] = $object->create_time();
 
 		return parent::check_data($data);
 	}
