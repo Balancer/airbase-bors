@@ -535,3 +535,4 @@ dt div.colright-100 {
 }
 
 .left { text-align: left !important; }
+.half-transparent { opacity: 0.4; }
