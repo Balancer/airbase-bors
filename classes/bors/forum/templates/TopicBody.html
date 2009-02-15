@@ -4,7 +4,9 @@
 {if $p->id()}
 <a name="p{$p->id()}"></a>
 <dl class="forumposting posted_by_{$p->owner_id()}">
-<dt>{$p->flag()} {$p->author_name()}, <a href="{$p->url()}">{$p->create_time()|full_time}</a>
+<dt>
+<div class="colleft-100">
+{$p->flag()} {$p->author_name()}, <a href="{$p->url()}">{$p->create_time()|full_time}</a>
 {if $p->answer_to_id()}
 {assign var=a value=$p->answer_to()}
 {if $a}
@@ -12,6 +14,11 @@
 {else}Ответ на удалённое сообщение post_id={$p->answer_to_id()}
 {/if}
 {/if}
+</div>
+<div class="colright-100">
+{$p->imaged_edit_url()}
+</div>
+<div class="clear">&nbsp;</div>
 </dt>
 <dd>
 
@@ -50,7 +57,6 @@
 <li>|</li>
 <li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
 <li class="postdelete"><a href="http://balancer.ru/forum/tools/post/{$p->id()}/">Инструменты</a></li>
-<li class="postedit"><a href="http://balancer.ru/forum/punbb/edit.php?id={$p->id()}">Редактировать</a></li>
 <li>|</li>
 <li class="postquote"><a href="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}">Ответить на сообщение</a></li>
 </ul>
