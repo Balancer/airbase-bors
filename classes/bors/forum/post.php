@@ -55,7 +55,7 @@ class forum_post extends base_page_db
 	function flag_db() { return $this->stb_flag_db; }
 	function set_flag_db($flag, $db_update) { return $this->fset('flag_db', $flag, $db_update); }
 	function post_body() { return $this->stb_post_body; }
-	function set_post_body($value, $dbupd) { if(!$value && $dbupd) debug_hidden_log('body', 'Set empty body'); $this->fset('post_body', $value, $dbupd); }
+	function set_post_body($value, $dbupd) { if($value == '' && $value !== NULL && $dbupd) debug_hidden_log('body', 'Set empty body'); $this->fset('post_body', $value, $dbupd); }
 	//TODO: странно, при прямом вызове пропадают флаги.
 //	function flag_db() { return $this->stb_flag_db; }
 	function set_owner_id($owner_id, $db_update) { return $this->fset('owner_id', $owner_id, $db_update); }
