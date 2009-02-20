@@ -119,7 +119,7 @@ class user_blog extends base_page
 		return join(" ", pages_show($this, $this->total_pages(), 12));
 	}
 
-	function num_blog() { return $this->db->get('SELECT COUNT(*) FROM topics WHERE poster_id='.$this->id()); }
+	function num_blog() { return $this->db()->get('SELECT COUNT(*) FROM topics WHERE poster_id='.$this->id()); }
 
 	function can_be_empty() { return true; }
 

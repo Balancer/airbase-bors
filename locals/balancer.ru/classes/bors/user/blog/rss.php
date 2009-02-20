@@ -27,7 +27,7 @@ class user_blog_rss extends user_blog
 		$rss->image = $image; 
 */
 		// get your news items from somewhere, e.g. your database: 
-		foreach($this->db->get_array('SELECT id FROM topics WHERE poster_id='.$this->id().' AND posted > '.(time()-30*86400).' ORDER BY posted DESC LIMIT 25') as $topic_id)
+		foreach($this->db()->get_array('SELECT id FROM topics WHERE poster_id='.$this->id().' AND posted > '.(time()-30*86400).' ORDER BY posted DESC LIMIT 25') as $topic_id)
 		{		
 		    $item = &new FeedItem();
 			$topic = class_load('forum_topic', $topic_id);
