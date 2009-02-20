@@ -1,8 +1,6 @@
 <?php
 
-class_include('def_image_png');
-
-class airbase_top_logo extends def_image_png
+class airbase_top_logo extends base_image_png
 {
 	function make_image()
 	{
