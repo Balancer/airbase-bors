@@ -40,8 +40,7 @@ class base_page_hts extends base_page_db
 
 	function parents()
 	{
-//		print_d($this->db->select_array('hts_data_parent', 'value', array('id=' => $this->id())));
-		return $this->db->select_array('hts_data_parent', 'value', array('id=' => $this->id()));
+		return $this->db()->select_array('hts_data_parent', 'value', array('id=' => $this->id()));
 	}
 
 	function template()
