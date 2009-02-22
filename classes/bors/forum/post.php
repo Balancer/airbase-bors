@@ -80,7 +80,7 @@ class forum_post extends base_page_db
 
 	function set_topic_page($page, $dbupd)
 	{
-		if($page && gettype($page) != 'integer')
+		if($page && !is_numeric($page)/*gettype($page) != 'integer'*/)
 			debug_hidden_log('type-mismatch-page', 'Set topic_page to '.gettype($page).'('.$page.')');
 
 		$this->fset('topic_page', $page, $dbupd);
@@ -244,6 +244,9 @@ class forum_post extends base_page_db
 			case 'Firefox':
 				$out_browser = '<img src="/bors-shared/images/browsers/firefox.gif" width="16" height="16" alt="Firefox" />';
 				break;
+			case 'Iceweasel':
+				$out_browser = '<img src="/bors-shared/images/browsers/iceweasel.png" width="16" height="16" alt="Iceweasel" />';
+				break;
 			case 'Safari':
 				$out_browser = '<img src="/bors-shared/images/browsers/safari.png" width="16" height="16" alt="Safari" />';
 				break;
@@ -259,7 +262,7 @@ class forum_post extends base_page_db
 		if((!$out_browser || !$out_os) && $this->poster_ua())
 			debug_hidden_log("user_agent", "Unknown user agent: ".$this->poster_ua()." in post ".$this->id());
 		
-		return '<div style="width:40px; height:16px; float:right; display:inline;" title="'.htmlspecialchars($this->poster_ua()).'">'.$out_browser.$out_os.'</div>';
+		return '<span title="'.htmlspecialchars($this->poster_ua()).'">'.$out_browser.$out_os.'</span>';
 	}
 
 	private $__answer_to = 0;

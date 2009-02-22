@@ -520,7 +520,7 @@ td.now { font-weight: bold; }
 img { border: none; }
 
 dt div.colleft-100 {
-	margin-right: 110px;
+/*	margin-right: 110px; */
 	min-width: 300px;
 	float: left;
 	display: inline;
@@ -536,3 +536,5 @@ dt div.colright-100 {
 
 .left { text-align: left !important; }
 .half-transparent { opacity: 0.4; }
+
+.img_middle img { vertical-align: middle !important; }

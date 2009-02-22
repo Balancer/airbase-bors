@@ -45,7 +45,7 @@ class forum_topic extends forum_abstract
 		);
 	}
 
-	function forum_id() { return $this->stb_forum_id; }
+	function forum_id() { return @$this->stb_forum_id; }
 	function owner_id() { return $this->stb_owner_id; }
 	function last_poster_name() { return $this->stb_last_poster_name; }
 	function num_replies() { return $this->stb_num_replies; }

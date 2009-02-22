@@ -1,24 +1,6 @@
 function css_load(elem, value, id, def)
 {
-	if(!id)
-	{
-		if(elem.indexOf('.') == -1)
-			id = "body"
-		else
-		{
-			elem = elem.split('.')
-			id = elem[0]
-			elem = elem[1]
-		}
-	}
-
-	if(elem.indexOf(".") == -1)
-		document.getElementById(id).style[elem] = value
-	else
-	{
-/*		alert("document.getElementById('"+id+"').style."+elem+" = "+value) */
-		eval("document.getElementById('"+id+"').style."+elem+" = "+value)
-	}
+	document.getElementById(id).style[elem] = value
 	
 	if(def != value)
 		createCookie(id+"."+elem, value, 180)
@@ -73,7 +55,8 @@ function createSelect(title, element, values, def)
 	cookie = readCookie(id+"."+element);
 	if(!cookie)
 		cookie = def
-	document.write("<select id="+id+" onChange=\"css_load('"+element+"', this.value"+(id ? ", '"+id+"'" : "")+", '"+def+"')\">")
+//	alert("<select id="+id+" onChange=\"css_load('"+element+"', this.value, '"+id+"', '"+def+"')\">")
+	document.write("<select id="+id+" onChange=\"css_load('"+element+"', this.value, '"+id+"', '"+def+"')\">")
 	values = values.split(";")
 	for(var i in values)
 	{

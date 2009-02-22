@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>{$title}</title>
+	<title><?=$title?></title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
@@ -12,62 +12,61 @@
 
 
 <script type="text/javascript"><!--
-createCookie('class_name', '{$this->class_name()}');createCookie('object_id', '{$this->id()}')
+createCookie('class_name', '<?=$self->class_name()?>');createCookie('object_id', '<?=$self->id()?>')
 
 var me_id = readCookie('user_id', 0)
 var me_hash = readCookie('cookie_hash', 0)
-if(me_id > 1 && me_hash) {ldelim}
+if(me_id > 1 && me_hash) {
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/setvars.js\"></"+"script>")
-{rdelim}
+}
 --></script>
 
 <script type="text/javascript"><!--
-if(top.me_is_coordinator) {ldelim}
+if(top.me_is_coordinator) {
 	document.writeln('<link rel="stylesheet" type="text/css" href="/bors-shared/css/coordinators.css" />')
 	document.writeln('<'+'script  type="text/javascript" src="/bors-shared/js/coordinators.js"></'+'script>')
-{rdelim}
+}
 
 --></script>
 
-{if $type == 'topic' and $id}
+<?if($type == 'topic' && $id):?>
 <script type="text/javascript"><!--
 var readed = readCookie('readedTopics', "").split(' ')
-if(!inArray(readed, {$id}) && readed.length < 40) readed.push({$id})
+if(!inArray(readed, <?=$id?>) && readed.length < 40) readed.push(<?=$id?>)
 createCookie('readedTopics', readed.join(' '), 3)
 --></script>
-{/if}
-{literal}
+<?endif;?>
 <!--[if IE]><style>
 .outer, .wide, h2, .wrapper, .minwidth {
 	height: 0;
 	height: auto;
 	zoom: 1;
-}
-dd, dt { height: 1%; }
+?>
+dd, dt { height: 1%; ?>
 </style><![endif]-->
 <!--[if lt IE 7]><style>
 .minwidth {
 	border-left: 404px solid #fff;
-}
+?>
 .wrapper {
 	margin-left: -404px;
 	position: relative;
-}
+?>
 </style><![endif]-->
 
-{/literal}
-{if $header}
-{foreach from=$header item="h"}
-{$h}
-{/foreach}
-{/if}
-{if $meta}{foreach key=key item=value from=$meta}
-<meta name="{$key}" content="{$value|htmlspecialchars}" />
-{/foreach}{/if}
-{foreach item=s from=$head_append}
-{$s}
-{/foreach}
+<?php
+if($header)
+	foreach($header as $h)
+		echo $h;
 
+if($meta)
+	foreach($meta as $key => $value)
+echo "<meta name=\"{$key}\" content=\"".htmlspecialchars($value)."\" />\n";
+
+if($head_append)
+	foreach($head_append as $s)
+		echo $s;
+?>
 </head>
 
 <body onload="onLoadPage()" id="body">
@@ -83,11 +82,11 @@ dd, dt { height: 1%; }
 	<div class="tpl_column_center"><div class="incenter" id="incenter">
 
 		<dl class="box">
-		<dt class="nav">{module name="top-navs"}</dt>
+		<dt class="nav"> <?=bors_tpl_module('nav_top')?> </dt>
 		<dd>
-			<h1>{$title}</h1>
-			{$description}
-{* if $this->keywords_string()}<br /><i>Ключевые слова: {$this->keywords_string()}</i>{/if *}
+			<h1><?=$title?></h1>
+			<?=$description?>
+<?if($self->keywords_string()):?><br /><i>Ключевые слова: <?=$self->keywords_string()?></i><?endif;?>
 		</dd>
 		</dl>
 
@@ -100,18 +99,23 @@ dd, dt { height: 1%; }
 <b>Обсудить и задать вопросы <a href="http://balancer.ru/support/2009/02/topic-66122-IE6-bol~she-ne-podderzhivaetsya.8198.html">можно в этой теме</a></b>.
 </dd></dl><![endif]-->
 
-		{$body}
+		<?=$body?>
 
 		<dl class="box">
-		<dt class="nav">{module name="top-navs"}</dt>
+		<dt class="nav"> <?=bors_tpl_module('nav_top')?> </dt>
 		</dl>
 
 	  <div class="copyright">
-        Copyright &copy; Balancer 1997..{0|strftime:"%Y"}<br/>
-	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
-		{if $views}{* {$views}-е посещение с {$views_first|strftime:"%d.%m.%Y"}<br/> *}{/if}
-		{if $views_average}В среднем посещений в день: {$views_average}<br/>{/if}
-	  </div>
+        Copyright &copy; Balancer 1997..<?=date('Y')?><br/>
+<?
+if($ct = $self->create_time(true))
+	echo "Создано ".date('d.m.Y', $ct)."<br />\n";
+if($views)
+	echo $views."-е посещение с ".date('d.m.Y', $views_first)."<br />\n";
+if($views_average)
+	echo "В среднем посещений в день: ".$views_average."<br />\n";
+?>
+	 </div>
 
 
 	</div></div> <!-- end center div -->
@@ -146,16 +150,16 @@ dd, dt { height: 1%; }
 <script type="text/javascript"><!--
 if(me_id < 2 || !me_hash)
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/templates/login.js\"></"+"script>")
-else {ldelim}
+else {
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
-	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?{$this->class_name()}://{$this->id()}\"></"+"script>")
-{rdelim}
+	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?<?=$self->class_name()?>://<?=$self->id()?>\"></"+"script>")
+}
 --></script>
 <noscript><p>Не работает без JavaScript</p></noscript>
 </dd></dl>
 
 <dl class="box w200"><dt>Новости сайта</dt>
-<dd>{module name="forums/sitenews"}</dd>
+<dd><?=bors_tpl_module('forum_sitenews')?></dd>
 </dl>
 
 <dl class="box w200"><dt>Популярные темы</dt>
