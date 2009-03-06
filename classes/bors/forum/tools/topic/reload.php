@@ -6,7 +6,7 @@ class forum_tools_topic_reload extends base_object
 
 	function pre_parse($data)
 	{
-		$topic = object_load('forum_topic', $this->id());
+		$topic = object_load('forum_topic', $this->id(), array('no_load_cache' => true));
 		if(preg_match('!/t\d+,(\d+)!', @$_SERVER['HTTP_REFERER'], $m))
 			$page = $m[1];
 		else

@@ -265,8 +265,6 @@ class airbase_board_post extends base_page_db
 		return $this->__answer_to = $post;
 	}
 
-	function cache_static() { return rand(86400, 86400*2); }
-
 	function template() { return 'empty.html'; }
 	function render() { return 'render_fullpage'; }
 
