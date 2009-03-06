@@ -22,10 +22,13 @@ class airbase_user_topics extends base_page
 
 	function local_template_data_set()
 	{
-		return array('topics' => objects_array('forum_topic', array(
-				'id IN' => $this->topics_ids(), 
-				'order' => '-last_post',
-		)));
+		if($this->topics_ids())
+			return array('topics' => objects_array('forum_topic', array(
+					'id IN' => $this->topics_ids(), 
+					'order' => '-last_post',
+			)));
+		else
+			return array();
 	}
 
 	function pre_show()

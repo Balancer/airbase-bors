@@ -91,9 +91,10 @@ function parents()
 		return template_assign_data("templates/ForumBody.html", $data);
 	}
 
+	//TODO: тут гости у нас строго 3-я группа!
 	function is_public_access()
 	{
-		$access = object_load('airbase_forum_access', "{$this->id()}:3");
+		$access = object_load('airbase_forum_access', "{$this->id()}:3", array('no_load_cache' => true));
 		if($access)
 			return $access->can_read();
 

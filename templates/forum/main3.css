@@ -367,7 +367,8 @@ input.text {
 }
 
 dl.box input.text {
-	width: 180px;
+	width: 160px;
+	font-size: 9pt;
 }
 
 input.submit {
@@ -474,15 +475,19 @@ blockquote .box {
 	text-align: right;
 }
 
-.edited_note {
+.yellow_box, .edited_note {
 	clear: both;
 	border: 1px solid #cc9;
-	padding: 1px;
+	padding: 2px;
 	margin: 2px 0;
 	background-color: #ffc;
 	font-size: xx-small;
 	color: #884;
+}
+
+.edited_note {
 	text-align: right;
+	padding: 1px;
 }
 
 li.postquote {
@@ -538,3 +543,6 @@ dt div.colright-100 {
 .half-transparent { opacity: 0.4; }
 
 .img_middle img { vertical-align: middle !important; }
+
+.red { color: red; }
+.b { font-weight: bold; }
