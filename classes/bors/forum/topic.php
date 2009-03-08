@@ -248,13 +248,10 @@ class forum_topic extends forum_abstract
 	{
 		return $this->db()->get_array("SELECT DISTINCT poster_id FROM posts WHERE topic_id={$this->id}");
 	}
-		
-	function cache_static()
-	{
-		return ($this->forum_id() 
-			&& $this->forum()->is_public_access()) 
-			? rand(86400*7, 86400*30): 0; 
-	}
+
+	function is_public_access() { return $this->forum_id() && $this->forum()->is_public_access(); }
+
+	function cache_static() { return $this->is_public_access() ? rand(86400*7, 86400*30) : 0; }
 
 	function base_url() { return $this->forum_id() ? $this->forum()->category()->category_base_full() : '/'; }
 		
