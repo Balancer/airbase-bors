@@ -20,7 +20,14 @@ class airbase_board_category extends base_object_db
 	function category_base() { return $this->stb_category_base; }
 	function parent_category_id() { return $this->stb_parent_category_id; }
 
-	function url() { return $this->category_base_full(); }
+	function url()
+	{
+		$base = $this->category_base_full();
+		if($this->parent_category_id())
+			return secure_path($base.'/viewcat.php?id='.$this->id());
+		else
+			return $base;
+	}
 
 	function nav_name() { return truncate($this->title(), 20); }
 	
