@@ -549,4 +549,6 @@ class forum_post extends base_page_db
 	}
 
 	function edit_url() { return "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}"; }
+
+	function template_vars() { return ''; }
 }
