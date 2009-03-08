@@ -60,7 +60,7 @@ function parents()
 		return array("forum_forum://" . $this->parent_forum_id());
 		
 	if($this->category())
-		return array("forum_category://" . $this->category_id());
+		return array("airbase_board_category://" . $this->category_id());
 		
 	return array("http://balancer.ru/forum/");
 }
