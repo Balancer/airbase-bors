@@ -18,7 +18,9 @@
 {/if}
 </div>
 <div class="colright-100">
-<span class="half-transparent">{$p->imaged_edit_url()}</span>
+<span class="half-transparent">
+{$p->imaged_edit_url()}
+</span>
 </div>
 <div class="clear">&nbsp;</div>
 </dt>
@@ -61,6 +63,7 @@
 <li>|</li>
 <li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
 <li class="postdelete"><a href="http://balancer.ru/forum/tools/post/{$p->id()}/">Инструменты</a></li>
+{if $this->is_public_access() and $owner}<li><script>warn_icon('{$p->internal_uri()}', {$owner->id()})</script></li>{/if}
 <li>{$p->imaged_edit_url()}Редактор</li>
 <li>|</li>
 <li class="postquote"><a href="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}">Ответить на сообщение</a></li>

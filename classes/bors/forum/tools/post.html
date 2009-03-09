@@ -1,5 +1,5 @@
 <ul>
-<li><a href="http://balancer.ru/admin/users/{$this->post()|get:owner_id}/warnings.html?object={$this->post()|get:internal_uri}">Выставить штраф</a></li>
+{if $this->post()|get:topic|get:is_public_access}<li><a href="http://balancer.ru/admin/users/{$this->post()|get:owner_id}/warnings.html?object={$this->post()|get:internal_uri}">Выставить штраф</a></li>{/if}
 <li><a href="http://balancer.ru/forum/punbb/delete.php?id={$this->id()}">Удалить</a></li>
 <li><a href="http://balancer.ru/admin/forum/post/{$this->id()}/as-new-topic">Вынести сообщение со всеми ответами в новую тему</a></li>
 <li><a href="http://balancer.ru/admin/forum/post/{$this->id()}/move-tree">Перенести сообщение со всеми ответами в другую тему</a></li>

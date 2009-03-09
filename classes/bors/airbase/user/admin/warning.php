@@ -15,7 +15,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 			return bors_message(ec('Неизвестный объект ').$data['object']);
 
 		if($data['user_id'] != $object->owner_id())
-			return bors_message(ec('Попытка выставить штраф пользователю, не являющемуся автором сообщения'));
+			return bors_message("Попытка выставить штраф пользователю [{$data['user_id']}], не являющемуся автором сообщения [{$object->owner_id()}]");
 
 		$previous_warning = objects_first('airbase_user_warning', array(
 			'user_id=' => $data['user_id'],
