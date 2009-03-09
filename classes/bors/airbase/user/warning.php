@@ -28,8 +28,11 @@ class airbase_user_warning extends base_object_db
 	function referer_titled_url()
 	{
 		if($this->warn_class_id() > 0)
-			return object_load($this->warn_class_id(), $this->warn_object_id())->titled_url();
-			
+		{
+			$obj = object_load($this->warn_class_id(), $this->warn_object_id());
+			return $obj ? $obj->titled_url() : '?';
+		}
+	
 		if($this->warn_class_id() == 0)
 		{
 			if($obj = object_load($this->referer()))
