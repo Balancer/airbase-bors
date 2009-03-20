@@ -103,33 +103,22 @@ class forum_topic extends forum_abstract
 			
 			$uid = $me->id();
 			$x = $this->db()->select('topic_visits', 'last_visit, last_post_id', array('user_id='=>$uid, 'topic_id='=>$this->id()));
-			$first_new_post_id = @$x['last_post_id'];
-//			exit($first_new_post_id);
-//			if(!$first_new_post_id)
-			{
-				$last_visit = $x['last_visit'];
-				$where = array('topic_id='=>$this->id(), 'posted>' => $last_visit);
-//				set_loglevel(10,NULL);
-				$first_new_post_id = intval($this->db()->select('posts', 'MIN(id)', $where));
-//				set_loglevel(2);
-//				exit();
-			}
-					
-//			exit("f=".$first_new_post_id);
+			$last_visit = @$x['last_visit'];
+
+			if(empty($last_visit))
+				$last_visit = $this->db()->select('topic_visits', 'MIN(last_visit)', array('last_visit>' => 0));
+
+			$first_new_post_id = intval($this->db()->select('posts', 'MIN(id)', array(
+				'topic_id' => $this->id(),
+				'posted>' => $last_visit,
+			)));
+
 			if($first_new_post_id)
-			{
-				$post = object_load('forum_post', $first_new_post_id);
-
-				if($post)
+				if($post = object_load('forum_post', $first_new_post_id))
 					return go($post->url_in_topic());
-			}
-
-//			exit('lkmnj');
 
 			$this->set_page('last');
 		}
-
-//		exit('tp='.$this->total_pages());
 
 		if($this->page() == 'last')
 			return go($this->url($this->total_pages()));

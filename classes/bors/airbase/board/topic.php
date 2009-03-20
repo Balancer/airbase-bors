@@ -1,6 +1,6 @@
 <?php
 
-class airbase_board_topic extends base_page_db
+class airbase_board_topic extends forum_topic
 {
 	function main_db_storage() { return 'punbb'; }
 	function main_table_storage() { return 'topics'; }
