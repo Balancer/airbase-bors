@@ -53,6 +53,8 @@ class forum_user extends base_object_db
 			'language',
 			'admin_note',
 			'email',
+			'rep_r', 'rep_g', 'rep_b',
+			'rep_x', 'rep_y',
 		)));
 	}
 
@@ -208,7 +210,10 @@ class forum_user extends base_object_db
 	{
 		if($this->is_banned !== NULL)
 			return $this->is_banned;
-	
+
+		if($this->warnings() >= 10)
+			return $this->is_banned = true;
+
 		if($ban = forum_ban::ban_by_username($this->title()))
 			return $this->is_banned = $ban;
 			
