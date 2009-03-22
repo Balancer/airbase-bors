@@ -304,15 +304,24 @@ class forum_topic extends forum_abstract
 		$this->set_num_replies($num_replies, true);
 		$first_pid = $this->db()->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));
 		$this->set_first_post_id($first_pid, true);
-		$first_post = object_load('forum_post', $first_pid);
-		$this->set_create_time($first_post->create_time(true), true);
-		$this->set_author_name($first_post->author_name(), true);
-		$this->set_owner_id($first_post->owner() ? $first_post->owner()->id() : NULL, true);
-		$last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id()));
-		$this->set_last_post_id($last_pid, true);
-		$last_post = object_load('forum_post', $last_pid);
-		$this->set_modify_time($last_post->create_time(true), true);
-		$this->set_last_poster_name($last_post->author_name(), true);
+		if($first_post = object_load('forum_post', $first_pid))
+		{
+			$this->set_create_time($first_post->create_time(true), true);
+			$this->set_author_name($first_post->author_name(), true);
+			$this->set_owner_id($first_post->owner() ? $first_post->owner()->id() : NULL, true);
+		}
+		else
+			debug_hidden_log('post_error', "Unknown first post $first_pid in {$this}->recalculate()");
+		
+		if($last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id())))
+		{
+			$this->set_last_post_id($last_pid, true);
+			$last_post = object_load('forum_post', $last_pid);
+			$this->set_modify_time($last_post->create_time(true), true);
+			$this->set_last_poster_name($last_post->author_name(), true);
+		}
+		else
+			debug_hidden_log('post_error', "Unknown last post $first_pid in {$this}->recalculate()");
 
 		$this->repaging_posts($full_repaging ? 1 : -1);
 
