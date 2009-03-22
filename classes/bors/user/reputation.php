@@ -2,8 +2,6 @@
 
 class user_reputation extends base_page_db
 {
-	function storage_engine() { return 'storage_db_mysql'; }
-
 	var $user;
 	
 	function title() { return $this->user->title().ec(": Репутация"); }
@@ -41,7 +39,12 @@ class user_reputation extends base_page_db
 		
 		return array(
 			'ref' => $this->ref() ? $this->ref() : @$_SERVER['HTTP_REFERER'],
-			'list' => array_reverse(objects_array('airbase_user_reputation', array('user_id=' => $this->id(), 'order' => 'time', 'page'=> $this->page(), 'per_page' => $this->items_per_page()))),
+			'list' => array_reverse(objects_array('airbase_user_reputation', array(
+				'user_id' => $this->id(),
+				'is_deleted' => 0,
+				'order' => 'time',
+				'page'=> $this->page(),
+				'per_page' => $this->items_per_page()))),
 			'reputation_abs_value' => sprintf("%.2f", $dbf->get("SELECT reputation FROM users WHERE id = {$this->id()}")),
 			'plus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score > 0"),
 			'minus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score < 0"),
@@ -53,7 +56,10 @@ class user_reputation extends base_page_db
 	function total_items()
 	{
 		if($this->total == NULL)
-			$this->total = intval(objects_count('airbase_user_reputation', array('where' => array('user_id=' => $this->id()))));
+			$this->total = intval(objects_count('airbase_user_reputation', array(
+				'user_id=' => $this->id(),
+				'is_deleted' => 0,
+			)));
 
 		return $this->total;
 	}
@@ -71,14 +77,14 @@ class user_reputation extends base_page_db
 	}
 
 //	function url($page=1) { return "http://balancer.ru/user/".$this->id()."/reputation".($page && $page != 1 ? ','.$page : '').".html"; }
-	function url($page = 0)
+	function url($page = 0, $append_query = true)
 	{
 		if($page == 0 || $this->total_pages() == 1)
 			$url = "http://balancer.ru/user/".$this->id()."/reputation.html";
 		else
 			$url = "http://balancer.ru/user/".$this->id()."/reputation,{$page}.html";
 			
-		if($this->ref())
+		if($append_query && $this->ref())
 			$url .= '?'.$this->ref();
 			
 		return $url;
@@ -91,13 +97,13 @@ class user_reputation extends base_page_db
 	function can_be_empty() { return true; }
 	function can_cached() { return false; }
 
-	function cache_groups_parent() { return "user-{$this->id()}-reputation"; }
+	function cache_groups() { return "user-{$this->id()}-reputation"; }
 
 	function on_action_reputation_add_do($data)
 	{
 		require_once('inc/users.php');
 	
-		$uid = intval($_POST['user_id']);
+		$uid = intval(@$_POST['user_id']);
 		if(!$uid)
 			return bors_message(ec("Не задан ID пользователя."));
 
@@ -167,7 +173,7 @@ class user_reputation extends base_page_db
 //		class_load('cache_group', "user-{$uid}-reputation")->clean();
 		
 		include_once("inc/navigation.php");
-		go("http://balancer.ru/user/$uid/reputation.html?");
+		return go($this->url($this->total_pages(), false));
 	}
 	
 	function access() { return $this; }
