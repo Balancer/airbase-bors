@@ -8,7 +8,7 @@ class forum_user extends base_object_db
 	function __construct($id)
 	{
 		if($id == -1)
-			$id = $this->check_cookie();
+			$id = $this->id_by_cookie();
 		
 		parent::__construct($id);
 	}
@@ -220,9 +220,12 @@ class forum_user extends base_object_db
 		return $this->is_banned = false;
 	}
 
-    function check_cookie()
+	static function id_by_cookie($user_hash_password = NULL)
 	{
-		if(!$user_hash_password = @$_COOKIE['cookie_hash'])
+		if(is_null($user_hash_password))
+			$user_hash_password = @$_COOKIE['cookie_hash'];
+
+		if(!$user_hash_password)
 			return 0;
 			
 		$db = new driver_mysql('punbb');
@@ -266,7 +269,7 @@ class forum_user extends base_object_db
 		return sha1(strtolower($this->salt()) . $this->saltp());
 	}
 
-	function cookie_hash_update($expired = -1)
+	function cookie_hash_update($expired = -1, $all_domains = true)
 	{
 		if($expired == -1)
 			$expired = time()+86400*365;
@@ -274,13 +277,37 @@ class forum_user extends base_object_db
 		$salt = sha1(rand());
 		$this->set_salt($salt, true);
 		$this->set_saltu($this->cookie_hash(), true);
+		$this->store();
+
+		$this->cookie_hash_set($expired, $all_domains);
+		return $this->saltu();
+	}
+
+	function cookie_hash_set($expired = -1, $all_domains = true)
+	{
+		if($expired == -1)
+			$expired = time()+86400*365;
 
 		SetCookie("user_id", $this->id(), $expired, "/", '.'.$_SERVER['HTTP_HOST']);
 		SetCookie("cookie_hash", $this->saltu(), $expired, "/", '.'.$_SERVER['HTTP_HOST']);
 			
 		$_COOKIE['user_id'] = $this->id();
 		$_COOKIE['cookie_hash'] = $this->saltu();
-		return $this->saltu();
+
+/*		if($all_domains)
+		{
+			$ch = curl_init($url);
+			foreach(bors_vhosts() as $host)
+			{
+				echo "Set $host<br/>";
+//				file_get_contents("http://{$host}/user/cookie-hash-update.bas?".$this->saltu());
+				curl_setopt_array($ch, array(CURLOPT_TIMEOUT => 1));
+				curl_exec($ch);
+				$content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+			}
+		}
+
+		bors_exit(">$all_domains");*/
 	}
 
 	static function do_login($user, $password, $handle_error = true)
@@ -294,11 +321,13 @@ class forum_user extends base_object_db
 		if(!$test)
 			return ec("Ошибка пароля пользователя '").$user."'";
 
-		if(!$check_user->saltu())
+		if($check_user->saltu())
+			$check_user->cookie_hash_set();
+		else
 			$check_user->cookie_hash_update();
 
-		SetCookie("user_id", $check_user->id(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
-		SetCookie("cookie_hash", $check_user->saltu(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
+//		SetCookie("user_id", $check_user->id(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
+//		SetCookie("cookie_hash", $check_user->saltu(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
 			
 		return $check_user;
 	}

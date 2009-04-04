@@ -93,8 +93,14 @@ class user_blog extends base_page
 		$this->user = class_load('forum_user', $id);
 		parent::__construct($id);
 			
+	}
+
+	function pre_show()
+	{
 		$this->add_template_data('user_id', $id);
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url(1)."rss.xml\" title=\"RSS блога пользователя ".addslashes($this->user->title())."\" />");
+
+		return true;
 	}
 
 	function url($page = 1)

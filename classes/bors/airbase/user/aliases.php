@@ -12,15 +12,17 @@ class airbase_user_aliases extends base_page
 		$last_post = $this->db('punbb')->select('posts', 'MAX(posted)', array('poster_id' => $this->id())) + 1;
 		$depth = $last_post-86400*30;
 
-		$ips = $this->db('punbb')->select_array('posts', 'distinct(poster_ip)', array('poster_id' => $this->id(), "posted BETWEEN $depth AND $last_post"));
-		$users_list = $this->db('punbb')->select_array('posts', 'poster_id, count(*) as count', array(
-			'poster_ip IN' => "'".join("','",$ips)."'", 
-			"posted BETWEEN $depth AND $last_post",
-			'group' => 'poster_id', 
-			'order' => '-count')
+		$ips = array_filter($this->db('punbb')->select_array('posts', 'distinct(poster_ip)', array('poster_id' => $this->id(), "posted BETWEEN $depth AND $last_post")));
+
+		if($ips)
+			$users_list = $this->db('punbb')->select_array('posts', 'poster_id, count(*) as count', array(
+				'poster_ip IN' => "'".join("','",$ips)."'", 
+				"posted BETWEEN $depth AND $last_post",
+				'group' => 'poster_id', 
+				'order' => '-count')
 		);
-//		print_d($ips);
-//		print_d($post_ids);
-		return array('users_list' => $users_list);
+		return array('users_list' => $ips ? $users_list : array());
 	}
+	
+	function cache_static() { return rand(3600, 7200); }
 }

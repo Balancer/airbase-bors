@@ -2,4 +2,4 @@
 <h4><a href="{$owner->url()}">{$owner->title()}</a></h4>
 {if $owner->group_title()}<h5>{$owner->group_title()}</h5>{/if}
 {if $owner->reputation()}<a href="http://balancer.ru/user/{$owner->id()}/reputation.html{if $ref}?{$ref}{/if}"><img src="http://balancer.ru/user/{$owner->id()}/rep.gif" class="rep" alt="" /></a>{/if}
-{if $owner->warnings()}<a href="http://balancer.ru/user/{$owner->id()}/warnings/"><img src="http://balancer.ru/user/{$owner->id()}/warnings.gif" class="warn" alt="" /></a>{/if}
+{if 1 || $owner->warnings()}<a href="http://balancer.ru/user/{$owner->id()}/warnings/"><img src="http://balancer.ru/user/{$owner->id()}/warnings.gif" class="warn" alt="" /></a>{/if}
