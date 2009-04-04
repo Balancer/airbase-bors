@@ -2,6 +2,8 @@
 <tr><th>Пользователь</th><th>Число сообщений</th></tr>
 {foreach from=$users_list item="x"}
 {bors_object_load class="bors_user" id=$x.poster_id var="u"}
+{if $u}
 <tr><td>{$u->titled_url()}</td><td>{$x.count}</td></tr>
+{/if}
 {/foreach}
 </table>
