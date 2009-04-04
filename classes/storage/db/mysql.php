@@ -14,8 +14,6 @@ class storage_db_mysql extends base_null
 			$was_loaded = false;
 			global $mysql_map;
 
-//			echo "MySqlStorage.load: <b>{$object->internal_uri()}</b>, size=".sizeof(get_object_vars($object))."; cnt=".(++$count)."<br />";
-
 			$def_db = $object->main_db_storage();
 
 			if(!$def_db)

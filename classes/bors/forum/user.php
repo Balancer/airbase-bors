@@ -170,7 +170,7 @@ class forum_user extends base_object_db
 					'forum_type' => 'punbb',
 					'forum_base_uri' => 'http://balancer.ru/forum',
 					'sharp_not_comment' => true,
-					'html_disable' => true,
+					'html_disable' => 'full',
 				)
 			);
 

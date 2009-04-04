@@ -55,11 +55,11 @@
 
 				$data = $req->getResponseBody();
 				if(strlen($data) <= 0)
-					return lcml("Zero size image ={$image}= error.");
+					return "Zero size image '{$image}' error.";
 
 				$content_type = $req->getResponseHeader('Content-Type');
 				if(!preg_match("!image!",$content_type))
-					return lcml("Non-image content type ('$content_type') image ={$image}= error.");
+					return "Non-image content type ('$content_type') image '{$image}' error.";
 
 				require_once('inc/filesystem.php');
 				mkpath(dirname($path));
