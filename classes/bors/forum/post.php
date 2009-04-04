@@ -155,7 +155,7 @@ class forum_post extends base_page_db
 					'forum_type' => 'punbb',
 					'forum_base_uri' => 'http://balancer.ru/forum',
 					'sharp_not_comment' => true,
-					'html_disable' => true,
+					'html_disable' => 'direct',
 					'uri' => $this->internal_uri(),
 					'nocache' => true,
 				)

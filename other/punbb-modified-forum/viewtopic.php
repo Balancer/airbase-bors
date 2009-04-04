@@ -545,7 +545,7 @@ while ($cur_post = $db->fetch_assoc($result))
 						'forum_type' => 'punbb',
 						'forum_base_uri' => 'http://balancer.ru/forum',
 						'sharp_not_comment' => true,
-						'html_disable' => true,
+						'html_disable' => 'direct',
 				));
 
 			$cms_db->update('users', "id = {$poster['id']}", array('signature_html' => $signature));
