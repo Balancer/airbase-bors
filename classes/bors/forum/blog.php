@@ -41,4 +41,6 @@ class forum_blog extends base_page_db
 	function topic() { return object_load('airbase_board_topic', $this->post()->topic_id()); }
 	function owner() { return object_load('forum_user', $this->owner_id()); }
 	function title() { return $this->topic()->title(); }
+
+	function url() { return $this->post()->url(); }
 }

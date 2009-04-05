@@ -4,7 +4,7 @@ class user_blog extends base_page
 {
 	private $user;
 	
-	function main_db_storage(){ return 'punbb'; }
+	function main_db(){ return 'punbb'; }
 
 	function template()
 	{
@@ -18,7 +18,7 @@ class user_blog extends base_page
 	function parents() { return array("forum_user://".$this->id()); }
 
 	private $data = array();
-	function data_providers()
+	function local_data()
 	{
 		$page_id = $this->page().','.$this->items_per_page();
 	
@@ -55,8 +55,8 @@ class user_blog extends base_page
 	{
 		if($this->last_post === false)
 		{
-			$data = $this->data_providers();
-			if(count($data['blog_records']))
+			$data = $this->local_data();
+			if(count(@$data['blog_records']))
 				$this->last_post = object_load('forum_post', $data['blog_records'][0]->id());
 			else
 				$this->last_post = NULL;
@@ -71,7 +71,7 @@ class user_blog extends base_page
 		if($this->first_post === false)
 		{
 			$data = $this->data_providers();
-			$records = $data['blog_records'];
+			$records = @$data['blog_records'];
 			if(count($records))
 				$this->first_post = object_load('forum_post', $records[count($records)-1]->id());
 			else
@@ -92,20 +92,19 @@ class user_blog extends base_page
 	
 		$this->user = class_load('forum_user', $id);
 		parent::__construct($id);
-			
 	}
 
 	function pre_show()
 	{
-		$this->add_template_data('user_id', $id);
-		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url(1)."rss.xml\" title=\"RSS блога пользователя ".addslashes($this->user->title())."\" />");
+		$this->add_template_data('user_id', $this->id());
+		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url()."rss.xml\" title=\"RSS блога пользователя ".addslashes($this->user->title())."\" />");
 
-		return true;
+		return false;
 	}
 
-	function url($page = 1)
+	function url($page = NULL)
 	{	
-		if($page == 0)
+		if(!$page || $page == $this->default_page())
 			return "http://balancer.ru/user/".$this->id()."/blog/"; 
 		else
 			return "http://balancer.ru/user/".$this->id()."/blog/$page.html"; 
