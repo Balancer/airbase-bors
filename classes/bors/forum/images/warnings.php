@@ -46,6 +46,8 @@ class forum_images_warnings extends base_image_gif
 		if($cross_half_count)
 			imagecopy($img, $cross_half, 10+$cross_full_count*$sx, 0, 0, 0, $sx, $sy);
 
+//		$warn_count = 10; // -----------------
+
 		if($warn_count >= 10)
 		{
 			$total = 0;
@@ -66,6 +68,7 @@ class forum_images_warnings extends base_image_gif
 			$white = imagecolorallocate($img, 255, 255, 255);
 
 			$text = ec('бан до '.strftime("%d.%m.%Y", $this->expired = $time+WARNING_DAYS*86400));
+//			$text = ec('бан до '.strftime("%d.%m.%Y", time() + rand(3*86400, 365*10*86400)));
 
 			$x = 0;
 			$y = 8;

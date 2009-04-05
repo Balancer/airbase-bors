@@ -1,59 +1,26 @@
 <?php
 
-class_include('user_blog');
-
-class user_blog_rss extends user_blog
+class user_blog_rss extends base_rss
 {
-	function render_engine() { return 'render_self'; }
-	
-	function url() { return parent::url(1)."rss.xml"; }
+	function title() { return $this->user()->title().ec(": Блог"); }
+	function description() { return ec("Все темы, начатые пользователем ").$this->user()->title().ec(" за последние 30 дней. Не более 25 штук."); }
 
-	function render()
+	function user() { return object_load('bors_user', $this->id()); }
+	function blog() { return object_load('user_blog', $this->id()); }
+
+	function rss_items()
 	{
-		include("3part/feedcreator.class.php"); 
-
-		$rss = &new UniversalFeedCreator(); 
-		$rss->encoding = 'utf-8'; 
-		$rss->title = $this->user->title().ec(": Блог");
-		$rss->description = ec("Все темы, начатые пользователем  последние 30 дней. Не более 25 штук.").$this->user->title();
-		$rss->link = parent::url(1);
-		$rss->syndicationURL = $this->url(); 
-
-/*		$image = new FeedImage(); 
-		$image->title = "dailyphp.net logo"; 
-		$image->url = "http://www.dailyphp.net/images/logo.gif"; 
-		$image->link = "http://www.dailyphp.net"; 
-		$image->description = "Feed provided by dailyphp.net. Click to visit."; 
-		$rss->image = $image; 
-*/
-		// get your news items from somewhere, e.g. your database: 
-		foreach($this->db->get_array('SELECT id FROM topics WHERE poster_id='.$this->id().' AND posted > '.(time()-30*86400).' ORDER BY posted DESC LIMIT 25') as $topic_id)
-		{		
-		    $item = &new FeedItem();
-			$topic = class_load('forum_topic', $topic_id);
-	    	$item->title = $topic->title();
-		    $item->link = $topic->url(); 
-			
-			$html = $topic->first_post()->body();
-			if(strlen($html) > 1024)
-			{
-				include_once("funcs/texts.php");
-				$html = strip_text($html, 1024);
-				$html .= "<br /><br /><a href=\"".$topic->url(1).ec("\">Дальше »»»");
-			}
-			
-			$item->description = $html;
-			$item->date = $topic->create_time(); 
-			$item->source = "http://balancer.ru/forum/";
-			$item->author = $topic->owner()->title();
-							     
-			$rss->addItem($item); 
-		} 
-								
-		$result = $rss->createFeed("RSS1.0");
-		header("Content-Type: ".$rss->contentType."; charset=".$rss->encoding);
-		return $result;
+		return objects_array('forum_blog', array(
+			'where' => array('owner_id=' => $this->id()),
+			'order' => '-blogged_time',
+			'create_time>' => time()-31*86400,
+			'limit' => 25,
+		));
 	}
-	
-	function cache_static() { return 600; }
+
+	function cache_static() { return rand(600, 1200); }
+
+	function url() { return $this->blog()->url().'rss.xml'; }
+	function rss_url() { return $this->blog()->url(); }
 }
+
