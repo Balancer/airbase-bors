@@ -112,7 +112,10 @@ class user_blog extends base_page
 
 	function cache_static()
 	{
-		return 86400*14;
+		if(!$this->page() || $this->page() == $this->default_page())
+			return rand(600, 7200);
+		else
+			return rand(3*86400, 20*86400);
 	}
 		
 	function pages_links()

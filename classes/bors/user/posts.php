@@ -22,7 +22,7 @@ class user_posts extends base_page
 	function title() { return $this->user()->title().ec(': Все сообщения'); }
 	function nav_name() { return ec('все сообщения'); }
 
-	function local_template_data_set()
+	function local_data()
 	{
 		$years = array();
 /*		$first = $this->db('punbb')->select('posts', 'MIN(posted)', array('poster_id' => $this->id()));

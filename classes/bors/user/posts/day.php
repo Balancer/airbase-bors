@@ -4,14 +4,28 @@ include_once('inc/strings.php');
 
 class user_posts_day extends base_page
 {
-	function cache_static() { return $this->is_today() ? 600 : 86400*60; }
-
 	private $year, $month, $day;
 
-	function set_page($page)
+	function cache_static() { return $this->is_today() ? 600 : 86400*60; }
+
+	function _configure()
 	{
+		$page = $this->args('page');
+
+		if($page == 'last')
+		{
+			$max = $this->db('punbb')->select('posts', 'MAX(posted)', array('poster_id' => $this->id()));
+			$page = date('Y/m/d', $max);
+		}
+		elseif($page == 'first')
+		{
+			$min = $this->db('punbb')->select('posts', 'MIN(posted)', array('poster_id' => $this->id()));
+			$page = date('Y/m/d', $min);
+		}
+
 		list($this->year, $this->month, $this->day) = explode('/', $page);
-		return parent::set_page($page);
+
+		return parent::_configure();
 	}
 
 	function is_today()
@@ -42,65 +56,31 @@ class user_posts_day extends base_page
 
 	function previous_day_link()
 	{
-		$day	= $this->day;
-		$month	= $this->month;
-		$year	= $this->year;
+		$prev = $this->db('punbb')->select('posts', 'MAX(posted)', array(
+			'poster_id' => $this->id(), 
+			'posted<' => strtotime("{$this->year}-{$this->month}-{$this->day}"),
+		));
 
-		while($year >= 2000)
-		{
-			$day--;
-			if($day < 1)
-			{
-				$month--;
-				if($month < 1)
-				{
-					$month = 12;
-					$year --;
-				}
-
-				$day = date('t', strtotime("$year-$month-01"));
-			}
-
-			$time0	= intval(strtotime("$year-$month-$day 00:00:00"));
-			$time9	= $time0 + 86400;
-			if(objects_count('forum_post', array('poster_id' => $this->id(), "posted BETWEEN $time0 AND $time9")))
-				return "http://balancer.ru/user/{$this->id()}/posts/$year/$month/$day/";
-		}
+		if($prev)
+			return 'http://balancer.ru/user/'.date('Y/m/d', $prev).'/';
+		else
+			return NULL;
 	}
 	
 	function next_day_link()
 	{
-		$day	= $this->day;
-		$month	= $this->month;
-		$year	= $this->year;
-		$toyear	= date('Y');
+		$next = $this->db('punbb')->select('posts', 'MAX(posted)', array(
+			'poster_id' => $this->id(), 
+			'posted>=' => strtotime("{$this->year}-{$this->month}-{$this->day}")+86400,
+		));
 
-		while($year <= $toyear)
-		{
-			$days = date('t', strtotime("$year-$month-01"));
-			$day++;
-			if($day > $days)
-			{
-				$month++;
-				if($month > 12)
-				{
-					$month = 1;
-					$year++;
-				}
-
-				$day = 1;
-			}
-
-			$time0	= intval(strtotime("$year-$month-$day 00:00:00"));
-			$time9	= $time0 + 86400;
-			if(objects_count('forum_post', array('poster_id' => $this->id(), "posted BETWEEN $time0 AND $time9")))
-				return "http://balancer.ru/user/{$this->id()}/posts/$year/$month/$day/";
-		}
-		
-		return NULL;
+		if($next)
+			return 'http://balancer.ru/user/'.date('Y/m/d', $next).'/';
+		else
+			return NULL;
 	}
 
-    function local_template_data_set()
+    function local_data()
 	{
 		$year	= $this->year;
 		$month	= $this->month;
@@ -113,7 +93,6 @@ class user_posts_day extends base_page
 			'posted BETWEEN '.$time0d.' AND '.($time0d+86400),
 			'order' => 'posted',
 		));
-
 		$list	= array();
 
 		for($day=1; $day<=$days; $day++)
