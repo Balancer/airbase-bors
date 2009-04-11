@@ -8,10 +8,10 @@ class user_posts_month extends base_page
 
 	private $year, $month;
 
-	function set_page($page)
+	function init()
 	{
-		list($this->year, $this->month) = explode('/', $page);
-		return parent::set_page($page);
+		list($this->year, $this->month) = explode('/', $this->args('page'));
+		return parent::init();
 	}
 
 	function template()
@@ -35,7 +35,7 @@ class user_posts_month extends base_page
 
 	function url() { return "http://balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/"; }
 
-    function local_template_data_set()
+    function local_data()
 	{
 		$year	= $this->year;
 		$month	= $this->month;

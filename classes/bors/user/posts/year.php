@@ -21,8 +21,8 @@ class user_posts_year extends base_page
 
 	function url() { return "http://balancer.ru/user/{$this->id()}/posts/{$this->page()}/"; }
 
-	function title() { return $this->user()->title().ec(': Все сообщения за ').$this->page().ec(' год'); }
-	function nav_name() { return $this->page(); }
+	function title() { return $this->user()->title().ec(': Все сообщения за ').$this->args('page').ec(' год'); }
+	function nav_name() { return $this->args('page'); }
 
 	function local_template_data_set()
 	{
