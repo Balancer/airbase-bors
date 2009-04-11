@@ -55,7 +55,7 @@
 		'(/user/(\d+)/)posts/ => user_posts(2)',
 		'(/user/(\d+)/posts/)(\d+)/ => user_posts_year(2,3)',
 		'/user/(\d+)/posts/(\d+/\d+)/ => user_posts_month(1,2)',
-		'/user/(\d+)/posts/(\d+/\d+/\d+)/ => user_posts_day(1,2)',
+		'/user/(\d+)/posts/(\d+/\d+/\d+|last|first)/ => user_posts_day(1,2)',
 
 		'/user/(\d+)/rep\.gif => user_image_reputation(1)',
 
