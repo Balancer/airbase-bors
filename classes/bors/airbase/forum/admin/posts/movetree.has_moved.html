@@ -1,7 +1,9 @@
-Сообщения:
+Сообщения{if $this->posts()}:
 <ul>
 {foreach from=$this->posts() item="post"}
 <li>{$post->titled_url()}</li>
 {/foreach}
 </ul>
-успешно перенесены.
+{/if}
+
+успешно перенесены в тему {$new_topic->titled_url()}.

@@ -44,11 +44,21 @@ class user_posts_day extends base_page
 	{
 		if($this->_user === false)
 			$this->_user = bors_user($this->id());
-		
+
 		return $this->_user;
 	}
 	
-	function title() { return $this->user()->title().ec(': Все сообщения за ').$this->day.' '.strtolower(month_name_rp($this->month)).' '.$this->year.ec(' года'); }
+	function title()
+	{
+		if(!$this->user())
+			return ec("Неизвестный пользователь с ID={$this->id()}");
+
+		return 
+			$this->user()->title().ec(': Все сообщения за ')
+			.$this->day.' '.strtolower(month_name_rp($this->month)).' '
+			.$this->year.ec(' года'); 
+	}
+
 	function nav_name() { return $this->day; }
 	function parents() { return array("http://balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/"); }
 
@@ -62,7 +72,7 @@ class user_posts_day extends base_page
 		));
 
 		if($prev)
-			return 'http://balancer.ru/user/'.date('Y/m/d', $prev).'/';
+			return 'http://balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $prev).'/';
 		else
 			return NULL;
 	}
@@ -75,7 +85,7 @@ class user_posts_day extends base_page
 		));
 
 		if($next)
-			return 'http://balancer.ru/user/'.date('Y/m/d', $next).'/';
+			return 'http://balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $next).'/';
 		else
 			return NULL;
 	}

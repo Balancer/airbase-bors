@@ -57,7 +57,7 @@ class forum_tools_post_moveTree extends base_page
 
 		$tid = intval($tid);
 	
-		$new_topic = object_load('forum_topic', $tid);
+		$new_topic = object_load('forum_topic', $tid, array('no_load_cache' => true));
 		if(!$new_topic || !$new_topic->id())
 			return bors_message(ec('Тема с номером ').$tid.ec(' не существует'));
 

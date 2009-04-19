@@ -12,7 +12,7 @@
 
 
 <script type="text/javascript"><!--
-createCookie('class_name', '{$this->class_name()}');createCookie('object_id', '{$this->id()}')
+{if $this}createCookie('class_name', '{$this->class_name()}');createCookie('object_id', '{$this->id()}'){/if}
 
 var me_id = readCookie('user_id', 0)
 var me_hash = readCookie('cookie_hash', 0)

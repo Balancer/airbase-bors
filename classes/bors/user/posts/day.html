@@ -1,5 +1,10 @@
 {module class="date_calend_month" year=$year month=$month list=$calend table="btab" now=$today}
 
+<div class="pages_select">
+{if $previous_day_link}<a href="{$previous_day_link}" class="select_page">Предыдущий день</a>{/if}
+{if $next_day_link}<a href="{$next_day_link}" class="select_page">Следующий день</a>{/if}
+</div>
+
 {assign var="skip_author_name" value=1}
 {foreach from=$posts item=p}
 <!-- post $post_id -->
