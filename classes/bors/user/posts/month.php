@@ -42,7 +42,7 @@ class user_posts_month extends base_page
 		$time0	= intval(strtotime("$year-$month-01 00:00:00"));
 		$days	= date('t', $time0);
 		$list	= array();
-		for($day=1; $day<$days; $day++)
+		for($day=1; $day<=$days; $day++)
 		{
 			$time9	= $time0 + 86400;
 			$total = objects_count('forum_post', array('poster_id' => $this->id(), "posted BETWEEN $time0 AND $time9"));

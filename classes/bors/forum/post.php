@@ -463,7 +463,7 @@ class forum_post extends base_page_db
 //		print_r($GLOBALS['move_tree_to_topic_changed_topics']);
 		
 		foreach(array_keys($GLOBALS['move_tree_to_topic_changed_topics']) as $tid)
-			object_load('forum_topic', $tid)->recalculate();
+			object_load('forum_topic', $tid, array('no_load_cache' => true))->recalculate();
 	}
 
 	private function __move_tree_to_topic($new_tid, $old_tid)

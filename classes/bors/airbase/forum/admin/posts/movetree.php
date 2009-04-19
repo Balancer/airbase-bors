@@ -2,6 +2,7 @@
 
 class airbase_forum_admin_posts_movetree extends base_page
 {
+	function class_file() { return __FILE__; }
 	function dont_move_tree() { return false; }
 
 	function main_db_storage() { return 'punbb'; }
@@ -54,7 +55,12 @@ class airbase_forum_admin_posts_movetree extends base_page
 		elseif(preg_match('!\?id=(\d+)!', $tid, $m))
 			$tid = $m[1];
 
-		$tid = intval($tid);
+		if(preg_match('!/t(\d+)\-\-!', $tid, $m))
+			$tid = intval($m[1]);
+		elseif(preg_match('!/t(\d+),\w+\-\-!', $tid, $m))
+			$tid = intval($m[1]);
+		else
+			$tid = intval($tid);
 	
 		$new_topic = object_load('forum_topic', $tid);
 		if(!$new_topic || !$new_topic->id())
@@ -71,8 +77,9 @@ class airbase_forum_admin_posts_movetree extends base_page
 	   
 	   	SetCookie('selected_posts', NULL, 0, '/');
 
-		return bors_message_tpl("xfile:movetree.has_moved.html", $this, array(
+		return bors_message_tpl("movetree.has_moved.html", $this, array(
 			'title' => ec('Сообщения успешно перенесены'),
+			'new_topic' => $new_topic,
 		)); 
 	}
 	
