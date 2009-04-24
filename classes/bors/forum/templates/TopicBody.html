@@ -1,3 +1,15 @@
+<div class="pages_select right">
+{if $this->is_closed()}
+	Тема закрыта
+{else}
+	<a href="http://balancer.ru/forum/punbb/post.php?tid={$this->id()}" 
+		class="select_page" 
+		onClick="return confirm('Внимание! Вы выбираете ответ не на конкретное сообщение (кнопкой «Ответить на сообщение»), а непосредственно в тему. В этом случае будет отсутствовать привязка ответа к отвечаемому сообщению. И, если Вы своим ответом отклоняетесь от основной темы обсуждения, то при возможном разделении темы создадите лишнюю работу модераторам. За что можете получить штрафной балл. Вы уверены, что хотите ответить именно в тему, 	без привязки к конкретному сообщению?');"
+	>Ответ в эту тему</a>
+{/if}
+<a href="http://balancer.ru/forum/punbb/post.php?fid={$this->forum()|get:id}" class="select_page">Создать новую тему</a>
+</div>
+
 {if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
 
 {if not $this->is_public_access()}<div class="yellow_box">Тема с ограниченным доступом</div>{/if}
@@ -66,7 +78,10 @@
 {if $this->is_public_access() and $owner}<li><script>warn_icon('{$p->internal_uri()}', {$owner->id()})</script></li>{/if}
 <li>{$p->imaged_edit_url()}Редактор</li>
 <li>|</li>
-<li class="postquote"><a href="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}">Ответить на сообщение</a></li>
+<li class="pages_select">
+ <a href="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
+  class="current_page">Ответить на сообщение</a>
+</li>
 </ul>
 
 <ul class="postfooter coordinators">
@@ -81,11 +96,6 @@
 {/foreach}
 
 {if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
-
-<div class="pages_select right">
-{if $this->is_closed()}Тема закрыта{else}<a href="http://balancer.ru/forum/punbb/post.php?tid={$this->id()}" class="select_page">Ответ в эту тему</a>{/if}
-<a href="http://balancer.ru/forum/punbb/post.php?fid={$this->forum()|get:id}" class="select_page">Создать новую тему</a>
-</div>
 
 {if 0 && $p}
 {if not $this->is_closed()}

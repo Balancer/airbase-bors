@@ -47,6 +47,20 @@ class forum_post extends base_page_db
 		);
 	}
 
+function topic_id() { return $this->stb_topic_id; }
+function topic_page() { return $this->stb_topic_page; }
+function edited_by() { return $this->stb_edited_by; }
+function poster_ip() { return $this->stb_poster_ip; }
+function poster_email() { return $this->stb_poster_email; }
+function poster_ua() { return $this->stb_poster_ua; }
+function post_source() { return $this->stb_post_source; }
+function hide_smilies() { return $this->stb_hide_smilies; }
+function have_attach() { return $this->stb_have_attach; }
+function have_cross() { return $this->stb_have_cross; }
+function have_answers() { return $this->stb_have_answers; }
+function set_have_answers($v, $dbup) { return $this->fset('have_answers', $v, $dbup); }
+
+
 	function set_topic_id($value, $dbupd) { return $this->fset('topic_id', $value, $dbupd); }
 	function set_create_time($value, $dbupd) { return $this->fset('create_time', $value, $dbupd); }
 	function set_edited($value, $dbupd) { return $this->fset('edited', $value, $dbupd); }

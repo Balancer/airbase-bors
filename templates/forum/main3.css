@@ -143,7 +143,6 @@ a:hover {
 	text-decoration: underline;
 }
 
-
 a.current_page, a.select_page {
 	padding: 1px 3px;
 	margin: 8px 2px;
@@ -152,11 +151,13 @@ a.current_page, a.select_page {
 
 a.current_page {
 	background-color: #9bd;
-	color: white;
+	color: white !important;
 }
 
-a.select_page { background-color: white; }
-a.select_page { color: #358; }
+a.select_page { 
+	background-color: white;
+	color: #358;
+}
 
 a.select_page:hover {
 	background-color: #9bd;

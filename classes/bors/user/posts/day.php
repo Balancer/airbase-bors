@@ -79,7 +79,7 @@ class user_posts_day extends base_page
 	
 	function next_day_link()
 	{
-		$next = $this->db('punbb')->select('posts', 'MAX(posted)', array(
+		$next = $this->db('punbb')->select('posts', 'MIN(posted)', array(
 			'poster_id' => $this->id(), 
 			'posted>=' => strtotime("{$this->year}-{$this->month}-{$this->day}")+86400,
 		));

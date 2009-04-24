@@ -45,6 +45,20 @@ class forum_topic extends forum_abstract
 		);
 	}
 
+function author_name() { return $this->stb_author_name; }
+function is_repaged() { return $this->stb_is_repaged; }
+function set_is_repaged($v, $dbup) { return $this->fset('is_repaged', $v, $dbup); }
+function visits() { return $this->stb_visits; }
+function first_post_id() { return $this->stb_first_post_id; }
+function last_post_id() { return $this->stb_last_post_id; }
+function first_visit_time() { return $this->stb_first_visit_time; }
+function last_visit_time() { return $this->stb_last_visit_time; }
+function last_edit_time() { return $this->stb_last_edit_time; }
+function set_last_edit_time($v, $dbup) { return $this->fset('last_edit_time', $v, $dbup); }
+function sticky() { return $this->stb_sticky; }
+function closed() { return $this->stb_closed; }
+function keywords_string_db() { return $this->stb_keywords_string_db; }
+
 	function forum_id() { return @$this->stb_forum_id; }
 	function owner_id() { return $this->stb_owner_id; }
 	function last_poster_name() { return $this->stb_last_poster_name; }
