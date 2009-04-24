@@ -1,0 +1,11 @@
+<table class="btab">
+<tr><th>Время создания</th><th>Тема</th><th>Форум</th><th>Автор</th><th>Всего ответов</th></tr>
+{foreach from=$items item="x"}
+<tr><td>{$x->create_time()|date:'H:i'}</td>
+	<td>{$x->titled_url()}</td>
+	<td>{$x->forum()|get:titled_url}</td>
+	<td>{$x->author_name()}</td>
+	<td>{$x->num_replies()}</td>
+</tr>
+{/foreach}
+</table>

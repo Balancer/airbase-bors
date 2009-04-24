@@ -7,7 +7,8 @@ class forum_tools_post extends base_page
 	
 	function parents() { return array('forum_post://'.$this->id()); }
 
-	function title() { return ec('Операции над сообщением'); }
+	function title() { return ec('Инструменты сообщения'); }
+	function nav_name() { return ec('инструменты'); }
 
 	function template() { return 'templates/forum/common.html'; }
 
@@ -27,7 +28,7 @@ class forum_tools_post extends base_page
 
 	function access() { return $this; }
 
-	function can_read() { templates_noindex(); return $this->can_action(); }
+	function can_read() { templates_noindex(); return bors()->user(); }
 
 	function can_action()
 	{
