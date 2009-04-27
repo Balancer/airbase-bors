@@ -9,7 +9,7 @@
 <br/>
 
 <div class="lenta_record_message">
-{assign var="body" value=$t->post()->body()}
+{assign var="body" value=$t->post()|get:body}
 <p>{$body|truncate:1024}</p>
 </div>
 

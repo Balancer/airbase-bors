@@ -15,6 +15,7 @@ $map = array(
 	'.*/index.php => forum_main',
 
 	'(/forum/)topic/\d+/(\d+),new/ => forum_topic(2)',
+	'(/)forum(\d+)/ => redirect:forum_forum(2)',
 
 	'/\d{4}/\d{1,2}/\d{1,2}/post\-(\d+)\.html => forum_post(1)',
 	"{$forums}forum/punbb/viewtopic\.php\?pid=(\d+) => forum_post(2)",
