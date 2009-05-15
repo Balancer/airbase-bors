@@ -234,9 +234,32 @@ class forum_user extends base_object_db
 		return $result;
 	}
 
-	function warnings_rate($period)
+	function warnings_rate($period, $type='per_time')
 	{
-		return $period * 86400 * $this->warnings_total() / ($this->last_post_time() - $this->create_time() + 1);
+		switch($type)
+		{
+			case 'per_posts_and_time':
+				$total_posts = $this->db('punbb')->select('posts', 'COUNT(*)', array(
+					'poster_id' => $this->id(),
+					'posted>' => time() - 86400*$period,
+				));
+				$total_warns = $this->db('punbb')->select('warnings', 'SUM(score)', array(
+					'user_id' => $this->id(),
+					'time>' => time() - 86400*$period,
+				));
+				if($total_warns == 0)
+					return ec('нет предупреждений');
+				if($total_posts == 0)
+					return ec('нет сообщений');
+				if($total_posts > $total_warns)
+					return "1/".round($total_posts/$total_warns, 1);
+				else
+					return round($total_warns/$total_posts, 1);
+
+			case 'per_time':
+			default:
+				return $period * 86400 * $this->warnings_total() / ($this->last_post_time() - $this->create_time() + 1);
+		}
 	}
 
     function check_password($password, $handle_errors = true)
