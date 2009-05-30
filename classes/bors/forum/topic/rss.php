@@ -2,7 +2,7 @@
 
 class forum_topic_rss extends forum_topic
 {
-	function render_engine() { return 'forum_topic_rss'; }
+	function render_engine() { return 'self'; }
 	
 	function url() { return $this->rss_url(); }
 //	function use_temporary_static_file() { return false; }
