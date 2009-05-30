@@ -372,7 +372,10 @@ class airbase_board_topic extends forum_topic
 			$this->db()->replace('topic_visits', $data);
 		}
 		else
-			$this->db()->update('topic_visits', "user_id=".intval($user_id)." AND topic_id=".intval($this->id()), $data);
+			$this->db()->update('topic_visits', array(
+				"user_id" => intval($user_id),
+				"topic_id" => intval($this->id()),
+			), $data);
 	}
 
 	function visits_counting() { return true; }
