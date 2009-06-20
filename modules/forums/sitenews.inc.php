@@ -1,4 +1,7 @@
 <?php
+
+require_once('engines/smarty/assign.php');
+
     function get_site_news($limit = 10)
     {
         $ch = &new Cache();

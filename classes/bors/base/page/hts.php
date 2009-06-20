@@ -7,6 +7,16 @@
 
 class base_page_hts extends base_page_db
 {
+	static function id_prepare($url)
+	{
+		if(preg_match('!^(.+/)index\.phtml$!', $url, $m))
+			$url = $m[1];
+		elseif(preg_match('!^(.+)\.phtml$!', $url, $m))
+			$url = $m[1].'/';
+
+		return $url;
+	}
+	
 	function can_cached() { return false; }
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function config_class() { return config('admin_config_class'); }
@@ -41,6 +51,23 @@ class base_page_hts extends base_page_db
 	function parents()
 	{
 		return $this->db()->select_array('hts_data_parent', 'value', array('id=' => $this->id()));
+	}
+
+	function children()
+	{
+		return $this->db()->select_array('hts_data_child', 'value', array('id' => $this->id(), 'order' => 'sort_order'));
+	}
+
+	function set_children($array, $db_up)
+	{
+		if($db_up)
+		{
+			$this->db()->delete('hts_data_child', array('id' => $this->id()));
+			for($i=0; $i<sizeof($array); $i++)
+				$this->db()->replace('hts_data_child', array('id' => $this->id(), 'value' => $array[$i], 'sort_order' => $i));
+		}
+
+		return parent::set_children($array, $db_up);
 	}
 
 	function template()
