@@ -55,6 +55,7 @@ class forum_user extends base_object_db
 			'email',
 			'rep_r', 'rep_g', 'rep_b',
 			'rep_x', 'rep_y',
+			'last_message_md',
 		)));
 	}
 
@@ -306,16 +307,22 @@ class forum_user extends base_object_db
 		return $this->saltu();
 	}
 
-	function cookie_hash_set($expired = -1, $all_domains = true)
+	function cookie_hash_set($expired = -1)
 	{
 		if($expired == -1)
 			$expired = time()+86400*365;
 
-		SetCookie("user_id", $this->id(), $expired, "/", '.'.$_SERVER['HTTP_HOST']);
-		SetCookie("cookie_hash", $this->saltu(), $expired, "/", '.'.$_SERVER['HTTP_HOST']);
-			
-		$_COOKIE['user_id'] = $this->id();
-		$_COOKIE['cookie_hash'] = $this->saltu();
+		foreach(array(
+			'user_id' => $this->id(), 
+			'cookie_hash' => $this->saltu(), 
+			'is_admin' => $this->is_admin()
+		) as $k => $v)
+		{
+			SetCookie($k, $v, $expired, "/", '.'.$_SERVER['HTTP_HOST']);
+			SetCookie($k, $v, $expired, "/", $_SERVER['HTTP_HOST']);
+			SetCookie($k, $v, $expired, "/");
+		}
+	}
 
 /*		if($all_domains)
 		{
@@ -330,8 +337,8 @@ class forum_user extends base_object_db
 			}
 		}
 
-		bors_exit(">$all_domains");*/
-	}
+		bors_exit(">$all_domains");
+*/
 
 	static function do_login($user, $password, $handle_error = true)
    	{
@@ -355,19 +362,16 @@ class forum_user extends base_object_db
 		return $check_user;
 	}
 
-    function do_logout()
+	static function do_logout()
 	{
-//		print_d($_COOKIE);
-		SetCookie('cookie_hash', '', 0, '/', $_SERVER['HTTP_HOST']);
-		SetCookie('user_id', '', 0, '/');
-		SetCookie('do_logout', 1, time()+3, '/', $_SERVER['HTTP_HOST']);
-		unset($_COOKIE['user_id']);
-		$_COOKIE['do_logout'] = 1;
-		unset($_COOKIE['cookie_hash']);
-//		print_d($_COOKIE);
-//		exit();
+		foreach(array('user_id', 'cookie_hash', 'is_admin') as $k)
+		{
+			SetCookie($k, NULL, 0, "/", '.'.$_SERVER['HTTP_HOST']);
+			SetCookie($k, NULL, 0, "/", $_SERVER['HTTP_HOST']);
+			SetCookie($k, NULL, 0, "/");
+		}
 	}
-	
+
 	function reputation_titled_url() { return "<a href=\"http://balancer.ru/user/{$this->id()}/reputation/\">{$this->title()}</a>"; }
 
 	function weight()
@@ -393,4 +397,9 @@ class forum_user extends base_object_db
 	}
 
 	function set_last_visit_time() { }
+
+	function is_admin()
+	{
+		return in_array($this->id(), array(3310, 10000));
+	}
 }

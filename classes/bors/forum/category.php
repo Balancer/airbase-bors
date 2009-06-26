@@ -16,6 +16,16 @@
 		function set_category_base($category_base, $db_update) { $this->set("category_base", $category_base, $db_update); }
 		function field_category_base_storage() { return 'punbb.categories.base_uri(id)'; }
 
+		var $stb_bors_append = '';
+		function bors_append() { return $this->stb_bors_append; }
+		function set_bors_append($bors_append, $db_update) { $this->set("bors_append", $bors_append, $db_update); }
+		function field_bors_append_storage() { return 'punbb.categories.bors_append(id)'; }
+
+		var $stb_category_template = '';
+		function category_template() { return $this->stb_category_template; }
+		function set_category_template($template, $db_update) { $this->set("category_template", $template, $db_update); }
+		function field_category_template_storage() { return 'punbb.categories.template(id)'; }
+
 		function url() { return $this->category_base_full(); }
 	
 		function category_base_full()
