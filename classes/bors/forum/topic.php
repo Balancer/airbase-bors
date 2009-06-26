@@ -465,4 +465,18 @@ function keywords_string_db() { return $this->stb_keywords_string_db; }
 		if($db_update)
 			common_keyword_bind::add($this);
 	}
+
+	function template()
+	{
+		if($this->forum()->category()->category_template())
+		{
+			$app = $this->forum()->category()->bors_append();
+			if(!defined('BORS_APPEND'))
+				define('BORS_APPEND', $app);
+
+			return $this->forum()->category()->category_template();
+		}
+
+		return parent::template();
+	}
 }

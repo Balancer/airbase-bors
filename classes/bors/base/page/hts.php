@@ -53,6 +53,18 @@ class base_page_hts extends base_page_db
 		return $this->db()->select_array('hts_data_parent', 'value', array('id=' => $this->id()));
 	}
 
+	function set_parents($array, $db_up)
+	{
+		if($db_up)
+		{
+			$this->db()->delete('hts_data_parent', array('id' => $this->id()));
+			for($i=0; $i<sizeof($array); $i++)
+				$this->db()->replace('hts_data_parent', array('id' => $this->id(), 'value' => $array[$i], 'sort_order' => $i));
+		}
+
+		return parent::set_parents($array, $db_up);
+	}
+
 	function children()
 	{
 		return $this->db()->select_array('hts_data_child', 'value', array('id' => $this->id(), 'order' => 'sort_order'));
