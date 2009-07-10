@@ -94,22 +94,11 @@ class airbase_board_post extends base_page_db
 
 	function source()
 	{
-		if(!$this->post_source())
-		{
-			$x = $this->db()->select('messages', 'message,html', array('id=' => $this->id()));
-			if(!$x || !$x['message'])
-			{
-				debug_hidden_log('messages-lost', 'Empty post source!');
-				return '';
-			}
-			
-			$this->set_post_source($x['message'], true);
-			$this->set_post_body($x['html'], true);
-			$this->store();
-			$this->db()->delete('messages', array('id=' => $this->id()));
-		}
-		
-		return $this->post_source();
+		if($ps = $this->post_source())
+			return $ps;
+
+		debug_hidden_log('messages-lost-2', 'Empty post source!');
+		return '';
 	}
 
 	var $_source_changed = false;

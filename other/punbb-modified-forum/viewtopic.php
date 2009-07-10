@@ -63,12 +63,6 @@ if($pid)
 	
 	// Determine on what page the post is located (depending on $pun_user['disp_posts'])
 	$posts = $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
-	if(sizeof($posts) == 0)
-	{
-		$cms_db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($id%10)." WHERE topic_id = $id");
-		$archive_loaded = true;
-		$posts = $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
-	}
 
 	for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
 		if ($posts[$i] == $pid)
@@ -171,6 +165,9 @@ for($ii=0; $ii<2; $i++)
 	else
 		break;
 }
+
+//TODO: проверить!
+exit('Уж ошибка так ошибка...'.__FILE__.':'.__LINE__);
 
 $cur_topic = $db->fetch_assoc($result);
 

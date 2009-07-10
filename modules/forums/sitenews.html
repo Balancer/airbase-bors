@@ -1,5 +1,5 @@
 <ul>
 {foreach from=$news item=t}
-<li><a href="{$t->url()}"{if $t->create_time() > time() - 4*86400} style="color: #c24;"{/if}>{$t->title()|truncate:28}</a></li>
+<li><a href="{$t->url()}"{if $t->create_time() > time() - 4*86400} style="color: #c24;"{/if}>{$t->title()|truncate:40}</a></li>
 {/foreach}
 </ul>
