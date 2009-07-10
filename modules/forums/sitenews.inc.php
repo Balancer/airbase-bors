@@ -6,7 +6,7 @@ require_once('engines/smarty/assign.php');
     {
         $ch = &new Cache();
 		
-        if($ch->get('sitenews-v1', $limit))
+        if($ch->get('sitenews-v2', $limit))
 			return $ch->last();
 
 		$limit = intval(max(1,min($limit,100)));

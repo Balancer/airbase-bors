@@ -265,7 +265,7 @@ class forum_user extends base_object_db
 
     function check_password($password, $handle_errors = true)
    	{
-		$sha_password = sha1(strtolower($this->title()) . $password);
+		$sha_password = sha1(bors_lower($this->title()) . $password);
 		$user_sha_password = $this->saltp();
 	
 		if(!$handle_errors)
@@ -290,7 +290,7 @@ class forum_user extends base_object_db
 
 	function cookie_hash()
 	{
-		return sha1(strtolower($this->salt()) . $this->saltp());
+		return sha1(bors_lower($this->salt()) . $this->saltp());
 	}
 
 	function cookie_hash_update($expired = -1, $all_domains = true)

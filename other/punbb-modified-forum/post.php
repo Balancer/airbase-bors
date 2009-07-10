@@ -254,7 +254,7 @@ if (isset($_POST['form_sent']))
 //VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}
 
-			$cms_db->insert('messages', array('id' => $new_pid, 'message' => $message));
+//			$cms_db->insert('messages', array('id' => $new_pid, 'message' => $message));
 
 			// Count number of replies in the topic
 			$result = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'posts WHERE topic_id='.$tid) 
@@ -394,7 +394,7 @@ if (isset($_POST['form_sent']))
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
 			}
 
-			$cms_db->insert('messages', array('id' => $new_pid, 'message' => $message));
+//			$cms_db->insert('messages', array('id' => $new_pid, 'message' => $message));
 			$cms_db->update('topics', "id=$new_tid", array(
 				'first_pid' => $new_pid,
 				'poster_id' => $pun_user['id'],
@@ -477,7 +477,7 @@ if ($tid)
 	if($qid)
 	{
 		$q_poster  = $cms_db->get("SELECT poster FROM posts WHERE id=$qid");
-		$q_message = $cms_db->get("SELECT message FROM messages WHERE id=$qid");
+//		$q_message = $cms_db->get("SELECT message FROM messages WHERE id=$qid");
 
 		$q_message = str_replace('[img]', '[url]', $q_message);
 		$q_message = str_replace('[/img]', '[/url]', $q_message);
@@ -713,7 +713,7 @@ if ($tid && $pun_config['o_topic_review'] != '0')
 
 	while ($cur_post = $db->fetch_assoc($result))
 	{
-		$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
+//		$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
 
 		// Switch the background color for every message.
 		$bg_switch = ($bg_switch) ? $bg_switch = false : $bg_switch = true;

@@ -2,8 +2,17 @@
 
 class airbase_forum_listfull extends base_list
 {
+	var $_list;
+
 	function named_list()
 	{
+		if(!is_null($this->_list))
+			return $this->_list;
+
+		$ch = new Cache;
+		if($ch->get('airbase_forum_listfull', 'list'))
+			return $this->_list = $ch->last();
+	
 		$forums = objects_array('airbase_forum_forum', array(
 			'order' => 'cat_id, disp_position',
 			'by_id' => true,
@@ -25,6 +34,6 @@ class airbase_forum_listfull extends base_list
 
 		$result[0] = ec('Не указан');
 
-		return $result;
+		return $this->_list = $ch->set($result, rand(3600, 7200));
 	}
 }

@@ -116,24 +116,11 @@ function set_have_answers($v, $dbup) { return $this->fset('have_answers', $v, $d
 
 	function source()
 	{
-		if(!$this->post_source())
-		{
-			$db = new driver_mysql('punbb');
-			$x = $db->select('messages', 'message,html', array('id=' => $this->id()));
-			if(!$x || !$x['message'])
-			{
-				debug_hidden_log('messages-lost', 'Empty post source!');
-				return '';
-			}
-			
-			$this->set_post_source($x['message'], true);
-			$this->set_post_body($x['html'], true);
-			$this->store();
-			$db->delete('messages', array('id=' => $this->id()));
-			$db->close();
-		}
-		
-		return $this->post_source();
+		if($ps = $this->post_source())
+			return $ps;
+
+		debug_hidden_log('messages-lost-3', 'Empty post source!');
+		return '';
 	}
 
 	var $_source_changed = false;
@@ -296,7 +283,7 @@ function set_have_answers($v, $dbup) { return $this->fset('have_answers', $v, $d
 		return $this->__answer_to = $post;
 	}
 
-	function cache_static() { return rand(86400, 86400*2); }
+//	function cache_static() { return rand(86400, 86400*2); }
 
 	function template() { return 'empty.html'; }
 	function render() { return 'render_fullpage'; }

@@ -16,6 +16,9 @@ $map = array(
 	'.*viewforum\.php\?id=(\d+).* => forum_forum(1)',
 	'.*/index.php => forum_main',
 
+	'/_bors/local/search/result/ => bors_tools_search_result',
+	'/tools/search/ => bors_tools_search',
+
 	'(/forum/)topic/\d+/(\d+),new/ => forum_topic(2)',
 	'(/)forum(\d+)/ => redirect:forum_forum(2)',
 
@@ -44,6 +47,9 @@ $map = array(
 	'/test/ => airbase_main',
 
 	'/user/(\d+)/personal\.js => forum_js_personal(1)',
+	'/_bors/j/users/(\d+)/personal\.js => forum_js_personal(1)',
+	'/_bors/j/local/forum/topvisits\.js => forum_js_topvisits',
+
 	'/user/(\d+)/setvars.js => forum_user_js_setvars(1)',
 	'/js/users/touch.js\?(.+) => user_js_touch(1)',
 
