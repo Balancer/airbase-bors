@@ -2,13 +2,13 @@
 
 class airbase_forum_attach extends base_object_db
 {
-	function main_db_storage(){ return 'punbb'; }
-	function main_table_storage(){ return 'attach_2_files'; }
+	function main_db(){ return 'punbb'; }
+	function main_table(){ return 'attach_2_files'; }
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	
-	function fields()
+	function main_table_fields()
 	{
-		return array('punbb'=>array('attach_2_files'=>array(
+		return array(
 			'id',
 			'post_id',
 			'owner_id' => 'owner',
@@ -19,35 +19,25 @@ class airbase_forum_attach extends base_object_db
 			'size',
 			'downloads',
 			'location',
-		)));
+		);
 	}
 
-	function set_post_id($value, $db_update) { return $this->fset('post_id', $value, $db_update); }
-	function post_id() { return $this->stb_post_id; }
-
-	function set_owner_id($value, $db_update) { return $this->fset('owner_id', $value, $db_update); }
-	function owner_id() { return $this->stb_owner_id; }
-
-	function set_title($value, $db_update) { return $this->fset('title', $value, $db_update); }
-	function title() { return $this->stb_title; }
-
-	function set_filename($value, $db_update) { return $this->fset('filename', $value, $db_update); }
-	function filename() { return $this->stb_filename; }
-
-	function set_extension($value, $db_update) { return $this->fset('extension', $value, $db_update); }
-	function extension() { return $this->stb_extension; }
-
-	function set_mime($value, $db_update) { return $this->fset('mime', $value, $db_update); }
-	function mime() { return $this->stb_mime; }
-
-	function set_size($value, $db_update) { return $this->fset('size', $value, $db_update); }
-	function size() { return $this->stb_size; }
-
-	function set_downloads($value, $db_update) { return $this->fset('downloads', $value, $db_update); }
-	function downloads() { return $this->stb_downloads; }
-
-	function set_location($value, $db_update) { return $this->fset('location', $value, $db_update); }
-	function location() { return $this->stb_location; }
+function post_id() { return @$this->data['post_id']; }
+function set_post_id($v, $dbup) { return $this->set('post_id', $v, $dbup); }
+function owner_id() { return @$this->data['owner_id']; }
+function set_owner_id($v, $dbup) { return $this->set('owner_id', $v, $dbup); }
+function filename() { return @$this->data['filename']; }
+function set_filename($v, $dbup) { return $this->set('filename', $v, $dbup); }
+function extension() { return @$this->data['extension']; }
+function set_extension($v, $dbup) { return $this->set('extension', $v, $dbup); }
+function mime() { return @$this->data['mime']; }
+function set_mime($v, $dbup) { return $this->set('mime', $v, $dbup); }
+function size() { return @$this->data['size']; }
+function set_size($v, $dbup) { return $this->set('size', $v, $dbup); }
+function downloads() { return @$this->data['downloads']; }
+function set_downloads($v, $dbup) { return $this->set('downloads', $v, $dbup); }
+function location() { return @$this->data['location']; }
+function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 
 	function url() { return "http://balancer.ru/forum/punbb/attachment.php?item=".$this->id(); }
 

@@ -4,8 +4,8 @@ require_once('inc/strings.php');
 
 class airbase_board_category extends base_object_db
 {
-	function main_db_storage() { return 'punbb'; }
-	function main_table_storage() { return 'categories'; }
+	function main_db() { return 'punbb'; }
+	function main_table() { return 'categories'; }
 	function main_table_fields()
 	{
 		return array(
@@ -17,8 +17,12 @@ class airbase_board_category extends base_object_db
 		);
 	}
 
-	function category_base() { return $this->stb_category_base; }
-	function parent_category_id() { return $this->stb_parent_category_id; }
+function parent_category_id() { return @$this->data['parent_category_id']; }
+function set_parent_category_id($v, $dbup) { return $this->set('parent_category_id', $v, $dbup); }
+function order() { return @$this->data['order']; }
+function set_order($v, $dbup) { return $this->set('order', $v, $dbup); }
+function category_base() { return @$this->data['category_base']; }
+function set_category_base($v, $dbup) { return $this->set('category_base', $v, $dbup); }
 
 	function url()
 	{

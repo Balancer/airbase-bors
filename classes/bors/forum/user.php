@@ -2,8 +2,7 @@
 
 class forum_user extends base_object_db
 {
-	function storage_engine() { return 'storage_db_mysql_smart'; }
-	function main_db_storage() { return 'punbb'; }
+	function main_db() { return 'punbb'; }
 
 	function __construct($id)
 	{
@@ -18,9 +17,9 @@ class forum_user extends base_object_db
 		return parent::loaded() && $this->id() > 1;
 	}
 
-	function fields()
+	function main_table_fields()
 	{
-		return array('punbb' => array('users' => array(
+		return array(
 			'id',
 			'title' => 'username',
 			'group_id',
@@ -56,27 +55,85 @@ class forum_user extends base_object_db
 			'rep_r', 'rep_g', 'rep_b',
 			'rep_x', 'rep_y',
 			'last_message_md',
-		)));
+		);
 	}
 
-	function set_title($value, $dbupd) { return $this->fset('title', $value, $dbupd); }
-	function title() { return $this->stb_title; }
-
-	function set_group_id($value, $dbupd) { return $this->fset('group_id', $value, $dbupd); }
-	function group_id() { return $this->stb_group_id; }
-
-	function set_user_title($value, $dbupd) { return $this->fset('user_title', $value, $dbupd); }
-	function user_title() { return $this->stb_user_title; }
-	
-	function set_use_avatar($value, $dbupd) { return $this->fset('use_avatar', $value, $dbupd); }
+function group_id() { return @$this->data['group_id']; }
+function set_group_id($v, $dbup) { return $this->set('group_id', $v, $dbup); }
+function user_title() { return @$this->data['user_title']; }
+function set_user_title($v, $dbup) { return $this->set('user_title', $v, $dbup); }
+function set_use_avatar($v, $dbup) { return $this->set('use_avatar', $v, $dbup); }
+function avatar_width() { return @$this->data['avatar_width']; }
+function set_avatar_width($v, $dbup) { return $this->set('avatar_width', $v, $dbup); }
+function avatar_height() { return @$this->data['avatar_height']; }
+function set_avatar_height($v, $dbup) { return $this->set('avatar_height', $v, $dbup); }
+function num_posts() { return @$this->data['num_posts']; }
+function set_num_posts($v, $dbup) { return $this->set('num_posts', $v, $dbup); }
+function signature() { return @$this->data['signature']; }
+function set_signature($v, $dbup) { return $this->set('signature', $v, $dbup); }
+function set_signature_html($v, $dbup) { return $this->set('signature_html', $v, $dbup); }
+function warnings() { return @$this->data['warnings']; }
+function set_warnings($v, $dbup) { return $this->set('warnings', $v, $dbup); }
+function warnings_total() { return @$this->data['warnings_total']; }
+function set_warnings_total($v, $dbup) { return $this->set('warnings_total', $v, $dbup); }
+function reputation() { return @$this->data['reputation']; }
+function set_reputation($v, $dbup) { return $this->set('reputation', $v, $dbup); }
+function pure_reputation() { return @$this->data['pure_reputation']; }
+function set_pure_reputation($v, $dbup) { return $this->set('pure_reputation', $v, $dbup); }
+function karma() { return @$this->data['karma']; }
+function set_karma($v, $dbup) { return $this->set('karma', $v, $dbup); }
+function salt() { return @$this->data['salt']; }
+function set_salt($v, $dbup) { return $this->set('salt', $v, $dbup); }
+function saltp() { return @$this->data['saltp']; }
+function set_saltp($v, $dbup) { return $this->set('saltp', $v, $dbup); }
+function saltu() { return @$this->data['saltu']; }
+function set_saltu($v, $dbup) { return $this->set('saltu', $v, $dbup); }
+function last_post_time() { return @$this->data['last_post_time']; }
+function set_last_post_time($v, $dbup) { return $this->set('last_post_time', $v, $dbup); }
+function www() { return @$this->data['www']; }
+function set_www($v, $dbup) { return $this->set('www', $v, $dbup); }
+function realname() { return @$this->data['realname']; }
+function set_realname($v, $dbup) { return $this->set('realname', $v, $dbup); }
+function location() { return @$this->data['location']; }
+function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
+function jabber() { return @$this->data['jabber']; }
+function set_jabber($v, $dbup) { return $this->set('jabber', $v, $dbup); }
+function icq() { return @$this->data['icq']; }
+function set_icq($v, $dbup) { return $this->set('icq', $v, $dbup); }
+function msn() { return @$this->data['msn']; }
+function set_msn($v, $dbup) { return $this->set('msn', $v, $dbup); }
+function aim() { return @$this->data['aim']; }
+function set_aim($v, $dbup) { return $this->set('aim', $v, $dbup); }
+function yahoo() { return @$this->data['yahoo']; }
+function set_yahoo($v, $dbup) { return $this->set('yahoo', $v, $dbup); }
+function timezone() { return @$this->data['timezone']; }
+function set_timezone($v, $dbup) { return $this->set('timezone', $v, $dbup); }
+function language() { return @$this->data['language']; }
+function set_language($v, $dbup) { return $this->set('language', $v, $dbup); }
+function admin_note() { return @$this->data['admin_note']; }
+function set_admin_note($v, $dbup) { return $this->set('admin_note', $v, $dbup); }
+function email() { return @$this->data['email']; }
+function set_email($v, $dbup) { return $this->set('email', $v, $dbup); }
+function rep_r() { return @$this->data['rep_r']; }
+function set_rep_r($v, $dbup) { return $this->set('rep_r', $v, $dbup); }
+function rep_g() { return @$this->data['rep_g']; }
+function set_rep_g($v, $dbup) { return $this->set('rep_g', $v, $dbup); }
+function rep_b() { return @$this->data['rep_b']; }
+function set_rep_b($v, $dbup) { return $this->set('rep_b', $v, $dbup); }
+function rep_x() { return @$this->data['rep_x']; }
+function set_rep_x($v, $dbup) { return $this->set('rep_x', $v, $dbup); }
+function rep_y() { return @$this->data['rep_y']; }
+function set_rep_y($v, $dbup) { return $this->set('rep_y', $v, $dbup); }
+function last_message_md() { return @$this->data['last_message_md']; }
+function set_last_message_md($v, $dbup) { return $this->set('last_message_md', $v, $dbup); }
 
 	function use_avatar()
 	{
-		if(!$this->stb_use_avatar)
-			return $this->stb_use_avatar;
+		if(!$this->data['use_avatar'])
+			return $this->data['use_avatar'];
 			
-		if(preg_match('/^\d+\.\w+/', $this->stb_use_avatar))
-			return $this->stb_use_avatar;
+		if(preg_match('/^\d+\.\w+/', $this->data['use_avatar']))
+			return $this->data['use_avatar'];
 
 		$avatars_dir = '/var/www/balancer.ru/htdocs/forum/punbb/img/avatars';
 		$id = $this->id();
@@ -93,33 +150,6 @@ class forum_user extends base_object_db
 		return $this->set_use_avatar($user_avatar, true);
 	}
 	
-	function set_avatar_width($value, $dbupd) { return $this->fset('avatar_width', $value, $dbupd); }
-	function avatar_width() { return $this->stb_avatar_width; }
-
-	function set_avatar_height($value, $dbupd) { return $this->fset('avatar_height', $value, $dbupd); }
-	function avatar_height() { return $this->stb_avatar_height; }
-
-	function set_num_posts($value, $dbupd) { return $this->fset('num_posts', $value, $dbupd); }
-	function num_posts() { return $this->stb_num_posts; }
-	
-	function set_signature($value, $dbupd) { return $this->fset('signature', $value, $dbupd); }
-	function signature() { return $this->stb_signature; }
-	
-	function set_warnings($value, $dbupd) { return $this->fset('warnings', $value, $dbupd); }
-	function warnings() { return $this->stb_warnings; }
-
-	function set_warnings_total($value, $dbupd) { return $this->fset('warnings_total', $value, $dbupd); }
-	function warnings_total() { return $this->stb_warnings_total; }
-	
-	function set_reputation($value, $dbupd) { return $this->fset('reputation', $value, $dbupd); }
-	function reputation() { return $this->stb_reputation; }
-
-	function set_create_time($value, $dbupd) { return $this->fset('create_time', $value, $dbupd); }
-	function create_time() { return $this->stb_create_time; }
-
-	function set_last_post_time($value, $dbupd) { return $this->fset('last_post_time', $value, $dbupd); }
-	function last_post_time() { return $this->stb_last_post_time; }
-
 	function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
 
 	var $_title = NULL;
@@ -163,7 +193,7 @@ class forum_user extends base_object_db
 
 	function signature_html()
 	{
-		if(empty($this->stb_signature_html) || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
+		if(empty($this->data['signature_html']) || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
 		{
 			$body = lcml(preg_replace("!\n+$!", '', $this->signature()),
 				array(
@@ -178,7 +208,7 @@ class forum_user extends base_object_db
 			$this->set_signature_html($body, true);
 		}				
 				
-		return $this->stb_signature_html; 
+		return $this->data['signature_html'];
 	}
 
 	function cache_clean_self()

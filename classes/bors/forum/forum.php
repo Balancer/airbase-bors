@@ -2,16 +2,66 @@
 
 class forum_forum extends base_page_db
 {
-	function storage_engine() { return 'storage_db_mysql'; }
-	
-	function main_table_storage() { return 'forums'; }
+	function main_table() { return 'forums'; }
+	function main_db() { return 'punbb'; }
 
-	function field_title_storage() { return 'punbb.forums.forum_name(id)'; }
+	function main_table_fields()
+	{
+		return array(
+			'id',
+			'title' => 'forum_name',
+			'description' => 'forum_desc',
+			'parent_forum_id' => 'parent',
+			'category_id' => 'cat_id',
+			'parent_forum_id' => 'parent',
+			'sort_order' => 'disp_position',
+			'keywords_string' => 'keywords',
+			'redirect_url',
+			'moderators',
+			'num_topics',
+			'num_posts',
+			'last_post_time' => 'last_post',
+			'last_post_id',
+			'last_poster',
+			'sort_by',
+			'original_id',
+			'skip_common',
+		);
+	}
+
+function parent_forum_id() { return @$this->data['parent_forum_id']; }
+function set_parent_forum_id($v, $dbup) { return $this->set('parent_forum_id', $v, $dbup); }
+function category_id() { return @$this->data['category_id']; }
+function set_category_id($v, $dbup) { return $this->set('category_id', $v, $dbup); }
+function sort_order() { return @$this->data['sort_order']; }
+function set_sort_order($v, $dbup) { return $this->set('sort_order', $v, $dbup); }
+function keywords_string() { return @$this->data['keywords_string']; }
+function set_keywords_string($v, $dbup) { return $this->set('keywords_string', $v, $dbup); }
+function redirect_url() { return @$this->data['redirect_url']; }
+function set_redirect_url($v, $dbup) { return $this->set('redirect_url', $v, $dbup); }
+function moderators() { return @$this->data['moderators']; }
+function set_moderators($v, $dbup) { return $this->set('moderators', $v, $dbup); }
+function num_topics() { return @$this->data['num_topics']; }
+function set_num_topics($v, $dbup) { return $this->set('num_topics', $v, $dbup); }
+function num_posts() { return @$this->data['num_posts']; }
+function set_num_posts($v, $dbup) { return $this->set('num_posts', $v, $dbup); }
+function last_post_time() { return @$this->data['last_post_time']; }
+function set_last_post_time($v, $dbup) { return $this->set('last_post_time', $v, $dbup); }
+function last_post_id() { return @$this->data['last_post_id']; }
+function set_last_post_id($v, $dbup) { return $this->set('last_post_id', $v, $dbup); }
+function last_poster() { return @$this->data['last_poster']; }
+function set_last_poster($v, $dbup) { return $this->set('last_poster', $v, $dbup); }
+function sort_by() { return @$this->data['sort_by']; }
+function set_sort_by($v, $dbup) { return $this->set('sort_by', $v, $dbup); }
+function original_id() { return @$this->data['original_id']; }
+function set_original_id($v, $dbup) { return $this->set('original_id', $v, $dbup); }
+function skip_common() { return @$this->data['skip_common']; }
+function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup); }
 
 	function __construct($id)
 	{
 		if(!$id)
-			debug_exit('Try to load empty forum');
+			debug_hidden_log('classes-error', 'Try to load empty forum');
 			
 		parent::__construct($id);
 	}
@@ -26,16 +76,6 @@ class forum_forum extends base_page_db
 
 	function uri_name() { return 'forum'; }
 
-	var $stb_parent_forum_id = '';
-	function parent_forum_id() { return $this->stb_parent_forum_id; }
-	function set_parent_forum_id($parent_forum_id, $db_update) { $this->set("parent_forum_id", $parent_forum_id, $db_update); }
-	function field_parent_forum_id_storage() { return 'punbb.forums.parent(id)'; }
-
-	var $stb_category_id = '';
-	function category_id() { return $this->stb_category_id; }
-	function set_category_id($category_id, $db_update) { $this->set("category_id", $category_id, $db_update); }
-	function field_category_id_storage() { return 'punbb.forums.cat_id(id)'; }
-
 	private $__category = 0;
 	function category()
 	{
@@ -49,10 +89,6 @@ class forum_forum extends base_page_db
 		return $this->__category = object_load('forum_category', $f->category_id());
 	}
 
-	var $stb_keywords_string = '';
-	function keywords_string() { return $this->stb_keywords_string; }
-	function set_keywords_string($keywords_string, $db_update) { $this->set("keywords_string", $keywords_string, $db_update); }
-	function field_keywords_string_storage() { return 'punbb.forums.keywords(id)'; }
 
 function parents()
 {
@@ -210,25 +246,13 @@ function parents()
 		return $forums;
 	}
 
-	var $stb_num_topics = '';
-	function num_topics() { return $this->stb_num_topics; }
-	function set_num_topics($num_topics, $db_update) { $this->set("num_topics", $num_topics, $db_update); }
-	function field_num_topics_storage() { return 'punbb.forums.num_topics(id)'; }
-
-	var $stb_num_posts = '';
-	function num_posts() { return $this->stb_num_posts; }
-	function set_num_posts($num_posts, $db_update) { $this->set("num_posts", $num_posts, $db_update); }
-	function field_num_posts_storage() { return 'punbb.forums.num_posts(id)'; }
-
 	function cache_static() { return $this->is_public_access() ? 600 : 0; }
 
 	function topic_update()
 	{
 		require_once('/var/www/balancer.ru/htdocs/cms/other/punbb-modified-forum/include/functions.php');
-//		update_
 	}
 
-//	function url_engine() { return 'url_titled'; }
 	function url() { return $this->category()->category_base_full().'viewforum.php?id='.$this->id(); }
 	function cache_static_can_be_dropped() { return false; }
 

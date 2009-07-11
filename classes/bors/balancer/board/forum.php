@@ -15,7 +15,7 @@ class balancer_board_forum extends base_page_db
 			'category_id' => 'cat_id',
 			'parent_forum_id' => 'parent',
 			'sort_order' => 'disp_position',
-			'keywords',
+			'keywords_string' => 'keywords',
 			'redirect_url',
 			'moderators',
 			'num_topics',
@@ -29,34 +29,34 @@ class balancer_board_forum extends base_page_db
 		);
 	}
 
-function parent_forum_id() { return $this->stb_parent_forum_id; }
-function set_parent_forum_id($v, $dbup) { return $this->fset('parent_forum_id', $v, $dbup); }
-function category_id() { return $this->stb_category_id; }
-function set_category_id($v, $dbup) { return $this->fset('category_id', $v, $dbup); }
-function sort_order() { return $this->stb_sort_order; }
-function set_sort_order($v, $dbup) { return $this->fset('sort_order', $v, $dbup); }
-function keywords() { return $this->stb_keywords; }
-function set_keywords($v, $dbup) { return $this->fset('keywords', $v, $dbup); }
-function redirect_url() { return $this->stb_redirect_url; }
-function set_redirect_url($v, $dbup) { return $this->fset('redirect_url', $v, $dbup); }
-function moderators() { return $this->stb_moderators; }
-function set_moderators($v, $dbup) { return $this->fset('moderators', $v, $dbup); }
-function num_topics() { return $this->stb_num_topics; }
-function set_num_topics($v, $dbup) { return $this->fset('num_topics', $v, $dbup); }
-function num_posts() { return $this->stb_num_posts; }
-function set_num_posts($v, $dbup) { return $this->fset('num_posts', $v, $dbup); }
-function last_post_time() { return $this->stb_last_post_time; }
-function set_last_post_time($v, $dbup) { return $this->fset('last_post_time', $v, $dbup); }
-function last_post_id() { return $this->stb_last_post_id; }
-function set_last_post_id($v, $dbup) { return $this->fset('last_post_id', $v, $dbup); }
-function last_poster() { return $this->stb_last_poster; }
-function set_last_poster($v, $dbup) { return $this->fset('last_poster', $v, $dbup); }
-function sort_by() { return $this->stb_sort_by; }
-function set_sort_by($v, $dbup) { return $this->fset('sort_by', $v, $dbup); }
-function original_id() { return $this->stb_original_id; }
-function set_original_id($v, $dbup) { return $this->fset('original_id', $v, $dbup); }
-function skip_common() { return $this->stb_skip_common; }
-function set_skip_common($v, $dbup) { return $this->fset('skip_common', $v, $dbup); }
+function parent_forum_id() { return @$this->data['parent_forum_id']; }
+function set_parent_forum_id($v, $dbup) { return $this->set('parent_forum_id', $v, $dbup); }
+function category_id() { return @$this->data['category_id']; }
+function set_category_id($v, $dbup) { return $this->set('category_id', $v, $dbup); }
+function sort_order() { return @$this->data['sort_order']; }
+function set_sort_order($v, $dbup) { return $this->set('sort_order', $v, $dbup); }
+function keywords_string() { return @$this->data['keywords_string']; }
+function set_keywords_string($v, $dbup) { return $this->set('keywords_string', $v, $dbup); }
+function redirect_url() { return @$this->data['redirect_url']; }
+function set_redirect_url($v, $dbup) { return $this->set('redirect_url', $v, $dbup); }
+function moderators() { return @$this->data['moderators']; }
+function set_moderators($v, $dbup) { return $this->set('moderators', $v, $dbup); }
+function num_topics() { return @$this->data['num_topics']; }
+function set_num_topics($v, $dbup) { return $this->set('num_topics', $v, $dbup); }
+function num_posts() { return @$this->data['num_posts']; }
+function set_num_posts($v, $dbup) { return $this->set('num_posts', $v, $dbup); }
+function last_post_time() { return @$this->data['last_post_time']; }
+function set_last_post_time($v, $dbup) { return $this->set('last_post_time', $v, $dbup); }
+function last_post_id() { return @$this->data['last_post_id']; }
+function set_last_post_id($v, $dbup) { return $this->set('last_post_id', $v, $dbup); }
+function last_poster() { return @$this->data['last_poster']; }
+function set_last_poster($v, $dbup) { return $this->set('last_poster', $v, $dbup); }
+function sort_by() { return @$this->data['sort_by']; }
+function set_sort_by($v, $dbup) { return $this->set('sort_by', $v, $dbup); }
+function original_id() { return @$this->data['original_id']; }
+function set_original_id($v, $dbup) { return $this->set('original_id', $v, $dbup); }
+function skip_common() { return @$this->data['skip_common']; }
+function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup); }
 
 	function nav_name() { return truncate($this->title(), 30); }
 

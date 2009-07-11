@@ -9,8 +9,8 @@ class airbase_board_post extends base_page_db
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function can_be_empty() { return false; }
 	
-	function main_db_storage() { return 'punbb'; }
-	function main_table_storage() { return 'posts'; }
+	function main_db() { return 'punbb'; }
+	function main_table() { return 'posts'; }
 	function fields() { return array($this->main_db_storage() => $this->main_db_fields()); }
 
 	function main_db_fields()
@@ -46,26 +46,37 @@ class airbase_board_post extends base_page_db
 		);
 	}
 
-	function set_topic_id($value, $dbupd) { return $this->fset('topic_id', $value, $dbupd); }
-	function set_create_time($value, $dbupd) { return $this->fset('create_time', $value, $dbupd); }
-	function set_edited($value, $dbupd) { return $this->fset('edited', $value, $dbupd); }
-	function edited() { return $this->stb_edited; }
-	function flag_db() { return $this->stb_flag_db; }
-	function set_flag_db($flag, $db_update) { return $this->fset('flag_db', $flag, $db_update); }
-	function post_body() { return $this->stb_post_body; }
-	function set_post_body($value, $dbupd) { return $this->fset('post_body', $value, $dbupd); }
 	//TODO: странно, при прямом вызове пропадают флаги.
-//	function flag_db() { return $this->stb_flag_db; }
-	function set_owner_id($owner_id, $db_update) { return $this->fset('owner_id', $owner_id, $db_update); }
-	function owner_id() { return $this->stb_owner_id; }
-	function set_poster_ip($poster_ip, $db_update) { return $this->fset('poster_ip', $poster_ip, $db_update); }
-	function set_author_name($author_name, $db_update) { return $this->fset('author_name', $author_name, $db_update); }
-	function author_name() { return $this->stb_author_name; }
-	function set_answer_to_id($value, $db_update) { return $this->fset('answer_to_id', $value, $db_update); }
-	function answer_to_id() { return $this->stb_answer_to_id; }
+//	function flag_db() { return $this->data['flag_db']; }
 
-	function set_warning_id($value, $db_update) { return $this->fset('warning_id', $value, $db_update); }
-	function warning_id() { return $this->stb_warning_id; }
+function topic_id() { return @$this->data['topic_id']; }
+function set_topic_id($v, $dbup) { return $this->set('topic_id', $v, $dbup); }
+function topic_page() { return @$this->data['topic_page']; }
+function edited() { return @$this->data['edited']; }
+function set_edited($v, $dbup) { return $this->set('edited', $v, $dbup); }
+function edited_by() { return @$this->data['edited_by']; }
+function set_edited_by($v, $dbup) { return $this->set('edited_by', $v, $dbup); }
+function owner_id() { return @$this->data['owner_id']; }
+function set_owner_id($v, $dbup) { return $this->set('owner_id', $v, $dbup); }
+function poster_ip() { return @$this->data['poster_ip']; }
+function set_poster_ip($v, $dbup) { return $this->set('poster_ip', $v, $dbup); }
+function poster_ua() { return @$this->data['poster_ua']; }
+function set_poster_ua($v, $dbup) { return $this->set('poster_ua', $v, $dbup); }
+function author_name() { return @$this->data['author_name']; }
+function set_author_name($v, $dbup) { return $this->set('author_name', $v, $dbup); }
+function answer_to_id() { return @$this->data['answer_to_id']; }
+function set_answer_to_id($v, $dbup) { return $this->set('answer_to_id', $v, $dbup); }
+function post_source() { return @$this->data['post_source']; }
+function set_post_source($v, $dbup) { return $this->set('post_source', $v, $dbup); }
+function post_body() { return @$this->data['post_body']; }
+function set_post_body($v, $dbup) { return $this->set('post_body', $v, $dbup); }
+function hide_smilies() { return @$this->data['hide_smilies']; }
+function set_hide_smilies($v, $dbup) { return $this->set('hide_smilies', $v, $dbup); }
+function have_attach() { return @$this->data['have_attach']; }
+function set_have_attach($v, $dbup) { return $this->set('have_attach', $v, $dbup); }
+function have_cross() { return @$this->data['have_cross']; }
+function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup); }
+
 
 	function topic() { return object_load('airbase_board_topic', $this->topic_id()); }
 	function parents() { return array("airbase_board_topic://".$this->topic_id()); }
