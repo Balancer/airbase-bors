@@ -25,11 +25,8 @@ class base_page_hts extends base_page_db
 
 	function loaded() { return $this->title() || $this->source(); }
 
-	function main_db_storage() { return config('mysql_database'); }
-
-	function main_table_storage() { return NULL; }
-
-	function fields_first() { return 'stb_title stb_source stb_description'; }
+	function main_db() { return config('mysql_database'); }
+	function main_table() { return NULL; }
 
 	function fields()
 	{

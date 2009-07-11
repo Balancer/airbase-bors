@@ -1,30 +1,32 @@
-<?
-	class forum_category extends forum_abstract
+<?php
+
+class forum_category extends base_object_db
+{
+	function main_db() { return 'punbb'; }
+	function main_table() { return 'categories'; }
+	function main_table_fields()
 	{
-		function field_title_storage() { return 'punbb.categories.cat_name(id)'; }
-	function storage_engine() { return 'storage_db_mysql'; }
+		return array(
+			'id',
+			'title' => 'cat_name',
+			'parent_category_id' => 'parent',
+			'order' => 'disp_position',
+			'category_base' => 'base_uri',
+			'bors_append',
+			'template',
+		);
+	}
 
-		function uri_name() { return 'category'; }
-
-		var $stb_parent_category_id = '';
-		function parent_category_id() { return $this->stb_parent_category_id; }
-		function set_parent_category_id($parent_category_id, $db_update) { $this->set("parent_category_id", $parent_category_id, $db_update); }
-		function field_parent_category_id_storage() { return 'punbb.categories.parent(id)'; }
-
-		var $stb_category_base = '';
-		function category_base() { return $this->stb_category_base; }
-		function set_category_base($category_base, $db_update) { $this->set("category_base", $category_base, $db_update); }
-		function field_category_base_storage() { return 'punbb.categories.base_uri(id)'; }
-
-		var $stb_bors_append = '';
-		function bors_append() { return $this->stb_bors_append; }
-		function set_bors_append($bors_append, $db_update) { $this->set("bors_append", $bors_append, $db_update); }
-		function field_bors_append_storage() { return 'punbb.categories.bors_append(id)'; }
-
-		var $stb_category_template = '';
-		function category_template() { return $this->stb_category_template; }
-		function set_category_template($template, $db_update) { $this->set("category_template", $template, $db_update); }
-		function field_category_template_storage() { return 'punbb.categories.template(id)'; }
+function parent_category_id() { return @$this->data['parent_category_id']; }
+function set_parent_category_id($v, $dbup) { return $this->set('parent_category_id', $v, $dbup); }
+function order() { return @$this->data['order']; }
+function set_order($v, $dbup) { return $this->set('order', $v, $dbup); }
+function category_base() { return @$this->data['category_base']; }
+function set_category_base($v, $dbup) { return $this->set('category_base', $v, $dbup); }
+function bors_append() { return @$this->data['bors_append']; }
+function set_bors_append($v, $dbup) { return $this->set('bors_append', $v, $dbup); }
+function template() { return @$this->data['template']; }
+function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 
 		function url() { return $this->category_base_full(); }
 	

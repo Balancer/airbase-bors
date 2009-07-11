@@ -46,43 +46,36 @@ class forum_topic extends forum_abstract
 		);
 	}
 
-function author_name() { return $this->stb_author_name; }
-function is_repaged() { return $this->stb_is_repaged; }
-function set_is_repaged($v, $dbup) { return $this->fset('is_repaged', $v, $dbup); }
-function visits() { return $this->stb_visits; }
-function first_post_id() { return $this->stb_first_post_id; }
-function last_post_id() { return $this->stb_last_post_id; }
-function first_visit_time() { return $this->stb_first_visit_time; }
-function last_visit_time() { return $this->stb_last_visit_time; }
-function last_edit_time() { return $this->stb_last_edit_time; }
-function set_last_edit_time($v, $dbup) { return $this->fset('last_edit_time', $v, $dbup); }
-function sticky() { return $this->stb_sticky; }
-function closed() { return $this->stb_closed; }
-function keywords_string_db() { return $this->stb_keywords_string_db; }
-
-	function forum_id() { return @$this->stb_forum_id; }
-	function owner_id() { return $this->stb_owner_id; }
-	function last_poster_name() { return $this->stb_last_poster_name; }
-	function num_replies() { return $this->stb_num_replies; }
-
-	function set_forum_id($value, $dbupd) { return $this->fset('forum_id', $value, $dbupd); }
-	function set_title($value, $dbupd) { return $this->fset('title', $value, $dbupd); }
-	function set_create_time($value, $dbupd) { return $this->fset('create_time', $value, $dbupd); }
-	function set_modify_time($value, $dbupd) { return $this->fset('modify_time', $value, $dbupd); }
-	function set_owner_id($value, $dbupd) { return $this->fset('owner_id', $value, $dbupd); }
-	function set_last_poster_name($value, $dbupd) { return $this->fset('last_poster_name', $value, $dbupd); }
-	function set_author_name($value, $dbupd) { return $this->fset('author_name', $value, $dbupd); }
-	function set_num_replies($num_replies, $db_update) { return $this->fset('num_replies', $num_replies, $db_update); }
-	function set_visits($num_views, $db_update) { return $this->fset('visits', $num_views, $db_update); }
-	function set_first_visit_time($value, $db_update) { return $this->fset('first_visit_time', $value, $db_update); }
-	function set_last_visit_time($value, $db_update) { return $this->fset('last_visit_time', $value, $db_update); }
-	function set_first_post_id($first_post_id, $db_update) { return $this->fset('first_post_id', $first_post_id, $db_update); }
-	function set_last_post_id($last_post_id, $db_update) { return $this->fset('last_post_id', $last_post_id, $db_update); }
-
-	function set_sticky($value, $db_update) { return $this->fset('sticky', $value, $db_update); }
-	function set_closed($value, $db_update) { return $this->fset('closed', $value, $db_update); }
-
-	function set_keywords_string_db($value, $db_update) { return $this->fset('keywords_string_db', $value, $db_update); }
+function forum_id() { return @$this->data['forum_id']; }
+function set_forum_id($v, $dbup) { return $this->set('forum_id', $v, $dbup); }
+function owner_id() { return @$this->data['owner_id']; }
+function set_owner_id($v, $dbup) { return $this->set('owner_id', $v, $dbup); }
+function last_poster_name() { return @$this->data['last_poster_name']; }
+function set_last_poster_name($v, $dbup) { return $this->set('last_poster_name', $v, $dbup); }
+function author_name() { return @$this->data['author_name']; }
+function set_author_name($v, $dbup) { return $this->set('author_name', $v, $dbup); }
+function num_replies() { return @$this->data['num_replies']; }
+function set_num_replies($v, $dbup) { return $this->set('num_replies', $v, $dbup); }
+function is_repaged() { return @$this->data['is_repaged']; }
+function set_is_repaged($v, $dbup) { return $this->set('is_repaged', $v, $dbup); }
+function visits() { return @$this->data['visits']; }
+function set_visits($v, $dbup) { return $this->set('visits', $v, $dbup); }
+function first_post_id() { return @$this->data['first_post_id']; }
+function set_first_post_id($v, $dbup) { return $this->set('first_post_id', $v, $dbup); }
+function last_post_id() { return @$this->data['last_post_id']; }
+function set_last_post_id($v, $dbup) { return $this->set('last_post_id', $v, $dbup); }
+function first_visit_time() { return @$this->data['first_visit_time']; }
+function set_first_visit_time($v, $dbup) { return $this->set('first_visit_time', $v, $dbup); }
+function last_visit_time() { return @$this->data['last_visit_time']; }
+function set_last_visit_time($v, $dbup) { return $this->set('last_visit_time', $v, $dbup); }
+function last_edit_time() { return @$this->data['last_edit_time']; }
+function set_last_edit_time($v, $dbup) { return $this->set('last_edit_time', $v, $dbup); }
+function sticky() { return @$this->data['sticky']; }
+function set_sticky($v, $dbup) { return $this->set('sticky', $v, $dbup); }
+function closed() { return @$this->data['closed']; }
+function set_closed($v, $dbup) { return $this->set('closed', $v, $dbup); }
+function keywords_string_db() { return @$this->data['keywords_string_db']; }
+function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_db', $v, $dbup); }
 
 	private $forum = false;
 	function forum()

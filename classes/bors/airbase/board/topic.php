@@ -2,15 +2,14 @@
 
 class airbase_board_topic extends forum_topic
 {
-	function main_db_storage() { return 'punbb'; }
-	function main_table_storage() { return 'topics'; }
+	function main_db() { return 'punbb'; }
+	function main_table() { return 'topics'; }
 
 	function uri_name() { return 't'; }
 
-	function fields()
+	function main_table_fields()
 	{
-		return array('punbb' => array(
-			'topics' => array(
+		return array(
 				'id',
 				'forum_id',
 				'title'	=> 'subject',
@@ -30,37 +29,8 @@ class airbase_board_topic extends forum_topic
 				'last_edit_time' => 'last_edit',
 				'sticky',
 				'closed',
-			),
-			
-//			'inner forums(forum_id)' => array(
-//				'forum_title' => 'forum_name',
-//			),
-		));
+		);
 	}
-
-	function forum_id() { return $this->stb_forum_id; }
-	function owner_id() { return $this->stb_owner_id; }
-	function last_poster_name() { return $this->stb_last_poster_name; }
-	function num_replies() { return $this->stb_num_replies; }
-
-	function set_forum_id($value, $dbupd) { return $this->fset('forum_id', $value, $dbupd); }
-	function set_title($value, $dbupd) { return $this->fset('title', $value, $dbupd); }
-	function set_create_time($value, $dbupd) { return $this->fset('create_time', $value, $dbupd); }
-	function set_modify_time($value, $dbupd) { return $this->fset('modify_time', $value, $dbupd); }
-	function set_owner_id($value, $dbupd) { return $this->fset('owner_id', $value, $dbupd); }
-	function set_last_poster_name($value, $dbupd) { return $this->fset('last_poster_name', $value, $dbupd); }
-	function set_author_name($value, $dbupd) { return $this->fset('author_name', $value, $dbupd); }
-	function set_num_replies($num_replies, $db_update) { return $this->fset('num_replies', $num_replies, $db_update); }
-	function set_visits($num_views, $db_update) { return $this->fset('visits', $num_views, $db_update); }
-	function set_first_visit_time($value, $db_update) { return $this->fset('first_visit_time', $value, $db_update); }
-	function set_last_visit_time($value, $db_update) { return $this->fset('last_visit_time', $value, $db_update); }
-	function set_first_post_id($first_post_id, $db_update) { return $this->fset('first_post_id', $first_post_id, $db_update); }
-	function last_post_id() { return $this->stb_last_post_id; }
-	function set_last_post_id($last_post_id, $db_update) { return $this->fset('last_post_id', $last_post_id, $db_update); }
-	function set_is_repaged($value, $db_update) { return $this->fset('is_repaged', $value, $db_update); }
-
-	function set_sticky($value, $db_update) { return $this->fset('sticky', $value, $db_update); }
-	function set_closed($value, $db_update) { return $this->fset('closed', $value, $db_update); }
 
 	private $forum = false;
 	function forum()

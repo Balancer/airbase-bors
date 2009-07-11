@@ -59,7 +59,7 @@
 					
 //					echo "{$link} -> {$obj->title()}<br />\n";
 					$link_line[] = array('uri' => $url, 'title' => $nav);
-//					echo "nav_name for $link = '".$obj->nav_name()."' ('$obj->stb_nav_name', '".$obj->title()."')<br />";
+//					echo "nav_name for $link = '".$obj->nav_name()."' ('{$obj->data['nav_name']}', '".$obj->title()."')<br />";
 //					print_r($link_line);
 				}
 				
