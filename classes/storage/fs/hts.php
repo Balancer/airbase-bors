@@ -21,7 +21,7 @@ class storage_fs_hts extends base_null
 		if($new_name == '-')
 			return $m[1];
 		else
-			return $this->obj->fset($new_name, $m[1], false);
+			return $this->obj->set($new_name, $m[1], false);
 	}
 
 	function load($object)

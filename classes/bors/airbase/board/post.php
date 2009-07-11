@@ -86,7 +86,7 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 		if($page && gettype($page) != 'integer')
 			debug_hidden_log('type-mismatch-page', 'Set topic_page to '.gettype($page).'('.$page.')');
 
-		$this->fset('topic_page', $page, $dbupd);
+		$this->set('topic_page', $page, $dbupd);
 	}
 
 	private $__owner = NULL;
