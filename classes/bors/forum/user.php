@@ -3,6 +3,7 @@
 class forum_user extends base_object_db
 {
 	function main_db() { return 'punbb'; }
+	function main_table() { return 'users'; }
 
 	function __construct($id)
 	{

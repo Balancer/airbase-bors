@@ -17,15 +17,15 @@ class user_blog extends base_page
 
 	function parents() { return array("forum_user://".$this->id()); }
 
-	private $data = array();
+	private $xdata = array();
 	function local_data()
 	{
 		$page_id = $this->page().','.$this->items_per_page();
 	
-		if(isset($this->data[$page_id]))
-			return $this->data[$page_id];
+		if(isset($this->xdata[$page_id]))
+			return $this->xdata[$page_id];
 
-		$this->data[$page_id] = array(
+		$this->xdata[$page_id] = array(
 				'blog_records' => array_reverse(objects_array('forum_blog', array(
 					'where' => array('owner_id=' => $this->id()),
 					'order' => 'blogged_time',
@@ -34,7 +34,7 @@ class user_blog extends base_page
 				)))
 			);
 		
-		return $this->data[$page_id];
+		return $this->xdata[$page_id];
 	}
 
 	function default_page() { return $this->total_pages(); }

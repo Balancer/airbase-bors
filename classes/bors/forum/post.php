@@ -3,19 +3,15 @@
 include_once('engines/lcml.php');
 include_once('inc/browsers.php');
 
-class forum_post extends base_page_db
+class forum_post extends base_object_db
 {
-	function storage_engine() { return 'storage_db_mysql_smart'; }
-	function can_be_empty() { return false; }
-	
-	function main_db_storage() { return 'punbb'; }
-	function main_table_storage() { return 'posts'; }
-	function fields() { return array($this->main_db_storage() => $this->main_db_fields()); }
+	function main_db() { return 'punbb'; }
+	function main_table() { return 'posts'; }
 
 	function main_db_fields()
 	{
 		return array(
-			$this->main_table_storage() => $this->main_table_fields(),
+			$this->main_table() => $this->main_table_fields(),
 			'posts_cached_fields(post_id)' => array(
 				'flag_db' => 'flag',
 				'warning_id',
@@ -79,7 +75,13 @@ function have_answers() { return @$this->data['have_answers']; }
 function set_have_answers($v, $dbup) { return $this->set('have_answers', $v, $dbup); }
 
 
-	function set_post_body($value, $dbupd) { if($value == '' && $value !== NULL && $dbupd) debug_hidden_log('body', 'Set empty body'); $this->fset('post_body', $value, $dbupd); }
+	function set_post_body($value, $dbupd)
+	{
+		if($value == '' && $value !== NULL && $dbupd)
+			debug_hidden_log('body', 'Set empty body');
+		$this->set('post_body', $value, $dbupd); 
+	}
+
 	//TODO: странно, при прямом вызове пропадают флаги.
 //	function flag_db() { return $this->data['flag_db']; }
 
@@ -91,7 +93,7 @@ function set_have_answers($v, $dbup) { return $this->set('have_answers', $v, $db
 		if($page && !is_numeric($page)/*gettype($page) != 'integer'*/)
 			debug_hidden_log('type-mismatch-page', 'Set topic_page to '.gettype($page).'('.$page.')');
 
-		$this->fset('topic_page', $page, $dbupd);
+		$this->set('topic_page', $page, $dbupd);
 	}
 
 	private $__owner = NULL;
@@ -277,17 +279,6 @@ function set_have_answers($v, $dbup) { return $this->set('have_answers', $v, $db
 		return $this->__answer_to = $post;
 	}
 
-//	function cache_static() { return rand(86400, 86400*2); }
-
-	function template() { return 'empty.html'; }
-	function render() { return 'render_fullpage'; }
-
-	function empty_body()
-	{
-		require_once('engines/smarty/assign.php');
-		return template_assign_data('post.html', array('this' => $this));
-	}
-	
 	function url_in_topic($topic = NULL)
 	{
 		$pid = $this->id();
@@ -545,5 +536,8 @@ function set_have_answers($v, $dbup) { return $this->set('have_answers', $v, $db
 
 	function edit_url() { return "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}"; }
 
-	function template_vars() { return ''; }
+	function pre_show()
+	{
+		return go($this->url_in_topic());
+	}
 }
