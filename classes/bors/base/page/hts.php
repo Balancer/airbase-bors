@@ -67,7 +67,10 @@ class base_page_hts extends base_page_db
 
 	function children()
 	{
-		return $this->db()->select_array('hts_data_child', 'value', array('id' => $this->id(), 'order' => 'sort_order'));
+		return array_map(
+			create_function('$x', 'return trim($x);'),
+			$this->db()->select_array('hts_data_child', 'value', array('id' => $this->id(), 'order' => 'sort_order'))
+		);
 	}
 
 	function set_children($array, $db_up)

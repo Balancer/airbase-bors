@@ -17,6 +17,7 @@ $map = array(
 	'.*/index.php => forum_main',
 
 	'/_bors/local/search/result/ => bors_tools_search_result',
+	'/tools/search/result/ => bors_tools_search_result',
 	'/tools/search/ => bors_tools_search',
 
 	'(/forum/)topic/\d+/(\d+),new/ => forum_topic(2)',
