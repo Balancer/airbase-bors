@@ -24,9 +24,10 @@ $map = array(
 
 	'/\d{4}/\d{1,2}/\d{1,2}/post\-(\d+)\.html => forum_post(1)',
 	"{$forums}forum/punbb/viewtopic\.php\?pid=(\d+) => forum_post(2)",
-	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-.+\.html\?? => forum_topic(2,4)",
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-.+\.html\?? => redirect:forum_topic(2,4)",
 	"{$forums}\d{4}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+\.html\?? => forum_topic(2,4)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-\-.+\.html\?? => forum_topic(2,4)",
+	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-.+\.html\?? => redirect:forum_topic(2,4)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+ => redirect:forum_topic(2,4)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(\d+).* => redirect:forum_topic(2,3)",
 	"{$forums}\d{4}/\d{1,2}/printable\-(\d+)\-\-.* => forum_printable(2)",
@@ -52,6 +53,7 @@ $map = array(
 
 	'/user/(\d+)/setvars.js => forum_user_js_setvars(1)',
 	'/js/users/touch.js\?(.+) => user_js_touch(1)',
+	'/js/board/comments/(\d+)\.js => balancer_board_js_comments(1)',
 
 	'(/admin/forum/posts/)move-tree => airbase_forum_admin_posts_movetree',
 

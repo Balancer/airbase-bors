@@ -16,7 +16,7 @@
 
 		if(!$data['local'])
 		{
-			$path = $GLOBALS['cms']['sites_store_path']."/{$data['host']}{$data['path']}";
+			$path = config('sites_store_path')."/{$data['host']}{$data['path']}";
 				
 			if(preg_match("!/$!",$path))
 				$path .= "index";
@@ -26,7 +26,7 @@
 				$c1 = substr($data['host'],0,1);
 				$c2 = substr($data['host'],1,1);
 //				require_once('inc/uris.php');
-				$path = $GLOBALS['cms']['sites_store_path']."/$c1/$c2/{$data['host']}".translite_path($data['path']);
+				$path = config('sites_store_path')."/$c1/$c2/{$data['host']}".translite_path($data['path']);
 
 				if(preg_match("!/$!",$path))
 					$path .= "index";
@@ -74,7 +74,7 @@
 			if(file_exists($path) && filesize($path)>0)
 			{
 				$remote = $image;
-				$image = str_replace($GLOBALS['cms']['sites_store_path'], $GLOBALS['cms']['sites_store_uri'], $path);
+				$image = str_replace(config('sites_store_path'), config('sites_store_uri'), $path);
 				$data['local'] = true;
 				if(!$hts->get_data($image,'origin_uri'))
 					$hts->set_data($image, 'origin_uri', $remote);

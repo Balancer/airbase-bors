@@ -44,7 +44,7 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 	function thumbnail_link($geometry)
 	{
 		if(preg_match("!(jpe?g|png|gif)!i", $this->extension()))
-			return "<br /><a href=\"{$this->url()}\"><img src=\"http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/$geometry/$1", $this->location())."\"></a>";
+			return "<br /><a href=\"{$this->url()}\"><img src=\"http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/$geometry/$1", $this->location())."\" alt=\"\" /></a>";
 		return '';
 	}
 }

@@ -5,12 +5,16 @@ class forum_blog extends base_page_db
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function can_be_empty() { return false; }
 	
-	function main_db_storage() { return 'punbb'; }
-	function main_table_storage() { return 'blog'; }
+	function main_db() { return 'punbb'; }
+	function main_table() { return 'blog'; }
 
 	function main_table_fields()
 	{
-		return array('id' => 'post_id', 'owner_id', 'forum_id', 'blogged_time');
+		return array(
+			'id' => 'post_id', 
+			'owner_id', 
+			'forum_id', 
+			'blogged_time');
 	}
 
 	function new_instance()
