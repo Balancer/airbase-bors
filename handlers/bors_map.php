@@ -10,6 +10,7 @@ $map = array(
 	'(/forums/)index\.php\?showtopic=(\d+) => redirect:forum_topic(2)',
 	'(/forums/)index\.php\?act=ST&f=\d+&t=(\d+) => redirect:forum_topic(2)',
 	'(/)cgi\-bin/forum/ultimatebb\.cgi\?ubb=get_topic&(f=\d+&t=\d+) => forum_topic_ubb(2)',
+	'/forum/Forum(\d+/HTML/\d+)\.html => forum_topic_ubb(1)',
 
 	'(/forums/)index\.php\?showtopic=(\d+)&st=(\d+)&? => forum_topic_ipbst(2,3)',
 
@@ -21,6 +22,9 @@ $map = array(
 	'(/)forum/(\d+/\d+)/ => forum_topic_ubb(2)',
 	'(/)forum/(\d+/\d+)/index\.htm => forum_topic_ubb(2)',
 	'(/)forum/(\d+/\d+)/(\d+)\.htm => forum_topic_ubb(2,3)',
+
+	'(.*/)index\.htm => common_redirect(1)',
+	'(.*/)index\-t\.htm => common_redirect(1)',
 
 //	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => forum_topic(1,2)',
 //	'.*viewtopic\.php\?id=(\d+).* => forum_topic(1)',
