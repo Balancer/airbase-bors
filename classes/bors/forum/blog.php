@@ -19,7 +19,7 @@ class forum_blog extends base_page_db
 
 	function new_instance()
 	{
-		$tab = $this->main_table_storage();
+		$tab = $this->main_table();
 
 		$this->db()->replace($tab, array('post_id' => $this->id(), 'blogged_time' => time()));
 	}

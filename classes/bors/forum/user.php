@@ -311,8 +311,7 @@ function set_last_message_md($v, $dbup) { return $this->set('last_message_md', $
 
    	    if($sha_password != $user_sha_password)
        	{
-           	$nick=user_data('nick');
-            echo "<h3><span style=\"text-color: red;\">Ошибка пароля или логина пользователя $nick! ($member_id)</span></h3>Залогиниться, зарегистрироваться или сменить аккаунт можно <a href=\"http://forums.airbase.ru/\">форуме Авиабазы</a>.<br><span style=\"font-size: xx-small;\">Внимание! Вместо старой системы регистрации теперь будет использоваться новая, объединённая с регистрацией на форумах!";
+            echo "<h3><span style=\"text-color: red;\">Ошибка пароля или логина пользователя {$this->title()}! ({$this->id()})</span></h3>Залогиниться, зарегистрироваться или сменить аккаунт можно <a href=\"http://forums.airbase.ru/\">форуме Авиабазы</a>.<br><span style=\"font-size: xx-small;\">Внимание! Вместо старой системы регистрации теперь будет использоваться новая, объединённая с регистрацией на форумах!";
    	        die();
        	}
 		
