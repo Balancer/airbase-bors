@@ -306,7 +306,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function recalculate($full_repaging = true)
 	{
-		$this->store(false);
+		bors()->changed_save(); // Сохраняем всё. А то в памяти могут быть модифицированные объекты, с которыми сейчас будем работать.
 		
 		$num_replies = $this->db()->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
 		$this->set_num_replies($num_replies, true);

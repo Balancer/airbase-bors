@@ -11,7 +11,7 @@ class airbase_forum_admin_posts_movetree extends base_page
 	function post_ids()
 	{
 		if($this->post_ids === false)
-			$this->post_ids = array_filter(@split(',', @$_COOKIE['selected_posts'])); 
+			$this->post_ids = array_filter(@explode(',', @$_COOKIE['selected_posts'])); 
 		
 		return $this->post_ids;
 	}

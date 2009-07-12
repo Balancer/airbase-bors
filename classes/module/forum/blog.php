@@ -15,13 +15,26 @@ class module_forum_blog extends base_page
 		if(isset($this->_data[$page_id]))
 			return $this->_data[$page_id];
 
-		$this->_data[$page_id] = array(
-				'blog_records' => objects_array('forum_blog', array(
+		$skip_forums = array(19, 37, 102, 138, 170);
+		if($sfs = $this->args('skip_forums'))
+			$skip_forums = array_merge($skip_forums, explode(',', $sfs));
+
+		$blogs = objects_array('forum_blog', array(
 					'order' => '-blogged_time',
 					'page' => max(1,$this->page()),
 					'per_page' => $limit,
-					'forum_id NOT IN' => array(19, 37, 102, 138, 170),
-				)),
+					'forum_id NOT IN' => $skip_forums,
+		));
+
+		$x = bors_fields_array_extract($blogs, array('id', 'owner_id', 'forum_id'));
+		$posts = objects_array('forum_post', array('id IN' => array_filter(array_unique($x['id'])), 'by_id' => true));
+		$users = objects_array('forum_user', array('id IN' => array_filter(array_unique($x['owner_id'])), 'by_id' => true));
+		$forums = objects_array('forum_forum', array('id IN' => array_filter(array_unique($x['owner_id'])), 'by_id' => true));
+		$topics = objects_array('forum_topic', array('id IN' => array_filter(array_unique(bors_field_array_extract($posts, 'topic_id')))));
+
+		$this->_data[$page_id] = array(
+				'blog_records' => $blogs,
+				'posts' => $posts,
 				'no_show_answers' => true,
 				'skip_message_footer' => true,
 			);

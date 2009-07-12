@@ -3,7 +3,7 @@
 <dd>
 
 {assign var=columns value=3}
-<table width="90%" border="0" cellPadding="0" cellSpacing="0"><tr><td><ul>
+<table width="90%" cellPadding="0" cellSpacing="0"><tr><td><ul>
 {foreach from=$base_categories item=cat name=loop}
 {if not $smarty.foreach.loop.first && $smarty.foreach.loop.iteration % $columns == 1}
 </ul></td><td><ul>

@@ -47,7 +47,10 @@ class base_page_hts extends base_page_db
 
 	function parents()
 	{
-		return $this->db()->select_array('hts_data_parent', 'value', array('id=' => $this->id()));
+		if($ps = $this->attr('parents'))
+			return $ps;
+
+		return $this->set_attr('parents', $this->db()->select_array('hts_data_parent', 'value', array('id=' => $this->id())));
 	}
 
 	function set_parents($array, $db_up)

@@ -317,6 +317,17 @@ function set_have_answers($v, $dbup) { return $this->set('have_answers', $v, $db
 		require_once("inc/urls.php");
 		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
 	}
+
+	function titled_link($text = NULL, $css=NULL) 
+	{
+		if(!$title)
+			$title = $this->title();
+
+		if($css)
+			$css = " class=\"{$css}\"";
+
+		return "<a href=\"{$this->url()}\"{$css}>{$title}</a>";
+	}
 		
 	function title() { return $this->topic()->title()." <small>[".$this->nav_name()."]</small>"; }
 	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown')).", ".strftime("%d.%m.%y", $this->create_time()); }
@@ -441,13 +452,14 @@ function set_have_answers($v, $dbup) { return $this->set('have_answers', $v, $db
 	function move_tree_to_topic($new_tid)
 	{
 //		echo "Post {$this->id()}: create_time=".strftime("%c", $this->create_time()).", modify_time=".strftime("%c", $this->modify_time(true)).", change_time=".strftime("%c", $this->change_time(true))."<br />\n";
+//		bors_exit();
 	
 		$GLOBALS['move_tree_to_topic_changed_topics'] = array();
 	
 		$this->__move_tree_to_topic($new_tid, $this->topic_id());
 		
 //		print_r($GLOBALS['move_tree_to_topic_changed_topics']);
-		
+
 		foreach(array_keys($GLOBALS['move_tree_to_topic_changed_topics']) as $tid)
 			object_load('forum_topic', $tid, array('no_load_cache' => true))->recalculate();
 	}
