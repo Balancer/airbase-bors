@@ -8,7 +8,7 @@
         if(substr($page,-1)!='/')
             $page = dirname ($page) . '/';
 
-        $image2 = abs_path_from_relative($image, "{$page}img/");
+		$image2 = abs_path_from_relative($image, "{$page}img/");
 		
         $hts = new DataBaseHTS();
 
