@@ -1,5 +1,5 @@
 {if $owner->use_avatar()}
-<div style="height: {$owner->avatar_height()}px; margin: {math equation="max(0,floor((100-w)/2))" w=$owner->avatar_width()}px 0"><img src="http://balancer.ru/forum/punbb/img/avatars/{$owner->use_avatar()}" width="{$owner->avatar_width()}" height="{$owner->avatar_height()}" alt="" /></div>
+<div title="{$owner->avatar_width()}x{$owner->avatar_height()}" style="height: {$owner->avatar_height()}px; margin: {math equation="max(0,floor((100-w)/2))" w=$owner->avatar_width()}px 0"><img src="http://balancer.ru/forum/punbb/img/avatars/{$owner->use_avatar()}" width="{$owner->avatar_width()}" height="{$owner->avatar_height()}" alt="" /></div>
 {else}
 <img src="http://www.gravatar.com/avatar/{$owner->id()|cat:'balancer-user-gravatar'|md5}?d=wavatar" width="100" height="100" alt="" />
 {/if}
