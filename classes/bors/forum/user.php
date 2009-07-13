@@ -128,30 +128,36 @@ function set_rep_y($v, $dbup) { return $this->set('rep_y', $v, $dbup); }
 function last_message_md() { return @$this->data['last_message_md']; }
 function set_last_message_md($v, $dbup) { return $this->set('last_message_md', $v, $dbup); }
 
-	function use_avatar()
-	{
-		if(!$this->data['use_avatar'])
-			return $this->data['use_avatar'];
+function use_avatar()
+{
+	if(!$this->data['use_avatar'])
+		return $this->data['use_avatar'];
 			
-		if(preg_match('/^\d+\.\w+/', $this->data['use_avatar']))
-			return $this->data['use_avatar'];
+	if(preg_match('/^\d+\.\w+/', $this->data['use_avatar']) && $this->data['avatar_width'])
+		return $this->data['use_avatar'];
 
-		$avatars_dir = '/var/www/balancer.ru/htdocs/forum/punbb/img/avatars';
-		$id = $this->id();
+	$avatars_dir = '/var/www/balancer.ru/htdocs/forum/punbb/img/avatars';
+	$id = $this->id();
 		
-		if($img_size = @getimagesize("$avatars_dir/$id.gif"))
-			$user_avatar = "$id.gif";
-		elseif($img_size = @getimagesize("$avatars_dir/$id.png"))
-			$user_avatar = "$id.png";
-		elseif($img_size = @getimagesize("$avatars_dir/$id.jpg"))
-			$user_avatar = "$id.jpg";
-		else
-			$user_avatar = "";
+	if($img_size = @getimagesize("$avatars_dir/$id.gif"))
+		$user_avatar = "$id.gif";
+	elseif($img_size = @getimagesize("$avatars_dir/$id.png"))
+		$user_avatar = "$id.png";
+	elseif($img_size = @getimagesize("$avatars_dir/$id.jpg"))
+		$user_avatar = "$id.jpg";
+	else
+		$user_avatar = "";
 
-		return $this->set_use_avatar($user_avatar, true);
+	if($img_size)
+	{
+		$this->set_avatar_width($img_size[0], true);
+		$this->set_avatar_height($img_size[1], true);
 	}
+
+	return $this->set_use_avatar($user_avatar, true);
+}
 	
-	function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
+function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
 
 	var $_title = NULL;
 	function group_title()
@@ -396,9 +402,9 @@ function set_last_message_md($v, $dbup) { return $this->set('last_message_md', $
 	{
 		foreach(array('user_id', 'cookie_hash', 'is_admin') as $k)
 		{
-			SetCookie($k, NULL, 0, "/", '.'.$_SERVER['HTTP_HOST']);
-			SetCookie($k, NULL, 0, "/", $_SERVER['HTTP_HOST']);
 			SetCookie($k, NULL, 0, "/");
+			SetCookie($k, NULL, 0, "/", $_SERVER['HTTP_HOST']);
+			SetCookie($k, NULL, 0, "/", '.'.$_SERVER['HTTP_HOST']);
 		}
 	}
 
