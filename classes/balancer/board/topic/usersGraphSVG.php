@@ -2,33 +2,43 @@
 
 class balancer_board_topic_usersGraphSVG extends base_image_svg
 {
-	function show_image()
+	function image()
 	{
+		debug_hidden_log('000', 'check for balancer_board_topic_usersGraphSVG');
+
 		$posts = objects_array('forum_post', array('topic_id' => $this->id()));
+		$topic = object_load('forum_topic', $this->id());
 
 		$users = array();
 		$edges = array();
 		$max = 0;
+		$maxu = 0;
 		foreach($posts as $p)
 		{
 			$user_id = $p->owner_id();
 			$user = $p->owner();
 			if(empty($users[$user_id]))
 				$users[$user_id] = array(
-					'name' => $user->title(),
+					'name' => $p->author_name(),
+//					'reputation' => $user->reputation(), !! сделать учёт на !$user
 					'link' => "http://balancer.ru/forum/user-{$user_id}-posts-in-topic-{$this->id()}/",
 					'count' => 1,
 				);
 			else
-				$users[$user_id]['count']++;
+			{
+				$cnt = ++$users[$user_id]['count'];
+				if($cnt > $maxu)
+					$maxu = $cnt;
+			}
 
 			if($answer_to = $p->answer_to())
 			{
 				$from_id = $user_id;
 				$to_id = $p->answer_to()->owner_id();
 				
-				if($from_id < $to_id)
-					list($to_id, $from_id) = array($from_id, $to_id);
+				if(!$this->args('ordered'))
+					if($from_id < $to_id)
+						list($to_id, $from_id) = array($from_id, $to_id);
 				
 				if(empty($edges[$from_id][$to_id]))
 					$edges[$from_id][$to_id] = array(
@@ -43,9 +53,15 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 			}
 		}
 
+		$title = 'Граф взаимных ответов участников темы «'.$topic->title().'»';
+
 		require_once 'Image/GraphViz.php';
 		$graph = new Image_GraphViz();
-//		$graph->setDirected(false);
+		$graph->setAttributes(array(
+			'label' => $title,
+			'labelloc' => 't',
+			'URL' => $topic->url(),
+		));
 		
 		foreach($users as $uid => $ud)
 			$graph->addNode(
@@ -53,8 +69,10 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 					array(
 						'URL'   => $ud['link'],
 						'label' => $ud['name'],
-//						'shape' => 'box'
-//				 		'fontsize' => '14'
+//						'tooltip' => $ud['reputation'],
+//						'shape' => 'box',
+//				 		'fontsize' => 8+intval(12*$ud['count']/$maxu),
+//						'fillcolor' => $ud['reputation'] >= 0 ? 
 					)
 			);
 
@@ -69,17 +87,22 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 
 					array(
 						'label' => $x['count'],
-						'arrowhead' => 'none',
+						'arrowhead' => $this->args('ordered') ? 'normal' : 'none',
 						'penwidth' => pow($x['count']/$max, 0.25)*4,
 //						'style' => 'dashed',
-//						'color' => 'red'
+						'color' => sprintf('#%2x%2x%2x', rand(0,128), rand(0,128), rand(0,128)),
 					)
 				);
 			}
 		}
 		
+		ob_start();
 		$graph->image('svg');
+		$svg = ob_get_contents();
+		ob_end_clean();
+		
+		return $svg; // str_replace('<title>G</title>', '<title>BalancerRu</title>', $svg);
 	}	
 
-	function cache_static() { return 600; }
+	function cache_static() { return rand(3600, 7200); }
 }
