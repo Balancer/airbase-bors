@@ -9,7 +9,7 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 		if(bors()->client()->is_bot())
 		{
 			debug_hidden_log('002', 'bot trapped!');
-			return go(object_load('forum_topic', $this->id())->url());
+			return go('http://balancer.ru/forum/');
 		}
 
 		return false;
@@ -152,8 +152,8 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 
 	function cache_static()
 	{
-		$base = max($this->edges_count, 50); 
-		$ttl = rand(10*$base, 20*$base);
+		$base = max($this->edges_count, 5);
+		$ttl = rand(100*$base, 200*$base);
 		debug_hidden_log('001', "TTL LOR for {$this->edges_count} = $ttl", false);
 		return $ttl;
 	}

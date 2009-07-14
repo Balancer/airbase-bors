@@ -76,6 +76,7 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 		$graph->setAttributes(array(
 			'label' => $title,
 			'labelloc' => 't',
+//			'spline' => true,
 			'URL' => $topic->url(),
 		));
 		
@@ -122,7 +123,7 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 
 	function cache_static()
 	{
-		$base = max($this->edges_count, 50); 
+		$base = max($this->edges_count, 5);
 		$ttl = rand(100*$base, 200*$base);
 		debug_hidden_log('001', "TTL for {$this->edges_count} = $ttl", false);
 		return $ttl;
