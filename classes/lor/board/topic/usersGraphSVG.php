@@ -2,6 +2,19 @@
 
 class lor_board_topic_usersGraphSVG extends base_image_svg
 {
+	private $edges_count = 0;
+
+	function pre_parse()
+	{
+		if(bors()->client()->is_bot())
+		{
+			debug_hidden_log('002', 'bot trapped!');
+			return go(object_load('forum_topic', $this->id())->url());
+		}
+
+		return false;
+	}
+
 	function image()
 	{
 		debug_hidden_log('001', 'check for lor_board_topic_usersGraphSVG');
@@ -83,6 +96,9 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 			}
 		}
 
+		$this->edges_count = count($edges);
+		debug_hidden_log('001', "Total edges LOR: {$this->edges_count}", false);
+
 		$title = "Граф взаимных ответов участников темы «{$title}»";
 
 		require_once 'Image/GraphViz.php';
@@ -134,5 +150,11 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 		return $svg;
 	}	
 
-	function cache_static() { return rand(3600, 7200); }
+	function cache_static()
+	{
+		$base = max($this->edges_count, 50); 
+		$ttl = rand(10*$base, 20*$base);
+		debug_hidden_log('001', "TTL LOR for {$this->edges_count} = $ttl", false);
+		return $ttl;
+	}
 }
