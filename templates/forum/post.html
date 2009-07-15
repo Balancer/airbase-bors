@@ -12,16 +12,28 @@
 *}
 {if $p}
 <a name="p{$p->id()}"></a>
-<dl class="forumposting posted_by_{$p->owner_id()}">
-<dt>{$p->flag()} {if $show_title}{$show_title} {/if}{if not $skip_author_name}{$p->author_name()}{/if}{if not $skip_date} <a href="{$p->url()}">{$p->create_time()|full_time}</a>{/if}
-{if not $no_show_answers and $p->answer_to_id()}
+{assign var="owner" value=$p->owner()}
 {assign var=a value=$p->answer_to()}
+<div class="post pby{$p->owner_id()}{if $a} pby{$a->id()}{/if}">
+<div class="head">
+<div class="to-left">
+{$p->flag()} {if $show_title}{$show_title} {/if}{if not $skip_author_name}{$p->author_name()}{/if}{if not $skip_date}, <a href="{$p->url()}">{$p->create_time()|full_time}</a>{/if}
+{if not $no_show_answers and $p->answer_to_id()}
 <span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>
 {/if}
 {if $forum} <small>// {$forum->titled_url()}</small>{/if}
-</dt>
-<dd>
-{assign var="owner" value=$p->owner()}
+</div>
+
+<div class="to-right">
+<div class="to-left"><img src="/_bors/i/thumb_up.gif" onclick="ptrch({$p->id()},'up')"  /></div>
+<div id="ptr{$p->id()}" class="to-left">{if $p->score() != NULL}{$p->score_colorized()}{/if}</div>
+<div class="to-left"><img src="/_bors/i/thumb_down.gif" onclick="ptrch({$p->id()},'down')" /></div>
+<div class="half-transparent to-left">{$p->imaged_edit_url()}</div>
+</div>
+
+<div class="clear">&nbsp;</div>
+</div>{*/head*}
+<div class="body">
 {if $owner and not $skip_avatar_block}<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>{/if}
 {if $strip}
 {assign var="body" value=$p->body()}
@@ -36,20 +48,48 @@
 
 <div class="postsignature">
 {if $owner and $owner->signature()}{$owner->signature_html()}{/if}
- {$p->owner_user_agent()}
+<span class="img_middle">
+&nbsp;{$p->owner_user_agent()}
+</span>
 </div>
 
+{if $p->attaches()}
+<hr />
+Прикреплённые файлы:
+{foreach from=$p->attaches() item="attach"}
+<div class="box float_left center" style="width: 300px; ">{$attach->thumbnail_link('300x300')}<a href="{$attach->url()}">{$attach->title()}</a> [{$attach->size()|smart_size}, {$attach->downloads()} {$attach->downloads()|sklon:'загрузка':'загрузки':'загрузок'}]</div>
+{/foreach}
+{/if}
+
+{if $p->edited() && $p->edited() > $p->create_time() + 300}<div class="edited_note">
+Это сообщение редактировалось {$p->edited()|strftime:"%d.%m.%Y в %H:%M"}
+</div>{/if}
+
 <ul class="postfooter">
+<li><a href="http://balancer.ru/user/{$p->owner_id()}/reputation.html?{$p->url()}">Репутация автору</a></li>
+<li>|</li>
 <li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
 <li class="postdelete"><a href="http://balancer.ru/forum/tools/post/{$p->id()}/">Инструменты</a></li>
-<li class="postedit"><a href="http://balancer.ru/forum/punbb/edit.php?id={$p->id()}">Редактировать</a></li>
-<li class="postquote"><a href="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}">Ответ на сообщение</a></li>
+{if $this->is_public_access() and $owner}<li><script type="text/javascript">warn_icon('{$p->internal_uri()}', {$owner->id()})</script></li>{/if}
+<li>{$p->imaged_edit_url()}Редактор</li>
+<li>|</li>
+<li class="pages_select">
+ <a href="{$this->forum()->category()->url()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
+  class="current_page">Ответить на сообщение</a>
+</li>
 </ul>
+
+<ul class="postfooter coordinators">
+<li>Групповые операции:</li>
+<li><input type="checkbox" id="_chkbx_p{$p->id()}" onclick="return apfgp(this, {$p->id()})" /><label for="_chkbx_p{$p->id()}">&nbsp;отметить</label></li>
+<li> | <a href="/admin/forum/posts/move-tree">перенос в другую тему</a></li>
+</ul>
+
 {else}
 <div class="clear">&nbsp;</div>
-{/if}
-</dd>
-</dl>
+{/if}{*/signature show*}
+</div>{*/body*}
+</div>{*/post*}
 {else}
 Error: Unknown post.
 {/if}
