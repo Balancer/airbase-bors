@@ -7,12 +7,15 @@
 
 	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
 	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
-<link rel="stylesheet" type="text/css" href="/_bors/css/main4.css" />
+<link rel="stylesheet" type="text/css" href="/_bors/css/main5.css" />
 
-	<script type="text/javascript" src="/bors-shared/js/funcs.js"></script>
-	<script type="text/javascript" src="/bors-shared/js/tune.js"></script>
+{foreach from=$js_include item="s"}
+<script type="text/javascript" src="{$s}"></script>
+{/foreach}
+
+	<script type="text/javascript" src="/_bors/js/funcs2.js"></script>
+	<script type="text/javascript" src="/_bors/js/tune.js"></script>
 	<script type="text/javascript" src="/_bors/js/cfuncs.js"></script>
-
 
 <script type="text/javascript"><!--
 {if $this}
@@ -151,8 +154,8 @@ dd, dt { height: 1%; }
 		<dd>
 			<script type="text/javascript">
 				createSelect("Шрифт", "fontFamily", "default(Verdana):Verdana;Georgia;sans-serif;serif;monospace", "Verdana")
-				createSelect("Размер", "fontSize", "8pt;default(10pt):10pt;12pt;14pt;16pt;20pt;24pt", "10pt")
-				createSelect("Расстояние до монитора", "incenter.width", "auto;30cm:14cm;45cm:20cm;70cm:30cm", "auto")
+				createSelect("Размер", "fontSize", "8pt;10pt;default(12pt):12pt;14pt;16pt;20pt;24pt", "12pt")
+				createSelect("Расстояние до монитора", "incenter.width", "auto;30cm:14cm;45cm:21cm;70cm:30cm", "auto")
 			</script>
 			<noscript><p>Не работает без JavaScript</p></noscript>
 		</dd>

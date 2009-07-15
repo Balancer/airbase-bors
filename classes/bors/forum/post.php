@@ -40,6 +40,7 @@ class forum_post extends base_object_db
 			'have_attach',
 			'have_cross',
 			'have_answers',
+			'score' => 'field2',
 		);
 	}
 
@@ -73,7 +74,8 @@ function have_cross() { return @$this->data['have_cross']; }
 function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup); }
 function have_answers() { return @$this->data['have_answers']; }
 function set_have_answers($v, $dbup) { return $this->set('have_answers', $v, $dbup); }
-
+function score() { return @$this->data['score']; }
+function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function set_post_body($value, $dbupd)
 	{
@@ -551,5 +553,46 @@ function set_have_answers($v, $dbup) { return $this->set('have_answers', $v, $db
 	function pre_show()
 	{
 		return go($this->url_in_topic());
+	}
+
+	function score_colorized($recalculate = false)
+	{
+		if(is_null($this->score()) && !$recalculate)
+			return "";
+	
+		$data = array(
+			'target_class_name' => $this->class_name(),
+			'target_object_id' => $this->id(),
+			'score' => 1,
+		);
+
+		$positives = objects_count('bors_votes_thumb', $data);
+
+		$data['score'] = -1;
+		$negatives = objects_count('bors_votes_thumb', $data);
+
+		$score = $positives - $negatives;
+
+		if($positives == 0 && $negatives == 0)
+			$this->set_score(NULL,   true);
+		else
+			$this->set_score($score, true);
+
+		if($score > 0)
+			$color = 'green';
+		elseif($score<0)
+			$color = 'red';
+		else
+			$color = 'black';
+
+		if($score>0)
+			$score = "+{$score}";
+
+		if($positives && $negatives)
+			$rate = " <small>(<span style=\"color:green\">+{$positives}</spam>/<span style=\"color:red\">-{$negatives}</span>)</small>";
+		else
+			$rate = "";
+
+		return "<span style=\"color:$color\">{$score}</span>{$rate}";
 	}
 }

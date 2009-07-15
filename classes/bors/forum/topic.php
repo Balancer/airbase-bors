@@ -156,7 +156,10 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		$data['this'] = $this;
 
-		return template_assign_data("templates/TopicBody.html", $data);
+//		if(debug_is_balancer())
+			return template_assign_data("xfile:forum/topic.html", $data);
+//		else
+//			return template_assign_data("templates/TopicBody.html", $data);
 	}
 
 	private $__all_posts_ids;
@@ -472,5 +475,11 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		}
 
 		return parent::template();
+	}
+
+	function pre_show()
+	{
+		templates_jquery();
+		return false;
 	}
 }

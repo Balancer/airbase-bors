@@ -1,0 +1,625 @@
+body {
+	font-size: 10pt;
+	font-family: Verdana;
+	color: #358;
+    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
+	margin: 0px; 
+	padding: 0px 0px 32px 4px;
+	clear: both;
+}
+
+h1, h2, h3, h4, h5, h6 { 
+	font-weight: 900; 
+	margin: 0;
+	padding: 0;
+}
+
+h1 { font-size: 2.0em; margin: 4px 0px 10px 0px;}
+h2 { font-size: 1.7em; margin: 8px 0px 4px 0px;}
+h3 { font-size: 1.2em;}
+h4 { font-size: 1.0em;}
+h5 { font-size: 0.9em;}
+h6 { font-size: 0.7em;}
+
+td { 
+	vertical-align: top; 
+	text-align: left;
+}
+
+table.btab { 
+	margin: 8px 0px 4px 0px; 
+	border-left: 1px solid #9bd;
+	border-top: 1px solid #9bd;
+	padding: 0;
+	border-collapse: collapse;
+}
+
+table.btab td { background: white; }
+
+.btab td, .btab th 
+{
+	border-right: 1px solid #9bd;
+	border-bottom: 1px solid #9bd;
+	padding: 2px;
+	margin: 0;
+}
+
+.btab caption {
+	color: #d0d0f0;
+	background-color: #def;
+	border-right: 1px solid #9bd;
+	border-top: 1px solid #9bd;
+	border-left: 1px solid #9bd;
+	padding: 2px;
+	margin: 0;
+	background-color: #9bd;
+	text-align: left;
+	color: white;
+	font-size: 1.0em; 
+	font-weight: bold; 
+}
+
+.btab caption a {color: #ffffd0;}
+
+.btab th {
+	color: #358;
+	background-color: #def;
+}
+
+dl.box {
+	border: 1px solid #9bd;
+	margin: 10px 0px 4px 0px; 
+	padding: 0px; 
+	background-color: white;
+}
+
+dl.box dt, dl.box dt a {
+	margin: 0px; 
+	color: white;
+	background-color: #9bd; 
+	padding: 1px; 
+	font-size: 0.9em; 
+	font-weight: bold; 
+}
+
+dl.box dd {margin: 2px; font-size: xx-small; padding: 2px; }
+dl.box dt a {color: #ffffd0;}
+
+.box {
+	border: 1px solid #9bd;
+	background-color: #def; 
+	margin: 0px 4px 4px 4px;
+	padding: 4px;
+}
+
+a.external {
+    background: url(http://airbase.ru/img/design/system/external.png) center right no-repeat;
+    padding-right: 13px;
+}
+
+.imperceptible {font-size: xx-small; color: #c0c0c0;}
+
+small { font-size: 0.8em; }
+
+dl.forumposting {
+	border: 1px solid #9bd; /* было: #06c */
+	margin: 10px 0px 4px 0px; 
+	padding: 0px; 
+	clear: both;
+	background-color: #ffffff;
+}
+
+dl.box h1 {
+	text-align: left;
+}
+
+dl.forumposting dt {
+	border-bottom: 1px solid #9bd;
+}
+
+dl.forumposting dt, dl.forumposting dt a {
+	margin: 0px; 
+	background-color: #def; 
+	padding: 1px; 
+	font-weight: 900;
+	font-size: 1.0em;
+	text-align: left;
+}
+
+dl.forumposting dd {
+	text-align: justify; 
+	padding: 4px; 
+	margin: 0px;
+}
+
+div.post {
+	border: 1px solid #9bd; /* было: #06c */
+	margin: 10px 0px 0px 0px; 
+	padding: 0px; 
+	clear: both;
+	background-color: #ffffff;
+}
+
+div.post div.head, div.post div.head a {
+	border-bottom: 1px solid #9bd;
+	margin: 0px; 
+	background-color: #def; 
+	padding: 1px; 
+	font-weight: 900;
+	font-size: 1.0em;
+	text-align: left;
+}
+
+div.post div.head div.to-right div {
+	margin: 0 4px;
+}
+
+div.post div.head div.to-right img {
+	cursor: pointer;
+}
+
+div.post div.body {
+	text-align: justify; 
+	padding: 4px; 
+	margin: 0px;
+}
+
+a {
+	text-decoration: none;
+	color: #06c;
+}
+
+a:visited {
+	color: #06c;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a.current_page, a.select_page {
+	padding: 1px 3px;
+	margin: 8px 2px;
+	border: 1px solid #9bd;
+}
+
+a.current_page {
+	background-color: #9bd;
+	color: white !important;
+}
+
+a.select_page { 
+	background-color: white;
+	color: #358;
+}
+
+a.select_page:hover {
+	background-color: #9bd;
+	color: white;
+	text-decoration: none;
+}
+
+.pages_select {
+	padding: 2px;
+	margin: 8px;
+	text-align: center;
+	font-size: 1.0em;
+}
+
+.topic_pages_links {
+	font-size: 0.8em;
+	white-space: nowrap;
+}
+
+small a.current_page, small a.select_page {
+	padding: 0px 1px;
+	margin: 1px 0px;
+}
+
+.pginlist {
+	display: inline;
+	padding: 2px;
+	margin: 2px;
+}
+
+.pginlist a {
+	padding: 0 1px;
+	margin: 0 1px;
+	font-size: 8pt;
+	border: none;
+}
+
+div.avatar_block {
+	width: 100px; 
+	float: right; 
+	margin: 0px 0px 8px 16px; 
+	display: inline; 
+	border-left: 1px solid #def;
+	border-bottom: 1px solid #def;
+	background-color: white; 
+	text-align: center;
+	overflow: hidden;
+}
+
+div.avatar_block h4 {
+	font-size: 9pt;
+	font-weight: 900;
+	padding: 0;
+	margin: 0;
+}
+
+div.avatar_block h5 {
+	font-size: 8pt;
+	padding: 0;
+	margin: 0;
+	font-weight: normal;
+}
+
+div.avatar_block div {
+	width: 100px;
+	height: 100px;
+	margin: 0;
+	text-align: center;
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+.nav, .navleft {
+	font-size: 0.8em;
+}
+
+
+BLOCKQUOTE {
+	border-color: #cde #eff #eff #cde;
+	BORDER-STYLE: solid;
+	BORDER-WIDTH: 1px;
+	font-size: 90%;
+	background-color: #def;
+	margin: 2px 5px;
+	padding: 4px;
+}
+
+span.q {
+	font-size: 80%;
+	color: #888;
+}
+
+table.small td {
+	font-size: 0.9em;
+	padding: 2px;
+}
+
+table.small td.small {
+	font-size: 0.8em;
+	padding: 2px;
+}
+
+.small {
+	font-size: 0.8em;
+	padding: 2px;
+}
+
+.copyright {
+	margin: 24px 0px 0px 0px;
+	text-align: right;
+	font-size: 0.8em;
+}
+
+td.post {
+	font-size: 1.0em;
+}
+
+.clear {
+	clear: both;
+	height: 0;
+}
+
+span.clear {
+	clear: both;
+	height: 0;
+	display: block;
+}
+
+.alignright {
+	text-align: right;
+}
+.testfloat {
+	width: 50px;
+	font-size: .8em;
+}
+.to-right {
+	float: right;
+}
+.to-left {
+	float: left;
+}
+
+.wrapper {
+    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
+}
+
+.outer {
+	margin-left: 200px;  /* L */
+}
+.tpl_column_center {
+	float: right;
+	width: 100%;
+	margin-left: -1px;
+}
+.tpl_column_left {
+	float: left;
+	position: relative;
+	width: 200px;  /* L */
+	margin-left: -201px;  /* -L-1 */
+	margin-right: 2px;
+}
+.minwidth {
+	min-width: 404px;
+}
+
+.incenter {
+	padding: 0 8px;
+}
+
+/* previene allargamento floats (hidden) \*//*/
+.inleft, .incenter {
+	width: 100%;
+	overflow: hidden;
+	padding: 4px;
+}
+
+.tpl_column_center {
+	margin-left: 0;
+}
+
+.tpl_column_left {
+	margin-right: 1px;
+}
+.minwidth {
+	border-left: 404px solid #fff;
+}
+.wrapper {
+	margin-left: -404px;
+}
+/**/
+
+.outer {
+/*	word-wrap: break-word; */
+}
+
+.w200 { width: 198px; }
+
+dl.box input {
+	border: 1px solid #9bd;
+    margin: 1px 3px;
+}
+
+input, textarea, select, option {
+	border: 1px solid #9bd; 
+	background: #f0faff;
+}
+
+input.text {
+	font-weight: bold; 
+}
+
+dl.box input.text {
+	width: 160px;
+	font-size: 9pt;
+}
+
+input.submit {
+	font-weight: bold; 
+	background-color: #9bd;
+	color: white;
+}
+
+ul.postfooter {
+	text-align: right;
+	clear: both;
+	margin: 0;
+	padding: 0;
+	width: auto;
+	font-size: 0.7em;
+}
+
+ul.postfooter li {
+    list-style-image:URL(http://airbase.ru/img/web/li/arrow_blue.gif);
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+
+ul.postfooter li a {
+/*order-top: 1px solid #def; */
+	color: #9bd;
+	padding: 0 2px;
+	margin: 0;
+}
+
+.answer { font-size: 0.8em; }
+
+
+.w100p { width: 100%; }
+.center { text-align: center; }
+.right { text-align: right; }
+
+.subsubforums { 
+	font-size: 0.8em; 
+	font-style: italic; 
+	padding-left: 3ex; 
+}
+
+textarea.quickreplyform {
+	width: 98%;
+}
+
+DIV.postsignature {
+	text-align: right;
+	color: #bbc;
+	font-size: 0.8em;
+	margin-top: 10px;
+	clear: both;
+}
+
+a tt.warnings {
+	font-size: 27px;
+	color: black;
+	text-decoration: none;
+}
+
+a tt.warnings small {
+	color: #888;
+}
+
+.btab td.pos_reputation { background-color: #efe; color: #060; }
+.btab td.neg_reputation { background-color: #fee; color: #900; }
+.btab tr.pos_reputation td { background-color: #efe; color: #060; }
+.btab tr.neg_reputation td { background-color: #fee; color: #900; }
+
+.w200 ul {
+	font: 8pt Verdana;
+	padding-left: 16px;
+	margin: 0;
+}
+
+.float_left {
+	float: left;
+	display: inline; 
+}
+
+.float_right {
+	float: right;
+	display: inline; 
+}
+
+h1.html, h2.html, h3.html, h4.html {
+	color: #358;
+}
+
+blockquote .box {
+	background-color: white;
+}
+
+.warning_note {
+	clear: both;
+	border: 1px solid red !important;
+	padding: 4px;
+	margin: 4px 0;
+	background-color: #ffdfd0 !important;
+	font-size: xx-small;
+	color: red !important;
+	text-align: right;
+}
+
+.yellow_box, .edited_note {
+	clear: both;
+	border: 1px solid #cc9;
+	padding: 2px;
+	margin: 2px 0;
+	background-color: #ffc;
+	font-size: xx-small;
+	color: #884;
+}
+
+.edited_note {
+	text-align: right;
+	padding: 1px;
+}
+
+li.postquote {
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+dl dd li.postquote a {
+	color: blue;
+}
+
+.coordinators {
+	visibility: hidden;
+}
+
+img.flag {
+	width: 20px;
+	height: 12px;
+	border: none;
+	vertical-align: middle;
+}
+
+img.smile, img.nob {
+	border: none;
+}
+
+img.rep, img.warn {
+	width: 100px;
+	height: 16px;
+	border: none;
+}
+
+td.now { font-weight: bold; }
+
+img { border: none; }
+
+dt div.colleft-100 {
+/*	margin-right: 110px; */
+	min-width: 300px;
+	float: left;
+	display: inline;
+}
+
+dt div.colright-100 {
+	right: 0px;
+	width: 100px;
+	float: right;
+	display: inline;
+	text-align: right;
+}
+
+dt span.colleft-100 {
+	min-width: 300px;
+	float: left;
+}
+
+dt span.colright-100 {
+	right: 0px;
+	width: 100px;
+	float: right;
+	text-align: right;
+}
+
+.left { text-align: left !important; }
+.half-transparent { opacity: 0.4; }
+
+.img_middle img { vertical-align: middle !important; }
+
+.red { color: red !important; }
+.b { font-weight: bold; }
+.nobr { white-space: nowrap; }
+
+.code {
+	background: white;
+	border: 1px solid #9bd;
+	margin-top: 0;
+	padding-left: 4px;
+	font-size: 12pt;
+}
+
+.code-head {
+	background: #9bd;
+	color: white;
+	border-top: 1px solid #9bd;
+	border-left: 1px solid #9bd;
+	border-right: 1px solid #9bd;
+	margin-bottom: 0;
+	font-weight: bold;
+	padding-left: 20px;
+	font-size: 14pt;
+}
+
+.top-ad {
+	text-align: center;
+	margin: 10px;
+	width: 738px;
+	height: 98px;
+}

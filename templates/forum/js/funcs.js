@@ -149,3 +149,6 @@ function warn_icon(o, uid) {
 if(top.me_is_coordinator)
 	document.write('<a href="http://balancer.ru/admin/users/'+uid+'/warnings.html?object='+o+'"><img src="http://balancer.ru/img/web/skull.gif"></a>')
 }
+
+// Изменяем контент индикатора рейтинга сообщения
+function ptrch(p,t) { $("#ptr"+p).load("http://balancer.ru/_bors/ajax/thumb-"+t+"?object=forum_post://"+p); }
