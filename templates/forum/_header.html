@@ -6,14 +6,19 @@
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
 	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
+<!--[if IE]><link href="/_bors/css/bors/ie.css" rel="stylesheet" media="all" /><![endif]-->
+<!--[if IE 6]><link href="/_bors/css/bors/ie6.css" rel="stylesheet" media="all" /><![endif]-->
+<!--[if IE 7]><link href="/_bors/css/bors/ie7.css" rel="stylesheet" media="all" /><![endif]-->
 	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
 <link rel="stylesheet" type="text/css" href="/_bors/css/main6.css" />
+
+{if not $jquery_has_added}<script type="text/javascript" src="/_bors/js/jquery.js"></script>{/if}
 
 {foreach from=$js_include item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
 
-	<script type="text/javascript" src="/_bors/js/funcs2.js"></script>
+	<script type="text/javascript" src="/_bors/js/funcs3.js"></script>
 	<script type="text/javascript" src="/_bors/js/tune.js"></script>
 	<script type="text/javascript" src="/_bors/js/cfuncs.js"></script>
 

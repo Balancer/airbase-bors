@@ -151,10 +151,10 @@ if(top.me_is_coordinator)
 }
 
 // Изменяем контент индикатора рейтинга сообщения
-function ptrch(p,t) { $("#ptr"+p).load("http://balancer.ru/_bors/ajax/thumb-"+t+"?object=forum_post://"+p); }
+function ptrch(p,t) { $("#ptr"+p).load("/_bors/ajax/thumb-"+t+"?object=forum_post://"+p); }
 
 // Делаем выпадушку внизу сообщений
-function pdsh(p) { $("#pfo"+p).load("http://balancer.ru/_bors/ajax/post-footer-tools?object=forum_post://"+p); }
+function pdsh(p) { $("#pfo"+p).load("/_bors/ajax/post-footer-tools?object=forum_post://"+p); }
 
 function addLoadEvent(func) {
    var oldonload = window.onload;

@@ -150,10 +150,8 @@ if(top.me_is_coordinator)
 	document.write('<a href="http://balancer.ru/admin/users/'+uid+'/warnings.html?object='+o+'"><img src="http://balancer.ru/img/web/skull.gif"></a>')
 }
 
-// Изменяем контент индикатора рейтинга сообщения
-function ptrch(p,t) { $("#ptr"+p).load("http://balancer.ru/_bors/ajax/thumb-"+t+"?object=forum_post://"+p); }
+function ptrch(p,t) { $("#ptr"+p).load("/_bors/ajax/thumb-"+t+"?object=forum_post://"+p); }
 
-// Делаем выпадушку внизу сообщений
 function pdsh(p)
 {
 	o=$("#pfo"+p);
@@ -162,7 +160,7 @@ function pdsh(p)
 	else
 	{
 		o.html('Загружаю...');
-		o.load("http://balancer.ru/_bors/ajax/post-footer-tools?object=forum_post://"+p);
+		o.load("/_bors/ajax/post-footer-tools?object=forum_post://"+p);
 	}
 }
 
