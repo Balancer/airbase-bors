@@ -18,24 +18,26 @@
 <div class="post pby{$p->owner_id()}{if $a} pby{$a->id()}{/if}">
 <div class="head">
 <div class="to-left">
-{$p->flag()} {if $show_title}{$show_title} {/if}{if not $skip_author_name}{$p->author_name()}{/if}{if not $skip_date}, <a href="{$p->url()}">{$p->create_time()|full_time}</a>{/if}
-{if not $no_show_answers and $p->answer_to_id()}
-<span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>
-{/if}
+{$p->flag()}
+{if $show_title}{$show_title} {/if}
+{if not $skip_author_name}{$p->author_name()}{/if}
+{if not $skip_date}, <a href="{$p->url()}">{$p->create_time()|full_time}</a>{/if}
+{if not $no_show_answers and $p->answer_to_id()}<span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>{/if}
 {if $forum} <small>// {$forum->titled_url()}</small>{/if}
 </div>
 
 {if not $skip_votes}
 <div class="to-right">
-<div class="to-left"><img src="/_bors/i/thumb_up.gif" onclick="ptrch({$p->id()},'up')"  /></div>
+<div class="to-left"><img src="/_bors/i/thumb_up.gif" onclick="ptrch({$p->id()},'up')"  alt="" width="16" height="16" /></div>
 <div id="ptr{$p->id()}" class="to-left">{if $p->score() != NULL}{$p->score_colorized()}{/if}</div>
-<div class="to-left"><img src="/_bors/i/thumb_down.gif" onclick="ptrch({$p->id()},'down')" /></div>
+<div class="to-left"><img src="/_bors/i/thumb_down.gif" onclick="ptrch({$p->id()},'down')" alt="" width="16" height="16" /></div>
 <div class="half-transparent to-left">{$p->imaged_edit_url()}</div>
 </div>
 {/if}
 
 <div class="clear">&nbsp;</div>
 </div>{*/head*}
+
 <div class="body">
 {if $owner and not $skip_avatar_block}<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>{/if}
 {if $strip}
@@ -68,10 +70,22 @@
 Это сообщение редактировалось {$p->edited()|strftime:"%d.%m.%Y в %H:%M"}
 </div>{/if}
 
+{if $p->warning()}<div class="warning_note">
+<b>{$p->warning()|get:moderator_name}:</b> предупреждение ({$p->warning()|get:score})
+{if $p->warning()|get:type_id} по категории «<b>{$p->warning()|get:type_id|bors_list_item_name:"airbase_user_warning_type"}</b>»
+{if $p->warning()|get:source}(<i>{$p->warning()|get:source}</i>){/if}
+{/if}.
+</div>{/if}
+
+
 <ul class="postfooter">
-<li><a href="#" onclick="pdsh('{$p->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" />&nbsp;инструменты</a></li>
+<li><script type="text/javascript"><!--
+if(top.me_is_coordinator)
+document.writeln('<label><input type="checkbox" id="_chkbx_p{$p->id()}" onclick="return apfgp(this, {$p->id()})" />&nbsp;отметить</label>')
+--></script></li>
+<li><a href="#" onclick="pdsh('{$p->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;инструменты</a></li>
 <li class="pages_select">
- <a href="{$this->forum()->category()->url()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
+ <a href="{$p->topic()->forum()->category()->url()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
   class="current_page">Ответить на сообщение</a>
 </li>
 </ul>

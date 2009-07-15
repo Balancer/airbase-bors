@@ -11,6 +11,9 @@ $map = array(
 
 	'.*/\w+\.phtml => base_page_hts(url)',
 
+	'/_bors/ajax/thumb\-(up|down)\?object=(.+) => balancer_ajax_thumb_vote(2,vote=1)',
+	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
+
 	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => forum_topic(1,2)',
 	'.*viewtopic\.php\?id=(\d+).* => forum_topic(1)',
 	'.*viewforum\.php\?id=(\d+).* => forum_forum(1)',

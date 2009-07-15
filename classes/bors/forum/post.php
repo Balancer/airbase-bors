@@ -589,7 +589,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			$score = "+{$score}";
 
 		if($positives && $negatives)
-			$rate = " <small>(<span style=\"color:green\">+{$positives}</spam>/<span style=\"color:red\">-{$negatives}</span>)</small>";
+			$rate = " <small>(<span style=\"color:green\">+{$positives}</span>/<span style=\"color:red\">-{$negatives}</span>)</small>";
 		else
 			$rate = "";
 

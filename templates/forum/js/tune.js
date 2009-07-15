@@ -34,11 +34,12 @@ function onLoadPage()
 		}
 	}
 
-	var spans = document.getElementsByTagName("span");
-	for(var i=0; i<spans.length; i++)
-	{
-		var span = spans[i];
-		if(m = span.innerHTML.match(/<!\-\-([\s\S]*)\-\->/m))
-			span.innerHTML = m[1]
-	}
+	$("span").each(
+		function()
+		{
+			x = $(this)
+ 			if(m = x.html().match(/^<!\-\-([\s\S]*)\-\->$/m))
+				x.html(m[1])
+		}
+	)
 }

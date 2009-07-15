@@ -1,0 +1,12 @@
+<dl class="box">
+<dt>Худшие {$lowest|@count} сообщений форума</dt>
+<dd>
+{foreach from=$lowest item="x"}
+{assign var="p" value=$x->object()}
+&nbsp;&nbsp;&nbsp;
+{if $p->warning_id() >0}<s>{/if}
+<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$p->titled_url()} {$p->score_colorized()}<br/>
+{if $p->warning_id() >0}</s>{/if}
+{/foreach}
+</dd>
+</dl>
