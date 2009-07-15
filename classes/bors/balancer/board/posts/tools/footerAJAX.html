@@ -1,0 +1,50 @@
+<div class="footer-info">
+
+{*
+<div class="to-right">
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<a href="#" onclick="$('#pfo'+{$id}).html('')">закрыть окно <img src="/_bors/i/close.gif" align="absmiddle"/>
+</a>
+</div>
+*}
+
+{if $me->is_coordinator()}
+<script type="text/javascript" src="/_bors/js/funcs3.js"></script>
+<script type="text/javascript" src="/_bors/js/coordinators.js"></script>
+
+<h6>Инструменты координатора</h6>
+<ul>
+<li><a href="http://balancer.ru/admin/users/{$owner_id}/warnings.html?object={$p->internal_uri()}"><img src="http://balancer.ru/img/web/skull.gif" />&nbsp;Выставить штраф пользователю за это сообщение</a></li>
+<li><a href="http://balancer.ru/admin/forum/post/{$id}/as-new-topic">Вынести сообщение со всеми ответами в <b>новую</b> тему</a></li>
+<li><a href="http://balancer.ru/admin/forum/post/{$id}/move-tree">Перенести сообщение со всеми ответами в <b>другую</b>, уже имеющуюся тему</a></li>
+<li><a href="http://balancer.ru/forum/tools/post/{$id}/">Старая страница инструментов</a></li>
+<li><input type="checkbox" id="_chkbx_p{$p->id()}" onclick="return apfgp(this, {$p->id()})"{if $smarty.cookies.selected_posts|regex_match:$id} checked="checked"{/if} /><label for="_chkbx_p{$p->id()}">&nbsp;Отметить тему для переноса</label></li>
+<li><a href="http://balancer.ru/admin/forum/posts/move-tree">Перенести все отмеченные сообщения в другую тему</a></li>
+{if $me->is_admin()}<li><a href="http://balancer.ru/forum/punbb/delete.php?id={$id}">Удалить это сообщение</a></li>{/if}
+</ul>
+
+<h6>Информация для координаторов</h6>
+<ul>
+<li>IP адрес: {$p->poster_ip()}</li>
+<li>User-Agent: {$p->poster_ua()}</li>
+</ul>
+
+{/if}{*/is_coordinator*}
+
+{if $me->id() == $p->owner_id || $me->is_admin()}
+<h6>Инструменты автора темы</h6>
+<ul>
+<li>{$p->admin()->imaged_edit_link('Редактировать')}</li>
+</ul>
+{/if}
+
+<h6>Инструменты посетителя</h6>
+<ul>
+<li><a href="#" onclick="ptrch({$id},'up')"><img src="/_bors/i/thumb_up.gif" /> Одобрить это сообщение</a></li>
+<li><a href="#" onclick="ptrch({$id},'down')"><img src="/_bors/i/thumb_down.gif" /> Неодобрить это сообщение</a></li>
+<li><a href="http://balancer.ru/user/{$p->owner_id()}/reputation.html?{$p->url()}">Изменить репутацию автора за это сообщение</a></li>
+<li><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить о нарушении модераторам</a></li>
+<li><a href="http://balancer.ru/forum/user-{$p->owner_id()}-posts-in-topic-{$p->id()}/">Показать все сообщения данного пользователя в данной теме</a></li>
+<li><a href="http://balancer.ru/admin/forum/post/{$id}/do-drop-cache.bas">Сбросить кеш этого сообщения</a></li>
+</ul>
+</div>

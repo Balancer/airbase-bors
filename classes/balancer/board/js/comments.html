@@ -1,0 +1,10 @@
+<h2>Комментарии</h2>
+{if $last_posts}
+<ul>
+{foreach from=$last_posts item="p"}
+<li>{$p->titled_url()}</li>
+{/foreach}
+</ul>
+{else}
+<a href="{$topic->url()}">добавить комментарий на форуме</a>
+{/if}
