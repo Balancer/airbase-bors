@@ -156,10 +156,11 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		$data['this'] = $this;
 
-//		if(debug_is_balancer())
-			return template_assign_data("xfile:forum/topic.html", $data);
-//		else
 //			return template_assign_data("templates/TopicBody.html", $data);
+//		if(debug_is_balancer())
+//			return template_assign_data("xfile:forum/topic2.html", $data);
+//		else
+			return template_assign_data("xfile:forum/topic.html", $data);
 	}
 
 	private $__all_posts_ids;

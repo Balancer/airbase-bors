@@ -7,6 +7,7 @@
 	$skip_author_name
 	$skip_avatar_block
 	$skip_date
+	$skip_votes - не рисовать иконки в заголовке
 	$skip_message_footer
 	$strip - сколько резать символов.
 *}
@@ -24,12 +25,14 @@
 {if $forum} <small>// {$forum->titled_url()}</small>{/if}
 </div>
 
+{if not $skip_votes}
 <div class="to-right">
 <div class="to-left"><img src="/_bors/i/thumb_up.gif" onclick="ptrch({$p->id()},'up')"  /></div>
 <div id="ptr{$p->id()}" class="to-left">{if $p->score() != NULL}{$p->score_colorized()}{/if}</div>
 <div class="to-left"><img src="/_bors/i/thumb_down.gif" onclick="ptrch({$p->id()},'down')" /></div>
 <div class="half-transparent to-left">{$p->imaged_edit_url()}</div>
 </div>
+{/if}
 
 <div class="clear">&nbsp;</div>
 </div>{*/head*}
@@ -66,24 +69,14 @@
 </div>{/if}
 
 <ul class="postfooter">
-<li><a href="http://balancer.ru/user/{$p->owner_id()}/reputation.html?{$p->url()}">Репутация автору</a></li>
-<li>|</li>
-<li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
-<li class="postdelete"><a href="http://balancer.ru/forum/tools/post/{$p->id()}/">Инструменты</a></li>
-{if $this->is_public_access() and $owner}<li><script type="text/javascript">warn_icon('{$p->internal_uri()}', {$owner->id()})</script></li>{/if}
-<li>{$p->imaged_edit_url()}Редактор</li>
-<li>|</li>
+<li><a href="#" onclick="pdsh('{$p->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" />&nbsp;инструменты</a></li>
 <li class="pages_select">
  <a href="{$this->forum()->category()->url()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
   class="current_page">Ответить на сообщение</a>
 </li>
 </ul>
 
-<ul class="postfooter coordinators">
-<li>Групповые операции:</li>
-<li><input type="checkbox" id="_chkbx_p{$p->id()}" onclick="return apfgp(this, {$p->id()})" /><label for="_chkbx_p{$p->id()}">&nbsp;отметить</label></li>
-<li> | <a href="/admin/forum/posts/move-tree">перенос в другую тему</a></li>
-</ul>
+<div id="pfo{$p->id()}"></div>
 
 {else}
 <div class="clear">&nbsp;</div>

@@ -73,8 +73,19 @@ a.external {
 	font-family: monospace;
 }
 
-dl.forumposting {border: 1px solid #0066cc; margin: 10px 4px 4px 4px; padding: 0px; background-color: #e8f0fc;}
-dl.forumposting dt, dl.forumposting dt a {margin: 0px; color: #ffffff; background-color: #0066cc; padding: 1px; font-size: 10pt; font-weight: bold; font-family: Verdana, sans-serif;}
-dl.forumposting dd {font-size: 10pt; text-align: justify; padding: 2px;}
-dl.forumposting dt a {color: #ffffd0;}
+div.post {
+	border: 1px solid #06c;
+	background-color: #ffffff;
+}
 
+div.post div.head, div.post div.head a {
+	border-bottom: 1px solid #06c;
+	background-color: #06c; 
+	color: #fff;
+}
+
+div.post div.head a {
+	border-bottom: 1px solid #06c;
+	background-color: #06c;
+	color: #ffffd0;
+}

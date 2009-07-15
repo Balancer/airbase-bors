@@ -1,0 +1,17 @@
+{foreach from=$links item="x"}
+<div style="white-space: nowrap;">
+ <span>
+  {if $x.indent > 4}{assign var="x.indent" value=4}{/if}
+  {if $x.indent}{""|indent:$x.indent:"&nbsp;"}{/if}
+  {assign var="img" value="mimetypes/empty"}
+  {if $x.here}{assign var="img" value="status/folder-visiting"}{/if}
+  {if $x.children_count}
+   {assign var="img" value="places/folder"}
+   {if $x.here}
+    {assign var="img" value="status/folder-open"}
+   {/if}
+  {/if}
+<a href="{$x.obj->url()}" class="plain" title="{$x.obj->title()|htmlspecialchars}"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/{$img}.png" alt="*" title="{$x.obj->title()|htmlspecialchars}" height="16" width="16" border="0" /></a>&nbsp;<a href="{$x.obj->url()|htmlspecialchars}" class="plain" title="{$x.obj->title()}">{$x.obj->nav_name()}</a>
+ </span>
+</div>
+{/foreach}

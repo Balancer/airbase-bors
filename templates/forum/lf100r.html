@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>left fixed, right fluid, with min-width</title>
+<style type="text/css">
+body {
+	margin: 10px;
+	padding: 0;
+	color: #000;
+	background-color: #fff;
+	font-family: Georgia, serif;
+	font-size: 100%;
+}
+.clear {
+	clear: both;
+}
+.alignright {
+	text-align: right;
+}
+.wide {
+	background-color: #ffc;
+}
+.top {
+	border-bottom: 1px solid #000;
+}
+.bottom {
+	border-top: 1px solid #000;
+	padding-bottom: 1px;
+}
+.testfloat {
+	width: 50px;
+	border: 2px solid #f90;
+	background-color: #ffd;
+	font-size: .8em;
+}
+.to-right {
+	float: right;
+}
+.to-left {
+	float: left;
+}
+
+.wrapper {
+	background-color: #cce;
+	border: 1px solid #000;
+}
+.outer {
+	margin-left: 200px;  /* L */
+	border-left: 1px solid #000;
+	background-color: #fcd;
+}
+.center {
+	float: right;
+	width: 100%;
+	margin-left: -1px;
+}
+.left {
+	float: left;
+	position: relative;
+	width: 200px;  /* L */
+	margin-left: -201px;  /* -L-1 */
+	margin-right: 2px;
+}
+.minwidth {
+	min-width: 404px;
+}
+
+/* previene allargamento floats (hidden) \*//*/
+.inleft, .incenter {
+	width: 100%;
+	overflow: hidden;
+}
+.center {
+	margin-left: 0;
+}
+.left {
+	margin-right: 1px;
+}
+.minwidth {
+	border-left: 404px solid #fff;
+}
+.wrapper {
+	margin-left: -404px;
+}
+/**/
+
+.outer {
+	word-wrap: break-word;
+}
+p, h1, h2, h3 {
+	margin: 0 0 1em 0;
+	border: 1px solid red;
+}
+</style>
+<!--[if IE]><style>
+.outer, .wide, h2, .wrapper, .minwidth {
+	height: 0;
+	he\ight: auto;
+	zoom: 1;
+}
+</style><![endif]-->
+<!--[if lt IE 7]><style>
+.minwidth {
+	border-left: 404px solid #fff;
+}
+.wrapper {
+	margin-left: -404px;
+	position: relative;
+}
+</style><![endif]-->
+</head>
+
+
+<body>
+<div class="minwidth"><div class="wrapper">
+
+<div class="wide top">
+	<h1>left fixed, right fluid</h1>
+	<p>Based on <a href="http://www.positioniseverything.net/piefecta-rigid.html">Big John's Piefecta</a>, with min-width</p>
+</div>
+
+<div class="outer">
+
+	<div class="center"><div class="incenter">
+		<h2>First in source</h2>
+		<p>This center col is first in the source, being a right float. The left col (second in source) is floated left in the same wrapper.
+		</p>
+		<p>The headings and paragraphs are widthless and have 1px red borders to show any width problems in the columns.
+		</p>
+		<h3>Some Of The Features</h3>
+		<div class="testfloat to-right">Here is a right float test box.</div>
+		<p>Any column may be longest. All the columns are floated.
+		</p>
+		<p><a href="lfcE.html">With oversized content</a> in this center column to check how the layout breaks, with the IE/Win &ldquo;box expansion&rdquo;</p>
+		<p>This is a <a href="/test/indext1.shtml">test link</a>. <!-- This is here to make this column longer. This is here to make this column longer. This is here to make this column longer. This is here to make this column longer. This is here to make this column longer. -->
+		</p>
+	</div></div> <!-- end center div -->
+
+	<div class="left"><div class="inleft">
+		<h2>Second in source</h2>
+		<div class="testfloat to-left">Here is a left float test box.</div>
+		<p class="alignright">This col is floated and also negatively margined to the left, so it is "pulled" out of its container except for a single pixel that is kept within the container.
+		</p>
+		<div class="testfloat to-right">Here is a right float test box.</div>
+		<p class="alignright">This layout works in: IE5+/Win, Opera 6+, Mozilla, IE5/Mac, Safari.
+		</p>
+		<p>This is a <a href="/test/indext1.shtml">test link</a>. <!-- This is here to make this column longer. This is here to make this column longer. This is here to make this column longer. This is here to make this column longer. This is here to make this column longer. -->
+		</p>
+	</div></div> <!-- end left div -->
+
+	<br class="clear" />
+</div> <!-- end outer div -->
+
+<div class="wide bottom">
+	<p>bottom</p>
+	<p><a href="./">CSS tests home</a></p>
+</div>
+
+</div></div>
+</body>
+
+</html>
