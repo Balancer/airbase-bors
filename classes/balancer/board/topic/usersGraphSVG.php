@@ -108,6 +108,18 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 						)
 					);
 				}
+
+				if(empty($users[$from_id]))
+				{
+					$user = object_load('forum_user', $from_id);
+					$graph->addNode(
+						$from_id,
+						array(
+							'URL'   => "http://balancer.ru/forum/user-{$from_id}-posts-in-topic-{$this->id()}/",
+							'label' => $user ? $user->title() : $from_id,
+						)
+					);
+				}
 				
 				$graph->addEdge(
 					array(
