@@ -97,13 +97,25 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 		{
 			foreach($to_ids as $to_id => $x)
 			{
+				if(empty($users[$to_id]))
+				{
+					$user = object_load('forum_user', $to_id);
+					$graph->addNode(
+						$to_id,
+						array(
+							'URL'   => "http://balancer.ru/forum/user-{$to_id}-posts-in-topic-{$this->id()}/",
+							'label' => $user ? $user->title() : $to_id,
+						)
+					);
+				}
+				
 				$graph->addEdge(
 					array(
 						$from_id => $to_id,
 					),
 
 					array(
-						'label' => $x['count'],
+						'label' => $x['count'] > 1 ? $x['count'] : ' ',
 						'arrowhead' => $this->args('ordered') ? 'normal' : 'none',
 						'penwidth' => pow($x['count']/$max, 0.25)*4,
 //						'style' => 'dashed',

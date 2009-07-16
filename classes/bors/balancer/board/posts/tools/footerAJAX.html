@@ -11,7 +11,7 @@
 <li><a href="http://balancer.ru/admin/forum/post/{$id}/move-tree">Перенести сообщение со всеми ответами в <b>другую</b>, уже имеющуюся тему</a></li>
 <li><a href="http://balancer.ru/forum/tools/post/{$id}/">Старая страница инструментов</a></li>
 {* <li><input type="checkbox" id="_chkbx_p{$id}" onclick="return apfgp(this, {$id})"{if $smarty.cookies.selected_posts|regex_match:$id} checked="checked"{/if} /><label for="_chkbx_p{$id}">&nbsp;Отметить тему для переноса</label></li> *}
-<li><a href="http://balancer.ru/admin/forum/posts/move-tree">Перенести все <b>отмеченные</b> сообщения в другую тему</a></li>
+<li><a href="/admin/forum/posts/move-tree">Перенести все <b>отмеченные</b> сообщения в другую тему</a></li>
 {if $me->is_admin()}<li><a href="http://balancer.ru/forum/punbb/delete.php?id={$id}">Удалить это сообщение</a></li>{/if}
 </ul>
 
