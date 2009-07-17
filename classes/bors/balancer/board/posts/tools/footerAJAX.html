@@ -6,6 +6,7 @@
 
 <h6>Инструменты координатора</h6>
 <ul>
+<li{if $overquote_crit} style="color:red!important"{/if}>Уровень цитирования: {$overquote}%</li>
 <li><a href="http://balancer.ru/admin/users/{$owner_id}/warnings.html?object={$p->internal_uri()}"><img src="http://balancer.ru/img/web/skull.gif" />&nbsp;Выставить штраф пользователю за это сообщение</a></li>
 <li><a href="http://balancer.ru/admin/forum/post/{$id}/as-new-topic">Вынести сообщение со всеми ответами в <b>новую</b> тему</a></li>
 <li><a href="http://balancer.ru/admin/forum/post/{$id}/move-tree">Перенести сообщение со всеми ответами в <b>другую</b>, уже имеющуюся тему</a></li>

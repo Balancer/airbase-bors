@@ -79,14 +79,6 @@ function set_original_id($v, $dbup) { return $this->set('original_id', $v, $dbup
 function skip_common() { return @$this->data['skip_common']; }
 function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup); }
 
-	function __construct($id)
-	{
-		if(!$id)
-			debug_hidden_log('classes-error', 'Try to load empty forum');
-			
-		parent::__construct($id);
-	}
-
 	function init()
 	{
 		if(!$this->id())

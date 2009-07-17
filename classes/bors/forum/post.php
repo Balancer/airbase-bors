@@ -259,7 +259,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		}
 
 		if((!$out_browser || !$out_os) && $this->poster_ua())
-			debug_hidden_log("user_agent", "Unknown user agent: ".$this->poster_ua()." in post ".$this->id());
+			debug_hidden_log("user_agent", "Unknown user agent: '".$this->poster_ua()."' in post ".$this->id());
 		
 		return '<span title="'.htmlspecialchars($this->poster_ua()).'">'.$out_browser.$out_os.'</span>';
 	}
@@ -293,8 +293,11 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
 
 			$topic = object_load('forum_topic', $tid);
+			
+			if(!$topic)
+				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
 		}
-	
+
 		if(!$topic->is_repaged())
 		{
 			$topic->repaging_posts();
