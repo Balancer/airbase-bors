@@ -422,27 +422,16 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function repaging_posts($page = NULL)
 	{
-		$total = $this->total_pages();
-	
-		if(!$page || !$this->is_repaged())
-			$page = 1;
-		elseif($page == -1)
-			$page = $total;
+		// set @rownum=0; 
+		// UPDATE posts t, (SELECT @rownum:=@rownum+1 rownum, posts.* FROM posts WHERE posts.topic_id = 52776 ORDER BY posts.`order`, posts.id) tmp SET t.page = floor((tmp.rownum-1)/25)+1 WHERE (t.id = tmp.id);
 
-		if($page == $total)
-		{
-			foreach($this->posts($page, false) as $post)
-				$post->set_topic_page($page, true);
- 		}
-		else
-		{
-			$posts = $this->all_posts();
-
-			for($page; $page <= $total; $page++)
-				foreach(array_slice($posts, ($page - 1) * $this->items_per_page(), $this->items_per_page()) as $post)
-					$post->set_topic_page($page, true);
-		}
-		
+		bors()->changed_save();
+		$dbh = new driver_mysql($this->main_db());
+		$dbh->query('SET @rownum=-1');
+		$dbh->query("UPDATE posts p, 
+			(SELECT @rownum:=@rownum+1 rownum, posts.* FROM posts WHERE posts.topic_id = {$this->id()}
+				ORDER BY posts.`order`, posts.id) tmp 
+			SET p.page = floor(tmp.rownum/{$this->items_per_page()})+1 WHERE (p.id = tmp.id);");
 		$this->set_is_repaged(1, true);
 	}
 

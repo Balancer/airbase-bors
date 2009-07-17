@@ -456,15 +456,10 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	
 	function move_tree_to_topic($new_tid)
 	{
-//		echo "Post {$this->id()}: create_time=".strftime("%c", $this->create_time()).", modify_time=".strftime("%c", $this->modify_time(true)).", change_time=".strftime("%c", $this->change_time(true))."<br />\n";
-//		bors_exit();
-	
 		$GLOBALS['move_tree_to_topic_changed_topics'] = array();
 	
 		$this->__move_tree_to_topic($new_tid, $this->topic_id());
 		
-//		print_r($GLOBALS['move_tree_to_topic_changed_topics']);
-
 		foreach(array_keys($GLOBALS['move_tree_to_topic_changed_topics']) as $tid)
 			object_load('forum_topic', $tid, array('no_load_cache' => true))->recalculate();
 	}

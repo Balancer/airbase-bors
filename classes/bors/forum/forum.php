@@ -245,7 +245,6 @@ function parents()
 			$dbh = new driver_mysql($this->main_db());
 			$subforum_ids = $dbh->select_array('forums', 'id', array("tree_position LIKE '{$this->tree_position()}{$this->id()}>%'"));
 			$dbh->close();
-			print_d($subforum_ids);
 			$subforum_ids = array();
 			return $this->set_attr('all_readable_subforum_ids', $subforum_ids);
 		}
