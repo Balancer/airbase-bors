@@ -100,15 +100,19 @@ class balancer_board_users_reputationGraphSVG extends base_image_svg
 				if(!empty($x['score-1']))
 					$tooltip[] = '-'.$x['score-1'];
 	
+				$tooltip = join('/', $tooltip);
+				if($tooltip == '+1' || $tooltip == '-1')
+					$tooltip = ' ';
+	
 				$graph->addEdge(
 					array(
 						$from_id => $to_id,
 					),
 
 					array(
-						'label' => join('/', $tooltip),
+						'label' => $tooltip,
 						'penwidth' => pow(abs($x['count'])/$max, 0.5)*3,
-//						'weight' => pow(@$x['score1'] + @$x['score-1'], 8),
+						'weight' => pow(@$x['score1'] + @$x['score-1'], 8),
 						'color' => $score > 0 ? '#00ff00' : ($score < 0 ? '#ff0000' : 'black'),
 					)
 				);

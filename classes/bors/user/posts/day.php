@@ -23,7 +23,9 @@ class user_posts_day extends base_page
 			$page = date('Y/m/d', $min);
 		}
 
-		list($this->year, $this->month, $this->day) = explode('/', $page);
+		@list($this->year, $this->month, $this->day) = @explode('/', $page);
+		if(empty($this->day))
+			debug_hidden_log('__trap', 'empty day in '.$page);
 
 		return parent::_configure();
 	}

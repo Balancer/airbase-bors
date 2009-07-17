@@ -429,8 +429,6 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		elseif($page == -1)
 			$page = $total;
 
-		$posts = $this->all_posts();
-
 		if($page == $total)
 		{
 			foreach($this->posts($page, false) as $post)
@@ -438,6 +436,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
  		}
 		else
 		{
+			$posts = $this->all_posts();
+
 			for($page; $page <= $total; $page++)
 				foreach(array_slice($posts, ($page - 1) * $this->items_per_page(), $this->items_per_page()) as $post)
 					$post->set_topic_page($page, true);

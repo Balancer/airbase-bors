@@ -15,10 +15,39 @@ class balancer_board_posts_tools_footerAJAX extends base_page
 
 	function local_data()
 	{
+		$x = $this->object();
+		$over = bors_overquote_rate($x->source());
+	
 		return array(
-			'p' => $this->object(),
-			'id' => $this->object()->id(),
-			'owner_id' => $this->object()->owner_id(),
+			'p' => $x,
+			'overquote' => $over,
+			'overquote_crit' => ($over > 60),
+			'id' => $x->id(),
+			'owner_id' => $x->owner_id(),
 		);
 	}
+}
+
+function bors_overquote_rate($text)
+{
+	if(bors_strlen($text) <= 400)
+		return 0;
+	
+	$q = 0;
+	$a = 0;
+	foreach(explode("\n", $text) as $s)
+	{
+		$s = trim($s);
+		if($s == '')
+			continue;
+		if(preg_match('/^\S+>/', $s))
+			$q += bors_strlen($s);
+		else
+			$a += bors_strlen($s);
+	}
+
+	if($a == 0)
+		return 100;
+
+	return sprintf('%.1f', $q/($a+$q)*100);
 }

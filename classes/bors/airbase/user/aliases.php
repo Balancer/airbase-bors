@@ -7,8 +7,10 @@ class airbase_user_aliases extends base_page
 	function user() { return object_load('bors_user', $this->id()); }
 	function can_be_empty() { return false; }
 	function loaded() { $this->init(); return $this->user(); }
-	function local_template_data_set()
+	function local_data()
 	{
+		templates_noindex();
+	
 		$last_post = $this->db('punbb')->select('posts', 'MAX(posted)', array('poster_id' => $this->id())) + 1;
 		$depth = $last_post-86400*30;
 

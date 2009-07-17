@@ -66,8 +66,9 @@ class balancer_board_keywords_tags extends base_page
 			.($page > 1 ? $page.'.html' : '');
 	}
 
-	function local_template_data_set()
+	function local_data()
 	{
+		templates_noindex();
 
 		return array(
 			'items' => array_slice($this->all_items(),
