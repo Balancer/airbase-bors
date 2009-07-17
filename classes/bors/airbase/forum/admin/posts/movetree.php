@@ -77,7 +77,7 @@ class airbase_forum_admin_posts_movetree extends base_page
 	   
 	   	SetCookie('selected_posts', NULL, 0, '/');
 
-		return bors_message_tpl("movetree.has_moved.html", $this, array(
+		return bors_message_tpl("xfile:movetree.has_moved.html", $this, array(
 			'title' => ec('Сообщения успешно перенесены'),
 			'new_topic' => $new_topic,
 		)); 
