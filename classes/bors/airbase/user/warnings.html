@@ -9,6 +9,7 @@
 </table>
 <input type="hidden" name="object" value="{$object->internal_uri()}" />
 <input type="hidden" name="user_id" value="{$this->id()}" />
+{go value=$object->url()}
 {/form}
 {/if}
 

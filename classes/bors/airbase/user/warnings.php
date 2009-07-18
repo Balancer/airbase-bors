@@ -18,7 +18,7 @@ class airbase_user_warnings extends base_page
 		return $this->user;
 	}
 
-	function local_template_data_set($skip_passive = false)
+	function local_data($skip_passive = false)
 	{
 		templates_noindex();
 		

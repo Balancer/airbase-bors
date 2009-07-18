@@ -4,9 +4,8 @@
 {form subaction="by_topic_id" id=$this->id()}
 {assign var="curtid" value=$this->topic|get:id}
 <select name="target_topic_id">
-{foreach from=$last_topics item="tid"}
-{bors_object_load class="forum_topic" id=$tid var="topic"}
-<option value="{$tid}"{if $tid==$curtid} selected="true"{/if}>{$topic->title()|truncate:40} [{$topic->forum()|get:title}]</option>
+{foreach from=$last_topics item="topic"}
+<option value="{$topic->id()}">{$topic->title()|truncate:40} [{$topic->forum()|get:title}]</option>
 {/foreach}
 </select> {submit value="Переместить"}
 <br />{checkbox name="dont_move_tree"}&nbsp;Не перемещать ответы на это сообщение

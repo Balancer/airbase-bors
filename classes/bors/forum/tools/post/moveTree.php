@@ -25,27 +25,35 @@ class forum_tools_post_moveTree extends base_page
 
 	function can_cache() { return false; }
 
-//	var $db;
-
-	function _queries()
+	function local_data()
 	{
+		$topics = array();
+		if(!empty($_SESSION['bba_last_target_topic_id']))
+			$topics[] = object_load('forum_topic', $_SESSION['bba_last_target_topic_id']);
+	
+		$topics = array_merge($topics, objects_array('forum_topic', array('order' => '-last_post' , 'limit' => 100)));
+	
 		return array(
-			'last_topics' => 'SELECT id FROM topics ORDER BY last_post DESC LIMIT 50',
+			'last_topics' => $topics,
 		);
 	}
 
 	function title() { return ec('Перемещение сообщения<br /><i>').$this->post->title().'</i>'; }
 	function nav_name() { return ec('Перемещение сообщения'); }
 
-	function target_topic_id() { return $this->post()->topic()->id(); }
-
-	function target_post_id() { return $this->post()->id(); }
+	function target_topic_id() { return @$_SESSION['bba_last_target_topic_id']; }
+	function target_post_id() { return ''; }
 
 	function url() { return 'http://balancer.ru/admin/forum/post/'.$this->id().'/move-tree'; }
 
 	function template() { return "forum/_header.html"; }
 
 	function access_engine() { return "forum_access_move"; }
+
+	function pre_parse()
+	{
+		session_register('bba_last_target_topic_id');
+	}
 
 	function on_action_by_topic_id(&$data)
 	{
@@ -61,15 +69,27 @@ class forum_tools_post_moveTree extends base_page
 		if(!$new_topic || !$new_topic->id())
 			return bors_message(ec('Тема с номером ').$tid.ec(' не существует'));
 
+		$_SESSION['bba_last_target_topic_id'] = $tid;
+
 		$this->topic = $new_topic;
+
+		$old_topic = $this->post()->topic();
 
 		if(empty($data['dont_move_tree']))
 			$this->post()->move_tree_to_topic($new_topic->id());
 		else
 			$this->post()->move_to_topic($new_topic->id());
 
+		if($old_topic->id() != $new_topic->id())
+		{
+			balancer_board_action::add($new_topic, "Перенос сообщений из {$old_topic->titled_url()}");
+			balancer_board_action::add($old_topic, "Перенос сообщений в {$new_topic->titled_url()}");
+		}
+		
 		return bors_message_tpl("moveTree.has_moved.html", $this, array(
 			'title' => ec('Сообщения успешно перенесены'),
+			'old_topic' => $old_topic,
+			'new_topic' => $new_topic,
 		)); 
 	}
 

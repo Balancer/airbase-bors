@@ -148,13 +148,21 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		$GLOBALS['cms']['cache_disabled'] = true;
 
 		require_once("engines/smarty/assign.php");
-		$data = array();
-
-		$data['posts'] = $this->posts();
+		$data = array(
+			'posts' => $this->posts(),
+			'last_actions' => objects_array('balancer_board_action', array(
+				'target_class_name' => $this->class_name(),
+				'target_object_id' => $this->id(),
+				'order' => 'create_time',
+				'limit' => 10,
+			)),
+			'is_last_page' => $this->page() == $this->total_pages(),
+		);
 
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");
 
 		bors_objects_preload($data['posts'], 'owner_id', 'forum_user', 'owner');
+		bors_objects_preload($data['last_actions'], 'owner_id', 'forum_user', 'owner');
 
 		$data['this'] = $this;
 		return template_assign_data("xfile:forum/topic.html", $data);
