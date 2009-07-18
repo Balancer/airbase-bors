@@ -154,13 +154,10 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");
 
-		$data['this'] = $this;
+		bors_objects_preload($data['posts'], 'owner_id', 'forum_user', 'owner');
 
-//			return template_assign_data("templates/TopicBody.html", $data);
-//		if(debug_is_balancer())
-//			return template_assign_data("xfile:forum/topic2.html", $data);
-//		else
-			return template_assign_data("xfile:forum/topic.html", $data);
+		$data['this'] = $this;
+		return template_assign_data("xfile:forum/topic.html", $data);
 	}
 
 	private $__all_posts_ids;
@@ -426,12 +423,19 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		// UPDATE posts t, (SELECT @rownum:=@rownum+1 rownum, posts.* FROM posts WHERE posts.topic_id = 52776 ORDER BY posts.`order`, posts.id) tmp SET t.page = floor((tmp.rownum-1)/25)+1 WHERE (t.id = tmp.id);
 
 		bors()->changed_save();
-		$dbh = new driver_mysql($this->main_db());
-		$dbh->query('SET @rownum=-1');
+//		$dbh = new driver_mysql($this->main_db());
+/*		$dbh->query('SET @rownum=-1');
 		$dbh->query("UPDATE posts p, 
 			(SELECT @rownum:=@rownum+1 rownum, posts.* FROM posts WHERE posts.topic_id = {$this->id()}
 				ORDER BY posts.`order`, posts.id) tmp 
 			SET p.page = floor(tmp.rownum/{$this->items_per_page()})+1 WHERE (p.id = tmp.id);");
+*/
+		$this->db()->query("
+			UPDATE posts AS t 
+				SET t.page = FLOOR((SELECT @rn:= @rn + 1 FROM (SELECT @rn:= -1) s)/{$this->items_per_page()})+1 
+				WHERE t.topic_id = {$this->id()}
+				ORDER BY t.`order`, t.`id`;
+		");
 		$this->set_is_repaged(1, true);
 	}
 
