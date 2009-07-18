@@ -455,4 +455,58 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 	{
 		return $this->is_admin();
 	}
+
+	function messages_daily_limit() // -1, если без ограничений.
+	{
+		$w = $this->warnings();
+
+		if($w <= 0)
+			return -1;
+
+		if($w >= 10)
+			return 0;
+
+		$offset = max(2, round(15 - (time() - 1247947991)/86400));
+
+		$limit = round(max(0, 15/($w*$w) * $this->reputation())) + $offset;
+		if($limit > 40)
+			return -1;
+			
+		return $limit;
+	}
+
+	function today_posted()
+	{
+		return $this->load_attr('today_posted', objects_count('forum_post', array(
+			'owner_id' => $this->id(), 
+			'create_time>' => time()-86400,
+		))); 
+	}
+
+	function today_posted_in_forum($forum_id)
+	{
+		return $this->load_attr('today_posted', objects_count('forum_post', array(
+			'owner_id' => $this->id(), 
+			'create_time>' => time()-86400,
+			'inner_join' => 'forum_topic ON (forum_post.topic_id = forum_topic.id)',
+			'forum_topic.forum_id=' => $forum_id,
+		))); 
+	}
+
+	function next_can_post($limit, $forum_id)
+	{
+		if($this->attr('next_can_post'))
+			return $this->attr('next_can_post');
+
+		$first_in_day = objects_first('forum_post', array(
+			'owner_id' => $this->id(), 
+			'create_time>' => time()-86400*2,
+			'order' => 'create_time',
+			'limit' => $limit,
+			'inner_join' => 'forum_topic ON (forum_post.topic_id = forum_topic.id)',
+			'forum_topic.forum_id=' => $forum_id,
+		));
+
+		return $this->set_attr('next_can_post', $first_in_day ? $first_in_day->create_time()+86400 : NULL);
+	}
 }
