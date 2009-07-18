@@ -142,10 +142,13 @@ div.post {
 	background-color: #ffffff;
 }
 
-div.post div.head, div.post div.head a {
-	border-bottom: 1px solid #9bd;
-	margin: 0px; 
+div.post div.head, div.post {
 	background-color: #def; 
+	border-bottom: 1px solid #9bd;
+}
+
+div.post div.head, div.post div.head a {
+	margin: 0px; 
 	padding: 1px; 
 	font-weight: 900;
 	font-size: 1.0em;
@@ -164,6 +167,7 @@ div.post div.body {
 	text-align: justify; 
 	padding: 4px; 
 	margin: 0px;
+	background-color: white;
 }
 
 a {
@@ -649,4 +653,9 @@ div.footer-info h6 {
 div.footer-info ul {
 	margin: 0;
 	padding: 0 0 0 20px;
+}
+
+div.moderatorial_post, div.moderatorial_post .head {
+	background-color: #fee !important;
+	border-color: #f88 !important;
 }

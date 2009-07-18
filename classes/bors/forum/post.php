@@ -41,6 +41,7 @@ class forum_post extends base_object_db
 			'have_cross',
 			'have_answers',
 			'score' => 'field2',
+			'is_moderatorial',
 		);
 	}
 

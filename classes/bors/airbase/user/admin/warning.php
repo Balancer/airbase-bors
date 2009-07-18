@@ -64,7 +64,39 @@ class airbase_user_admin_warning extends airbase_user_warning
 		$object = object_load($data['object']);
 		$object->set_warning_id($this->id(), true);
 		$object->cache_clean();
+
+		@unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
+		if($object->class_name() == 'forum_post')
+		{
+			$topic = $object->topic();
+			balancer_board_action::add($topic, "Предупреждение пользователю {$user->title()}: {$object->titled_url()}", true);
+		}
+	}
+
+	function delete()
+	{
+		$user = object_load('forum_user', $this->user_id());
+		$ret = parent::delete();
+		bors()->changed_save();
+
+		if($object->class_name() == 'forum_post')
+		{
+			$topic = $object->topic();
+			balancer_board_action::add($topic, "Отмена предупреждения пользователю {$user->title()}: {$object->titled_url()}", true);
+		}
+
+		$warnings = $this->db()->select('warnings', 'SUM(score)', array('user_id=' => $uid, 'time>' => time()-WARNING_DAYS*86400));
+		$warnings_total = $this->db()->select('warnings', 'SUM(score)', array('user_id=' => $uid));
+		$user->set_warnings($warnings + $data['score'], true);
+		$user->set_warnings_total($warnings_total + $data['score'], true);
+		$user->cache_clean();
+		object_load('users_topwarnings')->cache_clean();
+
+		$object = object_load($this->warn_class_id(), $this->warn_object_id());
+		$object->set_warning_id($this->id(), true);
+		$object->cache_clean();
 		
 		@unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
+		return $ret;
 	}
 }
