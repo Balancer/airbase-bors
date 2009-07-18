@@ -5,10 +5,24 @@ class forum_user extends base_object_db
 	function main_db() { return 'punbb'; }
 	function main_table() { return 'users'; }
 
+	static function id_prepare($id)
+	{
+		if($id != -1)
+			return $id;
+
+		if(!($cookie = @$_COOKIE['cookie_hash']))
+			return NULL;
+
+		return objects_first('forum_user', array('user_cookie_hash' => $cookie));
+	}
+
 	function __construct($id)
 	{
 		if($id == -1)
+		{
 			$id = $this->id_by_cookie();
+			debug_hidden_log('__critical', 'user_id is -1 =>'.$id);
+		}
 		
 		parent::__construct($id);
 	}

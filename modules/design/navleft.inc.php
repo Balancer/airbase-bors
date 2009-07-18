@@ -5,6 +5,9 @@
 
 		$obj = object_load($uri);
 
+		if(!$obj)
+			return '';
+
 		$children = $obj->children();
 
 		$data = array();
