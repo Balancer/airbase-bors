@@ -9,7 +9,7 @@
 {assign var="f" value=$t->forum()}
 {* assign var="p" value=$t->first_post() *}
 {if $f->is_public_access()}
-{include file="xfile:templates/forum/post.html" show_title=$t->title_url() strip="8192"}
+{include file="xfile:forum/post.html" show_title=$t->title_url() strip="8192"}
 {/if}
 {/if}{/if}
 {foreachelse}
