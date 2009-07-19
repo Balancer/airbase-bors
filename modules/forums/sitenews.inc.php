@@ -6,7 +6,7 @@ require_once('engines/smarty/assign.php');
     {
         $ch = &new Cache();
 		
-        if($ch->get('sitenews-v2', $limit))
+        if($ch->get('sitenews-v3', $limit))
 			return $ch->last();
 
 		$limit = intval(max(1,min($limit,100)));
@@ -16,5 +16,5 @@ require_once('engines/smarty/assign.php');
 //		set_loglevel(2);
 //		exit();
 
-		return $ch->set(template_assign_data("sitenews.html", array('news' => $news)), 3600);
+		return $ch->set(template_assign_data("sitenews.html", array('news' => $news)), 600);
     }
