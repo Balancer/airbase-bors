@@ -144,7 +144,7 @@ function set_last_message_md($v, $dbup) { return $this->set('last_message_md', $
 
 function use_avatar()
 {
-	if(!$this->data['use_avatar'])
+	if($this->data['use_avatar'] && !is_numeric($this->data['use_avatar']))
 		return $this->data['use_avatar'];
 			
 	if(preg_match('/^\d+\.\w+/', $this->data['use_avatar']) && $this->data['avatar_width'])
@@ -270,6 +270,32 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 			return $this->is_banned = $ban;
 			
 		return $this->is_banned = false;
+	}
+
+	function is_banned_in($forum_id) { return $this->load_attr('is_banned_in', _is_banned_in($forum_id)); }
+			
+	private function _is_banned_in($forum_id)
+	{
+		if($this->warnings() >= 10)
+			return true;
+
+		if($ban = forum_ban::ban_by_username($this->title()))
+			return $ban;
+
+		if($this->warnings_in($forum_id) >= 5)
+			return true;
+
+		return false;
+	}
+
+	function warnings_in($forum_id)
+	{
+		return intval($this->db('punbb')->select('warnings', 'SUM(score)', array(
+			'user_id' => $this->id(),
+			'posts.posted>' => time()-86400*14,
+			'inner_join' => array('forum_post ON forum_post.id = airbase_user_warning.warn_object_id', 'topics ON topics.id = posts.topic_id'),
+			'topics.forum_id=' => $forum_id,
+		)));
 	}
 
 	static function id_by_cookie($user_hash_password = NULL)

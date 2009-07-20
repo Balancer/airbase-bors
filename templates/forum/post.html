@@ -22,7 +22,7 @@
 {if $show_title}{$show_title} {/if}
 {if not $skip_author_name}{$p->author_name()}{/if}
 {if not $skip_date}, <a href="{$p->url()}">{$p->create_time()|full_time}</a>{/if}
-{if not $no_show_answers and $p->answer_to_id()}<span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>{/if}
+{if not $no_show_answers and $p->answer_to_id() && $a}<span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>{/if}
 {if $forum} <small>// {$forum->titled_url()}</small>{/if}
 {if $p->is_moderatorial()}<div class="red small">Данное сообщение является официальным предупреждением</div>{/if}
 </div>

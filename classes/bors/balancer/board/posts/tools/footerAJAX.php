@@ -16,13 +16,13 @@ class balancer_board_posts_tools_footerAJAX extends base_page
 	function local_data()
 	{
 		$x = $this->object();
-		$over = bors_overquote_rate($x->source());
+		$over = $x ? bors_overquote_rate($x->source()) : NULL;
 	
 		return array(
 			'p' => $x,
 			'overquote' => $over,
 			'overquote_crit' => ($over > 60),
-			'id' => $x->id(),
+			'id' => $x ? $x->id() : 0,
 			'owner_id' => $x->owner_id(),
 		);
 	}
