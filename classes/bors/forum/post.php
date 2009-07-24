@@ -60,7 +60,12 @@ function poster_email() { return @$this->data['poster_email']; }
 function set_poster_email($v, $dbup) { return $this->set('poster_email', $v, $dbup); }
 function poster_ua() { return @$this->data['poster_ua']; }
 function set_poster_ua($v, $dbup) { return $this->set('poster_ua', $v, $dbup); }
-function author_name() { return empty($this->data['author_name']) ? $this->set_author_name($this->owner()->title(), true) : $this->data['author_name']; }
+function author_name()
+{
+	if(empty($this->data['author_name']))
+		debug_hidden_log('empty-data', 'no author name');
+	return empty($this->data['author_name']) ? $this->set_author_name($this->owner()->title(), true) : $this->data['author_name']; 
+}
 function set_author_name($v, $dbup) { return $this->set('author_name', $v, $dbup); }
 function answer_to_id() { return @$this->data['answer_to_id']; }
 function set_answer_to_id($v, $dbup) { return $this->set('answer_to_id', $v, $dbup); }

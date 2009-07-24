@@ -77,3 +77,54 @@ function get_my_flag()
 	else
 		return $outher;
 }
+
+function bors_geo_place_title($ip)
+{
+	global $GEOIP_REGION_NAME;
+		
+	$ch = &new Cache();
+	if($ch->get("country_flag-v14", $ip))
+		return $ch->last();
+
+
+	$gi = geoip_open(BORS_3RD_PARTY.'/geoip/GeoLiteCity.dat', GEOIP_STANDARD);
+
+	$record = geoip_record_by_addr($gi, $ip);
+	$country_code = $record->country_code;
+	$country_name = $record->country_name;
+	$city_name = $record->city;
+	$region_code = $record->region;
+	geoip_close($gi);
+		
+	if(!$country_code)
+	{
+		$gi = geoip_open(BORS_3RD_PARTY.'/geoip/GeoIP.dat', GEOIP_STANDARD);
+		$country_code = geoip_country_code_by_addr($gi, $ip);
+		$country_name = geoip_country_name_by_addr($gi, $ip);
+		$region_code = geoip_region_by_addr($gi, $ip);
+		$city_name = "";
+		geoip_close($gi);
+	}
+
+	$region_name = @$GEOIP_REGION_NAME[$country_code][$region_code];
+
+	if($country_code)
+	{
+		$alt = array();
+		
+		if($country_name)
+			$alt[] = $country_name;
+		if($region_name && $region_name != $city_name && $region_name != $city_name.' City')
+			$alt[] = $region_name.(preg_match('!of$!', $region_name)?'':' region');
+		if($city_name)
+			$alt[] = $city_name;
+
+//		$alt[] = "cc=$country_code, rc=$region_code, $region_name";
+
+		$res = join(', ', $alt);
+	}
+	else
+		$res = "";
+
+	return $ch->set($res, -3600);
+}
