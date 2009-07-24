@@ -16,13 +16,16 @@
 {if $me->is_admin()}<li><a href="http://balancer.ru/forum/punbb/delete.php?id={$id}">Удалить это сообщение</a></li>{/if}
 </ul>
 
+{/if}{*/is_coordinator*}
+
+{if $me->is_coordinator() or $me->is_watcher()}
 <h6>Информация для координаторов</h6>
 <ul>
 <li>IP адрес: {$p->poster_ip()}</li>
+<li>GeoIP: {$p->poster_ip()|bors_geo_place_title}</li>
 <li>User-Agent: {$p->poster_ua()}</li>
 </ul>
-
-{/if}{*/is_coordinator*}
+{/if}
 
 {if $me->id() == $owner_id || $me->is_admin()}
 <h6>Инструменты автора темы</h6>

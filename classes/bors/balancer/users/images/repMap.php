@@ -18,7 +18,7 @@ class balancer_users_images_repMap extends base_image_svg
 			MAX(rep_g) as max_g, 
 			MIN(rep_b) as min_b, 
 			MAX(rep_b) as max_b
-		', array()));
+		', array('rep_x<>0', 'order'=>'last_post DESC', 'limit' => 150)));
 
 		$dx = $max_x - $min_x;
 		$dy = $max_y - $min_y;
@@ -29,14 +29,17 @@ class balancer_users_images_repMap extends base_image_svg
 
 		$offset = 50;
 
-		$scale = 5;
+		$width = 1024;
+		$height = $width*$dy/$dx;
+		
+		$scale = ($width - 100) / $dx;
 
 		// change the output format with the first parameter of factory()
-		$Canvas =& Image_Canvas::factory('svg', array('width' => round($dx*$scale+2*$offset), 'height' => round($dy*$scale+2*$offset), 'encoding' => 'utf-8'));
+		$Canvas =& Image_Canvas::factory('svg', array('width' => $width, 'height' => round($height), 'encoding' => 'utf-8'));
 
 		$Canvas->setLineColor('black');
 //		$Canvas->ellipse(array('x' => 199, 'y' => 149, 'rx' => 50, 'ry' => 50));
-		$Canvas->rectangle(array('x0' => $offset-10, 'y0' => $offset-10, 'x1' => $dx*$scale-$offset+10, 'y1' => $dy*$scale-$offset+10));
+		$Canvas->rectangle(array('x0' => $offset/2, 'y0' => $offset/2, 'x1' => $width-$offset/2, 'y1' => $height-$offset/2));
 
 //		echo ($dx*$scale)."\n";
 		foreach($dbh->select_array('users', '*', array('rep_x<>0', 'order'=>'last_post DESC', 'limit' => 150)) as $r)
@@ -89,5 +92,5 @@ class balancer_users_images_repMap extends base_image_svg
 		$Canvas->show();		
 	}
 
-	function cache_static() { return rand(3600, 7200); }
+//	function cache_static() { return rand(3600, 7200); }
 }

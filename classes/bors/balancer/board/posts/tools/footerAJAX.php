@@ -1,5 +1,7 @@
 <?php
 
+require_once('funcs/users/geoip/get_flag.php');
+
 class balancer_board_posts_tools_footerAJAX extends base_page
 {
 	function object() { return $this->load_attr('object', object_load($this->id())); }
