@@ -42,12 +42,25 @@ class forum_post extends base_object_db
 			'have_answers',
 			'score' => 'field2',
 			'is_moderatorial',
+			'is_deleted',
 		);
 	}
 
 function topic_id() { return @$this->data['topic_id']; }
 function set_topic_id($v, $dbup) { return $this->set('topic_id', $v, $dbup); }
-function topic_page() { return @$this->data['topic_page']; }
+function topic_page()
+{
+	$page = @$this->data['topic_page'];
+	if(!$page)
+	{
+		$this->topic()->repaging_posts();
+		$post = object_load('forum_post', $this->id(), array('no_load_cache' => true));
+		$page = @$post->data['topic_page'];
+	}
+
+	return $page;
+}
+
 function edited() { return @$this->data['edited']; }
 function set_edited($v, $dbup) { return $this->set('edited', $v, $dbup); }
 function edited_by() { return @$this->data['edited_by']; }
@@ -290,7 +303,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function url_in_topic($topic = NULL)
 	{
 		$pid = $this->id();
-		
+
 		if(!$topic)
 		{
 			$tid = $this->topic_id();
@@ -299,7 +312,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
 
 			$topic = object_load('forum_topic', $tid);
-			
+
 			if(!$topic)
 				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
 		}
@@ -311,7 +324,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		}
 		else
 			$post = $this;
-		
+
 		return $topic->url($post->topic_page())."#p".$post->id();
 	}
 

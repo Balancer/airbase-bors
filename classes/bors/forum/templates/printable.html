@@ -1,5 +1,5 @@
 {foreach from=$posts item=p}
-{if $p}
+{if $p && !$p->is_deleted()}
 <hr />
 <h3>{$p->flag()} {$p->author_name()}, {$p->create_time()|full_time}</h3>
 {if $p->answer_to_id()}<i><small>
@@ -19,7 +19,6 @@
 {/foreach}
 </p>
 {/if}
-
 
 {/if}
 {/foreach}

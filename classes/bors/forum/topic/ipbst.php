@@ -10,6 +10,12 @@ class forum_topic_ipbst extends base_page
 	function url()
 	{
 		$topic = object_load('forum_topic', $this->id());
+		if(!$topic)
+		{
+			debug_hidden_log('incorrect-urls', $this->id());
+			return 'http://balancer.ru/forums/';
+		}
+
 		return $topic->url(intval($this->page()/25) + 1);
 	}
 }

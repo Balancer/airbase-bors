@@ -48,7 +48,7 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 			
 //			if(preg_match('!<div class=msg id="comment\-\d+">.*Ответ на:.*\d+#comment\-\d+.*</a> от (.+?) \d+\.\d+\.\d+ .*<div class=sign>.+? <img src=".*="whois\.jsp\?nick=(.+?)">!s', $s, $m))
 //			if(preg_match('!.*?Ответ на: <a href="view\-message\.jsp?msgid=.*?</a> от (.+?) \d+\.\d+.\d+ \d+:\d+:\d+&nbsp;</div><div class="msg_body">.*<h2>Re: Новый раздел Google?</h2><i>&gt;Опенсурс - в опенсурс, проприетарные поделки гугла - в проприетаное ПО, нет?</i><br>'
-			if(preg_match('!Ответ на:.*\d+#comment\-\d+.*</a> от (.+?) \d+\.\d+.\d+ \d+:\d+:\d+&nbsp;.*<a href="whois\.jsp\?nick=(.+?)">!s', $s, $m))
+			if(preg_match('!Ответ на:.*\d+#comment\-\d+.*</a> от (.+?) \d+\.\d+.\d+ \d+:\d+:\d+.*<a href="whois\.jsp\?nick=(.+?)">!s', $s, $m))
 			{
 				$user = $m[2];
 				$answ = $m[1];

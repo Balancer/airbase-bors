@@ -43,7 +43,7 @@ class airbase_user_topics extends base_page
 	function title() { return $this->user()->title().ec(': темы с участием за месяц'); }
 	function nav_name() { return ec('темы с участием за месяц'); }
 
-	function body_template() { return 'airbase/forum/forum.html'; }
+	function body_template() { return 'xfile:airbase/forum/forum.html'; }
 
 	function cache_static() { return rand(86400*7, 14*86400); }
 

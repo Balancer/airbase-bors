@@ -475,7 +475,8 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 	function set_last_visit_time() { }
 
 	function is_admin() { return in_array($this->id(), array(3310, 10000)); }
-	function is_coordinator() { return $this->group()->is_coordinator() || $this->is_admin(); }
+	function is_moderator() { return $this->group()->is_moderator() || $this->is_admin(); }
+	function is_coordinator() { return $this->group()->is_coordinator() || $this->is_moderator(); }
 	function is_watcher() { return in_array($this->id(), array(46099)); }
 
 	function can_edit($object)

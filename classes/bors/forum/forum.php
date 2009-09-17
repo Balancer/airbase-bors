@@ -269,9 +269,9 @@ function parents()
 	{
 		if($root && $this->all_public_subforums_ids !== false)
 			return $this->all_public_subforums_ids;
-			
+
 		$forums = array($this->id());
-			
+
 		foreach($this->direct_subforums_ids() as $forum_id)
 		{
 			if(in_array($forum_id, $processed))
@@ -282,7 +282,7 @@ function parents()
 			if($subforum && $subforum->is_public_access())
 				$forums = array_merge($forums, $subforum->all_readable_subforum_ids(&$processed, false));
 		}
-			
+
 		if($root)
 			$this->all_public_subforums_ids = $forums;
 

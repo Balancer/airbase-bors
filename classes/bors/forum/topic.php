@@ -4,7 +4,7 @@ class forum_topic extends forum_abstract
 {
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function can_be_empty() { return false; }
-	
+
 	function main_db_storage() { return 'punbb'; }
 	function main_table_storage() { return 'topics'; }
 
@@ -80,18 +80,25 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	private $forum = false;
 	function forum()
 	{
+		if(array_key_exists('forum', $this->attr))
+			return $this->attr['forum'];
+
 		if($this->forum === false)
 			if(!$this->forum_id())
 				debug_exit('Empty forum_id for topic '.$this->id());
 			else
-				$this->forum = object_load('forum_forum', $this->forum_id()); 
-			
-		return $this->forum;
+				$this->forum = object_load('balancer_board_forum', $this->forum_id()); 
+
+		return $this->set_forum($this->forum);
 	}
-	
-	function first_post() { return object_load('forum_post', $this->first_post_id()); }
+
+	function set_forum($forum) { return $this->set_attr('forum', $forum); }
+
+	function first_post() { return $this->load_attr('first_post', object_load('balancer_board_post', $this->first_post_id())); }
+	function set_first_post($post) { return $this->set_attr('first_post', $post); }
+
 	function last_post() { return object_load('forum_post', $this->last_post_id()); }
-		
+
 	function parents() { return array("forum_forum://".$this->forum_id()); }
 
 	function is_sticky() { return $this->sticky() ? true : false; }
@@ -102,13 +109,13 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if($this->page() == 'new')
 		{
 			$me = bors()->user();
-		
+
 			if(!$me || $me->id() < 2)
 			{
 				$ref = $this->url($this->page());
 				return bors_message(ec('Вы не авторизованы на этом домене. Авторизуйтесь, пожалуйста. Если не поможет - попробуйте стереть cookies вашего браузера.'), array('login_form' => true, 'login_referer' => $ref));
 			}
-			
+
 			$uid = $me->id();
 			$x = $this->db()->select('topic_visits', 'last_visit, last_post_id', array('user_id='=>$uid, 'topic_id='=>$this->id()));
 			$last_visit = @$x['last_visit'];
@@ -122,8 +129,12 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			)));
 
 			if($first_new_post_id)
+			{
+				$post = object_load('forum_post', $first_new_post_id);
+
 				if($post = object_load('forum_post', $first_new_post_id))
 					return go($post->url_in_topic());
+			}
 
 			$this->set_page('last');
 		}
@@ -136,7 +147,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			templates_noindex();
 			return bors_message("Извините, доступ к этому ресурсу закрыт для Вас");
 		}
-		
+
 		return false;
 	}
 
@@ -144,7 +155,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	{
 		if(!$this->is_repaged() && rand(0,5) == 0)
 			$this->repaging_posts();
-	
+
 		$GLOBALS['cms']['cache_disabled'] = true;
 
 		require_once("engines/smarty/assign.php");
@@ -173,7 +184,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	{
 		if(isset($this->__all_posts_ids))
 			return $this->__all_posts_ids;
-		
+
 		return $this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id' => $this->id(), 'order' => '`order`,posted'));
 	}
 
@@ -260,7 +271,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	function cache_static() { return $this->is_public_access() ? rand(86400*7, 86400*30) : 0; }
 
 	function base_url() { return $this->forum_id() ? $this->forum()->category()->category_base_full() : '/'; }
-		
+
 	function title_url()
 	{
 		return "<a href=\"".$this->url()."\">".$this->title()."</a>";

@@ -659,3 +659,12 @@ div.moderatorial_post, div.moderatorial_post .head {
 	background-color: #fee !important;
 	border-color: #f88 !important;
 }
+
+table.yandex_money td {
+	font: 12pt Verdana bold;
+}
+
+table.yandex_money input {
+	margin-top: 80px;
+	font-weight: bold;
+}

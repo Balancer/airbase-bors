@@ -1,0 +1,40 @@
+<div class="warning_note left">
+<b>Внимание! Эта страница находится в процессе осмысления и создания.</b>
+</div>
+
+<table class="btab">
+<caption>Новые темы форумов</caption>
+<tr><th>Время</th><th>тема</th><th>форум</th><th>автор</th></tr>
+{foreach from=$new_topics item="t"}
+<tr><td>{$t->create_time()|date:'H:i'}</td>
+	<td>{$t->titled_url('new')}<br/>
+{if $t->description()}<i>{$t->description()}</i><br/>{/if}
+	</td>
+	<td>{$t->forum()->nav_named_url()}</td>
+	<td>{$t->author_name()}</td>
+</tr>
+{/foreach}
+</table>
+
+<table class="btab">
+<caption>Обновлённые темы форумов</caption>
+<tr><th>Время</th><th>тема</th><th>форум</th><th>отвечал</th></tr>
+{foreach from=$updated_topics item="t"}
+<tr><td>{$t->modify_time()|date:'H:i'}</td>
+	<td>{$t->titled_url('new')}</td>
+	<td>{$t->forum()->nav_named_url()}</td>
+	<td>{$t->last_poster_name()}</td>
+</tr>
+{/foreach}
+</table>
+
+<div class="post">
+<div class="head">Ссылки</div>
+<div class="body">
+<ul>
+<li><a href="http://balancer.ru/forum/">Старый вид форумов, на старом движке</a></li>
+<li><s><a href="classic/">Классический вид форумов, с вложениями и подфорумами</a></s></li>
+<li><s><a href="modern/">Новый вид форумов, одним потоком</a></s></li>
+</ul>
+</div>
+</div>

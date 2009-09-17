@@ -20,13 +20,13 @@ class airbase_forum_category extends base_object_db
 	function url() { return $this->category_base_full(); }
 
 	function nav_name() { return truncate($this->title(), 20); }
-	
+
 	function category_base_full()
 	{
 		$cat = $this;
 		while(!$cat->category_base() && $this->parent_category_id())
 			$cat = object_load('airbase_forum_category', $this->parent_category_id());
-			
+
 		return $cat->category_base();
 	}
 
