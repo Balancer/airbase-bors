@@ -34,7 +34,7 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 	}
 
 	function nav_name() { return truncate($this->title(), 20); }
-	
+
 	function category_base_full()
 	{
 		$cat = $this;

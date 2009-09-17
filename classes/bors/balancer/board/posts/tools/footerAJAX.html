@@ -24,6 +24,7 @@
 <li>IP адрес: {$p->poster_ip()}</li>
 <li>GeoIP: {$p->poster_ip()|bors_geo_place_title}</li>
 <li>User-Agent: {$p->poster_ua()}</li>
+<li>Точное время сообщения: {$p->create_time()|date:'d.m.Y H:i:s'}</li>
 </ul>
 {/if}
 

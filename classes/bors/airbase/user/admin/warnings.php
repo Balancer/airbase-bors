@@ -15,7 +15,7 @@ class airbase_user_admin_warnings extends airbase_user_warnings
 		)));
 	
 		return array_merge(parent::local_data(true), array(
-			'show_form' => $warns_from_me < 4,
+			'show_form' => (bors()->user()->is_coordinator() && $warns_from_me < 4) || bors()->user()->is_moderator(),
 			'warns_from_me' => $warns_from_me,
 			'passive_warnings' => array(),
 			'object' => $this->object(),

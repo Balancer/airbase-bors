@@ -31,4 +31,5 @@ function set_can_move($v, $dbup) { return $this->set('can_move', $v, $dbup); }
 	
 	function body() { return ec("Группа '{$this->title()}' (№{$this->id()})"); }
 	function is_coordinator() { return intval($this->can_move()) != 0; }
+	function is_moderator() { return in_array($this->id(), array(1, 2)); }
 }

@@ -12,6 +12,7 @@
 	$strip - сколько резать символов.
 *}
 {if $p}
+{if !$p->is_deleted()}
 <a name="p{$p->id()}"></a>
 {assign var="owner" value=$p->owner()}
 {assign var=a value=$p->answer_to()}
@@ -97,6 +98,7 @@ document.writeln('<label><input type="checkbox" id="_chkbx_p{$p->id()}" onclick=
 {/if}{*/signature show*}
 </div>{*/body*}
 </div>{*/post*}
+{/if}
 {else}
 Error: Unknown post.
 {/if}

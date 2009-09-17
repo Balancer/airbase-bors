@@ -8,6 +8,9 @@ include_once('geoip/geoipregionvars.php');
 
 function get_flag($ip, $owner = NULL)
 {
+	if(!$ip)
+		return "";
+
 	global $GEOIP_REGION_NAME;
 		
 	$ch = &new Cache();
@@ -80,6 +83,9 @@ function get_my_flag()
 
 function bors_geo_place_title($ip)
 {
+	if(!$ip)
+		return "";
+
 	global $GEOIP_REGION_NAME;
 		
 	$ch = &new Cache();

@@ -29,13 +29,13 @@ function template() { return @$this->data['template']; }
 function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 
 		function url() { return $this->category_base_full(); }
-	
+
 		function category_base_full()
 		{
 			$cat = $this;
 			while(!$cat->category_base() && $this->parent_category_id())
 				$cat = class_load('forum_category', $this->parent_category_id());
-			
+
 			return $cat->category_base();
 		}
 
@@ -61,11 +61,11 @@ function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 				$subcats[] = class_load('forum_category', $cat_id);
 			return $subcats;
 		}
-		
+
 		function all_subcats(&$processed = array())
 		{
 			$cats = array();
-			
+
 			foreach($this->direct_subforums_ids() as $forum_id)
 			{
 				if(in_array($forum_id, $processed))
@@ -75,7 +75,7 @@ function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 				$subforum = $cats[] = class_load('forum_category', $forum_id);
 				$cats = array_merge($cats, $subforum->all_subforums(&$processed));
 			}
-			
+
 			return $cats;
 		}
 
