@@ -16,14 +16,14 @@ class base_page_hts extends base_page_db
 
 		return $url;
 	}
-	
+
 	function can_cached() { return false; }
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function config_class() { return config('admin_config_class'); }
 	function html_disable() { return false; }
 	function lcml_tags_enabled() { return NULL; }
 
-	function loaded() { return $this->title() || $this->source(); }
+	function loaded() { return $this->title(true) || $this->source(); }
 
 	function main_db() { return config('mysql_database'); }
 	function main_table() { return NULL; }
@@ -98,7 +98,7 @@ class base_page_hts extends base_page_db
 		$host = $this->args('host');
 		if($host && preg_match('!/!', $this->id()))
 			$this->set_id('http://'.$host.$this->id());
-	
+
 		if(!$this->id())
 			$this->set_id($this->called_url());
 
