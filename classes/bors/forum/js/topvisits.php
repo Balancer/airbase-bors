@@ -26,12 +26,15 @@ class forum_js_topvisits extends base_js
 
 		$top = array();
 		foreach($top_ids as $x)
-			$top[] = array(
-				'topic' => $topics[$x['topic_id']],
-				'total' => $x['total'],
-				'start' => $x['start'],
-			);
-		
+			if(empty($topics[$x['topic_id']]))
+				debug_hidden_log('forum-topics-error', "Empty topic {$x['topic_id']}?");
+			else
+				$top[] = array(
+					'topic' => $topics[$x['topic_id']],
+					'total' => $x['total'],
+					'start' => $x['start'],
+				);
+
 		return array('top' => $top);
 	}
 
