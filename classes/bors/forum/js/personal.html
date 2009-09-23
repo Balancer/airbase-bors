@@ -1,17 +1,18 @@
-{assign var="owner" value=$this->owner()}
 <p><b>Здравствуйте, {$owner->titled_url()}!</b></p>
 
 Ваши:
 <ul>
-<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/blog/">Блог</a></li>
-<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/use-topics.html">Темы</a></li>
-<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/posts/">Сообщения</a></li>
-<li><a href="http://balancer.ru/user/{$this->owner()|get:id}/reputation/">Репутация</a></li>
+<li><a href="http://balancer.ru/user/{$owner->id()}/blog/">Блог</a></li>
+<li><a href="http://balancer.ru/user/{$owner->id()}/use-topics.html">Темы</a></li>
+<li><a href="http://balancer.ru/user/{$owner->id()}/posts/">Сообщения</a></li>
+<li><a href="http://balancer.ru/user/{$owner->id()}/reputation/">Репутация</a></li>
+<li><a href="http://balancer.ru/users/{$owner->id()}/votes/">Голоса</a></li>
 <li><a href="/actions/do-logout/">Выход</a></li>
 </ul>
 
 Форум:
 <ul>
+<li><a href="http://forums.airbase.ru/guidelines/">Правила</a></li>
 <li><a href="http://balancer.ru/forum/punbb/search.php?action=show_24h">За сутки</a></li>
 <li><a href="http://balancer.ru/forum/punbb/search.php?action=show_new">Новое</a></li>
 <li><a href="http://balancer.ru/tools/search/">Поиск</a></li>
