@@ -318,16 +318,16 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			$start_page = 1;
 		elseif($start_page == -1)
 			$start_page = $this->total_pages();
-			
+
 		$this->repaging_posts($start_page);
-		
+
 //		$this->recalculate();
 	}
 
 	function recalculate($full_repaging = true)
 	{
 		bors()->changed_save(); // Сохраняем всё. А то в памяти могут быть модифицированные объекты, с которыми сейчас будем работать.
-		
+
 		$num_replies = $this->db()->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
 		$this->set_num_replies($num_replies, true);
 		$first_pid = $this->db()->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));
@@ -340,12 +340,13 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		}
 		else
 			debug_hidden_log('post_error', "Unknown first post $first_pid in {$this}->recalculate()");
-		
+
 		if($last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id())))
 		{
 			$this->set_last_post_id($last_pid, true);
 			$last_post = object_load('forum_post', $last_pid);
-			$this->set_modify_time($last_post->create_time(true), true);
+			if($this->modify_time() < $last_post->create_time(true))
+				$this->set_modify_time($last_post->create_time(true), true);
 			$this->set_last_poster_name($last_post->author_name(), true);
 		}
 		else

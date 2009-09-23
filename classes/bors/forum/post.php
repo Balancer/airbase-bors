@@ -328,16 +328,16 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		return $topic->url($post->topic_page())."#p".$post->id();
 	}
 
-	function modify_time()
+	function modify_time($exact = false)
 	{
 		if($time = $this->edited())
 			return $time;
 
-		return $this->create_time();
+		return $this->create_time($exact);
 	}
 
-	function url() 
-	{ 
+	function url()
+	{
 		require_once("inc/urls.php");
 		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
 	}
@@ -352,7 +352,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		return "<a href=\"{$this->url()}\"{$css}>{$title}</a>";
 	}
-		
+
 	function title() { return $this->topic()->title()." <small>[".$this->nav_name()."]</small>"; }
 	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown')).", ".strftime("%d.%m.%y", $this->create_time()); }
 
