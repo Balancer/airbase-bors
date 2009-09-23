@@ -3,7 +3,7 @@
 class user_blog extends base_page
 {
 	private $user;
-	
+
 	function main_db(){ return 'punbb'; }
 
 	function template()
@@ -11,7 +11,7 @@ class user_blog extends base_page
 		templates_noindex();
 		return 'forum/_header.html';
 	}
-	
+
 	function title() { return $this->user->title().ec(": Блог"); }
 	function nav_name() { return ec("блог"); }
 
@@ -21,7 +21,7 @@ class user_blog extends base_page
 	function local_data()
 	{
 		$page_id = $this->page().','.$this->items_per_page();
-	
+
 		if(isset($this->xdata[$page_id]))
 			return $this->xdata[$page_id];
 
@@ -33,14 +33,14 @@ class user_blog extends base_page
 					'per_page' => $this->items_per_page(),
 				)))
 			);
-		
+
 		return $this->xdata[$page_id];
 	}
 
 	function default_page() { return $this->total_pages(); }
 
 	function items_per_page() { return 20; }
-	
+
 	private $total = false;
 	function total_items()
 	{
@@ -61,7 +61,7 @@ class user_blog extends base_page
 			else
 				$this->last_post = NULL;
 		}
-		
+
 		return $this->last_post;
 	}
 
@@ -77,10 +77,10 @@ class user_blog extends base_page
 			else
 				$this->first_post = NULL;
 		}
-		
+
 		return $this->first_post;
 	}
-	
+
 	function create_time() { return $this->first_post() ? $this->first_post()->create_time() : 0; }
 	function modify_time() { return $this->last_post() ? $this->last_post()->modify_time() : 0;	}
 
@@ -89,7 +89,7 @@ class user_blog extends base_page
 	function __construct($id)
 	{
 		$this->set_id($id);
-	
+
 		$this->user = class_load('forum_user', $id);
 		parent::__construct($id);
 	}
@@ -103,7 +103,7 @@ class user_blog extends base_page
 	}
 
 	function url($page = NULL)
-	{	
+	{
 		if(!$page || $page == $this->default_page())
 			return "http://balancer.ru/user/".$this->id()."/blog/"; 
 		else
@@ -117,7 +117,7 @@ class user_blog extends base_page
 		else
 			return rand(3*86400, 20*86400);
 	}
-		
+
 	function pages_links()
 	{
 		if($this->total_pages() < 2)

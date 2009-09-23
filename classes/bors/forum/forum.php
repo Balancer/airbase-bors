@@ -14,6 +14,7 @@ class forum_forum extends base_page_db
 			'parent_forum_id' => 'parent',
 			'tree_position',
 			'category_id' => 'cat_id',
+			'is_public',
 			'parent_forum_id' => 'parent',
 			'sort_order' => 'disp_position',
 			'keywords_string' => 'keywords',

@@ -76,8 +76,15 @@ function set_poster_ua($v, $dbup) { return $this->set('poster_ua', $v, $dbup); }
 function author_name()
 {
 	if(empty($this->data['author_name']))
+	{
 		debug_hidden_log('empty-data', 'no author name');
-	return empty($this->data['author_name']) ? $this->set_author_name($this->owner()->title(), true) : $this->data['author_name']; 
+		if($author = $this->owner())
+			$this->set_author_name($author->title(), true);
+		else
+			$this->set_author_name('Неизвестный', true);
+	}
+
+	return $this->data['author_name'];
 }
 function set_author_name($v, $dbup) { return $this->set('author_name', $v, $dbup); }
 function answer_to_id() { return @$this->data['answer_to_id']; }
