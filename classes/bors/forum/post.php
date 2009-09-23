@@ -547,7 +547,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			object_load('forum_topic', $this->topic_id()),
 			object_load('airbase_user_topics', $this->owner_id()),
 		);
-			
+
 		return $res;
 	}
 
@@ -555,10 +555,10 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		if($this->id() == $this->topic()->first_post_id())
 			return false;
-			
+
 		if(($me = bors()->user()) && $me->group()->is_coordinator())
 			return false;
-		
+
 		if($this->create_time() < time() - 86400)
 			return ec("Вы не можете редактировать это сообщение, так как прошло более суток с момента его создания");
 
@@ -576,7 +576,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		if(is_null($this->score()) && !$recalculate)
 			return "";
-	
+
 		$data = array(
 			'target_class_name' => $this->class_name(),
 			'target_object_id' => $this->id(),

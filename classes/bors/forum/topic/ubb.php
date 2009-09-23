@@ -14,9 +14,11 @@ class forum_topic_ubb extends base_object
 			else
 				$fid = str_replace('/', '-', $this->id());
 
-			$this->topic_id = $this->db('forums_airbase_ru')->select('ib_topics', 'tid', array('ubb_topic=' => $fid));
+			list($forum_id, $topic_id) = explode('-', $fid);
+
+			$this->topic_id = $this->db('punbb')->select('z_ubb_topics_map', 'new_topic_id', array('ubb_topic_id' => $topic_id, 'ubb_forum_id' => $forum_id));
 		}
-			
+
 		return $this->topic_id;
 	}
 
@@ -25,12 +27,12 @@ class forum_topic_ubb extends base_object
 		if(!$this->topic_id())
 			return false;
 
-		$topic = object_load('forum_topic', $this->topic_id());
+		$topic = object_load('balancer_board_topic', $this->topic_id());
 		return go($topic->url($this->args('page')));
 	}
-	
+
 	function pre_show() { return true; }
-	
+
 	function can_be_empty() { return false; }
 	function loaded() { return $this->topic_id(); }
 }

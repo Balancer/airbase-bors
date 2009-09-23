@@ -10,12 +10,13 @@ class balancer_board_users_rateLowest extends base_page
 
 	function local_data()
 	{
-		return array(
-			'lowest' => objects_array('bors_votes_thumb', array(
+		$lowest = objects_array('bors_votes_thumb', array(
 				'group' => 'target_class_name,target_object_id',
 				'order' => 'SUM(score)',
 				'limit' => 30,
-				)),
-		);
+		));
+
+		bors_objects_targets_preload($lowest);
+		return array('lowest' => $lowest);
 	}
 }
