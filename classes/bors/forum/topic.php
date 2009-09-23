@@ -5,20 +5,12 @@ class forum_topic extends forum_abstract
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function can_be_empty() { return false; }
 
-	function main_db_storage() { return 'punbb'; }
-	function main_table_storage() { return 'topics'; }
-
 	function uri_name() { return 't'; }
-
 	function fields() { return array($this->main_db_storage() => $this->main_db_fields()); }
 	function nav_name() { return truncate($this->title(), 60); }
 
-	function main_db_fields()
-	{
-		return array(
-			$this->main_table_storage() => $this->main_table_fields(),
-		);
-	}
+	function main_db() { return 'punbb'; }
+	function main_table() { return 'topics'; }
 
 	function main_table_fields()
 	{
@@ -29,6 +21,7 @@ class forum_topic extends forum_abstract
 			'description',
 			'create_time'	=> 'posted',
 			'modify_time'=> 'last_post',
+			'is_public',
 			'owner_id'=> 'poster_id',
 			'last_poster_name' => 'last_poster',
 			'author_name' => 'poster',
@@ -197,7 +190,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			'topic_id' => $this->id(),
 			'order' => '`order`,posted',
 		);
-		
+
 		if($this->is_repaged())
 			$data['`page` = '] = intval($page);
 		else
@@ -205,7 +198,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			$data['page'] = $page;
 			$data['per_page'] = $this->items_per_page();
 		}
-			
+
 		return $this->db()->select_array('posts', 'id', array($data));
 	}
 
@@ -218,7 +211,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			'topic_id' => $this->id(),
 			'order' => '`order`,posted',
 		);
-		
+
 		if($paging && $this->is_repaged())
 			$data['`page` = '] = intval($page);
 		else
@@ -226,7 +219,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			$data['page'] = $page;
 			$data['per_page'] = $this->items_per_page();
 		}
-			
+
 		return objects_array('forum_post', $data);
 	}
 
@@ -282,11 +275,11 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	function search_source()
 	{
 		$result = array();
-	
+
 		$start_from = ($this->page() - 1) * $this->items_per_page();
 
 		$query = "SELECT poster, message FROM posts INNER JOIN messages ON posts.id = messages.id WHERE topic_id={$this->id()} ORDER BY posts.`order`, posts.id LIMIT $start_from, ".$this->items_per_page();
-			
+
 		$posts = $this->db()->get_array($query);
 
 		$data['posts'] = array();
@@ -297,14 +290,14 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			if($x['message'])
 				$result[] = $x['poster'].":\n---------------\n".$x['message'];
 		}
-		
+
 		return join("\n============================\n\n", $result);
 	}
-	
+
 	function page_by_post_id($post_id)
 	{
 		$post_id = intval($post_id);
-	
+
 		$posts = $this->db()->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY `order`,posted");
 
 		for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
@@ -327,6 +320,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	function recalculate($full_repaging = true)
 	{
 		bors()->changed_save(); // Сохраняем всё. А то в памяти могут быть модифицированные объекты, с которыми сейчас будем работать.
+
+		$this->set_is_public($this->forum()->is_public(), true);
 
 		$num_replies = $this->db()->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
 		$this->set_num_replies($num_replies, true);
