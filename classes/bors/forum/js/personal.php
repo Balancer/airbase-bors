@@ -11,11 +11,13 @@ class forum_js_personal extends base_js
 	}
 
 	function cache_static() { return rand(5*86400, 7*86400); }
-		
+
 	function url()
 	{
 		return "/user/".$this->id()."/personal.js";
 	}
 
 	function owner() { return $this->owner; }
+
+	function template_local_vars() { return parent::template_local_vars().' owner'; }
 }
