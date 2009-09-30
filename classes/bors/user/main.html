@@ -1,18 +1,58 @@
 <dl class="forumposting">
-<dt>Ссылки</dt>
 <dd>
+<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>
+<h2>Информация</h2>
+<ul>
+<li>Зарегистрирован: {$user->create_time()|full_time}</li>
+<li>Последнее сообщение: <a href="http://balancer.ru/user/{$user->id()}/posts/last/">{$user->last_post_time()|full_time}</a><li>
+{if $user->messages_daily_limit() >= 0}<li>Ограничение числа сообщений в день на один форум: <span class="red">{$user->messages_daily_limit()}</span></li>{/if}
+</ul>
 
-<div class="avatar_block">{include file="xfile:templates/forum/post-avatar.html"}</div>
-
+<h2>Ссылки</h2>
 <ul>
 <li><a href="blog/">Блог</a></li>
 <li><a href="use-topics.html">Все темы</a></li>
 <li><a href="posts/">Все сообщения</a></li>
+<li><a href="/users/{$this->id()}/votes/">Оценки сообщений</a> (<span class="red">новое!</span>)</li>
 <li><a href="aliases.html">Пользователи, писавшие с тех же IP</a></li>
 <li><a href="reputation/">Репутация</a></li>
 <li><a href="warnings/">Предупреждения</a></li>
 <li><a href="http://balancer.ru/forum/punbb/misc.php?email={$this->id()}">Отправить сообщение на e-mail пользователя</a></li>
 <li><a href="http://balancer.ru/forum/punbb/profile.php?id={$this->id()}">Профиль на старом форуме</a></li>
 </ul>
+
+<div class="clear">&nbsp;</div>
+</dd>
+</dl>
+
+{if $messages_today}
+<table class="btab w100p">
+<caption>Количество сообщений по форумам за сутки:</caption>
+<tr><th>Форум</th><th>Число сообщений</th></tr>
+{foreach from=$messages_today_by_forums item="x"}
+{bors_object_load var="f" class="forum_forum" id=$x.forum_id}
+<tr><td>{$f->titled_url()}</td>
+	<td>{$x.count}</td>
+</tr>
+{/foreach}
+<tr><td>Итого:</td>
+	<td>{$messages_today}</td>
+</tr>
+</table>
+{/if}
+
+{if $messages_month_by_forums}
+<table class="btab w100p">
+<caption>Количество сообщений по форумам за месяц:</caption>
+<tr><th>Форум</th><th>Число сообщений</th></tr>
+{foreach from=$messages_month_by_forums item="x"}
+{bors_object_load var="f" class="forum_forum" id=$x.forum_id}
+<tr><td>{$f->titled_url()}</td>
+	<td>{$x.count}</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
 </dd>
 </dl>

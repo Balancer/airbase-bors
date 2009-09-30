@@ -1,4 +1,5 @@
-<b>Общая репутация:</b> {$reputation_abs_value}.<br />
+<b>Общая репутация:</b> {$reputation_abs_value}<br />
+<b>Общая репутация на основе равных весов голосующих:</b> {$pure_reputation}<br />
 <b>Положительных голосов:</b> {$plus}<br />
 <b>Негативных голосов:</b> {$minus}<br />
 
@@ -19,7 +20,7 @@ document.write('<s'+'cript type="text/javascript" src="http://balancer.ru/js/use
 </script>
 <td>
 {bors_class_load var=owner class="forum_user" id=$user_id}
-<div class="avatar_block">{include file="xfile:templates/forum/post-avatar.html"}</div>
+<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>
 </td>
 </tr></table>
 
@@ -55,8 +56,9 @@ if(top.me_is_coordinator)
 	<td class="{$backcolor}">
 		<a href="http://balancer.ru/user/{$r->voter_id()}/">{$u->title()}</a><br />
 		<a href="http://balancer.ru/user/{$r->voter_id()}/reputation/"><img src="http://balancer.ru/user/{$r->voter_id()}/rep.gif" width="100" height="16" border="0" /></a></td> 
-	<td class="{$backcolor}">{$r->comment()|truncate:500|pun_lcml}{if $r->refer()}
+	<td class="{$backcolor}">{$r->comment()|truncate:500|lcml_bb}
 		<script>add_warn('{$r->internal_uri()}', {$r->voter_id()})</script>
+		{if $r->refer()}
 		<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За:
 			{assign var="obj" value=0}
 			{if $r->refer()|regex_match:"^post://(\d+)"}

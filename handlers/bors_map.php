@@ -1,6 +1,12 @@
 <?php
-    $map = array(
-    	'(/) => balancer_main',
+
+$map = array(
+   	'http://(balancer.ru)/ => balancer_main',
+
+	'/_bors/ajax/thumb\-(up|down)\?object=(.+) => balancer_ajax_thumb_vote(2,vote=1)',
+	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
+
+	'(.*)\?cdrop  => bors_admin_tools_clean(1)',
     
 		'(/admin/users/(\d+)/)warnings.html\?object=(.+) => airbase_user_admin_warnings(2,object=3)',
 		'(/admin/users/(\d+)/)warnings.html => airbase_user_admin_warnings(2)',
@@ -15,6 +21,8 @@
 		'(/forum/)tools/topic/(\d+)/reload/? => forum_tools_topic_reload(2)',
 		'(/forum/tools/topic/)(\d+)/ => forum_tools_topic(2)',
 		'(/forum/tools/post/)(\d+)/ => forum_tools_post(2)',
+		'/forum/user\-(\d+\-posts\-in\-topic\-\d+)/ => balancer_board_posts_userInTopic(1)',
+		'/forum/user\-(\d+\-posts\-in\-topic\-\d+)/(\d+)\.html => balancer_board_posts_userInTopic(1,2)',
 
 		'/\d{4}/\d{1,2}/\d{1,2}/forum\-(\d+)(,(\d+))?\-\-.+ => forum_forum(1,3)',
 		'/\d{4}/\d{1,2}/\d{1,2}/forum\-(\d+)/? => forum_forum(1,3)',
@@ -26,16 +34,20 @@
 
 		'/js/users/reputation,(\d+)\.js => user_js_reputation(1,2)',
 		'/js/forum/topvisits\.js => forum_js_topvisits',
-		
+
 		'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+ => forum_category(1)',
 		'(/)forum/ => forum_main',
 		'(/forum/(\d+)/)news/ => airbase_forum_news(2)',
 		'(/forum/(\d+)/)news/(\d+)\.html => airbase_forum_news(2,3)',
 		'(/forum/(\d+)/)posts\-rss\.xml => airbase_board_forum_prss(2)',
 
+		'(/tools/backlinks/)\?object=(\d+) => bors_referer_backlinks(2)',
+		'/tools/backlinks/ => bors_referer_main',
+		'/tools/votes/ => bors_votes_last',
+
 		'(/tools/search/)result/ => bors_tools_search_result',
 		'(/tools/)search/ => bors_tools_search',
-		
+
 		'(/user/(\d+)/)use\-topics\.html => airbase_user_topics(2)',
 		'(/user/(\d+)/)use\-topics,(\d+)\.html => airbase_user_topics(2,3)',
 
@@ -67,7 +79,7 @@
 		'/user/(\d+)/reputation/\?(.+) => user_reputation(1,ref=2)',
 
 		'(/user/(\d+)/)aliases\.html => airbase_user_aliases(2)',
-		
+
 #		'/user/(\d+)/reputation.* => forum_main',
 
 		'(/)users/? => users_main',
@@ -82,10 +94,23 @@
 		'(/user/(\d+)/)warnings\.html => airbase_user_warnings(2)',
 		'(/user/(\d+)/)warnings,(\d+)\.html => airbase_user_warnings(2,3)',
 
+		'/users/images/rep\-map\.svg => balancer_users_images_repMap',
+
+		'(/users/(\d+)/)votes/ => balancer_user_votes(2)',
+
 		'(/bors/examples/)top-reputation/ => examples_topReputation',
 
 		'(/)(test|crazy)/ => base_page_hts',
 		'(/test/bors/)xml/ => bors_test_xml',
+
+	'/users/reputation/last-ograph\.svg => balancer_board_users_reputationGraphSVG',
+
+	'/forum/topics/(\d+)/reports/users-graph\.png => balancer_board_topic_usersGraphPng(1)',
+	'/forum/topics/(\d+)/reports/users-graph\.svg => balancer_board_topic_usersGraphSVG(1)',
+	'/forum/topics/(\d+)/reports/users-ograph\.svg => balancer_board_topic_usersGraphSVG(1,ordered=1)',
+
+	'/lor/topics/(\d+)/reports/users-graph\.svg => lor_board_topic_usersGraphSVG(1)',
+	'/lor/topics/(\d+)/reports/users-ograph\.svg => lor_board_topic_usersGraphSVG(1,ordered=1)',
 		
 //	'.* => base_page_hts',
 );

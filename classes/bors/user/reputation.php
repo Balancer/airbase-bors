@@ -3,8 +3,8 @@
 class user_reputation extends base_page_db
 {
 	var $user;
-	
-	function title() { return $this->user->title().ec(": Репутация"); }
+
+	function title() { return $this->user ? $this->user->title().ec(": Репутация") : ''; }
 	function nav_name() { return ec("репутация"); }
 
 	function parents() { return array("forum_user://".$this->id()); }
@@ -14,29 +14,29 @@ class user_reputation extends base_page_db
 		$this->user = class_load('forum_user', $id);
 		parent::__construct($id);
 
-		if(!$id)
-			return ec("Не задан ID пользователя.");
-
 //		debug_exit("id={$id}, user={$this->user->id}, page={$this->page()}");
 	}
 
 	function default_page() { return $this->total_pages(); }
-	
+
 	function pre_parse($get)
 	{
+		if(!$this->id())
+			return bors_message(ec("Не задан ID пользователя."));
+
 		if(!bors()->user() && !empty($get))
 			return go($this->url());
 
 		return false;
 	}
 
-	function local_template_data_set()
+	function local_data()
 	{
 		templates_noindex();
-	
+
 		$dbu = &new DataBase('USERS');
 		$dbf = &new DataBase('punbb');
-		
+
 		return array(
 			'ref' => $this->ref() ? $this->ref() : @$_SERVER['HTTP_REFERER'],
 			'list' => array_reverse(objects_array('airbase_user_reputation', array(
@@ -46,6 +46,7 @@ class user_reputation extends base_page_db
 				'page'=> $this->page(),
 				'per_page' => $this->items_per_page()))),
 			'reputation_abs_value' => sprintf("%.2f", $dbf->get("SELECT reputation FROM users WHERE id = {$this->id()}")),
+			'pure_reputation' => sprintf("%.2f", $dbf->get("SELECT pure_reputation FROM users WHERE id = {$this->id()}")),
 			'plus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score > 0"),
 			'minus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score < 0"),
 			'user_id' => $this->id(),
@@ -68,11 +69,11 @@ class user_reputation extends base_page_db
 	{
 		if($ref = $this->args('ref'))
 			return $ref;
-		
+
 		$keys = array_keys($_GET);
 		if(!empty($keys[0]) && preg_match('/^http:/', $keys[0]))
 			return $keys[0];
-		
+
 		return NULL;
 	}
 
@@ -80,13 +81,13 @@ class user_reputation extends base_page_db
 	function url($page = 0, $append_query = true)
 	{
 		if($page == 0 || $this->total_pages() == 1)
-			$url = "http://balancer.ru/user/".$this->id()."/reputation.html";
+			$url = "http://balancer.ru/user/".intval($this->id())."/reputation.html";
 		else
-			$url = "http://balancer.ru/user/".$this->id()."/reputation,{$page}.html";
-			
+			$url = "http://balancer.ru/user/".intval($this->id())."/reputation,{$page}.html";
+
 		if($append_query && $this->ref())
 			$url .= '?'.$this->ref();
-			
+
 		return $url;
 	}
 
@@ -120,7 +121,13 @@ class user_reputation extends base_page_db
 
 		if($me_id == $uid)
 			return bors_message(ec("Нельзя ставить репутацию самому себе."));
+
+		$md = md5($_POST['comment'].$uid);
+		if($me->last_message_md() == $md)
+			return bors_message(ec('Вы уже отправили это сообщение'));
 		
+		$me->set_last_message_md($md, true);
+	
 		if($dbf->get("SELECT num_posts FROM users WHERE id=$me_id") < 50)
 			return bors_message(ec("Репутацию выставлять могут только участники, имеющие более 50 сообщений на форуме."));
 
@@ -134,12 +141,12 @@ class user_reputation extends base_page_db
 		));
 
 		$grw = array(
-				1 => 8, // admin
-				2 => 6, // moder
+				1 => 7, // admin
+				2 => 5, // moder
 				3 => 0, // guest
-				5 => 4, // coordin
+				5 => 3, // coordinator
 				6 => 2, // старожилы
-				21 => 4, // координатор-литератор
+				21 => 3, // координатор-литератор
 			);
 
 		$total = 0;
@@ -153,7 +160,7 @@ class user_reputation extends base_page_db
 				$weight = 1;
 
 			if($v['id'] == 10000)
-				$weight = 10;
+				$weight = 9;
 					
 			if($dbf->get("SELECT num_posts FROM users WHERE id={$v['id']}") < 50)
 				$weight = 0;
@@ -181,4 +188,13 @@ class user_reputation extends base_page_db
 	function can_action() { return $_GET['act'] == 'reputation_add_do'; }
 	function can_read() { return true; }
 	function static_get_cache() { return true; }
+
+	function cache_clean_self()
+	{
+//		echo "Clean cache in {$this->cache_dir()}";
+//		exit();
+		parent::cache_clean_self();
+		foreach(glob($this->cache_dir().'/reputation*.html') as $f)
+			@unlink($f);
+	}
 }

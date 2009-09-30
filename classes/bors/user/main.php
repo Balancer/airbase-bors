@@ -28,14 +28,32 @@
 
 		function url() { return "http://balancer.ru/user/".$this->id()."/"; }
 
-		function cache_static()
-		{
-			return 86400*14;
-		}
+	function cache_static() { return rand(3600, 7200); }
 
-	function data_providers()
+	function local_data()
 	{
-		return array('owner' => $this->user(), );
+		$by_forums = $this->db('punbb')->select_array('posts', 'forum_id, count(*) AS `count`', array(
+			'posts.poster_id=' => $this->id(), 
+			'posts.posted>' => time()-86400,
+			'inner_join' => 'topics ON topics.id = posts.topic_id',
+			'group' => 'forum_id',
+			'order' => 'COUNT(*) DESC',
+		));
+
+		$by_forums_for_month = $this->db('punbb')->select_array('posts', 'forum_id, count(*) AS `count`', array(
+			'posts.poster_id=' => $this->id(), 
+			'posts.posted>' => time()-86400*30,
+			'inner_join' => 'topics ON topics.id = posts.topic_id',
+			'group' => 'forum_id',
+			'order' => 'COUNT(*) DESC',
+		));
+
+		return array(
+			'user' => $this->user(), 
+			'owner' => $this->user(), 
+			'messages_today' => objects_count('forum_post', array('owner_id' => $this->id(), 'create_time>' => time()-86400)),
+			'messages_today_by_forums' => $by_forums,
+			'messages_month_by_forums' => $by_forums_for_month,
+		);
 	}
 }
-
