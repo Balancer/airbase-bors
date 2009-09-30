@@ -10,7 +10,7 @@ class airbase_user_aliases extends base_page
 	function local_data()
 	{
 		templates_noindex();
-	
+
 		$last_post = $this->db('punbb')->select('posts', 'MAX(posted)', array('poster_id' => $this->id())) + 1;
 		$depth = $last_post-86400*30;
 
@@ -25,6 +25,14 @@ class airbase_user_aliases extends base_page
 		);
 		return array('users_list' => $ips ? $users_list : array());
 	}
-	
+
 	function cache_static() { return rand(3600, 7200); }
+
+	function pre_show()
+	{
+		if(bors()->client()->is_bot())
+			return go('/', true);
+
+		return false;
+	}
 }

@@ -156,7 +156,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			debug_hidden_log('data-lost', 'Set to empty post source!');
 			bors_exit('Set to empty post source!');
 		}
-	
+
 		$this->set_post_source($message, $db_update);
 		$this->_source_changed |= $db_update;
 
@@ -171,7 +171,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function body()
 	{
 		$this->source();
-	
+
 		if(!$this->post_body() || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
 		{
 			$body = lcml($this->post_source(),
@@ -185,7 +185,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 					'nocache' => true,
 				)
 			);
-	
+
 			$this->set_post_body($body, true);
 		}
 
@@ -203,7 +203,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			$this->set_flag_db(get_flag($this->poster_ip(), $this->owner()), true);
 			$db->close();
 		}
-		
+
 		return $this->flag_db();
 	}
 
@@ -211,9 +211,9 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		if(!$this->poster_ua())
 			return NULL;
-			
+
 		list($os, $browser) = get_browser_info($this->poster_ua());
-		
+
 		$out_os = '';
 		switch($os)
 		{
@@ -286,7 +286,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		if((!$out_browser || !$out_os) && $this->poster_ua())
 			debug_hidden_log("user_agent", "Unknown user agent: '".$this->poster_ua()."' in post ".$this->id());
-		
+
 		return '<span title="'.htmlspecialchars($this->poster_ua()).'">'.$out_browser.$out_os.'</span>';
 	}
 
@@ -295,7 +295,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		if($this->__answer_to !== 0)
 			return $this->__answer_to;
-	
+
 		if($id = $this->answer_to_id())
 			return $this->__answer_to =  class_load('forum_post', $id);
 
@@ -373,7 +373,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		if($this->_attach_ids !== false)
 			return $this->_attach_ids;
-			
+
 		if($this->have_attach() === NULL)
 		{
 			$db = new driver_mysql('punbb');
@@ -388,7 +388,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			}
 			else
 				$this->set_have_attach(0, true);
-			
+
 			return $ids;
 		}
 
@@ -397,7 +397,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		return $this->_attach_ids = array($this->have_attach());
 	}
-		
+
 	private $_attaches = NULL;
 	function attaches()
 	{
@@ -439,11 +439,11 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	}
 
 	function search_source() { return $this->source(); }
-	
+
 	function num_replies()
 	{
 		return 0;
-		
+
 //		$db = &new DataBase('punbb');
 //		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
 	}
@@ -451,7 +451,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function visits() { return $this->topic()->num_views(); }
 
 	function class_title() { return ec("Сообщение форума"); }
-	
+
 	function answers()
 	{
 		return objects_array('forum_post', array(
@@ -469,7 +469,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		return $result;
 	}
-	
+
 	function answers_in_this_topic()
 	{
 		$result = array();
@@ -479,13 +479,13 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		return $result;
 	}
-	
+
 	function move_tree_to_topic($new_tid)
 	{
 		$GLOBALS['move_tree_to_topic_changed_topics'] = array();
-	
+
 		$this->__move_tree_to_topic($new_tid, $this->topic_id());
-		
+
 		foreach(array_keys($GLOBALS['move_tree_to_topic_changed_topics']) as $tid)
 			object_load('forum_topic', $tid, array('no_load_cache' => true))->recalculate();
 	}
@@ -494,15 +494,15 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		$GLOBALS['move_tree_to_topic_changed_topics'][$new_tid] = true;
 		$GLOBALS['move_tree_to_topic_changed_topics'][$this->topic_id()] = true;
-		
+
 //		echo "Move {$this->id()} from {$this->topic_id()} to {$new_tid}<br />\n";
-	
+
 		if($this->topic_id() == $old_tid)
 		{
 			$this->set_topic_id($new_tid, true);
 			cache_static::drop($this);
 		}
-		
+
 		foreach($this->answers() as $answer)
 			$answer->__move_tree_to_topic($new_tid, $old_tid);
 	}
@@ -510,7 +510,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function move_to_topic($new_tid)
 	{
 		$old_tid = $this->topic_id();
-	
+
 		if($new_tid == $old_tid)
 			return;
 
@@ -518,7 +518,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		object_load('forum_topic', $old_tid)->recalculate();
 		object_load('forum_topic', $new_tid)->recalculate();
-		
+
 		cache_static::drop($this);
 	}
 
@@ -529,18 +529,18 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		if($this->warning !== false)
 			return $this->warning;
-	
+
 		if($this->warning_id() == -1)
 			return $this->warning = NULL;
-			
+
 		if($this->warning_id())
 			return $this->warning = object_load('airbase_user_warning', $this->warning_id());
-			
+
 		$warn = objects_first('airbase_user_warning', array(
 			'warn_class_id=' => $this->class_id(),
 			'warn_object_id='=>$this->id(),
 			'order' => '-time'));
-			
+
 		$db = new driver_mysql('punbb');
 		$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
 		$db->close();

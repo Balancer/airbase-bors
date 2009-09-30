@@ -28,7 +28,7 @@ class airbase_forum_news extends base_page
 		);
 	}
 
-	function total_items() { return $this->load_attr('total_items', intval(objects_count('forum_topic', array('forum_id IN' => $this->forum()->all_public_subforum_ids())))); }
+	function total_items() { return $this->__havec('total_items') ? $this->__lastc() : $this->__setc(intval(objects_count('forum_topic', array('forum_id IN' => $this->forum()->all_public_subforum_ids())))); }
 
 	function default_page() { return $this->total_pages(); }
 	function reverse_pages() { return true; }

@@ -3,7 +3,7 @@
 class module_user_blog extends base_page
 {
 	private $user;
-	
+
 	function main_db_storage(){ return 'punbb'; }
 
 	function local_template_data_set()
@@ -13,8 +13,9 @@ class module_user_blog extends base_page
 				'owner_id' => $this->args('owner_id'),
 				'limit' => $this->args('limit', 5),
 				'order' => '-blogged_time',
+				'is_public' => 1,
 			)),
-			
+
 			'skip_avatar_block' => $this->args('skip_avatar_block', false),
 		);
 	}

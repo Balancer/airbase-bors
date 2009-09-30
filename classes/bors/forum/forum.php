@@ -103,8 +103,6 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		return $this->__category = object_load('forum_category', $f->category_id());
 	}
 
-function parent_forum() { return $this->load_attr('parent_forum', $this->parent_forum_id() ? object_load('forum_forum', $this->parent_forum_id()) : NULL); }
-
 function parents()
 {
 	if($this->parent_forum_id())
@@ -302,4 +300,11 @@ function parents()
 
 	function cache_groups_parent() { return parent::cache_groups_parent().
 		" airbase-board-forum-{$this->id()}"; }
+
+	function auto_objects()
+	{
+		return array(
+			'parent_forum' => 'forum_forum(parent_forum_id)',
+		);
+	}
 }

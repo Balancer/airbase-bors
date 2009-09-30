@@ -2,7 +2,7 @@
 
 class balancer_ajax_thumb_vote extends base_object
 {
-	function object() { return $this->load_attr('object', object_load($this->id())); }
+	function object() { return $this->__havec('object') ? $this->__lastc() : $this->setc(object_load($this->id())); }
 
 	function content()
 	{

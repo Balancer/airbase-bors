@@ -17,6 +17,8 @@ class user_blog extends base_page
 
 	function parents() { return array("forum_user://".$this->id()); }
 
+	function is_reversed() { return true; }
+
 	private $xdata = array();
 	function local_data()
 	{
@@ -31,6 +33,7 @@ class user_blog extends base_page
 					'order' => 'blogged_time',
 					'page' => $this->page(),
 					'per_page' => $this->items_per_page(),
+					'is_public' => 1,
 				)))
 			);
 
