@@ -272,8 +272,8 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		return $this->is_banned = false;
 	}
 
-	function is_banned_in($forum_id) { return $this->load_attr('is_banned_in', _is_banned_in($forum_id)); }
-			
+	function is_banned_in($forum_id) { return $this->__havec('is_banned_in') ? $this->__lastc() : $this->__setc(_is_banned_in($forum_id)); }
+
 	private function _is_banned_in($forum_id)
 	{
 		if($this->warnings() >= 10)
@@ -305,7 +305,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 
 		if(!$user_hash_password)
 			return 0;
-			
+
 		$db = new driver_mysql('punbb');
 		$result = intval($db->select('users', 'id', array('user_cookie_hash=' => $user_hash_password)));
 		$db->close();
@@ -505,15 +505,15 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 
 	function today_posted()
 	{
-		return $this->load_attr('today_posted', objects_count('forum_post', array(
+		return $this->__havec('today_posted') ? $this->__lastc() : $this->__setc(objects_count('forum_post', array(
 			'owner_id' => $this->id(), 
 			'create_time>' => time()-86400,
-		))); 
+		)));
 	}
 
 	function today_posted_in_forum($forum_id)
 	{
-		return $this->load_attr('today_posted', objects_count('forum_post', array(
+		return $this->__havec('today_posted') ? $this->__lastc() : $this->__setc(objects_count('forum_post', array(
 			'owner_id' => $this->id(), 
 			'create_time>' => time()-86400,
 			'inner_join' => 'forum_topic ON (forum_post.topic_id = forum_topic.id)',

@@ -2,6 +2,9 @@
 
 class balancer_board_keywords_tags extends base_page
 {
+	function can_be_empty() { return false; }
+	function loaded() { return count($this->all_items()); }
+
 	static function keywords_explode($keywords_string)
 	{
 		$keywords_string = str_replace('/', ',', $keywords_string);
@@ -33,10 +36,10 @@ class balancer_board_keywords_tags extends base_page
 	function description()
 	{
 		require_once('inc/airbase_keywords.php');
-		
+
 		$sub_keywords = array();
 		$base_keywords = array();
-		
+
 		foreach($this->all_items() as $x)
 		{
 			$subkw = self::keywords_explode($x->keywords_string());
@@ -48,7 +51,7 @@ class balancer_board_keywords_tags extends base_page
 		
 		arsort($sub_keywords);
 		arsort($base_keywords);
-		
+
 		return ec("Фильтр: ").
 			airbase_keywords_linkify(join(',', 
 				array_slice(array_keys($sub_keywords), 0, 7)
@@ -56,11 +59,11 @@ class balancer_board_keywords_tags extends base_page
 			ec("К началу: ").
 				airbase_keywords_linkify(join(',', array_slice(array_keys($base_keywords), 0, 7)));
 	}
-	
+
 	function url($page = 1)
 	{
 		$keywords = array_map('urlencode', $this->keywords());
-		
+
 		return "http://forums.balancer.ru/tags/"
 			.join('/', $keywords)."/"
 			.($page > 1 ? $page.'.html' : '');

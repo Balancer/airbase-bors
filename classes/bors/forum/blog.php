@@ -14,7 +14,9 @@ class forum_blog extends base_page_db
 			'id' => 'post_id', 
 			'owner_id', 
 			'forum_id', 
-			'blogged_time');
+			'blogged_time',
+			'is_public',
+		);
 	}
 
 	function new_instance()

@@ -87,8 +87,6 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function set_forum($forum) { return $this->set_attr('forum', $forum); }
 
-	function first_post() { return $this->load_attr('first_post', object_load('balancer_board_post', $this->first_post_id())); }
-	function set_first_post($post) { return $this->set_attr('first_post', $post); }
 
 	function last_post() { return object_load('forum_post', $this->last_post_id()); }
 
@@ -490,5 +488,12 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	{
 		templates_jquery();
 		return false;
+	}
+
+	function auto_objects()
+	{
+		return array(
+			'first_post' => 'balancer_board_post(first_post_id)',
+		);
 	}
 }
