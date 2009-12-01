@@ -483,18 +483,18 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 	{
 		if($this->warning !== false)
 			return $this->warning;
-	
+
 		if($this->warning_id() == -1)
 			return $this->warning = NULL;
-			
+
 		if($this->warning_id())
 			return $this->warning = object_load('airbase_user_warning', $this->warning_id());
-			
+
 		$warn = objects_first('airbase_user_warning', array(
 			'warn_class_id=' => $this->class_id(),
 			'warn_object_id='=>$this->id(),
 			'order' => '-time'));
-			
+
 		$this->db()->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
 		$this->set_warning_id($warn ? $warn->id() : -1, true);
 		return $this->warning = $warn ? $warn : NULL;
@@ -506,7 +506,7 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 			object_load('airbase_board_topic', $this->topic_id()),
 			object_load('airbase_user_topics', $this->owner_id()),
 		);
-			
+
 		return $res;
 	}
 
