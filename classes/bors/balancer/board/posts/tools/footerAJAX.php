@@ -25,7 +25,7 @@ class balancer_board_posts_tools_footerAJAX extends base_page
 			'overquote' => $over,
 			'overquote_crit' => ($over > 60),
 			'id' => $x ? $x->id() : 0,
-			'owner_id' => $x->owner_id(),
+			'owner_id' => $x ? $x->owner_id() : NULL,
 		);
 	}
 }

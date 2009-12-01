@@ -1,12 +1,13 @@
 <div class="warning_note left">
-<b>Внимание! Эта страница находится в процессе осмысления и создания.</b>
+<b>Внимание! Эта страница находится в процессе осмысления и создания.</b> Можете пока
+пользоваться <a href="http://balancer.ru/forum/">старым и основным видом форумов</a>.
 </div>
 
-<table class="btab">
+<table class="btab w100p">
 <caption>Новые темы форумов</caption>
 <tr><th>Время</th><th>тема</th><th>форум</th><th>автор</th></tr>
 {foreach from=$new_topics item="t"}
-<tr><td>{$t->create_time()|date:'H:i'}</td>
+<tr><td>{$t->create_time()|smart_time}</td>
 	<td>{$t->titled_url('new')}<br/>
 {if $t->description()}<i>{$t->description()}</i><br/>{/if}
 	</td>
@@ -16,7 +17,9 @@
 {/foreach}
 </table>
 
-<table class="btab">
+<div class="box more w100p"><a href="http://forums.balancer.ru/new-topics/">Все новые темы форума за месяц &raquo;&raquo;&raquo;</a></div>
+
+<table class="btab w100p">
 <caption>Обновлённые темы форумов</caption>
 <tr><th>Время</th><th>тема</th><th>форум</th><th>отвечал</th></tr>
 {foreach from=$updated_topics item="t"}

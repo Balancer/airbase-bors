@@ -17,4 +17,9 @@ ul.operations li {
 <ul>
 <li><a href="http://balancer.ru/forum/topics/{$this->id()}/reports/users-graph.svg">Граф взаимных ответов участников темы</a></li>
 <li><a href="http://balancer.ru/forum/topics/{$this->id()}/reports/users-ograph.svg">Граф взаимных ответов участников темы (ориентированный)</a></li>
+{if $is_subscribed}
+<li><a href="http://balancer.ru/forum/punbb/misc.php?unsubscribe={$this->id()}">Отписаться от получения e-mail извещений при ответах в эту тему</a></li>
+{else}
+<li><a href="http://balancer.ru/forum/punbb/misc.php?subscribe={$this->id()}">Подписаться на получение e-mail извещений при ответах в эту тему</a></li>
+{/if}
 </ul>

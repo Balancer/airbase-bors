@@ -89,9 +89,14 @@ dl.box dt a {color: #ffffd0;}
 
 .box {
 	border: 1px solid #9bd;
-	background-color: #def; 
+	background-color: #def;
 	margin: 0px 4px 4px 4px;
 	padding: 4px;
+}
+
+.more {
+	margin: 0 0 20px 0;
+	background-color: white;
 }
 
 a.external {

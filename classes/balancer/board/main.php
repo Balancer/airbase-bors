@@ -14,6 +14,7 @@ class balancer_board_main extends base_page
 			'limit' => 10,
 			'closed' => 0,
 			'num_replies>=' => 0,
+			'is_public' => 1,
 		));
 
 //		bors_objects_preload($new_topics, 'first_post_id', 'balancer_board_post', 'first_post');
@@ -23,6 +24,7 @@ class balancer_board_main extends base_page
 			'updated_topics' => objects_array('balancer_board_topic', array(
 				'order' => '-modify_time',
 				'limit' => 10,
+				'is_public' => 1,
 			)),
 
 			'new_topics' => $new_topics,
