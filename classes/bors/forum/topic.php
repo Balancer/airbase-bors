@@ -39,8 +39,15 @@ class forum_topic extends forum_abstract
 		);
 	}
 
+function set_forum_id($v, $dbup)
+{
+	if(($new_forum = object_load('balancer_board_forum', $v)))
+		$this->set_is_public($new_forum->is_public(), true);
+
+	return $this->set('forum_id', $v, $dbup);
+}
+
 function forum_id() { return @$this->data['forum_id']; }
-function set_forum_id($v, $dbup) { return $this->set('forum_id', $v, $dbup); }
 function owner_id() { return @$this->data['owner_id']; }
 function set_owner_id($v, $dbup) { return $this->set('owner_id', $v, $dbup); }
 function last_poster_name() { return @$this->data['last_poster_name']; }

@@ -7,5 +7,5 @@ class balancer_board_new_topics extends base_page_paged
 	function template() { return 'forum/_header.html'; }
 	function title() { return 'Новые темы за месяц'; }
 	function nav_name() { return 'новые темы'; }
-	function where() { return array('posted>' => time()-86400*31); }
+	function where() { return array('posted>' => time()-86400*31, 'is_public' => 1); }
 }
