@@ -499,7 +499,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		$limit = round(max(0, 15/($w*$w) * $this->reputation())) + $offset;
 		if($limit > 40)
 			return -1;
-			
+
 		return $limit;
 	}
 
@@ -508,6 +508,14 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		return $this->__havec('today_posted') ? $this->__lastc() : $this->__setc(objects_count('forum_post', array(
 			'owner_id' => $this->id(), 
 			'create_time>' => time()-86400,
+		)));
+	}
+
+	function tomonth_posted()
+	{
+		return $this->__havec('tomonth_posted') ? $this->__lastc() : $this->__setc(objects_count('forum_post', array(
+			'owner_id' => $this->id(), 
+			'create_time>' => time()-86400*31,
 		)));
 	}
 
