@@ -345,8 +345,9 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function url()
 	{
-		require_once("inc/urls.php");
-		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
+//		require_once("inc/urls.php");
+//		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
+		return '/_bors/igo?o='.$this->internal_uri_ascii();
 	}
 
 	function titled_link($text = NULL, $css=NULL) 
@@ -574,10 +575,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function edit_url() { return "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}"; }
 
-	function pre_show()
-	{
-		return go($this->url_in_topic());
-	}
+	function pre_show() { return go($this->url_in_topic()); }
+	function igo($permanent = true) { return go($this->url_in_topic(), $permanent); }
 
 	function score_colorized($recalculate = false)
 	{
