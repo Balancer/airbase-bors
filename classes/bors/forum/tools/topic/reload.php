@@ -11,7 +11,7 @@ class forum_tools_topic_reload extends base_object
 			$page = $m[1];
 		else
 			$page = 1;
-		
+
 		$topic->recalculate();
 		return go($topic->url($page));
 	}

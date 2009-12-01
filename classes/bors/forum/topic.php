@@ -381,11 +381,11 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	function cache_clean_self($page = NULL)
 	{
 		parent::cache_clean_self($page);
-		
+
 //		$this->db('punbb')->query('UPDATE posts SET source_html=NULL WHERE topic_id = '.$this->id());
 //		if($posts = $this->all_posts_ids())
 //			$this->db('punbb')->query('UPDATE messages SET html=\'\' WHERE id IN (' . join(',', $posts) . ')');
-		
+
 		//TODO: подумать на тему неполной чистки.
 		foreach(glob($this->cache_dir().'/t'.$this->id().'*.html') as $f)
 			@unlink($f);

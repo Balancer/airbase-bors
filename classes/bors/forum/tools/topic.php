@@ -20,13 +20,13 @@ class forum_tools_topic extends base_page
 		$me = bors()->user();
         if(!$me || !$me->id())
             return false;
-	
+
 		if(!$me->group()->can_move())
 			return false;
-	
+
 		return true;
 	}
-	
+
 	function on_action_topic_edit($data)
 	{
 		foreach(explode(' ', 'description keywords_string title') as $key)
@@ -38,8 +38,11 @@ class forum_tools_topic extends base_page
 
 	function local_data()
 	{
+		$dbh = new driver_mysql('punbb');
+
 		return array(
 			'me' => bors()->user(),
+			'is_subscribed' => $dbh->select('subscriptions', 'COUNT(*)', array('user_id' => bors()->user_id(), 'topic_id' => $this->id())),
 		);
 	}
 }

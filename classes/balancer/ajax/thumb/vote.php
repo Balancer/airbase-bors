@@ -2,10 +2,11 @@
 
 class balancer_ajax_thumb_vote extends base_object
 {
-	function object() { return $this->__havec('object') ? $this->__lastc() : $this->setc(object_load($this->id())); }
+	function object() { return $this->__havec('object') ? $this->__lastc() : $this->__setc(object_load($this->id())); }
 
 	function content()
 	{
+		$this->object()->score_colorized(true);
 		switch($this->args('vote'))
 		{
 			case 'down':
@@ -17,6 +18,7 @@ class balancer_ajax_thumb_vote extends base_object
 			default:
 				return "Ошибка параметров";
 		}
+
 
 		if(!$this->object())
 			return "Неизвестный объект";
@@ -37,8 +39,9 @@ class balancer_ajax_thumb_vote extends base_object
 			'target_user_id' => $this->object()->owner_id(),
 			'score' => $score,
 		));
-		
+
 		$vote->store();
+		$this->object()->topic()->cache_clean_self($this->object()->page_in_topic());
 
 		return $this->object()->score_colorized(true);
 	}

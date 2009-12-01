@@ -3,6 +3,9 @@
 $forums = '(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/|/forum/)';
 
 $map = array(
+	'/\w{32}/cache(/.*/\d*x\d*/[^/]+\.(jpe?g|png|gif)) => bors_image_autothumb(1)',
+	'/\w{32}/cache(/.*/\d*x\d*\([^)]+\)/[^/]+\.(jpe?g|png|gif)) => bors_image_autothumb(1)',
+
 	'.*/\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)\-rss\.xml => forum_topic_rss(1)',
 	'.*/\d{4}/\d{1,2}/topic\-(\d+)\-rss\.xml => forum_topic_rss(1)',
 //	'.* => page_fs_separate', - Временно отключено по причине ошибок определения загруженности страницы.
