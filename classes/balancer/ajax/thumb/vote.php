@@ -6,7 +6,11 @@ class balancer_ajax_thumb_vote extends base_object
 
 	function content()
 	{
-		$this->object()->score_colorized(true);
+		$target = $this->object();
+		$me		= bors()->user();
+		$me_id	= bors()->user_id();
+
+		$target->score_colorized(true);
 		switch($this->args('vote'))
 		{
 			case 'down':
@@ -20,23 +24,29 @@ class balancer_ajax_thumb_vote extends base_object
 		}
 
 
-		if(!$this->object())
+		if(!$target)
 			return "Неизвестный объект";
 
-		if(!bors()->user_id())
+		if(!$me_id)
 			return "Только для зарегистрированных пользователей!";
 
-		if(bors()->user()->is_banned())
+		if($me->is_banned())
 			return "Вы находитесь в режиме «только чтение»";
 
-		if(bors()->user_id() == $this->object()->owner_id())
+		if($me_id == $target->owner_id())
 			return "<small>Нельзя ставить оценку себе!</small>";
 
+		if($me->tomonth_posted() < 10)
+			return "<small>У Вас слишком низкая активность на форумах</small>";
+
+		if($score < 0 && $target->modify_time() < time() - 86400*14)
+			return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";
+
 		$vote = object_new_instance('bors_votes_thumb', array(
-			'user_id' => bors()->user_id(),
-			'target_class_name' => $this->object()->class_name(),
-			'target_object_id' => $this->object()->id(),
-			'target_user_id' => $this->object()->owner_id(),
+			'user_id' => $me_id,
+			'target_class_name' => $target->class_name(),
+			'target_object_id' => $target->id(),
+			'target_user_id' => $target->owner_id(),
 			'score' => $score,
 		));
 
