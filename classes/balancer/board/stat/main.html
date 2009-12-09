@@ -1,0 +1,13 @@
+<table class="btab w100p">
+<caption>Самые популярные форумы за последний месяц</caption>
+<tr>
+	<th>Форум</th>
+	<th>Число ответов</th>
+</tr>
+{foreach from=$forums_stat key="forum_id" item="updates_count"}
+{assign var="x" value=$forums[$forum_id]}
+<tr>
+	<td>{$x->titled_url()}</td>
+	<td>{$updates_count}</td>
+{/foreach}
+</table>

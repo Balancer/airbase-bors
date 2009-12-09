@@ -29,6 +29,9 @@ $map = array(
 
 	'(/)new\-topics/ => balancer_board_new_topics',
 	'(/)new\-topics/(\d+)\.html => balancer_board_new_topics(NULL,2)',
+
+	'/stat/ => balancer_board_stat_main',
+
 	'(/)tags/ => balancer_board_keywords_main',
 	'(/tags/)(.*)/(\d+)\.html => balancer_board_keywords_tags(2,3)',
 	'(/tags/)(.*)/? => balancer_board_keywords_tags(2)',
