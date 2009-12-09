@@ -39,7 +39,7 @@
 <ul>
 <li><a href="#" onclick="ptrch({$id},'up')"><img src="/_bors/i/thumb_up.gif" /> Одобрить это сообщение</a></li>
 <li><a href="#" onclick="ptrch({$id},'down')"><img src="/_bors/i/thumb_down.gif" /> Неодобрить это сообщение</a></li>
-<li><a href="http://balancer.ru/user/{$owner_id}/reputation.html?{$p->url()}">Изменить репутацию автора за это сообщение</a></li>
+<li><a href="http://balancer.ru/user/{$owner_id}/reputation.html?{$p->internal_uri_ascii()}">Изменить репутацию автора за это сообщение</a></li>
 <li><a href="http://balancer.ru/forum/punbb/misc.php?report={$id}">Сообщить о нарушении модераторам</a></li>
 <li><a href="http://balancer.ru/forum/user-{$owner_id}-posts-in-topic-{$p->topic()->id()}/">Показать все сообщения данного пользователя в данной теме</a></li>
 <li><a href="http://balancer.ru/admin/forum/post/{$id}/do-drop-cache.bas">Сбросить кеш этого сообщения</a></li>

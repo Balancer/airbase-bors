@@ -6,7 +6,7 @@ class forum_main extends base_page
 	function nav_name() { return ec('форумы'); }
 	function parents() { return array('http://balancer.ru/'); }
 	function create_time() { return 943531800; }
-		
+
 	function _queries()
 	{
 		return array(
@@ -16,7 +16,7 @@ class forum_main extends base_page
 	}
 
 	function storage_engine() { return ''; }
-	
+
 //	function cache_static() { return 300; }
 
 	function url() { return 'http://balancer.ru/forum/'; }
