@@ -1,0 +1,9 @@
+#description Hе бойся напpавить дpyгого по ложномy FTP, ибо неисповедимы пути...
+#nav_name скачать
+#title Скачать
+
+Проект можно скачать из Mercurial-репозитория с адреса [http://hg.balancer.ru http://hg.balancer.ru].
+
+Также доступны ночные архивы:
+ * [/downloads/bors-core-nightly-latest.zip bors-core-nightly-latest.zip] - ядро системы
+ * [/downloads/bors-third-party-nightly-latest.zip bors-third-party-nightly-latest.zip] - основные компоненты сторонних разработчиков
