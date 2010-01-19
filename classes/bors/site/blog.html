@@ -1,0 +1,123 @@
+<style>{literal}
+div.avatar_block {
+	width: 100px; 
+	float: right; 
+	margin: 0px 0px 8px 16px; 
+	display: inline; 
+	border-left: 1px solid #999;
+	border-bottom: 1px solid #999;
+	background-color: white; 
+	text-align: center;
+	overflow: hidden;
+}
+
+div.avatar_block h4 {
+	font-size: 9pt;
+	font-weight: 900;
+	padding: 0;
+	margin: 0;
+}
+
+div.avatar_block h5 {
+	font-size: 8pt;
+	padding: 0;
+	margin: 0;
+	font-weight: normal;
+}
+
+div.avatar_block div {
+	width: 100px;
+	height: 100px;
+	margin: 0;
+	text-align: center;
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+div.post {
+	border: 1px solid #999;
+	margin: 10px 0px 0px 0px; 
+	padding: 0px; 
+	clear: both;
+	background-color: #ffffff;
+}
+
+div.post div.head, div.post {
+	background-color: #999; 
+	border-bottom: 1px solid #999;
+}
+
+div.post div.head, div.post div.head a {
+	margin: 0px; 
+	padding: 1px; 
+	font-weight: 900;
+	font-size: 1.0em;
+	text-align: left;
+	color: #ffe;
+}
+
+div.post div.head div.to-right div {
+	margin: 0 4px;
+}
+
+div.post div.head div.to-right img {
+	cursor: pointer;
+}
+
+div.post div.body {
+	text-align: justify; 
+	padding: 4px; 
+	margin: 0px;
+	background-color: white;
+}
+
+.code {
+	background: white;
+	border: 1px solid #ccc;
+	margin-top: 0;
+	padding-left: 4px;
+	font-size: 12pt;
+}
+
+.code-head {
+	background: #ccc;
+	color: white;
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	margin-bottom: 0;
+	font-weight: bold;
+}
+
+BLOCKQUOTE {
+	border-color: #ddd #e8e8e8 #eee #ddd;
+	BORDER-STYLE: solid;
+	BORDER-WIDTH: 1px;
+	font-size: 90%;
+	background-color: #eee;
+	margin: 2px 5px;
+	padding: 4px;
+}
+
+{/literal}</style>
+
+{$this->pages_links_nul()}
+
+{foreach from=$items item=r}
+{assign var="p" value=$r->post()}
+{if $p}
+ {assign var="t" value=$p->topic()}
+ {if $t}
+  {assign var="forum" value=$t->forum()}
+   {include file="xfile:forum/post.html" 
+   		show_title=$t->title_url()
+   		strip="2000"
+   		skip_message_footer=1
+   		skip_votes=1
+   		skip_forums=1
+   	}
+ {/if}
+{/if}
+{/foreach}
+
+{$this->pages_links_nul()}

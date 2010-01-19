@@ -1,0 +1,9 @@
+#nav_name ссылки
+#title Ссылки
+#description Не вся реклама в интернете, но весь интернет-реклама.
+#create_time 19.01.2010
+
+ * [http://hg.balancer.ru/|Mercurial-репозиторий]
+ * [http://trac.balancer.ru/bors-core/|Trac ядра системы]
+ * [http://trac.balancer.ru/bors-airbase/|Trac компонентов airbase.ru и balancer.ru]
+ * [http://balancer.ru/support/viewforum.php?id=60|Форум поддержки]
