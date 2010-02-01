@@ -3,7 +3,7 @@
 class balancer_board_keywords_tags extends base_page
 {
 	function can_be_empty() { return false; }
-	function loaded() { return count($this->all_items()); }
+	function loaded() { return count($this->all_items()) && $this->_items_this_page(); }
 
 	static function keywords_explode($keywords_string)
 	{
@@ -12,6 +12,7 @@ class balancer_board_keywords_tags extends base_page
 		$keywords = array_map('urldecode', $keywords);
 		$keywords = array_map('trim', $keywords);
 		$keywords = array_filter($keywords);
+		$keywords = array_filter($keywords, create_function('$x', 'return strlen($x) > 1;'));
 		sort($keywords);
 		return $keywords;
 	}
@@ -19,7 +20,7 @@ class balancer_board_keywords_tags extends base_page
 	static function id_prepare($id) { return join(',', self::keywords_explode($id)); }
 
 	function template() { return 'forum/_header.html'; }
-	function keywords_string() { return $this->id(); }
+	function keywords_string() { return urldecode($this->id()); }
 //	function body_engine() { return 'body_php'; }
 
 	private $_keywords = NULL;
@@ -48,16 +49,23 @@ class balancer_board_keywords_tags extends base_page
 			foreach(array_diff($subkw, $this->keywords()) as $kw)
 				@$sub_keywords[$kw]++;
 		}
-		
+
 		arsort($sub_keywords);
 		arsort($base_keywords);
 
-		return ec("Фильтр: ").
+		if(count($this->all_items()) <= 50)
+			$filters = '';
+		else
+			$filters = ec("Фильтр: ").
 			airbase_keywords_linkify(join(',', 
 				array_slice(array_keys($sub_keywords), 0, 7)
-			), $this->keywords_string()).'<br />'.
-			ec("К началу: ").
-				airbase_keywords_linkify(join(',', array_slice(array_keys($base_keywords), 0, 7)));
+			), $this->keywords_string());
+
+		$kw = ec("Тэги		: ").
+			airbase_keywords_linkify(join(',', array_slice(array_keys($base_keywords), 0, 7)));
+
+		return join('<br />', array($filters, $kw));
+
 	}
 
 	function url($page = 1)
@@ -69,15 +77,20 @@ class balancer_board_keywords_tags extends base_page
 			.($page > 1 ? $page.'.html' : '');
 	}
 
+	private function _items_this_page()
+	{
+		return $this->__havec('_items_this_page') ? $this->__lastc() : $this->__setc(array_slice($this->all_items(),
+				($this->args('page')-1) * $this->items_per_page(),
+				$this->items_per_page()
+		));
+	}
+
 	function local_data()
 	{
 		templates_noindex();
 
 		return array(
-			'items' => array_slice($this->all_items(),
-				($this->page()-1) * $this->items_per_page(),
-				$this->items_per_page()
-			),
+			'items' => $this->_items_this_page(),
 		);
 	}
 
@@ -115,7 +128,7 @@ class balancer_board_keywords_tags extends base_page
 						)) as $x)
 						$list[$x->internal_uri()] = $x;
 				}
-				
+
 				$items[] = $list;
 			}
 		}
@@ -128,7 +141,7 @@ class balancer_board_keywords_tags extends base_page
 			$items = $items[0];
 		else
 			$items = array();
-		
+
 		return $this->_all_items = $items;
 	}
 }

@@ -38,6 +38,7 @@ class airbase_board_post extends base_page_db
 			'poster_ua',
 			'author_name' => 'poster',
 			'answer_to_id' => 'answer_to',
+			'answer_to_user_id' => 'anwer_to_user_id',
 			'post_source' => 'source',
 			'post_body' => 'source_html',
 			'hide_smilies',
@@ -253,7 +254,7 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 	{
 		if($this->__answer_to !== 0)
 			return $this->__answer_to;
-	
+
 		if($id = $this->answer_to_id())
 			return $this->__answer_to =  class_load('airbase_board_post', $id);
 
@@ -419,7 +420,7 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 
 		return $result;
 	}
-	
+
 	function answers_in_this_topic()
 	{
 		$result = array();
@@ -429,17 +430,17 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 
 		return $result;
 	}
-	
+
 	function move_tree_to_topic($new_tid)
 	{
 //		echo "Post {$this->id()}: create_time=".strftime("%c", $this->create_time()).", modify_time=".strftime("%c", $this->modify_time(true)).", change_time=".strftime("%c", $this->change_time(true))."<br />\n";
-	
+
 		$GLOBALS['move_tree_to_topic_changed_topics'] = array();
-	
+
 		$this->__move_tree_to_topic($new_tid, $this->topic_id());
-		
+
 //		print_r($GLOBALS['move_tree_to_topic_changed_topics']);
-		
+
 		foreach(array_keys($GLOBALS['move_tree_to_topic_changed_topics']) as $tid)
 			object_load('airbase_board_topic', $tid)->recalculate();
 	}
@@ -448,15 +449,15 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 	{
 		$GLOBALS['move_tree_to_topic_changed_topics'][$new_tid] = true;
 		$GLOBALS['move_tree_to_topic_changed_topics'][$this->topic_id()] = true;
-		
+
 //		echo "Move {$this->id()} from {$this->topic_id()} to {$new_tid}<br />\n";
-	
+
 		if($this->topic_id() == $old_tid)
 		{
 			$this->set_topic_id($new_tid, true);
 			cache_static::drop($this);
 		}
-		
+
 		foreach($this->answers() as $answer)
 			$answer->__move_tree_to_topic($new_tid, $old_tid);
 	}

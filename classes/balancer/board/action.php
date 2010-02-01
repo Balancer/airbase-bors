@@ -29,7 +29,7 @@ class balancer_board_action extends base_page_db
 		if($this->is_new())
 			$cls[] = 'b';
 
-		return $cls ? ' class='.join(' ', $cls) : '';
+		return $cls ? ' class="'.join(' ', $cls).'"' : '';
 	}
 
 	static function add($object, $message, $is_moderatorial = false, $is_public = true)

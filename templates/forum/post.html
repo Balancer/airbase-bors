@@ -7,6 +7,7 @@
 	$skip_author_name
 	$skip_avatar_block
 	$skip_date
+	$skip_forums - не отображать название форума
 	$skip_votes - не рисовать иконки в заголовке
 	$skip_message_footer
 	$strip - сколько резать символов.
@@ -25,7 +26,7 @@
 {if not $skip_author_name}{$p->author_name()}{/if}
 {if not $skip_date}, <a href="{$p->url()}">{$p->create_time()|full_time}</a>{/if}
 {if not $no_show_answers and $p->answer_to_id() && $a}<span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>{/if}
-{if $forum} <small>// {$forum->titled_url()}</small>{/if}
+{if $forum and not $skip_forums} <small>// {$forum->titled_url()}</small>{/if}
 </div>
 
 {if not $skip_votes}

@@ -21,7 +21,7 @@ class airbase_board_forum_prss extends base_rss
 			'last_post>' => time() - 86400,
 			'forum_id' => $this->id(),
 		));
-	
+
 		return objects_array('airbase_board_post', array(
 			'posted>' => time() - 86400,
 			'order' => '-posted',
@@ -30,8 +30,8 @@ class airbase_board_forum_prss extends base_rss
 	}
 
 	function rss_url() { return $this->forum()->url(); }
-	function url() { return "http://{$_SERVER['HTTP_HOST']}/forum/{$this->id()}/posts-rss.xml"; }
-	
+	function url() { return "http://".@$_SERVER['HTTP_HOST']."/forum/{$this->id()}/posts-rss.xml"; }
+
 	// Очистка только чисто таймаутная. А то при частых ответах на форумах
 	// кеш практически не работает, всегда сбрасывается.
 	function cache_static() { return $this->forum()->is_public_access() ? rand(300, 600) : 0; }

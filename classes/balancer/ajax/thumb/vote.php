@@ -23,7 +23,6 @@ class balancer_ajax_thumb_vote extends base_object
 				return "Ошибка параметров";
 		}
 
-
 		if(!$target)
 			return "Неизвестный объект";
 
@@ -42,6 +41,10 @@ class balancer_ajax_thumb_vote extends base_object
 		if($score < 0 && $target->modify_time() < time() - 86400*14)
 			return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";
 
+		$topic = $target->topic();
+		if($topic->modify_time() < time() - 86400*90)
+			$topic->set_modify_time(time(), true);
+
 		$vote = object_new_instance('bors_votes_thumb', array(
 			'user_id' => $me_id,
 			'target_class_name' => $target->class_name(),
@@ -51,8 +54,8 @@ class balancer_ajax_thumb_vote extends base_object
 		));
 
 		$vote->store();
-		$this->object()->topic()->cache_clean_self($this->object()->page_in_topic());
+		$topic->cache_clean_self($target->page_in_topic());
 
-		return $this->object()->score_colorized(true);
+		return $target->score_colorized(true);
 	}
 }

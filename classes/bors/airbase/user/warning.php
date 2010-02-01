@@ -32,7 +32,7 @@ class airbase_user_warning extends base_object_db
 			$obj = object_load($this->warn_class_id(), $this->warn_object_id());
 			return $obj ? $obj->titled_url() : '?';
 		}
-	
+
 		if($this->warn_class_id() == 0)
 		{
 			if($obj = object_load($this->referer()))
@@ -45,7 +45,7 @@ class airbase_user_warning extends base_object_db
 
 			$this->set_warn_class_id(-1, true);
 		}
-		
+
 		return "<a href=\"{$this->referer()}\">{$this->referer()}</a>";
 	}
 
@@ -54,9 +54,18 @@ class airbase_user_warning extends base_object_db
 		$score = $this->score_db();
 		if($score > 0)
 			$score = '+'.$score;
-		
+
 		return $score;
 	}
 
 	function set_score($value, $dbup) { return $this->set_score_db($value, $dbup); }
+
+	function editor_fields_list()
+	{
+		return array(
+			ec('Тип штрафа:') => 'type_id|dropdown=airbase_user_warning_typesco',
+			ec('Комментарий:') => 'source|textarea=4',
+			ec('Количество штрафных баллов:') => 'score',
+		);
+	}
 }

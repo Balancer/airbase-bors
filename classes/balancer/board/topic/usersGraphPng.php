@@ -26,10 +26,10 @@ class balancer_board_topic_usersGraphPng extends base_image_png
 			{
 				$from_id = $user_id;
 				$to_id = $p->answer_to()->owner_id();
-				
+
 				if($from_id < $to_id)
 					list($to_id, $from_id) = array($from_id, $to_id);
-				
+
 				if(empty($edges[$from_id][$to_id]))
 					$edges[$from_id][$to_id] = array(
 						'count' => 1,

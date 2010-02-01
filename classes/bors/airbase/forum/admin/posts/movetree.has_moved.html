@@ -1,10 +1,12 @@
 Сообщения{if $this->posts()}:
 <ul>
 {foreach from=$this->posts() item="post"}
-<li>{$post->titled_url()}</li>
+<li>{if $post}{$post->titled_url()}{/if}</li>
 {/foreach}
 </ul>
 {/if}
 
+{if $old_topic && $new_topic}
 успешно перенесены из темы «{$old_topic->titled_url()}» в тему «{$new_topic->titled_url()}».
+{/if}
 

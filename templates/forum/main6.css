@@ -673,3 +673,14 @@ table.yandex_money input {
 	margin-top: 80px;
 	font-weight: bold;
 }
+
+.keywords, .keywords a {
+/*	font-size: 0.8em; */
+	font-style: italic;
+	padding-top: 10px;
+	color: #999;
+}
+
+.keywords a {
+	text-decoration: underline;
+}

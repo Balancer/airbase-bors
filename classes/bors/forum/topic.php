@@ -78,6 +78,16 @@ function set_closed($v, $dbup) { return $this->set('closed', $v, $dbup); }
 function keywords_string_db() { return @$this->data['keywords_string_db']; }
 function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_db', $v, $dbup); }
 
+	function keywords_linked()
+	{
+		if($this->__havec('keywords_linked'))
+			return $this->__lastc();
+
+		require_once('inc/airbase_keywords.php');
+		$kws = $this->keywords_string();
+		return $this->__setc($kws ? airbase_keywords_linkify($kws) : '');
+	}
+
 	private $forum = false;
 	function forum()
 	{
@@ -160,12 +170,13 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		require_once("engines/smarty/assign.php");
 		$data = array(
 			'posts' => $this->posts(),
-			'last_actions' => objects_array('balancer_board_action', array(
+			'last_actions' => array_reverse(objects_array('balancer_board_action', array(
 				'target_class_name' => $this->class_name(),
 				'target_object_id' => $this->id(),
-				'order' => 'create_time',
+				'order' => '-create_time',
+				'group' => 'target_class_name, target_object_id, message',
 				'limit' => 10,
-			)),
+			))),
 			'is_last_page' => $this->page() == $this->total_pages(),
 		);
 
@@ -267,7 +278,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function is_public_access() { return $this->forum_id() && $this->forum()->is_public_access(); }
 
-	function cache_static() { return $this->is_public_access() ? rand(86400*7, 86400*30) : 0; }
+	function cache_static() { return $this->is_public_access() ? rand(86400, 86400*3) : 0; }
 
 	function base_url() { return $this->forum_id() ? $this->forum()->category()->category_base_full() : '/'; }
 
@@ -503,5 +514,12 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		return array(
 			'first_post' => 'balancer_board_post(first_post_id)',
 		);
+	}
+
+	function last_visit_time_for_user($user)
+	{
+		return intval($this->db()->select('topic_visits', 'last_visit', array(
+			'user_id=' => $user->id(), 
+			'topic_id=' => $this->id())));
 	}
 }

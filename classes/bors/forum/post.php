@@ -1,5 +1,7 @@
 <?php
 
+// bors_exit('Форум в стадии модификации базы данных. Минут 30 (до ~03:50) будет недоступен. Можете пока сходить на <a href="http://balancer.endofinternet.net/mybb/index.php">Запасные форумы</a>.');
+
 include_once('engines/lcml.php');
 include_once('inc/browsers.php');
 
@@ -34,6 +36,7 @@ class forum_post extends base_object_db
 			'poster_ua',
 			'author_name' => 'poster',
 			'answer_to_id' => 'answer_to',
+			'answer_to_user_id' => 'anwer_to_user_id',
 			'post_source' => 'source',
 			'post_body' => 'source_html',
 			'hide_smilies',
@@ -347,7 +350,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 //		require_once("inc/urls.php");
 //		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
-		return '/_bors/igo?o='.$this->internal_uri_ascii();
+		return 'http://balancer.ru/_bors/igo?o='.$this->internal_uri_ascii();
 	}
 
 	function titled_link($text = NULL, $css=NULL) 
@@ -617,5 +620,10 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			$rate = "";
 
 		return "<span style=\"color:$color\">{$score}</span>{$rate}";
+	}
+
+	function has_readed_by_user($user)
+	{
+		return $this->topic()->last_visit_time_for_user($user) > $this->modify_time();
 	}
 }

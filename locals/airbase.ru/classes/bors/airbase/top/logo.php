@@ -6,11 +6,11 @@ class airbase_top_logo extends base_image_png
 	{
 		$id = $this->id();
 		$db = &new DataBase('top');
-		
+
 		$x = $db->get("SELECT place, visits FROM aviatop_members WHERE id = $id");
 		$place  = $x['place'];
 		$visits = $x['visits'];
-			
+
 		$x  = $db->get("SELECT SUM(visits) as sum, MIN(check_time) as min, MAX(check_time) as max FROM aviatop_week WHERE top_id = $id");
 		$rate = $x['sum']*86400/($x['max'] - $x['min']+1);
 
@@ -32,7 +32,7 @@ class airbase_top_logo extends base_image_png
 		chmod("$path/$id.png", 0664);
 
 		imagedestroy($img);
-			
+
 		return "http://airbase.ru/top/logos/$id.png";
 	}
 
@@ -40,11 +40,11 @@ class airbase_top_logo extends base_image_png
 	{
 		$id = $this->id();
 		$db = &new DataBase('top');
-		
+
 		$x = $db->get("SELECT place, visits FROM aviatop_members WHERE id = $id");
 		$place  = $x['place'];
 		$visits = $x['visits'];
-			
+
 		$x  = $db->get("SELECT SUM(visits) as sum, MIN(check_time) as min, MAX(check_time) as max FROM aviatop_week WHERE top_id = $id");
 		$rate = $x['sum']*86400/($x['max'] - $x['min']+1);
 
@@ -65,7 +65,7 @@ class airbase_top_logo extends base_image_png
 		ob_end_clean();
 
 		imagedestroy($img);
-			
+
 		return $png;
 	}
 
@@ -75,6 +75,6 @@ class airbase_top_logo extends base_image_png
 	}
 
 	function url() { return "http://airbase.ru/top/logos/{$this->id()}.png"; }
-	
+
 	function cache_static() { return 600; }
 }
