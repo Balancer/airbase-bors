@@ -29,6 +29,6 @@ class airbase_keywords_old extends base_object
 
 	function pre_show()
 	{
-		return go($this->url);
+		return go($this->url, true);
 	}
 }
