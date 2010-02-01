@@ -87,11 +87,13 @@ function bors_geo_place_title($ip)
 		return "";
 
 	global $GEOIP_REGION_NAME;
-		
+
 	$ch = &new Cache();
 	if($ch->get("country_flag-v14", $ip))
 		return $ch->last();
 
+	if(!file_exists(BORS_3RD_PARTY.'/geoip/GeoLiteCity.dat'))
+		return "";
 
 	$gi = geoip_open(BORS_3RD_PARTY.'/geoip/GeoLiteCity.dat', GEOIP_STANDARD);
 
@@ -101,7 +103,7 @@ function bors_geo_place_title($ip)
 	$city_name = $record->city;
 	$region_code = $record->region;
 	geoip_close($gi);
-		
+
 	if(!$country_code)
 	{
 		$gi = geoip_open(BORS_3RD_PARTY.'/geoip/GeoIP.dat', GEOIP_STANDARD);

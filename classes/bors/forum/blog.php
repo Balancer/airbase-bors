@@ -43,7 +43,7 @@ class forum_blog extends base_page_db
 	}
 
 	function forum() { return object_load('airbase_board_forum', $this->forum_id()); }
-	function post() { return object_load('airbase_board_post', $this->id()); }
+	function post() { return object_load('balancer_board_post', $this->id()); }
 	function topic() { return object_load('airbase_board_topic', $this->post()->topic_id()); }
 	function owner() { return object_load('forum_user', $this->owner_id()); }
 	function title() { return $this->topic()->title(); }

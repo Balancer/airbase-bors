@@ -26,7 +26,7 @@
   </td>
   <td class="small">
   	Форум: <b><?=$x->forum()->titled_url()?></b><br/>
-	Метки: <?=airbase_keywords_linkify($x->keywords_string())?>
+	Тэги: <?=airbase_keywords_linkify($x->keywords_string())?>
   </td>
 </tr>
 <?endforeach?>

@@ -1,3 +1,13 @@
+<script><!--
+function add_warn(edit_url)
+{ldelim}
+if(top.me_is_coordinator)
+	document.write('<div class="float right">'
+		+'<a href="'+edit_url+'"><img src="/bors-shared/images/edit-16.png"></a>'
+		+'</div>')
+{rdelim}
+--></script>
+
 {if $show_form}
 <h2>Выставление штрафа</h2>
 <p>За {$object->class_title_rp()|lower} «{$object->titled_url()}»</p>
@@ -26,7 +36,9 @@
 {foreach from=$active_warnings item="w"}
 <tr>
 	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
-	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</td>
+	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}
+		<script>add_warn('{$w->admin()->edit_url()}')</script>
+	</td>
 	<td>{$w->moderator_name()}</td>
 	<td>{$w->source()|pun_lcml}<br /><small>// За: {$w->referer_titled_url()} [{$w->id()}]</small></td>
 </tr>

@@ -108,6 +108,7 @@ dd, dt { height: 1%; }
 			<h1>{$title}</h1>
 			{$description}
 {* if $this->keywords_string()}<br /><i>Ключевые слова: {$this->keywords_string()}</i>{/if *}
+			{if $this->keywords_linked()}<div class="keywords">Тэги: {$this->keywords_linked()}</div>{/if}
 		</dd>
 		</dl>
 <div class="center"><div class="top-ad">

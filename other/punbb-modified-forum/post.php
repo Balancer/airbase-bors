@@ -194,6 +194,8 @@ if (isset($_POST['form_sent']))
 
 	$now = time();
 
+	$answer_to_post = object_load('forum_post', @$qid);
+
 	// Did everything go according to plan?
 	if (empty($errors) && !isset($_POST['preview']))
 	{
@@ -201,16 +203,16 @@ if (isset($_POST['form_sent']))
 		$md = md5($message);
 		if($me->get('last_message_md') == $md)
 			message("Вы уже отправили это сообщение");
-		
+
 		$me->set_data('last_message_md', $md);
-	
+
 		// If it's a reply
 		if ($tid)
 		{
 			if (!$pun_user['is_guest'])
 			{
 				// Insert the new post
-				$tdb = &new DataBase('punbb');
+				$tdb = new driver_mysql('punbb');
 				$data = array(
 					'poster' => $username,
 					'poster_id' => $pun_user['id'], 
@@ -219,8 +221,9 @@ if (isset($_POST['form_sent']))
 					'posted' => $now, 
 					'topic_id' => $tid,
 					'answer_to' => $qid,
+					'anwer_to_user_id' => $answer_to_post->owner_id(),
 				);
-				
+
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
 				$tdb->insert('posts_archive_'.($tid%10), $data);
@@ -246,6 +249,7 @@ if (isset($_POST['form_sent']))
 					'posted' => $now, 
 					'topic_id' => $tid,
 					'answer_to' => $qid,
+					'anwer_to_user_id' => $answer_to_post->owner_id(),
 				);
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
@@ -355,7 +359,7 @@ if (isset($_POST['form_sent']))
 			{
 				// Create the post ("topic post")
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
-				$tdb = &new DataBase('punbb');
+				$tdb = new driver_mysql('punbb');
 				$data = array(
 					'poster' => $username, 
 					'poster_id' => $pun_user['id'], 
@@ -364,8 +368,9 @@ if (isset($_POST['form_sent']))
 					'posted' => $now, 
 					'topic_id' => $new_tid,
 					'answer_to' => $qid,
+					'anwer_to_user_id' => $answer_to_post->owner_id(),
 				);
-				
+
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
 				$tdb->insert('posts_archive_'.($new_tid%10), $data);
@@ -386,8 +391,9 @@ if (isset($_POST['form_sent']))
 					'posted' => $now, 
 					'topic_id' => $new_tid,
 					'answer_to' => $qid,
+					'anwer_to_user_id' => $answer_to_post->owner_id(),
 				);
-				
+
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
 				$tdb->insert('posts_archive_'.($new_tid%10), $data);

@@ -23,7 +23,7 @@ class forum_user extends base_object_db
 			$id = $this->id_by_cookie();
 			debug_hidden_log('__critical', 'user_id is -1 =>'.$id);
 		}
-		
+
 		parent::__construct($id);
 	}
 
@@ -70,6 +70,8 @@ class forum_user extends base_object_db
 			'rep_r', 'rep_g', 'rep_b',
 			'rep_x', 'rep_y',
 			'last_message_md',
+			'mailing_period',
+			'last_mailing',
 		);
 	}
 
@@ -419,10 +421,10 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 	static function do_login($user, $password, $handle_error = true)
    	{
 		$check_user = objects_first('forum_user', array('username' => $user));
-	
+
 		if(!$check_user)
 			return ec("Неизвестный пользователь '").$user."'";
-			
+
 		$test = $check_user->check_password($password, $handle_error);
 		if(!$test)
 			return ec("Ошибка пароля пользователя '").$user."'";
@@ -434,7 +436,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 
 //		SetCookie("user_id", $check_user->id(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
 //		SetCookie("cookie_hash", $check_user->saltu(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
-			
+
 		return $check_user;
 	}
 
@@ -467,7 +469,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 
 		if($this->id() == 10000) // Balancer ;)
 			$weight = 10;
-					
+
 		if($this->num_posts() < 50 || $this->create_time() > time() - 86400*2)
 			$weight = 0;
 	}
@@ -484,6 +486,13 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		return $this->is_admin();
 	}
 
+	function reputation_weight()
+	{
+		$r = $this->reputation();
+		$w = 0.5 + atan($r*abs($r)/200)/pi();
+		return $w*$w;
+	}
+
 	function messages_daily_limit() // -1, если без ограничений.
 	{
 		$w = $this->warnings();
@@ -494,9 +503,9 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		if($w >= 10)
 			return 0;
 
-		$offset = max(2, round(15 - (time() - 1247947991)/86400));
+//		$offset = max(2, round(15 - (time() - 1247947991)/86400));
 
-		$limit = round(max(0, 15/($w*$w) * $this->reputation())) + $offset;
+		$limit = round(max(0, 300/($w*$w) * $this->reputation_weight() + 2 ));
 		if($limit > 40)
 			return -1;
 
@@ -534,14 +543,16 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		if($this->attr('next_can_post'))
 			return $this->attr('next_can_post');
 
-		$first_in_day = objects_first('forum_post', array(
+		$first_in_day = objects_array('forum_post', array(
 			'owner_id' => $this->id(), 
 			'create_time>' => time()-86400*2,
-			'order' => 'create_time',
+			'order' => '-create_time',
 			'limit' => $limit,
 			'inner_join' => 'forum_topic ON (forum_post.topic_id = forum_topic.id)',
 			'forum_topic.forum_id=' => $forum_id,
 		));
+
+		$first_in_day = $first_in_day[count($first_in_day)-1];
 
 		return $this->set_attr('next_can_post', $first_in_day ? $first_in_day->create_time()+86400 : NULL);
 	}
