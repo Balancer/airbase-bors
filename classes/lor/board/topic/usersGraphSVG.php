@@ -21,7 +21,8 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 
 		require_once('inc/http.php');
 
-		$url = "http://www.linux.org.ru/view-message.jsp?msgid={$this->id()}&page=-1";
+//		$url = "http://www.linux.org.ru/view-message.jsp?msgid={$this->id()}&page=-1";
+		$url = "http://www.linux.org.ru/news/doc/{$this->id()}/page-1";
 		$topic = http_get($url);
 		if(preg_match('!<title>(.*)</title>!', $topic, $m))
 			$title = $m[1];
@@ -32,7 +33,7 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 
 //		$topic = preg_replace("")
 
-		$posts = array_filter(preg_split("/<!\-\-.*?\-\->/", $topic), create_function('$s', 'return preg_match("/<a href=.whois.jsp.nick=/", $s);'));
+		$posts = array_filter(preg_split("/<!\-\-.*?\-\->/", $topic), create_function('$s', 'return preg_match("!/people/.+?/profile!", $s);'));
 
 //		echo "<xmp>"; print_d($posts); echo "</xmp>"; exit();
 
@@ -45,16 +46,16 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 			$s = trim(urldecode($s));
 			$user = '';
 			$answ = '';
-			
+
 //			if(preg_match('!<div class=msg id="comment\-\d+">.*Ответ на:.*\d+#comment\-\d+.*</a> от (.+?) \d+\.\d+\.\d+ .*<div class=sign>.+? <img src=".*="whois\.jsp\?nick=(.+?)">!s', $s, $m))
 //			if(preg_match('!.*?Ответ на: <a href="view\-message\.jsp?msgid=.*?</a> от (.+?) \d+\.\d+.\d+ \d+:\d+:\d+&nbsp;</div><div class="msg_body">.*<h2>Re: Новый раздел Google?</h2><i>&gt;Опенсурс - в опенсурс, проприетарные поделки гугла - в проприетаное ПО, нет?</i><br>'
-			if(preg_match('!Ответ на:.*\d+#comment\-\d+.*</a> от (.+?) \d+\.\d+.\d+ \d+:\d+:\d+.*<a href="whois\.jsp\?nick=(.+?)">!s', $s, $m))
+			if(preg_match('!Ответ на:.*\d+#comment\-\d+.*</a> от (.+?) \d+\.\d+.\d+ \d+:\d+:\d+.*<a href="/people/([^/]+?)/profile">!s', $s, $m))
 			{
 				$user = $m[2];
 				$answ = $m[1];
 			}
 //			elseif(preg_match('!<div class=title>\[<a href="/jump\-message\.jsp\?msgid=\+d&amp;cid=\d+">#</a>\]&nbsp;.*<div class=sign>.+? <img src=".*="whois\.jsp\?nick=(.+?)">!s', $s, $m))
-			elseif(preg_match('!<a href="whois\.jsp\?nick=(.+?)">!s', $s, $m))
+			elseif(preg_match('!<a href="/people/([^/]+?)/profile">!s', $s, $m))
 			{
 				$user = $m[1];
 			}
@@ -64,7 +65,7 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 			if(empty($users[$user]))
 				$users[$user] = array(
 					'name' => $user,
-					'link' => "http://www.linux.org.ru/whois.jsp?nick=".urlencode($user),
+					'link' => "http://www.linux.org.ru/people/".urlencode($user).'/profile/',
 					'count' => 1,
 				);
 			else
@@ -78,11 +79,11 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 			{
 				$from = $user;
 				$to = $answ;
-				
+
 				if(!$this->args('ordered'))
 					if($from < $to)
 						list($to, $from) = array($from, $to);
-				
+
 				if(empty($edges[$from][$to]))
 					$edges[$from][$to] = array(
 						'count' => 1,
@@ -108,7 +109,7 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 			'labelloc' => 't',
 			'URL' => $url,
 		));
-		
+
 		foreach($users as $uid => $ud)
 			$graph->addNode(
 				$uid,

@@ -32,9 +32,11 @@ class airbase_user_warning_typesco extends base_list
 			'6' => ec('Заведение второго аккаунта при R/O первого [п.9.1, +10]'),
 			'14' => ec('Нецензурные обращения и оскорбления к администрации сайта [п.5.3, +10]'),
 			'20' => ec('Спам, +10<br />'),
+
+			// При добавлении новых типов штрафов не забывай прописывать их вес ниже!
 		);
 	}
-	
+
 	static function score($id)
 	{
 		$scores = array(
@@ -58,8 +60,9 @@ class airbase_user_warning_typesco extends base_list
 			'17' => 2,
 			'18' => 3,
 			'19' => 6,
+			'20' => 10,
 		);
-		
+
 		return $scores[$id];
 	}
 }
