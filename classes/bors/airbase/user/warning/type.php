@@ -33,9 +33,11 @@ class airbase_user_warning_type extends base_list
 
 			'17' => ec('Немаскированные нецензурные выражения'),
 			'20' => ec('Спам'),
+
+			// При добавлении новых типов штрафов не забывай прописывать их вес ниже!
 		);
 	}
-	
+
 	static function score($id)
 	{
 		$scores = array(
@@ -59,8 +61,9 @@ class airbase_user_warning_type extends base_list
 			'17' => 2,
 			'18' => 3,
 			'19' => 6,
+			'20' => 10,
 		);
-		
+
 		return $scores[$id];
 	}
 }
