@@ -23,33 +23,43 @@
 ************************************************************************/
 
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
 
+if(bors_stop_bots('__nobots_testing', 'edit'))
+	return;
+
 $GLOBALS['cms']['cache_disabled'] = true;
+config_set('cache_disabled' , true);
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
 
 
 if($is_banned)
-	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%d-%m %H:%M", 30*86400+$ban_expire));
+	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire));
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id < 1)
 	message($lang_common['Bad request']);
 
 // Fetch some info about the post, the topic and the forum
-$result = $db->query('SELECT f.id AS fid, f.forum_name, f.moderators, f.redirect_url, fp.post_replies, fp.post_topics, t.id AS tid, t.subject, t.posted, t.closed, p.poster, p.poster_id, p.hide_smilies FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND p.id='.$id) 
+$result = $db->query('SELECT f.id AS fid, f.forum_name, f.moderators, f.redirect_url, 
+		fp.post_replies, fp.post_topics, 
+		t.id AS tid, t.subject, t.posted, t.closed, t.description, t.keywords_string,
+		p.poster, p.poster_id, p.hide_smilies
+	FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'topics AS t ON t.id=p.topic_id INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND p.id='.$id) 
 	or error('Unable to fetch post info', __FILE__, __LINE__, $db->error());
 if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
 
 $cur_post = $db->fetch_assoc($result);
 $blog = object_load('forum_blog', $id);
-
-$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($id));
+$post = object_load('forum_post', $id);
+$topic = $post->topic();
+$forum = $topic->forum();
+$cur_post['message'] = $post->source();
 
 // Sort out who the moderators are and if we are currently a moderator (or an admin)
 $mods_array = ($cur_post['moderators'] != '') ? unserialize($cur_post['moderators']) : array();
@@ -77,6 +87,9 @@ $errors = array();
 
 if (isset($_POST['form_sent']))
 {
+	if($msg = $post->is_edit_disable())
+		return bors_message($msg);
+	
 	if ($is_admmod)
 		confirm_referrer('edit.php');
 
@@ -117,8 +130,6 @@ if (isset($_POST['form_sent']))
 	// Did everything go according to plan?
 	if (empty($errors) && !isset($_POST['preview']))
 	{
-		$edited_sql = (!isset($_POST['silent']) || !$is_admmod) ? $edited_sql = ', edited='.time().', edited_by=\''.$db->escape($pun_user['username']).'\'' : '';
-
 		require PUN_ROOT.'include/search_idx.php';
 
 		if ($can_edit_subject)
@@ -128,19 +139,34 @@ if (isset($_POST['form_sent']))
 				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 		}
 
-		// Update the post
-		$db->query("UPDATE {$db->prefix}topics SET last_edit=".time()." WHERE id={$cur_post['tid']}")
-			or error('Unable to update post', __FILE__, __LINE__, $db->error());
-		$db->query('UPDATE '.$db->prefix.'posts SET hide_smilies=\''.$hide_smilies.'\''.$edited_sql.' WHERE id='.$id) 
-			or error('Unable to update post', __FILE__, __LINE__, $db->error());
-		$db->query('UPDATE '.$db->prefix.'posts_archive_'.($cur_post['tid']%10).' SET hide_smilies=\''.$hide_smilies.'\''.$edited_sql.' WHERE id='.$id) 
-			or error('Unable to update post', __FILE__, __LINE__, $db->error());
-		$db->query("UPDATE {$db->prefix}messages SET message='".$db->escape($message)."', `html` = NULL WHERE id=$id") 
-			or error('Unable to update post', __FILE__, __LINE__, $db->error());
+		$topic->set_last_edit_time(time(), true);
+		if ($can_edit_subject)
+		{
+			$topic->set_description($_POST['description'], true);
+			$topic->set_keywords_string($_POST['keywords_string'], true);
+		}
 
-		include_once("classes/objects/Bors.php");
-		$topic = class_load('forum_topic', $cur_post['tid']);
-		$post  = class_load('forum_post',  $id);
+		$post->set_source($message, true);
+		$post->set_hide_smilies(intval($hide_smilies), true);
+		$post->set_have_attach(NULL, true);
+
+		if(!isset($_POST['silent']) || !$is_admmod)
+		{
+			$post->set_edited(time(), true);
+			$post->set_edited_by($pun_user['username'], true);
+		}
+
+		include_once("engines/bors.php");
+
+		$post->set_modify_time(time(), true);
+		$topic->set_modify_time(time(), true);
+
+		$post->store();
+		$topic->store();
+
+		$post->cache_clean_self();
+		config_set('lcml_cache_disable', true);
+		$post->body();
 
 		$page = $topic->page_by_post_id($post->id());
 		$topic->set_page($page);
@@ -161,20 +187,26 @@ if (isset($_POST['form_sent']))
 				$blog = &new forum_blog($post->id());
 				$blog->new_instance();
 			}
-				
-			$blog->set_owner_id($pun_user['id'], true);
+
+			$blog->set_owner_id($post->owner_id(), true);
 			$blog->set_forum_id($topic->forum_id(), true);
+			$blog->set_is_public($topic->is_public(), true);
 			$blog->cache_clean();
 
 			include_once('engines/blogs/livejournal.com.php');
-			bors_blog_livejournal_com_edit($post->owner_id(), $topic, $topic->first_post()->id() == $post->id() ? $topic : $post, $post, $topic->forum());
+			bors_blog_livejournal_com_edit(
+				$post->owner_id(),
+				$topic,
+				$topic->first_post()->id() == $post->id() ? $topic : $post,
+				$post,
+				$topic
+			);
 		}
 
-		$topic->cache_clean();
-	
-//		include_once('engines/search.php');
-//		bors_search_object_index($topic, 'replace');
+		$topic->cache_clean_self();
 
+		$post->cache_clean();
+	
 		//Attachment Mod 2.0 Block Start
 		//First check if there are any files to delete, the postvariables should be named 'attach_delete_'.$i , if it's set you're going to delete the value of this (the 0 =< $i < attachments, just to get some order in there...)
 		if(isset($_POST['attach_num_attachments'])){
@@ -272,12 +304,20 @@ if($pun_user['g_id']==PUN_ADMIN){
 	$attach_allow_size=$pun_config['attach_max_size'];
 	$attach_per_post=-1;
 }else{
-	$attaches = objects_array('airbase_forum_attach', array('post_id' => $id));
-	$attach_allow_delete = false; //attach_rules($attach_rules,ATTACH_DELETE);
-	$attach_allow_owner_delete = true; // attach_rules($attach_rules,ATTACH_OWNER_DELETE);
-	$attach_allow_upload = true; //attach_rules($attach_rules,ATTACH_UPLOAD);
+	$result_attach=$db->query('SELECT ar.rules,ar.size,ar.per_post,COUNT(f.id) FROM '.$db->prefix.'attach_2_rules AS ar, '.$db->prefix.'attach_2_files AS f, '.$db->prefix.'posts AS p, '.$db->prefix.'topics AS t WHERE group_id=\''.intval($pun_user['g_id']).'\' AND p.id = \''.intval($id).'\' AND t.id = p.topic_id AND (ar.forum_id = t.forum_id OR ar.forum_id=0) GROUP BY f.post_id ORDER BY ar.forum_id DESC LIMIT 1')
+		or error('Unable to fetch attachment rules and current number of attachments in post (#2)',__FILE__,__LINE__,$db->error());	
+	if($db->num_rows($result_attach)==1){
+		list($attach_rules,$attach_allow_size,$attach_per_post,$attach_num_attachments)=$db->fetch_row($result_attach);
+		//may the user delete others attachments?
+		$attach_allow_delete = attach_rules($attach_rules,ATTACH_DELETE);
+		//may the user delete his/her own attachments?
+		$attach_allow_owner_delete = attach_rules($attach_rules,ATTACH_OWNER_DELETE);
+		//may the user upload new files?
+		$attach_allow_upload = attach_rules($attach_rules,ATTACH_UPLOAD);
+	}else{
+		//no rules set, so nothing allowed
+	}
 }
-
 $attach_output = '';
 $attach_output_two = '';
 //check if this post has attachments, if so make the appropiate output
@@ -316,6 +356,8 @@ if($attach_allow_upload){
 $page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_post['Edit post'];
 $required_fields = array('req_subject' => $lang_common['Subject'], 'req_message' => $lang_common['Message']);
 $focus_element = array('edit', 'req_message');
+
+include('include/tinymce.php');
 require PUN_ROOT.'header.php';
 
 $cur_index = 1;
@@ -323,7 +365,7 @@ $cur_index = 1;
 ?>
 <div class="linkst">
 	<div class="inbox">
-		<ul><li><a href="<?echo $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<a href="viewforum.php?id=<?php echo $cur_post['fid'] ?>"><?php echo pun_htmlspecialchars($cur_post['forum_name']) ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_post['subject']) ?></li></ul>
+		<ul><li><a href="<?echo $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<a href="viewforum.php?id=<?php echo $cur_post['fid'] /*"*/?>"><?php echo pun_htmlspecialchars($cur_post['forum_name']) ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_post['subject']) ?></li></ul>
 	</div>
 </div>
 
@@ -356,7 +398,7 @@ if (!empty($errors))
 else if (isset($_POST['preview']))
 {
 	require_once PUN_ROOT.'include/parser.php';
-	$preview_message = parse_message($message, $hide_smilies);
+	$preview_message = parse_message($message, $hide_smilies, true);
 
 ?>
 <div id="postpreview" class="blockpost">
@@ -377,8 +419,14 @@ else if (isset($_POST['preview']))
 }
 
 ?>
+
 <div class="blockform">
 	<h2><?php echo $lang_post['Edit post'] ?></h2>
+<?php
+if($msg = $post->is_edit_disable())
+	echo "<div class=\"warning_note\">{$msg}</div>";
+?>
+
 	<div class="box">
 		<form id="edit" method="post" <?php echo 'enctype="multipart/form-data"'; ##Attachment Mod 2.0 ?> action="edit.php?id=<?php echo $id ?>&amp;action=edit" onsubmit="return process_form(this)">
 			<div class="inform">
@@ -388,8 +436,18 @@ else if (isset($_POST['preview']))
 					<div class="infldset txtarea">
 <?php if ($can_edit_subject): ?>						<label><?php echo $lang_common['Subject'] ?><br />
 						<input class="longinput" type="text" name="req_subject" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?php echo pun_htmlspecialchars(isset($_POST['req_subject']) ? $_POST['req_subject'] : $cur_post['subject']) ?>" /><br /></label>
+	<label>Описание темы<br/><input class="longinput" type="text" name="description" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?php echo pun_htmlspecialchars(isset($_POST['decription']) ? $_POST['description'] : $cur_post['description']) ?>" /><br /></label>
+	<label>Ключевые слова (через запятую)<br/><input class="longinput" type="text" name="keywords_string" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?php echo pun_htmlspecialchars(isset($_POST['keywords_string']) ? $_POST['keywords_string'] : $cur_post['keywords_string'] ? $cur_post['keywords_string'] : $forum->keywords_string()) ?>" /><br /></label>
 <?php endif; ?>						<label><?php echo $lang_common['Message'] ?><br />
-						<textarea name="req_message" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo pun_htmlspecialchars(isset($_POST['req_message']) ? $message : $cur_post['message']) ?></textarea><br /></label>
+<div id="emoticons">
+	<a href="#" title=":)"><img src="http://airbase.ru/forum/smilies/smile.gif" /></a>
+	<a href="#" title=":("><img src="http://airbase.ru/forum/smilies/frown.gif" /></a>
+	<a href="#" title=":eek:"><img src="http://airbase.ru/forum/smilies/eek.gif" /></a>
+	<a href="#" title=":p"><img src="http://airbase.ru/forum/smilies/tongue.gif" /></a>
+	<a href="#" title=";)"><img src="http://airbase.ru/forum/smilies/wink.gif" /></a>
+	<a href="#" title=":D"><img src="http://airbase.ru/forum/smilies/biggrin.gif" /></a>
+</div>
+						<textarea name="req_message" id="bbcode" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo pun_htmlspecialchars(isset($_POST['req_message']) ? $message : $cur_post['message']) ?></textarea><br /></label>
 						<ul class="bblinks">
 							<li><a href="<? echo $pun_config['root_uri'];?>/help.php#bbcode" onclick="window.open(this.href); return false;"><?php echo $lang_common['BBCode'] ?></a>: <?php echo ($pun_config['p_message_bbcode'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
 							<li><a href="<? echo $pun_config['root_uri'];?>/help.php#img" onclick="window.open(this.href); return false;"><?php echo $lang_common['img tag'] ?></a>: <?php echo ($pun_config['p_message_img_tag'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>

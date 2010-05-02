@@ -245,7 +245,7 @@ DIV.postfootright LI, UL.bblinks LI {
 
 DIV.txtarea {WIDTH: 75%}
 
-DIV.txtarea TEXTAREA, INPUT.longinput {WIDTH: 100%}
+INPUT.longinput {WIDTH: 100%}
 
 .pun LABEL {DISPLAY: block}
 

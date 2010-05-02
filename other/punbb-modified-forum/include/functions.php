@@ -22,6 +22,9 @@
 
 ************************************************************************/
 
+require_once('inc/browsers.php');
+require_once('bors-end.php');
+
 //
 // Cookie stuff!
 //
@@ -35,7 +38,8 @@ function check_cookie(&$pun_user)
 	// We assume it's a guest
 	$cookie = array('user_id' => 1, 'password_hash' => 'Guest');
 
-	$me = new User();
+	require_once('obsolete/users.php');
+	$me = &new User();
 //	echo "Check cookie: me=".($me->data('id'));
 
 	if($me->data('id') > 1)
@@ -75,7 +79,7 @@ function check_cookie(&$pun_user)
 		if ($pun_user['save_pass'] == '0')
 			$expire = 0;
 
-		list($os, $browser) = get_browser_info();
+		list($os, $browser) = get_browser_info($_SERVER['HTTP_USER_AGENT']);
 
 		// Define this if you want this visit to affect the online list and the users last visit data
 		if (!defined('PUN_QUIET_VISIT'))
@@ -128,7 +132,7 @@ function set_default_user()
 
 	$pun_user = $db->fetch_assoc($result);
 
-	list($os, $browser) = get_browser_info();
+	list($os, $browser) = get_browser_info($_SERVER['HTTP_USER_AGENT']);
 
 	// Update online list
 	if (!$pun_user['logged'])
@@ -172,7 +176,8 @@ function check_bans()
 
 		if ($cur_ban['username'] != '' && !strcasecmp($pun_user['username'], $cur_ban['username']))
 		{
-			$db->query('DELETE FROM '.$db->prefix.'online WHERE ident=\''.$db->escape($pun_user['username']).'\'') or error('Unable to delete from online list', __FILE__, __LINE__, $db->error());
+			$db->query('DELETE FROM '.$db->prefix.'online WHERE ident=\''.$db->escape($pun_user['username']).'\'')
+				or error('Unable to delete from online list', __FILE__, __LINE__, $db->error());
 			message($lang_common['Ban message'].' '.(($cur_ban['expire'] != '') ? $lang_common['Ban message 2'].' '.strtolower(format_time($cur_ban['expire'], true)).'. ' : '').(($cur_ban['message'] != '') ? $lang_common['Ban message 3'].'<br /><br /><strong>'.pun_htmlspecialchars($cur_ban['message']).'</strong><br /><br />' : '<br /><br />').$lang_common['Ban message 4'].' <a href="mailto:'.$pun_config['o_admin_email'].'">'.$pun_config['o_admin_email'].'</a>.', true);
 		}
 
@@ -186,7 +191,8 @@ function check_bans()
 
 				if (substr($user_ip, 0, strlen($cur_ban_ips[$i])) == $cur_ban_ips[$i])
 				{
-					$db->query('DELETE FROM '.$db->prefix.'online WHERE ident=\''.$db->escape($pun_user['username']).'\'') or error('Unable to delete from online list', __FILE__, __LINE__, $db->error());
+					$db->query('DELETE FROM '.$db->prefix.'online WHERE ident=\''.$db->escape($pun_user['username']).'\'')
+						or error('Unable to delete from online list', __FILE__, __LINE__, $db->error());
 					message($lang_common['Ban message'].' '.(($cur_ban['expire'] != '') ? $lang_common['Ban message 2'].' '.strtolower(format_time($cur_ban['expire'], true)).'. ' : '').(($cur_ban['message'] != '') ? $lang_common['Ban message 3'].'<br /><br /><strong>'.pun_htmlspecialchars($cur_ban['message']).'</strong><br /><br />' : '<br /><br />').$lang_common['Ban message 4'].' <a href="mailto:'.$pun_config['o_admin_email'].'">'.$pun_config['o_admin_email'].'</a>.', true);
 				}
 			}
@@ -218,7 +224,7 @@ function generate_navlinks()
 	if ($pun_user['is_guest'])
 	{
 		if ($pun_user['g_search'] == '1')
-			$links[] = "<li id=\"navsearch\"><a href=\"http://balancer.ru/search/topic_titles/\">".$lang_common['Search'].'</a>';
+			$links[] = "<li id=\"navsearch\"><a href=\"http://balancer.ru/tools/search/\">".$lang_common['Search'].'</a>';
 
 		$links[] = "<li id=\"navregister\"><a href=\"{$pun_config['root_uri']}/register.php\">".$lang_common['Register'].'</a>';
 		$links[] = "<li id=\"navlogin\"><a href=\"{$pun_config['root_uri']}/login.php\">".$lang_common['Login'].'</a>';
@@ -230,14 +236,14 @@ function generate_navlinks()
 		if ($pun_user['g_id'] > PUN_MOD)
 		{
 			if ($pun_user['g_search'] == '1')
-				$links[] = "<li id=\"navsearch\"><a href=\"http://balancer.ru/search/topic_titles/\">".$lang_common['Search'].'</a>';
+				$links[] = "<li id=\"navsearch\"><a href=\"http://balancer.ru/tools/search/\">".$lang_common['Search'].'</a>';
 
 			$links[] = "<li id=\"navprofile\"><a href=\"{$pun_config['root_uri']}/profile.php?id={$pun_user['id']}\">".$lang_common['Profile'].'</a>';
 			$links[] = "<li id=\"navlogout\"><a href=\"{$pun_config['root_uri']}/login.php?action=out&amp;id={$pun_user['id']}\">".$lang_common['Logout'].'</a>';
 		}
 		else
 		{
-			$links[] = "<li id=\"navsearch\"><a href=\"http://balancer.ru/search/topic_titles/\">".$lang_common['Search'].'</a>';
+			$links[] = "<li id=\"navsearch\"><a href=\"http://balancer.ru/tools/search/\">".$lang_common['Search'].'</a>';
 			$links[] = "<li id=\"navprofile\"><a href=\"{$pun_config['root_uri']}/profile.php?id={$pun_user['id']}\">".$lang_common['Profile'].'</a>';
 			$links[] = "<li id=\"navadmin\"><a href=\"{$pun_config['root_uri']}/admin_index.php\">".$lang_common['Admin'].'</a>';
 			$links[] = "<li id=\"navlogout\"><a href=\"{$pun_config['root_uri']}/login.php?action=out&amp;id={$pun_user['id']}\">".$lang_common['Logout'].'</a>';
@@ -319,11 +325,6 @@ function update_forum($forum_id)
 	}
 	else	// There are no topics
 		$db->query('UPDATE '.$db->prefix.'forums SET num_topics=0, num_posts=0, last_post=NULL, last_post_id=NULL, last_poster=NULL WHERE id='.$forum_id) or error('Unable to update last_post/last_post_id/last_poster', __FILE__, __LINE__, $db->error());
-
-	@unlink("{$_SERVER['DOCUMENT_ROOT']}/forum/$forum_id/updates.js");
-	@unlink("{$_SERVER['DOCUMENT_ROOT']}/forum/0/updates.js");
-	include_once("tools/forum-updates-make.php");
-	punbb_forum_updates_make($forum_id);
 }
 
 //
@@ -348,11 +349,11 @@ function delete_topic($topic_id)
 		strip_search_index($post_ids);
 
 		// Delete posts in topic
-		$cms_db = &new DataBase('punbb');
+		$cms_db = new driver_mysql('punbb');
 		$posts = join(",", $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$topic_id"));
 		$db->query('DELETE FROM '.$db->prefix.'posts WHERE topic_id='.$topic_id) or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
-		$db->query("DELETE FROM {$db->prefix}messages WHERE id IN ($posts)") 
-			or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
+//		$db->query("DELETE FROM {$db->prefix}messages WHERE id IN ($posts)") 
+//			or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
 		$cms_db->close();
 	}
 
@@ -374,8 +375,7 @@ function delete_post($post_id, $topic_id)
 
 	// Delete the post
 	$db->query('DELETE FROM '.$db->prefix.'posts WHERE id='.$post_id) or error('Unable to delete post', __FILE__, __LINE__, $db->error());
-	$db->query('DELETE FROM '.$db->prefix.'posts_archive_'.($topic_id%10).' WHERE id='.$post_id) or error('Unable to delete post', __FILE__, __LINE__, $db->error());
-	$db->query('DELETE FROM '.$db->prefix.'messages WHERE id='.$post_id) or error('Unable to delete post', __FILE__, __LINE__, $db->error());
+//	$db->query('DELETE FROM '.$db->prefix.'messages WHERE id='.$post_id) or error('Unable to delete post', __FILE__, __LINE__, $db->error());
 
 	strip_search_index($post_id);
 
@@ -646,8 +646,8 @@ function confirm_referrer($script)
 {
 	global $pun_config, $lang_common;
 
-	if (!preg_match('#^'.preg_quote(str_replace('www.', '', $pun_config['o_base_url']).'/'.$script, '#').'#i', str_replace('www.', '', (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''))))
-		message($lang_common['Bad referrer']);
+//	if (!preg_match('#^'.preg_quote(str_replace('www.', '', $pun_config['o_base_url']).'/'.$script, '#').'#i', str_replace('www.', '', (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''))))
+//		message($lang_common['Bad referrer']);
 }
 
 
@@ -672,7 +672,7 @@ function random_pass($len)
 //
 function pun_hash($password, $name)
 {
-	return sha1(strtolower($name) . $password);
+	return sha1(bors_lower($name) . $password);
 
 	if (function_exists('sha1'))	// Only in PHP 4.3.0+
 		return sha1($str);
@@ -820,7 +820,7 @@ function maintenance_message()
 
 //
 // Display $message and redirect user to $destination_url
-//
+// "
 function redirect($destination_url, $message)
 {
 	global $db, $pun_config, $lang_common, $pun_user;
@@ -828,14 +828,8 @@ function redirect($destination_url, $message)
 	if ($destination_url == '')
 		$destination_url = 'index.php';
 
-	// If the delay is 0 seconds, we might as well skip the redirect all together
-	if ($pun_config['o_redirect_delay'] == '0')
-		header('Location: '.str_replace('&amp;', '&', $destination_url));
-
-
 	// Load the redirect template
 	$tpl_redir = trim(file_get_contents(PUN_ROOT.'include/template/redirect.tpl'));
-
 
 	// START SUBST - <pun_content_direction>
 	$tpl_redir = str_replace('<pun_content_direction>', $lang_common['lang_direction'], $tpl_redir);
@@ -856,7 +850,7 @@ function redirect($destination_url, $message)
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/colors.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css' ?>" />
-<?php
+<?php /*"*/
 
 	$tpl_temp = trim(ob_get_contents());
 	$tpl_redir = str_replace('<pun_head>', $tpl_temp, $tpl_redir);
@@ -909,7 +903,11 @@ function redirect($destination_url, $message)
 	// Close the db connection (and free up any result data)
 	$db->close();
 
-	pun_exit($tpl_redir);
+	// If the delay is 0 seconds, we might as well skip the redirect all together
+//	if ($pun_config['o_redirect_delay'] == '0')
+//		header('Location: '.str_replace('&amp;', '&', $destination_url));
+
+	pun_exit($tpl_redir, $pun_config['o_redirect_delay'] ? false : $destination_url);
 }
 
 
@@ -1085,110 +1083,15 @@ function dump()
 	exit;
 }
 
-	function get_browser_info()
-	{
-		$os = "";
-		if(preg_match("!Linux!", $_SERVER['HTTP_USER_AGENT']))
-			$os = "Linux";
-		elseif(preg_match("!Windows CE; PPC!", $_SERVER['HTTP_USER_AGENT']))
-			$os = "PocketPC";
-		elseif(preg_match("!J2ME!", $_SERVER['HTTP_USER_AGENT']))
-			$os = "J2ME";
-		elseif(preg_match("!Windows NT 6.0!", $_SERVER['HTTP_USER_AGENT']))
-			$os = "WindowsVista";
-		elseif(preg_match("!Windows NT 5.(1|2)!", $_SERVER['HTTP_USER_AGENT']))
-			$os = "WindowsXP";
-		elseif(preg_match("!Windows NT 5.0!", $_SERVER['HTTP_USER_AGENT']))
-			$os = "Windows2000";
-		elseif(preg_match("!Windows 98!", $_SERVER['HTTP_USER_AGENT']))
-			$os = "Windows98";
-		elseif(preg_match("!Win98!", $_SERVER['HTTP_USER_AGENT']))
-			$os = "Windows98";
-		elseif(preg_match("!Windows!i", $_SERVER['HTTP_USER_AGENT']))
-			$os = "Windows";
-
-		$browser="";
-		if(preg_match("!Opera!", $_SERVER['HTTP_USER_AGENT']))
-			$browser="Opera";
-		if(preg_match("!Konqueror!", $_SERVER['HTTP_USER_AGENT']))
-			$browser="Konqueror";
-		elseif(preg_match("!SeaMonkey!", $_SERVER['HTTP_USER_AGENT']))
-			$browser = "SeaMonkey";
-		elseif(preg_match("!Firefox!", $_SERVER['HTTP_USER_AGENT']))
-			$browser = "Firefox";
-		elseif(preg_match("!Gecko!", $_SERVER['HTTP_USER_AGENT']))
-			$browser = "Gecko";
-		elseif(preg_match("!MSIE!", $_SERVER['HTTP_USER_AGENT']))
-			$browser = "MSIE";
-
-		if(preg_match("!Akregator!", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$browser = "Akregator";
-			$os = "Linux";
-		}
-
-		if(preg_match("!Yahoo!", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$browser = "YahooBot";
-			$os = "YahooBot";
-		}
-
-		if(preg_match("!Rambler!", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$browser = "RamblerBot";
-			$os = "RamblerBot";
-		}
-
-		if(preg_match("!Googlebot!", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$browser = "GoogleBot";
-			$os = "GoogleBot";
-		}
-
-		if(preg_match("!msnbot!", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$browser = "MSNBot";
-			$os = "MSNBot";
-		}
-
-		if(preg_match("!WebAlta!", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$browser = "WebAltaBot";
-			$os = "WebAltaBot";
-		}
-
-		if(preg_match("!Anonymouse.org!", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$browser = "Anonymouse.org";
-			$os = "Anonymouse.org";
-		}
-
-		if(preg_match("!libwww-perl!", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$browser = "libwww-perl";
-			$os = "libwww-perl";
-		}
-
-		if(preg_match("!Download Master!", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$browser = "Download Master";
-			$os = "Windows";
-		}
-
-		if(preg_match("!Yandex!", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$browser = "YandexBot";
-			$os = "YandexBot";
-		}
-
-		return array($os, $browser);
-	}
-
-function pun_exit($message = 0)
+function pun_exit($message = 0, $redirect = false)
 {
-	global $bors;
-	if(!empty($bors) && is_object($bors))
-		$bors->changed_save();
+	bors()->changed_save();
+
+	// If the delay is 0 seconds, we might as well skip the redirect all together
+	if($redirect)
+		header('Location: '.str_replace('&amp;', '&', $redirect));
+
+	$message = bors_punbb_end($message);
 
 	exit($message);
 }

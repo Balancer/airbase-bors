@@ -26,7 +26,7 @@
 if (isset($_GET['action']))
 	define('PUN_QUIET_VISIT', 1);
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 
 
@@ -40,6 +40,7 @@ if (isset($_POST['form_sent']) && $action == 'in')
 	$form_username = trim($_POST['req_username']);
 	$form_password = trim($_POST['req_password']);
 
+
 //	$username_sql = ($db_type == 'mysql' || $db_type == 'mysqli') ? 'username=\''.$db->escape($form_username).'\'' : 'LOWER(username)=LOWER(\''.$db->escape($form_username).'\')';
 
 //	$result = $db->query('SELECT id, group_id, password, save_pass FROM '.$db->prefix.'users WHERE '.$username_sql) or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());
@@ -49,17 +50,19 @@ if (isset($_POST['form_sent']) && $action == 'in')
 
 //	if (!empty($db_password_hash))
 	{
-	
-		include_once("funcs/users.php");
-		$us = &new User();
-		$errno = $us->do_login($form_username, $form_password, false);
-		$authorized = !$errno;
+//		exit("Server error");
+//		include_once("obsolete/users.php");
+//		$us = &new User();
+		$me = bors_user::do_login($form_username, $form_password, false);
+//		$errno = $us->do_login($form_username, $form_password, false);
+//		$authorized = !$errno;
+		$authorized = is_object($me);
 	}
 
-	$user_id = $us->data('id');
-
-	if(!$authorized)
+	if(!$me || !is_object($me) || !$authorized)
 		message($lang_login['Wrong user/pass']." <a href=\"{$pun_config['root_uri']}/login.php?action=forget\">".$lang_login['Forgotten pass'].'</a>');
+
+	$user_id = $me->id();
 
 	// Update the status if this is the first time the user logged in
 
@@ -68,7 +71,7 @@ if (isset($_POST['form_sent']) && $action == 'in')
 				INNER JOIN {$db->prefix}groups AS g ON u.group_id=g.g_id 
 				LEFT JOIN {$db->prefix}online AS o ON o.user_id=u.id 
 			WHERE u.id=".intval($user_id);
-		
+
 	$result = $db->query($q) 
 		or error('Unable to fetch user information', __FILE__, __LINE__, $db->error());
 
@@ -95,15 +98,17 @@ else if ($action == 'out')
 		exit;
 	}
 
+	if($me = bors()->user())
+		$me->do_logout();
+
+	bors()->changed_save();
+
 	// Remove user from "users online" list.
 	$db->query('DELETE FROM '.$db->prefix.'online WHERE user_id='.$pun_user['id']) or error('Unable to delete from online list', __FILE__, __LINE__, $db->error());
 
 	// Update last_visit (make sure there's something to update it with)
 	if (isset($pun_user['logged']))
 		$db->query('UPDATE '.$db->prefix.'users SET last_visit='.$pun_user['logged'].' WHERE id='.$pun_user['id']) or error('Unable to update user visit data', __FILE__, __LINE__, $db->error());
-
-	$me = &new User($pun_user['id']);
-	$me->do_logout();
 
 	redirect('index.php', $lang_login['Logout redirect']);
 }

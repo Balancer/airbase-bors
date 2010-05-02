@@ -108,7 +108,7 @@ $max_subject_length = 30;
 // DO NOT EDIT ANYTHING BELOW THIS LINE! (unless you know what you are doing)
 
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 @include PUN_ROOT.'config.php';
 
 // If PUN isn't defined, config.php is missing or corrupt

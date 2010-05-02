@@ -1,14 +1,28 @@
 <?
 	function punbb_get_all_subforums($forum_id)
 	{
+		static $loaded = array();
+
 		$forum_id = intval($forum_id);
+		if(!empty($loaded[$forum_id]))
+			return $loaded[$forum_id];
+		
+		$db = new driver_mysql('punbb');
+
+//		if(debug_is_balancer())
+//		{
+			forum_forum::all_forums_preload(true);
+			$forum = object_load('forum_forum', $forum_id);
+//			echo "Get sub for $forum_id: ".$forum->tree_position()."{$forum_id}><br/>";
+			return $db->select_array('forums', 'id', array("tree_position LIKE '{$forum->tree_position()}{$forum_id}>%'"));
+//			return $forum->all_readable_subforum_ids();
+//		}
 
 		$fids    = array();
 		$checked = array();
 		
 		$fids[] = $forum_id;
 				
-		$db = &new DataBase('punbb');
 		do
 		{
 			$append = false;
@@ -24,9 +38,10 @@
 					$append = true;
 				}
 		} while($append);
+		$db->close();
 		
 		array_shift($fids);
-		return $fids;
+		return $loaded[$forum_id] = $fids;
 	}
 
 	function punbb_get_all_subcategories($cat_id)

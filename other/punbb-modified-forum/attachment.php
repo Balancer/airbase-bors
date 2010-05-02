@@ -1,8 +1,4 @@
 <?php
-
-	include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-	require_once("funcs/tools/ip_check.php");
-
 //	agava_ip_check();
 	
 /*
@@ -41,23 +37,24 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-	define('PUN_ROOT', './');
-	require PUN_ROOT.'include/common.php';
-	require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
+define('PUN_ROOT', dirname(__FILE__).'/');
+require PUN_ROOT.'include/common.php';
+require_once("funcs/tools/ip_check.php");
+
+require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
 
 	if(!isset($_GET['item']))
 		message('No file specified, so no download possible');
 
 	$attach_item = intval($_GET['item']);	// make it a bit more secure
 
-
-	include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 	require_once("funcs/tools/ip_check.php");
-	
+
+	//TODO: попробовать найти обходной способ!
 	if($ret = is_foreign_network())
 	{
 		$anon = "<br /><br />Вы можете попробовать получить доступ к этой странице через любой русский прокси или анонимайзер по адресу: http://www.anonymizer.ru/cgi-bin/webprox?session=demo&form=header&url=".urlencode("http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?{$_SERVER['QUERY_STRING']}");
-	
+
 		if($pun_user['is_guest'] || $pun_user['id'] <= 2)
 			message($ret.$anon);
 
@@ -78,6 +75,8 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 			|| $_SERVER['REMOTE_ADDR'] == '217.14.97.163'
 			|| $_SERVER['REMOTE_ADDR'] == '91.145.222.44'
 			|| $_SERVER['REMOTE_ADDR'] == '66.249.70.155'
+			|| $_SERVER['REMOTE_ADDR'] == '140.78.165.22' // 2	28438	0.43%	27980	0.73%	707.42 MB	1.59%	362	0.10%	140.78.165.22	Austria
+		
 			|| preg_match('!^66\.249\.!', $_SERVER['REMOTE_ADDR'])
 			|| preg_match('!^62\.80\.17!', $_SERVER['REMOTE_ADDR'])  //62.80.175.58, '62.80.172.224'
 		)
@@ -88,12 +87,13 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 		{
 			require_once "HTTP/Request.php";
 
-			$req = &new HTTP_Request("http://control.renter.ru/ipstat/");
+//			$req = &new HTTP_Request("http://control.renter.ru/ipstat/");
+			$req = &new HTTP_Request("http://clients.agava.ru/cl");
 			$req->setMethod(HTTP_REQUEST_METHOD_POST);
 			$req->addHeader("Accept-Charset", 'UTF-8');
 			$req->addHeader("Accept-Encoding", 'none');
-			$req->addPostData("user", "uka");
-			$req->addPostData("pass", "imi0Ngash");
+			$req->addPostData("user", config('agava_user'));
+			$req->addPostData("pass", config('agava_pass'));
 			$req->addPostData("from", "1/".strftime("%m/%y"));
 			$req->addPostData("to", strftime("%d/%m/%y"));
 			$req->addPostData("ip", "ALL");
@@ -104,9 +104,10 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
     	 		$resp = $req->getResponseBody();
 	 		else 
 		    	$resp = $resp->getMessage();
-		
-			if(!preg_match("!Российский.+Исходящий:</td><td>([\d\.]+) Мб.+Зарубежный.+Исходящий:</td><td>([\d\.]+) Мб!us", $resp, $m))
-				exit("Ошибка: Не могу получить данные о трафике! - $resp");
+
+			//TODO: попробовать найти обходной способ!
+//			if(!preg_match("!Российский.+Исходящий:</td><td>([\d\.]+) Мб.+Зарубежный.+Исходящий:</td><td>([\d\.]+) Мб!us", $resp, $m))
+//				exit("Ошибка: Не могу получить данные о трафике! - $ resp");
 
 			$diff = $m[2] - $m[1] + 3000;
 			$ch->set($diff, -7200);
@@ -145,8 +146,8 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 		$cdb = &new DataBase('punbb');
 		if($attach_post_id == "".intval($attach_post_id))
 		{
-			$topic_id = $cdb->get("SELECT topic_id FROM posts WHERE id = $attach_post_id");
-			$title = $cdb->get("SELECT subject FROM topics WHERE id = $topic_id");
+			$post = object_load('forum_post', $attach_post_id);
+			$title = $post ? $post->title() : ec("утерянное сообщение $attach_post_id");
 		}
 		else
 		{
@@ -172,9 +173,14 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 	else
 	{ 	// put the file out for download
 		// update number of downloads
-		$result = $db->query('UPDATE '.$db->prefix.'attach_2_files SET downloads=downloads+1 WHERE id=\''.$attach_item.'\'')or error();
+		ini_set('zlib.output_compression',  0);
+		$result = $db->query('UPDATE '.$db->prefix.'attach_2_files SET downloads=downloads+1 WHERE id=\''.$attach_item.'\'')
+			or error();
 
 		// open a pointer to the file
+		if(!file_exists($pun_config['attach_basefolder'].$attach_location))
+			debug_exit('Not exists file attach '.$attach_item.': '.$pun_config['attach_basefolder'].$attach_location);
+		
 		$fp = fopen($pun_config['attach_basefolder'].$attach_location, "rb");
 		if(!$fp)
 		{

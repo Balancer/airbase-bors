@@ -1,6 +1,6 @@
 <?
 	include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-	include_once("funcs/navigation/go.php");
+	include_once("inc/navigation.php");
 
 	$dir = dirname($_SERVER['PHP_SELF']);
 	if($dir == "/")

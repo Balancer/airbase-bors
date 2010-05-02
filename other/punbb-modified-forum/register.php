@@ -23,7 +23,7 @@
 ************************************************************************/
 
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 
 
@@ -144,7 +144,9 @@ else if (isset($_POST['form_sent']))
 	// Validate e-mail
 	require PUN_ROOT.'include/email.php';
 
-	if (!is_valid_email($email1))
+	if (preg_match('/(rambler.ru|pozitifff.com|sbcglobal.net|terbuny.net)/i', $email1, $m))
+		message("<b>{$m[1]}</b> не принимает почту с Авиабазы и форумов Balancer'а. Поэтому почтовые ящики этой системы больше не поддерживаются. Выберите более адекватную почтовую службу!");
+	else if (!is_valid_email($email1))
 		message($lang_common['Invalid e-mail']);
 	else if ($pun_config['o_regs_verify'] == '1' && $email1 != $email2)
 		message($lang_register['E-mail not match']);

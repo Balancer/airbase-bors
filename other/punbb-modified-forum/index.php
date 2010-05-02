@@ -32,16 +32,37 @@ if($_SERVER['HTTP_HOST']=='la2.wrk.ru' || $_SERVER['HTTP_HOST']=='la2.balancer.r
 	$tdiff = 41000;
 	$pdiff = 794000;
 
-	if(preg_match("!^/forum/index.php/board,(d+).(d+).html$!", $_SERVER['REQUEST_URI'], $m))
+	if(preg_match("!^/forum/index\.php/board,(\d+)\.(\d+)\.html$!", $_SERVER['REQUEST_URI'], $m))
 	{
-		$_GET['id'] = $m[1]+$fdiff;
-		$_GET['p'] = $m[2];
-		include("viewforum.php");
+		define('BORS_CORE', '/var/www/.bors/bors-core');
+		define('BORS_LOCAL', '/var/www/.bors/bors-airbase');
+		define('BORS_HOST', $_SERVER['DOCUMENT_ROOT'].'/cms-local');
+	
+		require_once(BORS_CORE.'/config.php');
+
+		$forum_id = $_GET['id'] = $m[1]+$fdiff;
+		$page = $_GET['p'] = $m[2];
+		go("/forum/viewforum.php?id={$forum_id}&p={$page}", true);
 		exit();
 	}
+
 }
 
-include_once("cms/funcs/navigation/go.php");
+define('PUN_ROOT', dirname(__FILE__).'/');
+require PUN_ROOT.'include/common.php';
+
+// include_once("/home/balancer/work/.bors/bors-core/inc/navigation.php");
+
+if(
+	preg_match('/pid=(\d+)/', @$_SERVER['QUERY_STRING'], $m)
+		|| preg_match('/pid=(\d+)?pid=\d+/', @$_SERVER['QUERY_STRING'], $m)
+)
+{
+	if($post = object_load('forum_post', $m[1] + $pdiff))
+		return go($post->url_in_topic());
+	debug_hidden_log('__trap', "Unknown post in ".$_SERVER['QUERY_STRING']);
+	return go('/');
+}
 
 if(!empty($_GET['topic']) && preg_match("!^(\d+)\.msg(\d+)$!", $_GET['topic'], $m))
 {
@@ -49,7 +70,10 @@ if(!empty($_GET['topic']) && preg_match("!^(\d+)\.msg(\d+)$!", $_GET['topic'], $
 	go("http://balancer.ru/forum/punbb/viewtopic.php?pid={$m[2]}#p{$m[2]}");
 }
 
-if(!empty($_GET['topic']) && preg_match("!^(\d+)\.msg!", $_GET['topic'], $m))
+if(!empty($_GET['topic']) && (
+	preg_match("!^(\d+)\.msg!", $_GET['topic'], $m)
+	|| preg_match("!^(\d+)\.0!", $_GET['topic'], $m)
+))
 {
 	//http://forums.airbase.ru/index.php?topic=27581.msg415049
 	go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}");
@@ -61,7 +85,7 @@ if(!empty($_SERVER['REQUEST_URI']) && preg_match("!topic,(\d+).(\d+)\.html$!", $
 	if(empty($m[2]))
 		go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}");
 	else
-		go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}&p=".intval($m[2]+1));
+		go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}&p=".(intval(($m[2]-1)/25)+1));
 }
 
 if(!empty($_GET['showforum']))
@@ -70,14 +94,20 @@ if(!empty($_GET['showforum']))
 	go("http://forums.airbase.ru/viewforum.php?id={$_GET['showforum']}");
 }
 
+function punbb_index_bors_load()
+{
+	require_once('include/bors_config.php');
+}
+
+
 if(!empty($_GET['view']))
 {
 	//http://forums.airbase.ru/?showtopic=3938&view=findpost&p=362293
 	if($_GET['view'] == 'findpost' && !empty($_GET['p']))
 	{
-		$_GET['pid'] = $_GET['p'];
-		include("viewtopic.php");
-		exit();
+		punbb_index_bors_load();
+		$obj = object_load('forum_post', intval($_GET['p']));
+		return go($obj ? $obj->url() : '/');
 	}
 }
 
@@ -93,9 +123,9 @@ if(!empty($_GET['act']))
 	switch($_GET['act'])
 	{
 		case 'SF':
-			$_GET['id'] = $_GET['f'];
-			include("viewforum.php");
-			exit();
+			punbb_index_bors_load();
+			$obj = object_load('forum_forum', intval($_GET['f']));
+			return go($obj->url());
 	}
 	
 	//http://forums.airbase.ru/index.php?act=Print&client=printer&f=61&t=25524
@@ -108,14 +138,13 @@ if(!empty($_GET['act']))
 
 }
 
-//include_once("funcs/navigation/go.php");
 if(!empty($_GET['showtopic']))
 {
-	$_GET['id'] = $_GET['showtopic'] + $tdiff;
-//	$_GET['p'] = $m[2];
-	include("viewtopic.php");
-	exit();
+	punbb_index_bors_load();
+	$obj = object_load('forum_topic_ipbst', $_GET['showtopic'] + $tdiff, array('page' => intval($_GET['st'])));
+	return go($obj->url());
 }
+
 
 
 //print_r($_GET); exit();
@@ -138,15 +167,11 @@ if(@$_GET['action'] == 'unreadreplies')
 
 if($_SERVER['HTTP_HOST'] != 'balancer.ru' || !preg_match("!^/forum!", $_SERVER['REQUEST_URI']))
 {
-	include("viewcat.php");
+	include(PUN_ROOT.'viewcat.php');
 	exit();
 }
 
-define('PUN_ROOT', './');
-require PUN_ROOT.'include/common.php';
-
 //print_r($pun_config);
-
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
@@ -155,21 +180,40 @@ if ($pun_user['g_read_board'] == '0')
 // Load the index.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/index.php';
 
+
 $page_title = pun_htmlspecialchars($pun_config['o_board_title']);
 define('PUN_ALLOW_INDEX', 1);
 require PUN_ROOT.'header.php';
 
-include_once("funcs/Cache.php");
+forum_forum::all_forums_preload(true);
+
 include_once("include/subforums.php");
-$ich = new Cache();
-if($ich->get("subforums-text-v4", $pun_config['root_uri']))
+$ich = new bors_cache();
+if($ich->get("subforums-text-v4", $pun_config['root_uri']))// && !debug_is_balancer()
+{
 	$subforums = $ich->last();
+}
 else
 {
-	foreach($cms_db->get_array("SELECT id FROM forums") as $iid)
-		$subforums[$iid] = get_subforums_text(punbb_get_all_subforums($iid));
+//	if(debug_is_balancer())
+//		echo config('cache_engine').', cd='.config('cache_disabled');
+
+/*	if(debug_is_balancer())
+	{
+		foreach($cms_db->get_array("SELECT id FROM forums") as $iid)
+//			if(!array_key_exists($iid, $subforums))
+				$subforums[$iid] = subforums_text(object_load('forum_forum', $iid));
+	}
+	else */
+//	{
+		foreach($cms_db->get_array("SELECT id FROM forums") as $iid)
+			$subforums[$iid] = get_subforums_text(punbb_get_all_subforums($iid));
+//	}
+
 	$ich->set($subforums, -7200);
 }
+
+$db = new driver_mysql('punbb');
 
 // Print the categories and forums
 $result = $db->query("SELECT c.id AS cid, 
@@ -190,13 +234,19 @@ $result = $db->query("SELECT c.id AS cid,
 		LEFT JOIN {$db->prefix}forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id={$pun_user['g_id']}) 
 	WHERE f.parent = 0
 		AND (fp.read_forum IS NULL OR fp.read_forum=1) 
+		AND c.skip_common = 0
 	ORDER BY c.disp_position, c.id, f.disp_position", true) 
 	or error('Unable to fetch category/forum list', __FILE__, __LINE__, $db->error());
 
 $cur_category = 0;
 $cat_count = 0;
-while ($cur_forum = $db->fetch_assoc($result))
+while ($cur_forum = $db->fetch($result))
 {
+//	if(debug_is_balancer())
+//		print_r($cur_forum);
+
+	$forum = object_load('forum_forum', $cur_forum['fid']);
+
 	$moderators = '';
 
 	if ($cur_forum['cid'] != $cur_category)	// A new category since last iteration?
@@ -257,8 +307,16 @@ while ($cur_forum = $db->fetch_assoc($result))
 	if ($cur_forum['forum_desc'] != '')
 		$forum_field .= "\n\t\t\t\t\t\t\t\t".$cur_forum['forum_desc'];
 
-	if($subforums[$cur_forum['fid']])
-		$forum_field .= $subforums[$cur_forum['fid']];
+	if(0 && debug_is_balancer())
+	{
+		if($subs = $forum->all_readable_subforum_ids())
+			$forum_field .= subforums_text($subs);
+	}
+	else
+	{
+		if($subforums[$cur_forum['fid']])
+			$forum_field .= $subforums[$cur_forum['fid']];
+	}
 
 	// If there is a last_post/last_poster.
 	if ($cur_forum['last_post'] != '')
@@ -303,14 +361,12 @@ else
 
 
 // Collect some statistics from the database
-$result = $db->query('SELECT COUNT(id)-1 FROM '.$db->prefix.'users') or error('Unable to fetch total user count', __FILE__, __LINE__, $db->error());
-$stats['total_users'] = $db->result($result);
+$stats['total_users'] = $cms_db->select($db->prefix.'users', 'COUNT(*)', array());
+$stats['last_user'] = $cms_db->select($db->prefix.'users', 'id, username', array('order' => '-registered', 'limit' => 1));
 
-$result = $db->query('SELECT id, username FROM '.$db->prefix.'users ORDER BY registered DESC LIMIT 1') or error('Unable to fetch newest registered user', __FILE__, __LINE__, $db->error());
-$stats['last_user'] = $db->fetch_assoc($result);
-
-$result = $db->query('SELECT SUM(num_topics), SUM(num_posts) FROM '.$db->prefix.'forums') or error('Unable to fetch topic/post count', __FILE__, __LINE__, $db->error());
-list($stats['total_topics'], $stats['total_posts']) = $db->fetch_row($result);
+//list($stats['total_topics'], $stats['total_posts']) = array_values($cms_db->select($db->prefix.'forums', 'SUM(num_topics), SUM(num_posts)', array()));
+$stats['total_topics'] = $cms_db->select($db->prefix.'topics', 'COUNT(*)', array());
+$stats['total_posts']  = $cms_db->select($db->prefix.'posts',  'COUNT(*)', array());
 
 ?>
 <div id="brdstats" class="block">

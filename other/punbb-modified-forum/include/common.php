@@ -22,33 +22,8 @@
 
 ************************************************************************/
 
-	global $client;
-	$client['is_bot'] = false;
-	foreach(array(
-			'yahoo' => 'Yahoo',
-			'rambler' => 'Rambler',
-			'google' => 'Google',
-			'yandex' => 'Yandex',
-		) as $pattern => $bot)
-	{
-		if(preg_match("!".$pattern."!i", $_SERVER['HTTP_USER_AGENT']))
-		{
-			$client['is_bot'] = $bot;
-			break;
-		}
-	}
-
-/*	if($client['is_bot'] && rand(0,100) < 50)
-	{
-		header('HTTP/1.1 503 Service Temporarily Unavailable');
-		header('Status: 503 Service Temporarily Unavailable');
-		header('Retry-After: 600');
-
-		@file_put_contents($file = $_SERVER['DOCUMENT_ROOT']."/cms/logs/blocked-bots.log", $_SERVER['REQUEST_URI']."/".@$_SERVER['HTTP_REFERER'] . "; IP=".@$_SERVER['REMOTE_ADDR']."; UA=".@$_SERVER['HTTP_USER_AGENT']."\n", FILE_APPEND);
-		@chmod($file, 0666);
-		exit("Service Temporarily Unavailable");
-	}
-*/
+$GLOBALS['stat']['start_microtime'] = microtime(true);
+$GLOBALS['stat']['start_time'] = time();
 
 // Enable DEBUG mode by removing // from the following line
 define('PUN_DEBUG', 1);
@@ -59,14 +34,17 @@ define('PUN_DEBUG', 1);
 
 if (!defined('PUN_ROOT'))
 {
-	echo 0/0;
+	debug_trace();
 	exit('The constant PUN_ROOT must be defined and point to a valid PunBB installation root directory.');
 }
 
 ini_set('include_path', ini_get('include_path') . ":/var/www/balancer.ru/htdocs/forum/punbb");
 
-include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-include_once("funcs/users.php");
+require_once('bors_config.php');
+
+if(defined('PUN_ADMIN_CONSOLE'))
+	if(bors_stop_bots('__nobots_testing', 'PUN_ADMIN_CONSOLE'))
+		return;
 
 // Load the functions script
 require PUN_ROOT.'include/functions.php';
@@ -85,7 +63,7 @@ if (!defined('PUN'))
 list($usec, $sec) = explode(' ', microtime());
 $pun_start = ((float)$usec + (float)$sec);
 
-$GLOBALS['main_uri'] = "http://{$_SERVER[HTTP_HOST]}{$_SERVER['REQUEST_URI']}";
+$GLOBALS['main_uri'] = "http://".@$_SERVER[HTTP_HOST].@$_SERVER['REQUEST_URI'];
 
 // Make sure PHP reports all errors except E_NOTICE. PunBB supports E_ALL, but a lot of scripts it may interact with, do not.
 error_reporting(E_ALL ^ E_NOTICE);
@@ -176,15 +154,30 @@ if (!defined('PUN_BANS_LOADED'))
 // Check if current user is banned
 check_bans();
 
-$cms_db = &new DataBase('punbb');
+@define('WARNING_DAYS', 14);
+
+$cms_db = new driver_mysql('punbb');
 $warn_count	= intval($pun_user['warnings']);
+$ban_expire = 0;
+
 if($is_banned	= ($warn_count >= 10))
-	$ban_expire	= $cms_db->get("SELECT MIN(`time`) FROM warnings WHERE user_id = ".intval($pun_user['id'])." AND time > ".(time()-WARNING_DAYS*86400)." LIMIT 10");
-else
-	$ban_expire = 0;
+{
+	$total = 0;
+	foreach($cms_db->get_array("SELECT score, time FROM warnings WHERE user_id = ".intval($pun_user['id'])." ORDER BY time DESC LIMIT 20") as $w)
+	{
+		$total += $w['score'];
+		if($total >= 10)
+		{
+			$ban_expire = $w['time'] + 3600;
+			break;
+		}
+	}
+}
 
 $cat_ids = "";
-include_once("tools/inc.php");
+
+require_once(PUN_ROOT.'tools/inc.php');
+
 foreach($cms_db->get_array("SELECT * FROM categories ORDER BY parent, disp_position") as $r)
 	if($r['base_uri'] && preg_match("!^{$r['base_uri']}!", $GLOBALS['main_uri']))
 	{

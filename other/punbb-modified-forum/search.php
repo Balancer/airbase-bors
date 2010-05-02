@@ -27,8 +27,9 @@
 // from the phpBB Group forum software phpBB2 (http://www.phpbb.com).
 
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 require_once PUN_ROOT.'include/common.php';
+require_once('include/bors_config.php');
 
 // Load the search.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/search.php';
@@ -472,6 +473,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 					t.id AS tid, 
 					t.poster, 
 					t.subject, 
+					t.description,
 					t.last_post, 
 					t.last_post_id, 
 					t.last_poster, 
@@ -492,6 +494,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 						t.id AS tid, 
 						t.poster, 
 						t.subject, 
+						t.description,
 						t.last_post, 
 						t.last_post_id, 
 						t.last_poster, 
@@ -506,6 +509,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 					GROUP BY t.id, 
 						t.poster, 
 						t.subject, 
+						t.description,
 						t.last_post, 
 						t.last_post_id, 
 						t.last_poster, 
@@ -519,6 +523,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 						t.id AS tid, 
 						t.poster, 
 						t.subject, 
+						t.description,
 						t.last_post, 
 						t.last_post_id, 
 						t.last_poster, 
@@ -533,6 +538,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 						t.id, 
 						t.poster, 
 						t.subject, 
+						t.description,
 						t.last_post, 
 						t.last_post_id, 
 						t.last_poster, 
@@ -571,7 +577,8 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		$page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_search['Search results'];
 		require PUN_ROOT.'header.php';
 
-
+		if($cat_ids)
+			echo "<div class=\"yellow_box\">Вы просматриваете список обновлений только одной категории форумов</div>";
 ?>
 <div class="linkst">
 	<div class="inbox">
@@ -605,21 +612,20 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 <?php
 
 		}
-
 		// Fetch the list of forums
 		$result = $db->query('SELECT id, forum_name FROM '.$db->prefix.'forums') or error('Unable to fetch forum list', __FILE__, __LINE__, $db->error());
 
 		$forum_list = array();
 		while ($forum_list[] = $db->fetch_row($result));
 
-		$topics = objects_array('forum_topic', array('id IN('.join(',', $topic_ids).')', 'by_id' => true));
+		$topics = objects_array('forum_topic', array('id IN' => $topic_ids, 'by_id' => true));
 
 		// Finally, lets loop through the results and output them
 		for ($i = 0; $i < count($search_set); ++$i)
 		{
 			$topic_id = $search_set[$i]['tid'];
 			$topic = $topics[$topic_id];
-		
+			
 			@reset($forum_list);
 			while (list(, $temp) = @each($forum_list))
 			{
@@ -663,6 +669,9 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 				$bg_switch = ($bg_switch) ? $bg_switch = false : $bg_switch = true;
 				$vtbg = ($bg_switch) ? ' rowodd' : ' roweven';
 
+				$description = &$search_set[$i]['description'];
+				if($description)
+					$subject .= "<br/><small><i>{$description}</i></small>";
 
 ?>
 <div class="blockpost searchposts<?php echo $vtbg;/*"*/?>">
@@ -697,7 +706,6 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 				$item_status = '';
 				$icon_type = 'icon';
 
-
 				$subject = $topic->titled_url() /* "<a href=\"{$pun_config['root_uri']}/viewtopic.php?id={$search_set[$i]['tid']}\">".pun_htmlspecialchars($search_set[$i]['subject']).'</a>*/ . ' <span class="byuser">'.$lang_common['by'].'&nbsp;'.pun_htmlspecialchars($search_set[$i]['poster']).'</span>';
 
 				if ($search_set[$i]['closed'] != '0')
@@ -723,9 +731,9 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 
 				$num_pages_topic = ceil(($search_set[$i]['num_replies'] + 1) / $pun_user['disp_posts']);
 
+				$_GET = array();
 				if ($num_pages_topic > 1)
-					$subject_multipage = '[ '.paginate($num_pages_topic, -1, 'viewtopic.php?id='.$search_set[$i]['tid']).' ]';
-//					$subject_multipage = '[ '.$topic->title_pages_links().' ]';
+					$subject_multipage = $topic->pages_links_nul('pginlist', '', '', false);
 				else
 					$subject_multipage = null;
 
@@ -735,6 +743,10 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 					$subject .= '&nbsp; '.(!empty($subject_new_posts) ? $subject_new_posts : '');
 					$subject .= !empty($subject_multipage) ? ' '.$subject_multipage : '';
 				}
+
+				$description = &$search_set[$i]['description'];
+				if($description)
+					$subject .= "<br/><small><i>{$description}</i></small>";
 
 ?>
 				<tr<?php if ($item_status != '') echo ' class="'.trim($item_status).'"'; ?>>

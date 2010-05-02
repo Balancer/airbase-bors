@@ -23,13 +23,15 @@
 ************************************************************************/
 
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
 
+if(bors_stop_bots('__nobots_testing', 'delete'))
+	return;
+
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
-
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id < 1)
@@ -41,8 +43,9 @@ if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
 
 $cur_post = $db->fetch_assoc($result);
+$post = object_load('forum_post', $id);
 
-$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
+$cur_post['message'] = $post->source();
 
 // Sort out who the moderators are and if we are currently a moderator (or an admin)
 $mods_array = ($cur_post['moderators'] != '') ? unserialize($cur_post['moderators']) : array();
@@ -55,10 +58,10 @@ $topic_post_id = $db->result($result);
 $is_topic_post = ($id == $topic_post_id) ? true : false;
 
 // Do we have permission to edit this post?
-if (($pun_user['g_delete_posts'] == '0' ||
+if (/*($pun_user['g_delete_posts'] == '0' ||
 	($pun_user['g_delete_topics'] == '0' && $is_topic_post) ||
 	$cur_post['poster_id'] != $pun_user['id'] ||
-	$cur_post['closed'] == '1') &&
+	$cur_post['closed'] == '1') &&*/
 	!$is_admmod)
 	message($lang_common['No permission']);
 
@@ -91,8 +94,9 @@ if (isset($_POST['delete']))
 		// Delete just this one post
 		delete_post($id, $cur_post['tid']);
 
-
 		update_forum($cur_post['fid']);
+		$topic = object_load('forum_topic', $cur_post['tid'], array('no_load_cache' => true));
+		$topic->cache_clean();
 
 		redirect('viewtopic.php?id='.$cur_post['tid'], $lang_delete['Post del redirect']);
 	}
@@ -104,9 +108,8 @@ require PUN_ROOT.'header.php';
 
 require PUN_ROOT.'include/parser.php';
 
-$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
-
-$cur_post['message'] = parse_message($cur_post['message'], $cur_post['hide_smilies']);
+//$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
+//$cur_post['message'] = parse_message($cur_post['message'], $cur_post['hide_smilies']);
 
 ?>
 <div class="linkst">

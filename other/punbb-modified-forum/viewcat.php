@@ -1,11 +1,9 @@
 <?php
 
-define('PUN_ROOT', './');
 
-include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-include_once("funcs/Cache.php");
+define('PUN_ROOT', dirname(__FILE__).'/');
 
-require PUN_ROOT.'include/common.php';
+require_once PUN_ROOT.'include/common.php';
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
@@ -17,14 +15,17 @@ $page_title = pun_htmlspecialchars($pun_config['o_board_title']);
 define('PUN_ALLOW_INDEX', 1);
 require PUN_ROOT.'header.php';
 
+forum_forum::all_forums_preload(true);
+
 include_once("include/subforums.php");
-$ich = new Cache();
+$ich = new bors_cache();
 if($ich->get("subforums-text-v4", $pun_config['root_uri']))
 	$subforums = $ich->last();
 else
 {
 	foreach($cms_db->get_array("SELECT id FROM forums") as $iid)
 		$subforums[$iid] = get_subforums_text(punbb_get_all_subforums($iid));
+
 	$ich->set($subforums, -600);
 }
 

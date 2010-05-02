@@ -26,16 +26,15 @@
 // Tell header.php to use the admin template
 define('PUN_ADMIN_CONSOLE', 1);
 
-include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-include_once("funcs/Cache.php");
 if(!empty($_POST))
 {
-	$ich = new Cache();
-	$ich->get("cat_names", "all");
-	$ich->set(NULL);
+	//TODO: добавить сброс кешей категорий.
+//	$ich = new Cache();
+//	$ich->get("cat_names", "all");
+//	$ich->set(NULL);
 }
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/common_admin.php';
 

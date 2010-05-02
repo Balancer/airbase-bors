@@ -125,6 +125,9 @@ function attach_create_attachment($name='', $mime='', $size=0, $tmp_name='', $po
 		if(strlen($mime)==0)
 			$mime = attach_create_mime(attach_find_extension($name));
 		
+		$post = object_load('forum_post', $post_id);
+		$post->set_have_attach(NULL, true);
+		$post->store();
 		// update the database with this info
 		$result = $db->query('INSERT INTO '.$db->prefix.'attach_2_files (owner,post_id,filename,extension,mime,location,size) VALUES (\''.$pun_user['id'].'\',\''.$post_id.'\',\''.$db->escape($name).'\',\''.attach_get_extension($name).'\',\''.$db->escape($mime).'\',\''.$db->escape("$sub1/$sub2/".$unique_name).'\',\''.$size.'\')')
 			or error('Unable to insert attachment record into database.',__FILE__,__LINE__,$db->error());
