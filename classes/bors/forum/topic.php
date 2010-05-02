@@ -175,7 +175,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 				'target_object_id' => $this->id(),
 				'order' => '-create_time',
 				'group' => 'target_class_name, target_object_id, message',
-				'limit' => 10,
+				'limit' => 20,
 			))),
 			'is_last_page' => $this->page() == $this->total_pages(),
 		);
@@ -505,6 +505,9 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function pre_show()
 	{
+		if($this->page() > $this->total_pages())
+			return go($this->url($this->total_pages()));
+
 		templates_jquery();
 		return false;
 	}
