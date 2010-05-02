@@ -57,15 +57,21 @@ $tpl_main = str_replace('<pun_char_encoding>', $lang_common['lang_encoding'], $t
 ob_start();
 
 // Is this a page that we want search index spiders to index?
-if (!defined('PUN_ALLOW_INDEX'))
+//if (!defined('PUN_ALLOW_INDEX'))
 	echo '<meta name="ROBOTS" content="NOINDEX, FOLLOW" />'."\n";
-
+if(!empty($_GET['id']) && preg_match('/viewforum\.php/', $_SERVER['REQUEST_URI']))
+	echo "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"http://balancer.ru/forum/{$_GET['id']}/posts-rss.xml\" title=\"Новые сообщения в этом форуме\" />";
+	
 ?>
 <title><?php echo $page_title ?></title>
+<meta name="Description" content="Форумы Balancer'а и Авиабазы. Свободное общение на всевозможные интересные темы. Военная и гражданская техника, авиация, космонавтика, компютеры и информационные технологии, Linux, люди, страны, политика, просто радости и горести жизни. У нас есть всё!">
+<meta name="Keywords" content="форум, форумы, доска объявлений, авиабаза, люди, коллектив, клуб, сообщество, BORS, PHP, фреймворк, CMS, CMF, новости, мероприятия, авиация, видео, юмор, байки, космос, межпланетная космонавтика, ПВО, ПРО, флот, танки, наука, техника, радиоэлектроника, автомобили, метро, рельсовый транспорт, ракетостроение, ракетомоделизм, МосГИРД, Jabber, искусство, фантастика, города и страны, соционика, химия, биология">
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/colors.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css';/*"*/?>" />
-<link rel="stylesheet" type="text/css" href="/cms/templates/forum/main3.css" />
+<link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
+<link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
+<link rel="stylesheet" type="text/css" href="/_bors/css/main6.css" />
 <?php
 	global $header;
 	if(!empty($header))
@@ -103,7 +109,7 @@ function process_form(the_form)
 			var elem = the_form.elements[i]
 			if (elem.name && elem.name.substring(0, 4) == "req_")
 			{
-				if (elem.type && (elem.type=="text" || elem.type=="textarea" || elem.type=="password" || elem.type=="file") && elem.value=='')
+				if (elem.type && (elem.type=="text" || elem.type=="xtextarea" || elem.type=="password" || elem.type=="file") && elem.value=='')
 				{
 					alert("\"" + element_names[elem.name] + "\" <?php echo $lang_common['required field'];/*"*/?>")
 					elem.focus()
@@ -179,10 +185,13 @@ else
 			$tpl_temp .= "\n\t\t\t\t<li class=\"maintenancelink\"><strong><a href=\"{$pun_config['root_uri']}/admin_options.php#maintenance\">Maintenance mode is enabled!</a></strong></li>";
 	}
 
-	$tpl_temp .= "</ul><ul class=\"conr\"><li>[ 
-		<a href=\"{$pun_config['root_uri']}/search.php?action=show_new\">{$lang_common['Show new posts']}</a> |
-		<a href=\"http://balancer.ru/user/{$pun_user['id']}/use-topics.html\">Показать все темы с Вашим участием</a> ]</li></ul>
-		<div class=\"clearer\"></div>\n\t\t</div>";
+	$tpl_temp .= "</ul><ul class=\"conr\"><li>
+ &middot; <a href=\"{$pun_config['root_uri']}/search.php?action=show_new\">{$lang_common['Show new posts']}</a><br />
+<!-- &middot; <a href=\"{$pun_config['root_uri']}/search.php?action=show_24h\">{$lang_common['Show recent posts']}</a><br /> -->
+ &middot; <a class=\"red\" href=\"http://forums.balancer.ru/personal/answers/\">Показать все ответы на Ваши сообщения</a><br />
+ &middot; <a href=\"http://balancer.ru/user/{$pun_user['id']}/use-topics.html\">Показать все темы с Вашим участием</a><br />
+ 	</li></ul>
+	<div class=\"clearer\"></div>\n\t\t</div>";
 }
 
 $tpl_main = str_replace('<pun_status>', $tpl_temp, $tpl_main);
@@ -206,6 +215,26 @@ if ($pun_config['o_announcement'] == '1')
 		</div>
 	</div>
 </div>
+
+<div class="center">
+<? /*
+$restart = filemtime('/var/log/started.log');
+if(($diff = time() - $restart) < 3600)
+{
+?>
+<div style="background-color:#fdd; border: 1px solid #f00; margin: 10px 0; padding: 5px; font: 14pt Verdana">
+Сервер Авиабазы автоматически аварийно перезагрузился <? $m=intval($diff/60+0.5); echo $m; echo sklon($m, ' минуту, минуты, минут'); ?> назад. Отвечать в темы можно будет через
+ <? $m=60-intval($diff/60+0.5); echo $m; echo sklon($m, ' минуту, минуты, минут'); ?>. Если сервер снова не уйдёт в перезагрузку за это время... Пока общаться можно на
+ <a href="http://balancer.endofinternet.net/mybb/index.php">Запасном форуме</a>.
+</div>
+<? } */ ?>
+<div class="top-ad">
+
+<? include("/usr/local/share/bors/sites/bors-airbase/templates/forum/ads/podarini.html"); ?>
+
+</div>
+</div>
+
 <?php
 
 	$tpl_temp = trim(ob_get_contents());
@@ -215,32 +244,6 @@ if ($pun_config['o_announcement'] == '1')
 else
 	$tpl_main = str_replace('<pun_announcement>', '', $tpl_main);
 // END SUBST - <pun_announcement>
-
-if($warn_count)
-{
-?>
-<div id="announce" class="block">
-	<div class="box">
-		<div class="inbox">
-			<div style="color: red;">
-<?	
-	echo "<span style=\"font-size: ".(10+$warn_count)."pt;\">";
-	if($is_banned)
-		echo "За превышение допустимого лимита штрафов в течении месяца Вы автоматически переведены в режим \"Только чтение\" до ".strftime("%Y-%d-%m %H:%M", 30*86400+$ban_expire). " Помните, что заведение второго аккаунта с целью обхода этого запрета, карается <b>полной и бессрочной блокировкой аккаунта</b>.";
-	else
-	{
-		include_once("funcs/strings.php");
-		echo "У Вас ".sklon($warn_count,"активен","активны","активны")." $warn_count ".sklon($warn_count, "штраф", "штрафа", "штрафов").". При достижении 10 штрафов, Вы будете автоматически переведены в режим \"только чтение\" на срок до истечения самого старого из активных штрафов (срок их активности - месяц с момента выставления).";
-	}
-	echo " Посмотреть список своих штрафов Вы можете на <a href=\"http://balancer.ru/users/{$pun_user['id']}/warnings/\">этой странице</a>."
-
-?>
-			</span></div>
-		</div>
-	</div>
-</div>
-<?
-}
 
 // START SUBST - <pun_main>
 ob_start();

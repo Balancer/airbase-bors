@@ -1,6 +1,7 @@
-<?
-	include_once(BORS_CORE.'/config.php');
-	include_once("engines/lcml.php");
+<?php
+
+require_once('bors_config.php');
+require_once('engines/lcml/main.php');
 
 	function pun_lcml($text)
 	{
@@ -10,14 +11,14 @@
 
 		global $cur_post;
 //		$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = '/forum/post'.@$cur_post['id'];
-			
+
 		return $ch->set(lcml($text, 
 			array(
 				'cr_type' => 'save_cr',
 				'forum_type' => 'punbb',
 				'forum_base_uri' => 'http://balancer.ru/forum',
 				'sharp_not_comment' => true,
-				'html_disable' => 'direct',
+				'html_disable' => true,
 				'uri' => "post://{$cur_post['id']}/",
 			)), 7*86400);
 	}

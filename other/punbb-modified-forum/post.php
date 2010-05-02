@@ -24,13 +24,29 @@
 
 $GLOBALS['cms']['cache_disabled'] = true;
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
+/*
+if(time()-filemtime("/var/log/started.log") < 3600)
+{
+	header("Status: 302 Moved Temporarily");
+	header("Location: http://balancer.endofinternet.net/mybb/thread-2672.html");
+	bors_exit();
+}
+*/
+//!debug_is_balancer())
+//{
+//	header("Status: 302 Moved Temporarily");
+//	header("Location: http://balancer.ru/support/2009/11/t68871--chastichnyj-zapusk-rezhim-tolko-dlya-chteniya.5457.html");
+//	bors_exit();
+//}
+
+if(bors_stop_bots('__nobots_testing', 'post'))
+	return;
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
-
 
 $tid = isset($_GET['tid']) ? intval($_GET['tid']) : 0;
 $fid = isset($_GET['fid']) ? intval($_GET['fid']) : 0;
@@ -38,7 +54,39 @@ if ($tid < 1 && $fid < 1 || $tid > 0 && $fid > 0)
 	message($lang_common['Bad request']);
 
 if($is_banned)
-	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%d-%m %H:%M", 30*86400+$ban_expire));
+	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire));
+
+$topic = object_load('forum_topic', $tid);
+$forum_id = $fid ? $fid : $topic->forum_id();
+$forum = object_load('forum_forum', $forum_id);
+
+$me = bors()->user();
+if(!$me)
+	message("Вы не авторизованы на этом домене. 
+	Попробуйте <a href=\"{$forum->category()->category_base_full()}login.php\">авторизоваться</a> снова. 
+	Помните, что в разных доменах (например, balancer.ru и forums.airbase.ru) нужно авторизоваться отдельно)");
+
+$messages_limit = $me->messages_daily_limit();
+if($messages_limit >= 0)
+{
+	$today_posted = $me->today_posted_in_forum($forum_id);
+	$messages_rest = $messages_limit - $today_posted;
+
+	debug_hidden_log('forum-limit-test', "me={$me->title()} [{$me->id()}]\nmessages_limit=$messages_limit\ntoday_posted=$today_posted");
+
+	if($messages_rest <= 0)
+	{
+		message("Вы не можете больше отправить ни одного сообщения в этот форум до <b>".full_time($me->next_can_post($messages_limit, $forum_id))."</b>. 
+		Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>»");
+	}
+}
+
+if($warnings_total = $me->warnings())
+	if(($warnings_in = $me->warnings_in($forum_id)) >= 5)
+		message("Вы не можете больше отправить ни одного сообщения в этот форум, пока количество активных штрафнах баллов равно пяти или более. Сейчас оно равно $warnings_in. 
+		Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>.");
+
+$forum = object_load('forum_forum', $forum_id);
 
 // Fetch some info about the topic and/or the forum
 if ($tid)
@@ -90,6 +138,8 @@ if(isset($_POST['qid']))
 
 $GLOBALS['cms']['cache_disabled'] = true;
 
+$true_text = 100;
+
 // Did someone just hit "Submit" or "Preview"?
 if (isset($_POST['form_sent']))
 {
@@ -105,11 +155,12 @@ if (isset($_POST['form_sent']))
 		$fid = $cms_db->get("SELECT forum_id FROM topics WHERE id = $tid");
 		$tid = 0;
 	}
-	
+
 	// If it's a new topic
 	if ($fid)
 	{
-		$subject = pun_trim($_POST['req_subject']);
+		$subject 	= pun_trim($_POST['req_subject']);
+		$description= pun_trim($_POST['nreq_description']);
 
 		if ($subject == '')
 			$errors[] = $lang_post['No subject'];
@@ -117,6 +168,15 @@ if (isset($_POST['form_sent']))
 			$errors[] = $lang_post['Too long subject'];
 		else if ($pun_config['p_subject_all_caps'] == '0' && strtoupper($subject) == $subject && $pun_user['g_id'] > PUN_MOD)
 			$subject = ucwords(strtolower($subject));
+
+		require_once('inc/strings.php');
+/*		if ($description == '')
+		{
+			$description = strip_tags($_POST['req_message']);
+			$description = preg_replace('!\[[^]]+\]!', '', $description);
+			$description = truncate($description, 64);
+		}
+*/
 	}
 
 	// If the user is logged in we get the username and e-mail from $pun_user
@@ -186,7 +246,6 @@ if (isset($_POST['form_sent']))
 		$message = preparse_bbcode($message, $errors);
 	}
 
-
 	require PUN_ROOT.'include/search_idx.php';
 
 	$hide_smilies = isset($_POST['hide_smilies']) ? 1 : 0;
@@ -194,17 +253,39 @@ if (isset($_POST['form_sent']))
 
 	$now = time();
 
-	$answer_to_post = object_load('forum_post', @$qid);
+	if(!isset($_POST['preview']))
+	{
+		if(bors_strlen($message) > 400 && preg_match('/^\S+>/', $message))
+		{
+			$q = 0;
+			$a = 0;
+			foreach(explode("\n", $message) as $s)
+			{
+				$s = trim($s);
+				if($s == '')
+					continue;
+				if(preg_match('/^\S+>/', $s))
+					$q += bors_strlen($s);
+				else
+					$a += bors_strlen($s);
+			}
+
+			$true_text = $a/($a+$q)*100+0.0001;
+		}
+	}
+
+	if(!empty($_POST['overquote_confirmed']))
+		$true_text = 100;
 
 	// Did everything go according to plan?
-	if (empty($errors) && !isset($_POST['preview']))
+	if(empty($errors) && !isset($_POST['preview']) && $true_text > 40)
 	{
-		$me = &new User();
 		$md = md5($message);
-		if($me->get('last_message_md') == $md)
+		if($me->last_message_md() == $md)
 			message("Вы уже отправили это сообщение");
 
-		$me->set_data('last_message_md', $md);
+		$me->set_last_message_md($md, true);
+		$answer_to_post = object_load('forum_post', @$qid);
 
 		// If it's a reply
 		if ($tid)
@@ -212,22 +293,38 @@ if (isset($_POST['form_sent']))
 			if (!$pun_user['is_guest'])
 			{
 				// Insert the new post
-				$tdb = new driver_mysql('punbb');
+				$tdb = &new DataBase('punbb');
 				$data = array(
 					'poster' => $username,
 					'poster_id' => $pun_user['id'], 
 					'poster_ip' => get_remote_address(), 
+					'poster_ua' => @$_SERVER['HTTP_USER_AGENT'],
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $tid,
 					'answer_to' => $qid,
-					'anwer_to_user_id' => $answer_to_post->owner_id(),
+					'anwer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
+					'source' => $message,
 				);
 
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
-				$tdb->insert('posts_archive_'.($tid%10), $data);
-//				$db->query("INSERT INTO {$db->prefix}posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES('".$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
+				$tdb->close();
+
+				if($qid)
+				{
+					// Пометим сообщение, на котрое отвечали, что на него есть ответы.
+					if($x = object_load('forum_post', $qid))
+					{
+						if($x->have_answers())
+						{
+							if($x->have_answers() > 0)
+								$x->set_have_answers(-1, true);
+						}
+						else
+							$x->set_have_answers($new_pid, true);
+					}
+				}
 
 				// To subscribe or not to subscribe, that ...
 				if ($pun_config['o_subscriptions'] == '1' && $subscribe)
@@ -244,21 +341,21 @@ if (isset($_POST['form_sent']))
 				$data = array(
 					'poster' => $username, 
 					'poster_ip' => get_remote_address(), 
+					'poster_ua' => @$_SERVER['HTTP_USER_AGENT'],
 					'poster_email' => ($pun_config['p_force_guest_email'] == '1' || $email != '') ? $email : '', 
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $tid,
 					'answer_to' => $qid,
 					'anwer_to_user_id' => $answer_to_post->owner_id(),
+					'source' => $message,
 				);
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
-				$tdb->insert('posts_archive_'.($tid%10), $data);
-//				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) 
-//VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
+				$tdb->close();
 			}
 
-//			$cms_db->insert('messages', array('id' => $new_pid, 'message' => $message));
+			$post = object_load('forum_post', $new_pid);
 
 			// Count number of replies in the topic
 			$result = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'posts WHERE topic_id='.$tid) 
@@ -275,11 +372,25 @@ if (isset($_POST['form_sent']))
 			if ($pun_config['o_subscriptions'] == '1')
 			{
 				// Get the post time for the previous post in this topic
-				$result = $db->query('SELECT posted FROM '.$db->prefix.'posts WHERE topic_id='.$tid.' ORDER BY id DESC LIMIT 1, 1') or error('Unable to fetch post info', __FILE__, __LINE__, $db->error());
-				$previous_post_time = $db->result($result);
+				$result = $db->query('SELECT posted FROM '.$db->prefix.'posts WHERE topic_id='.$tid.' ORDER BY id DESC LIMIT 1, 1')
+					 or error('Unable to fetch post info', __FILE__, __LINE__, $db->error());
+				$previous_post_time = intval($db->result($result));
 
 				// Get any subscribed users that should be notified (banned users are excluded)
-				$result = $db->query('SELECT u.id, u.email, u.notify_with_post, u.language FROM '.$db->prefix.'users AS u INNER JOIN '.$db->prefix.'subscriptions AS s ON u.id=s.user_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id='.$cur_posting['id'].' AND fp.group_id=u.group_id) LEFT JOIN '.$db->prefix.'online AS o ON u.id=o.user_id LEFT JOIN '.$db->prefix.'bans AS b ON u.username=b.username WHERE b.username IS NULL AND COALESCE(o.logged, u.last_visit)>'.$previous_post_time.' AND (fp.read_forum IS NULL OR fp.read_forum=1) AND s.topic_id='.$tid.' AND u.id!='.intval($pun_user['id'])) or error('Unable to fetch subscription info', __FILE__, __LINE__, $db->error());
+				$result = $db->query('SELECT u.id, u.email, u.notify_with_post, u.language 
+					FROM '.$db->prefix.'users AS u 
+						INNER JOIN '.$db->prefix.'subscriptions AS s ON u.id=s.user_id 
+						LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id='.$cur_posting['id'].' AND fp.group_id=u.group_id) 
+						LEFT JOIN '.$db->prefix.'online AS o ON u.id=o.user_id 
+						LEFT JOIN '.$db->prefix.'bans AS b ON u.username=b.username 
+					WHERE b.username IS NULL 
+						AND COALESCE(o.logged, u.last_visit) > '.$previous_post_time.' 
+						AND (fp.read_forum IS NULL OR fp.read_forum=1) 
+						AND s.topic_id='.$tid.' 
+						AND u.id!='.intval($pun_user['id']))
+					or error('Unable to fetch subscription info', __FILE__, __LINE__, $db->error());
+
+//				echo $db->num_rows($result); exit('--SELECT u.id, u.email, u.notify_with_post, u.language FROM '.$db->prefix.'users AS u INNER JOIN '.$db->prefix.'subscriptions AS s ON u.id=s.user_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id='.$cur_posting['id'].' AND fp.group_id=u.group_id) LEFT JOIN '.$db->prefix.'online AS o ON u.id=o.user_id LEFT JOIN '.$db->prefix.'bans AS b ON u.username=b.username WHERE b.username IS NULL AND COALESCE(o.logged, u.last_visit)>'.$previous_post_time.' AND (fp.read_forum IS NULL OR fp.read_forum=1) AND s.topic_id='.$tid.' AND u.id!='.intval($pun_user['id']));
 				if ($db->num_rows($result))
 				{
 					require_once PUN_ROOT.'include/email.php';
@@ -289,6 +400,7 @@ if (isset($_POST['form_sent']))
 					// Loop through subscribed users and send e-mails
 					while ($cur_subscriber = $db->fetch_assoc($result))
 					{
+//						print_d($cur_subscriber); exit();
 						// Is the subscription e-mail for $cur_subscriber['language'] cached or not?
 						if (!isset($notification_emails[$cur_subscriber['language']]))
 						{
@@ -333,47 +445,54 @@ if (isset($_POST['form_sent']))
 							}
 						}
 
+//						print_d($notification_emails); print_d($cur_subscriber); exit();
 						// We have to double check here because the templates could be missing
 						if (isset($notification_emails[$cur_subscriber['language']]))
 						{
-							if ($cur_subscriber['notify_with_post'] == '0')
+/*							if ($cur_subscriber['notify_with_post'] == '0')
 								pun_mail($cur_subscriber['email'], $notification_emails[$cur_subscriber['language']][0], $notification_emails[$cur_subscriber['language']][1]);
 							else
 								pun_mail($cur_subscriber['email'], $notification_emails[$cur_subscriber['language']][2], $notification_emails[$cur_subscriber['language']][3]);
+*/
+							bors_mailing::add($post, $cur_subscriber['id']);
 						}
+
 					}
 				}
 			}
 
-			include_once("classes/objects/Bors.php");
-			$topic = class_load('forum_topic', $tid, array('no_load_cache' => true));
+			include_once("engines/bors.php");
+			$topic = object_load('forum_topic', $tid, array('no_load_cache' => true));
+			$is_new_topic = false;
 		}
 		// If it's a new topic
 		else if ($fid)
 		{
 			// Create the topic
-			$db->query('INSERT INTO '.$db->prefix.'topics (poster, subject, posted, last_post, last_poster, forum_id) VALUES(\''.$db->escape($username).'\', \''.$db->escape($subject).'\', '.$now.', '.$now.', \''.$db->escape($username).'\', '.$fid.')') or error('Unable to create topic', __FILE__, __LINE__, $db->error());
+			$db->query('INSERT INTO '.$db->prefix.'topics (poster, subject, description, posted, last_post, last_poster, forum_id) VALUES(\''.$db->escape($username).'\', \''.$db->escape($subject).'\', \''.$db->escape($description).'\', '.$now.', '.$now.', \''.$db->escape($username).'\', '.$fid.')') or error('Unable to create topic', __FILE__, __LINE__, $db->error());
 			$new_tid = $db->insert_id();
 
 			if (!$pun_user['is_guest'])
 			{
 				// Create the post ("topic post")
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
-				$tdb = new driver_mysql('punbb');
+				$tdb = &new DataBase('punbb');
 				$data = array(
 					'poster' => $username, 
 					'poster_id' => $pun_user['id'], 
 					'poster_ip' => get_remote_address(), 
+					'poster_ua' => @$_SERVER['HTTP_USER_AGENT'],
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $new_tid,
 					'answer_to' => $qid,
-					'anwer_to_user_id' => $answer_to_post->owner_id(),
+					'anwer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
+					'source' => $message,
 				);
 
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
-				$tdb->insert('posts_archive_'.($new_tid%10), $data);
+				$tdb->close();
 
 				// To subscribe or not to subscribe, that ...
 				if ($pun_config['o_subscriptions'] == '1' && (isset($_POST['subscribe']) && $_POST['subscribe'] == '1'))
@@ -386,22 +505,23 @@ if (isset($_POST['form_sent']))
 				$data = array(
 					'poster' => $username, 
 					'poster_ip' => get_remote_address(), 
+					'poster_ua' => @$_SERVER['HTTP_USER_AGENT'],
 					'poster_email' => ($pun_config['p_force_guest_email'] == '1' || $email != '') ? $email : '',
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $new_tid,
 					'answer_to' => $qid,
 					'anwer_to_user_id' => $answer_to_post->owner_id(),
+					'source' => $message,
 				);
 
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
-				$tdb->insert('posts_archive_'.($new_tid%10), $data);
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_ip, poster_email, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', \''.get_remote_address().'\', '.$email_sql.', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
+				$tdb->close();
 			}
 
-//			$cms_db->insert('messages', array('id' => $new_pid, 'message' => $message));
-			$cms_db->update('topics', "id=$new_tid", array(
+			$cms_db->update('topics', array('id' => $new_tid), array(
 				'first_pid' => $new_pid,
 				'poster_id' => $pun_user['id'],
 			));
@@ -413,36 +533,64 @@ if (isset($_POST['form_sent']))
 
 			update_forum($fid);
 
-			include_once("classes/objects/Bors.php");
-			$topic = class_load('forum_topic', $new_tid, array('no_load_cache' => true));
+			include_once("engines/bors.php");
+			$topic = object_load('forum_topic', $new_tid, array('no_load_cache' => true));
+			$topic->recalculate(false);
+			$is_new_topic = true;
 		}
 
-		$post  = class_load('forum_post',  $new_pid, array('no_load_cache' => true));
-		
+		if(!empty($_POST['keywords_string']))
+			$topic->set_keywords_string($_POST['keywords_string'], true);
+		$post  = object_load('forum_post',  $new_pid, array('no_load_cache' => true));
+
 		$topic->set_modify_time(time(), true);
 		$post->set_modify_time(time(), true);
+		if($me && $me->is_coordinator())
+		{
+			if(!empty($_POST['is_moderatorial']))
+			{
+				$post->set_is_moderatorial(1, true);
+				balancer_board_action::add($topic, "Административное предупреждение: {$post->titled_url()}", true);
+			}
+		}
+
+		if($is_new_topic)
+			$topic_page = 1;
+		else
+			$topic_page = intval($topic->num_replies()/$topic->items_per_page()) + 1;
+
+		$post->set_topic_page($topic_page, true);
+
 		$topic->store();
 		$post->store();
 
-		$page = $topic->page_by_post_id($post->id());
 		$topic->set_page($page);
+
 		$topic->cache_clean();
+		$post->cache_clean();
+
+//		if(!empty($_POST['overquote_confirmed']))
+//			debug_hidden_log('overquoting', bors()->user_title().":\ntopic={$topic->url()}\npost={$post->url()}\n=== cut ===\n{$message}\n=== cut ===\n");
 
 		if(!empty($_POST['as_blog']))
 		{
 			$blog = &new forum_blog($post->id());
+			$blog->new_instance();
 			$blog->set_owner_id($post->owner_id(), true);
 			$blog->set_forum_id($topic->forum_id(), true);
-			$blog->new_instance();
+			$blog->set_is_public($topic->is_public(), true);
 			$blog->store();
 			$blog->cache_clean();
 
 			include_once('engines/blogs/livejournal.com.php');
-			bors_blog_livejournal_com_post($post->owner_id(), $topic, $topic->first_post()->id() == $post->id() ? $topic : $post, $post, $topic);
+			bors_blog_livejournal_com_post(
+				$post->owner_id(),
+				$topic,
+				$topic->first_post()->id() == $post->id() ? $topic : $post,
+				$post,
+				$topic
+			);
 		}
-			
-//		include_once('engines/search.php');
-//		bors_search_object_index($topic, 'replace');
 
 		// If the posting user is logged in, increment his/her post count
 		if (!$pun_user['is_guest'])
@@ -457,13 +605,12 @@ if (isset($_POST['form_sent']))
 				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
 		// Attachment Mod Block End
 
-		require_once('funcs/navigation/go.php');
+		require_once('inc/navigation.php');
+		unset($_SERVER['QUERY_STRING']);
 		go($post->url_in_topic($topic));
 		pun_exit();
-		redirect('viewtopic.php?pid='.$new_pid.'#p'.$new_pid, $lang_post['Post redirect']);
 	}
 }
-
 
 // If a topic id was specified in the url (it's a reply).
 if ($tid)
@@ -471,25 +618,25 @@ if ($tid)
 	$action = $lang_post['Post a reply'];
 //	$form = '<form id="post" method="post" action="post.php?action=post&amp;tid='.$tid.'" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">';
 
-	$topic = class_load('forum_topic', $tid);
+	$topic = object_load('forum_topic', $tid);
 	
 	$form = "";
-	if($topic->num_replies() >= 500)
-		$form = "<p style=\"color: red; font-size: 16pt; font-weight: 900; padding: 10px;\">Внимание! Слишком большой топик! Рекомендуется использовать ответ в новый топик путём установки отметки «<i>Разместить ответ как новую тему (требуется ввести заголовок)</i>» под формой ответа</p>";
+//	if($topic->num_replies() >= 500)
+//		$form = "<p style=\"color: red; font-size: 10pt; font-weight: 900; padding: 10px;\">Внимание! Слишком большой топик! Рекомендуется использовать ответ в новый топик путём установки отметки «<i>Разместить ответ как новую тему (требуется ввести заголовок)</i>» под формой ответа</p>";
 
 	$form .= '<form id="post" method="post" enctype="multipart/form-data" action="post.php?action=post&amp;tid='.$tid.'" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">'; //Attachment Mod has added enctype="multipart/form-data"
 
 	// If a quote-id was specified in the url.
 	if($qid)
 	{
-		$q_poster  = $cms_db->get("SELECT poster FROM posts WHERE id=$qid");
-//		$q_message = $cms_db->get("SELECT message FROM messages WHERE id=$qid");
+		$post = object_load('forum_post', $qid);
+		$q_poster  = $post ? $post->author_name() : ec("Ошибка сообщения $qid");
+		$q_message = $post ? $post->source() : ec("Ошибка сообщения $qid");
 
 		$q_message = str_replace('[img]', '[url]', $q_message);
 		$q_message = str_replace('[/img]', '[/url]', $q_message);
 		$q_message = pun_htmlspecialchars($q_message);
 
-		include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
 		include_once('inc/design/make_quote.php');
 
 		$quote = make_quote($q_poster, $q_message)."\n";
@@ -529,8 +676,8 @@ $attach_allowed = $pun_user['g_id'] != PUN_GUEST;
 
 //Attachment Mod Block End
 
+include('include/tinymce.php');
 require PUN_ROOT.'header.php';
-
 
 ?>
 <div class="linkst">
@@ -567,8 +714,9 @@ if (!empty($errors))
 }
 else if (isset($_POST['preview']))
 {
+	config_set('cache_disabled', true);
 	require_once PUN_ROOT.'include/parser.php';
-	$preview_message = parse_message($message, $hide_smilies);
+	$preview_message = parse_message($message, $hide_smilies, true);
 
 ?>
 <div id="postpreview" class="blockpost">
@@ -591,7 +739,47 @@ else if (isset($_POST['preview']))
 
 $cur_index = 1;
 
+if($true_text <= 40)
+{
+	$true_text = sprintf("%.1f", $true_text);
+	echo "<div class=\"red-box\">В Вашем сообщении только {$true_text}% введённого Вами текста. Это очень мало
+и похоже на избыточное цитирование больших объёмов текста. Или сократите цитаты до необходимого
+минимума, или подтвердите согласие с избыточным цитированием установив метку «<b>Я подтверждаю избыточное цитирование</b>»
+в части окна под полем ввода текста и редактирования. В этом случае, если избыточное
+цитирование было необоснованным, модераторы сайта могут выставить Вам штрафной балл.
+Посмотреть подробности и задать вопросы можно по ссылке 
+«<a href=\"http://balancer.ru/support/2009/07/t67978--ob-izbytochnom-tsitirovanii.195.html\">Об избыточном цитировании</a>».
+</div><br/>";
+}
+
+if($messages_limit >= 0)
+{
+	echo "<div class=\"red-box\">Из-за активных штрафов число Ваших сообщений в одном форуме в сутки ограничено {$messages_limit}-ю. 
+	Всего за последние 24 часа в этом форуме Вы отправили {$today_posted} сообщени".sklon($today_posted, 'е,я,й').". ";
+
+	if($messages_rest <= 0)
+		echo "Вы не можете больше отправить ни одного сообщения сюда до <b>".full_time($me->next_can_post($messages_limit, $forum_id))."</b>. ";
+	else
+		echo "Вы можете отправить ещё {$messages_rest}. ";
+
+	echo "Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>»";
+	echo "</div><br />";
+}
+
+if($warn_count = $me->warnings())
+{
+	echo "<div class=\"red-box\">";
+	echo "У Вас ".sklon($warn_count,"активен","активны","активны")." $warn_count ".sklon($warn_count, "общий штраф", "общих штрафа", "общих штрафов");
+	echo " и ".$me->warnings_in($forum->id())." в текущем форуме. ";
+	echo "При достижении 10 общих штрафов, Вы будете автоматически переведены в режим \"только чтение\" на срок до истечения самого старого из активных штрафов (срок их активности - две недели с момента выставления) во всех форумах. ";
+	echo "При достижении 5 активных штрафов в данном форумы Вы автоматически будете лишены возможности писать в него, но будете иметь возможность писать в другие. ";
+	echo "Посмотреть список своих штрафов Вы можете на <a href=\"http://balancer.ru/users/{$me->id()}/warnings/\">странице Ваших штрафов</a>. ";
+	echo "Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>»";
+	echo "</div><br/>";
+}
+
 ?>
+
 <div class="blockform">
 	<h2><span><?php echo $action ?></span></h2>
 	<div class="box">
@@ -617,11 +805,21 @@ if ($pun_user['is_guest'])
 
 if ($fid): ?>
 						<label><strong><?php echo $lang_common['Subject'] ?></strong><br /><input class="longinput" type="text" name="req_subject" value="<?php if (isset($_POST['req_subject'])) echo pun_htmlspecialchars($subject); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++;/*"*/ ?>" /><br /></label>
+						<label>Подзаголовок (описание темы, не обязательно)<br /><input class="longinput" type="text" name="nreq_description" value="<?php if (isset($_POST['nreq_description'])) echo pun_htmlspecialchars($description); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++;/*"*/ ?>" /><br /></label>
+						<label>Ключевые слова (через запятую)<br/><input class="longinput" type="text" name="keywords_string" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?= pun_htmlspecialchars(isset($_POST['keywords_string']) || !$forum ? $_POST['keywords_string'] : $forum->keywords_string()) ?>" /><br /></label>
 <? else: ?>
 						<div id="here_subject"></div>
 <?php endif; ?>
 						<label><strong><?php echo $lang_common['Message'] ?></strong><br />
-						<textarea name="req_message" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo isset($_POST['req_message']) ? pun_htmlspecialchars($message) : (isset($quote) ? $quote : ''); ?></textarea><br /></label>
+<div id="emoticons">
+	<a href="#" title=":)"><img src="http://airbase.ru/forum/smilies/smile.gif" /></a>
+	<a href="#" title=":("><img src="http://airbase.ru/forum/smilies/frown.gif" /></a>
+	<a href="#" title=":eek:"><img src="http://airbase.ru/forum/smilies/eek.gif" /></a>
+	<a href="#" title=":p"><img src="http://airbase.ru/forum/smilies/tongue.gif" /></a>
+	<a href="#" title=";)"><img src="http://airbase.ru/forum/smilies/wink.gif" /></a>
+	<a href="#" title=":D"><img src="http://airbase.ru/forum/smilies/biggrin.gif" /></a>
+</div>
+						<textarea name="req_message" id="bbcode" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo isset($_POST['req_message']) ? pun_htmlspecialchars($message) : (isset($quote) ? $quote : ''); ?></textarea><br /></label>
 						<ul class="bblinks">
 							<li><a href="<?echo $pun_config['root_uri'];?>/help.php#bbcode" onclick="window.open(this.href); return false;"><?php echo $lang_common['BBCode'] ?></a>: <?php echo ($pun_config['p_message_bbcode'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
 							<li><a href="<?echo $pun_config['root_uri'];?>/help.php#img" onclick="window.open(this.href); return false;"><?php echo $lang_common['img tag'] ?></a>: <?php echo ($pun_config['p_message_img_tag'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
@@ -640,7 +838,7 @@ if($attach_allowed){
 					<legend><?php echo $lang_attach['Attachment'] ?></legend>
 					<div class="infldset">
 						<div class="rbox">
-							<input type="hidden" name="MAX_FILE_SIZE" value="524288" /><input type="file" name="attached_file" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
+							<input type="hidden" name="MAX_FILE_SIZE" value="<?=config('forum_attach_max_size')?>" /><input type="file" name="attached_file" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
 							<?php echo $lang_attach['Note'];/*"*/ ?>
 						</div>
 					</div>
@@ -656,7 +854,7 @@ if (!$pun_user['is_guest'])
 		$checkboxes[] = '<label><input type="checkbox" name="hide_smilies" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['hide_smilies']) ? ' checked="checked"' : '').' />'.$lang_post['Hide smilies'];
 
 	if ($pun_config['o_subscriptions'] == '1')
-		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['subscribe']) ? ' checked="checked"' : '').' />'.$lang_post['Subscribe'];
+		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['subscribe']) || empty($_GET['tid']) ? ' checked="checked"' : '').' />'.$lang_post['Subscribe'];
 
 //	$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTMLval = this.checked ? '' : '".addslashes("<label><strong>Заголовок</strong><br /><input class=\"longinput\" type=\"text\" name=\"req_subject\" value=\"\" size=\"80\" maxlength=\"255\" tabindex=\"1\" /><br /></label>")."'\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
 
@@ -672,6 +870,12 @@ if (!$pun_user['is_guest'])
 }
 else if ($pun_config['o_smilies'] == '1')
 	$checkboxes[] = '<label><input type="checkbox" name="hide_smilies" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['hide_smilies']) ? ' checked="checked"' : '').' />'.$lang_post['Hide smilies'];
+
+if($true_text <= 40)
+	$checkboxes[] = "<label><input type=\"checkbox\" name=\"overquote_confirmed\" value=\"1\" tabindex=\"".($cur_index++)."\"/>Я подтверждаю избыточное цитирование</label>";
+
+if($me && $me->is_coordinator())
+	$checkboxes[] = "<label style=\"color:red\"><input type=\"checkbox\" name=\"is_moderatorial\" value=\"1\" tabindex=\"".($cur_index++)."\" />Данное сообщение - модераториал</label>";
 
 if (!empty($checkboxes))
 {
@@ -693,7 +897,14 @@ if (!empty($checkboxes))
 
 if($qid) echo "<input type=\"hidden\" name=\"qid\" value=\"$qid\">\n";
 ?>			</div>
-			<p><input type="submit" name="submit" value="<?php echo $lang_common['Submit'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="s" /><input type="submit" name="preview" value="<?php echo $lang_post['Preview'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="p" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
+<div class="yellow_box">
+<span class="red b">Важно!</span> Размещая на форуме информацию, авторами которой Вы <b>не</b> являетесь,
+Вы обязуетесь нести всю ответственность за соблюдение прав авторов
+этой информации. В случае претензий правообладателей эта информация
+может быть удалена. Все материалы, автором которых являетесь Вы,
+при опубликовании на форумах приобретают лицензию <a href="http://balancer.ru/support/2009/02/t66269--Prava-publikatsii-avtorskikh-materialov-.html"><b>Creative Commons</b> (by-nc-sa)</a>.
+</div>
+			<p><input type="submit" name="submit" value="<?php echo $lang_common['Submit'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="s" /><input type="submit" name="preview" value="<?php echo $lang_post['Preview'] ?>" tabindex="<?php echo $cur_index++ /*"*/?>" accesskey="p" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
 		</form>
 	</div>
 </div>
@@ -703,10 +914,6 @@ if($qid) echo "<input type=\"hidden\" name=\"qid\" value=\"$qid\">\n";
 // Check to see if the topic review is to be displayed.
 if ($tid && $pun_config['o_topic_review'] != '0')
 {
-	require_once 'include/parser.php';
-
-	$result = $db->query('SELECT id, poster, hide_smilies, posted FROM '.$db->prefix.'posts WHERE topic_id='.$tid.' ORDER BY id DESC LIMIT '.$pun_config['o_topic_review']) or error('Unable to fetch topic review', __FILE__, __LINE__, $db->error());
-
 ?>
 
 <div id="postreview" class="blockpost">
@@ -717,29 +924,25 @@ if ($tid && $pun_config['o_topic_review'] != '0')
 	$bg_switch = true;
 	$post_count = 0;
 
-	while ($cur_post = $db->fetch_assoc($result))
+	foreach(objects_array('forum_post', array('topic_id' => $tid, 'order' => '-id', 'limit' => $pun_config['o_topic_review'])) as $preview_post)
 	{
-//		$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
-
 		// Switch the background color for every message.
 		$bg_switch = ($bg_switch) ? $bg_switch = false : $bg_switch = true;
 		$vtbg = ($bg_switch) ? ' roweven' : ' rowodd';
 		$post_count++;
 
-		$cur_post['message'] = parse_message($cur_post['message'], $cur_post['hide_smilies']);
-
 ?>
-	<div class="box<?php echo $vtbg ?>">
+	<div class="box<?php echo $vtbg ?>/*"*/">
 		<div class="inbox">
 			<div class="postleft">
 				<dl>
-					<dt><strong><?php echo pun_htmlspecialchars($cur_post['poster']) ?></strong></dt>
-					<dd><?php echo format_time($cur_post['posted']) ?></dd>
+					<dt><strong><?php echo pun_htmlspecialchars($preview_post->author_name()) ?></strong></dt>
+					<dd><?php echo format_time($preview_post->create_time()) ?></dd>
 				</dl>
 			</div>
 			<div class="postright">
 				<div class="postmsg">
-					<?php echo $cur_post['message'] ?>
+					<tt><?php echo str_replace("\n", "<br/>\n", htmlspecialchars($preview_post->source()));?></tt>
 				</div>
 			</div>
 			<div class="clearer"></div>

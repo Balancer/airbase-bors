@@ -24,10 +24,10 @@
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $pid = isset($_GET['pid']) ? intval($_GET['pid']) : 0;
-include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-bors_init();
+require_once('include/bors_config.php');
 
 $qs = @$_SERVER['QUERY_STRING'];
+unset($_SERVER['QUERY_STRING']);
 if(preg_match('!^id=(\d+)&p=(\d+)$!', $qs, $m))
 	return go(object_load('forum_topic', $m[1])->url($m[2]), true);
 if(preg_match('!^id=(\d+)$!', $qs, $m))
@@ -35,26 +35,28 @@ if(preg_match('!^id=(\d+)$!', $qs, $m))
 if(preg_match('!^id=(\d+)&action=(new|last)$!', $qs, $m))
 	return go(object_load('forum_topic', $m[1])->url($m[2]), true);
 if(preg_match('!^pid=(\d+)$!', $qs, $m))
-	return go(object_load('forum_post', $m[1])->url_in_topic(), true);
+{
+	$post = object_load('forum_post', $m[1]);
+	if(!$post)
+	{
+		debug_hidden_log('__trap', "Пустой постинг {$m[1]}");
+		@header("HTTP/1.0 404 Not Found");
+		return go('http://balancer.ru/forum/', true);
+	}
+	return go($post->url_in_topic(), true);
+}
 
-include_once("funcs/DataBase.php");
-$cms_db = &new DataBase('punbb');
+$cms_db = new driver_mysql('punbb');
 
 $archive_loaded = false;
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 
 // If a post ID is specified we determine topic ID and page number so we can redirect to the correct message
 if($pid)
 {
 	$id = intval($cms_db->get("SELECT topic_id FROM posts WHERE id=$pid"));
-	if(!$id)
-	{
-		for($i=0; $i<10; $i++)
-			if($id = intval($cms_db->get("SELECT topic_id FROM posts_archive_{$i} WHERE id={$pid}")))
-				break;
-	}
-	
+
 	if(!$id)
 	{
 		require PUN_ROOT.'include/common.php';
@@ -76,8 +78,6 @@ $sub_id	= $id % 1000;
 
 $_SERVER['REQUEST_URI'] = "/forum/topic/$sub_id/$id".(empty($_GET['p'])||$_GET['p']==1 ? "":",{$_GET['p']}")."/";
 
-include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-include_once("funcs/Cache.php");
 $GLOBALS['global_cache'] = &new Cache();
 
 require PUN_ROOT.'include/common.php';
@@ -100,8 +100,6 @@ if ($action == 'new' && !$pun_user['is_guest'])
 {
 	$last_visit = intval($cms_db->get("SELECT last_visit FROM topic_visits WHERE user_id=".intval($pun_user['id'])." AND topic_id=$id"));
 	$first_new_post_id = intval($cms_db->get("SELECT MIN(id) FROM {$db->prefix}posts WHERE topic_id=$id AND posted>$last_visit"));
-	if(!$first_new_post_id)
-		$first_new_post_id = $cms_db->get("SELECT MIN(id) FROM {$db->prefix}posts_archive_".($id%10)." WHERE topic_id=$id AND posted>$last_visit");
 
 	if ($first_new_post_id)
 		header("Location: {$pun_config['root_uri']}/viewtopic.php?pid=$first_new_post_id#p$first_new_post_id");
@@ -117,8 +115,6 @@ else if ($action == 'last')
 	for($ii=0; $ii<2; $ii++)
 	{
 		$last_post_id = $cms_db->get("SELECT MAX(id) FROM {$db->prefix}posts WHERE topic_id=$id");
-		if(!$last_post_id)
-			$last_post_id = $cms_db->get("SELECT MAX(id) FROM {$db->prefix}posts_archive_".($id%10)." WHERE topic_id=$id");
 
 		if ($last_post_id)
 		{
@@ -138,7 +134,7 @@ if($pun_user['is_guest'])
 	SetCookie("user_id", "0", 0, "/");
 	$_COOKIE['user_id'] = "0";
 
-	require_once('funcs/navigation/go.php');
+	require_once('inc/navigation.php');
 
 	if($pid)
 		go(class_load("forum_post", intval($pid))->url(), true);
@@ -165,9 +161,6 @@ for($ii=0; $ii<2; $i++)
 	else
 		break;
 }
-
-//TODO: проверить!
-exit('Уж ошибка так ошибка...'.__FILE__.':'.__LINE__);
 
 $cur_topic = $db->fetch_assoc($result);
 
@@ -321,13 +314,6 @@ require PUN_ROOT.'include/parser.php';
 $bg_switch = true;	// Used for switching background color in posts
 $post_count = 0;	// Keep track of post numbers
 
-if(!$archive_loaded)
-{
-	$cnt = $cms_db->get("SELECT COUNT(*) FROM posts WHERE topic_id = $id");
-	if(!$cnt || $cnt != $cms_db->get("SELECT COUNT(*) FROM posts_archive_".($id%10)." WHERE topic_id = $id"))
-		$cms_db->query("INSERT IGNORE posts SELECT * FROM posts_archive_".($id%10)." WHERE topic_id = $id");
-}
-
 // Retrieve the posts
 $q = "
 	SELECT 
@@ -353,10 +339,6 @@ $q = "
 
 $result   = $db->query($q, false) 
 	or error('Unable to fetch post info', __FILE__, __LINE__, $db->error()); //Attachment Mod, changed the true to false...
-
-
-include_once($_SERVER['DOCUMENT_ROOT']."/cms/config.php");
-include_once("funcs/lcml.php");
 
 while ($cur_post = $db->fetch_assoc($result))
 {
@@ -542,7 +524,7 @@ while ($cur_post = $db->fetch_assoc($result))
 						'forum_type' => 'punbb',
 						'forum_base_uri' => 'http://balancer.ru/forum',
 						'sharp_not_comment' => true,
-						'html_disable' => 'direct',
+						'html_disable' => true,
 				));
 
 			$cms_db->update('users', "id = {$poster['id']}", array('signature_html' => $signature));
@@ -658,7 +640,7 @@ while ($cur_post = $db->fetch_assoc($result))
 
 		</td>
 		<td class="topic_right_column" valign="top" style="border-style: none;">
-<?include("design/right.php");?>
+<!-- ?include("design/right.php");? -->
 		</td>
 	</tr>
 </table>

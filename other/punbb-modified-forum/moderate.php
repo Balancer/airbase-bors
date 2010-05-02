@@ -23,10 +23,21 @@
 ************************************************************************/
 
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
 
+if(bors_stop_bots('__nobots_testing', 'moderate'))
+	return;
+
+foreach(explode(' ', 'topics move_to_forum move_topics_to') as $key)
+{
+	if(isset($_GET[$key]) && !isset($_POST[$key]))
+	{
+		$_POST[$key] = $_GET[$key];
+		unset($_GET[$key]);
+	}
+}
 
 // This particular function doesn't require forum-based moderator access. It can be used
 // by all moderators and admins.
@@ -368,6 +379,7 @@ if (isset($_REQUEST['move_topics']) || isset($_POST['move_topics_to']))
 	$result = $db->query('SELECT c.id AS cid, c.cat_name, f.id AS fid, f.forum_name FROM '.$db->prefix.'categories AS c INNER JOIN '.$db->prefix.'forums AS f ON c.id=f.cat_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND f.redirect_url IS NULL ORDER BY c.disp_position, c.id, f.disp_position', true) or error('Unable to fetch category/forum list', __FILE__, __LINE__, $db->error());
 
 	$cur_category = 0;
+	$last_fid = -1;
 	while ($cur_forum = $db->fetch_assoc($result))
 	{
 		if ($cur_forum['cid'] != $cur_category)	// A new category since last iteration?
@@ -378,11 +390,12 @@ if (isset($_REQUEST['move_topics']) || isset($_POST['move_topics_to']))
 			echo "\t\t\t\t\t\t\t".'<optgroup label="'.pun_htmlspecialchars($cur_forum['cat_name']).'">'."\n";
 			$cur_category = $cur_forum['cid'];
 		}
+/*"*/
+		if ($cur_forum['fid'] != $fid) 
+			echo "<option value=\"{$cur_forum['fid']}\"".($fid == $last_fid ? ' selected="true"' : '').">".pun_htmlspecialchars($cur_forum['forum_name']).'</option>'."\n";
 
-		if ($cur_forum['fid'] != $fid)
-			echo "\t\t\t\t\t\t\t\t".'<option value="'.$cur_forum['fid'].'">'.pun_htmlspecialchars($cur_forum['forum_name']).'</option>'."\n";
+		$last_fid = $cur_forum['fid'];
 	}
-
 ?>
 							</optgroup>
 						</select>
@@ -459,7 +472,7 @@ if (isset($_REQUEST['delete_topics']) || isset($_POST['delete_topics_comply']))
 <div class="blockform">
 	<h2><?php echo $lang_misc['Delete topics'] ?></h2>
 	<div class="box">
-		<form method="post" action="moderate.php?fid=<?php echo $fid ?>">
+		<form method="post" action="moderate.php?fid=<?php echo $fid;/*"*/ ?>">
 			<input type="hidden" name="topics" value="<?php echo implode(',', array_keys($topics)) ?>" />
 			<div class="inform">
 				<fieldset>
@@ -469,7 +482,7 @@ if (isset($_REQUEST['delete_topics']) || isset($_POST['delete_topics_comply']))
 					</div>
 				</fieldset>
 			</div>
-			<p><input type="submit" name="delete_topics_comply" value="<?php echo $lang_misc['Delete'] ?>" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
+			<p><input type="submit" name="delete_topics_comply" value="<?php echo $lang_misc['Delete'] ?>" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'];/*"*/ ?></a></p>
 		</form>
 	</div>
 </div>
@@ -482,6 +495,7 @@ if (isset($_REQUEST['delete_topics']) || isset($_POST['delete_topics_comply']))
 // Open or close one or more topics
 else if (isset($_REQUEST['open']) || isset($_REQUEST['close']))
 {
+
 	$action = (isset($_REQUEST['open'])) ? 0 : 1;
 
 	// There could be an array of topic ID's in $_POST
@@ -493,7 +507,13 @@ else if (isset($_REQUEST['open']) || isset($_REQUEST['close']))
 		if (empty($topics))
 			message($lang_misc['No topics selected']);
 
-		$db->query('UPDATE '.$db->prefix.'topics SET closed='.$action.' WHERE id IN('.implode(',', $topics).')') or error('Unable to close topics', __FILE__, __LINE__, $db->error());
+		foreach($topics as $topic_id)
+		{
+			$topic = class_load('forum_topic', $topic_id);
+			$topic->set_closed($action, true);
+		}
+		
+//		$db->query('UPDATE '.$db->prefix.'topics SET closed='.$action.' WHERE id IN('.implode(',', $topics).')') or error('Unable to close topics', __FILE__, __LINE__, $db->error());
 
 		$redirect_msg = ($action) ? $lang_misc['Close topics redirect'] : $lang_misc['Open topics redirect'];
 		redirect('moderate.php?fid='.$fid, $redirect_msg);
@@ -504,10 +524,13 @@ else if (isset($_REQUEST['open']) || isset($_REQUEST['close']))
 		confirm_referrer('viewtopic.php');
 
 		$topic_id = ($action) ? intval($_GET['close']) : intval($_GET['open']);
+		
 		if ($topic_id < 1)
 			message($lang_common['Bad request']);
 
-		$db->query('UPDATE '.$db->prefix.'topics SET closed='.$action.' WHERE id='.$topic_id) or error('Unable to close topic', __FILE__, __LINE__, $db->error());
+		$topic = class_load('forum_topic', $topic_id);
+		$topic->set_closed($action, true);
+		balancer_board_action::add($topic, "Тема ".($action?'закрыта':'открыта'), true);
 
 		$redirect_msg = ($action) ? $lang_misc['Close topic redirect'] : $lang_misc['Open topic redirect'];
 		redirect('viewtopic.php?id='.$topic_id, $redirect_msg);
@@ -524,7 +547,8 @@ else if (isset($_GET['stick']))
 	if ($stick < 1)
 		message($lang_common['Bad request']);
 
-	$db->query('UPDATE '.$db->prefix.'topics SET sticky=\'1\' WHERE id='.$stick) or error('Unable to stick topic', __FILE__, __LINE__, $db->error());
+	$topic = class_load('forum_topic', $stick);
+	$topic->set_sticky(1, true);
 
 	redirect('viewtopic.php?id='.$stick, $lang_misc['Stick topic redirect']);
 }
@@ -539,7 +563,8 @@ else if (isset($_GET['unstick']))
 	if ($unstick < 1)
 		message($lang_common['Bad request']);
 
-	$db->query('UPDATE '.$db->prefix.'topics SET sticky=\'0\' WHERE id='.$unstick) or error('Unable to unstick topic', __FILE__, __LINE__, $db->error());
+	$topic = class_load('forum_topic', $unstick);
+	$topic->set_sticky(0, true);
 
 	redirect('viewtopic.php?id='.$unstick, $lang_misc['Unstick topic redirect']);
 }

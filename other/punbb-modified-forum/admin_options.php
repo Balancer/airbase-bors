@@ -26,7 +26,7 @@
 // Tell header.php to use the admin template
 define('PUN_ADMIN_CONSOLE', 1);
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/common_admin.php';
 
@@ -38,8 +38,8 @@ if ($pun_user['g_id'] > PUN_ADMIN)
 if (isset($_POST['form_sent']))
 {
 	// Lazy referer check (in case base_url isn't correct)
-	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match('#/admin_options\.php#i', $_SERVER['HTTP_REFERER']))
-		message($lang_common['Bad referrer']);
+//	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match('#/admin_options\.php#i', $_SERVER['HTTP_REFERER']))
+//		message($lang_common['Bad referrer']);
 
 	$form = array_map('trim', $_POST['form']);
 

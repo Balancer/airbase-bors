@@ -42,6 +42,9 @@ ob_end_clean();
 ob_start();
 
 ?>
+
+<div class="box" style="padding: 4px; font-size: 10pt; font-weight: bold;">Сайт работает на сервере <a href="http://www.etegro.com/">ETegro Technologies</a></div><br/>
+
 <div id="brdfooter" class="block">
 	<h2><span><?php echo $lang_common['Board footer'] ?></span></h2>
 	<div class="box">
@@ -117,8 +120,42 @@ if ($footer_style == 'viewforum' || $footer_style == 'viewtopic')
 	}
 
 ?>
-			<p class="conr">Powered by <a href="http://balancer.ru/cms/">Balancer's CMS</a> and modified <a href="http://www.punbb.org/">PunBB</a><?php if ($pun_config['o_show_version'] == '1') echo ' '.$pun_config['o_cur_version']; ?><br />
-			&copy; Copyright 1998&#8211;2006 Balancer<br />
+<a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" border="0" /></a>
+
+<!--Rating@Mail.ru COUNTER--><script language="JavaScript" type="text/javascript"><!--
+d=document;var a='';a+=';r='+escape(d.referrer)
+js=10//--></script><script language="JavaScript1.1" type="text/javascript"><!--
+a+=';j='+navigator.javaEnabled()
+js=11//--></script><script language="JavaScript1.2" type="text/javascript"><!--
+s=screen;a+=';s='+s.width+'*'+s.height
+a+=';d='+(s.colorDepth?s.colorDepth:s.pixelDepth)
+js=12//--></script><script language="JavaScript1.3" type="text/javascript"><!--
+js=13//--></script><script language="JavaScript" type="text/javascript"><!--
+d.write('<a href="http://top.mail.ru/jump?from=1574967"'+
+' target="_top"><img src="http://d8.c0.b8.a1.top.mail.ru/counter'+
+'?id=1574967;t=57;js='+js+a+';rand='+Math.random()+
+'" alt="Рейтинг@Mail.ru"'+' border="0" height="31" width="88"/><\/a>')
+if(11<js)d.write('<'+'!-- ')//--></script><noscript><a
+target="_top" href="http://top.mail.ru/jump?from=1574967"><img
+src="http://d8.c0.b8.a1.top.mail.ru/counter?js=na;id=1574967;t=57"
+border="0" height="31" width="88"
+alt="Рейтинг@Mail.ru"/></a></noscript><script language="JavaScript" type="text/javascript"><!--
+if(11<js)d.write('--'+'>')//--></script><!--/COUNTER-->
+
+<a href="http://top.airbase.ru/"><img src="http://top.airbase.ru/?id=1" width="88" height="31" border="0" alt="АвиаТОП" title="Числа: место в рейтинге, хитов всего и хитов в сутки"></a>
+
+<!-- Yandex.Metrika -->
+<script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript"></script>
+<script type="text/javascript">
+try { var yaCounter510488 = new Ya.Metrika(510488); } catch(e){}
+</script>
+<noscript><div style="position: absolute;"><img src="//mc.yandex.ru/watch/510488" alt="" /></div></noscript>
+<!-- /Yandex.Metrika -->
+
+<div class="clear">&nbsp;</div>
+
+			<p class="conr">Powered by <a href="http://bors.balancer.ru">BORS(c) Framework</a> and modified <a href="http://www.punbb.org/">PunBB</a><?php if ($pun_config['o_show_version'] == '1') echo ' '.$pun_config['o_cur_version']; ?><br />
+			&copy; Copyright 1998&#8211;<?=date('Y');?> Balancer<br />
 			&copy; Copyright 2002&#8211;2005 Rickard Andersson</p>
 <?php
 

@@ -1,5 +1,5 @@
 <?
-	include_once("tools/inc.php");
+	include_once(PUN_ROOT.'tools/inc.php');
 
 	function get_subforums_html($forum)
 	{
@@ -133,8 +133,20 @@
 <?
 	}
 
-	function get_subforums_text($forums)
+function subforums_text($forum)
+{
+	$subs = array();
+	foreach($forum->all_readable_subforum_ids() as $subfid)
 	{
+		$f = object_load('forum_forum', $subfid);
+		$subs[] = $f->titled_url();
+	}
+
+	return "<div class=\"subforums\"><b>Подфорумы:</b> ".join(", ", $subs)."</div>\n";
+}
+
+function get_subforums_text($forums)
+{
 		if(empty($forums))
 			return "";
 	
@@ -167,4 +179,4 @@
 
 		$db->close();		
 		return "<div class=\"subforums\"><b>Подфорумы:</b> ".join(", ", $subforums)."</div>\n";
-	}
+}

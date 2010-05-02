@@ -67,6 +67,9 @@ function is_banned_email($email)
 //
 function pun_mail($to, $subject, $message, $from = '')
 {
+//	echo "=<xmp>$from</xmp>="; exit();
+	require_once('engines/mail.php');
+
 	global $pun_config, $lang_common;
 
 	// Default sender/return address
@@ -78,23 +81,14 @@ function pun_mail($to, $subject, $message, $from = '')
 	$subject = trim(preg_replace('#[\n\r]+#s', '', $subject));
 	$from = trim(preg_replace('#[\n\r:]+#s', '', $from));
 
-	$headers = 'From: '.$from."\r\n".'Date: '.date('r')."\r\n".'MIME-Version: 1.0'."\r\n".'Content-transfer-encoding: 8bit'."\r\n".'Content-type: text/plain; charset='.$lang_common['lang_encoding']."\r\n".'X-Mailer: PunBB Mailer';
+//	$headers = 'From: '.$from."\r\n".'Date: '.date('r')."\r\n".'MIME-Version: 1.0'."\r\n".'Content-transfer-encoding: 8bit'."\r\n".'Content-type: text/plain; charset='.$lang_common['lang_encoding']."\r\n".'X-Mailer: PunBB Mailer';
 
 	// Make sure all linebreaks are CRLF in message
 	$message = str_replace("\n", "\r\n", pun_linebreaks($message));
 
-	if ($pun_config['o_smtp_host'] != '')
-		smtp_mail($to, $subject, $message, $headers);
-	else
-	{
-		// Change the linebreaks used in the headers according to OS
-		if (strtoupper(substr(PHP_OS, 0, 3)) == 'MAC')
-			$headers = str_replace("\r\n", "\r", $headers);
-		else if (strtoupper(substr(PHP_OS, 0, 3)) != 'WIN')
-			$headers = str_replace("\r\n", "\n", $headers);
-
-		mail($to, $subject, $message, $headers);
-	}
+	send_mail($to, $subject, $message, NULL, $from, array(
+		'X-Mailer' => 'PunBB forum mailer over BORS(c)',
+	));
 }
 
 
@@ -113,77 +107,4 @@ function server_parse($socket, $expected_response)
 
 	if (!(substr($server_response, 0, 3) == $expected_response))
 		error('Unable to send e-mail. Please contact the forum administrator with the following error message reported by the SMTP server: "'.$server_response.'"', __FILE__, __LINE__);
-}
-
-
-//
-// This function was originally a part of the phpBB Group forum software phpBB2 (http://www.phpbb.com).
-// They deserve all the credit for writing it. I made small modifications for it to suit PunBB and it's coding standards.
-//
-function smtp_mail($to, $subject, $message, $headers = '')
-{
-	global $pun_config;
-
-	$recipients = explode(',', $to);
-
-	// Are we using port 25 or a custom port?
-	if (strpos($pun_config['o_smtp_host'], ':') !== false)
-		list($smtp_host, $smtp_port) = explode(':', $pun_config['o_smtp_host']);
-	else
-	{
-		$smtp_host = $pun_config['o_smtp_host'];
-		$smtp_port = 25;
-	}
-
-	if (!($socket = fsockopen($smtp_host, $smtp_port, $errno, $errstr, 15)))
-		error('Could not connect to smtp host "'.$pun_config['o_smtp_host'].'" ('.$errno.') ('.$errstr.')', __FILE__, __LINE__);
-
-	server_parse($socket, '220');
-
-	if ($pun_config['o_smtp_user'] != '' && $pun_config['o_smtp_pass'] != '')
-	{
-		fwrite($socket, 'EHLO '.$smtp_host."\r\n");
-		server_parse($socket, '250');
-
-		fwrite($socket, 'AUTH LOGIN'."\r\n");
-		server_parse($socket, '334');
-
-		fwrite($socket, base64_encode($pun_config['o_smtp_user'])."\r\n");
-		server_parse($socket, '334');
-
-		fwrite($socket, base64_encode($pun_config['o_smtp_pass'])."\r\n");
-		server_parse($socket, '235');
-	}
-	else
-	{
-		fwrite($socket, 'HELO '.$smtp_host."\r\n");
-		server_parse($socket, '250');
-	}
-
-	fwrite($socket, 'MAIL FROM: <'.$pun_config['o_webmaster_email'].'>'."\r\n");
-	server_parse($socket, '250');
-
-	$to_header = 'To: ';
-
-	@reset($recipients);
-	while (list(, $email) = @each($recipients))
-	{
-		fwrite($socket, 'RCPT TO: <'.$email.'>'."\r\n");
-		server_parse($socket, '250');
-
-		$to_header .= '<'.$email.'>, ';
-	}
-
-	fwrite($socket, 'DATA'."\r\n");
-	server_parse($socket, '354');
-
-	fwrite($socket, 'Subject: '.$subject."\r\n".$to_header."\r\n".$headers."\r\n\r\n".$message."\r\n");
-
-	fwrite($socket, '.'."\r\n");
-	server_parse($socket, '250');
-
-	fwrite($socket, 'QUIT'."\r\n");
-	fclose($socket);
-
-	return true;
 }

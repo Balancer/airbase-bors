@@ -118,6 +118,7 @@ else if (isset($_GET['email']))
 
 		require_once PUN_ROOT.'include/email.php';
 
+//		exit("pun_mail($recipient_email, $mail_subject, $mail_message, '\"'.str_replace('\"', '', {$pun_user['username']}).'\" <'.{$pun_user['email']}.'>');");
 		pun_mail($recipient_email, $mail_subject, $mail_message, '"'.str_replace('"', '', $pun_user['username']).'" <'.$pun_user['email'].'>');
 
 		redirect(htmlspecialchars($_POST['redirect_url']), $lang_misc['E-mail sent redirect']);
@@ -255,6 +256,9 @@ else if (isset($_GET['subscribe']))
 	$result = $db->query('SELECT 1 FROM '.$db->prefix.'subscriptions WHERE user_id='.$pun_user['id'].' AND topic_id='.$topic_id) or error('Unable to fetch subscription info', __FILE__, __LINE__, $db->error());
 	if ($db->num_rows($result))
 		message($lang_misc['Already subscribed']);
+
+	if (preg_match('/(rambler.ru|pozitifff.com|sbcglobal.net|terbuny.net)/i', $email1, $m))
+		message("<b>{$m[1]}</b> не принимает почту с Авиабазы и форумов Balancer'а. Поэтому почтовые ящики этой системы больше не поддерживаются. Выберите более адекватную почтовую службу!");
 
 	$db->query('INSERT INTO '.$db->prefix.'subscriptions (user_id, topic_id) VALUES('.$pun_user['id'].' ,'.$topic_id.')') or error('Unable to add subscription', __FILE__, __LINE__, $db->error());
 

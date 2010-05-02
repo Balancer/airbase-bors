@@ -55,7 +55,7 @@ class DBLayer
 				error('Unable to select database. MySQL reported: '.mysql_error(), __FILE__, __LINE__);
 		}
 		else
-			error('Unable to connect to MySQL server. MySQL reported: '.mysql_error(), __FILE__, __LINE__);
+			error('<b>Что-то не работает. Попробуйте заглянуть на <a href="http://balancer.endofinternet.net/mybb/">ЗАПАСНЫЕ ФОРУМЫ</a>.</b> <br/><br/>Unable to connect to MySQL server. MySQL reported: '.mysql_error(), __FILE__, __LINE__);
 	}
 
 

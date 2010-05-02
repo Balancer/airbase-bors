@@ -1,4 +1,5 @@
 <?php
+//if(1 || !empty($_POST['form'])) { echo "<xmp>"; print_r($_POST); print_r($_GET); print_r($_FILES); echo "</xmp>"; exit(); }
 /***********************************************************************
 
   Copyright (C) 2002-2005  Rickard Andersson (rickard@punbb.org)
@@ -22,12 +23,12 @@
 
 ************************************************************************/
 
-define('PUN_ROOT', './');
+define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 
 if($_SERVER['HTTP_HOST'] != 'balancer.ru' || !preg_match('!^/forum/punbb/!', $_SERVER['REQUEST_URI']))
 {
-	include_once('funcs/navigation/go.php');
+	include_once('inc/navigation.php');
 	go("http://balancer.ru/forum/punbb/profile.php" . (empty($_SERVER['QUERY_STRING']) ? "" : "?".$_SERVER['QUERY_STRING']), true);
 	exit("Redirected");
 }
@@ -404,6 +405,8 @@ else if ($action == 'upload_avatar' || $action == 'upload_avatar2')
 		elseif($img_size = @getimagesize("$avatars_dir/$id.jpg"))
 			$user_avatar = "$id.jpg";
 
+		bors()->changed_save(); // Сохраняем всё. А то, вдруг, там где-то старые параметры аватара.
+
 		// Enable use_avatar (seems sane since the user just uploaded an avatar)
 		$db->query("UPDATE {$db->prefix}users SET use_avatar='".addslashes($user_avatar)."', avatar_width={$img_size[0]}, avatar_height={$img_size[0]} WHERE id=$id")
 			or error('Unable to update avatar state', __FILE__, __LINE__, $db->error());
@@ -628,7 +631,7 @@ else if (isset($_POST['delete_user']) || isset($_POST['delete_user_comply']))
 <div class="blockform">
 	<h2><span><?php echo $lang_profile['Confirm delete user'] ?></span></h2>
 	<div class="box">
-		<form id="confirm_del_user" method="post" action="profile.php?id=<?php echo $id ?>">
+		<form id="confirm_del_user" method="post" action="profile.php?id=<?php echo $id /*"*/?>">
 			<div class="inform">
 				<fieldset>
 					<legend><?php echo $lang_profile['Confirm delete legend'] ?></legend>
@@ -641,7 +644,7 @@ else if (isset($_POST['delete_user']) || isset($_POST['delete_user_comply']))
 					</div>
 				</fieldset>
 			</div>
-			<p><input type="submit" name="delete_user_comply" value="<?php echo $lang_profile['Delete'] ?>" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
+			<p><input type="submit" name="delete_user_comply" value="<?php echo $lang_profile['Delete'] /*"*/?>" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
 		</form>
 	</div>
 </div>
@@ -786,7 +789,7 @@ else if (isset($_POST['form_sent']))
 
 			break;
 		}
-/*"*/
+
 		case 'personality':
 		{
 			$form = extract_elements(array('use_avatar'));
@@ -856,22 +859,31 @@ else if (isset($_POST['form_sent']))
 			message($lang_common['Bad request']);
 	}
 
+//	set_loglevel(10,0);
+	$user = object_load('forum_user', $id, array('no_load_cache' => true));
+	$user->set_signature($form['signature'], true);
+	$user->set_signature_html(NULL, true);
+	$user->set_use_avatar($form['use_avatar'], true);
 
-	// Singlequotes around non-empty values and NULL for empty values
-	$temp = array();
-	$form['signature_html'] = '';
-	while (list($key, $input) = @each($form))
+	foreach(array(
+		'url' => 'www', 
+		'title' => 'user_title',
+		'username' => 'title',
+	) as $from => $to)
 	{
-		$value = ($input !== '') ? '\''.$db->escape($input).'\'' : 'NULL';
-
-		$temp[] = $key.'='.$value;
+		if(isset($form[$from]))
+			$form[$to] = $form[$from];
+		unset($form[$from]);
 	}
 
-	if (empty($temp))
-		message($lang_common['Bad request']);
+	foreach($form as $key => $val)
+		$user->set($key, $val, true);
 
+	$user->store();
+//	print_d($form);
+//	bors_exit();
 
-	$db->query('UPDATE '.$db->prefix.'users SET '.implode(',', $temp).' WHERE id='.$id) or error('Unable to update profile', __FILE__, __LINE__, $db->error());
+//	$db->query('UPDATE '.$db->prefix.'users SET '.implode(',', $temp).' WHERE id='.$id) or error('Unable to update profile', __FILE__, __LINE__, $db->error());
 
 	// If we changed the username we have to update some stuff
 	if ($username_updated)
@@ -981,6 +993,8 @@ if ($pun_user['id'] != $id &&
 				<legend><?php echo $lang_profile['Section personal'] ?></legend>
 					<div class="infldset">
 						<dl>
+							<dt>Новый профиль:</dt>
+							<dd><a href="http://balancer.ru/user/<?php echo $id?>/">http://balancer.ru/user/<?php echo $id?>/</a></dd>
 							<dt><?php echo $lang_common['Username'] ?>: </dt>
 							<dd><?php echo pun_htmlspecialchars($user['username']) ?></dd>
 							<dt><?php echo $lang_common['Title'] ?>: </dt>
@@ -1327,7 +1341,7 @@ else
 <?php if (isset($avatar_format)): ?>					<img src="<?echo $pun_config['root_uri'];?>/<?php echo $pun_config['o_avatars_dir'].'/'.$id.'.'.$avatar_format;/*"*/?>" <?php echo $img_size[3] ?> alt="" />
 <?php endif; ?>					<p><?php echo $lang_profile['Avatar info'] ?></p>
 							<div class="rbox">
-								<label><input type="checkbox" name="form[use_avatar]" value="<?echo $user['use_avatar'];/*"*/?>"<?php if ($user['use_avatar']) echo ' checked="checked"' ?> /><?php echo $lang_profile['Use avatar'] ?><br /></label>
+								<label><input type="checkbox" name="form[use_avatar]" value="1"<?php if ($user['use_avatar']) echo ' checked="checked"' ?> /><?php echo $lang_profile['Use avatar'] ?><br /></label>
 							</div>
 							<p class="clearb"><?php echo $avatar_field ?></p>
 						</div>
