@@ -10,7 +10,7 @@ class forum_js_personal extends base_js
 		$this->owner = class_load('forum_user', $this->id());
 	}
 
-	function cache_static() { return rand(5*86400, 7*86400); }
+	function cache_static() { return rand(3600, 7200); }
 
 	function url()
 	{
