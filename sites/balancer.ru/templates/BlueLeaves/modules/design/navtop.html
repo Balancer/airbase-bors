@@ -1,0 +1,6 @@
+<ul id="nav">
+{section name=i loop=$links}
+{assign var=x value=$links[i]}
+<li><a href="{$x.uri}" title="{$x.title|htmlspecialchars}"{if $main_uri == $x.uri} class="on"{/if}>{$x.title|truncate:10}</a></li>
+{/section}
+</ul>

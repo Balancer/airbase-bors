@@ -1,0 +1,46 @@
+<form method="get" action="{$main_uri}">
+<input type="text" name="q" value="{$q|addslashes}" />
+{* сортировать по: <select name="order">
+<option value="ud">дате крайнего ответа, убыв.</option>
+<option value="cd">дате создания, убыв.</option>
+<option value="ca">дате создания, возр.</option>
+<option value="rd">числу ответов, убыв.</option>
+<option value="vd">числу просмотров, убыв.</option>
+</select> *}
+{* искать в: <select name="type">
+<option value="t">заголовках</option>
+<option value="m">сообщениях</option>
+</select> *}
+<input type="submit" value="искать" />
+</form>
+{if $topics !== false}
+<table class="btab" cellSpacing="0">
+<tr>
+{*	<th>форум</th>*}
+	<th>тема</th>
+	<th>ответов</th>
+	<th>просмотров</th>
+	<th>создана</th>
+	<th>крайний ответ</th>
+</tr>
+{foreach from=$objects item=t}
+{* assign var="t" value=$o->topic() *}
+{* assign var="f" value=$t->forum() *}
+{if $t}
+<tr>
+{*	<td style="font-size: 8pt;"><a href="{$f->url()}">{$f->title()}</a></td> *}
+	<td style="font-size: 8pt;"><a href="{$t->url()}">{$t->title()}</a></td>
+	<td style="font-size: 8pt;">{$t->num_replies()}</td>
+	<td style="font-size: 8pt;">{$t->visits()}</td>
+	<td style="font-size: 8pt;">{$t->create_time()|airbase_time}</td>
+	<td style="font-size: 8pt;">{$t->modify_time()|airbase_time}</td>
+</tr>
+{/if}
+{foreachelse}
+<li>Не найдено</li>
+{/foreach}
+</table>
+{/if}
+
+<h2>Поиск по форумам с помощью Google</h2>
+<script src="http://gmodules.com/ig/ifr?url=http://www.google.com/coop/api/007791417584937929882/cse/oluuy6b7wqk/gadget&amp;synd=open&amp;w=600&amp;h=NaN&amp;title=&amp;border=%23ffffff%7C0px%2C1px+solid+%2382CAFA%7C0px%2C2px+solid+%23BDEDFF%7C0px%2C3px+solid+%23E0FFFF&amp;output=js"></script>
