@@ -1,6 +1,0 @@
-<ul>				
-{section name=i loop=$links}
-{assign var=x value=$links[i]}
-<li><a href="{$x.uri}" title="{$x.title|htmlspecialchars}">{$x.title|truncate:19}</a></li>
-{/section}
-</ul>	
