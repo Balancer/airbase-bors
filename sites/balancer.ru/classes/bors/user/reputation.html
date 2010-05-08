@@ -1,0 +1,84 @@
+<b>Общая репутация:</b> {$reputation_abs_value}<br />
+<b>Общая репутация на основе равных весов голосующих:</b> {$pure_reputation}<br />
+<b>Положительных голосов:</b> {$plus}<br />
+<b>Негативных голосов:</b> {$minus}<br />
+
+<p><i><b>Внимание!</b>
+Репутацию может выставить только участник, имеющий более 50 сообщений на форуме.
+ <small>Страница обновляется один раз в сутки, либо при изменении репутации. Длина сообщения ограничена 500-ми символами.</small>
+</i>
+</p>
+
+<table width="100%"><tr>
+<td width="90%">
+
+<script type="text/javascript">
+{* for(i in document.location)
+	document.write(i + '=' + document.location[i] + '<br />')
+*}
+document.write('<s'+'cript type="text/javascript" src="http://balancer.ru/js/users/reputation,{$user_id}.js?ref='+(document.location.search.substring(1) ? document.location.search.substring(1) : document.referrer)+'"></s'+'cript>')
+</script>
+<td>
+{bors_class_load var=owner class="forum_user" id=$user_id}
+<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>
+</td>
+</tr></table>
+
+{* <script>document.forms['rep'].elements['uri'].value = document.location.search.substring(1) ? document.location.search.substring(1) : document.referrer </script> *}
+
+<script><!--
+function add_warn(o,uid)
+{ldelim}
+if(top.me_is_coordinator)
+	document.write('<div class="float right">'
+		+'<a href="http://balancer.ru/admin/users/'+uid+'/warnings.html?object='+o+'"><img src="http://balancer.ru/img/web/skull.gif"></a>'
+		+'<a href="/admin/mark/delete/?object='+o+'"><img src="/bors-shared/images/drop-16.png"></a>'
+		+'</div>')
+{rdelim}
+--></script>
+
+{if $list}
+{$this->pages_links_nul()}
+
+<table cellSpacing="0" class="btab">
+<tr><th>Дата</th><th>Вид</th><th>От кого</th><th>Комментарий</th></tr>
+{foreach from=$list item=r}
+{bors_object_load var=u class="forum_user" id=$r->voter_id()}
+
+{if $r->score()>0}
+{assign var="backcolor" value="pos_reputation"}
+{else}
+{assign var="backcolor" value="neg_reputation"}
+{/if}
+<tr>
+	<td class="{$backcolor}">{$r->create_time()|full_time}</td>
+	<td class="{$backcolor}">{if $r->score() > 0}+{/if}{$r->score()}</td>
+	<td class="{$backcolor}">
+		<a href="http://balancer.ru/user/{$r->voter_id()}/">{$u->title()}</a><br />
+		<a href="http://balancer.ru/user/{$r->voter_id()}/reputation/"><img src="http://balancer.ru/user/{$r->voter_id()}/rep.gif" width="100" height="16" border="0" /></a></td> 
+	<td class="{$backcolor}">{$r->comment()|truncate:500|lcml_bb}
+		<script>add_warn('{$r->internal_uri()}', {$r->voter_id()})</script>
+		{if $r->refer()}
+		<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За:
+			{assign var="obj" value=0}
+			{if $r->refer()|regex_match:"^post://(\d+)"}
+				{assign var="post_id" value=$r->refer()|regex_replace:"!^post://(\d+).*!":"\\1"}
+				{bors_object_load var="obj" class="forum_post" id=$post_id}
+			{/if}
+			{if $r->refer()|regex_match:"^topic://(\d+)"}
+				{assign var="topic_id" value=$r->refer()|regex_replace:"!^topic://(\d+).*!":"\\1"}
+				{bors_object_load var="obj" class="forum_topic" id=$topic_id}
+			{/if}
+			{if $obj}
+				<a href="{$obj->url()}">{$obj->title()}</a>
+			{else}
+				<a href="{$r->refer()}">{$r->refer()}</a>
+			{/if}
+		</div>{/if}
+	</td>
+</tr>
+{/foreach}
+</table>
+
+{$this->pages_links_nul()}
+{/if}
