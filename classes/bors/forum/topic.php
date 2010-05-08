@@ -6,7 +6,6 @@ class forum_topic extends forum_abstract
 	function can_be_empty() { return false; }
 
 	function uri_name() { return 't'; }
-	function fields() { return array($this->main_db_storage() => $this->main_db_fields()); }
 	function nav_name() { return truncate($this->title(), 60); }
 
 	function main_db() { return 'punbb'; }

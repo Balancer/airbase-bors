@@ -11,7 +11,6 @@ class airbase_board_post extends base_page_db
 	
 	function main_db() { return 'punbb'; }
 	function main_table() { return 'posts'; }
-	function fields() { return array($this->main_db_storage() => $this->main_db_fields()); }
 
 	function main_db_fields()
 	{
