@@ -1,0 +1,13 @@
+{foreach from=$this->images_list() item="img"}
+<div class="img_common img_200x200"><a href="{$img->url()}">{$img->thumbnail('200x200')|get:html_code}</a></div>
+{/foreach}
+
+<div class="clear">&nbsp;</div>
+
+{if $this->prev_link()}
+{$this->prev_link()}
+{/if}
+||
+{if $this->next_link()}
+{$this->next_link()}
+{/if}
