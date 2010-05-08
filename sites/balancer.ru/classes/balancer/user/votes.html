@@ -1,0 +1,46 @@
+{if $last}
+<dl class="box">
+<dt>Последние оценки</dt>
+<dd>
+{foreach from=$last item="x"}
+{if $x->object()}
+&nbsp;&nbsp;&nbsp;{$x->create_time()|airbase_time}<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url()}<br/>
+{/if}
+{/foreach}
+</dd>
+</dl>
+{/if}
+
+{if $best}
+<dl class="box">
+<dt>Лучшие сообщения</dt>
+<dd>
+{foreach from=$best item="x"}
+{if $x->object()}
+&nbsp;&nbsp;&nbsp;<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url()} {$x->object()->score_colorized()}<br/>
+{/if}
+{/foreach}
+</dd>
+</dl>
+{/if}
+
+{if $worst}
+<dl class="box">
+<dt>Худшие сообщения</dt>
+<dd>
+{foreach from=$worst item="x"}
+{if $x->object()}
+&nbsp;&nbsp;&nbsp;<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url()} {$x->object()->score_colorized()}<br/>
+{/if}
+{/foreach}
+</dd>
+</dl>
+{/if}
+
+{if not $last and not $best and not $worst}
+<dl class="box">
+<dd>
+Нет ни одной оценки сообщений этого пользователя
+</dd>
+</dl>
+{/if}

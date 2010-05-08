@@ -1,7 +1,10 @@
 <?php
 
-	class user_main extends base_page
-	{
+class user_main extends base_page
+{
+	function can_be_empty() { return false; }
+	function loaded() { return $this->user(); }
+
 		function template()
 		{
 			templates_noindex();
@@ -9,10 +12,10 @@
 		}
 
 		var $user = NULL;
-	
+
 		function title() { return $this->user()->title().ec(": Информация"); }
 		function nav_name() { return $this->user()->title(); }
-		
+
 		function user()
 		{
 			if($this->user === NULL)
@@ -28,7 +31,7 @@
 
 		function url() { return "http://balancer.ru/user/".$this->id()."/"; }
 
-	function cache_static() { return rand(3600, 7200); }
+	function cache_static() { return rand(600, 1200); }
 
 	function local_data()
 	{
@@ -48,7 +51,27 @@
 			'order' => 'COUNT(*) DESC',
 		));
 
+		$best = objects_array('bors_votes_thumb', array(
+				'target_user_id' => $this->id(),
+				'group' => 'target_class_name,target_object_id',
+				'order' => 'SUM(score) DESC',
+				'limit' => 20,
+		));
+
+		$best_of_month = objects_array('bors_votes_thumb', array(
+				'target_user_id' => $this->id(),
+				'create_time>' => time()-86400*30,
+				'group' => 'target_class_name,target_object_id',
+				'order' => 'SUM(score) DESC',
+				'limit' => 20,
+		));
+
+		bors_objects_targets_preload($best);
+		bors_objects_targets_preload($best_of_month);
+
 		return array(
+			'best' => $best,
+			'best_of_month' => $best_of_month,
 			'user' => $this->user(), 
 			'owner' => $this->user(), 
 			'messages_today' => objects_count('forum_post', array('owner_id' => $this->id(), 'create_time>' => time()-86400)),
