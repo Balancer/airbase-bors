@@ -1,0 +1,6 @@
+<?php
+
+class balancer_external_picasaweb_main extends base_page
+{
+	function is_auto_url_mapped_class() { return true; }
+}
