@@ -1,0 +1,23 @@
+div.post {
+	border: none;
+	padding: 0 0 20px 0;
+}
+
+div.post div.head, div.post div.head a {
+	font-size: 12pt;
+}
+
+span.answer {
+	font-size: 10pt;
+	padding-left: 2ex;
+}
+
+span.q {
+	font-style: italic;
+	font-size: 0.8em;
+	color: #999;
+}
+
+div.box a {
+	border: none !important;
+}

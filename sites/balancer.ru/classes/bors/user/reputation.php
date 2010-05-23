@@ -1,6 +1,6 @@
 <?php
 
-class user_reputation extends base_page_db
+class user_reputation extends base_page
 {
 	var $user;
 

@@ -1,0 +1,13 @@
+<small>
+	<a href="{$data.feed.link[1].HREF}">альбом</a>
+	| <a href="{$data.feed.link[2].HREF}">слайдшоу</a>
+<small>
+
+<br/><br/>
+
+{foreach from=$data.feed.entry item="x"}
+<a href="{$x.link[2].HREF}">
+	<img src="{$x.thumb}" /><br/>
+	{$x.summary}<br/><br/>
+</a>
+{/foreach}

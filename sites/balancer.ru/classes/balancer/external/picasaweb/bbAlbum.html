@@ -1,0 +1,10 @@
+<textarea cols="30" rows="50" class="w100p" style="width: 95%!important">
+[url={$data.feed.link[1].HREF}]альбом[/url] | [url={$data.feed.link[2].HREF}]слайдшоу[/url]
+
+{foreach from=$data.feed.entry item="x"}
+[url={$x.link[2].HREF}][img]{$x.thumb}[/img][/url]
+{if $x.desc}[url={$x.link[2].HREF}]{$x.desc}[/url]
+{/if}
+
+{/foreach}
+</textarea>

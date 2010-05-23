@@ -3,7 +3,7 @@
 class airbase_user_topics extends base_page
 {
 //	function config_class() { return 'airbase_forum_config'; }
-	function main_db_storage() { return 'punbb'; }
+	function db_name() { return 'punbb'; }
 	function template() { return 'forum/_header.html'; }
 
 	private $ids = false;
