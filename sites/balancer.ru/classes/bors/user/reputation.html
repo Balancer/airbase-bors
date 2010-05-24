@@ -60,6 +60,9 @@ if(top.me_is_coordinator)
 		<script>add_warn('{$r->internal_uri()}', {$r->voter_id()})</script>
 		{if $r->refer()}
 		<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За:
+			{if $r->target()}
+				{$r->target()->titled_url()}
+			{else}
 			{assign var="obj" value=0}
 			{if $r->refer()|regex_match:"^post://(\d+)"}
 				{assign var="post_id" value=$r->refer()|regex_replace:"!^post://(\d+).*!":"\\1"}
@@ -73,6 +76,7 @@ if(top.me_is_coordinator)
 				<a href="{$obj->url()}">{$obj->title()}</a>
 			{else}
 				<a href="{$r->refer()}">{$r->refer()}</a>
+			{/if}
 			{/if}
 		</div>{/if}
 	</td>
