@@ -42,7 +42,7 @@
 </div>{*/head*}
 
 <div class="body">
-{if $owner and not $skip_avatar_block}<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>{/if}
+{if $owner and not $skip_avatar_block}<div class="avatar_block">{include file="xfile:forum/post-avatar.html" object=$p}</div>{/if}
 {if $strip}
 {assign var="body" value=$p->body()}
 {$body|strip_text:$strip}

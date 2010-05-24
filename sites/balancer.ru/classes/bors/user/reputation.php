@@ -37,14 +37,21 @@ class user_reputation extends base_page
 		$dbu = &new DataBase('USERS');
 		$dbf = &new DataBase('punbb');
 
+		$list = array_reverse(objects_array('airbase_user_reputation', array(
+			'user_id' => $this->id(),
+			'is_deleted' => 0,
+			'order' => 'time',
+			'page'=> $this->page(),
+			'per_page' => $this->items_per_page()))
+		);
+
+		for($i=0; $i<count($list); $i++)
+			if($r = $list[$i]->refer())
+				$list[$i]->set('target', object_load($r), false);
+
 		return array(
 			'ref' => $this->ref() ? $this->ref() : @$_SERVER['HTTP_REFERER'],
-			'list' => array_reverse(objects_array('airbase_user_reputation', array(
-				'user_id' => $this->id(),
-				'is_deleted' => 0,
-				'order' => 'time',
-				'page'=> $this->page(),
-				'per_page' => $this->items_per_page()))),
+			'list' => $list,
 			'reputation_abs_value' => sprintf("%.2f", $dbf->get("SELECT reputation FROM users WHERE id = {$this->id()}")),
 			'pure_reputation' => sprintf("%.2f", $dbf->get("SELECT pure_reputation FROM users WHERE id = {$this->id()}")),
 			'plus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score > 0"),
@@ -71,7 +78,7 @@ class user_reputation extends base_page
 			return $ref;
 
 		$keys = array_keys($_GET);
-		if(!empty($keys[0]) && preg_match('/^http:/', $keys[0]))
+		if(!empty($keys[0]) && (preg_match('/^http:/', $keys[0]) || preg_match('/^\w+$/', $keys[0])))
 			return $keys[0];
 
 		return NULL;
@@ -92,7 +99,7 @@ class user_reputation extends base_page
 	}
 
 	function cache_static() { return rand(86400*7, 86400*30); }
-		
+
 	function template() { return "forum/common.html"; }
 
 	function can_be_empty() { return true; }
@@ -103,7 +110,7 @@ class user_reputation extends base_page
 	function on_action_reputation_add_do($data)
 	{
 		require_once('inc/users.php');
-	
+
 		$uid = intval(@$_POST['user_id']);
 		if(!$uid)
 			return bors_message(ec("Не задан ID пользователя."));

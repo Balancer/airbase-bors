@@ -88,7 +88,7 @@ $result = $db->query("
 		FROM {$db->prefix}categories AS c 
 			LEFT JOIN {$db->prefix}forums AS f ON c.id=f.cat_id 
 			LEFT JOIN {$db->prefix}forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id={$pun_user['g_id']}) 
-		WHERE f.parent = 0
+		WHERE f.parent IS NULL
 			AND f.cat_id IN($ids)
 			AND (fp.read_forum IS NULL OR fp.read_forum=1) 
 		ORDER BY c.disp_position, c.id, f.disp_position", true) 

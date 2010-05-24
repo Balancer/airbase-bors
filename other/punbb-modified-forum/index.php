@@ -232,7 +232,7 @@ $result = $db->query("SELECT c.id AS cid,
 	FROM {$db->prefix}categories AS c 
 		LEFT JOIN {$db->prefix}forums AS f ON c.id=f.cat_id 
 		LEFT JOIN {$db->prefix}forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id={$pun_user['g_id']}) 
-	WHERE f.parent = 0
+	WHERE f.parent IS NULL
 		AND (fp.read_forum IS NULL OR fp.read_forum=1) 
 		AND c.skip_common = 0
 	ORDER BY c.disp_position, c.id, f.disp_position", true) 
@@ -245,7 +245,8 @@ while ($cur_forum = $db->fetch($result))
 //	if(debug_is_balancer())
 //		print_r($cur_forum);
 
-	$forum = object_load('forum_forum', $cur_forum['fid']);
+	if($cur_forum['fid'])
+		$forum = object_load('forum_forum', intval($cur_forum['fid']));
 
 	$moderators = '';
 
