@@ -1,0 +1,17 @@
+{$this->pages_links_nul()}
+
+<table class="btab small" style="width: 600px"><tr>
+{foreach from=$items item="x" name="loop"}
+<td>
+{$x->thumbnail_link('300x300(crop)')}<br/>
+<a href="{$x->url()}">{$x->title()}</a><br/>
+[{$x->size()|smart_size}, {$x->downloads()} {$x->downloads()|sklon:'загрузка':'загрузки':'загрузок'}]<br />
+Сообщение: {$x->post()->nav_named_url()}<br/>
+</td>
+{if $smarty.foreach.loop.iteration % 2 == 0}</tr><tr>{/if}
+{foreachelse}
+В этой теме нет ни одного приложения
+{/foreach}
+</tr></table>
+
+{$this->pages_links_nul()}
