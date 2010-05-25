@@ -54,6 +54,7 @@ class user_main extends base_page
 		$best = objects_array('bors_votes_thumb', array(
 				'target_user_id' => $this->id(),
 				'group' => 'target_class_name,target_object_id',
+				'having' => 'SUM(score) > 0',
 				'order' => 'SUM(score) DESC',
 				'limit' => 20,
 		));
@@ -62,6 +63,7 @@ class user_main extends base_page
 				'target_user_id' => $this->id(),
 				'create_time>' => time()-86400*30,
 				'group' => 'target_class_name,target_object_id',
+				'having' => 'SUM(score) > 0',
 				'order' => 'SUM(score) DESC',
 				'limit' => 20,
 		));
