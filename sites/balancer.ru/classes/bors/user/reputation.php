@@ -34,7 +34,6 @@ class user_reputation extends base_page
 	{
 		templates_noindex();
 
-		$dbu = &new DataBase('USERS');
 		$dbf = &new DataBase('punbb');
 
 		$list = array_reverse(objects_array('airbase_user_reputation', array(
@@ -54,8 +53,8 @@ class user_reputation extends base_page
 			'list' => $list,
 			'reputation_abs_value' => sprintf("%.2f", $dbf->get("SELECT reputation FROM users WHERE id = {$this->id()}")),
 			'pure_reputation' => sprintf("%.2f", $dbf->get("SELECT pure_reputation FROM users WHERE id = {$this->id()}")),
-			'plus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score > 0"),
-			'minus' => $dbu->get("SELECT COUNT(*) FROM reputation_votes WHERE user_id = {$this->id()} AND score < 0"),
+			'plus' => objects_count('airbase_user_reputation', array('user_id' => $this->id(), 'score>=' => 0)),
+			'minus' => objects_count('airbase_user_reputation', array('user_id' => $this->id(), 'score<' => 0)),
 			'user_id' => $this->id(),
 		);
 	}
@@ -116,10 +115,10 @@ class user_reputation extends base_page
 			return bors_message(ec("Не задан ID пользователя."));
 
 		$me = bors()->user();
-		$dbf = &new DataBase('punbb');
-		$dbu = &new DataBase('USERS');
+		$dbf = new DataBase('punbb');
+		$dbu = new DataBase('USERS');
 		$me_id = $me->id();
-		
+
 		if($me_id == 1)
 			return bors_message(ec("Голосование возможно только для авторизованных пользователей."));
 
