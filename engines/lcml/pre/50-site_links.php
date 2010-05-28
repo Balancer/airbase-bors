@@ -7,11 +7,17 @@ function lcml_site_links($txt)
 	return $txt;
 }
 
+function lp_import($url)
+{
+	if(preg_match("!^(http://(www\.)?lenta.ru/news/\d{4}/\d{1,2}/\d{1,2}/\w+/)$!i", $url))
+		return lcml(lcml_site_links_get('lentaru', $url, $url));
+}
+
 function lcml_site_links_get($origin, $id, $url0)
 {
 	require_once('inc/http.php');
 	$url = call_user_func("lcml_site_links_url_{$origin}", $id);
-	@list($title, $description, $content, $date) = call_user_func("lcml_site_links_get_{$origin}", bors_external_content::load($url));
+	@list($title, $description, $content, $date, $image, $image_description) = call_user_func("lcml_site_links_get_{$origin}", bors_external_content::load($url));
 
 	$text = array("[quote]");
 
@@ -23,6 +29,9 @@ function lcml_site_links_get($origin, $id, $url0)
 
 	if($date)
 		$text[] = "[small][i]".trim($date)."[/i][/small]";
+
+	if($image)
+		$text[] = "[img {$image} nohref|{$image_description}]";
 
 	$text[] = html2bb(trim($content), $url0);
 	$text[] = "// $url0";
@@ -76,4 +85,48 @@ function lcml_site_links_get_nr2($content)
 //	print_d($text);
 
 	return array(@$title, @$description, @$text, @$date);
+}
+
+function lcml_site_links_url_lentaru($id) { return $id; }
+function lcml_site_links_get_lentaru($content)
+{
+	if(preg_match('!^(.+)<h2>(.+?)</h2>(.+)$!is', $content, $m))
+	{
+		$title = $m[2];
+		$content = $m[1].$m[3];
+	}
+
+//	if(preg_match('!^(.+)<h2 class=arstit>(.+?)</h2>(.+)$!is', $content, $m))
+//	{
+//		$description = $m[2];
+//		$content = $m[1].$m[3];
+//	}
+
+	if(preg_match('!^(.+)<DIV class=dt>(.+?)</DIV>(.+)$!is', $content, $m))
+	{
+		$date = $m[2];
+		$content = $m[1].$m[3];
+	}
+
+	if(preg_match('!^(.+)<TD class=zpic>.*?<img src=(\S+) (.+)$!is', $content, $m))
+	{
+		$image = $m[2];
+		$content = $m[1].$m[3];
+	}
+
+	if(preg_match('!^(.+)<td class=zalt style="padding-top:10px">.*?<DIV class=dt>(.+?)</DIV>(.+)$!is', $content, $m))
+	{
+		$image_description = $m[2];
+		$content = $m[1].$m[3];
+	}
+
+	if(preg_match('!></iframe>.*?</TD></TR></TABLE>(.+)<P class=links>!is', $content, $m))
+	{
+		$text = explode('<p>', $m[1]);
+		$text = '<p>'.join('</p><p>', $text).'</p>';
+	}
+
+//	print_d($text);
+
+	return array(@$title, @$description, @$text, @$date, @$image, @$image_description);
 }
