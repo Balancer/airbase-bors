@@ -517,7 +517,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 						t.closed, 
 						t.forum_id$group_by_sql
 					ORDER BY $sort_by_sql";
-			else		
+			else
 				$sql = "
 					SELECT 
 						t.id AS tid, 
@@ -566,12 +566,17 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 
 		$search_set = array();
 		$topic_ids = array();
+		$post_ids = array();
+
 		while ($row = $db->fetch_assoc($result))
 		{
 			$search_set[] = $row;
+			$post_ids[] = $row['last_post_id'];
 			$topic_ids[] = $row['tid'];
 		}
-		
+
+		objects_array('balancer_board_post', array('id IN' => array_unique($post_ids)));
+
 		$db->free_result($result);
 
 		$page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_search['Search results'];
@@ -625,7 +630,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		{
 			$topic_id = $search_set[$i]['tid'];
 			$topic = $topics[$topic_id];
-			
+
 			@reset($forum_list);
 			while (list(, $temp) = @each($forum_list))
 			{

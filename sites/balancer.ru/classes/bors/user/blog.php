@@ -12,7 +12,7 @@ class user_blog extends base_page
 		return 'forum/_header.html';
 	}
 
-	function title() { return $this->user->title().ec(": Блог"); }
+	function title() { return object_property($this->user, 'title').ec(": Блог"); }
 	function nav_name() { return ec("блог"); }
 
 	function parents() { return array("forum_user://".$this->id()); }

@@ -11,6 +11,9 @@ function lp_import($url)
 {
 	if(preg_match("!^(http://(www\.)?lenta.ru/news/\d{4}/\d{1,2}/\d{1,2}/\w+/)$!i", $url))
 		return lcml(lcml_site_links_get('lentaru', $url, $url));
+
+	// TODO: сделать красиво
+	return "<a href=\"$url\">$url</a>";
 }
 
 function lcml_site_links_get($origin, $id, $url0)
