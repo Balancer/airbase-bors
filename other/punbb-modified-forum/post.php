@@ -72,8 +72,6 @@ if($messages_limit >= 0)
 	$today_posted = $me->today_posted_in_forum($forum_id);
 	$messages_rest = $messages_limit - $today_posted;
 
-	debug_hidden_log('forum-limit-test', "me={$me->title()} [{$me->id()}]\nmessages_limit=$messages_limit\ntoday_posted=$today_posted");
-
 	if($messages_rest <= 0)
 	{
 		message("Вы не можете больше отправить ни одного сообщения в этот форум до <b>".full_time($me->next_can_post($messages_limit, $forum_id))."</b>. 

@@ -23,7 +23,7 @@ class base_page_hts extends base_page_db
 	function html_disable() { return false; }
 	function lcml_tags_enabled() { return NULL; }
 
-	function loaded() { return $this->title(true) || $this->source(); }
+	function loaded() { return $this->create_time(true) || $this->source(); } //TODO: придумать что-то более адекватно. title() сейчас может не понимать true
 
 	function main_db() { return config('mysql_database'); }
 	function main_table() { return NULL; }

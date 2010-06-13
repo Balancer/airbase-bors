@@ -36,6 +36,10 @@ var me_hash = readCookie('cookie_hash', 0)
 if(me_id > 1 && me_hash) {ldelim}
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/setvars.js\"></"+"script>")
 {rdelim}
+
+{literal}
+var addthis_config = { data_track_clickback: true }
+{/literal}
 --></script>
 
 <script type="text/javascript"><!--
@@ -124,6 +128,24 @@ dd, dt { height: 1%; }
 </dd></dl><![endif]-->
 
 		{$body}
+
+<br/>
+<div class="box addthis_toolbox addthis_default_style">
+<a class="addthis_button_email"></a>
+<a class="addthis_button_favorites"></a>
+<a class="addthis_button_print"></a>
+<a class="addthis_button_pdfonline"></a>
+<a class="addthis_button_livejournal"></a>
+<a class="addthis_button_facebook"></a>
+<a class="addthis_button_delicious"></a>
+<a class="addthis_button_evernote"></a>
+<a class="addthis_button_google"></a>
+<a class="addthis_button_googlebuzz"></a>
+<a class="addthis_button_twitter"></a>
+<span class="addthis_separator">|</span>
+<a href="http://www.addthis.com/bookmark.php?v=250&amp;username=balancer73" class="addthis_button_compact small">Добавить страницу в другие сервисы закладок и блоги...</a>
+</div>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=balancer73"></script>
 
 <div class="center"><div class="top-ad">
 {include file="xfile:forum/ads/google-ads-bottom.html"}
