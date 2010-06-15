@@ -18,4 +18,7 @@ base_object::add_template_data('template_top_menu', array(
 	'projects'		=>	'проекты',
 	'links'		=>	'ссылки',
 	'http://balancer.ru/support/viewforum.php?id=60'		=>	'форум',
+	'http://trac.balancer.ru/bors-core/'		=>	'Trac',
 ));
+
+base_object::add_template_data('bottom_counters', 'xfile:bors/site/counters.html');
