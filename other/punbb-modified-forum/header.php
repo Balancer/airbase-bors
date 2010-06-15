@@ -230,7 +230,10 @@ if(($diff = time() - $restart) < 3600)
 <? } */ ?>
 <div class="top-ad">
 
-<? include("/usr/local/share/bors/sites/bors-airbase/templates/forum/ads/podarini.html"); ?>
+<?php
+//include("/usr/local/share/bors/sites/bors-airbase/templates/forum/ads/podarini.html");
+include("/usr/local/share/bors/sites/bors-airbase/templates/forum/ads/google-ads.html");
+?>
 
 </div>
 </div>
