@@ -7,7 +7,7 @@ class airbase_user_reputation_form extends base_page
 	function init() { $this->user = object_load('forum_user', $this->id()); return false; }
 	function title() { return ec('Изменение репутации пользователя ').$this->user()->title(); }
 	
-	function loaded() { return $this->user; }
+	function loaded() { return $this->user != NULL; }
 	
 	function user() { return $this->user; }
 	

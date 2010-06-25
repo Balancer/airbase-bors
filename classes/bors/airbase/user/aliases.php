@@ -6,7 +6,7 @@ class airbase_user_aliases extends base_page
 	function config_class() { return 'airbase_forum_config'; }
 	function user() { return object_load('bors_user', $this->id()); }
 	function can_be_empty() { return false; }
-	function loaded() { $this->init(); return $this->user(); }
+	function loaded() { $this->init(); return $this->user() != NULL; }
 	function local_data()
 	{
 		templates_noindex();
