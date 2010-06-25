@@ -24,13 +24,14 @@
 {$p->flag()}
 {if $show_title}{$show_title} {/if}
 {if not $skip_author_name}{$p->author_name()}{/if}
-{if not $skip_date}, <a href="{$p->url()}">{$p->create_time()|full_time}</a>{/if}
-{if not $no_show_answers and $p->answer_to_id() && $a}<span class="answer">(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)</span>{/if}
+{if not $skip_date} #<a href="{$p->url()}">{$p->create_time()|full_time}</a>{/if}
+{if not $no_show_answers and $p->answer_to_id() and $a}&nbsp;<span class="answer">@{$a->author_name()}#<a href="{$a->url()}">{$a->create_time()|full_time}</a></span>{/if}
 {if $forum and not $skip_forums} <small>// {$forum->titled_url()}</small>{/if}
 </div>
 
 {if not $skip_votes}
 <div class="to-right">
+{if $me && $me->is_coordinator()}<div class="to-left"><div id="pttools_{$p->id()}" class="to-left"></div><img src="/_bors/i/tools.gif" alt="*" onclick="sh('pttools', {$p->id()})"  alt="" width="16" height="16" /></div>{/if}
 <div class="to-left"><img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$p->id()},'up')"  alt="" width="16" height="16" /></div>
 <div id="ptr{$p->id()}" class="to-left">{if $p->score() != NULL}{$p->score_colorized()}{/if}</div>
 <div class="to-left"><img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$p->id()},'down')" alt="" width="16" height="16" /></div>

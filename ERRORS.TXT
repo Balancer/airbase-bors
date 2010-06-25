@@ -1,0 +1,13 @@
+Сделать/реализовать
+-------------------
+
+Удаление или скрытие ошибочных записей в репутации
+http://balancer.ru/_bors/admin/mark/delete/?object=airbase_user_reputation://22160/
+via http://balancer.ru/user/7367/warnings,2.html
+отчёт в http://balancer.ru/support/post.php?tid=67144&qid=2194047
+
+Проблемы разметки
+-----------------
+
+Некорректно отработала ссылка в начале: HTTP Error 403
+http://forums.airbase.ru/2010/06/t70285--massovoe-spisanie-samoletov-vvs-ssha.1480.html
