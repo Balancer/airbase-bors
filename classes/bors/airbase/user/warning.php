@@ -22,6 +22,13 @@ class airbase_user_warning extends base_object_db
 		)));
 	}
 
+	function auto_targets()
+	{
+		return array(
+			'target' => 'warn_class_id(warn_object_id)',
+		);
+	}
+
 	function moderator() { return object_load('forum_user', $this->moderator_id()); }
 	function user() { return object_load('forum_user', $this->user_id()); }
 
