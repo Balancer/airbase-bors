@@ -2,6 +2,8 @@
 
 class balancer_board_topic extends forum_topic
 {
+	function extends_class() { return 'forum_topic'; }
+
 	static function _forum_ids($domain)
 	{
 		static $fcache = array();

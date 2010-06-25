@@ -365,7 +365,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	}
 
 	function title() { return $this->topic()->title()." <small>[".$this->nav_name()."]</small>"; }
-	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown')).", ".strftime("%d.%m.%y", $this->create_time()); }
+	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown'))."#".strftime("%d.%m.%y H:i", $this->create_time()); }
 
 	function base_url()
 	{
@@ -455,6 +455,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function visits() { return $this->topic()->num_views(); }
 
 	function class_title() { return ec("Сообщение форума"); }
+	function class_title_vp() { return ec("сообщение форума"); }
 
 	function answers()
 	{

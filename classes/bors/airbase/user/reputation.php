@@ -2,6 +2,8 @@
 
 class airbase_user_reputation extends base_page_db
 {
+	function class_title_vp() { return ec('запись репутации'); }
+
 	function fields()
 	{
 		return array('USERS' => array('reputation_votes' => array(

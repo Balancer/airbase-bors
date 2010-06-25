@@ -10,7 +10,7 @@ if(top.me_is_coordinator)
 
 {if $show_form}
 <h2>Выставление штрафа</h2>
-<p>За {$object->class_title_rp()|lower} «{$object->titled_url()}»</p>
+<p>За {$object->class_title_vp()|lower} «{$object->titled_url()}»</p>
 {form class="airbase_user_admin_warning"}
 <table>
 <tr><td>Причина штрафа:</td><td>{bors_radio name="type_id" list="airbase_user_warning_typesco" class="w100p"}</td></tr>

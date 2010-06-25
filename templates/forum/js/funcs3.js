@@ -164,6 +164,18 @@ function pdsh(p)
 	}
 }
 
+function sh(type, id)
+{
+	o=$('#'+type+'_'+id);
+	if(o.html())
+		o.toggle(100)
+	else
+	{
+		o.html('<small>...</small>');
+		o.load("/_bors/ajax/types/"+type+"?id="+id);
+	}
+}
+
 function addLoadEvent(func) {
    var oldonload = window.onload;
    if (typeof window.onload != 'function') {
