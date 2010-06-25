@@ -3,7 +3,7 @@
 class user_main extends base_page
 {
 	function can_be_empty() { return false; }
-	function loaded() { return $this->user(); }
+	function loaded() { return $this->user() != NULL; }
 
 		function template()
 		{
