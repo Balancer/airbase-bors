@@ -1,8 +1,19 @@
 Исправить срочно
 ----------------
 
+Не работает страница:
+http://balancer.ru/_bors/igo?o=forum_post__2200099
+http://forums.airbase.ru/2010/06/t63022,2--faq-ili-chasto-zadavaemye-voprosy-i-otvety-na-morskom-versio.4186.html#p1876129
+http://forums.airbase.ru/2010/06/t63022,2--faq-ili-chasto-zadavaemye-voprosy-i-otvety-na-morskom-versio.4186.html
+
 Права доступа и координирования у GOGI
 http://balancer.ru/_bors/igo?o=forum_post__2195340
+
+Исправить
+---------
+
+Сменил только аватар, но ...исчезла и подпись))
+http://balancer.ru/_bors/igo?o=forum_post__2199382
 
 Сделать/реализовать
 -------------------

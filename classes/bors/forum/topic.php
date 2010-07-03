@@ -19,7 +19,8 @@ class forum_topic extends forum_abstract
 			'title'	=> 'subject',
 			'description',
 			'create_time'	=> 'posted',
-			'modify_time'=> 'last_post',
+			'last_post_create_time'=> 'last_post',
+			'modify_time',
 			'is_public',
 			'owner_id'=> 'poster_id',
 			'last_poster_name' => 'last_poster',
@@ -356,9 +357,10 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		{
 			$this->set_last_post_id($last_pid, true);
 			$last_post = object_load('forum_post', $last_pid);
-			if($this->modify_time() < $last_post->create_time(true))
-				$this->set_modify_time($last_post->create_time(true), true);
+			if($this->last_post_create_time() < $last_post->create_time(true))
+				$this->set_last_post_create_time($last_post->create_time(true), true);
 			$this->set_last_poster_name($last_post->author_name(), true);
+
 		}
 		else
 			debug_hidden_log('post_error', "Unknown last post $first_pid in {$this}->recalculate()");
@@ -368,6 +370,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		foreach($this->posts() as $p)
 			$p->set_body(NULL, true);
 
+		$this->set_modify_time(time(), true);
 		$this->store(false);
 
 		$this->cache_clean_self();

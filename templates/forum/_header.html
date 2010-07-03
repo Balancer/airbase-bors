@@ -1,8 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>{$title}</title>
+	<title>{$browser_title|htmlspecialchars}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="title" content="{$title|htmlspecialchars}" />
+{if $this->description()}
+	<meta name="description" content="{$this->description()|htmlspecialchars}"/>
+{/if}
+{if $this->keywords_string()}
+	<meta name="keywords" content="{$this->keywords_string()|htmlspecialchars}"/>
+{/if}
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
 	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
@@ -132,17 +139,19 @@ dd, dt { height: 1%; }
 
 <br/>
 <div class="box addthis_toolbox addthis_default_style">
+<a class="addthis_button_livejournal"></a>
+<a class="addthis_button_facebook"></a>
+<a class="addthis_button_twitter"></a>
+<a class="addthis_button_bobrdobr"></a>
+<a class="addthis_button_myspace"></a>
 <a class="addthis_button_email"></a>
 <a class="addthis_button_favorites"></a>
 <a class="addthis_button_print"></a>
 <a class="addthis_button_pdfonline"></a>
-<a class="addthis_button_livejournal"></a>
-<a class="addthis_button_facebook"></a>
 <a class="addthis_button_delicious"></a>
 <a class="addthis_button_evernote"></a>
 <a class="addthis_button_google"></a>
 <a class="addthis_button_googlebuzz"></a>
-<a class="addthis_button_twitter"></a>
 <span class="addthis_separator">|</span>
 <a href="http://www.addthis.com/bookmark.php?v=250&amp;username=balancer73" class="addthis_button_compact small">Добавить страницу в другие сервисы закладок и блоги...</a>
 </div>
