@@ -1,7 +1,5 @@
 <?php
 
-config_set('debug_mysql_queries_log', true);
-
 class aviatop_main extends base_page_paged
 {
 	function config_class() { return 'aviatop_config'; }
