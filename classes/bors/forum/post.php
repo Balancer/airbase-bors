@@ -365,7 +365,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	}
 
 	function title() { return $this->topic()->title()." <small>[".$this->nav_name()."]</small>"; }
-	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown'))."#".strftime("%d.%m.%y H:i", $this->create_time()); }
+	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown'))."#".date("d.m.y H:i", $this->create_time()); }
 
 	function base_url()
 	{
@@ -625,6 +625,6 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function has_readed_by_user($user)
 	{
-		return $this->topic()->last_visit_time_for_user($user) > $this->modify_time();
+		return $this->topic()->last_visit_time_for_user($user) > $this->last_post_create_time();
 	}
 }

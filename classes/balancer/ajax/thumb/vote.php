@@ -42,8 +42,8 @@ class balancer_ajax_thumb_vote extends base_object
 			return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";
 
 		$topic = $target->topic();
-		if($topic->modify_time() < time() - 86400*90)
-			$topic->set_modify_time(time(), true);
+//		if($topic->modify_time() < time() - 86400*90)
+		$topic->set_modify_time(time(), true);
 
 		$vote = object_new_instance('bors_votes_thumb', array(
 			'user_id' => $me_id,

@@ -542,6 +542,7 @@ if (isset($_POST['form_sent']))
 		$post  = object_load('forum_post',  $new_pid, array('no_load_cache' => true));
 
 		$topic->set_modify_time(time(), true);
+		$topic->set_last_post_create_time($post->create_time(), true);
 		$post->set_modify_time(time(), true);
 		if($me && $me->is_coordinator())
 		{
