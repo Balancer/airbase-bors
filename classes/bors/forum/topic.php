@@ -80,12 +80,23 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function keywords_linked()
 	{
-		if($this->__havec('keywords_linked'))
+		if($this->__havefc())
 			return $this->__lastc();
 
 		require_once('inc/airbase_keywords.php');
 		$kws = $this->keywords_string();
 		return $this->__setc($kws ? airbase_keywords_linkify($kws) : '');
+	}
+
+	function keywords_linked_q()
+	{
+		if($this->__havefc())
+			return $this->__lastc();
+
+		require_once('inc/airbase_keywords.php');
+		$kws = $this->keywords_string();
+//		return $this->__setc($kws ? '"'.join('","', preg_split('/\s*,\s*/', addslashes(airbase_keywords_linkify($kws)))) .'"' : '');
+		return $this->__setc($kws ? '"'.join('","', $this->keywords()) .'"' : '');
 	}
 
 	private $forum = false;
@@ -153,7 +164,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		if(!$this->forum()->can_read())
 		{
-			templates_noindex();
+			template_noindex();
 			return bors_message("Извините, доступ к этому ресурсу закрыт для Вас");
 		}
 
@@ -491,6 +502,34 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			common_keyword_bind::add($this);
 	}
 
+	function keywords() { return array_map('trim', explode(',', $this->keywords_string())); }
+	function set_keywords($keywords, $up)
+	{
+		sort($keywords, SORT_LOCALE_STRING);
+		return $this->set_keywords_string(join(', ', array_unique($keywords)), $up);
+	}
+
+	function add_keyword($keyword, $up)
+	{
+		$keywords = $this->keywords();
+		$keywords[] = $keyword;
+		$this->set_keywords($keywords, $up);
+	}
+
+	function remove_keyword($keyword, $up)
+	{
+		$keyword = trim($keyword);
+		$keywords = array();
+		foreach($this->keywords() as $kw)
+		{
+			$kw = trim($kw);
+			if($kw != $keyword)
+				$keywords[] = $kw;
+		}
+
+		$this->set_keywords($keywords, $up);
+	}
+
 	function template()
 	{
 		if($this->forum()->category()->category_template())
@@ -510,7 +549,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if($this->page() > $this->total_pages())
 			return go($this->url($this->total_pages()));
 
-		templates_jquery();
+		template_jquery();
 		return false;
 	}
 

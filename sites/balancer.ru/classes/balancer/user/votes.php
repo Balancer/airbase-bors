@@ -49,7 +49,7 @@ class balancer_user_votes extends base_page
 
 	function pre_show()
 	{
-		templates_noindex();
+		template_noindex();
 
 		if(bors()->client()->is_bot())
 			return go('/');

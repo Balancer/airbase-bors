@@ -14,7 +14,7 @@ class forum_tools_topic extends base_page
 	}
 
 	function access() { return $this; }
-	function can_read() { templates_noindex(); return true; }
+	function can_read() { template_noindex(); return true; }
 	function can_action()
 	{
 		$me = bors()->user();

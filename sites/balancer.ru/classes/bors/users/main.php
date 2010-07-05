@@ -4,7 +4,7 @@ class users_main extends base_page
 {
 	function template()
 	{
-		templates_noindex();
+		template_noindex();
 		return 'forum/common.html';
 	}
 

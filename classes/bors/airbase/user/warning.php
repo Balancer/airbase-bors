@@ -40,17 +40,20 @@ class airbase_user_warning extends base_object_db
 			return $obj ? $obj->titled_url() : '?';
 		}
 
-		if($this->warn_class_id() == 0)
+		if($this->warn_object_id() && ($obj = object_load('balancer_board_post', $this->warn_object_id())))
 		{
-			if($obj = object_load($this->referer()))
-			{
-				$has = objects_first('airbase_user_warning', array('warn_class_id' => $obj->class_id(), 'warn_object_id' => $obj->id()));
-				$this->set_warn_class_id($obj->class_id(), !$has);
-				$this->set_warn_object_id($obj->id(), !$has);
-				return $obj->titled_url();
-			}
+			$has = objects_first('airbase_user_warning', array('warn_class_id' => $obj->class_id(), 'warn_object_id' => $obj->id()));
+			$this->set_warn_class_id($obj->class_id(), !$has);
+			$this->set_warn_object_id($obj->id(), !$has);
+			return $obj->titled_url();
+		}
 
-			$this->set_warn_class_id(-1, true);
+		if($obj = object_load($this->referer()))
+		{
+			$has = objects_first('airbase_user_warning', array('warn_class_id' => $obj->class_id(), 'warn_object_id' => $obj->id()));
+			$this->set_warn_class_id($obj->class_id(), !$has);
+			$this->set_warn_object_id($obj->id(), !$has);
+			return $obj->titled_url();
 		}
 
 		return "<a href=\"{$this->referer()}\">{$this->referer()}</a>";

@@ -6,7 +6,7 @@ class users_topwarnings extends base_page
 
 	function template()
 	{
-		templates_noindex();
+		template_noindex();
 		return 'forum/_header.html';
 	}
 
@@ -15,7 +15,7 @@ class users_topwarnings extends base_page
 
 	function parents() { return array("http://balancer.ru/users/"); }
 
-	function data_providers()
+	function local_data()
 	{
 /*		$warns = array();
 		foreach($this->db('punbb')->select_array('warnings', 'user_id, sum(score) as `sum`', array(
@@ -27,7 +27,7 @@ class users_topwarnings extends base_page
 		$warns2 = array();
 		foreach(objects_array('forum_user', array('id IN' => array_keys($warns))) as $u)
 			$warns2[$u->id()] = $u->warnings_rate(31, 'per_posts_and_time');
-		
+
 //		asort($warns2);
 //		print_d($warns2);
 //		exit();

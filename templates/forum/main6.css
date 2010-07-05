@@ -84,7 +84,10 @@ dl.box dt, dl.box dt a {
 	font-weight: bold; 
 }
 
-dl.box dd {margin: 2px; font-size: xx-small; padding: 2px; }
+dl.box dd {margin: 4px; font-size: normal; padding: 4px; }
+
+dl.w200 dd { margin: 2px; font-size: xx-small; padding: 2px; }
+
 dl.box dt a {color: #ffffd0;}
 
 .box {
@@ -675,12 +678,39 @@ table.yandex_money input {
 }
 
 .keywords, .keywords a {
-/*	font-size: 0.8em; */
+	font-size: 0.75em;
 	font-style: italic;
 	padding-top: 10px;
 	color: #999;
 }
 
 .keywords a {
+	font-size: 1.0em;
+}
+
+.keywords a {
 	text-decoration: underline;
+}
+
+.tagEditor
+{
+	margin: 4px 0;
+	padding: 0;
+	display: inline;
+	list-style-type: none;
+}
+
+.tagEditor li
+{
+	margin-right: 8px;
+	display: inline;
+	list-style-type: none;
+	cursor: pointer;
+/*	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;*/
+}
+
+.tagEditor li img {
+	vertical-align: middle;
+	margin-left: 2px;
 }

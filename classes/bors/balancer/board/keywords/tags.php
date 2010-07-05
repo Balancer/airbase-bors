@@ -87,7 +87,7 @@ class balancer_board_keywords_tags extends base_page
 
 	function local_data()
 	{
-		templates_noindex();
+		template_noindex();
 
 		return array(
 			'items' => $this->_items_this_page(),

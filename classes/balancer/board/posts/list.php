@@ -7,7 +7,7 @@ class balancer_board_posts_list extends base_page_paged
 
 	function template()
 	{
-		templates_jquery();
+		template_jquery();
 		return 'templates/forum/_header.html';
 	}
 
@@ -15,5 +15,5 @@ class balancer_board_posts_list extends base_page_paged
 	function items_per_page() { return 25; }
 
 	function access() { return $this; }
-	function can_read() { templates_noindex(); return bors()->user(); }
+	function can_read() { template_noindex(); return bors()->user(); }
 }

@@ -8,7 +8,7 @@ class user_blog extends base_page
 
 	function template()
 	{
-		templates_noindex();
+		template_noindex();
 		return 'forum/_header.html';
 	}
 

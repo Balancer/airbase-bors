@@ -4,7 +4,7 @@ class balancer_blog extends user_blog
 {
 	function template()
 	{
-		templates_noindex();
+		template_noindex();
 		return 'BlueLeaves';
 	}
 	
