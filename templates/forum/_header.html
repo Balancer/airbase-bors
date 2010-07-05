@@ -19,8 +19,6 @@
 	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
 <link rel="stylesheet" type="text/css" href="/_bors/css/main6.css" />
 
-{if not $jquery_has_added}<script type="text/javascript" src="/_bors/js/jquery.js"></script>{/if}
-
 {foreach from=$js_include item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
@@ -119,7 +117,31 @@ dd, dt { height: 1%; }
 			<h1>{$title}</h1>
 			{$description}
 {* if $this->keywords_string()}<br /><i>Ключевые слова: {$this->keywords_string()}</i>{/if *}
-			{if $this->keywords_linked()}<div class="keywords">Тэги: {$this->keywords_linked()}</div>{/if}
+			{if $this->keywords_linked()}<div class="keywords">
+
+{if $me_id > 0}
+<script>{literal}
+        $(document).ready(function() {
+            $("#tags_def").hide()
+            $("#tags").tagEditor(
+            {
+                items: [{/literal}{$this->keywords_linked_q()}{literal}],
+                confirmRemoval: true,
+                separator: ',',
+                completeOnSeparator: true,
+                completeOnBlur: true,
+                confirmRemovalText: "Вы хотите удалить этот тэг?",
+				imageTagUrl: 'http://balancer.ru/_bors3rdp/jquery/plugins/tageditor/minus_small.png',
+				object: '{/literal}{$this->internal_uri_ascii()}{literal}',
+            });
+		});
+{/literal}</script>
+Тэги:<input id="tags" name="tags" type="text" value="" /><span id="tags_def">{$this->keywords_linked()}</span>
+{else}
+Тэги: {$this->keywords_linked()}
+{/if}
+</div>{/if}
+
 		</dd>
 		</dl>
 

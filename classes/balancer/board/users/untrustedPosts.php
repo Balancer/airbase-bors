@@ -4,7 +4,7 @@ class balancer_board_users_untrustedPosts extends balancer_board_posts_list
 {
 	function title() { return ec('Сообщения потенциально опасных пользователей'); }
 	function config_class() { return 'balancer_board_admin_config'; }
-	function can_read() { templates_noindex(); return ($me=bors()->user()) ? $me->is_coordinator() : false; }
+	function can_read() { return ($me=bors()->user()) ? $me->is_coordinator() : false; }
 
 	function order() { return '-create_time'; }
 
@@ -25,7 +25,7 @@ class balancer_board_users_untrustedPosts extends balancer_board_posts_list
 
 	function pre_show()
 	{
-		templates_noindex();
+		template_noindex();
 		return false;
 	}
 

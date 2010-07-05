@@ -19,7 +19,7 @@ class bors_site_blog extends base_page_paged
 
 	function pre_show()
 	{
-		templates_noindex();
+		template_noindex();
 		return parent::pre_show();
 	}
 

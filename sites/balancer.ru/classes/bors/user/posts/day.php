@@ -37,7 +37,7 @@ class user_posts_day extends base_page
 
 	function template()
 	{
-		templates_noindex();
+		template_noindex();
 		return 'forum/_header.html';
 	}	
 

@@ -7,7 +7,7 @@ class balancer_board_keywords_main extends base_page
 	
 	function local_data()
 	{
-		templates_noindex();
+		template_noindex();
 	
 		return array(
 			'keywords' => objects_array('common_keyword', array(

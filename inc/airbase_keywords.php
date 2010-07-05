@@ -9,3 +9,9 @@ function airbase_keywords_linkify($keywords_string, $base_keywords = '')
 		."/\">".trim($key)."</a>";
 	return join(', ', $result);
 }
+
+function airbase_keyword_linkify($keyword)
+{
+	$keyword = trim($keyword);
+	return "<a href=\"http://forums.balancer.ru/tags/{$keyword}/\">$keyword</a>";
+}

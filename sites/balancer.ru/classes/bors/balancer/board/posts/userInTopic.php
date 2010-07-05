@@ -44,7 +44,7 @@ class balancer_board_posts_userInTopic extends balancer_board_posts_list
 
 	function pre_show()
 	{
-		templates_noindex();
+		template_noindex();
 		return false;
 	}
 

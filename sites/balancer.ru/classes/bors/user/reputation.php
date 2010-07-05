@@ -32,7 +32,7 @@ class user_reputation extends base_page
 
 	function local_data()
 	{
-		templates_noindex();
+		template_noindex();
 
 		$dbf = &new DataBase('punbb');
 

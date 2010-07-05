@@ -99,7 +99,7 @@ class airbase_board_topic extends forum_topic
 
 		if(!$this->forum()->can_read())
 		{
-			templates_noindex();
+			template_noindex();
 			return bors_message("Извините, доступ к этому ресурсу закрыт для Вас");
 		}
 		

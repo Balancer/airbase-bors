@@ -281,6 +281,10 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			case 'Gecko':
 				$out_browser = '<img src="/bors-shared/images/browsers/mozilla.gif" width="16" height="16" alt="Mozilla" />';
 				break;
+			case 'IE5':
+			case 'IE6':
+			case 'IE7':
+			case 'IE8':
 			case 'MSIE':
 				$out_browser = '<img src="/bors-shared/images/browsers/ie6.gif" width="16" height="16" alt="IE" />';
 				break;
@@ -290,7 +294,9 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if((!$out_browser || !$out_os) && $this->poster_ua())
 			debug_hidden_log("user_agent", "Unknown user agent: '".$this->poster_ua()."' in post ".$this->id());
 
-		return '<span title="'.htmlspecialchars($this->poster_ua()).'">'.$out_browser.$out_os.'</span>';
+		return '<span title="'.htmlspecialchars($this->poster_ua())
+			.' ['.htmlspecialchars($os).','.htmlspecialchars($browser).']">'
+			.$out_browser.$out_os.'</span>';
 	}
 
 	private $__answer_to = 0;

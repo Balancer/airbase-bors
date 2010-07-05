@@ -16,7 +16,7 @@ class user_posts_month extends base_page
 
 	function template()
 	{
-		templates_noindex();
+		template_noindex();
 		return 'forum/_header.html';
 	}	
 

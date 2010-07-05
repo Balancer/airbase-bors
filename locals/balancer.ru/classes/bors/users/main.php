@@ -7,7 +7,7 @@
 
 	function template()
 	{
-		templates_noindex();
+		template_noindex();
 		return 'forum/main.html';
 	}
 

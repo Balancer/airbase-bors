@@ -14,18 +14,18 @@ class airbase_user_warnings extends base_page
 	{
 		if($this->user === NULL)
 			$this->user = object_load('bors_user', $this->id());
-		
+
 		return $this->user;
 	}
 
 	function local_data($skip_passive = false)
 	{
-		templates_noindex();
-		
+		template_noindex();
+
 		$data = array(
 			'ref' => urldecode(@$_GET['ref']) or @$_SERVER['HTTP_REFERER'],
 		);
-		
+
 		if(!$skip_passive)
 			$data['passive_warnings'] = array_reverse(objects_array('airbase_user_warning', array(
 				'user_id=' => $this->id(),
@@ -34,7 +34,7 @@ class airbase_user_warnings extends base_page
 				'page' => $this->page(),
 				'per_page' => $this->items_per_page(),
 			)));
-		
+
 		if(!$this->page() || $this->page() == $this->total_pages())
 			$data['active_warnings']  = array_reverse(objects_array('airbase_user_warning', array(
 				'user_id=' => $this->id(), 
@@ -48,9 +48,9 @@ class airbase_user_warnings extends base_page
 	function title() { return ec("Штрафы пользователя ") . $this->user()->title(); }
 
 	function nav_name() { return ec('Штрафы'); }
-	
+
 	function parents() { return array($this->user()); }
-	
+
 	function total_items() { return objects_count('airbase_user_warning', array('user_id=' => $this->id(), 'time<=' => time()-86400*WARNING_DAYS)); }
 	function default_page() { return $this->total_pages(); }
 

@@ -9,7 +9,7 @@ class airbase_user_aliases extends base_page
 	function loaded() { $this->init(); return $this->user() != NULL; }
 	function local_data()
 	{
-		templates_noindex();
+		template_noindex();
 
 		$last_post = $this->db('punbb')->select('posts', 'MAX(posted)', array('poster_id' => $this->id())) + 1;
 		$depth = $last_post-86400*30;

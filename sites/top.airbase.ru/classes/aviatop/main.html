@@ -18,8 +18,8 @@
 {if $x}
 {math assign="pos" equation="(page-1)*per_page+cur" page=$this->page() per_page=$this->items_per_page() cur=$smarty.foreach.loop.iteration}
 <tr>
-	<td><b>{$pos}. <a href="{$x->site_url()}">{$x->title()}</a></b><br />
-	{if $x->logo()}<a href="{$x->site_url()}"><img src="{$x->logo()}" align="right"></a>{/if}
+	<td><b>{$pos}. <a href="{$x->url()}">{$x->title()}</a></b> <small>[<a href="{$x->www()}" target="_blank">www</a>]</small><br />
+	{if $x->logo()}<a href="{$x->url()}"><img src="{$x->logo()}" align="right"></a>{/if}
 	<small>{$x->description()}</small>
 	</td>
 	<td>{$x->age()|smart_interval}</td>

@@ -28,7 +28,7 @@ class forum_tools_post extends base_page
 
 	function access() { return $this; }
 
-	function can_read() { templates_noindex(); return bors()->user(); }
+	function can_read() { return bors()->user(); }
 
 	function can_action()
 	{
@@ -70,7 +70,7 @@ class forum_tools_post extends base_page
 
 	function pre_show()
 	{
-		templates_noindex();
+		template_noindex();
 		return parent::pre_show();
 	}
 }

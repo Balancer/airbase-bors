@@ -1,1 +1,1 @@
-/home2/balancer.ru/htdocs/templates/login.js
+/var/www/balancer.ru/htdocs/templates/login.js
