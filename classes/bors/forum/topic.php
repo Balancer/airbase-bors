@@ -550,6 +550,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			return go($this->url($this->total_pages()));
 
 		template_jquery();
+//		template_jquery_plugin_lazyload();
+		template_jquery_plugin_lazyload_ad();
 		return false;
 	}
 

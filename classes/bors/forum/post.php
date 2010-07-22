@@ -30,7 +30,7 @@ class forum_post extends base_object_db
 			'create_time'	=> 'posted',
 			'edited',
 			'edited_by',
-			'owner_id'=> 'poster_id',
+			'owner_id' => 'poster_id',
 			'poster_ip',
 			'poster_email',
 			'poster_ua',
@@ -48,6 +48,8 @@ class forum_post extends base_object_db
 			'is_deleted',
 		);
 	}
+
+//	function __orm_setters() { return array('';); }
 
 function topic_id() { return @$this->data['topic_id']; }
 function set_topic_id($v, $dbup) { return $this->set('topic_id', $v, $dbup); }

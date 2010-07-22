@@ -38,7 +38,7 @@ if($_SERVER['HTTP_HOST']=='la2.wrk.ru' || $_SERVER['HTTP_HOST']=='la2.balancer.r
 		define('BORS_LOCAL', '/var/www/.bors/bors-airbase');
 		define('BORS_HOST', $_SERVER['DOCUMENT_ROOT'].'/cms-local');
 	
-		require_once(BORS_CORE.'/config.php');
+		require_once(BORS_CORE.'/init.php');
 
 		$forum_id = $_GET['id'] = $m[1]+$fdiff;
 		$page = $_GET['p'] = $m[2];

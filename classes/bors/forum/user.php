@@ -556,4 +556,26 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 
 		return $this->set_attr('next_can_post', $first_in_day ? $first_in_day->create_time()+86400 : NULL);
 	}
+
+	function reputaton_html()
+	{
+		return "<img src=\"http://balancer.ru/user/{$this->id()}/rep.gif\" class=\"rep\" alt=\"\" />";
+		$reputation_value = $this->reputation();
+		// Репутация в диапазоне -1..1
+		$rep = atan($reputation_value*$reputation_value/($reputation_value >= 0 ? 300 : 100))*2/pi();
+		// Нормируем в диапазоне [0,5] с шагом 0,5
+		$reputation_abs = round(5*(1+$rep))/2;
+		if(!$reputation_abs)
+			return '';
+
+		$stars = str_repeat('★', intval($reputation_abs));
+		if(intval($reputation_abs) != $reputation_abs)
+			$stars .= '☆';
+
+		if(!$stars)
+			return '';
+
+		return "<div style=\"color: ".($reputation_value > 0 ? 'gold' : 'gray')."\">{$stars}</div>";
+//		☆★
+	}
 }
