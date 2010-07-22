@@ -452,7 +452,7 @@ if (isset($_POST['form_sent']))
 							else
 								pun_mail($cur_subscriber['email'], $notification_emails[$cur_subscriber['language']][2], $notification_emails[$cur_subscriber['language']][3]);
 */
-							bors_mailing::add($post, $cur_subscriber['id']);
+							bors_mailing::add($post->topic(), $cur_subscriber['id']);
 						}
 
 					}

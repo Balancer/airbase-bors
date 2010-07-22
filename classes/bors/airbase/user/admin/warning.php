@@ -28,8 +28,8 @@ class airbase_user_admin_warning extends airbase_user_warning
 			'warn_object_id=' => $object->id(),
 		));
 
-//		if($previous_warning)
-//			return bors_message(ec('Пользователь уже получил предупреждение за это сообщение'));
+		if($previous_warning)
+			return bors_message(ec('Пользователь уже получил предупреждение за это сообщение'));
 
 		$data['create_time'] = time();
 		$data['score'] = airbase_user_warning_type::score($data['type_id']);

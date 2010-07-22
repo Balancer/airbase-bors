@@ -1,3 +1,9 @@
+Сделать
+-------
+ * Просмотр новых тем по календарю. 
+   Перенос http://forums.balancer.ru/new-topics/10years-ago/ в виде модуля на главную форумов
+   и в левую колонку... Или не нужно колонку переполнять?
+
 Пополнить сайт
 --------------
  * Як-130
@@ -11,6 +17,7 @@ AJAX-сайты
 
 AJAX-инструменты
 ----------------
+
 Accordion Content script (v1.9)
 http://www.dynamicdrive.com/dynamicindex17/ddaccordion.htm
 
@@ -29,3 +36,6 @@ http://forums.balancer.ru/personal/favorites/
   * http://money.cnn.com/2010/06/03/news/companies/bp_obama_administration_bill/index.htm
   * http://www.wired.com/threatlevel/2010/06/limewire-owes-billion/
 
+Занести в избранное, когда будет готово. И сделать отметку «факт».
+ * http://balancer.ru/_bors/igo?o=forum_post__2208695
+ * http://balancer.ru/_bors/igo?o=forum_post__2208106

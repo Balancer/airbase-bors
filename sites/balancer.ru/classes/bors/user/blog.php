@@ -2,9 +2,14 @@
 
 class user_blog extends base_page
 {
-	private $user;
-
 	function main_db(){ return 'punbb'; }
+
+	function auto_objects()
+	{
+		return array(
+			'user' => 'forum_user(id)',
+		);
+	}
 
 	function template()
 	{
@@ -12,7 +17,7 @@ class user_blog extends base_page
 		return 'forum/_header.html';
 	}
 
-	function title() { return object_property($this->user, 'title').ec(": Блог"); }
+	function title() { return object_property($this->user(), 'title').ec(": Блог"); }
 	function nav_name() { return ec("блог"); }
 
 	function parents() { return array("forum_user://".$this->id()); }
@@ -89,18 +94,10 @@ class user_blog extends base_page
 
 	function total_pages() { return intval(($this->total_items()-1) / $this->items_per_page()) + 1; }
 
-	function __construct($id)
-	{
-		$this->set_id($id);
-
-		$this->user = class_load('forum_user', $id);
-		parent::__construct($id);
-	}
-
 	function pre_show()
 	{
 		$this->add_template_data('user_id', $this->id());
-		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url()."rss.xml\" title=\"RSS блога пользователя ".addslashes($this->user->title())."\" />");
+		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url()."rss.xml\" title=\"RSS блога пользователя ".htmlspecialchars($this->user()->title())."\" />");
 
 		return false;
 	}

@@ -85,12 +85,23 @@ class balancer_board_keywords_tags extends base_page
 		));
 	}
 
-	function local_data()
+	function pre_show()
 	{
 		template_noindex();
+		template_jquery();
+		return parent::pre_show();
+	}
 
+	function keyword()
+	{
+//		return objects_first('common_keyword', '');
+	}
+
+	function local_data()
+	{
 		return array(
 			'items' => $this->_items_this_page(),
+//			'keyword' => $this->keyword(),
 		);
 	}
 

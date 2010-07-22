@@ -2,12 +2,15 @@
 
 class balancer_blog extends user_blog
 {
-	function template()
+	function pre_show()
 	{
 		template_noindex();
-		return 'BlueLeaves';
+		return parent::pre_show();
 	}
-	
+
+	//FIXME: разрбраться, почему игнорируется дефолтовый стиль сайта. Возможно, переопределяется явно в user_blog?
+	function template() { return 'blue_spring'; }
+
 	function title() { return ec('Тропа Балансер\'а'); }
 	function nav_name() { return ec("тропа"); }
 
