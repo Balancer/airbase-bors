@@ -307,4 +307,12 @@ function parents()
 			'parent_forum' => 'forum_forum(parent_forum_id)',
 		);
 	}
+
+	function update_num_topics()
+	{
+		$this->set_num_topics(objects_count('balancer_board_topic', array('forum_id' => $this->id())), true);
+		$this->set_num_posts(objects_count('balancer_board_post', array(
+			'inner_join' => 'balancer_board_topic ON (balancer_board_topic.id = balancer_board_post.topic_id AND balancer_board_topic.forum_id='.$this->id().')'
+		)), true);
+	}
 }

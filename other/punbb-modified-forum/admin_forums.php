@@ -49,7 +49,9 @@ if (isset($_POST['add_forum']))
 	if ($add_to_cat < 1)
 		message($lang_common['Bad request']);
 
-	$db->query('INSERT INTO '.$db->prefix.'forums (cat_id) VALUES('.$add_to_cat.')') or error('Unable to create forum', __FILE__, __LINE__, $db->error());
+	$q = 'INSERT INTO '.$db->prefix.'forums (cat_id) VALUES('.$add_to_cat.')';
+//	$db->query('INSERT INTO '.$db->prefix.'forums (cat_id) VALUES('.$add_to_cat.')')
+	$db->query($q) or error('Unable to create forum in query "'.$q.'"', __FILE__, __LINE__, $db->error());
 
 	// Regenerate the quickjump cache
 	require_once PUN_ROOT.'include/cache.php';
@@ -150,11 +152,16 @@ else if (isset($_POST['update_positions']))
 
 	while (list($forum_id, $parent) = @each($_POST['parent']))
 	{
-		if(!preg_match('#^\d+$#', $parent))
-			message('Parent must be a positive integer value.');
+		if($parent && !preg_match('#^\d+$#', $parent))
+			message('Parent must be a positive integer value (got '.$parent.').');
 
-		$db->query("UPDATE {$db->prefix}forums SET parent=".intval($parent)." WHERE id=".intval($forum_id))
-			or error('Unable to update forum', __FILE__, __LINE__, $db->error());
+		if($parent)
+			$parent = intval($parent);
+		else
+			$parent = 'NULL';
+
+		$db->query($q = "UPDATE {$db->prefix}forums SET parent=$parent WHERE id=".intval($forum_id))
+			or error('Unable to update forum in query '.$q, __FILE__, __LINE__, $db->error());
 	}
 
 	// Regenerate the quickjump cache
