@@ -17,7 +17,10 @@
 <!--[if IE 6]><link href="/_bors/css/bors/ie6.css" rel="stylesheet" media="all" /><![endif]-->
 <!--[if IE 7]><link href="/_bors/css/bors/ie7.css" rel="stylesheet" media="all" /><![endif]-->
 	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
-<link rel="stylesheet" type="text/css" href="/_bors/css/main6.css" />
+	<link rel="stylesheet" type="text/css" href="/_bors/css/main6.css" />
+{foreach item=css from=$css_list}
+	<link rel="stylesheet" type="text/css" href="{$css}" />
+{/foreach}
 
 {foreach from=$js_include item="s"}
 <script type="text/javascript" src="{$s}"></script>
@@ -90,6 +93,13 @@ dd, dt { height: 1%; }
 {if $meta}{foreach key=key item=value from=$meta}
 <meta name="{$key}" content="{$value|htmlspecialchars}" />
 {/foreach}{/if}
+{if $javascript}
+<script type="text/javascript"><!--
+{foreach from=$javascript item="s"}
+{$s}
+{/foreach}
+--></script>
+{/if}
 {foreach item=s from=$head_append}
 {$s}
 {/foreach}

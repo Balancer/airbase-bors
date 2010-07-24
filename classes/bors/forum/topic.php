@@ -479,7 +479,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			UPDATE posts AS t 
 				SET t.page = FLOOR((SELECT @rn:= @rn + 1 FROM (SELECT @rn:= -1) s)/{$this->items_per_page()})+1 
 				WHERE t.topic_id = {$this->id()}
-				ORDER BY t.`order`, t.`id`;
+				ORDER BY t.`order`, t.`posted`;
 		");
 		$this->set_is_repaged(1, true);
 	}
@@ -552,6 +552,22 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		template_jquery();
 //		template_jquery_plugin_lazyload();
 		template_jquery_plugin_lazyload_ad();
+//		template_jquery_plugin_autocomplete();
+/*
+//		http://jqueryui.com/docs/Getting_Started#Click_Download.21
+//		http://jqueryui.com/demos/autocomplete/#option-source
+//		http://www.learningjquery.com/2010/06/autocomplete-migration-guide
+//		template_css('/_bors3rdp/jquery/jquery-ui.css');
+		template_css('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+		template_jquery();
+		template_js_include('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js');
+
+		template_js('
+$(function() {
+	$("#tags").autocomplete({ source: ["aaaa", "bbbbb", "ccccc"]});
+});
+'		);
+*/
 		return false;
 	}
 

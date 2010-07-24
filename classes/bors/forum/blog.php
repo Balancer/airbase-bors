@@ -11,7 +11,8 @@ class forum_blog extends base_page_db
 	function main_table_fields()
 	{
 		return array(
-			'id' => 'post_id', 
+			'id' => 'post_id',
+			'keywords_string',
 			'owner_id', 
 			'forum_id', 
 			'blogged_time',

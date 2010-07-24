@@ -573,9 +573,10 @@ if (isset($_POST['form_sent']))
 
 		if(!empty($_POST['as_blog']))
 		{
-			$blog = &new forum_blog($post->id());
+			$blog = new forum_blog($post->id());
 			$blog->new_instance();
 			$blog->set_owner_id($post->owner_id(), true);
+			$blog->set_keywords_string(@$_POST['keywords'], true);
 			$blog->set_forum_id($topic->forum_id(), true);
 			$blog->set_is_public($topic->is_public(), true);
 			$blog->store();
@@ -587,7 +588,7 @@ if (isset($_POST['form_sent']))
 				$topic,
 				$topic->first_post()->id() == $post->id() ? $topic : $post,
 				$post,
-				$topic
+				empty($_POST['keywords']) ? $topic : $blog
 			);
 		}
 
@@ -795,18 +796,19 @@ if ($pun_user['is_guest'])
 	$email_label = ($pun_config['p_force_guest_email'] == '1') ? '<strong>'.$lang_common['E-mail'].'</strong>' : $lang_common['E-mail'];
 	$email_form_name = ($pun_config['p_force_guest_email'] == '1') ? 'req_email' : 'email';
 
-?>						<label class="conl"><strong><?php echo $lang_post['Guest name'] ?></strong><br /><input type="text" name="req_username" value="<?php if (isset($_POST['req_username'])) echo pun_htmlspecialchars($username); /*"*/ ?>" size="25" maxlength="25" tabindex="<?php echo $cur_index++; /*"*/ ?>" /><br /></label>
-						<label class="conl"><?php echo $email_label;/*"*/ ?><br /><input type="text" name="<?php echo $email_form_name ?>" value="<?php if (isset($_POST[$email_form_name])) echo pun_htmlspecialchars($email); ?>" size="50" maxlength="50" tabindex="<?php echo $cur_index++;/*"*/ ?>" /><br /></label>
+?>						<label class="conl"><strong><?php echo $lang_post['Guest name'] ?></strong><br /><input type="text" name="req_username" value="<?php if (isset($_POST['req_username'])) echo pun_htmlspecialchars($username); /*"*/ ?>" size="25" maxlength="25" tabindex="<?php echo $cur_index++; ?>" /><br /></label>
+						<label class="conl"><?php echo $email_label; ?><br /><input type="text" name="<?php echo $email_form_name ?>" value="<?php if (isset($_POST[$email_form_name])) echo pun_htmlspecialchars($email); ?>" size="50" maxlength="50" tabindex="<?php echo $cur_index++; ?>" /><br /></label>
 						<div class="clearer"></div>
 <?php
 
 }
 
 if ($fid): ?>
-						<label><strong><?php echo $lang_common['Subject'] ?></strong><br /><input class="longinput" type="text" name="req_subject" value="<?php if (isset($_POST['req_subject'])) echo pun_htmlspecialchars($subject); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++;/*"*/ ?>" /><br /></label>
-						<label>Подзаголовок (описание темы, не обязательно)<br /><input class="longinput" type="text" name="nreq_description" value="<?php if (isset($_POST['nreq_description'])) echo pun_htmlspecialchars($description); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++;/*"*/ ?>" /><br /></label>
+						<label><strong><?php echo $lang_common['Subject'] ?></strong><br /><input class="longinput" type="text" name="req_subject" value="<?php if (isset($_POST['req_subject'])) echo pun_htmlspecialchars($subject); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++; ?>" /><br /></label>
+						<label>Подзаголовок (описание темы, не обязательно)<br /><input class="longinput" type="text" name="nreq_description" value="<?php if (isset($_POST['nreq_description'])) echo pun_htmlspecialchars($description); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++; ?>" /><br /></label>
 						<label>Ключевые слова (через запятую)<br/><input class="longinput" type="text" name="keywords_string" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?= pun_htmlspecialchars(isset($_POST['keywords_string']) || !$forum ? $_POST['keywords_string'] : $forum->keywords_string()) ?>" /><br /></label>
 <? else: ?>
+						<div id="here_keywords"></div>
 						<div id="here_subject"></div>
 <?php endif; ?>
 						<label><strong><?php echo $lang_common['Message'] ?></strong><br />
@@ -859,7 +861,7 @@ if (!$pun_user['is_guest'])
 
 	if($tid) // Ответ
 	{
-		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\"/>Разместить ответ в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\"     value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_blog'])     ? ' checked="checked"' : '')." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '".addslashes("<label><strong>Тэги:</strong>&nbsp;<input                     class='longinput' type='text' name='keywords'    value='".defval($_POST, 'keywords', $topic->keywords_string())."'    size='40' maxlength='255' /><br /></label>")."' : ''\"/>Разместить ответ в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
 		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTML = this.checked ? '".addslashes("<label><strong>{$lang_common['Subject']}</strong><br /><input class='longinput' type='text' name='req_subject' value='".(@$_POST['req_subject'])."' size='80' maxlength='255' /><br /></label>")."' : ''\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
 	}
 	else
