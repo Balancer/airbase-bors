@@ -63,6 +63,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 
 		$object = object_load($data['object']);
 		$object->set_warning_id($this->id(), true);
+		$object->set_modify_time(time(), true);
 		$object->cache_clean();
 
 		@unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
