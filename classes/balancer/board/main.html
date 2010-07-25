@@ -3,6 +3,16 @@
 пользоваться <a href="http://balancer.ru/forum/">старым и основным видом форумов</a>.
 </div>
 
+<dl class="box">
+<dt>Популярные тэги</dt>
+<dd>
+{foreach from=$top_tags item="x"}
+{$x->titled_url()} ({$x->targets_count()})
+{/foreach}
+</dd>
+</dl>
+<div class="box more"><a href="http://forums.balancer.ru/tags/">Все тэги с возможностью совмещённой фильтрации &raquo;&raquo;&raquo;</a></div>
+
 <table class="btab w100p">
 <caption>Новые темы форумов</caption>
 <tr><th>Время</th><th>тема</th><th>форум</th><th>автор</th></tr>
@@ -26,7 +36,7 @@
 <tr><td>{$t->modify_time()|date:'H:i'}</td>
 	<td>{$t->titled_url('new')}</td>
 	<td>{$t->forum()->nav_named_url()}</td>
-	<td>{$t->last_poster_name()}</td>
+	<td><a href="{$t->url('new')}">{$t->last_poster_name()}</a></td>
 </tr>
 {/foreach}
 </table>

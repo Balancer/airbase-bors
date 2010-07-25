@@ -28,6 +28,13 @@ class balancer_board_main extends base_page
 			)),
 
 			'new_topics' => $new_topics,
+
+			'top_tags' => objects_array('common_keyword', array(
+				'targets_count>' => 50,
+				'order' => '-targets_count',
+				'limit' => 50,
+				'by_id' => true,
+			)),
 		);
 	}
 }

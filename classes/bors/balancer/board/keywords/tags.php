@@ -13,7 +13,7 @@ class balancer_board_keywords_tags extends base_page
 		$keywords = array_map('trim', $keywords);
 		$keywords = array_filter($keywords);
 		$keywords = array_filter($keywords, create_function('$x', 'return strlen($x) > 1;'));
-		sort($keywords);
+		sort($keywords, SORT_LOCALE_STRING);
 		return $keywords;
 	}
 
@@ -79,8 +79,14 @@ class balancer_board_keywords_tags extends base_page
 
 	private function _items_this_page()
 	{
-		return $this->__havec('_items_this_page') ? $this->__lastc() : $this->__setc(array_slice($this->all_items(),
-				($this->args('page')-1) * $this->items_per_page(),
+		$page = max(1, $this->arg('page'))-1;
+		$offset = $page * $this->items_per_page();
+//		echo "array_slice(".count($this->all_items()).", ".$offset.",{$this->items_per_page()})<br/>";
+
+//		return array_slice($this->all_items(), $offset, $this->items_per_page());
+
+		return $this->__havec('_items_this_page_'.$page) ? $this->__lastc() : $this->__setc(array_slice($this->all_items(),
+				$offset,
 				$this->items_per_page()
 		));
 	}
@@ -89,6 +95,7 @@ class balancer_board_keywords_tags extends base_page
 	{
 		template_noindex();
 		template_jquery();
+//		var_dump(bors_field_array_extract($this->all_items(), 'title'));
 		return parent::pre_show();
 	}
 

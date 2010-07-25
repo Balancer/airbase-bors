@@ -84,7 +84,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	{
 		if(!$this->id())
 			debug_exit('Try to init empty forum');
-			
+
 		return parent::init();
 	}
 
