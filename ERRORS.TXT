@@ -28,3 +28,11 @@ via http://balancer.ru/user/7367/warnings,2.html
 
 Некорректно отработала ссылка в начале: HTTP Error 403
 http://forums.airbase.ru/2010/06/t70285--massovoe-spisanie-samoletov-vvs-ssha.1480.html
+
+Импорт RSS. Сделать обработку картинок:
+http://balancer.ru/tech/forum/2010/07/t70656--yandex-source-fshoke-bez-temy.8250.html
+http://balancer.ru/tech/forum/2010/07/t70674--ya-navernoe-nikogda-ne-dorastu-do-ubuntu.8251.html#p2221453
+
+Проблемы с именами авторов старых сообщений
+-------------------------------------------
+http://la2.balancer.ru/forum/2010/07/t11026--flight-simulators-zhurnal-game-exe-ischet-obozrevatelya-razd.9196.html
