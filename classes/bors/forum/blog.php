@@ -69,4 +69,14 @@ class forum_blog extends base_page_db
 	function url() { return $this->post()->url(); }
 
 	function container() { return $this->topic(); }
+
+	function keywords() { return array_map('trim', explode(',', $this->keywords_string())); }
+	function set_keywords($keywords, $up)
+	{
+		sort($keywords, SORT_LOCALE_STRING);
+		$this->set_keywords_string(join(', ', array_unique($keywords)), $up);
+		if($up)
+			common_keyword_bind::add($this);
+		return $keywords;
+	}
 }

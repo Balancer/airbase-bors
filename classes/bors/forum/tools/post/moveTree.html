@@ -5,7 +5,7 @@
 {assign var="curtid" value=$this->topic|get:id}
 <select name="target_topic_id">
 {foreach from=$last_topics item="topic"}
-<option value="{$topic->id()}">{$topic->title()|truncate:40} [{$topic->forum()|get:title}]</option>
+<option value="{$topic->id()}">{$topic->title()|truncate:80} [{$topic->forum()|get:title}]</option>
 {/foreach}
 </select> {submit value="Переместить"}
 <br />{checkbox name="dont_move_tree"}&nbsp;Не перемещать ответы на это сообщение

@@ -506,28 +506,10 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	function set_keywords($keywords, $up)
 	{
 		sort($keywords, SORT_LOCALE_STRING);
-		return $this->set_keywords_string(join(', ', array_unique($keywords)), $up);
-	}
-
-	function add_keyword($keyword, $up)
-	{
-		$keywords = $this->keywords();
-		$keywords[] = $keyword;
-		$this->set_keywords($keywords, $up);
-	}
-
-	function remove_keyword($keyword, $up)
-	{
-		$keyword = trim($keyword);
-		$keywords = array();
-		foreach($this->keywords() as $kw)
-		{
-			$kw = trim($kw);
-			if($kw != $keyword)
-				$keywords[] = $kw;
-		}
-
-		$this->set_keywords($keywords, $up);
+		$this->set_keywords_string(join(', ', array_unique($keywords)), $up);
+		if($up)
+			common_keyword_bind::add($this);
+		return $keywords;
 	}
 
 	function template()

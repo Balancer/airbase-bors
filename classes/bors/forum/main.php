@@ -2,9 +2,9 @@
 
 class forum_main extends base_page
 {
-	function title() { return ec("Форумы Balancer'а"); }
-	function nav_name() { return ec('форумы'); }
-	function parents() { return array('http://balancer.ru/'); }
+	function title() { return ec("Старые форумы Balancer'а"); }
+	function nav_name() { return ec('старые'); }
+	function parents() { return array('http://forums.balancer.ru/'); }
 	function create_time() { return 943531800; }
 
 	function _queries()
