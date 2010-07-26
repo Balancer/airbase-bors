@@ -4,7 +4,7 @@ class forum_blog extends base_page_db
 {
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function can_be_empty() { return false; }
-	
+
 	function main_db() { return 'punbb'; }
 	function main_table() { return 'blog'; }
 
@@ -13,8 +13,9 @@ class forum_blog extends base_page_db
 		return array(
 			'id' => 'post_id',
 			'keywords_string',
-			'owner_id', 
-			'forum_id', 
+			'owner_id',
+			'topic_id',
+			'forum_id',
 			'blogged_time',
 			'is_public',
 		);
@@ -43,11 +44,29 @@ class forum_blog extends base_page_db
 			$blog->cache_clean_self($this->id());
 	}
 
-	function forum() { return object_load('airbase_board_forum', $this->forum_id()); }
-	function post() { return object_load('balancer_board_post', $this->id()); }
-	function topic() { return object_load('airbase_board_topic', $this->post()->topic_id()); }
+	function cache_clean_self()
+	{
+		parent::cache_clean_self();
+		bors()->changed_save();
+//		bors_exit('tid='.$this->post()->topic_id());
+		$this->set_topic_id(object_load('balancer_board_post', $this->id())->topic_id(), true);
+		$this->set_forum_id(object_load('balancer_board_topic', $this->topic_id())->forum_id(), true);
+		common_keyword_bind::add($this);
+	}
+
+	function auto_objects()
+	{
+		return array(
+			'post' => 'balancer_board_post(id)',
+			'topic' => 'balancer_board_topic(topic_id)',
+			'forum' => 'balancer_board_forum(forum_id)',
+		);
+	}
+
 	function owner() { return object_load('forum_user', $this->owner_id()); }
 	function title() { return $this->topic()->title(); }
 
 	function url() { return $this->post()->url(); }
+
+	function container() { return $this->topic(); }
 }

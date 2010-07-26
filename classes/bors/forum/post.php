@@ -508,11 +508,12 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		$GLOBALS['move_tree_to_topic_changed_topics'][$new_tid] = true;
 		$GLOBALS['move_tree_to_topic_changed_topics'][$this->topic_id()] = true;
 
-//		echo "Move {$this->id()} from {$this->topic_id()} to {$new_tid}<br />\n";
+//		echo "Move {$this->debug_title()} from {$this->topic_id()} to {$new_tid}<br />\n";
 
 		if($this->topic_id() == $old_tid)
 		{
 			$this->set_topic_id($new_tid, true);
+			$this->cache_clean();
 			cache_static::drop($this);
 		}
 
@@ -533,6 +534,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		object_load('forum_topic', $new_tid)->recalculate();
 
 		cache_static::drop($this);
+		$this->cache_clean();
 	}
 
 	function auto_search_index() { return $this->_source_changed; }
@@ -566,6 +568,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		$res = array(
 			object_load('forum_topic', $this->topic_id()),
 			object_load('airbase_user_topics', $this->owner_id()),
+			object_load('balancer_board_blog', $this->id()),
 		);
 
 		return $res;
