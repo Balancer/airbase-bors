@@ -577,6 +577,7 @@ if (isset($_POST['form_sent']))
 			$blog->new_instance();
 			$blog->set_owner_id($post->owner_id(), true);
 			$blog->set_keywords_string(@$_POST['keywords'], true);
+			$blog->set_topic_id($topic->id(), true);
 			$blog->set_forum_id($topic->forum_id(), true);
 			$blog->set_is_public($topic->is_public(), true);
 			$blog->store();

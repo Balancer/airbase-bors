@@ -130,7 +130,10 @@ class balancer_board_keywords_tags extends base_page
 		$items = array();
 		foreach(objects_array('common_keyword', array('keyword IN' => $keys_norm)) as $kw)
 		{
-			if($binds = objects_array('common_keyword_bind', array('keyword_id' => $kw->id())))
+			if($binds = objects_array('common_keyword_bind', array(
+					'keyword_id' => $kw->id(),
+					'target_class_id' => 2,
+				)))
 			{
 				$objects_map = array();
 				foreach($binds as $b)

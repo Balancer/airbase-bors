@@ -185,7 +185,7 @@ if (isset($_POST['form_sent']))
 		{
 			if(!$blog)
 			{
-				$blog = &new forum_blog($post->id());
+				$blog = new forum_blog($post->id());
 				$blog->new_instance();
 			}
 
