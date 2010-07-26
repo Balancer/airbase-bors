@@ -187,6 +187,16 @@ require PUN_ROOT.'header.php';
 
 forum_forum::all_forums_preload(true);
 
+?>
+<ul><li><b>
+<?
+	$self = object_load('http://balancer.ru/forum/');
+	$nav = object_load('module_nav_top', $self);
+	echo $nav->body();
+?>
+</li></b></ul>
+<?
+
 include_once("include/subforums.php");
 $ich = new bors_cache();
 if($ich->get("subforums-text-v4", $pun_config['root_uri']))// && !debug_is_balancer()

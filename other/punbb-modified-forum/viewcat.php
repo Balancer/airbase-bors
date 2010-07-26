@@ -55,6 +55,8 @@ if(!$id)
 	}
 }
 
+$category = object_load('balancer_board_category', $id);
+
 include_once("tools/inc.php");
 $ids = punbb_get_all_subcategories($id);
 $ids[] = $id;
@@ -111,6 +113,14 @@ while ($cur_forum = $db->fetch_assoc($result))
 			$cur_forum['cat_name'] = $cat_names[$cur_forum['cat_parent']]." : ".$cur_forum['cat_name'];
 
 ?>
+
+<ul><li><b>
+<?
+	$nav = object_load('module_nav_top', $category);
+	echo $nav->body();
+?>
+</li></b></ul>
+
 <div id="idx<?echo $cat_count;/*"*/?>" class="blocktable">
 	<h2><span><?php echo pun_htmlspecialchars($cur_forum['cat_name']) ?></span></h2>
 	<div class="box">
