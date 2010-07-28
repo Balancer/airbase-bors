@@ -3,6 +3,8 @@
 $map = array(
 	'/ => airbase_main',
 
+	'(/top/)(\d+)/ => aviatop_member(2)',
+
 	'(/top/)logos/(\d+)\.png => airbase_top_logo(2)',
 	'(/top/)\?img=(\d+) => airbase_top_logo(2)',
 	'(/top/)(\d+)\.png => airbase_top_logo(2)',

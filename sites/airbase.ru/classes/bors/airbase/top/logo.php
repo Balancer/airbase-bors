@@ -5,12 +5,12 @@ class airbase_top_logo extends base_image_png
 	function make_image()
 	{
 		$id = $this->id();
-		$db = &new DataBase('top');
-		
+		$db = new driver_mysql('top');
+
 		$x = $db->get("SELECT place, visits FROM aviatop_members WHERE id = $id");
 		$place  = $x['place'];
 		$visits = $x['visits'];
-			
+
 		$x  = $db->get("SELECT SUM(visits) as sum, MIN(check_time) as min, MAX(check_time) as max FROM aviatop_week WHERE top_id = $id");
 		$rate = $x['sum']*86400/($x['max'] - $x['min']+1);
 
@@ -32,19 +32,31 @@ class airbase_top_logo extends base_image_png
 		chmod("$path/$id.png", 0664);
 
 		imagedestroy($img);
-			
+
 		return "http://airbase.ru/top/logos/$id.png";
 	}
 
 	function image()
 	{
+		// Не используем статическое кеширование объекта.
+		// Инкрементим обращения вручную.
+//		if($this->cache_static() == 0)
+		{
+			$this->views_inc();
+		}
+
 		$id = $this->id();
-		$db = &new DataBase('top');
-		
+
+		$cache = new bors_cache_file(NULL);
+		if($cache->get('aviatop_logo', $id))
+			return $cache->last();
+
+		$db = new driver_mysql('top');
+
 		$x = $db->get("SELECT place, visits FROM aviatop_members WHERE id = $id");
 		$place  = $x['place'];
 		$visits = $x['visits'];
-			
+
 		$x  = $db->get("SELECT SUM(visits) as sum, MIN(check_time) as min, MAX(check_time) as max FROM aviatop_week WHERE top_id = $id");
 		$rate = $x['sum']*86400/($x['max'] - $x['min']+1);
 
@@ -65,8 +77,8 @@ class airbase_top_logo extends base_image_png
 		ob_end_clean();
 
 		imagedestroy($img);
-			
-		return $png;
+
+		return $cache->set($png, 600);
 	}
 
 	function PutS($img, $y, $s, $c)
@@ -75,6 +87,23 @@ class airbase_top_logo extends base_image_png
 	}
 
 	function url() { return "http://airbase.ru/top/logos/{$this->id()}.png"; }
-	
-	function cache_static() { return 600; }
+
+//	function cache_static() { return 600; }
+
+	function views_inc()
+	{
+		$time = time();
+		$prev = objects_first('aviatop_week', array('top_id' => $this->id(), 'check_time' => $time));
+		if(!$prev || !$prev->id())
+		{
+			$prev = object_new_instance('aviatop_week', array(
+				'top_id' => $this->id(),
+				'visits' => 0,
+				'check_time' => time(),
+			));
+		}
+
+		$prev->set_visits($prev->visits() + 1, true);
+		$prev->store();
+	}
 }
