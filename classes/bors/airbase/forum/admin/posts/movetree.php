@@ -33,9 +33,9 @@ class airbase_forum_admin_posts_movetree extends base_page
 		$topics = array();
 		if(!empty($_SESSION['bba_last_target_topic_id']))
 			$topics[] = object_load('forum_topic', $_SESSION['bba_last_target_topic_id']);
-	
-		$topics = array_merge($topics, objects_array('forum_topic', array('order' => '-last_post' , 'limit' => 100)));
-	
+
+		$topics = array_merge($topics, objects_array('forum_topic', array('order' => '-last_post' , 'limit' => 200)));
+
 		return array(
 			'posts' => $this->posts(),
 			'last_topics' => $topics,
