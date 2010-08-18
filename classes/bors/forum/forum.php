@@ -315,4 +315,9 @@ function parents()
 			'inner_join' => 'balancer_board_topic ON (balancer_board_topic.id = balancer_board_post.topic_id AND balancer_board_topic.forum_id='.$this->id().')'
 		)), true);
 	}
+
+	function recalculate()
+	{
+		$this->update_num_topics();
+	}
 }
