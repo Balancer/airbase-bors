@@ -638,4 +638,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		return $this->topic()->last_visit_time_for_user($user) > $this->last_post_create_time();
 	}
+
+	function on_delete_pre() { $this->topic(); }
+	function on_delete_post() { $this->topic()->recalculate(); }
 }

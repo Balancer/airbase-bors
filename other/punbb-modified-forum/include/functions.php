@@ -961,6 +961,9 @@ H2 {MARGIN: 0; COLOR: #FFFFFF; BACKGROUND-COLOR: #B84623; FONT-SIZE: 1.1em; PADD
 
 			if ($db_error['error_sql'] != '')
 				echo "\t\t".'<br /><br /><strong>Failed query:</strong> '.pun_htmlspecialchars($db_error['error_sql'])."\n";
+			echo "Если проблема постоянна и к форуму нет доступа, попробуйте заглянуть
+			за подробностями на <a href=\"http://balancer.endofinternet.net/mybb/forum-2.html\">Запасной форум</a>
+			или на <a href=\"http://bal.livejournal.com/\">bal.livejournal.com</a>";
 		}
 	}
 	else

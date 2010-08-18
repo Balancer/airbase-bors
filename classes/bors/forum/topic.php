@@ -566,4 +566,7 @@ $(function() {
 			'user_id=' => $user->id(), 
 			'topic_id=' => $this->id())));
 	}
+
+	function on_delete_pre() { $this->forum(); }
+	function on_delete_post() { $this->forum()->recalculate(); }
 }
