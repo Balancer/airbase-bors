@@ -550,7 +550,8 @@ $(function() {
 });
 '		);
 */
-		return false;
+		$this->tools()->use_ajax();
+		return parent::pre_show();
 	}
 
 	function auto_objects()
