@@ -1,0 +1,19 @@
+{if $items}
+<table class="btab w100p">
+<tr>
+	<th>Сообщение</th>
+	<th>Отметка</th>
+</tr>
+{foreach from=$items item="x"}
+<tr>
+	<td><b>{$x->titled_url()}</b>{if $x->description()}<br/><small>{$x->description()}</small>{/if}</td>
+	<td>{$x->tools()->favorite_link_ajax()}</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
+<ul>
+{if not $items}<li>Ваше избранное пусто</li>{/if}
+<li><a href="http://balancer.ru/support/2010/08/t72893--polzovatelskie-izbrannye-soobscheniya.6511.html">Обсуждение и вопросы на форуме</a></li>
+</ul>
