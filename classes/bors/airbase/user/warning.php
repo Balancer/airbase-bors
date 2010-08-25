@@ -10,6 +10,7 @@ class airbase_user_warning extends base_object_db
 		return array('punbb' => array('warnings' => array(
 			'id',
 			'user_id',
+//			'create_time' => array('name' => 'time', 'comment' => 'Дата выставления'),
 			'create_time' => 'time',
 			'score_db' => 'score',
 			'type_id',
