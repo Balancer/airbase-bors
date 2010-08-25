@@ -34,6 +34,7 @@ class forum_topic extends forum_abstract
 			'last_visit_time' => 'last_visit',
 			'last_edit_time' => 'last_edit',
 			'sticky',
+			'moved_to',
 			'closed',
 			'keywords_string_db' => 'keywords_string',
 		);
@@ -530,6 +531,9 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	{
 		if($this->page() > $this->total_pages())
 			return go($this->url($this->total_pages()));
+
+		if($this->moved_to())
+			return go(object_load('balancer_board_topic', $this->moved_to())->url($this->page()));
 
 		template_jquery();
 //		template_jquery_plugin_lazyload();
