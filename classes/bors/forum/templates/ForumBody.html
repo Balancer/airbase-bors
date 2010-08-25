@@ -3,6 +3,8 @@
 	{include file="xfile:templates/forums-list.html"}
 {/if}
 
+{$this->pages_links_nul()}
+
 <table class="btab small w100p" cellSpacing="0">
 <tr>
 	<th>&nbsp;</th>
@@ -11,7 +13,7 @@
 	<th>Обновлено</th>
 </tr>
 {foreach from=$topics item=topic_id}
-{bors_class_load var=t class="forum_topic" id=$topic_id}
+{bors_object_load var=t class=$forum_topic_class id=$topic_id}
 {assign var=f value=$t->forum()}
 {assign var=o value=$t->owner()}
 <tr class="tr_forum_{$f->id()}">
@@ -24,3 +26,5 @@
 </tr>
 {/foreach}
 </table>
+
+{$this->pages_links_nul()}

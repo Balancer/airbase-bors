@@ -2,7 +2,7 @@
 
 class forum_tools_post_do extends base_page
 {
-	function main_db_storage() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 
 	function can_cache() { return false; }
 

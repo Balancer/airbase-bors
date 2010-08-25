@@ -3,7 +3,7 @@
 class forum_forum extends base_page_db
 {
 	function main_table() { return 'forums'; }
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 
 	function main_table_fields()
 	{
@@ -98,7 +98,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	
 		$f = $this;
 		while($f->category_id() == 0)
-			$f = object_load('forum_forum', $f->parent_forum_id());
+			$f = object_load(config('punbb.forum_class', 'forum_forum'), $f->parent_forum_id());
 
 		return $this->__category = object_load('forum_category', $f->category_id());
 	}
@@ -125,11 +125,12 @@ function parents()
 
 		$data = array();
 
-		$topics_per_page = 50;
+		$topics_per_page = $this->items_per_page();
 		$start_from = ($this->page() - 1) * $topics_per_page;
-			
-		$db = new driver_mysql('punbb');
+
+		$db = new driver_mysql(config('punbb.database', 'punbb'));
 		$data['topics'] = $db->get_array("SELECT id FROM topics WHERE forum_id IN (".join(",", $this->all_readable_subforum_ids()).") ORDER BY last_post DESC LIMIT $start_from, $topics_per_page");
+		$data['forum_topic_class'] = config('punbb.forum_topic_class', 'forum_topic');
 		$db->close(); $db = NULL;
 
 //			foreach($topics as $tid)
@@ -139,6 +140,9 @@ function parents()
 
 		return template_assign_data("templates/ForumBody.html", $data);
 	}
+
+	function items_per_page() { return 50; }
+	function total_items() { return $this->db()->select('topics', 'COUNT(*)', array("(forum_id IN (".join(",", $this->all_readable_subforum_ids())."))")) ; }
 
 	//TODO: тут гости у нас строго 3-я группа!
 	function is_public_access()
@@ -168,7 +172,7 @@ function parents()
 	{ 
 		$children_caches = array();
 		if($this->parent_forum_id())
-			$children_caches[] = class_load('forum_forum', $this->parent_forum_id());
+			$children_caches[] = class_load(config('punbb.forum_class', 'forum_forum'), $this->parent_forum_id());
 
 		if($this->category_id())
 			$children_caches[] = class_load('forum_category', $this->category_id());
@@ -186,7 +190,7 @@ function parents()
 	function direct_subforums_ids()
 	{
 		// Получаем одни forum_id для дочерних форумов первого уровня
-		$db = new driver_mysql('punbb');
+		$db = new driver_mysql(config('punbb.database', 'punbb'));
 		$result =  $db->get_array("SELECT id FROM forums WHERE parent = {$this->id()}");
 		$db->close(); 
 		$db = NULL;
@@ -197,7 +201,7 @@ function parents()
 	{
 		$subforums = array();
 		foreach($this->direct_subforums_ids() as $forum_id)
-			$subforums[] = class_load('forum_forum', $forum_id);
+			$subforums[] = class_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
 		return $subforums;
 	}
 		
@@ -211,8 +215,8 @@ function parents()
 				continue;
 
 			$processed[] = $forum_id;
-			$subforum = $forums[] = class_load('forum_forum', $forum_id);
-			$forums = array_merge($forums, $subforum->all_subforums(&$processed));
+			$subforum = $forums[] = class_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
+			$forums = array_merge($forums, $subforum->all_subforums($processed));
 		}
 			
 		return $forums;
@@ -226,7 +230,7 @@ function parents()
 			return;
 
 		$preloaded = true;
-		$all = objects_array('forum_forum', array('order' => 'sort_order'));
+		$all = objects_array(config('punbb.forum_class', 'forum_forum'), array('order' => 'sort_order'));
 		if($update_pos)
 			foreach($all as $f)
 				$f->tree_position();
@@ -238,7 +242,7 @@ function parents()
 			return $ids;
 
 		$this->all_forums_preload();
-
+/*
 		if(debug_is_balancer())
 		{
 			$dbh = new driver_mysql($this->main_db());
@@ -247,7 +251,7 @@ function parents()
 			$subforum_ids = array();
 			return $this->set_attr('all_readable_subforum_ids', $subforum_ids);
 		}
-	
+*/
 		$forums = array($this->id());
 			
 		foreach($this->direct_subforums_ids() as $forum_id)
@@ -256,8 +260,8 @@ function parents()
 				continue;
 
 			$processed[] = $forum_id;
-			$subforum = object_load('forum_forum', $forum_id);
-			$forums = array_merge($forums, $subforum->all_readable_subforum_ids(&$processed));
+			$subforum = object_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
+			$forums = array_merge($forums, $subforum->all_readable_subforum_ids($processed));
 		}
 			
 		return $this->set_attr('all_readable_subforum_ids', $forums);
@@ -277,9 +281,9 @@ function parents()
 				continue;
 
 			$processed[] = $forum_id;
-			$subforum = object_load('forum_forum', $forum_id);
+			$subforum = object_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
 			if($subforum && $subforum->is_public_access())
-				$forums = array_merge($forums, $subforum->all_readable_subforum_ids(&$processed, false));
+				$forums = array_merge($forums, $subforum->all_readable_subforum_ids($processed, false));
 		}
 
 		if($root)

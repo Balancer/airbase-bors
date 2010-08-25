@@ -7,7 +7,7 @@ include_once('inc/browsers.php');
 
 class forum_post extends base_object_db
 {
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'posts'; }
 
 	function main_db_fields()
@@ -203,7 +203,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if(!$this->flag_db() || !preg_match("!>$!", $this->flag_db()))
 		{
 			include_once('funcs/users/geoip/get_flag.php');
-			$db = new driver_mysql('punbb');
+			$db = new driver_mysql(config('punbb.database', 'punbb'));
 			$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
 			$this->set_flag_db(get_flag($this->poster_ip(), $this->owner()), true);
 			$db->close();

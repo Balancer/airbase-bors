@@ -2,9 +2,9 @@
 
 class forum_group extends base_page_db
 {
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'groups'; }
-	
+
 	function main_table_fields()
 	{
 		return array(

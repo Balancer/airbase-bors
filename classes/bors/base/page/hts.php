@@ -25,13 +25,16 @@ class base_page_hts extends base_page_db
 
 	function loaded() { return $this->create_time(true) || $this->source(); } //TODO: придумать что-то более адекватно. title() сейчас может не понимать true
 
+//	function main_db() { return config('hts.database', 'HTS'); }
+//	function main_table_storage() { return NULL; }
+	function fields_first() { return 'stb_title stb_source stb_description'; }
 	function main_db() { return config('mysql_database'); }
 	function main_table() { return NULL; }
 
 	function fields()
 	{
 		return array(
-			'HTS' => array(
+			config('hts.database', 'HTS') => array(
 				'hts_data_source' => array('source' => 'value'),
 				'hts_data_title'  => array('title'  => 'value'),
 				'hts_data_description'  => array('description'  => 'value'),
@@ -40,7 +43,6 @@ class base_page_hts extends base_page_db
 				'hts_data_nav_name'  => array('nav_name'  => 'value'),
 				'hts_data_cr_type'  => array('cr_type'  => 'value'),
 				'hts_data_template'  => array('template_db'  => 'value'),
-				'hts_data_compile_time'  => array('compile_time'  => 'value'),
 			),
 		);
 	}
@@ -50,7 +52,7 @@ class base_page_hts extends base_page_db
 		if($ps = $this->attr('parents'))
 			return $ps;
 
-		return $this->set_attr('parents', $this->db()->select_array('hts_data_parent', 'value', array('id=' => $this->id())));
+		return $this->set_attr('parents', $this->db(config('hts.database', 'HTS'))->select_array('hts_data_parent', 'value', array('id=' => $this->id())));
 	}
 
 	function set_parents($array, $db_up)

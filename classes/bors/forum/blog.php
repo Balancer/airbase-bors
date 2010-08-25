@@ -5,8 +5,8 @@ class forum_blog extends base_page_db
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function can_be_empty() { return false; }
 
-	function main_db() { return 'punbb'; }
-	function main_table() { return 'blog'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
+	function main_table_storage() { return 'blog'; }
 
 	function main_table_fields()
 	{

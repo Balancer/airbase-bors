@@ -38,7 +38,7 @@ class forum_tools_topic extends base_page
 
 	function local_data()
 	{
-		$dbh = new driver_mysql('punbb');
+		$db = new driver_mysql(config('punbb.database', 'punbb'));
 
 		return array(
 			'me' => bors()->user(),

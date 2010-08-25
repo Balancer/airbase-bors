@@ -40,7 +40,7 @@ class balancer_board_topic extends forum_topic
 
 	static function sitemap_last_modify_time($domain, $page, $per_page)
 	{
-		$dbh = new driver_mysql('punbb');
+		$dbh = new driver_mysql(config('punbb.database', 'punbb'));
 		$dates = $dbh->select_array('topics', 'last_post', array(
 			'forum_id IN' => self::_forum_ids($domain),
 			'page' => $page,

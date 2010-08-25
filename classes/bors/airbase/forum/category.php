@@ -4,7 +4,7 @@ require_once('inc/strings.php');
 
 class airbase_forum_category extends base_object_db
 {
-	function main_db_storage() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table_storage() { return 'categories'; }
 	function main_table_fields()
 	{

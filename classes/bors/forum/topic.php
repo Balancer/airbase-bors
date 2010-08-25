@@ -1,14 +1,15 @@
 <?php
 
-class forum_topic extends forum_abstract
+class forum_topic extends base_page_db
 {
-	function storage_engine() { return 'storage_db_mysql_smart'; }
+//	function storage_engine() { return 'storage_db_mysql_smart'; }
+	function storage_engine() { return 'bors_storage_mysql'; }
 	function can_be_empty() { return false; }
 
 	function uri_name() { return 't'; }
 	function nav_name() { return truncate($this->title(), 60); }
 
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'topics'; }
 
 	function main_table_fields()
@@ -269,7 +270,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if($this->total_pages() < 2)
 			return "";
 
-		include_once('funcs/design/page_split.php');
+		include_once('inc/design/page_split.php');
 		return join(" ", pages_show($this, $this->total_pages(), 15));
 	}
 
@@ -278,7 +279,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if($this->total_pages() < 2)
 			return "";
 
-		include_once('funcs/design/page_split.php');
+		include_once('inc/design/page_split.php');
 		return join(" ", pages_show($this, $this->total_pages(), 5, false));
 	}
 

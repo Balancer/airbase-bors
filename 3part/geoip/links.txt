@@ -1,2 +1,0 @@
-http://www.maxmind.com/download/geoip/api/php/
-http://weblogexpert.com/download.htm

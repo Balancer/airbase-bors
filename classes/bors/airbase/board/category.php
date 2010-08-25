@@ -4,8 +4,9 @@ require_once('inc/strings.php');
 
 class airbase_board_category extends base_object_db
 {
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'categories'; }
+
 	function main_table_fields()
 	{
 		return array(
@@ -86,7 +87,7 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 	function direct_subforums_ids()
 	{
 		// Получаем одни forum_id для дочерних форумов первого уровня
-		$db = &new DataBase('punbb');
+		$db = &new DataBase(self::main_db());
 		$result = $this->db()->select_array('forums', 'id', array('cat_id' => $this->id()));
 		$db->close();
 		return $result;

@@ -2,7 +2,7 @@
 
 class airbase_board_topic extends forum_topic
 {
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'topics'; }
 
 	function uri_name() { return 't'; }

@@ -2,8 +2,8 @@
 
 class balancer_board_forum extends base_page_db
 {
-	function main_table_storage() { return 'forums'; }
-	function main_db_storage() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
+	function main_table() { return 'forums'; }
 
 	function main_table_fields()
 	{
@@ -82,10 +82,21 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		if(!$gid)
 			$gid = 3;
 
-		$can_read = class_load('balancer_board_access', "{$this->id()}:$gid")->can_read();
+		$can_read = class_load('balancer_board_access', "{$this->id()}:$gid");
+		if($can_read)
+			$can_read = $can_read->can_read();
+		else
+			$can_read = NULL;
 
 		if($can_read === NULL)
-			$can_read = class_load('balancer_board_group', $gid)->can_read();
+		{
+			$can_read = class_load('balancer_board_group', $gid);
+			if($can_read)
+				$can_read = $can_read->can_read();
+		}
+
+		if($can_read === NULL)
+			return true;
 
 		return $can_read;
 	}

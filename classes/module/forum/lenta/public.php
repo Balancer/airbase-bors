@@ -4,7 +4,7 @@ require_once('inc/lists.php');
 
 class module_forum_lenta_public extends base_page
 {
-	function main_db_storage(){ return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 
 	private $bdata = array();
 	function local_template_data_set()
