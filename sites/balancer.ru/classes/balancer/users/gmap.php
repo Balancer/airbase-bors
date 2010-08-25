@@ -17,7 +17,7 @@ class balancer_users_gmap extends bors_page
 		template_js_include("/js/tlabel.2.05.js");
 
 		$ll = array();
-		foreach(objects_array('bors_access_log', array('user_id>' => 0, 'group' => 'user_id')) as $x)
+		foreach(objects_array('bors_access_log', array('user_id>' => 0, 'user_ip<>' => '', 'group' => 'user_id', 'order' => 'COUNT(*)')) as $x)
 		{
 			list($country_code, $country_name, $city_name, $city_object) = geoip_info($x->user_ip());
 			if($city_object && $x->user()->use_avatar())
@@ -29,7 +29,7 @@ class balancer_users_gmap extends bors_page
 l.id = 'u{$x->user_id()}'
 l.anchorLatLng = new GLatLng (".str_replace(',','.',$lat).", ".str_replace(',','.', $long).")
 l.anchorPoint = 'center';
-l.content = '<a href=\"/user/{$x->user_id()}/\" target=\"_blank\"><img class=\"g\" src=\"/cache/forum/punbb/img/avatars/48x48/{$x->user()->use_avatar()}\" title=\"{$x->user()->title()}\" /></a>'
+l.content = '<a href=\"/user/{$x->user_id()}/\" target=\"_blank\"><img class=\"g\" src=\"/cache/forum/punbb/img/avatars/48x48/{$x->user()->use_avatar()}\" title=\"{$x->user()->title()}, $city_name, $country_name\" /></a>'
 map.addTLabel(l)
 ";
 //l.percentOpacity = 80;

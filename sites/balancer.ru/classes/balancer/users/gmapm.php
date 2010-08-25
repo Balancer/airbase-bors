@@ -1,9 +1,9 @@
 <?php
 
-class balancer_users_gmapd extends bors_page
+class balancer_users_gmapm extends bors_page
 {
-	function title() { return ec('Карта авторов сообщений за сутки'); }
-	function nav_name() { return ec('карта авторов сообщений за сутки'); }
+	function title() { return ec('Карта авторов сообщений за месяц'); }
+	function nav_name() { return ec('карта авторов сообщений за месяц'); }
 	function config_class() { return 'balancer_board_config'; }
 
 	function is_auto_url_mapped_class() { return true; }
@@ -17,7 +17,7 @@ class balancer_users_gmapd extends bors_page
 		template_js_include("/js/tlabel.2.05.js");
 
 		$ll = array();
-		foreach(objects_array('balancer_board_post', array('create_time>' => time()-86400, 'poster_ip<>' => '', 'group' => 'owner_id', 'order' => 'COUNT(*)')) as $x)
+		foreach(objects_array('balancer_board_post', array('create_time>' => time()-86400*30, 'poster_ip<>' => '', 'group' => 'owner_id', 'order' => 'COUNT(*)')) as $x)
 		{
 			list($country_code, $country_name, $city_name, $city_object) = geoip_info($x->poster_ip());
 //			if(debug_is_balancer() && $x->owner_id() == 10000)

@@ -79,6 +79,14 @@ class user_main extends base_page
 			'messages_today' => objects_count('forum_post', array('owner_id' => $this->id(), 'create_time>' => time()-86400)),
 			'messages_today_by_forums' => $by_forums,
 			'messages_month_by_forums' => $by_forums_for_month,
+			'today_total' => objects_count('balancer_board_post', array(
+				'owner_id' => $this->id(),
+				'create_time>' => time()-86400,
+			)),
+			'tomonth_total' => objects_count('balancer_board_post', array(
+				'owner_id' => $this->id(),
+				'create_time>' => time()-86400*30,
+			)),
 		);
 	}
 }
