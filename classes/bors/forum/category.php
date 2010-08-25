@@ -2,7 +2,7 @@
 
 class forum_category extends base_object_db
 {
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'categories'; }
 	function main_table_fields()
 	{
@@ -14,6 +14,7 @@ class forum_category extends base_object_db
 			'category_base' => 'base_uri',
 			'bors_append',
 			'template',
+			'category_template' => 'template',
 		);
 	}
 

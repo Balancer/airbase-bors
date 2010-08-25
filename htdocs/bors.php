@@ -17,6 +17,5 @@
 
 	// Путь к системному кешу (шаблоны Smarty и т.п.), может не совпадать с HTTP-кешем.
 	define('BORS_SYSTEM_CACHE', $_SERVER['DOCUMENT_ROOT'].'/../cache/');
-	
-	include_once(BORS_INCLUDE.'config.php');
+
 	include_once(BORS_INCLUDE.'main.php');

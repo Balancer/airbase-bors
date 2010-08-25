@@ -5,12 +5,13 @@ class airbase_forum_access extends base_object_db
 	private $forum_id = '';
 	private $group_id = '';
 
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'forum_perms'; }
 
 	function __construct($id)
 	{
 		list($this->forum_id, $this->group_id) = explode(':', $id);
+//		echo $this->forum_id.','. $this->group_id;
 		parent::__construct($id);
 	}
 
@@ -30,5 +31,4 @@ function can_post() { return @$this->data['can_post']; }
 function set_can_post($v, $dbup) { return $this->set('can_post', $v, $dbup); }
 function can_new() { return @$this->data['can_new']; }
 function set_can_new($v, $dbup) { return $this->set('can_new', $v, $dbup); }
-
 }

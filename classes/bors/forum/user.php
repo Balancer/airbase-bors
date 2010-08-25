@@ -2,7 +2,7 @@
 
 class forum_user extends base_object_db
 {
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'users'; }
 
 	static function id_prepare($id)
@@ -211,7 +211,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		global $bors_forum_user_ranks;
 		if($bors_forum_user_ranks === NULL)
 		{
-			$db = new driver_mysql('punbb');
+			$db = new driver_mysql(config('punbb.database', 'punbb'));
 			$bors_forum_user_ranks = $db->select_array('ranks', 'rank, min_posts', array('order' => '-min_posts'));
 			$db->close();
 		}
@@ -301,7 +301,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 
 	function warnings_in($forum_id)
 	{
-		return intval($this->db('punbb')->select('warnings', 'SUM(score)', array(
+		return intval($this->db(config('punbb.database', 'punbb'))->select('warnings', 'SUM(score)', array(
 			'user_id' => $this->id(),
 			'posts.posted>' => time()-86400*14,
 			'inner_join' => array('forum_post ON forum_post.id = airbase_user_warning.warn_object_id', 'topics ON topics.id = posts.topic_id'),
@@ -317,7 +317,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		if(!$user_hash_password)
 			return 0;
 
-		$db = new driver_mysql('punbb');
+		$db = new driver_mysql(config('punbb.database', 'punbb'));
 		$result = intval($db->select('users', 'id', array('user_cookie_hash=' => $user_hash_password)));
 		$db->close();
 		return $result;
@@ -328,11 +328,11 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		switch($type)
 		{
 			case 'per_posts_and_time':
-				$total_posts = $this->db('punbb')->select('posts', 'COUNT(*)', array(
+				$total_posts = $this->db(config('punbb.database', 'punbb'))->select('posts', 'COUNT(*)', array(
 					'poster_id' => $this->id(),
 					'posted>' => time() - 86400*$period,
 				));
-				$total_warns = $this->db('punbb')->select('warnings', 'SUM(score)', array(
+				$total_warns = $this->db(config('punbb.database', 'punbb'))->select('warnings', 'SUM(score)', array(
 					'user_id' => $this->id(),
 					'time>' => time() - 86400*$period,
 				));

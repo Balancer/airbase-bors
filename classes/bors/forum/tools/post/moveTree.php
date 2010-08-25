@@ -8,7 +8,7 @@ class forum_tools_post_moveTree extends base_page
 
 	function parents() { return array('forum_post://'.$this->post()->id()); }
 	
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 
 	var $post, $topic;
 	function post() { return $this->post; }

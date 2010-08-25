@@ -2,7 +2,7 @@
 
 class balancer_board_action extends base_page_db
 {
-	function main_db() { return 'punbb'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'board_actions'; }
 	function main_table_fields()
 	{

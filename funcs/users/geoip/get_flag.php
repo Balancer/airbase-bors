@@ -2,9 +2,9 @@
 
 global $GEOIP_REGION_NAME;
 
-include_once('geoip/geoip.inc');
-include_once('geoip/geoipcity.inc');
-include_once('geoip/geoipregionvars.php');
+require_once(BORS_3RD_PARTY.'/geoip/geoip.inc');
+require_once(BORS_3RD_PARTY.'/geoip/geoipcity.inc');
+require_once(BORS_3RD_PARTY.'/geoip/geoipregionvars.php');
 
 function get_flag($ip, $owner = NULL)
 {
