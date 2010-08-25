@@ -29,7 +29,7 @@ class balancer_users_gmap extends bors_page
 l.id = 'u{$x->user_id()}'
 l.anchorLatLng = new GLatLng (".str_replace(',','.',$lat).", ".str_replace(',','.', $long).")
 l.anchorPoint = 'center';
-l.content = '<img class=\"g\" src=\"/cache/forum/punbb/img/avatars/48x48/{$x->user()->use_avatar()}\" title=\"{$x->user()->title()}\" />'
+l.content = '<a href=\"/user/{$x->user_id()}/\" target=\"_blank\"><img class=\"g\" src=\"/cache/forum/punbb/img/avatars/48x48/{$x->user()->use_avatar()}\" title=\"{$x->user()->title()}\" /></a>'
 map.addTLabel(l)
 ";
 //l.percentOpacity = 80;
