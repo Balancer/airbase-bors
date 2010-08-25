@@ -172,7 +172,16 @@ function use_avatar()
 
 	return $this->set_use_avatar($user_avatar, true);
 }
-	
+/*
+function avatar_thumb($geo)
+{
+	$ava = $this->use_avatar();
+	if(!$ava)
+		return NULL;
+
+	return preg_replace('!^(.+/)([^/]+)$!', '/cache$1');
+}
+*/
 function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
 
 	var $_title = NULL;
