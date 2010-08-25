@@ -1,9 +1,9 @@
 <?php
 
-class balancer_users_gmap extends bors_page
+class balancer_users_gmapd extends bors_page
 {
-	function title() { return ec('Карта пользователей онлайн'); }
-	function nav_name() { return ec('карта пользователей онлайн'); }
+	function title() { return ec('Карта авторов сообщений за сутки'); }
+	function nav_name() { return ec('карта авторов сообщений за сутки'); }
 	function config_class() { return 'balancer_board_config'; }
 
 	function is_auto_url_mapped_class() { return true; }
@@ -17,19 +17,19 @@ class balancer_users_gmap extends bors_page
 		template_js_include("/js/tlabel.2.05.js");
 
 		$ll = array();
-		foreach(objects_array('bors_access_log', array('user_id>' => 0, 'group' => 'user_id')) as $x)
+		foreach(objects_array('balancer_board_post', array('create_time>' => time()-86400, 'group' => 'owner_id')) as $x)
 		{
-			list($country_code, $country_name, $city_name, $city_object) = geoip_info($x->user_ip());
-			if($city_object && $x->user()->use_avatar())
+			list($country_code, $country_name, $city_name, $city_object) = geoip_info($x->poster_ip());
+			if($city_object && ($ava = $x->owner()->use_avatar()))
 			{
 				$lat = $city_object->latitude + rand(-100, 100)/500;
 				$long = $city_object->longitude + rand(-100, 100)/500;
 
 				$code = "var l = new TLabel()
-l.id = 'u{$x->user_id()}'
+l.id = 'u{$x->owner_id()}'
 l.anchorLatLng = new GLatLng (".str_replace(',','.',$lat).", ".str_replace(',','.', $long).")
 l.anchorPoint = 'center';
-l.content = '<img class=\"g\" src=\"/cache/forum/punbb/img/avatars/48x48/{$x->user()->use_avatar()}\" title=\"{$x->user()->title()}\" />'
+l.content = '<img class=\"g\" src=\"/cache/forum/punbb/img/avatars/48x48/$ava\" title=\"{$x->author_name()}\" />'
 map.addTLabel(l)
 ";
 //l.percentOpacity = 80;
