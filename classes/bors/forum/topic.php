@@ -35,6 +35,7 @@ class forum_topic extends forum_abstract
 			'last_edit_time' => 'last_edit',
 			'sticky',
 			'moved_to',
+			'joined_to_topic_id', // id темы, к которой была присоединена данная.
 			'closed',
 			'keywords_string_db' => 'keywords_string',
 		);

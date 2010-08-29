@@ -20,7 +20,7 @@ class user_image_reputation extends base_image_gif
 			$star = imagecreatefromgif("/var/www/balancer.ru/htdocs/img/web/stars/2/star-black.gif");
 			$star_empty  = imagecreatefromgif("/var/www/balancer.ru/htdocs/img/web/stars/star-black-empty.gif");
 		}
-		
+
 		$sx = imagesx($star);
 		$sy = imagesy($star);
 
@@ -34,7 +34,7 @@ class user_image_reputation extends base_image_gif
 
 		$img  = imagecreatetruecolor($ww, $hh);
 		$img_filled = imagecreatetruecolor($ww, $hh);
-		
+
 		$white = imagecolorallocate($img, 255, 255, 255);
 		$grey  = imagecolorallocate($img, 128, 128, 192);
 
@@ -43,7 +43,7 @@ class user_image_reputation extends base_image_gif
 
 		imagefill($img, 0, 0, $transparent);
 		imagefill($img_filled, 0, 0, $transparent);
-		
+
 		// Заполняем пустыми звёздами
 //		for($i=0; $i<5; $i++)
 //			imagecopy($img, $star_empty, $offset + $i*$sx, 0, 0, 0, imagesx($star), imagesy($star));
@@ -51,7 +51,7 @@ class user_image_reputation extends base_image_gif
 		// Заполняем полными звёздами
 		for($i=0; $i<5; $i++)
 			imagecopy($img_filled, $star, $offset + $i*$sx, 0, 0, 0, imagesx($star), imagesy($star));
-		
+
 		if($reputation_abs)
 			imagecopy($img, $img_filled, 0, 0, 0, 0, $offset + $reputation_abs, 20);
 
@@ -61,10 +61,10 @@ class user_image_reputation extends base_image_gif
 		imagedestroy($star);
 		imagedestroy($star_empty);
 	}
-	
+
 	function url() { return "http://balancer.ru/user/{$this->id()}/rep.gif"; }
-	
+
 	function cache_static() { return rand(3600*10, 3600*30); }
-	
+
 	function cache_groups() { return "user-{$this->id()}-reputation"; }
 }

@@ -6,7 +6,6 @@
 
 <h6>Инструменты координатора</h6>
 <ul>
-<li{if $overquote_crit} style="color:red!important"{/if}>Уровень цитирования: {$overquote}%</li>
 <li><a href="http://balancer.ru/admin/users/{$owner_id}/warnings.html?object={$p->internal_uri()}"><img src="http://balancer.ru/img/web/skull.gif" />&nbsp;Выставить штраф пользователю за это сообщение</a></li>
 <li><a href="http://balancer.ru/admin/forum/post/{$id}/as-new-topic">Вынести сообщение со всеми ответами в <b>новую</b> тему</a></li>
 <li><a href="http://balancer.ru/admin/forum/post/{$id}/move-tree">Перенести сообщение со всеми ответами в <b>другую</b>, уже имеющуюся тему</a></li>
@@ -25,6 +24,8 @@
 <li>GeoIP: {$p->poster_ip()|bors_geo_place_title}</li>
 <li>User-Agent: {$p->poster_ua()}</li>
 <li>Точное время сообщения: {$p->create_time()|date:'d.m.Y H:i:s'}</li>
+<li{if $overquote_crit} style="color:red!important"{/if}>Уровень цитирования: {$overquote}%</li>
+<li>Spam (авто): {if $spam}<span class="red">Да</span>{else}<span class="green">Нет</span>{/if}</li>
 </ul>
 {/if}
 
