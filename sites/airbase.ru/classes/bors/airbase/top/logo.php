@@ -96,6 +96,7 @@ class airbase_top_logo extends base_image_png
 		$prev = objects_first('aviatop_week', array('top_id' => $this->id(), 'check_time' => $time));
 		if(!$prev || !$prev->id())
 		{
+//			config_set('debug_mysql_queries_log', true);
 			$prev = object_new_instance('aviatop_week', array(
 				'top_id' => $this->id(),
 				'visits' => 0,

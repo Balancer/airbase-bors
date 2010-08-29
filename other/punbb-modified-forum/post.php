@@ -539,11 +539,13 @@ if (isset($_POST['form_sent']))
 
 		if(!empty($_POST['keywords_string']))
 			$topic->set_keywords_string($_POST['keywords_string'], true);
+
 		$post  = object_load('forum_post',  $new_pid, array('no_load_cache' => true));
 
 		$topic->set_modify_time(time(), true);
 		$topic->set_last_post_create_time($post->create_time(), true);
 		$post->set_modify_time(time(), true);
+
 		if($me && $me->is_coordinator())
 		{
 			if(!empty($_POST['is_moderatorial']))
@@ -571,7 +573,30 @@ if (isset($_POST['form_sent']))
 //		if(!empty($_POST['overquote_confirmed']))
 //			debug_hidden_log('overquoting', bors()->user_title().":\ntopic={$topic->url()}\npost={$post->url()}\n=== cut ===\n{$message}\n=== cut ===\n");
 
-		if(!empty($_POST['as_blog']))
+		// If the posting user is logged in, increment his/her post count
+		if (!$pun_user['is_guest'])
+		{
+			$low_prio = '';//($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
+			$db->query('UPDATE '.$low_prio.$db->prefix.'users SET num_posts=num_posts+1, last_post='.$now.' WHERE id='.$pun_user['id']) or error('Unable to update user', __FILE__, __LINE__, $db->error());
+		}
+
+		// Attachment Mod Block Start
+		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))
+			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
+				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
+		// Attachment Mod Block End
+
+		if($post->owner()->num_posts() < 50 || $post->owner()->create_time() > time() - 7*86400)
+		{
+			$post->set_is_spam(balancer_akismet::factory()->classify($post) ? 1 : 0, true);
+			if($post->is_spam())
+			{
+				debug_hidden_log('spam', 'Marked as spam: '.$post->source());
+//				message('Ваше сообщение похоже на спам. Оно оставлено на проверку координаторам. Если сообщение корректно, оно будет размещено на форуме');
+			}
+		}
+
+		if(!empty($_POST['as_blog']) && !$post->is_spam())
 		{
 			$blog = new forum_blog($post->id());
 			$blog->new_instance();
@@ -592,19 +617,6 @@ if (isset($_POST['form_sent']))
 				empty($_POST['keywords']) ? $topic : $blog
 			);
 		}
-
-		// If the posting user is logged in, increment his/her post count
-		if (!$pun_user['is_guest'])
-		{
-			$low_prio = '';//($db_type == 'mysql') ? 'LOW_PRIORITY ' : '';
-			$db->query('UPDATE '.$low_prio.$db->prefix.'users SET num_posts=num_posts+1, last_post='.$now.' WHERE id='.$pun_user['id']) or error('Unable to update user', __FILE__, __LINE__, $db->error());
-		}
-
-		// Attachment Mod Block Start
-		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))
-			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
-				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
-		// Attachment Mod Block End
 
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);

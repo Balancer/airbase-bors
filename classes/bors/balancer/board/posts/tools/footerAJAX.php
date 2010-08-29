@@ -11,7 +11,7 @@ class balancer_board_posts_tools_footerAJAX extends base_page
 	{
 		if(!bors()->user_id())
 			return "Только для зарегистрированных пользователей!";
-		
+
 		return false;
 	}
 
@@ -19,13 +19,17 @@ class balancer_board_posts_tools_footerAJAX extends base_page
 	{
 		$x = $this->object();
 		$over = $x ? bors_overquote_rate($x->source()) : NULL;
-	
+
+		if(is_null($x->is_spam()))
+			$x->set_is_spam(balancer_akismet::factory()->classify($x) ? 1 : 0, true);
+
 		return array(
 			'p' => $x,
 			'overquote' => $over,
 			'overquote_crit' => ($over > 60),
 			'id' => $x ? $x->id() : 0,
 			'owner_id' => $x ? $x->owner_id() : NULL,
+			'spam' => object_property($x, 'is_spam'),
 		);
 	}
 }
