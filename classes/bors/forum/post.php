@@ -25,6 +25,7 @@ class forum_post extends base_object_db
 	{
 		return array(
 			'id',
+			'title_raw' => 'field1',
 			'topic_id',
 			'topic_page' => 'page',
 			'create_time'	=> 'posted',
@@ -46,8 +47,17 @@ class forum_post extends base_object_db
 			'score' => 'field2',
 			'is_moderatorial',
 			'is_deleted',
+			'is_spam',
+			'is_incorrect',
+			'last_moderator_id',
 		);
 	}
+
+// Заняты: 	field1 => title
+//			field2 => score
+
+// Свободны:field3 string
+//			field4 => is_spam int(11)
 
 //	function __orm_setters() { return array('';); }
 
@@ -372,7 +382,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		return "<a href=\"{$this->url()}\"{$css}>{$title}</a>";
 	}
 
-	function title() { return $this->topic()->title()." <small>[".$this->nav_name()."]</small>"; }
+	function title() { return object_property($this->topic(), 'title')." <small>[".$this->nav_name()."]</small>"; }
 	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown'))."#".date("d.m.y H:i", $this->create_time()); }
 
 	function base_url()
