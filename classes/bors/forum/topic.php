@@ -2,15 +2,17 @@
 
 class forum_topic extends base_page_db
 {
-//	function storage_engine() { return 'storage_db_mysql_smart'; }
-	function storage_engine() { return 'bors_storage_mysql'; }
+	function config_class() { return 'balancer_board_config'; }
+
+	function storage_engine() { return 'storage_db_mysql_smart'; }
+//	function storage_engine() { return 'bors_storage_mysql'; }
 	function can_be_empty() { return false; }
 
 	function uri_name() { return 't'; }
 	function nav_name() { return truncate($this->title(), 60); }
 
-	function main_db() { return config('punbb.database', 'punbb'); }
-	function main_table() { return 'topics'; }
+	function db_name() { return config('punbb.database', 'punbb'); }
+	function table_name() { return 'topics'; }
 
 	function main_table_fields()
 	{
@@ -572,6 +574,12 @@ $(function() {
 		return intval($this->db()->select('topic_visits', 'last_visit', array(
 			'user_id=' => $user->id(), 
 			'topic_id=' => $this->id())));
+	}
+
+	function was_updated_for_user($user)
+	{
+		$last = $this->last_visit_time_for_user($user);
+		return !$last || $last < $user->previous_session_end();
 	}
 
 	function on_delete_pre() { $this->forum(); }

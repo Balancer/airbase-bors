@@ -320,7 +320,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 					FROM {$db->prefix}topics AS t 
 						INNER JOIN {$db->prefix}forums AS f ON f.id=t.forum_id 
 						LEFT JOIN {$db->prefix}forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id={$pun_user['g_id']})
-					WHERE t.forum_id <> 190 AND (fp.read_forum IS NULL OR fp.read_forum=1)
+					WHERE t.forum_id NOT IN (37, 190, 191) AND (fp.read_forum IS NULL OR fp.read_forum=1)
 						$cat_ids
 						AND t.last_post>{$pun_user['last_visit']}") 
 					or error('Unable to fetch topic list', __FILE__, __LINE__, $db->error());
@@ -337,7 +337,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 					FROM {$db->prefix}topics AS t 
 						INNER JOIN {$db->prefix}forums AS f ON f.id=t.forum_id 
 						LEFT JOIN {$db->prefix}forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id={$pun_user['g_id']}) 
-					WHERE t.forum_id <> 190 AND (fp.read_forum IS NULL OR fp.read_forum=1) 
+					WHERE t.forum_id NOT IN (37, 190, 191) AND (fp.read_forum IS NULL OR fp.read_forum=1) 
 						$cat_ids
 						AND t.last_post>".(time() - 86400))
 					or error('Unable to fetch topic list', __FILE__, __LINE__, $db->error());
@@ -630,6 +630,8 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		{
 			$topic_id = $search_set[$i]['tid'];
 			$topic = $topics[$topic_id];
+//			if(!$topic)
+//				continue;
 
 			@reset($forum_list);
 			while (list(, $temp) = @each($forum_list))

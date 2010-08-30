@@ -55,6 +55,8 @@ class forum_user extends base_object_db
 			'saltu' => 'user_cookie_hash',
 			'create_time' => 'registered',
 			'last_post_time' => 'last_post',
+			'previous_session_end' => 'last_visit',
+			'last_visit_time' => 'last_real_visit',
 			'www' => 'url',
 			'realname',
 			'location',
@@ -483,7 +485,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 			$weight = 0;
 	}
 
-	function set_last_visit_time() { }
+//	function set_last_visit_time() { }
 
 	function is_admin() { return in_array($this->id(), array(3310, 10000)); }
 	function is_moderator() { return $this->group()->is_moderator() || $this->is_admin(); }

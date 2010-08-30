@@ -42,7 +42,7 @@ class forum_tools_topic extends base_page
 
 		return array(
 			'me' => bors()->user(),
-			'is_subscribed' => $dbh->select('subscriptions', 'COUNT(*)', array('user_id' => bors()->user_id(), 'topic_id' => $this->id())),
+			'is_subscribed' => $db->select('subscriptions', 'COUNT(*)', array('user_id' => bors()->user_id(), 'topic_id' => $this->id())),
 		);
 	}
 }
