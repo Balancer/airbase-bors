@@ -30,4 +30,42 @@ class balancer_akismet extends base_object
 		$this->akismet->setPermalink($object->url());
 		return $this->akismet->isCommentSpam();
 	}
+
+	function submit_spam($object)
+	{
+		if(!$object)
+			return NULL;
+
+		if(!$object->source())
+			return NULL;
+
+		$this->akismet->setCommentAuthor($object->owner()->title());
+		$this->akismet->setCommentAuthorEmail($object->owner()->email());
+//		$akismet->setCommentAuthorURL($url);
+		$this->akismet->setCommentContent($object->source());
+		$this->akismet->setPermalink($object->url());
+
+		debug_hidden_log('akismet-submit-spam', "{$object->debug_title()}: {$object->source()}");
+
+		return $this->akismet->submitSpam();
+	}
+
+	function submit_ham($object)
+	{
+		if(!$object)
+			return NULL;
+
+		if(!$object->source())
+			return NULL;
+
+		$this->akismet->setCommentAuthor($object->owner()->title());
+		$this->akismet->setCommentAuthorEmail($object->owner()->email());
+//		$akismet->setCommentAuthorURL($url);
+		$this->akismet->setCommentContent($object->source());
+		$this->akismet->setPermalink($object->url());
+
+		debug_hidden_log('akismet-submit-ham', "{$object->debug_title()}: {$object->source()}");
+
+		return $this->akismet->submitHam();
+	}
 }

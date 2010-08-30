@@ -16,4 +16,6 @@ class balancer_board_posts_list extends base_page_paged
 
 	function access() { return $this; }
 	function can_read() { template_noindex(); return bors()->user(); }
+
+//	function where() { return array(); }
 }

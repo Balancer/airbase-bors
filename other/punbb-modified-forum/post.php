@@ -586,12 +586,12 @@ if (isset($_POST['form_sent']))
 				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
 		// Attachment Mod Block End
 
-		if($post->owner()->num_posts() < 50 || $post->owner()->create_time() > time() - 7*86400)
+		if($post->owner()->num_posts() < 20 && $post->owner()->create_time() > time() - 7*86400)
 		{
 			$post->set_is_spam(balancer_akismet::factory()->classify($post) ? 1 : 0, true);
 			if($post->is_spam())
 			{
-				debug_hidden_log('spam', 'Marked as spam: '.$post->source());
+				debug_hidden_log('spam', "Marked as spam: [owner={$post->owner()}, num_posts={$post->owner()->num_posts()}, registered={$post->owner()->create_time()}]".$post->source());
 //				message('Ваше сообщение похоже на спам. Оно оставлено на проверку координаторам. Если сообщение корректно, оно будет размещено на форуме');
 			}
 		}

@@ -126,7 +126,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	}
 
 	//TODO: странно, при прямом вызове пропадают флаги.
-//	function flag_db() { return $this->data['flag_db']; }
+	function flag_db() { return $this->data['flag_db']; }
+	function warning_id() { return $this->data['warning_id']; }
 
 	function topic() { return object_load('forum_topic', $this->topic_id()); }
 	function parents() { return array("forum_topic://".$this->topic_id()); }
@@ -646,7 +647,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function has_readed_by_user($user)
 	{
-		return $this->topic()->last_visit_time_for_user($user) > $this->last_post_create_time();
+		$topic = $this->topic();
+		return $topic->last_visit_time_for_user($user) > $topic->last_post_create_time();
 	}
 
 	function on_delete_pre() { $this->topic(); }
