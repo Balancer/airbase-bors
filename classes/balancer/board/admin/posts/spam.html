@@ -1,0 +1,29 @@
+{if $items}
+{if $is_filtered_spam}
+<div class="red_box red">Вы выбрали указанные сообщения для подтверждения их статуса спама. Проверьте, не попало ли среди них что-то нужное.</div>
+{/if}
+
+{if $is_filtered_ham}
+<div class="green_box green">Вы выбрали указанные сообщения для снятия пометки спама. Проверьте, не попал ли в них спам.</div>
+{/if}
+
+{$this->pages_links_nul()}
+
+{foreach from=$items item="p"}
+{include file="xfile:forum/post.html"}
+{/foreach}
+
+{$this->pages_links_nul()}
+
+<div class="pages_select">
+	<a href="?act=mark{if $is_filtered_spam}_do{/if}&type=spam" class="select_page big-extra">Пометить как спам</a>
+	<a href="?act=mark{if $is_filtered_ham}_do{/if}&type=ham" class="select_page big-extra">Пометить как нормальные сообщения</a>
+</div>
+
+{else}
+
+<div class="yellow_box">
+Очередь сообщений для проверки пуста
+</div>
+
+{/if}
