@@ -25,7 +25,7 @@
 <li>User-Agent: {$p->poster_ua()}</li>
 <li>Точное время сообщения: {$p->create_time()|date:'d.m.Y H:i:s'}</li>
 <li{if $overquote_crit} style="color:red!important"{/if}>Уровень цитирования: {$overquote}%</li>
-<li>Spam (авто): {if $spam}<span class="red">Да</span>{else}<span class="green">Нет</span>{/if}</li>
+<li><a href="http://forums.balancer.ru/admin/posts/spam">Spam (авто)</a>: {if $spam}<span class="red">Да</span>{else}<span class="green">Нет</span>{/if}</li>
 </ul>
 {/if}
 
