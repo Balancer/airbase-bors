@@ -82,9 +82,9 @@ function set_group_id($v, $dbup) { return $this->set('group_id', $v, $dbup); }
 function user_title() { return @$this->data['user_title']; }
 function set_user_title($v, $dbup) { return $this->set('user_title', $v, $dbup); }
 function set_use_avatar($v, $dbup) { return $this->set('use_avatar', $v, $dbup); }
-function avatar_width() { return @$this->data['avatar_width']; }
+function avatar_width($size = false) { return $size ? intval($size*@$this->data['avatar_width']/100) : @$this->data['avatar_width']; }
 function set_avatar_width($v, $dbup) { return $this->set('avatar_width', $v, $dbup); }
-function avatar_height() { return @$this->data['avatar_height']; }
+function avatar_height($size = false) { return $size ? intval($size*@$this->data['avatar_height']/100) : @$this->data['avatar_height']; }
 function set_avatar_height($v, $dbup) { return $this->set('avatar_height', $v, $dbup); }
 function num_posts() { return @$this->data['num_posts']; }
 function set_num_posts($v, $dbup) { return $this->set('num_posts', $v, $dbup); }
@@ -281,7 +281,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 
 		if($ban = forum_ban::ban_by_username($this->title()))
 			return $this->is_banned = $ban;
-			
+
 		return $this->is_banned = false;
 	}
 

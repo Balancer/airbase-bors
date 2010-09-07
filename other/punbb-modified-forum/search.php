@@ -582,8 +582,20 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		$page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_search['Search results'];
 		require PUN_ROOT.'header.php';
 
+?>
+<ul><li><b>
+<?
+	$self = object_load('http://balancer.ru/forum/');
+	$nav = object_load('module_nav_top', $self);
+	echo $nav->body();
+?>
+</li></b></ul>
+<?
+
+
 		if($cat_ids)
 			echo "<div class=\"yellow_box\">Вы просматриваете список обновлений только одной категории форумов</div>";
+
 ?>
 <div class="linkst">
 	<div class="inbox">
