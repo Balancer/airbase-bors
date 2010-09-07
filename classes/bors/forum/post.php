@@ -5,8 +5,11 @@
 include_once('engines/lcml.php');
 include_once('inc/browsers.php');
 
-class forum_post extends base_object_db
+class forum_post extends base_page_db
 {
+	function config_class() { return 'balancer_board_config'; }
+	function template() { return 'forum/page.html'; }
+
 	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'posts'; }
 
@@ -367,9 +370,10 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function url()
 	{
+		return dirname($this->topic()->url()).'/p'.$this->id().'.html';
 //		require_once("inc/urls.php");
 //		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
-		return 'http://balancer.ru/_bors/igo?o='.$this->internal_uri_ascii();
+//		return 'http://balancer.ru/_bors/igo?o='.$this->internal_uri_ascii();
 	}
 
 	function titled_link($text = NULL, $css=NULL) 
@@ -384,7 +388,20 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	}
 
 	function title() { return object_property($this->topic(), 'title')." <small>[".$this->nav_name()."]</small>"; }
+//	function page_title() { return ''; }
 	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown'))."#".date("d.m.y H:i", $this->create_time()); }
+
+	function description()
+	{
+		return "<ul><li><a href=\"{$this->url_in_topic()}\">Помотреть это сообщение в теме</a></li></ul>";
+	}
+
+	function local_data()
+	{
+		return array(
+			'p' => $this,
+		);
+	}
 
 	function base_url()
 	{
@@ -601,8 +618,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function edit_url() { return "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}"; }
 
-	function pre_show() { return go($this->url_in_topic()); }
-	function igo($permanent = true) { return go($this->url_in_topic(), $permanent); }
+//	function pre_show() { return go($this->url_in_topic()); }
+	function igo($permanent = true) { return go($this->url(), $permanent); }
 
 	function score_colorized($recalculate = false)
 	{

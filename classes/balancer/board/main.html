@@ -1,17 +1,59 @@
-<div class="warning_note left">
-<b>Внимание! Эта страница находится в процессе осмысления и создания.</b> Можете пока
-пользоваться <a href="http://balancer.ru/forum/">старым и основным видом форумов</a>.
+<div class="yellow_box" style="font-size: 10pt">
+<b>Внимание! Эта страница находится в процессе осмысления и создания.</b><br/>
+Можете пока пользоваться <a href="http://balancer.ru/forum/">старым и основным видом форумов</a>.<br/>
+Обсудить концепцию можно в <a href="http://balancer.ru/support/2010/09/t73813--glavnaya-stranitsa-forumov.2468.html">соответствующей теме форума</a>.
 </div>
 
+<div style="width: 100%; float: left; margin-right: -420px">
+
+<div style="width: 400px; float: right">
+
 <dl class="box">
-<dt>Популярные тэги</dt>
+<dt>YouTube</dt>
 <dd>
-{foreach from=$top_tags item="x"}
-{$x->titled_url()} ({$x->targets_count()})
-{/foreach}
+<object width="380" height="285"><param name="movie" value="http://www.youtube.com/v/{$last_youtube}?fs=1&amp;hl=ru_RU"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/{$last_youtube}?fs=1&amp;hl=ru_RU" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="380" height="285"></embed></object>
+Сообщение: <a href="{$last_youtube_post->url_in_topic()}">{$last_youtube_post->title()}</a>
 </dd>
 </dl>
-<div class="box more"><a href="http://forums.balancer.ru/tags/">Все тэги с возможностью совмещённой фильтрации &raquo;&raquo;&raquo;</a></div>
+
+<dl class="box">
+<dt>Лучшее сообщение последних дней</dt>
+<dd class="small" style="overflow: hidden">
+{assign var="p" value=$best_of_days->target()}
+{assign var="forum" value=$p->topic()->forum()}
+{include file="xfile:forum/post.html" skip_message_footer=true skip_votes=true no_show_answers=true avatar_size=50 strip=2000}
+<p><small>// Сообщение: <a href="{$p->url_in_topic()}">{$p->title()}</a></small</p>
+<p><b>[ <a href="http://balancer.ru/tools/votes/">Все лучшие сообщения</a> ]</b></p>
+</dd>
+</dl>
+
+<dl class="box">
+<dt>Последнее сообщение</dt>
+<dd class="small" style="overflow: hidden">
+{assign var="p" value=$last_post}
+{assign var="forum" value=$p->topic()->forum()}
+{include file="xfile:forum/post.html" skip_message_footer=true skip_votes=true no_show_answers=true avatar_size=50 strip=1000}
+<p><small>// Сообщение: <a href="{$p->url_in_topic()}">{$p->title()}</a></small</p>
+<p><b>[ <a href="http://balancer.ru/forum/punbb/search.php?action=show_24h">Все новые сообщения</a> ]</b></p>
+</dd>
+</dl>
+
+</div>{* Конец правой колонки *}
+
+<div style="margin-right: 410px">
+
+<table class="btab w100p">
+<caption>Обновлённые темы форумов</caption>
+<tr><th>Время</th><th>тема</th><th>форум</th><th>отвечал</th></tr>
+{foreach from=$updated_topics item="t"}
+<tr><td>{$t->modify_time()|date:'H:i'}</td>
+	<td>{$t->titled_url('new')}</td>
+	<td>{$t->forum()->nav_named_url()}</td>
+	<td><a href="{$t->url('new')}">{$t->last_poster_name()}</a></td>
+</tr>
+{/foreach}
+<tr><td>&nbsp;</td><td colspan="3" class="big-extra b"><a href="http://balancer.ru/forum/punbb/search.php?action=show_24h">Темы, обновившиеся за последние сутки</a></td></tr>
+</table>
 
 <table class="btab w100p">
 <caption>Новые темы форумов</caption>
@@ -25,25 +67,36 @@
 	<td>{$t->author_name()}</td>
 </tr>
 {/foreach}
+<tr><td>&nbsp;</td><td colspan="3" class="big-extra b"><a href="http://forums.balancer.ru/new-topics/">Все новые темы форумов за месяц</a></td></tr>
 </table>
 
-<div class="box more w100p"><a href="http://forums.balancer.ru/new-topics/">Все новые темы форума за месяц &raquo;&raquo;&raquo;</a></div>
+<table border="0" width="100%"><tr>
+<td width="50%"><dl class="box"><dt>Группа «Авиабаза» в социальных сетях</dt><dd>
+<ul>
+<li><a href="http://www.facebook.com/group.php?gid=112213115503551">Facebook</a></li>
+<li><a href="http://vk.com/club87640">ВКонтакте</a></li>
+</ul>
+</dd></dl></td>
 
-<table class="btab w100p">
-<caption>Обновлённые темы форумов</caption>
-<tr><th>Время</th><th>тема</th><th>форум</th><th>отвечал</th></tr>
-{foreach from=$updated_topics item="t"}
-<tr><td>{$t->modify_time()|date:'H:i'}</td>
-	<td>{$t->titled_url('new')}</td>
-	<td>{$t->forum()->nav_named_url()}</td>
-	<td><a href="{$t->url('new')}">{$t->last_poster_name()}</a></td>
-</tr>
+<td><dl class="box"><dt>Пользователи на карте</dt><dd>
+<ul>
+<li><a href="http://balancer.ru/users/gmap/">Онлайн</a></li>
+<li><a href="http://balancer.ru/users/gmapd/">За сутки</a></li>
+</ul>
+</dd></dl></td>
+
+</tr></table>
+
+<dl class="box"><dt>Популярные тэги</dt><dd>
+{foreach from=$top_tags item="x"}
+{$x->titled_url()} ({$x->targets_count()})
 {/foreach}
-</table>
+<br/><br/>
+<p><a href="http://forums.balancer.ru/tags/" class="big-extra b">Все тэги с возможностью совмещённой фильтрации</a></p>
+</dd></dl>
 
-<div class="post">
-<div class="head">Ссылки</div>
-<div class="body">
+
+<dl class="box"><dt>Ссылки</dt><dd>
 <ul>
 <li><a href="http://balancer.ru/forum/">Старый вид форумов, на старом движке</a></li>
 <li><s><a href="classic/">Классический вид форумов, с вложениями и подфорумами</a></s></li>
@@ -51,5 +104,30 @@
 <li><a href="/blogs/">Все блоговые записи форума</a></li>
 <li><a href="/stat/">Статистика форумов</a></li>
 </ul>
+</dd></dl>
+
+<dl class="box"><dt>Авторы лучших сообщений</dt><dd>
+{foreach from=$best_votes_by_authors item="v"}
+{$v->target_user()->titled_url()},
+{/foreach}
+</dd></dl>
+
+
+{* Конец центральной колонки *}
+
 </div>
+
+
 </div>
+
+<div class="clear">&nbsp;</div>
+
+<dl class="box"><dt>Социализация</dt><dd>
+{literal}<div class="float-left rspace"><script type="text/javascript"><!--
+document.write(VK.Share.button(false,{type: "round", text: "Сохранить"}));
+--></script></div>{/literal}
+<div class="float-left rspace"><a name="fb_share" type="button_count" href="http://www.facebook.com/sharer.php">Опубликовать</a><script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script></div>
+<div class="float-left rspace"><a class="mrc__share" href="http://platform.mail.ru/share">В Мой Мир</a><script src="http://cdn.connect.mail.ru/js/share/2/share.js" type="text/javascript" charset="UTF-8"></script></div>
+<div class="float-left rspace"><a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="balancer73">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></div>
+<div class="clear">&nbsp;</div>
+</dd></dl>

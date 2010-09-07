@@ -75,7 +75,7 @@ class forum_images_warnings extends base_image_gif
 			$black = imagecolorallocate($img,   0,   0,   0);
 			$white = imagecolorallocate($img, 255, 255, 255);
 
-			if($user->is_banned())
+			if(is_object($user->is_banned()))
 				$text = ec('        админбан    ');
 			else
 				$text = ec('бан до '.strftime("%d.%m.%Y", $this->expired = $time+WARNING_DAYS*86400));

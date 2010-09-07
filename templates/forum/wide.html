@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>{$browser_title|htmlspecialchars}</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="title" content="{$title|htmlspecialchars}" />
+{if $this->description()}
+	<meta name="description" content="{$this->description()|htmlspecialchars}"/>
+{/if}
+{if $this->get('keywords_string')}
+	<meta name="keywords" content="{$this->keywords_string()|htmlspecialchars}"/>
+{/if}
+	<link rel="SHORTCUT ICON" href="/favicon.ico" />
+
+	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
+<!--[if IE]><link href="/_bors/css/bors/ie.css" rel="stylesheet" media="all" /><![endif]-->
+<!--[if IE 6]><link href="/_bors/css/bors/ie6.css" rel="stylesheet" media="all" /><![endif]-->
+<!--[if IE 7]><link href="/_bors/css/bors/ie7.css" rel="stylesheet" media="all" /><![endif]-->
+	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
+	<link rel="stylesheet" type="text/css" href="/_bors/css/main6.css" />
+{foreach item=css from=$css_list}
+	<link rel="stylesheet" type="text/css" href="{$css}" />
+{/foreach}
+
+{foreach from=$js_include item="s"}
+<script type="text/javascript" src="{$s}"></script>
+{/foreach}
+
+	<script type="text/javascript" src="/_bors/js/funcs3.js"></script>
+	<script type="text/javascript" src="/_bors/js/tune.js"></script>
+	<script type="text/javascript" src="/_bors/js/cfuncs.js"></script>
+
+<script type="text/javascript"><!--
+{if $this}
+createCookie('class_name', '{$this->class_name()}')
+createCookie('object_id', '{$this->id()}')
+{if $this->class_name() == 'forum_topic'}
+createCookie('last_topic_id', '{$this->id()}')
+{/if}
+{/if}
+
+var me_id = readCookie('user_id', 0)
+var me_hash = readCookie('cookie_hash', 0)
+if(me_id > 1 && me_hash) {ldelim}
+	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/setvars.js\"></"+"script>")
+{rdelim}
+
+{literal}
+var addthis_config = { data_track_clickback: true }
+{/literal}
+--></script>
+
+<script type="text/javascript"><!--
+if(top.me_is_coordinator) {ldelim}
+	document.writeln('<link rel="stylesheet" type="text/css" href="/_bors/css/coordinators.css" />')
+	document.writeln('<'+'script  type="text/javascript" src="/_bors/js/coordinators.js"></'+'script>')
+{rdelim}
+
+--></script>
+
+{if $header}
+{foreach from=$header item="h"}
+{$h}
+{/foreach}
+{/if}
+{if $meta}{foreach key=key item=value from=$meta}
+<meta name="{$key}" content="{$value|htmlspecialchars}" />
+{/foreach}{/if}
+{if $javascript}
+<script type="text/javascript"><!--
+{foreach from=$javascript item="s"}
+{$s}
+{/foreach}
+--></script>
+{/if}
+{foreach item=s from=$head_append}
+{$s}
+{/foreach}
+{foreach item=s from=$header_append}
+{$s}
+{/foreach}
+
+</head>
+
+<body onload="onLoadPage()" id="body">
+<div style="padding: 0 20px">
+<dl class="box">
+<dt class="nav">{module name="top-navs"}</dt>
+<dd><h1>{$title}</h1>
+<div class="small i">{$description}</div></dd>
+</dl>
+
+{$body}
+</div>
+</body>
+</html>

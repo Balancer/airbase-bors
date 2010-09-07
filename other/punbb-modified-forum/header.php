@@ -189,6 +189,7 @@ else
  &middot; <a href=\"{$pun_config['root_uri']}/search.php?action=show_new\">{$lang_common['Show new posts']}</a><br />
 <!-- &middot; <a href=\"{$pun_config['root_uri']}/search.php?action=show_24h\">{$lang_common['Show recent posts']}</a><br /> -->
  &middot; <a class=\"red\" href=\"http://forums.balancer.ru/personal/answers/\">Показать все ответы на Ваши сообщения</a><br />
+<!-- &middot; <a class=\"red\" href=\"http://balancer.ru/users/favorites/\">Ваше избранное</a><br /> -->
  &middot; <a href=\"http://balancer.ru/user/{$pun_user['id']}/use-topics.html\">Показать все темы с Вашим участием</a><br />
  	</li></ul>
 	<div class=\"clearer\"></div>\n\t\t</div>";

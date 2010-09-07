@@ -13,7 +13,7 @@ class forum_tools_post_do extends base_page
 
 		if(!bors()->user() || !bors()->user()->group()->is_coordinator())
 			return bors_message(ec('У Вас нет прав для выполнения этой операции'));
-		
+
 		switch($this->page())
 		{
 			case 'drop-cache':
@@ -21,12 +21,13 @@ class forum_tools_post_do extends base_page
 				$p->cache_clean();
 				$p->store();
 				$t->cache_clean();
+				$t->set_modify_time(time(), true);
 				$t->store();
 				break;
 			default:
 				break;
 		}
-		
+
 		return go($p->url());
 	}
 }
