@@ -399,17 +399,17 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 	function cookie_hash_set($expired = -1)
 	{
 		if($expired == -1)
-			$expired = time()+86400*365;
+			$expired = time()+86400*30;
 
 		foreach(array(
-			'user_id' => $this->id(), 
-			'cookie_hash' => $this->saltu(), 
+			'user_id' => $this->id(),
+			'cookie_hash' => $this->saltu(),
 			'is_admin' => $this->is_admin()
 		) as $k => $v)
 		{
 			SetCookie($k, $v, $expired, "/", '.'.$_SERVER['HTTP_HOST']);
-			SetCookie($k, $v, $expired, "/", $_SERVER['HTTP_HOST']);
-			SetCookie($k, $v, $expired, "/");
+//			SetCookie($k, $v, $expired, "/", $_SERVER['HTTP_HOST']);
+//			SetCookie($k, $v, $expired, "/");
 		}
 	}
 

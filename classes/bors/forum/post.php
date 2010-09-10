@@ -332,6 +332,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		return $this->__answer_to = $post;
 	}
 
+	// Осторожнее и использованием $topic! Если, например, ищем ссылку на ответ, находящийся 
+	// не в текущей теме.
 	function url_in_topic($topic = NULL)
 	{
 		$pid = $this->id();
@@ -376,6 +378,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 //		return 'http://balancer.ru/_bors/igo?o='.$this->internal_uri_ascii();
 	}
 
+	function url_for_igo() { return 'http://balancer.ru/_bors/igo?o='.$this->internal_uri_ascii(); }
+
 	function titled_link($text = NULL, $css=NULL) 
 	{
 		if(!$title)
@@ -387,15 +391,15 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		return "<a href=\"{$this->url()}\"{$css}>{$title}</a>";
 	}
 
-	function title() { return object_property($this->topic(), 'title')." <small>[".$this->nav_name()."]</small>"; }
-//	function page_title() { return ''; }
+	function title() { return object_property($this->topic(), 'title')." [".$this->nav_name()."]"; }
+	function page_title() { return object_property($this->topic(), 'title')." <small>[".$this->nav_name()."]</small>"; }
 	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown'))."#".date("d.m.y H:i", $this->create_time()); }
-
+/*
 	function description()
 	{
 		return "<ul><li><a href=\"{$this->url_in_topic()}\">Помотреть это сообщение в теме</a></li></ul>";
 	}
-
+*/
 	function local_data()
 	{
 		return array(
@@ -619,7 +623,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function edit_url() { return "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}"; }
 
 //	function pre_show() { return go($this->url_in_topic()); }
-	function igo($permanent = true) { return go($this->url(), $permanent); }
+	function igo($permanent = true) { return go($this->url_in_topic(), $permanent); }
 
 	function score_colorized($recalculate = false)
 	{

@@ -1,7 +1,7 @@
 function css_load(elem, value, id, def)
 {
 	document.getElementById(id).style[elem] = value
-	
+
 	if(def != value)
 		createCookie(id+"."+elem, value, 180)
 	else
@@ -20,7 +20,7 @@ function createCookie(name,value,days)
 
 	document.cookie = name+"="+value+expires+"; path=/";
 }
-										
+
 function readCookie(name, def) 
 {
 	var nameEQ = name + "=";
@@ -69,10 +69,10 @@ function createSelect(title, element, values, def)
 			name = value[0]
 			value = value[1]
 		}
-			
+
 		document.write("<option value=\""+value+"\""+(cookie == value ? " selected=\"true\"" : "")+">"+name+"</option>")
 	}
-	
+
 	document.write("</select><br />")
 }
 
@@ -98,7 +98,7 @@ function process_form(the_form)
 {
 	var element_names = new Object()
 	element_names["req_message"] = "Сообщение"
-		
+
 	if (document.all || document.getElementById)
 	{
 		for (i = 0; i < the_form.length; ++i)
