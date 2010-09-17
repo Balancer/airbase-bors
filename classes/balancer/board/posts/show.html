@@ -1,3 +1,5 @@
+{if not $post->is_public_access()}<div class="yellow_box">Сообщение с ограниченным доступом</div>{/if}
+
 {include file="xfile:forum/post.html" p=$post show_title='<a href="'|cat:$post->url_for_igo()|cat:'">'|cat:$topic->title()|cat:'</a>'}
 
 {literal}

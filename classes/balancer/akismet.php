@@ -39,8 +39,8 @@ class balancer_akismet extends base_object
 		if(!$object->source())
 			return NULL;
 
-		$this->akismet->setCommentAuthor($object->owner()->title());
-		$this->akismet->setCommentAuthorEmail($object->owner()->email());
+		$this->akismet->setCommentAuthor(object_property($object->owner(), 'title'));
+		$this->akismet->setCommentAuthorEmail(object_property($object->owner(), 'email'));
 //		$akismet->setCommentAuthorURL($url);
 		$this->akismet->setCommentContent($object->source());
 		$this->akismet->setPermalink($object->url());

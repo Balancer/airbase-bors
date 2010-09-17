@@ -631,7 +631,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			return "";
 
 		$data = array(
-			'target_class_name' => $this->class_name(),
+			'target_class_name' => $this->extends_class(),
 			'target_object_id' => $this->id(),
 			'score' => 1,
 		);
