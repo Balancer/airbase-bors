@@ -27,4 +27,15 @@ class balancer_board_posts_show extends bors_page
 	}
 
 	function url() { return $this->post()->url(); }
+
+	function pre_show()
+	{
+    	if(!$this->post()->topic()->forum()->can_read())
+		{
+			template_noindex();
+			return bors_message("Извините, доступ к этому ресурсу закрыт для Вас");
+		}
+
+		return false;
+	}
 }

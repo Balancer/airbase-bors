@@ -22,9 +22,9 @@ class balancer_board_ban extends base_object_db
 	static function ban($user, $ip, $expire = false)
 	{
 		$ban = object_new_instance('balancer_board_ban', array(
-			'username' => $user->title(),
+			'username' => object_property($user, 'title'),
 			'ip' => $ip,
-			'email' => $user->email(),
+			'email' => object_property($user, 'email'),
 			'message' => ec('Автоматический бессрочный бан за рассылку спама'),
 			'expire' => $expire ? $expire + time() : NULL,
 			'moderator_id' => bors()->user_id(),
