@@ -100,6 +100,7 @@ $map = array(
 		'/forum/viewtopic\.php\?pid=(\d+) => redirect:forum_post(1)',
 
 		'(/img/forums/)(\d+)/index.bas => balancer_images_index(2)',
+		'(/img/forums/)(\d+)/? => balancer_images_index(2)',
 
 		'/js/users/reputation,(\d+)\.js => user_js_reputation(1,2)',
 		'/js/forum/topvisits\.js => forum_js_topvisits',

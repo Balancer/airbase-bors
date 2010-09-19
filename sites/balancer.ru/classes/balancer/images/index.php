@@ -1,11 +1,11 @@
 <?php
 
-class balancer_images_index extends base_page
+class balancer_images_index extends bors_page
 {
 	function title() { $this->year(); return ec('Изображения за ').month_name($this->month()).' '.$this->year().ec(' года'); }
 	function nav_name() { return month_name($this->month()).' '.$this->year().ec(' года'); }
 	function template() { return 'blue_spring'; }
-	
+
 	function cache_static() { return $this->id() < date('ym') ? rand(100*86400,300*86400) : rand(3*86400, 7*86400); }
 
 	function year() { return '20'.substr($this->id(), 0, 2); }
@@ -25,14 +25,14 @@ class balancer_images_index extends base_page
 				$m = 12;
 				$y--;
 			}
-			
+
 			$p = sprintf("%02d%02d", $y%1000, $m);
 			if(file_exists("{$base}/{$p}"))
-				return "<a href=\"/img/forums/{$p}/index.bas\">««« "
+				return "<a href=\"/img/forums/{$p}/\">««« "
 					.month_name($m).' '
 					.$y.ec(' года')."</a>";
 		}
-		
+
 		return NULL;
 	}
 
@@ -50,14 +50,14 @@ class balancer_images_index extends base_page
 				$m = 1;
 				$y++;
 			}
-			
+
 			$p = sprintf("%02d%02d", $y%1000, $m);
 			if(file_exists("{$base}/{$p}"))
-				return "<a href=\"/img/forums/{$p}/index.bas\">"
+				return "<a href=\"/img/forums/{$p}/\">"
 					.month_name($m).' '
 					.$y.ec(' года')." »»»</a>";
 		}
-		
+
 		return NULL;
 	}
 
@@ -69,9 +69,9 @@ class balancer_images_index extends base_page
 		while($file = readdir($dh))
 			if(preg_match('/\.(gif|png|jpe?g)$/i', $file))
 				$files[] = $file;
-			
+
 		sort($files);
-		
+
 		$images = array();
 		foreach($files as $file)
 		{
@@ -86,7 +86,7 @@ class balancer_images_index extends base_page
 
 			$images[] = $img;
 		}
-		
+
 		return $images;
 	}
 }

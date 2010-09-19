@@ -7,7 +7,7 @@
 {if $this->prev_link()}
 {$this->prev_link()}
 {/if}
-||
+{if $this->prev_link() and $this->next_link()}||{/if}
 {if $this->next_link()}
 {$this->next_link()}
 {/if}
