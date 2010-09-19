@@ -1,5 +1,7 @@
 <?php
 
+require_once('inc/images.php');
+
 class balancer_images_index extends bors_page
 {
 	function title() { $this->year(); return ec('Изображения за ').month_name($this->month()).' '.$this->year().ec(' года'); }
@@ -26,11 +28,10 @@ class balancer_images_index extends bors_page
 				$y--;
 			}
 
+			$title = month_name($m).' '.$y.ec(' года');
 			$p = sprintf("%02d%02d", $y%1000, $m);
 			if(file_exists("{$base}/{$p}"))
-				return "<a href=\"/img/forums/{$p}/\">««« "
-					.month_name($m).' '
-					.$y.ec(' года')."</a>";
+				return "<a href=\"/img/forums/{$p}/\">".bors_icon('a-prev.png', array('title' => $title))." $title</a>";
 		}
 
 		return NULL;
@@ -51,11 +52,10 @@ class balancer_images_index extends bors_page
 				$y++;
 			}
 
+			$title = month_name($m).' '.$y.ec(' года');
 			$p = sprintf("%02d%02d", $y%1000, $m);
 			if(file_exists("{$base}/{$p}"))
-				return "<a href=\"/img/forums/{$p}/\">"
-					.month_name($m).' '
-					.$y.ec(' года')." »»»</a>";
+				return "<a href=\"/img/forums/{$p}/\">$title ".bors_icon('a-next.png', array('title' => $title))."</a>";
 		}
 
 		return NULL;
