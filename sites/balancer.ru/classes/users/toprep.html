@@ -30,12 +30,18 @@
 
 <h3>Крайние изменения репутации</h3>
 <table class="btab w100p">
-<tr><th>Дата</th><th>Кому</th><th>От кого</th></tr>
+<tr><th>Дата</th><th>Кому</th><th>От кого</th><th>Комментарий</th></tr>
 {foreach from=$latest item="r"}
 <tr class="{if $r->score() > 0}pos{else}neg{/if}_reputation">
 	<td>{$r->create_time()|full_time}</td>
 	<td>{$users|@get_array:$r->user_id()|get:reputation_titled_url}</td>
 	<td>{$users|@get_array:$r->voter_id()|get:titled_url}</td>
+	<td>{$r->comment()|truncate:500|lcml_bb}
+		<script>add_warn('{$r->internal_uri()}', {$r->voter_id()})</script>
+		{if $r->refer()}
+		<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За: {$r->refer_link()}</div>
+		{/if}
+	</td>
 </tr>
 {/foreach}
 </table>
