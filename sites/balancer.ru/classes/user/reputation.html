@@ -59,26 +59,8 @@ if(top.me_is_coordinator)
 	<td class="{$backcolor}">{$r->comment()|truncate:500|lcml_bb}
 		<script>add_warn('{$r->internal_uri()}', {$r->voter_id()})</script>
 		{if $r->refer()}
-		<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За:
-			{if $r->target()}
-				{$r->target()->titled_url()}
-			{else}
-			{assign var="obj" value=0}
-			{if $r->refer()|regex_match:"^post://(\d+)"}
-				{assign var="post_id" value=$r->refer()|regex_replace:"!^post://(\d+).*!":"\\1"}
-				{bors_object_load var="obj" class="forum_post" id=$post_id}
-			{/if}
-			{if $r->refer()|regex_match:"^topic://(\d+)"}
-				{assign var="topic_id" value=$r->refer()|regex_replace:"!^topic://(\d+).*!":"\\1"}
-				{bors_object_load var="obj" class="forum_topic" id=$topic_id}
-			{/if}
-			{if $obj}
-				<a href="{$obj->url()}">{$obj->title()}</a>
-			{else}
-				<a href="{$r->refer()}">{$r->refer()}</a>
-			{/if}
-			{/if}
-		</div>{/if}
+			<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За: {$r->refer_link()}</div>
+		{/if}
 	</td>
 </tr>
 {/foreach}
