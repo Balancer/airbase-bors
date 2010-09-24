@@ -589,4 +589,6 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		return "<div style=\"color: ".($reputation_value > 0 ? 'gold' : 'gray')."\">{$stars}</div>";
 //		☆★
 	}
+
+	function blog() { return object_load('forum_blog', $this->id()); }
 }

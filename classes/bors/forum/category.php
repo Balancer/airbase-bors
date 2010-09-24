@@ -1,6 +1,6 @@
 <?php
 
-class forum_category extends base_object_db
+class forum_category extends base_page_db
 {
 	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'categories'; }
