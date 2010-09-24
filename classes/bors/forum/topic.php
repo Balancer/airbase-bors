@@ -579,7 +579,10 @@ $(function() {
 	function was_updated_for_user($user)
 	{
 		$last = $this->last_visit_time_for_user($user);
-		return !$last || $last < $user->previous_session_end();
+		if(!$last)
+			$last = $user->previous_session_end();
+
+		return $this->modify_time() > $last;
 	}
 
 	function on_delete_pre() { $this->forum(); }
