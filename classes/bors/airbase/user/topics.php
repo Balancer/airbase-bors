@@ -20,7 +20,7 @@ class airbase_user_topics extends base_page
 
 	function url() { return "http://balancer.ru/user/".$this->id()."/use-topics.html"; }
 
-	function local_template_data_set()
+	function local_data()
 	{
 		if($this->topics_ids())
 			return array('topics' => objects_array('forum_topic', array(

@@ -17,10 +17,10 @@
 {foreach from=$topics item=t}
 {assign var=f value=$t->forum()}
 {assign var=o value=$t->owner()}
-<tr class="tr_forum_{$f->id()}">
+<tr class="tr_forum_{$f->id()}{if $t->was_updated_for_user($me)} b{/if}">
 	<td><div class="visited_topic" id="vtl_{$t->id()}">&nbsp;</div></td>
 	<td id="vtt_{$t->id()}">
-		{$t->titled_url()}{if $t->description()}<br /><small><i>{$t->description}</i></small>{/if}
+		<a href="{$t->url('new')}">{$t->title()}</a>{if $t->description()}<br /><small><i>{$t->description}</i></small>{/if}
 		{if $t->total_pages() > 1}<small><span class="topic_pages_links">{$t->title_pages_links()}</span></small>{/if}
 		(<a href="{$f->url()}">{$f->title()}</a>, {$t->create_time()|airbase_time})</td>
 	<td class="small aligncenter">{$t->num_replies()}</td>
