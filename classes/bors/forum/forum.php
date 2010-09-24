@@ -95,7 +95,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	{
 		if($this->__category !== 0)
 			return $this->__category;
-	
+
 		$f = $this;
 		while($f->category_id() == 0)
 			$f = object_load(config('punbb.forum_class', 'forum_forum'), $f->parent_forum_id());
@@ -103,24 +103,27 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		return $this->__category = object_load('forum_category', $f->category_id());
 	}
 
-function parents()
-{
-	if($this->parent_forum_id())
-		return array("forum_forum://" . $this->parent_forum_id());
-		
-	if($this->category())
-		return array("airbase_board_category://" . $this->category_id());
-		
-	return array("http://balancer.ru/forum/");
-}
+	function parents()
+	{
+		if($this->parent_forum_id())
+			return array("forum_forum://" . $this->parent_forum_id());
 
+		if($this->category())
+			return array("airbase_board_category://" . $this->category_id());
+
+		return array("http://balancer.ru/forum/");
+	}
+
+	function pre_show()
+	{
+		if(!$this->can_read())
+			return bors_message(ec("Извините, доступ к этому ресурсу закрыт для Вас."));
+
+		return parent::pre_show();
+	}
+/*
 	function body()
 	{
-//			$this->cache_clean_self();
-		
-		if(!$this->can_read())
-			return ec("Извините, доступ к этому ресурсу закрыт для Вас");
-
 		include_once("engines/smarty/assign.php");
 
 		$data = array();
@@ -140,7 +143,7 @@ function parents()
 
 		return template_assign_data("templates/ForumBody.html", $data);
 	}
-
+*/
 	function items_per_page() { return 50; }
 	function total_items() { return $this->db()->select('topics', 'COUNT(*)', array("(forum_id IN (".join(",", $this->all_readable_subforum_ids())."))")) ; }
 
@@ -169,14 +172,14 @@ function parents()
 	}
 
 	function cache_children()
-	{ 
+	{
 		$children_caches = array();
 		if($this->parent_forum_id())
 			$children_caches[] = class_load(config('punbb.forum_class', 'forum_forum'), $this->parent_forum_id());
 
 		if($this->category_id())
 			$children_caches[] = class_load('forum_category', $this->category_id());
-			
+
 		return $children_caches;
 	}
 		
