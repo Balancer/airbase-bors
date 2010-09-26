@@ -6,11 +6,13 @@
 	<th>Отметка</th>
 </tr>
 {foreach from=$items item="x"}
+{if $x and $x->topic()}
 <tr>
 	<td><b>{$x->titled_url()}</b>{if $x->description()}<br/><small>{$x->description()}</small>{/if}</td>
 	<td>{$x->topic()->forum()->titled_url()}</td>
 	<td>{$x->tools()->favorite_link_ajax()}</td>
 </tr>
+{/if}
 {/foreach}
 </table>
 {/if}
