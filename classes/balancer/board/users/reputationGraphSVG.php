@@ -32,6 +32,8 @@ class balancer_board_users_reputationGraphSVG extends base_image_svg
 			$voter = $r->owner();
 			$voter_id = $voter->id();
 			$target = $r->target_user();
+			if(!$target)
+				continue;
 			$target_id = $target->id();
 			if(empty($users[$voter_id]))
 				$users[$voter_id] = array(

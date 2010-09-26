@@ -45,7 +45,7 @@ $lang_common = array(
 'Redirect icon'			=>	'Форум перенесен',
 
 // Miscellaneous
-'Announcement'			=>	'Объявление',
+'Announcement'			=>	'Объявления',
 'Options'				=>	'Свойства',
 'Actions'				=>	'Действие',
 'Submit'				=>	'Отправить',	// "name" of submit buttons
