@@ -4,6 +4,9 @@ class balancer_board_posts_show extends bors_page
 {
 	function config_class() { return 'balancer_board_config'; }
 
+	function can_be_empty() { return false; }
+	function loaded() { return $this->post() != NULL; }
+
 	function parents() { return array($this->post()->topic()->url()); }
 
 	function auto_objects()

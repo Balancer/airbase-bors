@@ -36,7 +36,7 @@ function lcml_site_links_get($origin, $id, $url0)
 	if($image)
 		$text[] = "[img {$image} nohref|{$image_description}]";
 
-	$text[] = html2bb(trim($content), $url0);
+	$text[] = html2bb(trim($content), array('origin_url' => $url0));
 	$text[] = "// $url0";
 	$text[] =" [/quote]";
 

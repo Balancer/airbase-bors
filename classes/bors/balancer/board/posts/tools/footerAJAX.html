@@ -21,7 +21,7 @@
 <h6>Информация для координаторов</h6>
 <ul>
 <li>IP адрес: {$p->poster_ip()}</li>
-<li>GeoIP: {$p->poster_ip()|bors_geo_place_title}</li>
+<li>GeoIP: {$p->poster_ip()|geoip_place}</li>
 <li>User-Agent: {$p->poster_ua()}</li>
 <li>Точное время сообщения: {$p->create_time()|date:'d.m.Y H:i:s'}</li>
 <li{if $overquote_crit} style="color:red!important"{/if}>Уровень цитирования: {$overquote}%</li>

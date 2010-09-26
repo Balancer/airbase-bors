@@ -1,6 +1,6 @@
 <?php
 
-require_once('funcs/users/geoip/get_flag.php');
+require_once('inc/clients/geoip-place.php');
 
 class balancer_board_posts_tools_footerAJAX extends base_page
 {

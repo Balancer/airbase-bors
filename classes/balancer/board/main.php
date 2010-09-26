@@ -31,6 +31,16 @@ class balancer_board_main extends base_page
 			'is_public' => 1,
 		));
 
+		$youtube_objects = bors_find_all('balancer_board_posts_object', array(
+			'target_class_name' => 'bors_external_youtube',
+			'target_score>' => 2,
+			'order' => '-target_create_time',
+			'limit' => 20,
+		));
+
+		srand();
+		usort($youtube_objects, create_function('$x, $y', 'return rand(0, $y->target_score()+1) - rand(0, $x->target_score()+1);'));
+//		var_dump($youtube_objects[0]->data);
 //		bors_objects_preload($new_topics, 'first_post_id', 'balancer_board_post', 'first_post');
 		bors_objects_preload($new_topics, 'forum_id', 'balancer_board_forum', 'forum');
 
@@ -50,8 +60,8 @@ class balancer_board_main extends base_page
 				'by_id' => true,
 			)),
 
-			'last_youtube' => 'SzJA2mF14fA', //bors_server_var('last_youtube'),
-			'last_youtube_post' => object_load('balancer_board_post', 2260895),
+			'last_youtube' => $youtube_objects[0]->target_object_id(),// 'SzJA2mF14fA',
+			'last_youtube_post' => object_load('balancer_board_post', $youtube_objects[0]->post_id()),
 
 			'best_of_days' => objects_first('bors_votes_thumb', array(
 				'create_time>' => time()-86400*3,
