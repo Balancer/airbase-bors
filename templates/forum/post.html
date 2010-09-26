@@ -37,9 +37,9 @@
   {if $me->is_coordinator()}<div id="pttools_{$p->id()}" class="to-left"></div><img src="/_bors/i/tools.gif" alt="*" onclick="sh('pttools', {$p->id()})"  width="16" height="16" title="Инструменты координатора" />{/if}
  </div>
  {/if}
- <div class="to-left"><img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$p->id()},'up')"  alt="" width="16" height="16" /></div>
+ <div class="to-left"><img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$p->id()},'up')"  width="16" height="16" /></div>
  <div id="ptr{$p->id()}" class="to-left">{if $p->score() != NULL}{$p->score_colorized()}{/if}</div>
- <div class="to-left"><img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$p->id()},'down')" alt="" width="16" height="16" /></div>
+ <div class="to-left"><img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$p->id()},'down')" width="16" height="16" /></div>
  <div class="half-transparent to-left">{$p->imaged_edit_url()}</div>
 </div>
 {/if}

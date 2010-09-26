@@ -1,0 +1,8 @@
+{$this->pages_links()}
+
+{foreach from=$items item="v"}
+{assign var="p" value=$v->post()}
+{include file="xfile:forum/post.html" show_title=$p->topic()->title_url() strip="1500"}
+{/foreach}
+
+{$this->pages_links_nul()}
