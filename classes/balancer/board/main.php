@@ -38,11 +38,20 @@ class balancer_board_main extends base_page
 			'limit' => 20,
 		));
 
+		$top_visit_topics = objects_array('balancer_board_topic', array(
+				'num_views>=' => 10,
+				'last_visit - first_visit > 600',
+				'select' => array('(86400*num_views)/(last_visit-first_visit) AS views_per_day'),
+				'order' => '(86400*num_views)/(last_visit-first_visit) DESC',
+				'forum_id NOT IN' => array(37),
+				'limit' => 20,
+		));
+
 		srand();
 		usort($youtube_objects, create_function('$x, $y', 'return rand(0, $y->target_score()+1) - rand(0, $x->target_score()+1);'));
 //		var_dump($youtube_objects[0]->data);
 //		bors_objects_preload($new_topics, 'first_post_id', 'balancer_board_post', 'first_post');
-		bors_objects_preload($new_topics, 'forum_id', 'balancer_board_forum', 'forum');
+		bors_objects_preload(array_merge($new_topics, $top_visit_topics), 'forum_id', 'balancer_board_forum', 'forum');
 
 		return array(
 			'updated_topics' => objects_array('balancer_board_topic', array(
@@ -52,6 +61,7 @@ class balancer_board_main extends base_page
 			)),
 
 			'new_topics' => $new_topics,
+			'top_visit_topics' => $top_visit_topics,
 
 			'top_tags' => objects_array('common_keyword', array(
 				'targets_count>' => 50,

@@ -1,0 +1,8 @@
+Cross-browser Rotation Transformation with CSS
+http://samuli.hakoniemi.net/cross-browser-rotation-transformation-with-css/
+
+CSS: Rotate Text / Image Elements by 90, 180 or 270 Degrees
+http://www.kavoir.com/2009/08/css-rotate-text-image-elements-by-90-180-or-270-degrees.html
+
+Cross Browser CSS Transforms – even in IE
+http://www.useragentman.com/blog/2010/03/09/cross-browser-css-transforms-even-in-ie/

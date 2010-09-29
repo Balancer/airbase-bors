@@ -11,8 +11,8 @@
 		'(/forum/tools/post/)(\d+)/ => forum_tools_post(2)',
 
 		'/js/users/touch.js\?(.+) => user_js_touch(1)',
-		'/js/forum/topvisits.js => forum_js_topvisits',
-		
+//		'/js/forum/topvisits.js => forum_js_topvisits',
+
 		'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+ => forum_category(1)',
 		'/user/(\d+)/personal\.js => forum_js_personal(1)',
 		'(/)forum/ => forum_main',
