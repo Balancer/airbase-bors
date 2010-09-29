@@ -7,11 +7,11 @@ class user_reputation extends base_page
 	function title() { return $this->user ? $this->user->title().ec(": Репутация") : ''; }
 	function nav_name() { return ec("репутация"); }
 
-	function parents() { return array("forum_user://".$this->id()); }
+	function parents() { return array("balancer_board_user://".$this->id()); }
 
 	function __construct($id)
 	{
-		$this->user = class_load('forum_user', $id);
+		$this->user = class_load('balancer_board_user', $id);
 		parent::__construct($id);
 
 //		debug_exit("id={$id}, user={$this->user->id}, page={$this->page()}");
@@ -177,7 +177,7 @@ class user_reputation extends base_page
 
 		$dbf->query("UPDATE users SET reputation = '".str_replace(",",".",$total)."' WHERE id = $uid");
 
-		$target_user = class_load('forum_user', $uid);
+		$target_user = class_load('balancer_board_user', $uid);
 
 		foreach (glob($target_user->user_dir().'/reputation*.html') as $filename)
 			unlink($filename);

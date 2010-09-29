@@ -17,6 +17,7 @@
 {if $avatar_size == 100}
 {if $owner->group_title()}<h5>{$owner->group_title()}</h5>{/if}
 {* {if $owner->reputation()}<a href="http://balancer.ru/user/{$owner->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}"><img src="http://balancer.ru/user/{$owner->id()}/rep.gif" class="rep" alt="" /></a>{/if} *}
-{if $owner->reputation()}<a href="http://balancer.ru/user/{$owner->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}">{$owner->reputation_html()}</a>{/if}
-{if $owner->warnings() || $owner->is_banned()}<a href="http://balancer.ru/user/{$owner->id()}/warnings/"><img src="http://balancer.ru/user/{$owner->id()}/warnings.gif" class="warn" alt="" /></a>{/if}
+{if $owner->reputation()}<a href="http://balancer.ru/user/{$owner->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}" class="rep">{$owner->reputation_html()}</a>{/if}
+{* {if $owner->warnings() || $owner->is_banned()}<a href="http://balancer.ru/user/{$owner->id()}/warnings/"><img src="http://balancer.ru/user/{$owner->id()}/warnings.gif" class="warn" alt="" /></a>{/if} *}
+{if $owner->warnings() || $owner->is_banned()}<a href="http://balancer.ru/user/{$owner->id()}/warnings/" class="warn">{$owner->warnings_html()}</a>{/if}
 {/if}

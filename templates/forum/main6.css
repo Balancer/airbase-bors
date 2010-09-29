@@ -576,10 +576,17 @@ img.smile, img.nob {
 	border: none;
 }
 
-img.rep, img.warn {
+.rep, .warn {
+	display: block;
 	width: 100px;
-	height: 16px;
-	border: none;
+	height: 23px;
+	padding: 0;
+	margin: 0;
+/*	border: 1px solid #ccc;*/
+}
+
+a.rep:hover, a.warn:hover {
+	text-decoration: none;
 }
 
 td.now { font-weight: bold; }

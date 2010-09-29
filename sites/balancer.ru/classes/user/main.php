@@ -19,7 +19,7 @@ class user_main extends base_page
 		function user()
 		{
 			if($this->user === NULL)
-				$this->user = class_load('forum_user', $this->id());
+				$this->user = class_load('balancer_board_user', $this->id());
 
 			return $this->user;
 		}

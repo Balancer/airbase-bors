@@ -16,11 +16,13 @@ class forum_images_warnings extends base_image_gif
 		$image_name = "skull"; // "cross"
 
 		$user_id = $this->id();
+		$user = $this->user();
 
 		if($user_id)
 		{
-			$db = &new DataBase('punbb');
-			$warn_count = min(10, intval($db->get("SELECT SUM(score) FROM warnings WHERE user_id = $user_id AND time > ".(time()-WARNING_DAYS*86400))));
+//			$db = new driver_mysql('punbb');
+//			$warn_count = min(10, intval($db->get("SELECT SUM(score) FROM warnings WHERE user_id = $user_id AND time > ".(time()-WARNING_DAYS*86400))));
+			$warn_count = $user->warnings();
 		}
 		else
 			$warn_count = 0;
@@ -55,9 +57,9 @@ class forum_images_warnings extends base_image_gif
 
 //		$warn_count = 10; // -----------------
 
-		$user = $this->user();
 		if($warn_count >= 10 || $user->is_banned())
 		{
+			$db = new driver_mysql('punbb');
 			$total = 0;
 			$time  = 0;
 			foreach($db->get_array("SELECT score, time FROM warnings WHERE user_id = {$user_id} ORDER BY time DESC LIMIT 20") as $w)

@@ -22,7 +22,7 @@ class balancer_blog extends user_blog
 		
 		$this->set_id($id);
 	
-		$this->user = class_load('forum_user', $id);
+		$this->user = class_load('balancer_board_user', $id);
 		parent::__construct($id);
 			
 		$this->add_template_data('user_id', $id);

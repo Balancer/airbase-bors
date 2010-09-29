@@ -7,7 +7,7 @@ class user_blog extends base_page
 	function auto_objects()
 	{
 		return array(
-			'user' => 'forum_user(id)',
+			'user' => 'balancer_board_user(id)',
 		);
 	}
 
@@ -20,7 +20,7 @@ class user_blog extends base_page
 	function title() { return object_property($this->user(), 'title').ec(": Блог"); }
 	function nav_name() { return ec("блог"); }
 
-	function parents() { return array("forum_user://".$this->id()); }
+	function parents() { return array("balancer_board_user://".$this->id()); }
 
 	function is_reversed() { return true; }
 

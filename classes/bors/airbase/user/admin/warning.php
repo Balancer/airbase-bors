@@ -76,7 +76,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 
 	function delete()
 	{
-		$user = object_load('forum_user', $this->user_id());
+		$user = object_load('balancer_board_user', $this->user_id());
 		$ret = parent::delete();
 		bors()->changed_save();
 
