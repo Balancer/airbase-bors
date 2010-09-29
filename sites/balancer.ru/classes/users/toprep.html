@@ -12,7 +12,8 @@
 <tr><th colSpan="3">Высшие оценки:</th>
 <tr><th>№</th><th>Пользователь</th><th>Репутация</th></tr>
 {foreach from=$high item=u name=top1}
-<tr><td>{$smarty.foreach.top1.iteration}</td><td>{$u->titled_url()}</td><td><a href="/user/{$u->id()}/reputation/"><img src="/user/{$u->id()}/rep.gif" border="0" /></a>&nbsp;({$u->reputation()|sprintf:"%.1f"})</td></tr>
+{* <tr><td>{$smarty.foreach.top1.iteration}</td><td>{$u->titled_url()}</td><td><a href="/user/{$u->id()}/reputation/"><img src="/user/{$u->id()}/rep.gif" border="0" /></a>&nbsp;({$u->reputation()|sprintf:"%.1f"})</td></tr> *}
+<tr><td>{$smarty.foreach.top1.iteration}</td><td>{$u->titled_url()}</td><td><a href="/user/{$u->id()}/reputation/">{$u->reputation_html()}</a>&nbsp;({$u->reputation()|sprintf:"%.1f"})</td></tr>
 {/foreach}
 </table>
 
@@ -22,7 +23,8 @@
 <tr><th colSpan="2">Низшие оценки:</th>
 <tr><th>Пользователь</th><th>Репутация</th></tr>
 {foreach from=$low item=u}
-<tr><td>{$u->titled_url()}</td><td><a href="/user/{$u->id()}/reputation/"><img src="/user/{$u->id()}/rep.gif" border="0" /></a>&nbsp;({$u->reputation()|sprintf:"%.1f"})</td></tr>
+{* <tr><td>{$u->titled_url()}</td><td><a href="/user/{$u->id()}/reputation/"><img src="/user/{$u->id()}/rep.gif" border="0" /></a>&nbsp;({$u->reputation()|sprintf:"%.1f"})</td></tr> *}
+<tr><td>{$u->titled_url()}</td><td><a href="/user/{$u->id()}/reputation/">{$u->reputation_html()}</a>&nbsp;({$u->reputation()|sprintf:"%.1f"})</td></tr>
 {/foreach}
 </table>
 

@@ -577,12 +577,14 @@ img.smile, img.nob {
 }
 
 .rep, .warn {
-	display: block;
+	display: inline;
 	width: 100px;
 	height: 23px;
 	padding: 0;
 	margin: 0;
 /*	border: 1px solid #ccc;*/
+/*	letter-spacing: -3px; */
+	font-size: 16pt;
 }
 
 a.rep:hover, a.warn:hover {

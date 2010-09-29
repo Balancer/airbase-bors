@@ -34,15 +34,20 @@ class balancer_board_user extends forum_user
 //		☆★
 		$stars = str_repeat('★', $full_stars = intval($stars_count));
 		if($full_stars != $stars_count)
-			$stars .= '☆';
+		{
+			if($reputation >= 0)
+				$stars .= '☆';
+			else
+				$stars = '☆'.$stars;
+		}
 
 		if(!$stars)
 			return '';
 
 		if($reputation >= 0)
-			return "<div class=\"rep\" style=\"color: gold; font-size: 16pt; font-family: sans-serif\">{$stars}</div>";
+			return "<span class=\"rep\" style=\"color: gold; font-size: 16pt; font-family: sans-serif\">{$stars}</span>";
 		else
-			return "<div class=\"rep rot180\" style=\"color: gray; font-size: 16pt; font-family: sans-serif\">{$stars}</div>";
+			return "<span class=\"rep rot180\" style=\"color: gray; font-size: 16pt; font-family: sans-serif\">{$stars}</span>";
 	}
 
 	function warnings_html()
@@ -50,7 +55,7 @@ class balancer_board_user extends forum_user
 		$warnings = $this->warnings();
 
 		if(is_object($this->is_banned()))
-			return "<div style=\"color: red; font-size: 7pt; font-family: sans-serif\">админ. бан</div>";
+			return "<span style=\"color: red; font-size: 7pt; font-family: sans-serif\">админ. бан</span>";
 
 		if(!$warnings)
 			return '';
@@ -70,7 +75,7 @@ class balancer_board_user extends forum_user
 				}
 			}
 
-			return "<div style=\"color: red; font-size: 7pt; font-family: sans-serif\">бан до ".strftime("%d.%m.%Y", $this->expired = $time+WARNING_DAYS*86400)."</div>";
+			return "<span style=\"color: red; font-size: 7pt; font-family: sans-serif\">бан до ".strftime("%d.%m.%Y", $this->expired = $time+WARNING_DAYS*86400)."</span>";
 		}
 
 //		☠
@@ -81,6 +86,6 @@ class balancer_board_user extends forum_user
 		if(!$skulls)
 			return '';
 
-		return "<div class=\"warn\" style=\"margin:0; padding:0; color: black; font-size: 15pt; font-family: sans-serif\">{$skulls}</div>";
+		return "<span class=\"warn\" style=\"margin:0; padding:0; color: black; font-size: 16pt; font-family: sans-serif\">{$skulls}</span>";
 	}
 }
