@@ -28,7 +28,7 @@ class users_toprep extends base_page
 			'pure_low' => objects_array('bors_user', array('order' => 'pure_reputation', 'limit' => 50)),
 			
 			'latest' => $latest,
-			'users'	=> objects_array('forum_user', array('id IN' => array_keys($user_ids), 'by_id' => true)),
+			'users'	=> objects_array('balancer_board_user', array('id IN' => array_keys($user_ids), 'by_id' => true)),
 		);
 	}
 

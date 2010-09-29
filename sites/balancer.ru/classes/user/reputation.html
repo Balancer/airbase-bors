@@ -19,7 +19,7 @@
 document.write('<s'+'cript type="text/javascript" src="http://balancer.ru/js/users/reputation,{$user_id}.js?ref='+(document.location.search.substring(1) ? document.location.search.substring(1) : document.referrer)+'"></s'+'cript>')
 </script>
 <td>
-{bors_class_load var=owner class="forum_user" id=$user_id}
+{bors_class_load var=owner class="balancer_board_user" id=$user_id}
 <div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>
 </td>
 </tr></table>
@@ -43,7 +43,7 @@ if(top.me_is_coordinator)
 <table cellSpacing="0" class="btab">
 <tr><th>Дата</th><th>Вид</th><th>От кого</th><th>Комментарий</th></tr>
 {foreach from=$list item=r}
-{bors_object_load var=u class="forum_user" id=$r->voter_id()}
+{bors_object_load var=u class="balancer_board_user" id=$r->voter_id()}
 
 {if $r->score()>0}
 {assign var="backcolor" value="pos_reputation"}

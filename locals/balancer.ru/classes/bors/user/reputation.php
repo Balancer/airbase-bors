@@ -13,7 +13,7 @@ class user_reputation extends base_page_db
 
 	function __construct($id)
 	{
-		$this->user = class_load('forum_user', $id);
+		$this->user = class_load('balancer_board_user', $id);
 		parent::__construct($id);
 
 		if(!$id)
@@ -126,7 +126,7 @@ class user_reputation extends base_page_db
 
 		$dbf->query("UPDATE users SET reputation = '".str_replace(",",".",$total)."' WHERE id = $uid");
 
-		class_load('forum_user', $uid)->cache_clean_self();
+		class_load('balancer_board_user', $uid)->cache_clean_self();
 		class_load('cache_group', "user-{$uid}-reputation")->clean();
 		
 		include_once("funcs/navigation/go.php");

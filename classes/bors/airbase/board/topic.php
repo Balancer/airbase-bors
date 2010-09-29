@@ -298,7 +298,7 @@ class airbase_board_topic extends forum_topic
 
 //		TODO: убедиться, что модифицируется только автор сообщения при постинге: блоги, все сообщения и т.п.
 //		foreach($this->all_users() as $user_id)
-//			$res[] = object_load('forum_user', $user_id);
+//			$res[] = object_load('balancer_board_user', $user_id);
 			
 		return $res;
 	}

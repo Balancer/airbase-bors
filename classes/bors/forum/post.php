@@ -218,10 +218,10 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if(!$this->flag_db() || !preg_match("!>$!", $this->flag_db()))
 		{
 			require_once('inc/clients/geoip-place.php');
-			$db = new driver_mysql(config('punbb.database', 'punbb'));
-			$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
+//			$db = new driver_mysql(config('punbb.database', 'punbb'));
+//			$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
 			$this->set_flag_db(geoip_flag($this->poster_ip(), $this->owner_id() == 10000), true);
-			$db->close();
+//			$db->close();
 		}
 
 		return $this->flag_db();

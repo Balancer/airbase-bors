@@ -30,8 +30,8 @@ class airbase_user_warning extends base_object_db
 		);
 	}
 
-	function moderator() { return object_load('forum_user', $this->moderator_id()); }
-	function user() { return object_load('forum_user', $this->user_id()); }
+	function moderator() { return object_load('balancer_board_user', $this->moderator_id()); }
+	function user() { return object_load('balancer_board_user', $this->user_id()); }
 
 	function referer_titled_url()
 	{

@@ -28,7 +28,7 @@ class module_forum_blog extends base_page
 
 		$x = bors_fields_array_extract($blogs, array('id', 'owner_id', 'forum_id'));
 		$posts = objects_array('forum_post', array('id IN' => array_filter(array_unique($x['id'])), 'by_id' => true));
-		$users = objects_array('forum_user', array('id IN' => array_filter(array_unique($x['owner_id'])), 'by_id' => true));
+		$users = objects_array('balancer_board_user', array('id IN' => array_filter(array_unique($x['owner_id'])), 'by_id' => true));
 		$forums = objects_array('forum_forum', array('id IN' => array_filter(array_unique($x['owner_id'])), 'by_id' => true));
 		$topics = objects_array('forum_topic', array('id IN' => array_filter(array_unique(bors_field_array_extract($posts, 'topic_id')))));
 

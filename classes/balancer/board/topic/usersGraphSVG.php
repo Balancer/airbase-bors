@@ -99,7 +99,7 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 			{
 				if(empty($users[$to_id]))
 				{
-					$user = object_load('forum_user', $to_id);
+					$user = object_load('balancer_board_user', $to_id);
 					$graph->addNode(
 						$to_id,
 						array(
@@ -111,7 +111,7 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 
 				if(empty($users[$from_id]))
 				{
-					$user = object_load('forum_user', $from_id);
+					$user = object_load('balancer_board_user', $from_id);
 					$graph->addNode(
 						$from_id,
 						array(
