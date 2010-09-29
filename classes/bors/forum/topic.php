@@ -198,8 +198,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");
 
-		bors_objects_preload($data['posts'], 'owner_id', 'forum_user', 'owner');
-		bors_objects_preload($data['last_actions'], 'owner_id', 'forum_user', 'owner');
+		bors_objects_preload($data['posts'], 'owner_id', 'balancer_board_user', 'owner');
+		bors_objects_preload($data['last_actions'], 'owner_id', 'balancer_board_user', 'owner');
 
 		$data['this'] = $this;
 		return template_assign_data("xfile:forum/topic.html", $data);
@@ -404,7 +404,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 //		TODO: убедиться, что модифицируется только автор сообщения при постинге: блоги, все сообщения и т.п.
 //		foreach($this->all_users() as $user_id)
-//			$res[] = object_load('forum_user', $user_id);
+//			$res[] = object_load('balancer_board_user', $user_id);
 			
 		return $res;
 	}

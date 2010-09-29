@@ -1,5 +1,5 @@
 <?php
-
+//TODO: под снос, если не нужна статика
 class forum_js_topvisits extends base_js
 {
 	function local_template_data_set()

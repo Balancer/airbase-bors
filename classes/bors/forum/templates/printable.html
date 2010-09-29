@@ -4,7 +4,7 @@
 <h3>{$p->flag()} {$p->author_name()}, {$p->create_time()|full_time}</h3>
 {if $p->answer_to_id()}<i><small>
 {assign var=a value=$p->answer_to()}
-(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>)
+{if $a}(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>){/if}
 </small></i>{/if}
 <p>
 {$p->body()}

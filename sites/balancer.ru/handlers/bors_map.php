@@ -60,7 +60,7 @@ $map = array(
 
 	'/user/(\d+)/personal\.js => forum_js_personal(1)',
 	'/_bors/j/users/(\d+)/personal\.js => forum_js_personal(1)',
-	'/_bors/j/local/forum/topvisits\.js => forum_js_topvisits',
+//	'/_bors/j/local/forum/topvisits\.js => forum_js_topvisits',
 
 	'/user/(\d+)/setvars.js => forum_user_js_setvars(1)',
 	'/js/users/touch.js\?(.+) => user_js_touch(1)',
@@ -103,7 +103,7 @@ $map = array(
 		'(/img/forums/)(\d+)/? => balancer_images_index(2)',
 
 		'/js/users/reputation,(\d+)\.js => user_js_reputation(1,2)',
-		'/js/forum/topvisits\.js => forum_js_topvisits',
+//		'/js/forum/topvisits\.js => forum_js_topvisits',
 
 		'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+ => forum_category(1)',
 		'(/)forum/ => forum_main',

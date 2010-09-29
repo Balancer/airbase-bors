@@ -147,7 +147,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function owner()
 	{
 		if($this->__owner === NULL)
-			$this->__owner =  object_load('forum_user', $this->owner_id());
+			$this->__owner =  object_load('balancer_board_user', $this->owner_id());
 
 		return $this->__owner;
 	}

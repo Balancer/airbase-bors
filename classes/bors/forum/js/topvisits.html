@@ -1,6 +1,0 @@
-<ul>
-{foreach from=$top item=x}
-{assign var="topic" value=$x.topic}
-<li><a href="{$topic->url()}" title="{$topic->title()|htmlspecialchars}; Посещений: {$x.total} с {$x.start|date:'d.m.Y'}"{if $topic->create_time() > time() - 86400} style="color: #c24;"{/if}>{$topic->title()|truncate:50}</a></li>
-{/foreach}
-</ul>

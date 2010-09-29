@@ -270,8 +270,8 @@ div.avatar_block h5 {
 }
 
 div.avatar_block div {
-	width: 100px;
-	height: 100px;
+/*	width: 100px;
+	height: 100px;*/
 	margin: 0;
 	text-align: center;
 	vertical-align: middle;
@@ -714,3 +714,5 @@ table.yandex_money input {
 	vertical-align: middle;
 	margin-left: 2px;
 }
+
+.rot180{behavior:url(-ms-transform.htc);-moz-transform:rotate(180deg);-webkit-transform:rotate(180deg);-o-transform:rotate(180deg);-ms-transform:rotate(180deg);}
