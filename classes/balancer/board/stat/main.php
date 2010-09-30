@@ -40,6 +40,7 @@ class balancer_board_stat_main extends bors_page
 			@$forums_stat[$x->forum_id()] += $topics_count[$x->id()] ;
 
 		arsort($forums_stat);
+		$forums_stat = array_slice($forums_stat, 0, 50, true);
 
 		$forums = objects_array('balancer_board_forum', array('id IN' => array_keys($forums_stat), 'by_id' => true));
 

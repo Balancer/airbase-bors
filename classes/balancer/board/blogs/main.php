@@ -14,7 +14,7 @@ class balancer_board_blogs_main extends bors_abstract_blog
 
 	function pre_show()
 	{
-		templates_noindex();
+		template_noindex();
 		return parent::pre_show();
 	}
 
