@@ -375,7 +375,7 @@ span.clear {
 	padding: 0 8px;
 }
 
-/* previene allargamento floats (hidden) \*//*/
+/* previene allargamento floats (hidden) */
 .inleft, .incenter {
 	width: 100%;
 	overflow: hidden;
@@ -584,8 +584,15 @@ img.smile, img.nob {
 	margin: 0;
 /*	border: 1px solid #ccc;*/
 /*	letter-spacing: -3px; */
-	font-size: 15pt;
 	font-family: Tahoma, Verdana, sans-serif;
+}
+
+.rep {
+	font-size: 15pt;
+}
+
+.warn {
+	font-size: 24px;
 }
 
 a.rep:hover, a.warn:hover {
