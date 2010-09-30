@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bors>
+<owner_id>10000</owner_id>
+<last_editor_id>10000</last_editor_id>
+<new></new>
+<title>Документация по форуму</title>
+<description></description>
+<source> * [format/|Форматирование]
+
+[red][i]раздел в процессе написания[/i][/red]</source>
+<cr_type>save_cr</cr_type>
+<parents>
+<i idx="0">/</i>
+</parents>
+<new_object_class>page_fs_xml</new_object_class>
+<go>newpage</go>
+<uri>http://forums.balancer.ru/doc/?edit</uri>
+<class_name>page_fs_xml</class_name>
+<main_url>/doc/</main_url>
+<edit></edit>
+<modify_time>Tue, 14 Jul 2009 15:11:20 GMT</modify_time>
+</bors>
