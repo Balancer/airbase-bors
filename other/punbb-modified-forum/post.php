@@ -236,6 +236,7 @@ if (isset($_POST['form_sent']))
 
 	// Clean up message from POST
 	$message = pun_linebreaks(pun_trim($_POST['req_message']));
+	$message = bors_markup_prepare::parse($message);
 
 	if ($message == '')
 		$errors[] = $lang_post['No message'];

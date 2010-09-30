@@ -349,7 +349,7 @@ span.clear {
 }
 
 .wrapper {
-    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
+    background: #D8F0FF url(http://airbase.ru/images/web/sky-back.jpg);
 }
 
 .outer {
@@ -579,12 +579,13 @@ img.smile, img.nob {
 .rep, .warn {
 	display: inline;
 	width: 100px;
-	height: 23px;
+	height: 24px;
 	padding: 0;
 	margin: 0;
 /*	border: 1px solid #ccc;*/
 /*	letter-spacing: -3px; */
-	font-size: 16pt;
+	font-size: 15pt;
+	font-family: Tahoma, Verdana, sans-serif;
 }
 
 a.rep:hover, a.warn:hover {
@@ -724,4 +725,4 @@ table.yandex_money input {
 	margin-left: 2px;
 }
 
-.rot180{behavior:url(-ms-transform.htc);-moz-transform:rotate(180deg);-webkit-transform:rotate(180deg);-o-transform:rotate(180deg);-ms-transform:rotate(180deg);}
+.rot180{behavior:url(/_bors/css/-ms-transform.htc);-moz-transform:rotate(180deg);-webkit-transform:rotate(180deg);-o-transform:rotate(180deg);-ms-transform:rotate(180deg);}

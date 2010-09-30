@@ -5,7 +5,7 @@
 {if $owner->use_avatar()}
 <div style="height: {$owner->avatar_height($avatar_size)}px; margin: {math equation="max(0,floor((s-w)/2))" w=$owner->avatar_width() s=$avatar_size}px 0">
 <a href="{$owner->url()}">
-<img src="http://balancer.ru/forum/punbb/img/avatars/{$owner->use_avatar()}" width="{$owner->avatar_width($avatar_size)}" height="{$owner->avatar_height($avatar_size)}" alt="" />
+<img src="http://s.wrk.ru/a/{$owner->use_avatar()}" width="{$owner->avatar_width($avatar_size)}" height="{$owner->avatar_height($avatar_size)}" alt="" />
 </a>
 </div>
 {else}
