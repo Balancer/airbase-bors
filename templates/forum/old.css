@@ -144,12 +144,12 @@ li{
 }
 
 #li_g{
-    list-style-image:URL(http://airbase.ru//images/web/gb.gif);
+    list-style-image:URL(http://airbase.ru/images/web/gb.gif);
 }
 
 body{
     color: #003366;
-    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
+    background: #D8F0FF url(http://airbase.ru/images/web/sky-back.jpg);
 }
 
 A{color: #0066CC}
@@ -192,7 +192,7 @@ th{
 
 #addurl, #addinfo, #tnews, #xref
 {
-    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
+    background: #D8F0FF url(http://airbase.ru/images/web/sky-back.jpg);
 }
 
 #dtab td{
@@ -205,7 +205,7 @@ th{
 }
 
 #btab td, .btab td{
-    background: #e8f0fc; /*#D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);*/
+    background: #e8f0fc; /*#D8F0FF url(http://airbase.ru/images/web/sky-back.jpg);*/
 }
 
 hr{

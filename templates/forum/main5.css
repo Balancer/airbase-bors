@@ -2,7 +2,7 @@ body {
 	font-size: 10pt;
 	font-family: Verdana;
 	color: #358;
-    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
+    background: #D8F0FF url(http://airbase.ru/images/web/sky-back.jpg);
 	margin: 0px; 
 	padding: 0px 0px 32px 4px;
 	clear: both;
@@ -335,7 +335,7 @@ span.clear {
 }
 
 .wrapper {
-    background: #D8F0FF url(http://airbase.ru//images/web/sky-back.jpg);
+    background: #D8F0FF url(http://airbase.ru/images/web/sky-back.jpg);
 }
 
 .outer {

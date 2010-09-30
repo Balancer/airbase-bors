@@ -12,15 +12,22 @@
 {/if}
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
-	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
-<!--[if IE]><link href="/_bors/css/bors/ie.css" rel="stylesheet" media="all" /><![endif]-->
-<!--[if IE 6]><link href="/_bors/css/bors/ie6.css" rel="stylesheet" media="all" /><![endif]-->
-<!--[if IE 7]><link href="/_bors/css/bors/ie7.css" rel="stylesheet" media="all" /><![endif]-->
-	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
-	<link rel="stylesheet" type="text/css" href="/_bors/css/main6.css" />
+	<link rel="stylesheet" type="text/css" href="/_bors/css/balancer.css" />
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
+
+{literal}
+<!--[if IE]><style>
+.outer, .wide, h2, .wrapper, .minwidth { height: 0; height: auto; zoom: 1; }
+dd, dt { height: 1%; }
+</style><![endif]-->
+<!--[if lt IE 7]><style>
+.minwidth { border-left: 404px solid #fff; }
+.wrapper { margin-left: -404px; position: relative; }
+pre { word-wrap: break-word; }
+</style><![endif]-->
+{/literal}
 
 {foreach from=$js_include item="s"}
 <script type="text/javascript" src="{$s}"></script>
@@ -65,26 +72,6 @@ if(!inArray(readed, {$id}) && readed.length < 40) readed.push({$id})
 createCookie('readedTopics', readed.join(' '), 3)
 --></script>
 {/if}
-{literal}
-<!--[if IE]><style>
-.outer, .wide, h2, .wrapper, .minwidth {
-	height: 0;
-	height: auto;
-	zoom: 1;
-}
-dd, dt { height: 1%; }
-</style><![endif]-->
-<!--[if lt IE 7]><style>
-.minwidth {
-	border-left: 404px solid #fff;
-}
-.wrapper {
-	margin-left: -404px;
-	position: relative;
-}
-</style><![endif]-->
-
-{/literal}
 {if $header}
 {foreach from=$header item="h"}
 {$h}
@@ -333,6 +320,7 @@ try { var yaCounter510488 = new Ya.Metrika(510488); } catch(e){}
 <noscript><div style="position: absolute;"><img src="//mc.yandex.ru/watch/510488" alt="" /></div></noscript>
 <!-- /Yandex.Metrika -->
 {/literal}
+
 </div>{* /center *}
 
 </dd></dl>
