@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bors>
+<owner_id>10000</owner_id>
+<last_editor_id>10000</last_editor_id>
+<new></new>
+<title>Предварительно отформатированный код</title>
+<description></description>
+<source>== Форматирование в Wiki-стиле ==
+
+Если строка текста начинается с пробела, то эта строка считается предварительно отформатированной. 
+[code|Пример кода:]
+простая строка
+ строка, начинающаяся с пробела
+опять простая строка
+    // фрагмента кода:
+    function local_data()
+    {
+        templates_noindex();
+
+        return array(
+            'new_url' =&gt; $this-&gt;id(),
+            'referer' =&gt; ($ref = bors()-&gt;referer()) ? $ref : 'newpage_admin',
+        );
+    }
+[/code]
+
+[quote|Результат обработки:]
+простая строка
+ строка, начинающаяся с пробела
+опять простая строка
+    // фрагмента кода:
+    function local_data()
+    {
+        templates_noindex();
+
+        return array(
+            'new_url' =&gt; $this-&gt;id(),
+            'referer' =&gt; ($ref = bors()-&gt;referer()) ? $ref : 'newpage_admin',
+        );
+    }
+[/quote]
+</source>
+<cr_type>save_cr</cr_type>
+<parents>
+<i idx="0">/doc/format/</i>
+</parents>
+<new_object_class>page_fs_xml</new_object_class>
+<go>newpage</go>
+<uri>http://forums.balancer.ru/doc/format/pre/?edit</uri>
+<class_name>page_fs_xml</class_name>
+<main_url>/doc/format/pre/</main_url>
+<edit></edit>
+<modify_time>Tue, 14 Jul 2009 15:22:39 GMT</modify_time>
+</bors>

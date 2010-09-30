@@ -1,0 +1,14 @@
+{$this->pages_links_nul()}
+
+<table class="btab w100p">
+<caption>Ответы на Ваши сообщения</caption>
+<tr><th>Время</th><th>тема</th><th>форум</th></tr>
+{foreach from=$posts item="p"}
+<tr{if not $p->has_readed_by_user($me)} class="b"{/if}><td>{$p->create_time()|smart_time}</td>
+	<td>{$p->titled_url()}<br/></td>
+	<td>{$p->topic()->forum()->nav_named_url()}</td>
+</tr>
+{/foreach}
+</table>
+
+{$this->pages_links_nul()}
