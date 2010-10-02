@@ -64,7 +64,7 @@ class forum_tools_post_moveTree extends base_page
 			$tid = $m[1];
 
 		$tid = intval($tid);
-	
+
 		$new_topic = object_load('forum_topic', $tid, array('no_load_cache' => true));
 		if(!$new_topic || !$new_topic->id())
 			return bors_message(ec('Тема с номером ').$tid.ec(' не существует'));
@@ -100,9 +100,11 @@ class forum_tools_post_moveTree extends base_page
 			$pid = $m[1];
 		elseif(preg_match('!\?pid=(\d+)!', $pid, $m))
 			$pid = $m[1];
+		elseif(preg_match('!/p(\d+)\.html$!', $pid, $m))
+			$pid = $m[1];
 
 		$pid = intval($pid);
-	
+
 		$new_post = object_load('forum_post', $pid);
 		if(!$new_post || !$new_post->id())
 			return bors_message(ec('Сообщение с номером ').$pid.ec(' не существует'));
