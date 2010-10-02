@@ -1,0 +1,29 @@
+{$this->pages_links_nul('', '', ' ')}
+
+{foreach from=$items item=p}
+{if $p && !$p->is_deleted()}
+<hr />
+<h3>{$p->flag()} {$p->author_name()}, {$p->create_time()|full_time}</h3>
+{if $p->answer_to_id()}<i><small>
+{assign var=a value=$p->answer_to()}
+{if $a}(ответ на {$a->author_name()}, <a href="{$a->url()}">{$a->create_time()|full_time}</a>){/if}
+</small></i>{/if}
+<p>
+{$p->body()}
+</p>
+
+{if $p->attaches()}
+<hr />
+<p>
+Прикреплённые файлы:
+{foreach from=$p->attaches() item="attach"}
+<div class="box float_left center" style="width: 300px; ">{$attach->thumbnail_link('300x300')}<a href="{$attach->url()}">{$attach->title()}</a> [{$attach->size()|smart_size}, {$attach->downloads()} загруз{$attach->downloads()|sklon:'ка,ки,ок'}]</div>
+{/foreach}
+</p>
+{/if}
+
+{/if}
+{/foreach}
+<hr />
+
+{$this->pages_links_nul('', '', ' ')}

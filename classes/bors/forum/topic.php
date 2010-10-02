@@ -167,7 +167,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if($this->page() == 'last')
 			return go($this->url($this->total_pages()));
 
-		if(!$this->forum()->can_read())
+		if(!$this->forum() || !$this->forum()->can_read())
 		{
 			template_noindex();
 			return bors_message("Извините, доступ к этому ресурсу закрыт для Вас");
@@ -296,7 +296,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function cache_static() { return $this->is_public_access() ? rand(86400, 86400*3) : 0; }
 
-	function base_url() { return $this->forum_id() ? $this->forum()->category()->category_base_full() : '/'; }
+	function base_url() { return $this->forum_id() && $this->forum() ? $this->forum()->category()->category_base_full() : '/'; }
 
 	function title_url()
 	{
