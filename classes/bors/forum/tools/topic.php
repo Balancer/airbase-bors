@@ -39,10 +39,14 @@ class forum_tools_topic extends base_page
 	function local_data()
 	{
 		$db = new driver_mysql(config('punbb.database', 'punbb'));
+		$user_ids = $db->select_array('posts', 'DISTINCT poster_id', array(
+			'topic_id' => $this->id(),
+		));
 
 		return array(
 			'me' => bors()->user(),
 			'is_subscribed' => $db->select('subscriptions', 'COUNT(*)', array('user_id' => bors()->user_id(), 'topic_id' => $this->id())),
+			'authors' => objects_array('balancer_board_user', array('id IN' => $user_ids, 'order' => 'title')),
 		);
 	}
 }

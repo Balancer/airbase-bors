@@ -554,6 +554,9 @@ if (isset($_POST['form_sent']))
 		$topic->set_last_post_create_time($post->create_time(), true);
 		$post->set_modify_time(time(), true);
 
+		if($me->xmpp_notify_enabled() && $me->id() != $post->owner_id())
+			bors_messages_users_xmpp::queue($me, $topic);
+
 		if($me && $me->is_coordinator())
 		{
 			if(!empty($_POST['is_moderatorial']))

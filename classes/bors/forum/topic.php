@@ -122,7 +122,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	function set_forum($forum) { return $this->set_attr('forum', $forum); }
 
 
-	function last_post() { return object_load('forum_post', $this->last_post_id()); }
+//	function last_post() { return object_load('forum_post', $this->last_post_id()); }
 
 	function parents() { return array("forum_forum://".$this->forum_id()); }
 
@@ -566,6 +566,7 @@ $(function() {
 	{
 		return array(
 			'first_post' => 'balancer_board_post(first_post_id)',
+			'last_post' => 'balancer_board_post(last_post_id)',
 		);
 	}
 

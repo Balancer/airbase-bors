@@ -3,9 +3,10 @@
 <title>{$this->browser_title()}</title>
 </head>
 <body>
-<small>{module class="nav_top" id=$this}</small>
 <h1>{$this->page_title()}</h1>
 {if $this->description()}<small><i>{$this->description}</i></small>{/if}
 {$this->body()}
+<hr/>
+<small>{module class="nav_top" id=$this}{if $this->full_version_url()} [<a href="{$this->full_version_url()}">полная версия</a>]{/if}</small>
 </body>
 </html>

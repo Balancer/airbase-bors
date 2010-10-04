@@ -192,6 +192,7 @@ if (isset($_POST['form_sent']))
 			$blog->set_owner_id($post->owner_id(), true);
 			$blog->set_forum_id($topic->forum_id(), true);
 			$blog->set_is_public($topic->is_public(), true);
+			$blog->set_keywords_string($_POST['blog_keywords_string'], true);
 			$blog->cache_clean();
 
 			include_once('engines/blogs/livejournal.com.php');
@@ -200,14 +201,14 @@ if (isset($_POST['form_sent']))
 				$topic,
 				$topic->first_post()->id() == $post->id() ? $topic : $post,
 				$post,
-				$topic
+				$blog->keywords_string() ? $blog : $topic
 			);
 		}
 
 		$topic->cache_clean_self();
 
 		$post->cache_clean();
-	
+
 		//Attachment Mod 2.0 Block Start
 		//First check if there are any files to delete, the postvariables should be named 'attach_delete_'.$i , if it's set you're going to delete the value of this (the 0 =< $i < attachments, just to get some order in there...)
 		if(isset($_POST['attach_num_attachments'])){
@@ -435,11 +436,16 @@ if($msg = $post->is_edit_disable())
 					<legend><?php echo $lang_post['Edit post legend'] ?></legend>
 					<input type="hidden" name="form_sent" value="1" />
 					<div class="infldset txtarea">
-<?php if ($can_edit_subject): ?>						<label><?php echo $lang_common['Subject'] ?><br />
-						<input class="longinput" type="text" name="req_subject" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?php echo pun_htmlspecialchars(isset($_POST['req_subject']) ? $_POST['req_subject'] : $cur_post['subject']) ?>" /><br /></label>
+<?php if ($can_edit_subject): ?>
+	<label><?php echo $lang_common['Subject'] ?><br /><input class="longinput" type="text" name="req_subject" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?php echo pun_htmlspecialchars(isset($_POST['req_subject']) ? $_POST['req_subject'] : $cur_post['subject'])/*"*/ ?>" /><br /></label>
 	<label>Описание темы<br/><input class="longinput" type="text" name="description" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?php echo pun_htmlspecialchars(isset($_POST['decription']) ? $_POST['description'] : $cur_post['description']) ?>" /><br /></label>
 	<label>Ключевые слова (через запятую)<br/><input class="longinput" type="text" name="keywords_string" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?php echo pun_htmlspecialchars(isset($_POST['keywords_string']) ? $_POST['keywords_string'] : $cur_post['keywords_string'] ? $cur_post['keywords_string'] : $forum->keywords_string()) ?>" /><br /></label>
-<?php endif; ?>						<label><?php echo $lang_common['Message'] ?><br />
+<?php endif; ?>
+<?php if($blog): ?>
+	<label>Ключевые слова для записи блога<br/><input class="longinput" type="text" name="blog_keywords_string" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?php echo pun_htmlspecialchars(isset($_POST['blog_keywords_string']) ? $_POST['keywords_string'] : $blog->keywords_string()) /*"*/ ?>" /><br /></label>
+<?php endif; ?>
+	<label><?php echo $lang_common['Message'] ?><br />
+
 <div id="emoticons">
 	<a href="#" title=":)"><img src="http://airbase.ru/forum/smilies/smile.gif" /></a>
 	<a href="#" title=":("><img src="http://airbase.ru/forum/smilies/frown.gif" /></a>

@@ -53,6 +53,7 @@ class forum_post extends base_page_db
 			'is_spam',
 			'is_incorrect',
 			'last_moderator_id',
+			'sort_order' => '`order`',
 		);
 	}
 

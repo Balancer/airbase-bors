@@ -5,7 +5,7 @@
 <tr><th>Время</th><th>тема</th><th>форум</th></tr>
 {foreach from=$posts item="p"}
 <tr{if not $p->has_readed_by_user($me)} class="b"{/if}><td>{$p->create_time()|smart_time}</td>
-	<td>{$p->titled_url()}<br/></td>
+	<td><a href="{$p->url_for_igo()}">{$p->title()}</a><br/></td>
 	<td>{$p->topic()->forum()->nav_named_url()}</td>
 </tr>
 {/foreach}
