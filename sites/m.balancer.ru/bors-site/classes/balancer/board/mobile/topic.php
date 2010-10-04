@@ -2,17 +2,22 @@
 
 class balancer_board_mobile_topic extends balancer_board_topic
 {
-	function extends_class() { return 'forum_topic'; }
+	function extends_class() { return 'forum_post'; }
 
-	function url() { return '/t'.$this->id(); }
+	function url($page = NULL) { return '/t'.$this->id().($page > 1 ? ".$page" : ""); }
 
 	function parents() { return array($this->forum()->url()); }
 
+	function forum() { return bors_load('balancer_board_mobile_forum', $this->forum_id()); }
+
 	function auto_objects()
 	{
-		return array(
-			'forum' => 'balancer_board_mobile_forum(forum_id)',
-		);
+		return array_merge(parent::auto_objects(), array(
+//			'forum' => 'balancer_board_mobile_forum(forum_id)',
+			'first_post' => 'balancer_board_mobile_post(first_post_id)',
+			'last_post' => 'balancer_board_mobile_post(last_post_id)',
+			'new_post' => 'balancer_board_mobile_post(new_post_id)',
+		));
 	}
 
 	function local_data()
@@ -26,6 +31,4 @@ class balancer_board_mobile_topic extends balancer_board_topic
 			)),
 		);
 	}
-
-	function items_per_page() { return 10; }
 }

@@ -1,11 +1,12 @@
 <?php
 
-class balancer_board_mobile_main extends bors_page
+class balancer_board_mobile_main extends balancer_board_mobile_page
 {
 	var $title_ec = "Форумы Balancer'а, мобильная версия";
 	var $nav_name_ec = "мобильные форумы";
 	function parents() { return array('/'); }
-	function is_auto_url_mapped_class() { return true; }
+
+	function can_read() { return true; }
 
 	function local_data()
 	{

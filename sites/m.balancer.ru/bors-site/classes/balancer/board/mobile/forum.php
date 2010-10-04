@@ -2,55 +2,37 @@
 
 class balancer_board_mobile_forum extends balancer_board_forum
 {
+	function url($page = NULL) { return '/f'.$this->id().($page > 1 ? '.'.$page : NULL); }
 	function extends_class() { return 'forum_forum'; }
-
-	function url() { return '/f'.$this->id(); }
-
-//	function parents() { echo 'x'.$this->category()->url(); return array($this->category()->url()); }
-//	function parents() { return array('/'); }
 
 	function parents()
 	{
-		if($this->parent_forum_id())
-			return array($this->parent_forum()->url());
+		if($this->forum()->parent_forum_id())
+			return array($this->forum()->parent_forum()->url());
 
-		if($this->category())
-			return array($this->category()->url());
+		if($this->forum()->category())
+			return array($this->forum()->category()->url());
 
 		return array('/');
 	}
 
-	private $__category = 0;
 	function category()
 	{
-		if($this->__category !== 0)
-			return $this->__category;
+		if($this->__lastfc())
+			return $this->__lastc;
 
-		$f = $this;
+		$f = $this->forum();
 		while($f->category_id() == 0)
 			$f = object_load(config('punbb.forum_class', 'balancer_board_mobile_forum'), $f->parent_forum_id());
 
-		return $this->__category = object_load('balancer_board_mobile_category', $f->category_id());
+		return $this->__setc(object_load('balancer_board_mobile_category', $f->category_id()));
 	}
 
 	function auto_objects()
 	{
 		return array(
+			'forum' => 'balancer_board_mobile_forum(id)',
 			'parent_forum' => 'balancer_board_mobile_forum(parent_forum_id)',
 		);
 	}
-
-	function local_data()
-	{
-		return array(
-			'topics' => objects_array('balancer_board_mobile_topic', array(
-				'forum_id' => $this->id(),
-				'page' => $this->page(),
-				'per_page' => $this->items_per_page(),
-				'order' => '-modify_time',
-			)),
-		);
-	}
-
-	function items_per_page() { return 10; }
 }

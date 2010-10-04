@@ -74,6 +74,8 @@ class forum_user extends base_object_db
 			'last_message_md',
 			'mailing_period',
 			'last_mailing',
+			'xmpp_notify_enabled', // Период нотификации. 0 == запрещено, -1 - мгновенно, иначе - период времени.
+			'last_mailing',
 		);
 	}
 
