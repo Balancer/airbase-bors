@@ -1,0 +1,7 @@
+{$this->post()->body()}
+<hr/>
+[
+{if $prev}««« {$prev->nav_named_link()}{/if} 
+{if $prev and $next} | {/if} 
+{if $next} {$next->nav_named_link()} »»»{/if} 
+]
