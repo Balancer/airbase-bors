@@ -1,0 +1,9 @@
+<h1>{$topic->title()}</h1>
+<p>Тема форумов Авиабазы</p>
+<ul>
+<li>Форум: {$topic->forum()->titled_link()}</li>
+<li>Постоянный адрес темы: {$topic->titled_link()}</li>
+<li>Дата создания темы: {$topic->create_time()|full_time}</li>
+<li>Дата модификации темы на момент создания документа: {$topic->modify_time()|full_time}</li>
+<li>Всего ответов в теме: {$topic->num_replies()}</li>
+</ul>
