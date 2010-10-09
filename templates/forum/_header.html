@@ -242,7 +242,7 @@ if(me_id < 2 || !me_hash)
 else {ldelim}
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
 {if $this && $this->class_name() == 'forum_topic'}
-	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?{$this->class_name()}://{$this->id()}\"></"+"script>")
+	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?{$this->class_name()}://{$this->id()}&"+Math.random()+"\"></"+"script>")
 {/if}
 {rdelim}
 --></script>

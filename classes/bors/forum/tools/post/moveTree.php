@@ -7,19 +7,21 @@ class forum_tools_post_moveTree extends base_page
 	function dont_move_tree() { return false; }
 
 	function parents() { return array('forum_post://'.$this->post()->id()); }
-	
+
 	function main_db() { return config('punbb.database', 'punbb'); }
 
 	var $post, $topic;
 	function post() { return $this->post; }
 	function topic() { return $this->topic; }
-	
+
 	function __construct($id)
 	{
-		$this->db = &new driver_mysql($this->main_db());
-		
-		$this->post = object_load('forum_post', intval($id));
-		$this->topic = $this->post()->topic();
+		$this->db = new driver_mysql($this->main_db());
+		if($id)
+		{
+			$this->post = object_load('balancer_board_post', intval($id));
+			$this->topic = $this->post->topic();
+		}
 		return parent::__construct($id);
 	}
 
