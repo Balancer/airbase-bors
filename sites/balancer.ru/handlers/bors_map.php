@@ -63,7 +63,7 @@ $map = array(
 //	'/_bors/j/local/forum/topvisits\.js => forum_js_topvisits',
 
 	'/user/(\d+)/setvars.js => forum_user_js_setvars(1)',
-	'/js/users/touch.js\?(.+) => user_js_touch(1)',
+//	'/js/users/touch.js\?(.+) => user_js_touch(1)',
 	'/js/board/comments/(\d+)\.js => balancer_board_js_comments(1)',
 
 	'(/admin/forum/posts/)move-tree => airbase_forum_admin_posts_movetree',
