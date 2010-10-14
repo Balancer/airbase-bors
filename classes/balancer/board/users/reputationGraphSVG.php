@@ -1,6 +1,6 @@
 <?php
 
-define('REPUTATION_GRAPH_LIMIT', 300);
+define('REPUTATION_GRAPH_LIMIT', 500);
 
 class balancer_board_users_reputationGraphSVG extends base_image_svg
 {
@@ -73,14 +73,14 @@ class balancer_board_users_reputationGraphSVG extends base_image_svg
 		$title = 'Граф последних '.REPUTATION_GRAPH_LIMIT.' репутаций (с '.date('d.m.Y', $reps[count($reps)-1]->create_time()).' по '.date('d.m.Y').')';
 
 		require_once 'Image/GraphViz.php';
-		$graph = new Image_GraphViz();
+		$graph = new Image_GraphViz(true, array(), 'Репутации форумов Balancer.Ru', true, true);
 		$graph->setAttributes(array(
 			'label' => $title,
 			'labelloc' => 't',
 //			'splines' => true,
 			'URL' => 'http://balancer.ru/users/toprep/',
 		));
-		
+
 		foreach($users as $uid => $ud)
 			$graph->addNode(
 				$uid,
@@ -101,11 +101,11 @@ class balancer_board_users_reputationGraphSVG extends base_image_svg
 					$tooltip[] = '+'.$x['score1'];
 				if(!empty($x['score-1']))
 					$tooltip[] = '-'.$x['score-1'];
-	
+
 				$tooltip = join('/', $tooltip);
 				if($tooltip == '+1' || $tooltip == '-1')
 					$tooltip = ' ';
-	
+
 				$graph->addEdge(
 					array(
 						$from_id => $to_id,
@@ -113,21 +113,24 @@ class balancer_board_users_reputationGraphSVG extends base_image_svg
 
 					array(
 						'label' => $tooltip,
-						'penwidth' => pow(abs($x['count'])/$max, 0.5)*3,
-						'weight' => pow(@$x['score1'] + @$x['score-1'], 8),
+						'penwidth' => pow(abs($x['count'])/$max, 0.5)*3+1,
+						'weight' => @$x['score1'] + @$x['score-1'],
 						'color' => $score > 0 ? '#00ff00' : ($score < 0 ? '#ff0000' : 'black'),
 					)
 				);
 			}
 		}
-		
-		ob_start();
-		$graph->image('svg');
-		$svg = ob_get_contents();
-		ob_end_clean();
-		
+
+		$svg = $graph->fetch('svg');
+
+		if(!$svg)
+			return bors_message("Unknown error: empty result");
+
+		if(PEAR::isError($svg))
+			return $svg->getMessage();
+
 		return $svg; // str_replace('<title>G</title>', '<title>BalancerRu</title>', $svg);
-	}	
+	}
 
 	function cache_static() { return rand(3600, 7200); }
 }
