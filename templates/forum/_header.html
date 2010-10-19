@@ -64,7 +64,6 @@ if(top.me_is_coordinator) {ldelim}
 	document.writeln('<link rel="stylesheet" type="text/css" href="/_bors/css/coordinators.css" />')
 	document.writeln('<'+'script  type="text/javascript" src="/_bors/js/coordinators.js"></'+'script>')
 {rdelim}
-
 --></script>
 
 {if $type == 'topic' and $id}
@@ -182,7 +181,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 {if not $skip_ad}
 <div class="center"><div class="top-ad">
-{include file="xfile:forum/ads/google-ads-bottom.html"}
+{include file="xfile:forum/ads/google-ads-bottom.original.html"}
 </div></div>
 {/if}
 		<dl class="box">
@@ -262,22 +261,9 @@ var pageTracker = _gat._getTracker("UA-3907196-1");
 pageTracker._trackPageview();
 --></script>
 
-<dl class="box w200"><dt>География форума</dt>
+<dl class="box w200"><dt>Статистика</dt>
 <dd>
-<div class="center">
-
-<span><!--<center><a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a></center>--></span>
-<br />
-<script type="text/javascript"><!--
-kod = 2537;
-width = 185;
-document.write('<span><!-'+'-<a href="http://www.mapyourvisitors.com/map' + kod + '.php"><img src="http://www.mapyourvisitors.com/' + width + '/' + kod + '.jpg?r=' + escape(document.referrer) + '&u=' + escape(document.URL) + '" alt="MapYourVisitors.COM" title="MapYourVisitors.COM - Нанесите на карту ваших посетителей" /></a>-'+'-></span><br />');
---></script>
-<br />
-{*
-<span><!--<center><a href="http://s02.flagcounter.com/more/NNik"><img src="http://s02.flagcounter.com/count/NNik/bg=FFFFFF/txt=000000/border=CCCCCC/columns=2/maxflags=12/viewers=0/labels=0/" alt="free counters" /></a></center>--></span>
-<br/>
-*}
+<div>
 
 <!--Rating@Mail.ru counter-->
 <script language="javascript" type="text/javascript">//<![CDATA[
@@ -298,9 +284,11 @@ a+';rand='+Math.random()+'" alt="Рейтинг@Mail.ru" border="0" '+
 height="31" width="88" border="0" alt="Рейтинг@Mail.ru" /></a></noscript>
 <script language="javascript" type="text/javascript">//<![CDATA[
 if(11<js)d.write('--'+'&#062');//]]></script>
-<!--// Rating@Mail.ru counter--><br/>
+<!--// Rating@Mail.ru counter-->
 
-<a href="http://top.airbase.ru/"><img src="http://top.airbase.ru/?id=1" width="88" height="31" alt="АвиаТОП" title="Числа: место в рейтинге, хитов всего и хитов в сутки" /></a><br/>
+<span><!--<a href="http://top.airbase.ru/"><img src="http://top.airbase.ru/?id=1" width="88" height="31" alt="АвиаТОП" title="Числа: место в рейтинге, хитов всего и хитов в сутки" /></a>--></span>
+
+<br/>
 
 <!--LiveInternet counter--><script type="text/javascript"><!--
 document.write("<a href='http://www.liveinternet.ru/click' "+
@@ -312,8 +300,25 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
 "' alt='' title='LiveInternet: показано число посетителей за"+
 " сегодня' "+
 "border='0' width='88' height='15'><\/a>")
-//--></script><!--/LiveInternet--><br/>
+//--></script><!--/LiveInternet-->
 
+{* amung.us - 80x15 *}
+<span><!--<a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a>--></span>
+
+<br />
+
+{*
+<script type="text/javascript"><!--
+kod = 2537;
+width = 185;
+document.write('<a href="http://www.mapyourvisitors.com/map' + kod + '.php"><img src="http://www.mapyourvisitors.com/' + width + '/' + kod + '.jpg?r=' + escape(document.referrer) + '&u=' + escape(document.URL) + '" border="0" alt="MapYourVisitors.COM - My visitors map" /></a>');
+//--></script>
+<br />
+*}
+{*
+<span><!--<center><a href="http://s02.flagcounter.com/more/NNik"><img src="http://s02.flagcounter.com/count/NNik/bg=FFFFFF/txt=000000/border=CCCCCC/columns=2/maxflags=12/viewers=0/labels=0/" alt="free counters" /></a></center>--></span>
+<br/>
+*}
 
 {literal}<!-- Yandex.Metrika -->
 <script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript"></script>
@@ -324,7 +329,7 @@ try { var yaCounter510488 = new Ya.Metrika(510488); } catch(e){}
 <!-- /Yandex.Metrika -->
 {/literal}
 
-</div>{* /center *}
+</div>{* /статистика *}
 
 </dd></dl>
 
