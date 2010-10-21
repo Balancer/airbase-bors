@@ -1,7 +1,7 @@
 <?
     function module_show_childs_row($parent_uri)
     {
-		$hts = &new DataBaseHTS();
+		$hts = new DataBaseHTS();
 		$parent_uri = $hts->normalize_uri($parent_uri);
 		$data = array();
 		$links = array();

@@ -17,7 +17,7 @@ class forum_topic_rss extends forum_topic
 
 		require_once("feedcreator.class.php"); 
 
-		$rss = &new UniversalFeedCreator(); 
+		$rss = new UniversalFeedCreator(); 
 		$rss->encoding = 'utf-8'; 
 		$rss->title = $object->title();
 		$rss->description = ec("Ответы в топик ").$object->title();
@@ -34,7 +34,7 @@ class forum_topic_rss extends forum_topic
 		// get your news items from somewhere, e.g. your database: 
 		foreach($object->db()->get_array("SELECT id FROM posts WHERE topic_id={$object->id()} ORDER BY posted DESC LIMIT 50") as $post_id)
 		{		
-		    $item = &new FeedItem();
+		    $item = new FeedItem();
 			$post = class_load('forum_post', $post_id);
 	    	$item->title = $object->title();
 		    $item->link = $post->url(); 

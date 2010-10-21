@@ -53,7 +53,7 @@
 		
 		$cids[] = $cat_id;
 				
-		$db = &new DataBase('punbb');
+		$db = new DataBase('punbb');
 		do
 		{
 			$append = false;

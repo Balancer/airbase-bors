@@ -3,7 +3,7 @@
 	{
 		$owner = bors()->user()->id();
 		
-		$db = &new DataBase('HTS');
+		$db = new DataBase('HTS');
 		$db->query("INSERT INTO `hts_logs` SET
 			`type` = '".addslashes($type)."',
 			`uri` = '".addslashes($uri)."',
@@ -29,7 +29,7 @@
 
 		$owner = intval($owner);
 		
-		$db = &new DataBase('HTS');
+		$db = new DataBase('HTS');
 		$query = "
 			SELECT `record_id`, `time`
 			FROM `hts_logs`

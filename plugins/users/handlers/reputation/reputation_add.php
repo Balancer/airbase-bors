@@ -9,9 +9,9 @@
 		if(!$uid)
 			return error_message(ec("Не задан ID пользователя."));
 
-		$me = &new User();
-		$dbf = &new DataBase('punbb');
-		$dbu = &new DataBase('USERS');
+		$me = new User();
+		$dbf = new DataBase('punbb');
+		$dbu = new DataBase('USERS');
 		$me_id = $me->get('id');
 		
 		if($me_id == 1)

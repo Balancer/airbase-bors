@@ -7,7 +7,7 @@ class user_image_reputation extends base_image_gif
 		$func1 = "imagecreatefromgif";
 		$func2 = "imagegif";
 
-		$db = &new DataBase('punbb');
+		$db = new DataBase('punbb');
 		$reputation_value = $db->get("SELECT reputation FROM users WHERE id = ".intval($this->id()));
 
 		if($reputation_value >= 0)

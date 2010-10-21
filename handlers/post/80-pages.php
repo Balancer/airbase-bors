@@ -9,7 +9,7 @@
 	{
 //		echo "<tt>try show page '$uri'</tt><br/>";
 	
-	    $hts  = &new DataBaseHTS($uri);
+	    $hts  = new DataBaseHTS($uri);
 
 		if($hts->get('source') || $hts->get('body'))
 		{

@@ -71,12 +71,12 @@
         exit();
     }
 
-    list($QUERY_ENCODED,$args)=split("\?",$QUERY_ENCODED."?");
+    list($QUERY_ENCODED,$args)=explode('?', $QUERY_ENCODED."?");
 
     if(!empty($args))
-        foreach(split("&", $args."&") as $arg)
+        foreach(explode("&", $args."&") as $arg)
         {
-            list($key, $value) = split("=", $arg."=");
+            list($key, $value) = explode("=", $arg."=");
             if($key && $value)
                 $GLOBALS[$key] = $value;
         }
@@ -177,7 +177,7 @@
 //        include("$DOCUMENT_ROOT/scripts/inc/funcs.php");
         if(file_exists("$DOCUMENT_ROOT$data[1]/$data[3]"))
         {
-            list($w,$h)=split("x",$data[2]);
+            list($w,$h)=explode("x",$data[2]);
 
 //            die($w."x".$h);
 

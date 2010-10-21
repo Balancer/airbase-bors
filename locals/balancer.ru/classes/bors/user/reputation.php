@@ -32,8 +32,8 @@ class user_reputation extends base_page_db
 
 	function data_providers()
 	{
-		$dbu = &new DataBase('USERS');
-		$dbf = &new DataBase('punbb');
+		$dbu = new DataBase('USERS');
+		$dbf = new DataBase('punbb');
 		
 		$result = array(
 			'ref' => @$_SERVER['HTTP_REFERER'],
@@ -67,9 +67,9 @@ class user_reputation extends base_page_db
 		if(!$uid)
 			return bors_message(ec("Не задан ID пользователя."));
 
-		$me = &new User();
-		$dbf = &new DataBase('punbb');
-		$dbu = &new DataBase('USERS');
+		$me = new User();
+		$dbf = new DataBase('punbb');
+		$dbu = new DataBase('USERS');
 		$me_id = $me->get('id');
 
 		if($me_id < 2)

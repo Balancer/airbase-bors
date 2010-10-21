@@ -5,10 +5,10 @@
 	
 	global $bors;
 	
-	$bors = &new Bors();
+	$bors = new Bors();
 	
-	$obj = &new Page('http://bal.aviaport.ru/help/');
-	$me = &new AP_User(5458);
+	$obj = new Page('http://bal.aviaport.ru/help/');
+	$me = new AP_User(5458);
 
 	echo $me->email();
 	

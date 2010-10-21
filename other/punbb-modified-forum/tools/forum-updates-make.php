@@ -35,7 +35,7 @@
 		}
 
 		$topics = array();
-		$db = &new DataBase('punbb');
+		$db = new DataBase('punbb');
 		if($forums)
 			foreach($db->get_array("SELECT id as topic_id, subject as title,  id mod 1000 as sub FROM topics WHERE last_post > ".(time()-90*86400)." AND forum_id IN($forums) ORDER BY last_post DESC LIMIT $limit") as $t)
 				$topics[] = $t;

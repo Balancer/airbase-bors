@@ -14,7 +14,7 @@
 
         $out = NULL;
 
-        $hts = &new DataBaseHTS();
+        $hts = new DataBaseHTS();
 
         $keys = $hts->get_data_array($page,'keyword');
 

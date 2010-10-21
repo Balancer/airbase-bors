@@ -9,7 +9,7 @@ require_once('funcs/datetime.php');
 require_once('funcs/users.php');
 require_once('funcs/texts.php');
 
-foreach(split(" ", "lines time show t forum ignore_forums") as $var)
+foreach(explode(" ", "lines time show t forum ignore_forums") as $var)
 	$$var = @$_GET[$var];
 
 if(empty($lines))  $lines=empty($time)?50:2000;
@@ -145,7 +145,7 @@ EOT;
     function parse_forums_list($list)
     {
         $forums=array();
-        $f=split(",",$list);
+        $f=explode(",",$list);
 
         for($i=0, $count = count($f); $f<$count; $i++)
         {
@@ -155,7 +155,7 @@ EOT;
             }
             else
             {
-                list($b,$e)=split('-',$f[$i]);
+                list($b,$e)=explode('-',$f[$i]);
                 for($j=$b;$j<=$e;$j++)
                     $forums[]=$j;
             }

@@ -4,7 +4,7 @@
         include_once('funcs/DataBase.php');
         include_once('funcs/Cache.php');
 		
-		$ch = &new Cache();
+		$ch = new Cache();
 
 		if($ch->get('l2j-top-daily', $days))
 		{
@@ -12,7 +12,7 @@
 			return;
 		}
 		
-        $db = &new DataBase('l2jdb');
+        $db = new DataBase('l2jdb');
         $max = $db->get("select max(count) from online;");
 
 		$d = array();

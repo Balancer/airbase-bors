@@ -16,7 +16,7 @@
 
 		$data = array();
 
-		$db = &new DataBase('AIRBASE');
+		$db = new DataBase('AIRBASE');
 		
 		$data['list'] = $db->get_array("
 			SELECT DISTINCT 

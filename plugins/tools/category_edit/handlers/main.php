@@ -17,7 +17,7 @@
 		
 		$data['base_uri'] = $plugin_data['base_uri'];
 		
-		$hts = &new DataBaseHTS;
+		$hts = new DataBaseHTS;
 	
         include_once("engines/smarty/assign.php");
 
@@ -64,8 +64,8 @@
 		require_once('inc/system.php');
 		require_once('funcs/modules/messages.php');
 
-		$hts = &new DataBaseHTS;
-		$us = &new User;
+		$hts = new DataBaseHTS;
+		$us = new User;
 
 		if(!$us->data('id') || !$us->data('name'))
 			return error_message(ec("Вы не вошли в систему"));
@@ -91,7 +91,7 @@
 	function plugins_tools_categories_editor_title($uri, $match, $plugin_data)
 	{
 		$cat = "category://{$_SERVER['HTTP_HOST']}/".str_replace("{$plugin_data['base_uri']}", "", $uri);
-		$hts = &new DataBaseHTS;
+		$hts = new DataBaseHTS;
 		$title = $hts->get_data($cat, 'title');
 		if(!$title || $uri == $plugin_data['base_uri'])
 			$title = ec('Редактор категорий');
