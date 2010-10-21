@@ -3,7 +3,7 @@
 	{
 		$GLOBALS['cms']['cache_disabled'] = false;
 
-		$cache = &new Cache();
+		$cache = new Cache();
 		
 		if($cache->get('LBR:DB',"$db_name-online-v5"))
 			return $cache->last();
@@ -15,7 +15,7 @@
 		$MAP_MIN_Y = -256144;
 		$MAP_MAX_Y = 262144;
 		
-		$db = &new DataBase($db_name);
+		$db = new DataBase($db_name);
 		
 		list($map_img_w, $map_img_h) = getimagesize("{$_SERVER['DOCUMENT_ROOT']}/images/maps/mediumMap.jpg");
 		

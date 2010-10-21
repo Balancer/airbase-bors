@@ -21,7 +21,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = &new DataBaseHTS;
+		$hts = new DataBaseHTS;
 		$uri = $hts->normalize_uri($uri);
 
 		$data     = array();
@@ -58,7 +58,7 @@
 //		print_r($data);
 		$data['order'] = $hts->get_data($uri, 'order');
 
-		$me = &new User();
+		$me = new User();
 
 		$GLOBALS['cms']['templates_cache_disabled'] = true;
 
@@ -93,7 +93,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = &new DataBaseHTS;
+		$hts = new DataBaseHTS;
 		
 		if(isset($_POST['link']))
 			$hts->add_child($uri, $_POST['link']);
@@ -109,7 +109,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = &new DataBaseHTS;
+		$hts = new DataBaseHTS;
 		
 		if(isset($_GET['link']))
 			$hts->child_remove($uri, $_GET['link']);
@@ -125,7 +125,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = &new DataBaseHTS;
+		$hts = new DataBaseHTS;
 		
 		if(isset($_POST['link']))
 			$hts->parent_add($uri, $_POST['link']);
@@ -141,7 +141,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = &new DataBaseHTS;
+		$hts = new DataBaseHTS;
 		
 		if(isset($_GET['link']))
 			$hts->parent_remove($uri, $_GET['link']);
@@ -157,7 +157,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 
-		$hts = &new DataBaseHTS();
+		$hts = new DataBaseHTS();
 		
 		$hts->set_data($uri, 'order', intval($_POST['order']));
 

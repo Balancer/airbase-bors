@@ -1,8 +1,8 @@
 <?
 	function get_categories($host, $cat)
 	{
-		$hts = &new DataBaseHTS('WWW');
-		$db  = &new DataBase('WWW');
+		$hts = new DataBaseHTS('WWW');
+		$db  = new DataBase('WWW');
 		$cats = array();
 //		$GLOBALS['log_level'] = 10;
 		foreach($db->get_array("
@@ -27,7 +27,7 @@
 
 	function get_category_name($host, $cat, $value)
 	{
-		$hts = &new DataBaseHTS('WWW');
+		$hts = new DataBaseHTS('WWW');
 		
 //		echo "Get $host.==$cat==://==$value==<br/>";
 		

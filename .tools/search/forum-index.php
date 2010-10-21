@@ -15,8 +15,8 @@
 
 	include_once('engines/search.php');
 
-	$db = &new DataBase(config('search_db'));
-//	$pundb = &new DataBase('punbb');
+	$db = new DataBase(config('search_db'));
+//	$pundb = new DataBase('punbb');
 //	$min = $db->get('SELECT MIN(class_id) FROM bors_search_titles')-1;
 
 	// 1193541:

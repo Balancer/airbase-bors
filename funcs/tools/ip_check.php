@@ -30,7 +30,7 @@
 		if(!empty($_COOKIE['bors_ifn']))
 			return $_COOKIE['bors_ifn'] == 2 ? $msg : false;
 
-		$cache = &new Cache();
+		$cache = new Cache();
 		if($cache->get('is_foreign_network', $_SERVER['REMOTE_ADDR']))
 			return $cache->last() == 2 ? $msg : false;
 	

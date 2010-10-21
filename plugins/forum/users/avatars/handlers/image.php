@@ -55,9 +55,9 @@
 		imageline($img_dst,   0, $my,   0,   0, $grey);
 		imageline($img_dst,   0, $mx, $mx, $mx, $grey);
 		
-//		$hts = &new DataBaseHTS();
+//		$hts = new DataBaseHTS();
 
-		$user = &new User($user_id);
+		$user = new User($user_id);
 		
 		$user_nick = $user->get('nick');
 		

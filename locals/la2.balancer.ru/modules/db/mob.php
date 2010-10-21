@@ -10,7 +10,7 @@
 
 		$GLOBALS['cms']['cache_disabled'] = false;
 
-		$cache = &new Cache();
+		$cache = new Cache();
 		
 		if($cache->get('LBR:DB',"mob-$mob_id-3"))
 			return $cache->last();

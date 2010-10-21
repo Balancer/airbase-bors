@@ -82,13 +82,13 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 		)
 			message("Ваш IP заблокирован в аттачах за создание очень высокого зарубежного трафика. Подробнее - http://balancer.ru/forum/punbb/viewtopic.php?pid=967737#p967737 ".$anon);
 		
-		$ch = &new Cache();
+		$ch = new Cache();
 		if(!($diff = $ch->get('stat', 'agava-rate')))
 		{
 			require_once "HTTP/Request.php";
 
-//			$req = &new HTTP_Request("http://control.renter.ru/ipstat/");
-			$req = &new HTTP_Request("http://clients.agava.ru/cl");
+//			$req = new HTTP_Request("http://control.renter.ru/ipstat/");
+			$req = new HTTP_Request("http://clients.agava.ru/cl");
 			$req->setMethod(HTTP_REQUEST_METHOD_POST);
 			$req->addHeader("Accept-Charset", 'UTF-8');
 			$req->addHeader("Accept-Encoding", 'none');
@@ -143,7 +143,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 	{ // show the imageview page
 		$page_title = htmlspecialchars($pun_config['o_board_title']).' / Image view - '.$attach_filename.' - ';
 		require 'header.php';
-		$cdb = &new DataBase('punbb');
+		$cdb = new DataBase('punbb');
 		if($attach_post_id == "".intval($attach_post_id))
 		{
 			$post = object_load('balancer_board_post', $attach_post_id);
@@ -151,7 +151,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 		}
 		else
 		{
-			$hts = &new DataBaseHTS();
+			$hts = new DataBaseHTS();
 			$title = $hts->get($attach_post_id, 'title');
 		}
 	?>

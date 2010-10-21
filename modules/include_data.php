@@ -3,7 +3,7 @@
 
     function include_data($uri, $key)
     {
-        $hts = &new DataBaseHTS();
+        $hts = new DataBaseHTS();
         return $hts->get_data($uri, $key);
    	}
 

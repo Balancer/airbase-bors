@@ -52,7 +52,7 @@ if (isset($_POST['form_sent']) && $action == 'in')
 	{
 //		exit("Server error");
 //		include_once("obsolete/users.php");
-//		$us = &new User();
+//		$us = new User();
 		$me = bors_user::do_login($form_username, $form_password, false);
 //		$errno = $us->do_login($form_username, $form_password, false);
 //		$authorized = !$errno;

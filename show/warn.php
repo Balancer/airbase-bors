@@ -20,7 +20,7 @@
         $iwarn = intval($warn/2+0.5);
         if($iwarn>5) $iwarn=5;
         if($iwarn<0) $iwarn=0;
-        list($start_ro, $stop_ro, $left_ro, $units_ro) = split(":", $member['restrict_post']); //1095341423:1096867752:-423:h
+        list($start_ro, $stop_ro, $left_ro, $units_ro) = explode(":", $member['restrict_post']); //1095341423:1096867752:-423:h
         $ban = $stop_ro ? "<font size=\"1\" color=\"red\">[R/O до ".strftime("%d.%m.%Y %H:%M",$stop_ro)."]</font>" : "";
         if($member['restrict_post'] == "1")
 	        $ban = "<font size=\"1\" color=\"red\">[Бесрочный R/O]</font>";

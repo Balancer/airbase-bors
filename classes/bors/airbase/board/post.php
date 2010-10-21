@@ -396,7 +396,7 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 	{
 		return 0;
 		
-//		$db = &new DataBase('punbb');
+//		$db = new DataBase('punbb');
 //		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
 	}
 

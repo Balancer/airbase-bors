@@ -34,7 +34,7 @@ class user_reputation extends base_page
 	{
 		template_noindex();
 
-		$dbf = &new DataBase('punbb');
+		$dbf = new DataBase('punbb');
 
 		$list = array_reverse(objects_array('airbase_user_reputation', array(
 			'user_id' => $this->id(),

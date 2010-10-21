@@ -39,7 +39,7 @@ function check_cookie(&$pun_user)
 	$cookie = array('user_id' => 1, 'password_hash' => 'Guest');
 
 	require_once('obsolete/users.php');
-	$me = &new User();
+	$me = new User();
 //	echo "Check cookie: me=".($me->data('id'));
 
 	if($me->data('id') > 1)
@@ -266,7 +266,7 @@ function generate_navlinks()
 	$ret = '<ul>'."\n\t\t\t\t".implode($lang_common['Link separator'].'</li>'."\n\t\t\t\t", $links).'</li>'."\n\t\t\t".'</ul>';
 	$ret .= "<ul><li><b>Группы форумов:</b></li>";
 	$ret .= "<li><a href=\"http://balancer.ru/forum/\">Все вместе</a></li>";
-	$db = &new DataBase('punbb');
+	$db = new DataBase('punbb');
 	foreach($db->get_array("SELECT * FROM categories WHERE base_uri != '' ORDER BY disp_position") as $c)
 		$ret .= "<li><a href=\"{$c['base_uri']}\">{$c['cat_name']}</a></li>";
 	$db->close();
@@ -467,7 +467,7 @@ function get_title($user)
 
 	if(empty($GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']]))
 	{
-		$cdb = &new DataBase('punbb');
+		$cdb = new DataBase('punbb');
 		$group  = $cdb->get("SELECT * FROM groups WHERE g_id = ".intval($user['group_id']));
 		$GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']] = serialize($group);
 //		$cdb->close();

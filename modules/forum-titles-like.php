@@ -6,11 +6,11 @@
     {
 		return "";
 	
-        $ch = &new Cache();
+        $ch = new Cache();
 
         $title = preg_replace("![^\w\-А-Яа-я]+!u", " ", $title);
         $title = preg_replace("!\s+!", " ", $title);
-        $title = split(" ", $title);
+        $title = explode(" ", $title);
         sort($title);
 
         $stitle = join(" ", $title);
@@ -21,7 +21,7 @@
 
         $out = NULL;
 
-        $hts = &new DataBaseHTS();
+        $hts = new DataBaseHTS();
 
         $weights = array();
 

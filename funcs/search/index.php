@@ -9,9 +9,9 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = &new DataBase('SEARCH');
+		$db = new DataBase('SEARCH');
 
-		$Stemmer = &new Lingua_Stem_Ru();
+		$Stemmer = new Lingua_Stem_Ru();
 				
 		$words = index_split($text);
 		
@@ -55,9 +55,9 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = &new DataBase('SEARCH');
+		$db = new DataBase('SEARCH');
 
-		$Stemmer = &new Lingua_Stem_Ru();
+		$Stemmer = new Lingua_Stem_Ru();
 				
 		$words = index_split($text);
 		
@@ -102,9 +102,9 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = &new DataBase('punbb');
+		$db = new DataBase('punbb');
 
-		$Stemmer = &new Lingua_Stem_Ru();
+		$Stemmer = new Lingua_Stem_Ru();
 				
 		$must = array();
 		$none = array();
@@ -154,9 +154,9 @@
 			return 0;
 			
 		if(!$db)
-			$db = &new DataBase('SEARCH');
+			$db = new DataBase('SEARCH');
 
-		$Stemmer = &new Lingua_Stem_Ru();
+		$Stemmer = new Lingua_Stem_Ru();
 		$word = $Stemmer->stem_word($word);
 			
 		if(strlen($word) > 16)
@@ -181,9 +181,9 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = &new DataBase('punbb');
+		$db = new DataBase('punbb');
 
-		$Stemmer = &new Lingua_Stem_Ru();
+		$Stemmer = new Lingua_Stem_Ru();
 				
 		$search = array();
 		foreach($words as $word)
@@ -285,9 +285,9 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = &new DataBase('punbb');
+		$db = new DataBase('punbb');
 
-		$Stemmer = &new Lingua_Stem_Ru();
+		$Stemmer = new Lingua_Stem_Ru();
 				
 		$must = array();
 		$none = array();

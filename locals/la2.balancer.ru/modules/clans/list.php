@@ -1,13 +1,13 @@
 <?
     function modules_la2_clans_clanlist_totallist()
     {
-		$ch = &new Cache();
+		$ch = new Cache();
 		if($ch->get("la2", "clanlist-total-v4"))
 			return $ch->last;
 
 		$res = "";
 
-        $db = &new DataBase('l2jdb','la2', 'la2kkk');
+        $db = new DataBase('l2jdb','la2', 'la2kkk');
         $list = $db->get_array("SELECT * FROM `clan_data` WHERE `clan_level` > 0 ORDER BY `clan_level` DESC, `clan_name`;");
 
         $res .= "<table cellSpacing=\"0\" class=\"btab\" width=\"100%\">\n";

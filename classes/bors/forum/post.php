@@ -490,7 +490,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		return 0;
 
-//		$db = &new DataBase('punbb');
+//		$db = new DataBase('punbb');
 //		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
 	}
 

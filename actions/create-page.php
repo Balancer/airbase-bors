@@ -9,7 +9,7 @@
 	{
 //		exit("Try create $_uri");
 
-		foreach(split(' ', "source title uri") as $p)
+		foreach(explode(' ', "source title uri") as $p)
 			$$p = @$_POST[$p];
 
 		if($_uri != @$_POST['uri'])
@@ -18,7 +18,7 @@
 			exit();
 		}
 		
-    	foreach(split(' ','description nav_name page referer title uri') as $p)
+    	foreach(explode(' ','description nav_name page referer title uri') as $p)
         	$$p = @$_POST[$p];
 
 		if(sizeof($referer)>1 && $referer{strlen($referer)} == '?')
@@ -27,9 +27,9 @@
     	if(empty($title) && !empty($htitle))
         	$title = $htitle;
 
-		$me = &new User();
+		$me = new User();
 
-    	$hts = &new DataBaseHTS();
+    	$hts = new DataBaseHTS();
 	    $uri = $hts->normalize_uri($uri);
 
 	    if(empty($referer))

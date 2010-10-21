@@ -12,9 +12,9 @@
 
 		function Bors()
 		{
-			$this->config = &new Config();
+			$this->config = new Config();
 		}
 	}
 
 	global $bors;
-	$bors = &new Bors();
+	$bors = new Bors();

@@ -65,12 +65,12 @@
         exit();
     }
 
-    list($QUERY_ENCODED,$args)=split("\?",$QUERY_ENCODED."?");
+    list($QUERY_ENCODED,$args)=explode('?', $QUERY_ENCODED."?");
 
     if(!empty($args))
-        foreach(split("&", $args."&") as $arg)
+        foreach(explode("&", $args."&") as $arg)
         {
-            list($key, $value) = split("=", $arg."=");
+            list($key, $value) = explode("=", $arg."=");
             if($key && $value)
                 $GLOBALS[$key] = $value;
         }
@@ -154,7 +154,7 @@
 		$image = "{$_SERVER['DOCUMENT_ROOT']}$QUERY_ENCODED";
         if(file_exists($image0))
         {
-            list($w,$h)=split("x",$data[2]);
+            list($w,$h)=explode("x",$data[2]);
 
 //            die($w."x".$h);
 
@@ -222,7 +222,7 @@
     // Ключевые слова
 
     require_once('obsolete/DataBaseHTS.php');
-    $hts = &new DataBaseHTS();
+    $hts = new DataBaseHTS();
 
     $_SERVER['HTTP_HOST'] = str_replace(':80', '', $_SERVER['HTTP_HOST']);
     $full_uri = empty($page) ? "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" : $page;

@@ -12,7 +12,7 @@ class user_blog_rss extends user_blog
 	{
 		include("3part/feedcreator.class.php"); 
 
-		$rss = &new UniversalFeedCreator(); 
+		$rss = new UniversalFeedCreator(); 
 		$rss->encoding = 'utf-8'; 
 		$rss->title = $this->user->title().ec(": Блог");
 		$rss->description = ec("Все темы, начатые пользователем  последние 30 дней. Не более 25 штук.").$this->user->title();
@@ -29,7 +29,7 @@ class user_blog_rss extends user_blog
 		// get your news items from somewhere, e.g. your database: 
 		foreach($this->db()->get_array('SELECT id FROM topics WHERE poster_id='.$this->id().' AND posted > '.(time()-30*86400).' ORDER BY posted DESC LIMIT 25') as $topic_id)
 		{		
-		    $item = &new FeedItem();
+		    $item = new FeedItem();
 			$topic = class_load('forum_topic', $topic_id);
 	    	$item->title = $topic->title();
 		    $item->link = $topic->url(); 

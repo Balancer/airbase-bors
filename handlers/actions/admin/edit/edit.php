@@ -8,7 +8,7 @@
 		if(!check_action_access(3, $uri))
 			return true;
 		
-        $hts  = &new DataBaseHTS($uri);
+        $hts  = new DataBaseHTS($uri);
 
 		$data = array(
 			'source' => $hts->get('source'),

@@ -17,7 +17,7 @@
 		if(!empty($GLOBALS['cms']['recompiled_uris'][$uri]))
 			return;
 			
-        $hts = &new DataBaseHTS;
+        $hts = new DataBaseHTS;
 
 		$source = $hts->get_data($uri, 'source');
 		$body   = $hts->get_data($uri, 'body');

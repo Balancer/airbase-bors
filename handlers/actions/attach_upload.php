@@ -8,7 +8,7 @@
 		$attach_basefolder = "/var/www/files.balancer.ru/files/forums/attaches/";
 
 		require_once('funcs/modules/messages.php');
-		$me = &new User();
+		$me = new User();
 		
 		if($me->get('level') < 2)
 			return error_message(ec("Недостаточный уровень доступа"));
@@ -35,7 +35,7 @@
 		if(strlen($mime)==0)
 			$mime = attach_create_mime(attach_find_extension($name));
 
-		$db = &new DataBase('punbb');
+		$db = new DataBase('punbb');
 		
 		// update the database with this info
 		$db->replace('attach_2_files', array(

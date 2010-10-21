@@ -64,7 +64,7 @@
 
     function show_forum_comments($id)
     {
-        list($id,$forum,$title,$lines,$max_post,$reverse)=split(",",$id.',,,,,');
+        list($id,$forum,$title,$lines,$max_post,$reverse)=explode(",",$id.',,,,,');
 
         if(empty($forum)) $forum=14;
         if(empty($title)) $title="Комментарии";

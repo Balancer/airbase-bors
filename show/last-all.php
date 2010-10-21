@@ -105,14 +105,14 @@ echo $to_echo;
     $chatlist=file("{$_SERVER['DOCUMENT_ROOT']}/chat/chatlist.txt");
     foreach($chatlist as $chat)
     {
-        list($chat,$name)=@split("\|",$chat);
+        list($chat,$name)=@explode("|",$chat);
         if($name)
         {
             $fh=fopen("{$_SERVER['DOCUMENT_ROOT']}/chat/$chat.txt","rt");
             $number=1;
             while(!feof($fh) && $number)
             {   
-                list($number,$time,$author,$ip,$text)=@split("\|",chop(fgets($fh))."||||");
+                list($number,$time,$author,$ip,$text)=@explode("|",chop(fgets($fh))."||||");
                 if($time)
                 {
                     $out_array[]="$time|$author|$chat|$name|$text";
@@ -124,7 +124,7 @@ echo $to_echo;
     rsort($out_array);
     for($i=0; $i<4; $i++)
     {
-        list($time,$author,$chat,$name,$text)=@split("\|",$out_array[$i]);
+        list($time,$author,$chat,$name,$text)=@explode("|",$out_array[$i]);
         $text = strip_text($text,100);
         $text = preg_replace("!<br>|<p>!i"," ",$text);
         $time = strftime("%d.%m.%y %H:%M",$time);

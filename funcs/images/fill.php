@@ -35,7 +35,7 @@
 			if(!file_exists($path) || filesize($path)==0)
 			{
 				require_once('HTTP/Request.php');
-				$req =& new HTTP_Request($image, array(
+				$req = new HTTP_Request($image, array(
 					'allowRedirects' => true,
 					'maxRedirects' => 3,
 					'timeout' => 10,

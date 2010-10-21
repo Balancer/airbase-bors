@@ -3,7 +3,7 @@
     {
 //		echo "\n<!--Get nav for $uri-->\n";
 	
-        $ch = &new Cache();
+        $ch = new Cache();
         if($ch->get('top_navs-v7', $uri) && false)
         {
 			echo $ch->last();
@@ -16,7 +16,7 @@
 
         $parents = link_line($uri);
 
-		$hts = &new DataBaseHTS();
+		$hts = new DataBaseHTS();
 
 		include_once("engines/smarty/assign.php");
 		$tpl = "top-navs.html";
@@ -41,7 +41,7 @@
 			{
 //				echo "<!--$nav-->\n";
 				$link_line = array();
-				foreach(split("\|#\|", $nav) as $link)
+				foreach(explode('|#|', $nav) as $link)
 				{	
 					$obj = object_load($link);
 					if($obj && $obj->nav_name())
@@ -81,7 +81,7 @@
 		elseif(class_exists('DataBaseHTS'))
 		{
 //			echo "Can't load class '$uri'<br/>\n";
-			$hts = &new DataBaseHTS($uri);
+			$hts = new DataBaseHTS($uri);
 			$parents = $hts->get_array('parent');
 		}
 	
