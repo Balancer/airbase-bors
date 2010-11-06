@@ -78,7 +78,7 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 
 			$processed[] = $forum_id;
 			$subforum = $cats[] = object_load('airbase_board_category', $forum_id);
-			$cats = array_merge($cats, $subforum->all_subforums(&$processed));
+			$cats = array_merge($cats, $subforum->all_subforums($processed));
 		}
 			
 		return $cats;

@@ -29,7 +29,14 @@ function set_bors_append($v, $dbup) { return $this->set('bors_append', $v, $dbup
 function template() { return @$this->data['template']; }
 function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 
-		function url() { return $this->category_base_full(); }
+	function url()
+	{
+		$base = $this->category_base_full();
+		if($this->parent_category_id())
+			return secure_path($base.'/viewcat.php?id='.$this->id());
+		else
+			return $base;
+	}
 
 		function category_base_full()
 		{
@@ -74,7 +81,7 @@ function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 
 				$processed[] = $forum_id;
 				$subforum = $cats[] = class_load('forum_category', $forum_id);
-				$cats = array_merge($cats, $subforum->all_subforums(&$processed));
+				$cats = array_merge($cats, $subforum->all_subforums($processed));
 			}
 
 			return $cats;

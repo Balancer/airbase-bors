@@ -69,7 +69,7 @@ $GLOBALS['main_uri'] = "http://".@$_SERVER[HTTP_HOST].@$_SERVER['REQUEST_URI'];
 error_reporting(E_ALL ^ E_NOTICE);
 
 // Turn off magic_quotes_runtime
-set_magic_quotes_runtime(0);
+@set_magic_quotes_runtime(0);
 
 // Strip slashes from GET/POST/COOKIE (if magic_quotes_gpc is enabled)
 if (get_magic_quotes_gpc())
