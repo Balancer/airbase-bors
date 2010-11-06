@@ -55,12 +55,16 @@ if(!$id)
 	}
 }
 
-$category = object_load('balancer_board_category', $id);
-
 include_once("tools/inc.php");
 $ids = punbb_get_all_subcategories($id);
 $ids[] = $id;
+$categories = bors_find_all('balancer_board_category', array('id IN' => $ids, 'by_id' => true));
 $ids = join(",", $ids);
+
+$cat_nav_bodies = array();
+//TODO: Так извращённо, потому что вызов module_nav_top->body() в теле цикла вывода приводит к потере mysql-контекста
+foreach($categories as $c)
+	$cat_nav_bodies[$c->id()] = bors_load('module_nav_top', $c)->body();
 
 if($ids)
 	foreach($cms_db->get_array("SELECT forum_id, last_visit FROM forum_visits LEFT JOIN forums ON forum_id = id WHERE cat_id IN ($ids) AND user_id=".intval($pun_user['id'])) as $row)
@@ -92,9 +96,10 @@ $result = $db->query("
 			LEFT JOIN {$db->prefix}forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id={$pun_user['g_id']}) 
 		WHERE f.parent IS NULL
 			AND f.cat_id IN($ids)
-			AND (fp.read_forum IS NULL OR fp.read_forum=1) 
+			AND (1 OR fp.read_forum IS NULL OR fp.read_forum=1) 
 		ORDER BY c.disp_position, c.id, f.disp_position", true) 
 	or error('Unable to fetch category/forum list', __FILE__, __LINE__, $db->error());
+
 
 $cur_category = 0;
 $cat_count = 0;
@@ -116,8 +121,7 @@ while ($cur_forum = $db->fetch_assoc($result))
 
 <ul><li><b>
 <?
-	$nav = object_load('module_nav_top', $category);
-	echo $nav->body();
+	echo $cat_nav_bodies[$cur_forum['cid']];
 ?>
 </li></b></ul>
 
@@ -210,14 +214,12 @@ while ($cur_forum = $db->fetch_assoc($result))
 				</tr>
 <?php
 
-}
-
+} // end while?
 // Did we output any categories and forums?
 if ($cur_category > 0)
 	echo "\t\t\t".'</tbody>'."\n\t\t\t".'</table>'."\n\t\t".'</div>'."\n\t".'</div>'."\n".'</div>'."\n\n";
 else
 	echo '<div id="idx0" class="block"><div class="box"><div class="inbox"><p>'.$lang_index['Empty board'].'</p></div></div></div>';
-
 
 // Collect some statistics from the database
 $result = $db->query('SELECT COUNT(id)-1 FROM '.$db->prefix.'users') or error('Unable to fetch total user count', __FILE__, __LINE__, $db->error());

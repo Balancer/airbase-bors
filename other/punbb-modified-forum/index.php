@@ -51,8 +51,6 @@ if($_SERVER['HTTP_HOST']=='la2.wrk.ru' || $_SERVER['HTTP_HOST']=='la2.balancer.r
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 
-// include_once("/home/balancer/work/.bors/bors-core/inc/navigation.php");
-
 if(
 	preg_match('/pid=(\d+)/', @$_SERVER['QUERY_STRING'], $m)
 		|| preg_match('/pid=(\d+)?pid=\d+/', @$_SERVER['QUERY_STRING'], $m)
@@ -252,9 +250,6 @@ $cur_category = 0;
 $cat_count = 0;
 while ($cur_forum = $db->fetch($result))
 {
-//	if(debug_is_balancer())
-//		print_r($cur_forum);
-
 	if($cur_forum['fid'])
 		$forum = object_load('forum_forum', intval($cur_forum['fid']));
 
@@ -362,14 +357,13 @@ while ($cur_forum = $db->fetch($result))
 				</tr>
 <?php
 
-}
+} // end while?
 
 // Did we output any categories and forums?
 if ($cur_category > 0)
 	echo "\t\t\t".'</tbody>'."\n\t\t\t".'</table>'."\n\t\t".'</div>'."\n\t".'</div>'."\n".'</div>'."\n\n";
 else
 	echo '<div id="idx0" class="block"><div class="box"><div class="inbox"><p>'.$lang_index['Empty board'].'</p></div></div></div>';
-
 
 // Collect some statistics from the database
 $stats['total_users'] = $cms_db->select($db->prefix.'users', 'COUNT(*)', array());

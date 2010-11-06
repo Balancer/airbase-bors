@@ -63,7 +63,7 @@ class airbase_forum_category extends base_object_db
 
 			$processed[] = $forum_id;
 			$subforum = $cats[] = object_load('airbase_forum_category', $forum_id);
-			$cats = array_merge($cats, $subforum->all_subforums(&$processed));
+			$cats = array_merge($cats, $subforum->all_subforums($processed));
 		}
 			
 		return $cats;

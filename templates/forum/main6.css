@@ -645,6 +645,7 @@ dt span.colright-100 {
 	margin-top: 0;
 	padding-left: 4px;
 	font-size: 12pt;
+	font-family: monospace !important;
 }
 
 .code-head {
@@ -655,6 +656,7 @@ dt span.colright-100 {
 	border-right: 1px solid #9bd;
 	margin-bottom: 0;
 	font-weight: bold;
+	font-size: 8pt;
 }
 
 .top-ad {
