@@ -158,10 +158,12 @@ else if (isset($_POST['update_positions']))
 		if($parent)
 			$parent = intval($parent);
 		else
-			$parent = 'NULL';
+			$parent = NULL;
 
-		$db->query($q = "UPDATE {$db->prefix}forums SET parent=$parent WHERE id=".intval($forum_id))
-			or error('Unable to update forum in query '.$q, __FILE__, __LINE__, $db->error());
+		$forum = bors_load('balancer_board_forum', $forum_id);
+		$forum->set_parent_forum_id($parent, true);
+//		$db->query($q = "UPDATE {$db->prefix}forums SET parent=$parent WHERE id=".intval($forum_id))
+//			or error('Unable to update forum in query '.$q, __FILE__, __LINE__, $db->error());
 	}
 
 	// Regenerate the quickjump cache

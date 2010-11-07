@@ -19,7 +19,7 @@ forum_forum::all_forums_preload(true);
 
 include_once("include/subforums.php");
 $ich = new bors_cache();
-if($ich->get("subforums-text-v4", $pun_config['root_uri']))
+if($ich->get("subforums-text-v5", $pun_config['root_uri']))
 	$subforums = $ich->last();
 else
 {
@@ -96,7 +96,7 @@ $result = $db->query("
 			LEFT JOIN {$db->prefix}forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id={$pun_user['g_id']}) 
 		WHERE f.parent IS NULL
 			AND f.cat_id IN($ids)
-			AND (1 OR fp.read_forum IS NULL OR fp.read_forum=1) 
+			AND (fp.read_forum IS NULL OR fp.read_forum=1) 
 		ORDER BY c.disp_position, c.id, f.disp_position", true) 
 	or error('Unable to fetch category/forum list', __FILE__, __LINE__, $db->error());
 

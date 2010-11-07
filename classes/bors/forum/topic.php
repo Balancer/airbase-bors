@@ -577,13 +577,13 @@ $(function() {
 			'topic_id=' => $this->id())));
 	}
 
-	function was_updated_for_user($user)
+	function was_updated_for_user($user, $for_post = false)
 	{
 		$last = $this->last_visit_time_for_user($user);
 		if(!$last)
 			$last = $user->previous_session_end();
 
-		return $this->modify_time() > $last;
+		return ($for_post ? $this->last_post_create_time() : $this->modify_time()) > $last;
 	}
 
 	function on_delete_pre() { $this->forum(); }

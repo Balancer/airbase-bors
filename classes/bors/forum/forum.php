@@ -12,7 +12,8 @@ class forum_forum extends base_page_db
 			'title' => 'forum_name',
 			'description' => 'forum_desc',
 			'parent_forum_id' => 'parent',
-			'tree_position',
+			'parent_id' => 'parent',
+			'tree_map',
 			'category_id' => 'cat_id',
 			'is_public',
 			'parent_forum_id' => 'parent',
@@ -34,24 +35,11 @@ class forum_forum extends base_page_db
 function parent_forum_id() { return @$this->data['parent_forum_id']; }
 function set_parent_forum_id($v, $dbup)
 {
-	if($dbup && $this->parent_forum_id())
-		$this->tree_position();
+	if($dbup && ($v||$this->parent_id()))
+		$this->set_tree_map(bors_lib_object::tree_map($this), true);
 
 	return $this->set('parent_forum_id', $v, $dbup);
 }
-
-function tree_position($can_up = true)
-{
-	if(empty($this->data['tree_position']) && ($pid = $this->parent_forum_id()) && $pid != $this->id())
-	{
-		$parent = $this->parent_forum();
-		$ppos = $parent->tree_position(false) . $pid . '>';
-		$this->set('tree_position', $ppos, $can_up);
-	}
-
-	return @$this->data['tree_position'];
-}
-function set_tree_position($v, $dbup) { return $this->set('tree_position', $v, $dbup); }
 
 function category_id() { return @$this->data['category_id']; }
 function set_category_id($v, $dbup) { return $this->set('category_id', $v, $dbup); }
@@ -228,7 +216,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	static function all_forums_preload($update_pos = false)
 	{
 		static $preloaded = false;
-		
+
 		if($preloaded)
 			return;
 
@@ -236,7 +224,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		$all = objects_array(config('punbb.forum_class', 'forum_forum'), array('order' => 'sort_order'));
 		if($update_pos)
 			foreach($all as $f)
-				$f->tree_position();
+				$f->set_tree_map(bors_lib_object::tree_map($f), true);
 	}
 
 	function all_readable_subforum_ids(&$processed = array())
@@ -245,18 +233,9 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 			return $ids;
 
 		$this->all_forums_preload();
-/*
-		if(debug_is_balancer())
-		{
-			$dbh = new driver_mysql($this->main_db());
-			$subforum_ids = $dbh->select_array('forums', 'id', array("tree_position LIKE '{$this->tree_position()}{$this->id()}>%'"));
-			$dbh->close();
-			$subforum_ids = array();
-			return $this->set_attr('all_readable_subforum_ids', $subforum_ids);
-		}
-*/
+
 		$forums = array($this->id());
-			
+
 		foreach($this->direct_subforums_ids() as $forum_id)
 		{
 			if(in_array($forum_id, $processed))
@@ -266,7 +245,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 			$subforum = object_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
 			$forums = array_merge($forums, $subforum->all_readable_subforum_ids($processed));
 		}
-			
+
 		return $this->set_attr('all_readable_subforum_ids', $forums);
 	}
 
@@ -311,6 +290,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	function auto_objects()
 	{
 		return array(
+			'parent' => 'balancer_board_forum(parent_id)',
 			'parent_forum' => 'forum_forum(parent_forum_id)',
 		);
 	}
