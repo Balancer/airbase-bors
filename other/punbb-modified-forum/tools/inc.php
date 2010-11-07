@@ -6,42 +6,15 @@
 		$forum_id = intval($forum_id);
 		if(!empty($loaded[$forum_id]))
 			return $loaded[$forum_id];
-		
+
 		$db = new driver_mysql('punbb');
 
-//		if(debug_is_balancer())
-//		{
-			forum_forum::all_forums_preload(true);
-			$forum = object_load('forum_forum', $forum_id);
-//			echo "Get sub for $forum_id: ".$forum->tree_position()."{$forum_id}><br/>";
-			return $db->select_array('forums', 'id', array("tree_position LIKE '{$forum->tree_position()}{$forum_id}>%'"));
-//			return $forum->all_readable_subforum_ids();
-//		}
+		forum_forum::all_forums_preload(true);
+		$forum = object_load('forum_forum', $forum_id);
 
-		$fids    = array();
-		$checked = array();
-		
-		$fids[] = $forum_id;
-				
-		do
-		{
-			$append = false;
-			foreach($fids as $fid)
-				if(!in_array($fid, $checked))
-				{
-					$fids2 = $fids;
-					$checked[] = $fid;
-					foreach($db->get_array("SELECT id FROM forums WHERE parent = $fid ORDER BY disp_position") as $id)
-						if(!in_array($id, $fids2))
-							$fids2[] = $id;
-					$fids = $fids2;
-					$append = true;
-				}
-		} while($append);
-		$db->close();
-		
-		array_shift($fids);
-		return $loaded[$forum_id] = $fids;
+		$subforum_ids = $db->select_array('forums', 'id', array("tree_map LIKE '{$forum->tree_map()}{$forum_id}.%'"));
+//		if(debug_is_balancer())			print_d($subforum_ids);
+		return $subforum_ids;
 	}
 
 	function punbb_get_all_subcategories($cat_id)

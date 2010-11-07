@@ -102,7 +102,7 @@ document.writeln('<label><input type="checkbox" id="_chkbx_p{$p->id()}" onclick=
 --></script></li>
 <li><a href="#" onclick="pdsh('{$p->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;инструменты</a></li>
 <li class="pages_select">
- <a href="{$p->topic()->forum()->category()->url()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
+ <a href="{$p->topic()->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
   class="current_page">Ответить на сообщение</a>
 </li>
 </ul>
