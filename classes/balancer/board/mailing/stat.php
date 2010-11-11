@@ -53,25 +53,45 @@ class balancer_board_mailing_stat extends base_object_db
 				else
 					$last_visit = 0;
 
-				$last_visit = max($last_visit, $user_stat->last_mailing()) - 7*86400;
+				$last_visit = max($last_visit, $user_stat->last_mailing());
 
 				$mail .= $target->fetch_updated_from($last_visit, $user_stat->mail_format());
 			}
 		}
 
+		$to = bors_ext_mail::make_recipient($user);
+		$subject = "[forums.balancer.ru] Обновлённые темы форумов";
+
+		echo "Send to $to\n";
+
+		require_once('engines/mail.php');
 		switch($user_stat->mail_format())
 		{
 			case 'text':
-				file_put_contents('mail.txt', $mail);
+				$mail = "Сообщение в текстовом формате. Чтобы изменить формат или изменить условия подписки посетите адрес ...\n\n"
+					.$mail;
+				send_mail($to, $subject, $mail, NULL, 'balabot@balancer.ru');
 				break;
 			case 'html':
-				file_put_contents('mail.html', $mail);
+				$mail = "<p>Сообщение в формате HTML. Чтобы изменить формат или изменить условия подписки посетите адрес ...</p>\n\n"
+					.$mail;
+				send_mail($to, $subject, NULL, $mail, 'balabot@balancer.ru');
 				break;
 			case 'pdf':
-				$tmp = 'mail.html'; //tmpfile();
+				$tmp = tempnam(sys_get_temp_dir(), 'mailing').'.html';
+				$pdf = tempnam(sys_get_temp_dir(), 'mailing').'.pdf';
 				file_put_contents($tmp, $mail);
-				system("/usr/local/bin/wkhtmltopdf-amd64 $tmp $tmp.pdf");
+//				echo "$tmp -> $pdf\n";
+				system("/usr/local/bin/wkhtmltopdf-amd64 $tmp $pdf");
+				$mail = "Сообщение в формате PDF. Чтобы изменить формат или изменить условия подписки посетите адрес ...:\n\n";
+//				echo $pdf;
+				send_mail($to, $subject, $mail, NULL, 'balabot@balancer.ru', NULL, array(array(
+					'file' => $pdf,
+					'name' => 'balancer-'.date('Y-m-d_H-i-s'),
+					'type' => 'application/pdf',
+				)));
 				unlink($tmp);
+				unlink($pdf);
 				break;
 			default:
 				debug_hidden_log('mailing-errors', "Unknown mail format {$user_stat->mail_format()} at id {$user_stat->mail_format()->id()}");

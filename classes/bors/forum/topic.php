@@ -638,14 +638,12 @@ $(function() {
 		if(!$text)
 			return NULL;
 
-		$title = "*   {$this->title()}   *";
+		$title = "*   {$this->title()}";
 
 		$div  = str_repeat('-', 72);
 		$div2  = str_repeat('=', 72);
-		$divt = str_repeat('=', bors_strlen($title));
-		$divt2 = "*   ".str_repeat(' ', bors_strlen($this->title()))."   *";
 
-		return "\n$divt\n$divt2\n$title\n$divt2\n$divt\n"
+		return "\n$div2\n*\n$title\n*\n$div2\n"
 			."Форум: {$this->forum()->title()}, {$this->forum()->url()}\n\n\n"
 			.join("\n".$div."\n", $text)."\n\n";
 	}
