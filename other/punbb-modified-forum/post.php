@@ -562,7 +562,7 @@ if (isset($_POST['form_sent']))
 			if(!empty($_POST['is_moderatorial']))
 			{
 				$post->set_is_moderatorial(1, true);
-				balancer_board_action::add($topic, "Административное предупреждение: {$post->titled_url()}", true);
+				balancer_board_action::add($topic, "Административное предупреждение: {$post->nav_named_link()}", true);
 			}
 		}
 

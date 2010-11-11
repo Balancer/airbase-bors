@@ -396,6 +396,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function title() { return object_property($this->topic(), 'title')." [".$this->nav_name()."]"; }
 	function page_title() { return object_property($this->topic(), 'title')." <small>[".$this->nav_name()."]</small>"; }
 	function nav_name() { return ($this->author_name() ? $this->author_name() : ($this->owner() ? $this->owner()->title() : 'Unknown'))."#".date("d.m.y H:i", $this->create_time()); }
+	function shortest_title() { return "#".date("d.m.y H:i", $this->create_time()); }
 /*
 	function description()
 	{

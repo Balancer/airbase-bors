@@ -18,12 +18,12 @@
 {include file="xfile:forum/post.html"}
 {/foreach}
 
-{if $last_actions && $is_last_page}
+{if $last_actions}
 <dl class="box small">
 <dt>Последние действия над темой</dt>
 <dd><ul>
 {foreach from=$last_actions item="a"}
-<li{$a->type_class()}>{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()} </li>
+<li{$a->type_class()} style="font-size: 8pt">{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}</li>
 {/foreach}
 </ul></dd>
 </dl>

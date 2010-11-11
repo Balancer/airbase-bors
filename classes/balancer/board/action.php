@@ -12,7 +12,7 @@ class balancer_board_action extends base_page_db
 			'owner_id',
 			'target_class_name',
 			'target_object_id',
-			'message',
+			'message_raw' => 'message',
 			'is_moderatorial',
 			'is_public',
 		);
@@ -37,10 +37,16 @@ class balancer_board_action extends base_page_db
 		object_new_instance('balancer_board_action', array(
 			'target_class_name' => $object->class_name(),
 			'target_object_id' => $object->id(),
-			'message' => $message,
+			'message_raw' => $message,
 			'is_moderatorial' => $is_moderatorial,
 			'is_public' => $is_public,
 		));
+	}
+
+	function message()
+	{
+//<li class="red">marata [17.10.2010 11:00]: Предупреждение пользователю KILLO: <a href="http://balancer.ru/support/2008/09/p2262128.html">Обсуждение модераториалов [KILLO#17.10.10 05:38]</a></li>
+		return preg_replace('!(Предупреждение пользователю).+?:( <a href=".+?">).+?\[(.+?)\]!', '$1$2$3', $this->message_raw());
 	}
 }
 

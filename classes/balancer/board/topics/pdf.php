@@ -19,7 +19,7 @@ class balancer_board_topics_pdf extends bors_object
 		$topic = $object->topic();
 		$helper_url = object_load('balancer_board_topics_pdfHelper', $this->id())->url();
 		$cover_url = object_load('balancer_board_topics_pdfCover', $this->id())->url();
-		echo $this->url();
+//		echo $this->url();
 		$data = url_parse($this->url());
 		$target_dir = dirname($data['local_path']);
 		$target_name = basename($data['local_path']);
