@@ -70,7 +70,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 		if($object->class_name() == 'forum_post')
 		{
 			$topic = $object->topic();
-			balancer_board_action::add($topic, "Предупреждение пользователю {$user->title()}: {$object->titled_url()}", true);
+			balancer_board_action::add($topic, "Предупреждение пользователю: {$object->nav_named_link()}", true);
 		}
 	}
 
@@ -83,7 +83,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 		if($object->class_name() == 'forum_post')
 		{
 			$topic = $object->topic();
-			balancer_board_action::add($topic, "Отмена предупреждения пользователю {$user->title()}: {$object->titled_url()}", true);
+			balancer_board_action::add($topic, "Отмена предупреждения пользователю {$user->title()}: {$object->nav_named_link()}", true);
 		}
 
 		$warnings = $this->db()->select('warnings', 'SUM(score)', array('user_id=' => $uid, 'time>' => time()-WARNING_DAYS*86400));

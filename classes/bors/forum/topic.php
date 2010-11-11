@@ -176,6 +176,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		return false;
 	}
 
+	function is_last_page() { return $this->page() == $this->total_pages(); }
+
 	function body()
 	{
 		if(!$this->is_repaged() && rand(0,5) == 0)
@@ -184,22 +186,30 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		$GLOBALS['cms']['cache_disabled'] = true;
 
 		require_once("engines/smarty/assign.php");
+
+
+
 		$data = array(
 			'posts' => $this->posts(),
-			'last_actions' => array_reverse(objects_array('balancer_board_action', array(
+			'is_last_page' => $this->is_last_page(),
+		);
+
+		if($this->is_last_page())
+		{
+			$data['last_actions'] = array_reverse(objects_array('balancer_board_action', array(
 				'target_class_name' => $this->class_name(),
 				'target_object_id' => $this->id(),
 				'order' => '-create_time',
 				'group' => 'target_class_name, target_object_id, message',
 				'limit' => 20,
-			))),
-			'is_last_page' => $this->page() == $this->total_pages(),
-		);
+			)));
+
+			bors_objects_preload($data['last_actions'], 'owner_id', 'balancer_board_user', 'owner');
+		}
 
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");
 
 		bors_objects_preload($data['posts'], 'owner_id', 'balancer_board_user', 'owner');
-		bors_objects_preload($data['last_actions'], 'owner_id', 'balancer_board_user', 'owner');
 
 		$data['this'] = $this;
 		return template_assign_data("xfile:forum/topic.html", $data);
@@ -588,4 +598,55 @@ $(function() {
 
 	function on_delete_pre() { $this->forum(); }
 	function on_delete_post() { $this->forum()->recalculate(); }
+
+	function fetch_updated_from($time, $format = 'html')
+	{
+		$updated_posts = bors_find_all('balancer_board_post', array(
+			'topic_id' => $this->id(),
+			'create_time>' => $time,
+			'is_deleted' => false,
+			'order' => '`order` DESC, `posted` DESC',
+			'limit' => 25,
+		));
+
+		if($format != 'text')
+		{
+			$html = array();
+			foreach(array_reverse($updated_posts) as $p)
+			{
+				$html[] = $p->html(array(
+					'show_title' => false,
+					'skip_forums' => true,
+				));
+			}
+
+			if(!$html)
+				return NULL;
+
+			return "<dl class='box'><dt>Форум: {$this->forum()->titled_link()}</dt>
+<dd><h2>{$this->title()}</h2></dd></dl>
+".join("\n\n", $html);
+		}
+
+		$text = array();
+		foreach(array_reverse($updated_posts) as $p)
+		{
+			$text[] = $p->text(array(
+				));
+		}
+
+		if(!$text)
+			return NULL;
+
+		$title = "*   {$this->title()}   *";
+
+		$div  = str_repeat('-', 72);
+		$div2  = str_repeat('=', 72);
+		$divt = str_repeat('=', bors_strlen($title));
+		$divt2 = "*   ".str_repeat(' ', bors_strlen($this->title()))."   *";
+
+		return "\n$divt\n$divt2\n$title\n$divt2\n$divt\n"
+			."Форум: {$this->forum()->title()}, {$this->forum()->url()}\n\n\n"
+			.join("\n".$div."\n", $text)."\n\n";
+	}
 }

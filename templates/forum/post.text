@@ -1,0 +1,6 @@
+*** {$p->author_name()} #{$p->create_time()|full_time}
+---------------------------------
+
+{$p->source()}
+
+// {$p->url()}
