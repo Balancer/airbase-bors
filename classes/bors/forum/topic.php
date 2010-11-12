@@ -275,6 +275,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	}
 
 	function items_per_page() { return 25; }
+	function items_around_page() { return 7; }
 
 	function total_pages() { return intval($this->num_replies() / $this->items_per_page()) + 1; }
 
