@@ -13,9 +13,10 @@
 <h2>Ссылки</h2>
 <ul>
 <li><a href="blog/">Блог</a></li>
-<li><a href="use-topics.html">Все темы</a></li>
+<li><a href="/users/{$this->id()}/own/">Все темы, созданные пользователем</a> (<span class="red">новое!</span>)</li>
+<li><a href="use-topics.html">Все темы с участием пользователя</a></li>
 <li><a href="posts/">Все сообщения</a></li>
-<li><a href="/users/{$this->id()}/votes/">Оценки сообщений</a> (<span class="red">новое!</span>)</li>
+<li><a href="/users/{$this->id()}/votes/">Оценки сообщений</a></li>
 <li><a href="aliases.html">Пользователи, писавшие с тех же IP</a></li>
 <li><a href="reputation/">Репутация</a></li>
 <li><a href="warnings/">Предупреждения</a></li>
