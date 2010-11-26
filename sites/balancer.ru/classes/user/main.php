@@ -31,7 +31,7 @@ class user_main extends base_page
 
 		function url() { return "http://balancer.ru/user/".$this->id()."/"; }
 
-	function cache_static() { return rand(600, 1200); }
+	function cache_static() { return config('static_forum') ? rand(600, 1200) : 0; }
 
 	function local_data()
 	{

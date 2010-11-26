@@ -40,8 +40,14 @@ class airbase_forum_news extends base_page
 //		template_noindex();
 		return 'forum/_header.html';
 	}
-	
+
 	function url_engine() { return 'url_calling2'; }
-	function cache_static() { return $this->page() != $this->default_page() ? rand(3600, 7200) : rand(100,500); }
+	function cache_static()
+	{
+		if(!config('static_forum'))
+			return 0;
+		return $this->page() != $this->default_page() ? rand(3600, 7200) : rand(100,500);
+	}
+
 	function can_cached() { return false; }
 }

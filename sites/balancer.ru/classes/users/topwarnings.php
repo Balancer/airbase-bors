@@ -44,5 +44,5 @@ class users_topwarnings extends base_page
 
 	function url() { return "http://balancer.ru/users/warnings/"; }
 
-	function cache_static() { return 86400*14; }
+	function cache_static() { return config('static_forum') ? 86400*14 : 0; }
 }

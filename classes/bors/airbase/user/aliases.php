@@ -26,7 +26,7 @@ class airbase_user_aliases extends base_page
 		return array('users_list' => $ips ? $users_list : array());
 	}
 
-	function cache_static() { return rand(3600, 7200); }
+	function cache_static() { return config('static_forum') ? rand(3600, 7200) : 0; }
 
 	function pre_show()
 	{

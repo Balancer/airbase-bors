@@ -52,8 +52,8 @@ class user_reputation extends base_page_db
 
 	function url() { return "http://balancer.ru/user/".$this->id()."/reputation.html"; }
 
-	function cache_static() { return 86400*30; }
-		
+	function cache_static() { return config('static_forum') ? 86400*30 : 0; }
+
 	function template() { return "forum/common.html"; }
 
 	function can_be_empty() { return true; }

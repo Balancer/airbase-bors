@@ -34,5 +34,5 @@ class users_toprep extends base_page
 
 	function url() { return "http://balancer.ru/users/toprep/"; }
 
-	function cache_static() { return 600; }
+	function cache_static() { return config('static_forum') ? 600 : 0; }
 }

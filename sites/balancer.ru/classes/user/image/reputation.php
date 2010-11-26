@@ -64,7 +64,7 @@ class user_image_reputation extends base_image_gif
 
 	function url() { return "http://balancer.ru/user/{$this->id()}/rep.gif"; }
 
-	function cache_static() { return rand(3600*10, 3600*30); }
+	function cache_static() { return config('static_forum') ? rand(3600*10, 3600*30) : 0; }
 
 	function cache_groups() { return "user-{$this->id()}-reputation"; }
 }

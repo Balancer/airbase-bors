@@ -18,7 +18,7 @@ class user_blog_rss extends base_rss
 		));
 	}
 
-	function cache_static() { return rand(600, 1200); }
+	function cache_static() { return config('static_forum') ? rand(600, 1200) : 0; }
 
 	function url() { return $this->blog()->url().'rss.xml'; }
 	function rss_url() { return $this->blog()->url(); }

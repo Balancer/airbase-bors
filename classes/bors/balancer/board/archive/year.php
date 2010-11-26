@@ -18,5 +18,5 @@ class balancer_board_archive_year extends base_page
 		);
 	}
 
-	function cache_static() { return rand(3600, 7200); }
+	function cache_static() { return config('static_forum') ? rand(3600, 7200) : 0; }
 }

@@ -15,5 +15,5 @@ class users_main extends base_page
 
 	function url() { return "http://balancer.ru/users/"; }
 
-	function cache_static() { return 86400*7; }
+	function cache_static() { return config('static_forum') ? 86400*7 : 0; }
 }

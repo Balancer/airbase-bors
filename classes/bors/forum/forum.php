@@ -274,7 +274,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		return $forums;
 	}
 
-	function cache_static() { return $this->is_public_access() ? 600 : 0; }
+	function cache_static() { return $this->is_public_access() && config('static_forum') ? 600 : 0; }
 
 	function topic_update()
 	{

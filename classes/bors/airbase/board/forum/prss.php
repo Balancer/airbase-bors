@@ -34,6 +34,6 @@ class airbase_board_forum_prss extends base_rss
 
 	// Очистка только чисто таймаутная. А то при частых ответах на форумах
 	// кеш практически не работает, всегда сбрасывается.
-	function cache_static() { return $this->forum()->is_public_access() ? rand(300, 600) : 0; }
+	function cache_static() { return $this->forum()->is_public_access() && config('static_forum') ? rand(300, 600) : 0; }
 //	function cache_groups() { return "airbase-board-forum-{$this->id()}"; }
 }

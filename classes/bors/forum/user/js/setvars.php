@@ -2,7 +2,7 @@
 
 class forum_user_js_setvars extends base_jss
 {
-	function cache_static() { return rand(3*86400, 7*86400); }
+	function cache_static() { return config('static_forum') ? rand(3*86400, 7*86400) : 0; }
 
 	function url() { return "/user/".$this->id()."/setvars.js"; }
 

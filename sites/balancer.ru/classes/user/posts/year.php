@@ -2,20 +2,20 @@
 
 class user_posts_year extends base_page
 {
-	function cache_static() { return 600; }
+	function cache_static() { return config('static_forum') ? 600 : 0; }
 
 	function template()
 	{
 		template_noindex();
 		return 'forum/_header.html';
-	}	
+	}
 
 	private $_user = false;
 	function user()
 	{
 		if($this->_user === false)
 			$this->_user = bors_user($this->id());
-		
+
 		return $this->_user;
 	}
 

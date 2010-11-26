@@ -107,7 +107,7 @@ class base_page_hts extends base_page_db
 		return parent::init();
 	}
 
-	function cache_static() { return rand(86400, 7*86400); }
+	function cache_static() { return config('static_forum') ? rand(86400, 7*86400) : 0; }
 	function url() { return $this->id(); }
 
 	function post_set($data)
