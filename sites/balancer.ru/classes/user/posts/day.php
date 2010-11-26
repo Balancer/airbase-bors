@@ -6,7 +6,7 @@ class user_posts_day extends base_page
 {
 	private $year, $month, $day;
 
-	function cache_static() { return $this->is_today() ? 600 : 86400*60; }
+	function cache_static() { return false; } // Только так, пока показываются приватные сообщения!
 
 	function _configure()
 	{

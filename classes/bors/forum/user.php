@@ -281,7 +281,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		if($this->warnings() >= 10)
 			return $this->is_banned = true;
 
-		if($ban = forum_ban::ban_by_username($this->title()))
+		if($ban = balancer_board_ban::find_by_name($this->title()))
 			return $this->is_banned = $ban;
 
 		return $this->is_banned = false;
@@ -294,7 +294,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		if($this->warnings() >= 10)
 			return true;
 
-		if($ban = forum_ban::ban_by_username($this->title()))
+		if($ban = balancer_board_ban::find_by_name($this->title()))
 			return $ban;
 
 		if($this->warnings_in($forum_id) >= 5)

@@ -51,7 +51,7 @@ class balancer_board_admin_posts_spam extends bors_paginated
 
 			if($is_spam && is_null($post->is_moderated()))
 			{
-				balancer_board_ban::ban($post->owner(), $post->poster_ip(), false);
+				balancer_board_ban::ban($post->owner(), $post->poster_ip(), false, $post);
 				balancer_akismet::factory()->submit_spam($post);
 			}
 

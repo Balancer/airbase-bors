@@ -1,13 +1,26 @@
 <table class="btab w100p">
 <caption>Самые популярные форумы последнего месяца</caption>
 <tr>
-	<th>Форум</th>
-	<th>Число ответов</th>
+	<th rowspan="2">Форум</th>
+	<th colspan="4">Число ответов</th>
 </tr>
-{foreach from=$forums_stat key="forum_id" item="updates_count"}
+<tr>
+	<th>За последние 30 дней</th>
+	<th>За предыдущие 30 дней</th>
+	<th>год назад</th>
+	<th>10 лет назад</th>
+</tr>
+{foreach from=$forums_stat key="forum_id" item="stat"}
+{assign var="updates_last" value=$stat.now}
+{assign var="updates_prev" value=$stat.prev}
+{assign var="updates_prev_year" value=$stat.prev_year}
+{assign var="updates_prev_10year" value=$stat.prev_10year}
 {assign var="x" value=$forums[$forum_id]}
 <tr>
 	<td>{$x->titled_url()}</td>
-	<td>{$updates_count}</td>
+	<td>{$updates_last}</td>
+	<td>{$updates_prev}</td>
+	<td>{$updates_prev_year}</td>
+	<td>{$updates_prev_10year}</td>
 {/foreach}
 </table>
