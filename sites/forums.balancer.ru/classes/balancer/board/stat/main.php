@@ -37,6 +37,13 @@ class balancer_board_stat_main extends bors_page
 			'order' => '-updated',
 		));
 
+		$topics_by_posts_prev_5year = $dbh->select_array('posts', 'topic_id, COUNT(*) as updated', array(
+			'posted>' => time() - 5*365*86400 - 30*86400,
+			'posted<=' => time() - 5*365*86400,
+			'group' => 'topic_id',
+			'order' => '-updated',
+		));
+
 		$topics_by_posts_prev_10year = $dbh->select_array('posts', 'topic_id, COUNT(*) as updated', array(
 			'posted>' => time() - 10*365*86400 - 30*86400,
 			'posted<=' => time() - 10*365*86400,
@@ -65,6 +72,13 @@ class balancer_board_stat_main extends bors_page
 			$topics_count_prev_year[$x['topic_id']] = $x['updated'];
 		}
 
+		$topics_ids_prev_5year = array();
+		foreach($topics_by_posts_prev_5year as $x)
+		{
+			$topics_ids_prev_5year[] = $x['topic_id'];
+			$topics_count_prev_5year[$x['topic_id']] = $x['updated'];
+		}
+
 		$topics_ids_prev_10year = array();
 		foreach($topics_by_posts_prev_10year as $x)
 		{
@@ -76,6 +90,7 @@ class balancer_board_stat_main extends bors_page
 		$topics = objects_array('balancer_board_topic', array('id IN' => $topics_ids, 'by_id' => true));
 		$topics_prev = objects_array('balancer_board_topic', array('id IN' => $topics_ids_prev, 'by_id' => true));
 		$topics_prev_year = objects_array('balancer_board_topic', array('id IN' => $topics_ids_prev_year, 'by_id' => true));
+		$topics_prev_5year = objects_array('balancer_board_topic', array('id IN' => $topics_ids_prev_5year, 'by_id' => true));
 		$topics_prev_10year = objects_array('balancer_board_topic', array('id IN' => $topics_ids_prev_10year, 'by_id' => true));
 		foreach($topics as $x)
 			@$forums_stat[$x->forum_id()]['now'] += $topics_count[$x->id()] ;
@@ -85,6 +100,9 @@ class balancer_board_stat_main extends bors_page
 
 		foreach($topics_prev_year as $x)
 			@$forums_stat[$x->forum_id()]['prev_year'] += $topics_count_prev_year[$x->id()] ;
+
+		foreach($topics_prev_5year as $x)
+			@$forums_stat[$x->forum_id()]['prev_5year'] += $topics_count_prev_5year[$x->id()] ;
 
 		foreach($topics_prev_10year as $x)
 			@$forums_stat[$x->forum_id()]['prev_10year'] += $topics_count_prev_10year[$x->id()] ;
