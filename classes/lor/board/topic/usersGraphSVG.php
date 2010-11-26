@@ -142,14 +142,14 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 				);
 			}
 		}
-		
+
 		ob_start();
 		$graph->image('svg');
 		$svg = ob_get_contents();
 		ob_end_clean();
-		
+
 		return $svg;
-	}	
+	}
 
 	function cache_static()
 	{

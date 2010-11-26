@@ -37,8 +37,5 @@ class balancer_blog extends user_blog
 			return "http://balancer.ru/blog/$page.html"; 
 	}
 
-	function cache_static()
-	{
-		return 86400*14;
-	}
+	function cache_static() { return config('static_forum') ? 86400*14 : 0; }
 }

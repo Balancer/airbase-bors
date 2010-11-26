@@ -97,7 +97,7 @@ class user_reputation extends base_page
 		return $url;
 	}
 
-	function cache_static() { return rand(86400*7, 86400*30); }
+	function cache_static() { return config('static_forum') ? rand(86400*7, 86400*30) : 0; }
 
 	function template() { return "forum/common.html"; }
 

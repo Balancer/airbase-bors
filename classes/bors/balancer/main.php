@@ -6,5 +6,5 @@ class balancer_main extends base_page
 	function nav_name() { return 'Balancer.Ru'; }
 	function template() { return 'blue_spring'; }
 
-	function cache_static() { return 600; }
+	function cache_static() { return config('static_forum') ? 600 : 0 ; }
 }

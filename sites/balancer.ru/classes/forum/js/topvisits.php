@@ -11,10 +11,10 @@ class forum_js_topvisits extends base_js
 				'forum_id NOT IN' => array(37),
 				'limit' => 20,
 		));
-		
+
 		return array('top' => $top);
 	}
 
-	function cache_static() { return rand(3600,7200); }
+	function cache_static() { return config('static_forum') ? rand(3600,7200) : 0; }
 //	function url_engine() { return 'url_calling'; }
 }

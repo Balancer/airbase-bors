@@ -14,5 +14,11 @@ class balancer_board_archive_month extends base_page
 		return intval($id);
 	}
 
-	function cache_static() { return date('Y/n', $this->id()) == date('Y/n') ? rand(3600, 7200) : rand(30*86400, 90*86400); }
+	function cache_static()
+	{
+		if(!config('static_forum'))
+			return 0;
+
+		return date('Y/n', $this->id()) == date('Y/n') ? rand(3600, 7200) : rand(30*86400, 90*86400);
+	}
 }

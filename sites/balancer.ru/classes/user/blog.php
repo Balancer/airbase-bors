@@ -112,6 +112,9 @@ class user_blog extends base_page
 
 	function cache_static()
 	{
+		if(!config('static_forum'))
+			return 0;
+
 		if(!$this->page() || $this->page() == $this->default_page())
 			return rand(600, 7200);
 		else

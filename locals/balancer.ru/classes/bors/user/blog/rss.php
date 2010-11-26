@@ -55,5 +55,5 @@ class user_blog_rss extends user_blog
 		return $result;
 	}
 	
-	function cache_static() { return 600; }
+	function cache_static() { return config('static_forum') ? 600 : 0; }
 }

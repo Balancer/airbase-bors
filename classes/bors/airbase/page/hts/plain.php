@@ -29,5 +29,5 @@ class airbase_page_hts_plain extends base_page
 		return false;
 	}
 
-	function cache_static() { return rand(10*86400, 30*86400); }
+	function cache_static() { return config('static_forum') ? rand(10*86400, 30*86400) : 0; }
 }

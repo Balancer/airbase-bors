@@ -45,7 +45,7 @@ class airbase_user_topics extends base_page
 
 	function body_template() { return 'xfile:airbase/forum/forum.html'; }
 
-	function cache_static() { return rand(86400*7, 14*86400); }
+	function cache_static() { return config('static_forum') ? rand(86400*7, 14*86400) : 0; }
 
 	function pages_links_nul() { return ""; }
 }

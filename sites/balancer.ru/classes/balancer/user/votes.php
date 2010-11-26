@@ -57,7 +57,7 @@ class balancer_user_votes extends base_page
 		return false;
 	}
 
-	function cache_static() { return rand(600, 1200); }
+	function cache_static() { return config('static_forum') ? rand(600, 1200) : 0; }
 
 	function parents() { return array($this->user()->url()); }
 }

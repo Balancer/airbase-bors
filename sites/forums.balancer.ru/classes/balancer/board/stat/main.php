@@ -117,4 +117,6 @@ class balancer_board_stat_main extends bors_page
 			'forums_stat' => $forums_stat,
 		);
 	}
+
+	function cache_static() { return rand(3600, 7200); }
 }

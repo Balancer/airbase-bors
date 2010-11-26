@@ -18,5 +18,11 @@ class balancer_board_blogs_main extends bors_abstract_blog
 		return parent::pre_show();
 	}
 
-	function cache_static() { return $this->page() >= $this->default_page()-2 ? rand(300,600) : rand(86400*14, 86400*30); }
+	function cache_static()
+	{
+		if(!config('static_forum'))
+			return 0;
+
+		return $this->page() >= $this->default_page()-2 ? rand(300,600) : rand(86400*14, 86400*30);
+	}
 }
