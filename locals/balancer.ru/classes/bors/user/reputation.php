@@ -76,7 +76,7 @@ class user_reputation extends base_page_db
 			return bors_message(ec("Голосование возможно только для авторизованных пользователей."));
 
 		exit($me->username());
-//		$ban = forum_ban::ban_by_username($me->)
+//		$ban = balancer_board_ban::find_by_name($me->)
 
 		if($me_id == $uid)
 			return bors_message(ec("Нельзя ставить репутацию самому себе."));
