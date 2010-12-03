@@ -7,8 +7,8 @@ class forum_access_move extends access_base
 		$me = bors()->user();
 		if(!$me)
 			return false;
-	
-		$post = $this->id()->post();
+
+		$post = $this->id()->get('post');
 		if(is_object($post) && $post->owner() && $post->owner()->id() == $me->id())
 			return true;
 

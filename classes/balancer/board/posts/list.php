@@ -2,7 +2,7 @@
 
 class balancer_board_posts_list extends base_page_paged
 {
-	function main_class() { return 'forum_post'; }
+	function main_class() { return 'balancer_board_post'; }
 	function order() { return 'create_time'; }
 
 	function template()

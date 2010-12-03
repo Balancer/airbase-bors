@@ -13,15 +13,17 @@ class forum_post extends base_page_db
 	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'posts'; }
 
-	function main_db_fields()
+//	function main_db_fields()
+	function fields_map_db()
 	{
-		return array(
+		return array($this->main_db() => array(
 			$this->main_table() => $this->main_table_fields(),
 			'posts_cached_fields(post_id)' => array(
+//			'posts_cached_fields' => array(	'id' => 'post_id',
 				'flag_db' => 'flag',
 				'warning_id',
 			),
-		);
+		));
 	}
 
 	function main_table_fields()

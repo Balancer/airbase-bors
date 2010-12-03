@@ -23,8 +23,21 @@ class balancer_board_users_rateLowest extends base_page
 				'create_time>' => time()-86400*14,
 		));
 
+		$lowest_last = objects_array('bors_votes_thumb', array(
+				'group' => 'target_class_name,target_object_id',
+				'order' => '-create_time',
+				'having' => 'SUM(score) <= -4',
+				'create_time>' => time()-86400*14,
+		));
+
 		bors_objects_targets_preload($lowest);
 		bors_objects_targets_preload($lowest_week);
-		return compact('lowest', 'lowest_week');
+		bors_objects_targets_preload($lowest_last);
+
+//		$lowest_last = array_filter($lowest_week, function($x) { return $x->object()->warning_id() <= 0;});
+		usort($lowest_last, function($x, $y) { return $y->object()->create_time() - $x->object()->create_time(); });
+		$lowest_last = array_slice($lowest_last, 0, 20);
+
+		return compact('lowest', 'lowest_week', 'lowest_last');
 	}
 }

@@ -1,12 +1,25 @@
 <dl class="box">
+<dt>Последние худшие {$lowest_last|@count} сообщений форума</dt>
+<dd>
+{foreach from=$lowest_last item="x"}
+{assign var="p" value=$x->object()}
+&nbsp;&nbsp;&nbsp;
+{if $p->warning_id() >0 }<s style="font-size: 8pt">{/if}
+<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$p->titled_url()} {$p->score_colorized()}<br/>
+{if $p->warning_id()}</s>{/if}
+{/foreach}
+</dd>
+</dl>
+
+<dl class="box">
 <dt>Худшие {$lowest_week|@count} сообщений форума за две недели</dt>
 <dd>
 {foreach from=$lowest_week item="x"}
 {assign var="p" value=$x->object()}
 &nbsp;&nbsp;&nbsp;
-{if $p->warning_id() >0}<s>{/if}
+{if $p->warning_id() > 0}<s style="font-size: 8pt">{/if}
 <img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$p->titled_url()} {$p->score_colorized()}<br/>
-{if $p->warning_id() >0}</s>{/if}
+{if $p->warning_id()}</s>{/if}
 {/foreach}
 </dd>
 </dl>

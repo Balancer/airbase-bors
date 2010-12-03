@@ -361,7 +361,7 @@ if (isset($_POST['form_sent']))
 				$tdb->close();
 			}
 
-			$post = object_load('forum_post', $new_pid);
+			$post = object_load('balancer_board_post', $new_pid);
 
 			// Count number of replies in the topic
 			$result = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'posts WHERE topic_id='.$tid) 
