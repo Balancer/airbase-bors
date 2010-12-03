@@ -33,6 +33,9 @@ class airbase_user_topics extends base_page
 
 	function pre_show()
 	{
+		if(!$this->user())
+			return bors_http_error(404);
+
 		$this->add_template_data('skip_subforums', true);
 		template_noindex();
 		return false;
