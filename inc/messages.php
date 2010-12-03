@@ -58,11 +58,11 @@ function bors_message_tpl($template, $obj, $params)
 	$redir = defval($params, 'redirect', false);
 	$title = defval($params, 'title', ec('Ошибка!'));
 	$timeout = defval($params, 'timeout', -1);
-	
+
 	$params['this'] = &$obj;
 	$params['template_dir'] = $obj->_class_dir();
-	
 	require_once('engines/smarty/assign.php');
+
 	$body = template_assign_data($template, $params);
 
 //	print_d($params); exit($body);
@@ -79,9 +79,9 @@ function bors_message_tpl($template, $obj, $params)
 		else
 			$redir = user_data('level') > 3 ? "/admin/news/" : "/";
 	}
-		
+
 	if($redir && $timeout >= 0)
 		go($redir, false, $timeout);
-		
+
 	return true;
 }
