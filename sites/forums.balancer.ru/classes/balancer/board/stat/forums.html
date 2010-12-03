@@ -1,0 +1,39 @@
+<table class="btab w100p">
+<caption>Активность форумов (по числу сообщений)</caption>
+<tr>
+	<th rowspan="2">Форум</th>
+	<th colspan="5">Число ответов</th>
+</tr>
+<tr>
+	<th>За последние 30 дней</th>
+	<th>За предыдущие 30 дней</th>
+	<th>год назад</th>
+	<th>5 лет назад</th>
+	<th>10 лет назад</th>
+</tr>
+{foreach from=$forums_stat key="forum_id" item="stat"}
+{assign var="updates_last" value=$stat.now}
+{assign var="updates_prev" value=$stat.prev}
+{assign var="updates_prev_year" value=$stat.prev_year}
+{assign var="updates_prev_5year" value=$stat.prev_5year}
+{assign var="updates_prev_10year" value=$stat.prev_10year}
+{assign var="x" value=$forums[$forum_id]}
+<tr>
+	<td>{$x->titled_url()}</td>
+	<td>{$updates_last}</td>
+	<td>{$updates_prev}</td>
+	<td>{$updates_prev_year}</td>
+	<td>{$updates_prev_5year}</td>
+	<td>{$updates_prev_10year}</td>
+{/foreach}
+</table>
+
+<dl class="box">
+<dt>Смотри также</dt>
+<dd>
+<ul>
+<li><a href="http://balancer.ru/support/2010/11/t73705--statistika-forumov.html">Обсуждение этой страницы на форуме</a></li>
+<li><a href="http://forums.balancer.ru/new-topics/10years-ago/">В этот день 10 лет назад</a> (новые темы десятилетней давности)</li>
+</ul>
+</dd>
+</dl>

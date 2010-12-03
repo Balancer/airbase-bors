@@ -4,7 +4,7 @@ include_once('inc/strings.php');
 
 class user_posts_month extends base_page
 {
-	function cache_static() { config('static_forum') ? return 600 : 0; }
+	function cache_static() { return config('static_forum') ? 600 : 0; }
 
 	private $year, $month;
 

@@ -165,7 +165,7 @@ if (defined('PUN_DEBUG'))
 	// Calculate script generation time
 	list($usec, $sec) = explode(' ', microtime());
 	$time_diff = sprintf('%.3f', ((float)$usec + (float)$sec) - $pun_start);
-	echo "\t\t\t".'<p class="conr">[ Generated in '.$time_diff.' seconds, '.($db->get_num_queries()+debug_count('mysql_queries')).' queries executed ]</p>'."\n";
+//	echo "\t\t\t".'<p class="conr">[ Generated in '.$time_diff.' seconds, '.($db->get_num_queries()+debug_count('mysql_queries')).' queries executed ]</p>'."\n";
 }
 
 ?>
@@ -177,7 +177,7 @@ if (defined('PUN_DEBUG'))
 
 
 // End the transaction
-$db->end_transaction();
+//$db->end_transaction();
 
 // Display executed queries (if enabled)
 if (defined('PUN_SHOW_QUERIES'))

@@ -1,0 +1,34 @@
+<table class="btab w100p">
+<caption>Активность координаторов по числу штрафов за месяц</caption>
+<tr>
+	<th>Координатор</th>
+	<th>Число выставленных штрафов</th>
+</tr>
+{foreach from=$month_warns item="x"}
+<tr>
+	<td>{$x.coordinator_name}</td>
+	<td>{$x.warnings_count}</td>
+{/foreach}
+</table>
+
+<table class="btab w100p">
+<caption>Активность координаторов по числу штрафов за год</caption>
+<tr>
+	<th>Координатор</th>
+	<th>Число выставленных штрафов</th>
+</tr>
+{foreach from=$year_warns item="x"}
+<tr>
+	<td>{$x.coordinator_name}</td>
+	<td>{$x.warnings_count}</td>
+{/foreach}
+</table>
+
+<dl class="box">
+<dt>Смотри также</dt>
+<dd>
+<ul>
+<li><a href="http://balancer.ru/_bors/igo?o=forum_post__2302716">Обсуждение этой страницы на форуме</a> (в закрытом форуме)</li>
+</ul>
+</dd>
+</dl>

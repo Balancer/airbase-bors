@@ -54,7 +54,7 @@ class balancer_ajax_thumb_vote extends base_object
 		));
 
 		$vote->store();
-		$topic->cache_clean_self($target->page_in_topic());
+		$topic->cache_clean_self($target->topic_page());
 
 		return $target->score_colorized(true);
 	}

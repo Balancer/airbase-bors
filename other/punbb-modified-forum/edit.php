@@ -56,7 +56,7 @@ if (!$db->num_rows($result))
 
 $cur_post = $db->fetch_assoc($result);
 $blog = object_load('forum_blog', $id);
-$post = object_load('forum_post', $id);
+$post = object_load('balancer_board_post', $id);
 $topic = $post->topic();
 $forum = $topic->forum();
 $cur_post['message'] = $post->source();

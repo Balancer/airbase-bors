@@ -30,12 +30,12 @@ class balancer_board_topic extends forum_topic
 
 	static function sitemap_index($domain, $page, $per_page)
 	{
-		return objects_array('balancer_board_topic', array(
+		return array_reverse(objects_array('balancer_board_topic', array(
 			'forum_id IN' => self::_forum_ids($domain),
 			'page' => $page,
 			'per_page' => $per_page,
 			'order' => 'modify_time',
-		));
+		)));
 	}
 
 	static function sitemap_last_modify_time($domain, $page, $per_page)
