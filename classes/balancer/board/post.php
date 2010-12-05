@@ -38,4 +38,62 @@ class balancer_board_post extends forum_post
 
 		return bors_templates_smarty::render_data('xfile:/var/www/bors/bors-airbase/templates/forum/post.text', $data);
 	}
+
+	function auto_objects()
+	{
+		return array_merge(parent::auto_objects(), array(
+			'avatar_raw' => 'balancer_board_avatar(avatar_raw_id)',
+		));
+	}
+
+	function avatar()
+	{
+		$avatar_raw = $this->avatar_raw();
+		if($avatar_raw)
+			return $avatar_raw;
+
+		// К постингу не был приписан ни один аватар.
+		// Попробуем найти уже зарегистрированный аватар пользователя.
+		$owner_avatar = bors_find_first('balancer_board_avatar', array(
+			'owner_id' => $this->owner_id(),
+			'order' => '-create_time',
+		));
+
+		if($owner_avatar)
+			return $owner_avatar;
+
+		$owner = $this->owner();
+		if(!$owner)
+			return NULL; //TODO: вот тут и нужно приделывать граватары всякие
+
+		$avatar_file = $owner->use_avatar();
+		if(!$avatar_file)
+			return NULL; //TODO: и тут тоже нужно приделывать граватары всякие
+
+		//FIXME: хардкодный путь к аватарам
+		$avatar_file_full_path = '/var/www/balancer.ru/htdocs/forum/punbb/img/avatars/'.$avatar_file;
+
+		if(!file_exists($avatar_file_full_path))
+			return NULL; //TODO: и тут тоже нужно приделывать граватары всякие
+
+		$image = bors_image::register_file($avatar_file_full_path);
+		// Ссылка у нас единая. Кстати...
+		//FIXME: тут тоже подумать на тему настроек
+		$image->set_full_url('http://s.wrk.ru/a/'.$avatar_file, true);
+		$image->set_relative_path(NULL, true);
+
+		// Всё, картинка есть, можно регистровать новый аватар
+		return object_new_instance('balancer_board_avatar', array(
+			'owner_id' => $this->owner_id(),
+			'image_class_name' => $image->class_name(),
+			'image_id' => $image->id(),
+			'image_original_url' => $image->full_url(),
+			'image_file' => $image->full_file_name(),
+//			'image_html',
+			'title' => $owner->title(),
+			'signature' => $owner->signature(),
+//			'signature_html',
+//			'create_time',
+		));
+	}
 }

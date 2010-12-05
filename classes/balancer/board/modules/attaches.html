@@ -1,0 +1,6 @@
+{if $items}
+Прикреплённые файлы:
+{foreach from=$items item="attach"}
+<div class="box float_left center" style="width: 300px; ">{$attach->thumbnail_link('300x300')}<a href="{$attach->url()}">{$attach->title()}</a> [{$attach->size()|smart_size}, {$attach->downloads()} {$attach->downloads()|sklon:'загрузка':'загрузки':'загрузок'}]</div>
+{/foreach}
+{/if}

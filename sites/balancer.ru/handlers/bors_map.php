@@ -169,6 +169,8 @@ $map = array(
 		'/users/images/rep\-map\.svg => balancer_users_images_repMap',
 
 		'(/users/(\d+)/)votes/ => balancer_user_votes(2)',
+		'(/users/(\d+)/)attaches/   => balancer_board_users_attaches(2)',
+		'(/users/(\d+)/)attaches/(\d+)\.html   => balancer_board_users_attaches(2,3)',
 		'(/users/(\d+)/)own/   => balancer_board_users_own(2)',
 		'(/users/(\d+)/)own/(\d+)\.html   => balancer_board_users_own(2,3)',
 

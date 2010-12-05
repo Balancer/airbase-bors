@@ -37,6 +37,7 @@ class forum_post extends base_page_db
 			'edited',
 			'edited_by',
 			'owner_id' => 'poster_id',
+			'avatar_raw_id' => 'avatar_id',
 			'poster_ip',
 			'poster_email',
 			'poster_ua',
