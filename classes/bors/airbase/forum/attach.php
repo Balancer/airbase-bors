@@ -2,11 +2,11 @@
 
 class airbase_forum_attach extends base_object_db
 {
-	function main_db() { return config('punbb.database', 'punbb'); }
-	function main_table(){ return 'attach_2_files'; }
-	function storage_engine() { return 'storage_db_mysql_smart'; }
-	
-	function main_table_fields()
+	function db_name() { return config('punbb.database', 'punbb'); }
+	function table_name(){ return 'attach_2_files'; }
+	function storage_engine() { return 'bors_storage_mysql'; }
+
+	function table_fields()
 	{
 		return array(
 			'id',

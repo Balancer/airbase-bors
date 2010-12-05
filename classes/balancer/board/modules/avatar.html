@@ -1,0 +1,19 @@
+{if $user->use_avatar()}
+<div style="height: {$height}px; margin: {$margin_w}px 0">
+<a href="{$user->url()}">
+<img src="http://s.wrk.ru/a/{$user->use_avatar()}" width="{$width}" height="{$height}" alt="" />
+</a>
+</div>
+{else}
+<a href="{$user->url()}">
+<img src="http://www.gravatar.com/avatar/{$user->id()|cat:'balancer-user-gravatar'|md5}?d=wavatar" width="{$avatar_size}" height="{$avatar_size}" alt="" />
+</a>
+{/if}
+<h4><a href="{$user->url()}">{$user->title()}</a></h4>
+{if $avatar_size == 100}
+{if $user->group_title()}<h5>{$user->group_title()}</h5>{/if}
+{* {if $user->reputation()}<a href="http://balancer.ru/user/{$user->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}"><img src="http://balancer.ru/user/{$user->id()}/rep.gif" class="rep" alt="" /></a>{/if} *}
+{if $user->reputation()}<a href="http://balancer.ru/user/{$user->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}" class="rep">{$user->reputation_html()}</a><br/>{/if}
+{* {if $user->warnings() || $user->is_banned()}<a href="http://balancer.ru/user/{$user->id()}/warnings/"><img src="http://balancer.ru/user/{$user->id()}/warnings.gif" class="warn" alt="" /></a>{/if} *}
+{if $user->warnings() || $user->is_banned()}<a href="http://balancer.ru/user/{$user->id()}/warnings/" class="warn">{$user->warnings_html()}</a><br/>{/if}
+{/if}
