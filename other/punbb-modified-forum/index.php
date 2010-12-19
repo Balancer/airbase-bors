@@ -57,7 +57,7 @@ if(
 )
 {
 	if($post = object_load('forum_post', $m[1] + $pdiff))
-		return go($post->url_in_topic());
+		return go($post->url_in_container());
 	debug_hidden_log('__trap', "Unknown post in ".$_SERVER['QUERY_STRING']);
 	return go('/');
 }

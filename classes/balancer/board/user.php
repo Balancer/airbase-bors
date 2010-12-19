@@ -88,4 +88,29 @@ class balancer_board_user extends forum_user
 
 		return "<span class=\"warn\" style=\"margin:0; padding:0; color: black\">{$skulls}</span>";
 	}
+
+	function avatar() { return balancer_board_avatar::make($this->id()); }
+
+	function old_avatar_image()
+	{
+		$file = $this->use_avatar();
+		if(!$file)
+			return NULL; //TODO: и тут тоже нужно приделывать граватары всякие
+
+		//FIXME: хардкодный путь к аватарам
+		$full_path = '/var/www/balancer.ru/htdocs/forum/punbb/img/avatars/'.$file;
+
+		if(!file_exists($full_path))
+			return NULL; //TODO: и тут тоже нужно приделывать граватары всякие
+
+		$image = bors_image::register_file($full_path);
+		// Ссылка у нас единая. Кстати...
+		//FIXME: тут тоже подумать на тему настроек
+		$image->set_full_url('http://s.wrk.ru/a/'.$file, true);
+		$image->set_relative_path(NULL, true);
+		$image->wxh();
+		bors()->changed_save();
+
+		return $image;
+	}
 }

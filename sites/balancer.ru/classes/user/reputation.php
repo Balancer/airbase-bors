@@ -188,9 +188,9 @@ class user_reputation extends base_page
 		include_once("inc/navigation.php");
 		return go($this->url($this->total_pages(), false));
 	}
-	
+
 	function access() { return $this; }
-	
+
 	function can_action() { return $_GET['act'] == 'reputation_add_do'; }
 	function can_read() { return true; }
 	function static_get_cache() { return true; }
@@ -200,7 +200,7 @@ class user_reputation extends base_page
 //		echo "Clean cache in {$this->cache_dir()}";
 //		exit();
 		parent::cache_clean_self();
-		foreach(glob($this->cache_dir().'/reputation*.html') as $f)
+		foreach(glob($this->get('cache_dir').'/reputation*.html') as $f)
 			@unlink($f);
 	}
 }

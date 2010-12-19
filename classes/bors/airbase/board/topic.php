@@ -84,7 +84,7 @@ class airbase_board_topic extends forum_topic
 				$post = object_load('airbase_board_post', $first_new_post_id);
 
 				if($post)
-					return go($post->url_in_topic());
+					return go($post->url_in_container());
 			}
 
 //			exit('lkmnj');

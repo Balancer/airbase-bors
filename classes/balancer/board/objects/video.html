@@ -2,7 +2,16 @@
 
 {foreach from=$items item="v"}
 {assign var="p" value=$v->post()}
-{include file="xfile:forum/post.html" show_title=$p->topic()->title_url() strip="1500"}
+{include file="xfile:forum/post.html" show_title=$p->topic()->title_url()}
 {/foreach}
 
 {$this->pages_links_nul()}
+
+<dl class="box">
+<dt>Ссылки</dt>
+<dd>
+<ul>
+<li><a href="http://balancer.ru/support/2010/12/t75157--obsuzhdenie-stranitsy-vse-soobscheniya-s-videorolikami.html">Тема форума для обсуждения этой страницы</a></li>
+</ul>
+</div>
+</dd></dl>

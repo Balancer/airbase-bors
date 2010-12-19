@@ -10,13 +10,24 @@ $post = bors_load('balancer_board_post', 2304663);
 
 $avatar = $post->avatar();
 $image = $avatar->image();
-echo "image: {$image}\n";
+//echo "image: {$image}\n";
 
 $thumb = $image->thumbnail('50x');
-
+/*
 echo "thumb: {$thumb}\n";
 echo "thumb->full_url(): {$thumb->full_url()}\n";
 echo "thumb->url(): {$thumb->url()}\n";
+echo "thumb->width() = {$thumb->width()}\n";
 
-echo $thumb->html_code()."\n";
+//echo $thumb->html_code()."\n";
+*/
+
+// {module class='balancer_board_modules_avatar' user_id=$v->target_user()->id() size='50'}
+$avatar_module = object_load('balancer_board_modules_avatar', NULL, array(
+	'geo' => '50x50',
+	'user_id' => 124,
+///	'show_group' => false,
+));
+
+echo "--------------------\n{$avatar_module->html_code()}\n";
 

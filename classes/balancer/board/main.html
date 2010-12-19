@@ -30,7 +30,7 @@
 <dt>YouTube</dt>
 <dd>
 <object width="380" height="285"><param name="movie" value="http://www.youtube.com/v/{$last_youtube}?fs=1&amp;hl=ru_RU"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/{$last_youtube}?fs=1&amp;hl=ru_RU" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="380" height="285"></embed></object>
-Сообщение: <a href="{$last_youtube_post->url_in_topic()}">{$last_youtube_post->title()}</a>
+Сообщение: <a href="{$last_youtube_post->url_in_container()}">{$last_youtube_post->title()}</a>
 <p><b>[ <a href="http://forums.balancer.ru/objects/video/">Все видео форума</a> ]</b></p>
 </dd>
 </dl>
@@ -41,7 +41,7 @@
 {assign var="p" value=$best_of_days->target()}
 {assign var="forum" value=$p->topic()->forum()}
 {include file="xfile:forum/post.html" skip_message_footer=true skip_votes=true no_show_answers=true avatar_size=50 strip=2000}
-<p><small>// Сообщение: <a href="{$p->url_in_topic()}">{$p->title()}</a></small</p>
+<p><small>// Сообщение: <a href="{$p->url_in_container()}">{$p->title()}</a></small</p>
 <p><b>[ <a href="http://balancer.ru/tools/votes/">Все лучшие сообщения</a> ]</b></p>
 </dd>
 </dl>
@@ -52,7 +52,7 @@
 {assign var="p" value=$last_post}
 {assign var="forum" value=$p->topic()->forum()}
 {include file="xfile:forum/post.html" skip_message_footer=true skip_votes=true no_show_answers=true avatar_size=50 strip=1000}
-<p><small>// Сообщение: <a href="{$p->url_in_topic()}">{$p->title()}</a></small</p>
+<p><small>// Сообщение: <a href="{$p->url_in_container()}">{$p->title()}</a></small</p>
 <p><b>[ <a href="http://balancer.ru/forum/punbb/search.php?action=show_24h">Все новые сообщения</a> ]</b></p>
 </dd>
 </dl>
@@ -184,8 +184,11 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 
 <dl class="box"><dt>Авторы лучших сообщений</dt><dd>
 {foreach from=$best_votes_by_authors item="v"}
-{$v->target_user()->titled_url()},
+<div class="float_left" style="width: 50px; height: 80px; overflow: hidden; padding: 2px; text-align: center;">
+{module class='balancer_board_modules_avatar' user_id=$v->target_user()->id() geo='50x50'}
+</div>
 {/foreach}
+<div class="clear">&nbsp;</div>
 </dd></dl>
 
 

@@ -752,7 +752,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 
 				$_GET = array();
 				if ($num_pages_topic > 1)
-					$subject_multipage = $topic->pages_links_nul('pginlist', '', '', false);
+					$subject_multipage = $topic->pages_links_nul('pginlist', '', '', false, false, 7);
 				else
 					$subject_multipage = null;
 

@@ -8,10 +8,10 @@
 		if(!$obj)
 			return '';
 
-		$children = $obj->children();
+		$children = $obj->get('children');
 
 		$data = array();
-	
+
 //		Явные дети нашей страницы
 		if(!isset($GLOBALS['module_data']['downlevel']) || $GLOBALS['module_data']['downlevel'] > 0)
 		{
@@ -21,7 +21,8 @@
 				{
 					$child = object_load($child_url);
 					if(!$child)
-						echo "Can't load '$child_url'<br/>";
+						debug_hidden_log('navigation-error', "Can't load '$child_url'");
+
 					if($child && $child->nav_name())
 						$data[$child->url()] = array(
 							'obj' => $child,
@@ -105,12 +106,12 @@
 				{
 					$bro = object_load($bro_url);
 //					echo "<span style=\"font-size: 6pt;\">-- $indent: $child</span><br/>\n";
-					if(!$bro->nav_name())
+					if(!$bro || !$bro->nav_name())
 						continue;
 
 					if(empty($GLOBALS['module_data']['self_hide']) || $brother != $uri)
 						$children_list[$bro->url()] = modules_design_navleft_fill($bro, $indent);
-					
+
 					if($bro->url() == $obj->url() && $we)
 					{
 						// Если это наша страница - добавляем подготовленный заранее блок детей.
@@ -139,6 +140,6 @@ function modules_design_navleft_fill($obj, $indent)
 	return array(
 		'obj' => $obj,
 		'indent' => $indent,
-		'children_count' => count($obj->children()),
+		'children_count' => count($obj->get('children')),
 	);
 }

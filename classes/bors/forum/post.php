@@ -337,6 +337,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		return $this->__answer_to = $post;
 	}
 
+	function url_in_container() { return $this->url_in_topic(); }
+
 	// Осторожнее и использованием $topic! Если, например, ищем ссылку на ответ, находящийся 
 	// не в текущей теме.
 	function url_in_topic($topic = NULL)
@@ -629,7 +631,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function edit_url() { return "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}"; }
 
 //	function pre_show() { return go($this->url_in_topic()); }
-	function igo($permanent = true) { return go($this->url_in_topic(), $permanent); }
+	function igo($permanent = true) { return go($this->url_in_container(), $permanent); }
 
 	function score_colorized($recalculate = false)
 	{

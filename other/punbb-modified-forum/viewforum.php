@@ -67,7 +67,9 @@ if(empty($pun_user['g_id']))
 $forum = object_load('balancer_board_forum', $id);
 
 // Fetch some info about the forum
-$result = $db->query('SELECT f.forum_name, f.redirect_url, f.moderators, f.num_topics, f.sort_by, fp.post_topics FROM '.$db->prefix.'forums AS f LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND f.id='.$id) or error('Unable to fetch forum info', __FILE__, __LINE__, $db->error());
+$result = $db->query('SELECT f.forum_name, f.redirect_url, f.moderators, f.num_topics, f.sort_by, fp.post_topics FROM '.$db->prefix.'forums AS f LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND f.id='.$id)
+	or error('Unable to fetch forum info', __FILE__, __LINE__, $db->error());
+
 if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
 
@@ -157,7 +159,12 @@ echo get_subforums_html($id);
 if ($pun_user['is_guest'] || $pun_config['o_show_dot'] == '0')
 {
 	// Without "the dot"
-	$sql = 'SELECT id, poster, subject, description, posted, last_post, last_post_id, last_poster, num_views, num_replies, closed, sticky, moved_to FROM '.$db->prefix.'topics WHERE forum_id='.$id.' ORDER BY sticky DESC, '.(($cur_forum['sort_by'] == '1') ? 'posted' : 'last_post').' DESC LIMIT '.$start_from.', '.$pun_user['disp_topics'];
+	$sql = 'SELECT id, poster, subject, description, posted, last_post,
+		last_post_id, last_poster, num_views, num_replies, closed, sticky,
+		moved_to FROM '.$db->prefix.'topics 
+		WHERE forum_id='.$id.' ORDER BY sticky DESC,
+		'.(($cur_forum['sort_by'] == '1') ? 'posted' : 'last_post').' DESC
+		LIMIT '.$start_from.', '.$pun_user['disp_topics'];
 }
 else
 {
