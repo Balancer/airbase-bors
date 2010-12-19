@@ -1,4 +1,4 @@
-<?
+<?php
     require_once('obsolete/DataBaseHTS.php');
 //    require_once('Smarty/Smarty.class.php');
 

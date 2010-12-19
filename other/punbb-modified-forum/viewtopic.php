@@ -43,7 +43,7 @@ if(preg_match('!^pid=(\d+)$!', $qs, $m))
 		@header("HTTP/1.0 404 Not Found");
 		return go('http://balancer.ru/forum/', true);
 	}
-	return go($post->url_in_topic(), true);
+	return go($post->url_in_container(), true);
 }
 
 $cms_db = new driver_mysql('punbb');

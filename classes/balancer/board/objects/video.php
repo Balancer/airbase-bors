@@ -23,6 +23,7 @@ class balancer_board_objects_video extends bors_paginated
 	{
 		return array_merge(parent::where(), array(
 			'target_class_name' => 'bors_external_youtube',
+			'group' => 'post_id',
 		));
 	}
 

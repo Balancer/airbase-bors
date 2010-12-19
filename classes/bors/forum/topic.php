@@ -158,7 +158,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 				$post = object_load('forum_post', $first_new_post_id);
 
 				if($post = object_load('forum_post', $first_new_post_id))
-					return go($post->url_in_topic());
+					return go($post->url_in_container());
 			}
 
 			$this->set_page('last');
@@ -275,7 +275,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	}
 
 	function items_per_page() { return 25; }
-	function items_around_page() { return 7; }
+	function items_around_page() { return 12; }
 
 	function total_pages() { return intval($this->num_replies() / $this->items_per_page()) + 1; }
 
@@ -285,7 +285,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			return "";
 
 		include_once('inc/design/page_split.php');
-		return join(" ", pages_show($this, $this->total_pages(), 15));
+		return join(" ", pages_show($this, $this->total_pages(), $this->items_around_page()));
 	}
 
 	function title_pages_links()

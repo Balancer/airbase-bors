@@ -631,7 +631,7 @@ if (isset($_POST['form_sent']))
 
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);
-		go($post->url_in_topic($topic));
+		go($post->url_in_container($topic));
 		pun_exit();
 	}
 }

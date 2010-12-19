@@ -1,4 +1,4 @@
-<?
+<?php
     require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/config.site.php");
     require_once('obsolete/DataBaseHTS.php');
 
@@ -20,5 +20,3 @@
             echo "</div>\n";
         }
     }
-
-?>

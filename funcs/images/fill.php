@@ -1,4 +1,5 @@
-<?
+<?php
+
     require_once('obsolete/DataBaseHTS.php');
     require_once('obsolete/users.php');
     require_once('inc/filesystem.php');
@@ -9,7 +10,7 @@
             $page = dirname ($page) . '/';
 
 		$image2 = abs_path_from_relative($image, "{$page}img/");
-		
+
         $hts = new DataBaseHTS();
 
 		$data = url_parse($image2);
@@ -17,7 +18,7 @@
 		if(!$data['local'])
 		{
 			$path = config('sites_store_path')."/{$data['host']}{$data['path']}";
-				
+
 			if(preg_match("!/$!",$path))
 				$path .= "index";
 
@@ -117,4 +118,3 @@
 
         return $image;
     }
-?>

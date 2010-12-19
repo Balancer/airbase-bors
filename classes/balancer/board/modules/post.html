@@ -47,8 +47,7 @@
 
  <div class="body">
   {if $owner and not $skip_avatar_block}
-   {if not $avatar_size}{assign var="avatar_size" value=100}{/if}
-   <div class="avatar_block">{include file="xfile:forum/post-avatar.html" object=$p avatar_size=$avatar_size}</div>
+   <div class="avatar_block">{module class='balancer_board_modules_avatar' size=$avatar_size user=$owner}</div>
   {/if}
   {if $strip}
    {assign var="body" value=$p->body()}
