@@ -33,7 +33,14 @@ class airbase_user_reputation extends base_page_db
 		if(preg_match('/^\w+__\d+$/', $ref))
 		{
 			$object = object_load($ref);
-			return object_property($object, 'titled_url');
+			switch(object_property($object, 'class_name'))
+			{
+				case 'balancer_board_post':
+				case 'forum_post':
+					return object_property($object, 'titled_url_in_container');
+				default:
+					return object_property($object, 'titled_url');
+			}
 		}
 
 		if(preg_match('!post://(\d+)/?!', $ref, $m))
@@ -47,7 +54,7 @@ class airbase_user_reputation extends base_page_db
 			$object = $object->target();
 
 		if($object)
-			return $object->titled_url();
+			return $object->titled_url_in_container();
 
 		return $ref;
 	}
