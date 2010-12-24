@@ -4,7 +4,7 @@
 <dd>
 {foreach from=$last item="x"}
 {if $x->object()}
-&nbsp;&nbsp;&nbsp;{$x->create_time()|airbase_time}<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url()}<br/>
+&nbsp;&nbsp;&nbsp;{$x->create_time()|airbase_time}<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url_in_container()}<br/>
 {/if}
 {/foreach}
 </dd>
@@ -17,7 +17,7 @@
 <dd>
 {foreach from=$best item="x"}
 {if $x->object()}
-&nbsp;&nbsp;&nbsp;<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url()} {$x->object()->score_colorized()}<br/>
+&nbsp;&nbsp;&nbsp;<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url_in_container()} {$x->object()->score_colorized()}<br/>
 {/if}
 {/foreach}
 </dd>
@@ -30,7 +30,7 @@
 <dd>
 {foreach from=$worst item="x"}
 {if $x->object()}
-&nbsp;&nbsp;&nbsp;<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url()} {$x->object()->score_colorized()}<br/>
+&nbsp;&nbsp;&nbsp;<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url_in_container()} {$x->object()->score_colorized()}<br/>
 {/if}
 {/foreach}
 </dd>

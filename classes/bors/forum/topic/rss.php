@@ -33,20 +33,20 @@ class forum_topic_rss extends forum_topic
 */
 		// get your news items from somewhere, e.g. your database: 
 		foreach($object->db()->get_array("SELECT id FROM posts WHERE topic_id={$object->id()} ORDER BY posted DESC LIMIT 50") as $post_id)
-		{		
+		{
 		    $item = new FeedItem();
-			$post = class_load('forum_post', $post_id);
+			$post = class_load('balancer_board_post', $post_id);
 	    	$item->title = $object->title();
-		    $item->link = $post->url(); 
-			
+		    $item->link = $post->url_in_container();
+
 			$html = $post->body();
 			if(strlen($html) > 1024)
 			{
 				include_once("inc/texts.php");
 				$html = strip_text($html, 1024);
-				$html .= "<br /><br /><a href=\"".$post->url(1).ec("\">Дальше »»»");
+				$html .= "<br /><br /><a href=\"".$post->url_in_container().ec("\">Дальше »»»");
 			}
-			
+
 			$item->description = $html;
 			$item->date = $post->create_time(); 
 			$item->source = "http://balancer.ru/forum/";
@@ -54,10 +54,10 @@ class forum_topic_rss extends forum_topic
 				$item->author = $post->owner()->title();
 			else
 				debug_hidden_log('lost-data', 'Unknown author for '.$post);
-							     
-			$rss->addItem($item); 
+
+			$rss->addItem($item);
 		} 
-								
+
 		$result = $rss->createFeed("RSS1.0");
 		header("Content-Type: ".$rss->contentType."; charset=".$rss->encoding);
 		return $result;
