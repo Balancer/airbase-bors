@@ -336,6 +336,7 @@ class airbase_board_topic extends forum_topic
 
 		$data = array(
 			'topic_id' => $this->id(),
+			'target_class_id' => $this->class_id(),
 			'user_id' => $user_id,
 			'count' => $visits,
 			'last_visit' => time(),
@@ -348,10 +349,12 @@ class airbase_board_topic extends forum_topic
 			$this->db()->replace('topic_visits', $data);
 		}
 		else
+		{
 			$this->db()->update('topic_visits', array(
 				"user_id" => intval($user_id),
 				"topic_id" => intval($this->id()),
 			), $data);
+		}
 	}
 
 	function visits_counting() { return true; }
@@ -363,7 +366,7 @@ class airbase_board_topic extends forum_topic
 	{
 		if($this->owner === false)	
 			$this->owner = object_load('bors_user', $this->owner_id());
-		
+
 		return $this->owner;
 	}
 

@@ -6,6 +6,15 @@ class airbase_user_topics extends base_page
 	function db_name() { return 'punbb'; }
 	function template() { return 'forum/_header.html'; }
 
+	function parents()
+	{
+		$p = parent::parents();
+		if($this->id() == bors()->user_id())
+			$p[] = 'http://forums.balancer.ru/personal/';
+
+		return $p;
+	}
+
 	private $ids = false;
 	private function topics_ids()
 	{
@@ -23,8 +32,9 @@ class airbase_user_topics extends base_page
 	function local_data()
 	{
 		if($this->topics_ids())
-			return array('topics' => objects_array('forum_topic', array(
+			return array('topics' => objects_array('balancer_board_topic', array(
 					'id IN' => $this->topics_ids(), 
+					'last_post_create_time>' => 0,
 					'order' => '-last_post',
 			)));
 		else

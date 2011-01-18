@@ -446,6 +446,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		$visits = intval($this->db()->select('topic_visits', 'count', array('user_id=' => $user_id, 'topic_id=' => $this->id()))) + 1;
 
 		$data = array(
+			'target_class_id' => $this->class_id(),
 			'topic_id' => $this->id(),
 			'user_id' => $user_id,
 			'count' => $visits,
@@ -459,10 +460,12 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			$this->db()->replace('topic_visits', $data);
 		}
 		else
+		{
 			$this->db()->update('topic_visits', array(
 					'user_id' => intval($user_id),
 					'topic_id' => intval($this->id())
 				), $data);
+		}
 	}
 
 	function visits_counting() { return true; }
@@ -583,8 +586,11 @@ $(function() {
 
 	function last_visit_time_for_user($user)
 	{
+		if(!is_object($user))
+			return 0;
+
 		return intval($this->db()->select('topic_visits', 'last_visit', array(
-			'user_id=' => $user->id(), 
+			'user_id=' => $user->id(),
 			'topic_id=' => $this->id())));
 	}
 

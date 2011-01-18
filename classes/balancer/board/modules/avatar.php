@@ -33,12 +33,15 @@ class balancer_board_modules_avatar extends bors_module
 			$block_h = intval($m[2]);
 		}
 
-		$image = $avatar->image()->thumbnail($geo);
-		$image->wxh(); // чтобы произошёл перерасчёт параметров, если их ещё нет.
-		$height = $image->height();
-		$width  = $image->width();
-		$margin_w = max(0, floor(($block_w - $width)/2));
-		$margin_h = max(0, floor(($block_h - $height)/2));
+		if($avatar)
+		{
+			$image = $avatar->image()->thumbnail($geo);
+			$image->wxh(); // чтобы произошёл перерасчёт параметров, если их ещё нет.
+			$height = $image->height();
+			$width  = $image->width();
+			$margin_w = max(0, floor(($block_w - $width)/2));
+			$margin_h = max(0, floor(($block_h - $height)/2));
+		}
 
 		$show_title = $this->args('show_title', true);
 		$show_group = $this->args('show_group', $block_w >= 100);
