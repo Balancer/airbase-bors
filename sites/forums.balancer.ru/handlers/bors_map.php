@@ -36,7 +36,7 @@ $map = array(
 
 	'/new\-topics/10years-ago/ => balancer_board_topics_10years',
 
-	'/user/(\d+)/personal\.js => forum_userPersonalJS(1)',
+	'/user/(\d+)/personal\.js => forum_js_personal(1)',
 	'/user/(\d+)/warnings\.gif => forum_images_warnings(1)',
 	'/user/(\d+)/use-topics\.html => users_UseTopics(1)',
 	'/user/(\d+)/blog/ => user_blog(1)',

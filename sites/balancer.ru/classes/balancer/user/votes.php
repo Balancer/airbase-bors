@@ -59,5 +59,12 @@ class balancer_user_votes extends base_page
 
 	function cache_static() { return config('static_forum') ? rand(600, 1200) : 0; }
 
-	function parents() { return array($this->user()->url()); }
+	function parents()
+	{
+		$p = array($this->user()->url());
+		if($this->id() == bors()->user_id())
+			$p[] = 'http://forums.balancer.ru/personal/';
+
+		return $p;
+	}
 }

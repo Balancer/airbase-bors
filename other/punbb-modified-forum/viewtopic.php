@@ -244,6 +244,7 @@ if($pun_user['id'] > 1)
 	$count = intval($cms_db->get("SELECT count FROM topic_visits WHERE user_id=".intval($pun_user['id'])." AND topic_id=".intval($id))) + 1;
 
 	$data = array(
+			'target_class_id' => 2,
 			'topic_id' => $id,
 			'user_id' => $pun_user['id'],
 			'count' => $count,
@@ -254,7 +255,7 @@ if($pun_user['id'] > 1)
 		$data['first_visit'] = time();
 
 	$cms_db->store(
-		"{$db->prefix}topic_visits", 
+		"{$db->prefix}topic_visits",
 		"user_id=".intval($pun_user['id'])." AND topic_id=".intval($id),
 		$data,
 		false,
