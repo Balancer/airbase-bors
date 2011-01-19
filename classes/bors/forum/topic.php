@@ -384,7 +384,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		{
 			$this->set_last_post_id($last_pid, true);
 			$last_post = object_load('forum_post', $last_pid);
-			if($this->last_post_create_time() < $last_post->create_time(true))
+			if($this->get('last_post_create_time') < $last_post->create_time(true))
 				$this->set_last_post_create_time($last_post->create_time(true), true);
 			$this->set_last_poster_name($last_post->author_name(), true);
 
@@ -596,6 +596,12 @@ $(function() {
 
 	function was_updated_for_user($user, $for_post = false)
 	{
+		if(!$user)
+		{
+			debug_hidden_log('users_error', 'Попытка определить обновлялся ли топик для нерегистрированного пользователя');
+			return false;
+		}
+
 		$last = $this->last_visit_time_for_user($user);
 		if(!$last)
 			$last = $user->previous_session_end();

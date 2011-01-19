@@ -1,5 +1,9 @@
 <?php
 
+bors_url_map(array(
+	'/login/ => wrk_mauth_login',
+));
+
 $forums = '(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/|/forum/)';
 
 $map = array(
