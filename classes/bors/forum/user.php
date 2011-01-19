@@ -403,6 +403,9 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		if($expired == -1)
 			$expired = time()+86400*30;
 
+		if(!$this->saltu())
+			return $this->cookie_hash_update();
+
 		foreach(array(
 			'user_id' => $this->id(),
 			'cookie_hash' => $this->saltu(),
@@ -460,6 +463,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 			SetCookie($k, NULL, 0, "/");
 			SetCookie($k, NULL, 0, "/", $_SERVER['HTTP_HOST']);
 			SetCookie($k, NULL, 0, "/", '.'.$_SERVER['HTTP_HOST']);
+			SetCookie($k, NULL, 0, "/", 'airbase.ru');
 		}
 	}
 

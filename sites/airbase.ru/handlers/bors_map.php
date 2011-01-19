@@ -1,5 +1,9 @@
 <?php
 
+bors_url_map(array(
+	'/login/ => wrk_mauth_login',
+));
+
 $map = array(
 	'/ => airbase_main',
 
