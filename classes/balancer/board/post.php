@@ -96,4 +96,41 @@ class balancer_board_post extends forum_post
 //			'create_time',
 		));
 	}
+
+	function direct_answers()
+	{
+		return bors_find_all(__CLASS__, array(
+			'answer_to_id' => $this->id(),
+		));
+	}
+
+	function answers_count($recount = false)
+	{
+//		echo "answers_count({$this})\n";
+		if(!$recount && !is_null($this->answers_count_raw()))
+			return $this->answers_count_raw();
+
+		$summ = 0;
+		foreach($this->direct_answers() as $a)
+		{
+//			echo "sum{$a}\n";
+			$summ += $a->answers_count($recount) + 1;
+		}
+
+		return $this->set_answers_count_raw($summ, true);
+	}
+
+	function parents_answers_recount($set = false)
+	{
+//		echo "par({$this})\n";
+		if($set !== false)
+			$this->set_answers_count_raw($set, true);
+
+		if($parent = bors_load('balancer_board_post', $this->answer_to_id()))
+		{
+//			echo "par={$parent}\n";
+			$parent->answers_count(false);
+			$parent->parents_answers_recount();
+		}
+	}
 }

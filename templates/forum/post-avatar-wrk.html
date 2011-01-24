@@ -1,0 +1,20 @@
+{*
+	$avatar_size = 100
+*}
+{if not $avatar_size}{assign var="avatar_size" value=100}{/if}
+{if $owner->use_avatar()}
+<div style="height: {$owner->avatar_height($avatar_size)}px; margin: {math equation="max(0,floor((s-w)/2))" w=$owner->avatar_width() s=$avatar_size}px 0">
+<a href="{$owner->url()}">
+<img src="http://s.wrk.ru/a/{$owner->use_avatar()}" width="{$owner->avatar_width($avatar_size)}" height="{$owner->avatar_height($avatar_size)}" alt="" />
+</a>
+</div>
+{else}
+<a href="{$owner->url()}">
+<img src="http://www.gravatar.com/avatar/{$owner->id()|cat:'balancer-user-gravatar'|md5}?d=wavatar" width="{$avatar_size}" height="{$avatar_size}" alt="" />
+</a>
+{/if}
+{if $avatar_size == 100}
+{if $owner->group_title()}<h5>{$owner->group_title()}</h5>{/if}
+{if $owner->reputation()}<a href="http://balancer.ru/user/{$owner->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}" class="rep">{$owner->reputation_html()}</a><br/>{/if}
+{if $owner->warnings() || $owner->is_banned()}<a href="http://balancer.ru/user/{$owner->id()}/warnings/" class="warn">{$owner->warnings_html()}</a><br/>{/if}
+{/if}

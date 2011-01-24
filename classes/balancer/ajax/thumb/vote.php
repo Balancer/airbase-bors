@@ -56,6 +56,19 @@ class balancer_ajax_thumb_vote extends base_object
 		$vote->store();
 		$topic->cache_clean_self($target->topic_page());
 
-		return $target->score_colorized(true);
+		$return = $target->score_colorized(true);
+
+		if(is_null($target->mark_best_date()))
+		{
+			$positives = objects_count('bors_votes_thumb', array(
+				'score>' => 0,
+				'target_class_name' => 'forum_post',
+				'target_object_id' => $target->id(),
+			));
+			if($positives >= 3)
+				$target->set_mark_best_date($vote->create_time(), true);
+		}
+
+		return $return;
 	}
 }

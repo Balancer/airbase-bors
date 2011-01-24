@@ -1,0 +1,132 @@
+{*
+	переменные:
+	$p - сам постинг
+	$forum - форум, если нужно показать ссылку на него
+	$no_show_answers = true, если не показывать ответы.
+	$show_title = "заголовок", если нужна печать заголовка.
+	$skip_author_name
+	$skip_avatar_block
+	$skip_date
+	$skip_forums - не отображать название форума
+	$skip_tools - не рисовать инструменты
+	$skip_votes - не рисовать иконки в заголовке
+	$skip_message_footer
+	$strip - сколько резать символов.
+*}
+{if $p}
+{if !$p->is_deleted()}
+<a name="p{$p->id()}"></a>
+{assign var="owner" value=$p->owner()}
+{assign var=a value=$p->answer_to()}
+
+<div class="post pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $p->is_moderatorial()} moderatorial_post{/if}">
+
+
+<div class="head">
+<div class="to-left">
+{if $p->is_moderatorial()}<div class="red small">Данное сообщение является официальным предупреждением</div>{/if}
+{$p->flag()}
+{if not $skip_author_name}{$p->author_name()}{/if}
+{if not $skip_date} <a href="{$p->url_for_igo()}">#{$p->create_time()|full_time}</a>{/if}
+{if not $no_show_answers and $p->answer_to_id() and $a}&nbsp;<span class="answer">ответ на @{$a->author_name()}<a href="{$a->url_in_container()}">#{$a->create_time()|full_time}</a></span>{/if}
+</div>
+
+{if not $skip_votes}
+<div class="to-right">
+ {if $me}
+ <div class="to-left">
+  {$p->tools()->favorite_link_ajax()}
+{if not $skip_tools}
+  {if $me->is_coordinator()}<div id="pttools_{$p->id()}" class="to-left"></div><img src="/_bors/i/tools.gif" alt="*" onclick="sh('pttools', {$p->id()})"  width="16" height="16" title="Инструменты координатора" />{/if}
+{/if}
+ </div>
+ {/if}
+ <div class="to-left"><img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$p->id()},'up')"  width="16" height="16" /></div>
+ <div id="ptr{$p->id()}" class="to-left">{if $p->score() != NULL}{$p->score_colorized()}{/if}</div>
+ <div class="to-left"><img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$p->id()},'down')" width="16" height="16" /></div>
+{if not $skip_tools}
+ <div class="half-transparent to-left">{$p->imaged_edit_url()}</div>
+{/if}
+</div>
+{/if}
+
+<div class="clear">&nbsp;</div>
+</div>{*/head*}
+
+{if $owner and not $skip_avatar_block}
+{if not $avatar_size}{assign var="avatar_size" value=100}{/if}
+<div class="avatar_block">{include file="xfile:forum/post-avatar-wrk.html" object=$p avatar_size=$avatar_size}</div>
+{/if}
+
+<div class="post-body">
+{if $show_title}<h3><a href="{$p->url_in_container()}">{$show_title}</a></h3>{/if}
+{if $forum and not $skip_forums}<small class="nosub">{icon image="forum.png" link=$forum->url()}&nbsp;{$forum->titled_url()}</small>{/if}
+<br/><br/>
+{if $strip}
+{assign var="body" value=$p->body()}
+{$body|strip_text:$strip}
+{if strlen($body) >= $strip}
+<br /><br /><a href="{$p->url_in_container()}">Дальше »»»</a>
+{/if}
+{else}
+{if $p->is_spam() && $p->topic()->forum_id() != 191 && not $show_spam}
+<div class="box">** Это сообщение от непроверенного пользователя и похоже на спам. После проверки его координаторами оно будет или уничтожено, или разрешено к показу **</div>
+{else}
+{$p->body()}
+{/if}
+{/if}
+
+{if $p->attaches()}
+<hr />
+Прикреплённые файлы:
+{foreach from=$p->attaches() item="attach"}
+<div class="box float_left center" style="width: 300px; ">{$attach->thumbnail_link('300x300')}<a href="{$attach->url()}">{$attach->title()}</a> [{$attach->size()|smart_size}, {$attach->downloads()} {$attach->downloads()|sklon:'загрузка':'загрузки':'загрузок'}]</div>
+{/foreach}
+{/if}
+
+{if not $skip_message_footer}
+
+<div class="postsignature">
+{if $owner and $owner->signature()}{$owner->signature_html()}{/if}
+<span class="img_middle">
+&nbsp;{$p->owner_user_agent()}
+</span>
+</div>
+
+{if $p->edited() && $p->edited() > $p->create_time() + 300}<div class="edited_note">
+Это сообщение редактировалось {$p->edited()|strftime:"%d.%m.%Y в %H:%M"}
+</div>{/if}
+
+{if $p->warning()}<div class="warning_note">
+<b>{$p->warning()|get:moderator_name}:</b> предупреждение ({$p->warning()|get:score})
+{if $p->warning()|get:type_id} по категории «<b>{$p->warning()|get:type_id|bors_list_item_name:"airbase_user_warning_type"}</b>»
+{if $p->warning()|get:source}(<i>{$p->warning()|get:source}</i>){/if}
+{/if}.
+</div>{/if}
+
+<div id="pfo{$p->id()}"></div>
+
+<ul class="postfooter">
+<li><script type="text/javascript"><!--
+if(top.me_is_coordinator)
+document.writeln('<label><input type="checkbox" id="_chkbx_p{$p->id()}" onclick="return apfgp(this, {$p->id()})" />&nbsp;отметить</label>')
+--></script></li>
+<li><a href="#" onclick="pdsh('{$p->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;инструменты</a></li>
+<li class="pages_select">
+ <a href="{$p->topic()->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
+  class="current_page">Ответить на сообщение</a>
+</li>
+</ul>
+
+{else}
+<div class="clear">&nbsp;</div>
+{/if}{*/signature show*}
+
+<div class="nosub small" style="margin-top: 5px;">{icon image="comments.png" link=$p->url_in_container()} <a href="{$p->url_in_container()}"}>комментариев: {$p->answers_count()}</a></div>
+
+</div>{*/body*}
+</div>{*/post*}
+{/if}
+{else}
+Error: Unknown post.
+{/if}

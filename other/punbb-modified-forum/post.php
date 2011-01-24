@@ -548,11 +548,13 @@ if (isset($_POST['form_sent']))
 		if(!empty($_POST['keywords_string']))
 			$topic->set_keywords_string($_POST['keywords_string'], true);
 
-		$post  = object_load('forum_post',  $new_pid, array('no_load_cache' => true));
+		$post  = object_load('balancer_board_post',  $new_pid, array('no_load_cache' => true));
 
 		$topic->set_modify_time(time(), true);
 		$topic->set_last_post_create_time($post->create_time(), true);
 		$post->set_modify_time(time(), true);
+
+		$post->parents_answers_recount(0);
 
 		if($me->xmpp_notify_enabled() && $me->id() != $post->owner_id())
 			bors_messages_users_xmpp::queue($me, $topic);
