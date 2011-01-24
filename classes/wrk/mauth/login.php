@@ -44,9 +44,11 @@ class wrk_mauth_login extends bors_page
 
 		$sig  = bors()->request()->data('sig');
 		$host = bors()->server()->host();
-		$ref  = bors()->client()->referer();
+		$ref  = bors()->request()->data('ref');
+		if(!$ref)
+			$ref  = bors()->client()->referer();
 
-		if($ref == 'http://wrk.ru/login/')
+		if(preg_match('!^http://wrk.ru/login/!', $ref))
 			$ref = NULL;
 
 		if($host == 'wrk.ru' && !$sig)
@@ -71,22 +73,35 @@ class wrk_mauth_login extends bors_page
 		$sig = bors()->request()->data('sig');
 		$host = bors()->server()->host();
 		$ref  = bors()->client()->referer();
+
+		if(preg_match('!^http://wrk.ru/login/!', $ref))
+			$ref = NULL;
+
+		// Если это вызов авторизации на одном из промежуточных доменов.
+		// запоминаем реферер и идём в начало цикла.
+		if($host != 'wrk.ru' && !$sig)
+			return go('http://wrk.ru/login/?ref='.$ref);
+
 		if($host == 'wrk.ru' && !$sig)
 		{
 			// Это начало цикла. Выводим страницу.
 			return false;
 		}
 
+		$auth = bors_find_first('wrk_mauth', array(
+			'signature' => $sig,
+		));
+
 		if($host == 'wrk.ru' && $sig)
 		{
 			// Это конец цикла. Переходим туда, откуда пришли.
+			// Сперва - чистим авторизационную куку.
+			if($auth)
+				$auth->delete();
 			return go($ref ? $ref : 'http://wrk.ru/');
 		}
 
 		// Иначе - это промежуточная авторизация на домене.
-		$auth = bors_find_first('wrk_mauth', array(
-			'signature' => $sig,
-		));
 
 		if(!$auth)
 			return bors_message(ec('Ошибка циклической авторизации в домене $host'));

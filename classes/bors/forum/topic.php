@@ -121,9 +121,6 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function set_forum($forum) { return $this->set_attr('forum', $forum); }
 
-
-//	function last_post() { return object_load('forum_post', $this->last_post_id()); }
-
 	function parents() { return array("forum_forum://".$this->forum_id()); }
 
 	function is_sticky() { return $this->sticky() ? true : false; }
@@ -155,9 +152,9 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 			if($first_new_post_id)
 			{
-				$post = object_load('forum_post', $first_new_post_id);
+				$post = object_load('balancer_board_post', $first_new_post_id);
 
-				if($post = object_load('forum_post', $first_new_post_id))
+				if($post = object_load('balancer_board_post', $first_new_post_id))
 					return go($post->url_in_container());
 			}
 
@@ -186,8 +183,6 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		$GLOBALS['cms']['cache_disabled'] = true;
 
 		require_once("engines/smarty/assign.php");
-
-
 
 		$data = array(
 			'posts' => $this->posts(),
@@ -263,12 +258,12 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			$data['per_page'] = $this->items_per_page();
 		}
 
-		return objects_array('forum_post', $data);
+		return objects_array('balancer_board_post', $data);
 	}
 
 	protected function all_posts()
 	{
-		return objects_array('forum_post', array(
+		return objects_array('balancer_board_post', array(
 			'topic_id' => $this->id(),
 			'order' => '`order`,posted',
 		));
@@ -330,7 +325,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		foreach($posts as $x)
 		{
-//			$post = class_load('forum_post', $pid);
+//			$post = class_load('balancer_board_post', $pid);
 			if($x['message'])
 				$result[] = $x['poster'].":\n---------------\n".$x['message'];
 		}
@@ -371,7 +366,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		$this->set_num_replies($num_replies, true);
 		$first_pid = $this->db()->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));
 		$this->set_first_post_id($first_pid, true);
-		if($first_post = object_load('forum_post', $first_pid))
+		if($first_post = object_load('balancer_board_post', $first_pid))
 		{
 			$this->set_create_time($first_post->create_time(true), true);
 			$this->set_author_name($first_post->author_name(), true);
@@ -383,7 +378,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if($last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id())))
 		{
 			$this->set_last_post_id($last_pid, true);
-			$last_post = object_load('forum_post', $last_pid);
+			$last_post = object_load('balancer_board_post', $last_pid);
 			if($this->get('last_post_create_time') < $last_post->create_time(true))
 				$this->set_last_post_create_time($last_post->create_time(true), true);
 			$this->set_last_poster_name($last_post->author_name(), true);

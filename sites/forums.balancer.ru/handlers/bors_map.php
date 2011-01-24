@@ -1,4 +1,10 @@
 <?php
+
+bors_url_map(array(
+	'/best/ => balancer_board_posts_best',
+	'(/)best/(\d+)\.html => balancer_board_posts_best(NULL,2)',
+));
+
 $map = array(
 	'/ => balancer_board_main',
 	'/index.html => balancer_board_main',

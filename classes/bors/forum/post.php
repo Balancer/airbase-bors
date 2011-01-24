@@ -22,6 +22,10 @@ class forum_post extends base_page_db
 //			'posts_cached_fields' => array(	'id' => 'post_id',
 				'flag_db' => 'flag',
 				'warning_id',
+				'answers_count_raw' => 'answers_count',
+				'mark_best_date',
+				'score_positive_raw' => 'score_positive',
+				'score_negative_raw' => 'score_negative',
 			),
 		));
 	}
@@ -592,7 +596,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			return $this->warning = object_load('airbase_user_warning', $this->warning_id());
 
 		$warn = objects_first('airbase_user_warning', array(
-			'warn_class_id=' => $this->class_id(),
+			'warn_class_id=' => $this->extends_class_id(),
 			'warn_object_id='=>$this->id(),
 			'order' => '-time'));
 
@@ -633,21 +637,46 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 //	function pre_show() { return go($this->url_in_topic()); }
 	function igo($permanent = true) { return go($this->url_in_container(), $permanent); }
 
+	function has_readed_by_user($user)
+	{
+		$topic = $this->topic();
+		return $topic->last_visit_time_for_user($user) > $topic->last_post_create_time();
+	}
+
+	function on_delete_pre() { $this->topic(); }
+	function on_delete_post() { $this->topic()->recalculate(); }
+
+	function score_positive($recalculate = false)
+	{
+		if(!$recalculate && !is_null($this->score_positive_raw()))
+			return $this->score_positive_raw();
+
+		return $this->set_score_positive_raw(objects_count('bors_votes_thumb', array(
+			'target_class_name' => $this->extends_class(),
+			'target_object_id' => $this->id(),
+			'score' => 1,
+		)), true);
+	}
+
+	function score_negative($recalculate = false)
+	{
+		if(!$recalculate && !is_null($this->score_negative_raw()))
+			return $this->score_negative_raw();
+
+		return $this->set_score_negative_raw(objects_count('bors_votes_thumb', array(
+			'target_class_name' => $this->extends_class(),
+			'target_object_id' => $this->id(),
+			'score' => -1,
+		)), true);
+	}
+
 	function score_colorized($recalculate = false)
 	{
 		if(is_null($this->score()) && !$recalculate)
 			return "";
 
-		$data = array(
-			'target_class_name' => $this->extends_class(),
-			'target_object_id' => $this->id(),
-			'score' => 1,
-		);
-
-		$positives = objects_count('bors_votes_thumb', $data);
-
-		$data['score'] = -1;
-		$negatives = objects_count('bors_votes_thumb', $data);
+		$positives = $this->score_positive($recalculate);
+		$negatives = $this->score_negative($recalculate);
 
 		$score = $positives - $negatives;
 
@@ -673,13 +702,4 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		return "<span style=\"color:$color\">{$score}</span>{$rate}";
 	}
-
-	function has_readed_by_user($user)
-	{
-		$topic = $this->topic();
-		return $topic->last_visit_time_for_user($user) > $topic->last_post_create_time();
-	}
-
-	function on_delete_pre() { $this->topic(); }
-	function on_delete_post() { $this->topic()->recalculate(); }
 }
