@@ -9,7 +9,11 @@ function lcml_old_keywords_links($text)
 	if(!$keywords)
 		$keywords = file($_SERVER['DOCUMENT_ROOT'].'/links.txt');
 
-	$main_url = bors()->main_object()->url();
+	$main_obj = bors()->main_object();
+	if(!$main_obj)
+		return $text;
+
+	$main_url = $main_obj->url();
 
 	$found = false;
 	foreach($keywords as $s)

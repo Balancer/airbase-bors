@@ -52,11 +52,6 @@ class forum_tools_post_moveTree extends base_page
 
 	function access_engine() { return "forum_access_move"; }
 
-	function pre_parse()
-	{
-		session_register('bba_last_target_topic_id');
-	}
-
 	function on_action_by_topic_id(&$data)
 	{
 		$tid = @$data['target_topic_id'];

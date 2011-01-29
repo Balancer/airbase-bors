@@ -28,7 +28,7 @@ function user_title() { return @$this->data['user_title']; }
 function set_user_title($v, $dbup) { return $this->set('user_title', $v, $dbup); }
 function can_move() { return @$this->data['can_move']; }
 function set_can_move($v, $dbup) { return $this->set('can_move', $v, $dbup); }
-	
+
 	function body() { return ec("Группа '{$this->title()}' (№{$this->id()})"); }
 	function is_coordinator() { return intval($this->can_move()) != 0; }
 	function is_moderator() { return in_array($this->id(), array(1, 2)); }

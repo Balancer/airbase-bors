@@ -67,7 +67,7 @@ else if ($pun_config['o_rules'] == '1' && !isset($_GET['agree']) && !isset($_POS
 					</div>
 				</fieldset>
 			</div>
-			<p><input type="submit" name="agree" value="<?php echo $lang_register['Agree'] ?>" /><input type="submit" name="cancel" value="<?php echo $lang_register['Cancel'] ?>" /></p>
+			<p><input type="submit" name="agree" value="<?php echo $lang_register['Agree'] ?>" /><input type="submit" name="cancel" value="<?php echo $lang_register['Cancel']; /*"*/ ?>" /></p>
 		</form>
 	</div>
 </div>
@@ -79,6 +79,14 @@ else if ($pun_config['o_rules'] == '1' && !isset($_GET['agree']) && !isset($_POS
 
 else if (isset($_POST['form_sent']))
 {
+	$crc = md5(intval($_POST['captcha_result']).'salt');
+
+	if($crc != @$_POST['captcha_hash'])
+	{
+//		debug_hidden_log('users-register-captcha-fail', 'Пользователь ошибся при вводе captcha');
+		return message('Вы ввели неверный результат выражения. Попробуйте ещё раз.');
+	}
+
 	// Check that someone from this IP didn't register a user within the last hour (DoS prevention)
 	$result = $db->query('SELECT 1 FROM '.$db->prefix.'users WHERE registration_ip=\''.get_remote_address().'\' AND registered>'.(time() - 3600)) or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());
 
@@ -256,6 +264,20 @@ $required_fields = array('req_username' => $lang_common['Username'], 'req_passwo
 $focus_element = array('register', 'req_username');
 require PUN_ROOT.'header.php';
 
+//require_once(config('recaptcha.include'));
+//$publickey = config('recaptcha.pubkey');
+
+$x1 = rand(2, 4);
+
+$operators = array(
+	array('к %d прибавить %d = ', '+', rand(0,49), rand(0,49)),
+	array('от %d отнять %d = ',   '-', rand(20, 40), rand(1,19)),
+	array('умножить %d на %d = ', '*', rand(1,10), rand(1,10)),
+	array('разделить %d на %d = ','/', rand(1,4)*$x1, $x1),
+);
+
+list($format, $operator, $a, $b) = $operators[rand(0,count($operators)-1)];
+eval("\$expect_result = md5((\$a $operator \$b).'salt');");
 ?>
 <div class="blockform">
 	<h2><span><?php echo $lang_register['Register'] ?></span></h2>
@@ -267,10 +289,17 @@ require PUN_ROOT.'header.php';
 					<p><?php echo $lang_register['Desc 1'] ?></p>
 					<p><?php echo $lang_register['Desc 2'] ?></p>
 				</div>
+				<div class="forminfo">
+В виду засилья спам-ботов на нашем форуме, Вы должны подтвердить, что являетесь человеком. Сосчитайте результат выражения и введите его в форму ввода:<br/>
+<b><?php echo sprintf($format, $a, $b);?>
+					<input name="captcha_result" value="" />
+</b>
+				</div>
 				<fieldset>
 					<legend><?php echo $lang_register['Username legend'] ?></legend>
 					<div class="infldset">
 						<input type="hidden" name="form_sent" value="1" />
+						<input type="hidden" name="captcha_hash" value="<?php echo $expect_result /*"*/ ?>" />
 						<label><strong><?php echo $lang_common['Username'] ?></strong><br /><input type="text" name="req_username" size="25" maxlength="25" /><br /></label>
 					</div>
 				</fieldset>

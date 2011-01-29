@@ -18,8 +18,8 @@ class balancer_board_mobile_forum extends balancer_board_forum
 
 	function category()
 	{
-		if($this->__lastfc())
-			return $this->__lastc;
+		if($this->__havefc())
+			return $this->__lastc();
 
 		$f = $this->forum();
 		while($f->category_id() == 0)

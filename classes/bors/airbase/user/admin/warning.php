@@ -50,7 +50,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 		);
 	}
 
-	function post_set(&$data)
+	function on_new_instance(&$data)
 	{
 		$uid = $data['user_id'];
 		$user = object_load('bors_user', $uid);
@@ -62,12 +62,12 @@ class airbase_user_admin_warning extends airbase_user_warning
 		object_load('users_topwarnings')->cache_clean();
 
 		$object = object_load($data['object']);
-		$object->set_warning_id($this->id(), true);
+		$object->set_warning_id(NULL, true);
 		$object->set_modify_time(time(), true);
 		$object->cache_clean();
 
 		@unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
-		if($object->class_name() == 'forum_post')
+		if($object->extends_class() == 'forum_post')
 		{
 			$topic = $object->topic();
 			balancer_board_action::add($topic, "Предупреждение пользователю: {$object->nav_named_link()}", true);
@@ -80,7 +80,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 		$ret = parent::delete();
 		bors()->changed_save();
 
-		if($object->class_name() == 'forum_post')
+		if($object->extends_class_name() == 'forum_post')
 		{
 			$topic = $object->topic();
 			balancer_board_action::add($topic, "Отмена предупреждения пользователю {$user->title()}: {$object->nav_named_link()}", true);

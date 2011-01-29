@@ -18,6 +18,7 @@ class forum_tools_post_do extends base_page
 		{
 			case 'drop-cache':
 				$p->set_post_body(NULL, true);
+				$p->set_warning_id(NULL, true);
 				$p->set_flag_db(NULL, true);
 				$p->cache_clean();
 				$p->store();
@@ -29,6 +30,6 @@ class forum_tools_post_do extends base_page
 				break;
 		}
 
-		return go($p->url());
+		return go($p->url_in_container());
 	}
 }
