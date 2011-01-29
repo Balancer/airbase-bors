@@ -14,11 +14,19 @@ class balancer_user_votes extends base_page
 
 	function local_data()
 	{
-		$last = objects_array('bors_votes_thumb', array(
-				'order' => '-create_time',
-				'limit' => 30,
+		$last = array();
+
+		foreach(objects_array('bors_votes_thumb', array(
 				'target_user_id' => $this->id(),
-		));
+				'create_time>' => time() - 86400*30,
+				'order' => '-create_time',
+//				'group' => 'target_class_name,target_object_id',
+				'limit' => 100,
+		)) as $vote)
+			if(empty($last[$idx = $vote->target_class_name().'-'.$vote->target_object_id()]))
+				$last[$idx] = $vote;
+
+		$last = array_splice(array_values($last), 0, 30);
 
 		$best = objects_array('bors_votes_thumb', array(
 				'group' => 'target_class_name,target_object_id',

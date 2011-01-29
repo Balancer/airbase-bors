@@ -389,7 +389,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 //		return 'http://balancer.ru/_bors/igo?o='.$this->internal_uri_ascii();
 	}
 
-	function url_for_igo() { return 'http://balancer.ru/_bors/igo?o='.$this->internal_uri_ascii(); }
+	function url_for_igo() { return 'http://balancer.ru/g/p'.$this->id(); }
 
 	function titled_link($text = NULL, $css=NULL) 
 	{
@@ -596,7 +596,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			return $this->warning = object_load('airbase_user_warning', $this->warning_id());
 
 		$warn = objects_first('airbase_user_warning', array(
-			'warn_class_id=' => $this->extends_class_id(),
+			'warn_class_id' => $this->extends_class_id(),
 			'warn_object_id='=>$this->id(),
 			'order' => '-time'));
 

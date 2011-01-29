@@ -1,10 +1,10 @@
 {if $last}
 <dl class="box">
-<dt>Последние оценки</dt>
+<dt>Последние оценённые сообщения</dt>
 <dd>
 {foreach from=$last item="x"}
 {if $x->object()}
-&nbsp;&nbsp;&nbsp;{$x->create_time()|airbase_time}<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url_in_container()}<br/>
+&nbsp;&nbsp;&nbsp;{$x->create_time()|airbase_time}<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->object()->titled_url_in_container()}&nbsp;{$x->target()->score_colorized()}<br/>
 {/if}
 {/foreach}
 </dd>
@@ -44,3 +44,12 @@
 </dd>
 </dl>
 {/if}
+
+<dl class="box">
+<dt>Смотри также</dt>
+<dd>
+<ul>
+<li><a href="http://balancer.ru/support/2009/09/t68558--prosmotr-otsenok-soobschenij-polzovatelya.html">Обсуждение этой страницы</a></li>
+</ul>
+</dd>
+</dl>

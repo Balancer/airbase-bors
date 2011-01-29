@@ -7,6 +7,6 @@
 {if $this->description()}<small><i>{$this->description}</i></small>{/if}
 {$this->body()}
 <hr/>
-<small>{module class="nav_top" id=$this}{if $this->full_version_url()} [<a href="{$this->full_version_url()}">полная версия</a>]{/if}</small>
+<small>{module class="nav_top" id=$this}{if $this->get('full_version_url')} [<a href="{$this->full_version_url()}">полная версия</a>]{/if}</small>
 </body>
 </html>
