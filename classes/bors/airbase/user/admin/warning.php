@@ -88,8 +88,8 @@ class airbase_user_admin_warning extends airbase_user_warning
 
 		$warnings = $this->db()->select('warnings', 'SUM(score)', array('user_id=' => $uid, 'time>' => time()-WARNING_DAYS*86400));
 		$warnings_total = $this->db()->select('warnings', 'SUM(score)', array('user_id=' => $uid));
-		$user->set_warnings($warnings + $data['score'], true);
-		$user->set_warnings_total($warnings_total + $data['score'], true);
+		$user->set_warnings($warnings - $data['score'], true);
+		$user->set_warnings_total($warnings_total - $data['score'], true);
 		$user->cache_clean();
 		object_load('users_topwarnings')->cache_clean();
 

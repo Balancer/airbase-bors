@@ -1,7 +1,9 @@
 <?php
 
-class balancer_board_posts_show extends bors_page
+class balancer_board_posts_show extends bors_view
 {
+	function main_class() { return 'balancer_board_post'; }
+
 	function config_class() { return 'balancer_board_config'; }
 
 	function can_be_empty() { return false; }
