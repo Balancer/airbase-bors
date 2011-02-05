@@ -48,7 +48,6 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/prof_reg.php';
 // Load the profile.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/profile.php';
 
-
 if ($action == 'change_pass')
 {
 	if (isset($_GET['key']))
@@ -90,6 +89,7 @@ if ($action == 'change_pass')
 				message($lang_common['No permission']);
 		}
 	}
+
 
 	if (isset($_POST['form_sent']))
 	{

@@ -87,7 +87,7 @@ $map = array(
 		'(/admin/forum/post/(\d+)/)move-tree => forum_tools_post_moveTree(2)',
 		'(/admin/forum/post/(\d+)/)do\-(\S+)\.bas => forum_tools_post_do(2,3)',
 
-		'(/)blog/ => balancer_blog',
+		'(/)blog/? => balancer_blog',
 		'(/)blog/index.html => redirect:balancer_blog',
 		'(/)blog/(\d+).html => balancer_blog(NULL,2)',
 
@@ -155,6 +155,7 @@ $map = array(
 		'/user/(\d+)/reputation/\?(.+) => user_reputation(1,ref=2)',
 
 		'(/user/(\d+)/)aliases\.html => airbase_user_aliases(2)',
+		'(/users/(\d+)/)aliases/ => airbase_user_aliases(2)',
 
 #		'/user/(\d+)/reputation.* => forum_main',
 

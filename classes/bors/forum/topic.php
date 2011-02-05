@@ -655,4 +655,21 @@ $(function() {
 			."Форум: {$this->forum()->title()}, {$this->forum()->url()}\n\n\n"
 			.join("\n".$div."\n", $text)."\n\n";
 	}
+
+	function global_data()
+	{
+		$where = array(
+			'target_class_name IN' => array('forum_topic', 'balancer_board_topic'),
+			'target_object_id' => $this->id(),
+		);
+
+		if(($p = $this->args('page')) > 1)
+			$where['target_page'] = $p;
+		else
+			$where[] = 'target_page<2';
+
+		$search_keywords = bors_find_all('bors_referer_search', $where);
+
+		return array_merge(parent::global_data(), compact('search_keywords'));
+	}
 }

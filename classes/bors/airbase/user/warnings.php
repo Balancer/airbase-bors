@@ -37,9 +37,10 @@ class airbase_user_warnings extends base_page
 
 		if(!$this->page() || $this->page() == $this->total_pages())
 			$data['active_warnings']  = array_reverse(objects_array('airbase_user_warning', array(
-				'user_id=' => $this->id(), 
-				'time>' => time()-86400*WARNING_DAYS, 
+				'user_id' => $this->id(),
+				'time>' => time()-86400*WARNING_DAYS,
 				'order' => 'time',
+//				'limit' => 10,
 			)));
 
 		return $data;

@@ -33,9 +33,9 @@ class balancer_user_avatar extends base_object_db
 
 	function auto_targets()
 	{
-		return array(
+		return array_merge(parent::auto_targets(), array(
 			'raw_image' => 'image_class_name(image_id)',
-		);
+		));
 	}
 
 	function image()
