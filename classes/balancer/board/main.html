@@ -42,7 +42,8 @@
 {assign var="forum" value=$p->topic()->forum()}
 {include file="xfile:forum/post.html" skip_message_footer=true skip_votes=true no_show_answers=true avatar_size=50 strip=2000}
 <p><small>// Сообщение: <a href="{$p->url_in_container()}">{$p->title()}</a></small</p>
-<p><b>[ <a href="http://balancer.ru/tools/votes/">Все лучшие сообщения</a> ]</b></p>
+<p><b>[ <a href="/best/">Все лучшие сообщения</a>
+| <a href="http://balancer.ru/tools/votes/">Оценки</a> ]</b></p>
 </dd>
 </dl>
 

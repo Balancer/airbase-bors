@@ -76,6 +76,7 @@ class forum_user extends base_object_db
 			'last_mailing',
 			'xmpp_notify_enabled', // Период нотификации. 0 == запрещено, -1 - мгновенно, иначе - период времени.
 			'last_mailing',
+			'utmx',
 		);
 	}
 
@@ -575,4 +576,22 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 	}
 
 	function blog() { return object_load('forum_blog', $this->id()); }
+
+    function utmx_update()
+    {
+        if(empty($_COOKIE['__utmx']))
+        {
+			$utmx = $this->utmx();
+			if(!$utmx)
+				$utmx = $this->set_utmx(md5(rand(0, time()).time()), true);
+
+			SetCookie("__utmx", $utmx, time()+365*86400, "/", $_SERVER['HTTP_HOST']);
+			$_COOKIE['__utmx'] = $utmx;
+        }
+        else
+        {
+            if(!$this->utmx())
+                $this->set_utmx($_COOKIE['__utmx'], true);
+        }
+    }
 }

@@ -43,6 +43,7 @@ class balancer_retranslate_googlereader extends base_page
 		$authToken = substr($authRaw, 5);
 		$user_id = '14299261987225235624';
         $ch = curl_init("http://www.google.com/reader/atom/user/{$user_id}/state/com.google/broadcast");
+//        $ch = curl_init("http://www.google.com/reader/atom/user/{$user_id}/state/com.google/published");
         $header[] = 'Authorization: GoogleLogin auth='.$authToken;
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);

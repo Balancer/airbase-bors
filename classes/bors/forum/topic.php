@@ -542,6 +542,12 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function pre_show()
 	{
+		$me = bors()->user();
+		if($me)
+		{
+			$me->utmx_update();
+		}
+
 		if($this->page() > $this->total_pages())
 			return go($this->url($this->total_pages()));
 
