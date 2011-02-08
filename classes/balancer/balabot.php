@@ -8,8 +8,6 @@ class balancer_balabot extends base_object
 
 	static function on_thumb_up($target)
 	{
-		debug_hidden_log('balabot', 'thumb_up: '.$target->debug_title(), false);
-
 		$bot = bors_find_first('balancer_board_user', array('title' => 'BalaBOT'));
 		//balancer_balabot::send_tweet('Ты скучен, Зойдберг.');
 
