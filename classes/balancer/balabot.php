@@ -29,6 +29,9 @@ class balancer_balabot extends base_object
 			array('%user% интересно пишет: ', ''),
 			array('Обратите внимание на пост %user% «', '»'),
 			array('Очень интересно: %user%> ', ''),
+			array('Хорошо пишет %user%: ', ''),
+			array('Неплохо: %user%> ', ''),
+			array('Согласен с %user% - ', ''),
 		);
 
 		$tpl = $tpls[rand(0, count($tpls)-1)];

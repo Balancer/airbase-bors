@@ -2,7 +2,8 @@
 
 class forum_blog extends base_page_db
 {
-	function storage_engine() { return 'storage_db_mysql_smart'; }
+//	function storage_engine() { return 'storage_db_mysql_smart'; }
+	function storage_engine() { return 'bors_storage_mysql'; }
 	function can_be_empty() { return false; }
 
 	function main_db() { return config('punbb.database', 'punbb'); }
