@@ -54,6 +54,7 @@ class forum_user extends base_object_db
 			'saltp' => 'password',
 			'saltu' => 'user_cookie_hash',
 			'create_time' => 'registered',
+			'registration_ip',
 			'last_post_time' => 'last_post',
 			'previous_session_end' => 'last_visit',
 			'last_visit_time' => 'last_real_visit',

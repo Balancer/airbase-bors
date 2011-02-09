@@ -75,8 +75,8 @@ class balancer_balabot_parser extends bors_object
 
 	function do_post($match)
 	{
-		$post = trim(@$match[2]);
-		if(!$post)
+		$message = trim(@$match[2]);
+		if(!$message)
 			return $this->send("Команда отсылки нового сообщения на форум. Нужно писать (в любом варианте):
 
 post текст
@@ -94,35 +94,46 @@ post [заголовок] *ключевые *слова текст
 
 		$message = trim($match[2]);
 
-		if(preg_match('/^\[(.+?)\]\s+(.+)$/s', $post, $m))
+		if(preg_match('/^\[(.+?)\]\s+(.+)$/s', $message, $m))
 		{
 			$title = $m[1];
-			$post  = $m[2];
+			$message  = $m[2];
 		}
 		else
 			$title = NULL;
 
 		$tags = array();
-		if(preg_match('/^((\*\S+( |$))+)(.+?)$/ms', $post, $m))
+		if(preg_match('/^((\*\S+( |$))+)(.+?)$/ms', $message, $m))
 		{
 			$raw_tags = $m[1];
-			$post = $m[4];
+			$message = $m[4];
 			if(preg_match_all('/\*(\S+)( |$)/', $raw_tags, $matches))
 				foreach($matches[1] as $tag)
 					$tags[] = $tag;
 		}
 
-		if(preg_match_all('/ #(\S+)( |\.|,|$)/m', $post, $matches))
+		if(preg_match_all('/ #(\S+)( |\.|,|$)/m', $message, $matches))
 			foreach($matches[1] as $tag)
 				$tags[] = $tag;
 
-		$post = trim($post);
+		$message = trim($message);
 
-		$forum_id = 1; // Флейм и тесты
+		$forum_id = 12; // За жизнь
 
 		if($title)
 		{
-			return $this->send("Создание новых тем пока не реализовано");
+			if($tags)
+				$forum_id = common_keyword::best_forum(join(',', $tags), 0);
+
+			if(!$forum_id)
+				$forum_id = 12; // За жизнь
+
+			$forum = bors_load('balancer_board_forum', $forum_id);
+
+//			return $this->send("Ваше сообщение будет размещено в форуме {$forum->title()} - {$forum->url()}");
+
+			$topic = balancer_board_topic::create($forum, $title, $message, $user, join(', ', $tags), true);
+			return $this->send("Ваше сообщение было размещено в новой теме {$topic->title()} по адресу {$topic->url()} на форуме {$forum->title()} [{$forum->url()}]");
 		}
 
 		if($tags)
@@ -135,7 +146,7 @@ post [заголовок] *ключевые *слова текст
 
 //		return $this->send("Ваше сообщение будет размещено в теме {$topic->title()} - {$topic->url()}");
 
-		$post = balancer_board_post::create($topic_id, $post, $user, join(', ', $tags), true);
+		$post = balancer_board_post::create($topic, $message, $user, join(', ', $tags), true);
 		return $this->send("Ваше сообщение было размещено в теме {$post->topic()->title()} по адресу {$post->url_for_igo()}");
 	}
 
