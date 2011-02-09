@@ -133,4 +133,45 @@ class balancer_board_post extends forum_post
 			$parent->parents_answers_recount();
 		}
 	}
+
+	function create($topic_id, $message, $user, $keywords_string = NULL, $as_blog = NULL)
+	{
+//		echo "Pass post to $topic_id\n";
+		$post = object_new_instance(__CLASS__, array(
+			'author_name' => $user->title(),
+			'owner_id' => $user->id(),
+			'poster_ip' => bors()->client()->ip(),
+			'poster_ua' => bors()->client()->agent(),
+			'poster_email' => NULL, //($pun_config['p_force_guest_email'] == '1' || $email != '') ? $email : '',
+			'hide_smilies' => false, //$hide_smilies, 
+			'topic_id' => $topic_id,
+			'answer_to_id' => NULL,
+			'answer_to_user_id' => NULL,
+			'source' => $message,
+		));
+
+		if(!$as_blog && $keywords_string)
+			$as_blog = true;
+
+		$topic = $post->topic();
+
+		if($as_blog)
+		{
+			$blog = object_new_instance('balancer_board_blog', array(
+				'id' => $post->id(),
+				'owner_id' => $post->owner_id(),
+				'topic_id' => $topic_id,
+				'forum_id' => $topic->forum_id(),
+				'is_public' => $topic->is_public(),
+			));
+			if($keywords_string)
+				$blog->set_keywords_string($keywords_string, true);
+
+			common_keyword_bind::add($blog);
+		}
+
+		$topic->recalculate();
+
+		return $post;
+	}
 }

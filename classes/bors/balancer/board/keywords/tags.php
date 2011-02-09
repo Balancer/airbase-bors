@@ -128,22 +128,22 @@ class balancer_board_keywords_tags extends base_page
 				$keys_norm[] = $key_norm;
 
 		$items = array();
-		foreach(objects_array('common_keyword', array('keyword IN' => $keys_norm)) as $kw)
+		foreach(bors_find_all('common_keyword', array('keyword IN' => $keys_norm)) as $kw)
 		{
-			if($binds = objects_array('common_keyword_bind', array(
+			if($binds = bors_find_all('common_keyword_bind', array(
 					'keyword_id' => $kw->id(),
-					'target_class_id' => 2,
+					'target_container_class_id' => 2,
 				)))
 			{
 				$objects_map = array();
 				foreach($binds as $b)
-					$objects_map[$b->target_class_id()][] = $b->target_object_id();
+					$objects_map[$b->target_container_class_id()][] = $b->target_container_object_id();
 
 				$list = array();
 				foreach($objects_map as $class_id => $objects_ids)
 				{
 					$class_name = class_id_to_name($class_id);
-					foreach(objects_array($class_name, array(
+					foreach(bors_find_all($class_name, array(
 							'id IN' => $objects_ids,
 							'order' => '-modify_time',
 						)) as $x)

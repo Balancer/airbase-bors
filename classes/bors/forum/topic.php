@@ -184,8 +184,19 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		require_once("engines/smarty/assign.php");
 
+		$posts = $this->posts();
+		$post_ids = array_keys($posts);
+		$blogs = bors_find_all('balancer_board_blog', array('id IN' => $post_ids, 'by_id' => true));
+
+		foreach($blogs as $blog_id => $blog)
+		{
+			$posts[$blog_id]->set_blog($blog, false);
+			if($kws = $blog->keywords())
+				$posts[$blog_id]->set_kws_links(common_keyword::linkify($kws, '', ' | ', true), false);
+		}
+
 		$data = array(
-			'posts' => $this->posts(),
+			'posts' => array_values($posts),
 			'is_last_page' => $this->is_last_page(),
 		);
 
@@ -248,6 +259,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		$data = array(
 			'topic_id' => $this->id(),
 			'order' => '`order`,posted',
+			'by_id' => true,
 		);
 
 		if($paging && $this->is_repaged())
@@ -259,14 +271,6 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		}
 
 		return objects_array('balancer_board_post', $data);
-	}
-
-	protected function all_posts()
-	{
-		return objects_array('balancer_board_post', array(
-			'topic_id' => $this->id(),
-			'order' => '`order`,posted',
-		));
 	}
 
 	function items_per_page() { return 25; }
@@ -389,7 +393,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		$this->repaging_posts($full_repaging ? 1 : -1);
 
-		foreach($this->posts() as $p)
+		foreach($this->posts() as $pid => $p)
 			$p->set_body(NULL, true);
 
 		$this->set_modify_time(time(), true);
@@ -424,10 +428,6 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	function cache_clean_self($page = NULL)
 	{
 		parent::cache_clean_self($page);
-
-//		$this->db('punbb')->query('UPDATE posts SET source_html=NULL WHERE topic_id = '.$this->id());
-//		if($posts = $this->all_posts_ids())
-//			$this->db('punbb')->query('UPDATE messages SET html=\'\' WHERE id IN (' . join(',', $posts) . ')');
 
 		//TODO: подумать на тему неполной чистки.
 		foreach(glob($this->cache_dir().'/t'.$this->id().'*.html') as $f)
@@ -478,17 +478,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function repaging_posts($page = NULL)
 	{
-		// set @rownum=0; 
-		// UPDATE posts t, (SELECT @rownum:=@rownum+1 rownum, posts.* FROM posts WHERE posts.topic_id = 52776 ORDER BY posts.`order`, posts.id) tmp SET t.page = floor((tmp.rownum-1)/25)+1 WHERE (t.id = tmp.id);
-
 		bors()->changed_save();
-//		$dbh = new driver_mysql($this->main_db());
-/*		$dbh->query('SET @rownum=-1');
-		$dbh->query("UPDATE posts p, 
-			(SELECT @rownum:=@rownum+1 rownum, posts.* FROM posts WHERE posts.topic_id = {$this->id()}
-				ORDER BY posts.`order`, posts.id) tmp 
-			SET p.page = floor(tmp.rownum/{$this->items_per_page()})+1 WHERE (p.id = tmp.id);");
-*/
+
 		$this->db()->query("
 			UPDATE posts AS t 
 				SET t.page = FLOOR((SELECT @rn:= @rn + 1 FROM (SELECT @rn:= -1) s)/{$this->items_per_page()})+1 

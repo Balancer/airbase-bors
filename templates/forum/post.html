@@ -51,6 +51,8 @@
 {if $owner and not $skip_avatar_block}
 {if not $avatar_size}{assign var="avatar_size" value=100}{/if}
 <div class="avatar_block">{include file="xfile:forum/post-avatar.html" object=$p avatar_size=$avatar_size}</div>{/if}
+{assign var="kws_links" value=$p|get:'kws_links'}
+{if $kws_links}<div class="post_kws">{$kws_links}</div>{/if}
 {if $strip}
 {assign var="body" value=$p->body()}
 {$body|strip_text:$strip}
