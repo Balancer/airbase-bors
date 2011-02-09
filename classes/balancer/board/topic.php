@@ -57,4 +57,34 @@ class balancer_board_topic extends forum_topic
 			'forum_id IN' => self::_forum_ids($domain),
 		));
 	}
+
+	static function create($forum, $title, $message, $user, $keywords_string = NULL, $as_blog = true, $data = array())
+	{
+		echo "Pass new topic to {$forum->debug_title()}\n";
+
+		$is_public = defval($data, 'is_public', true);
+
+		$data = array_merge(array(
+			'forum_id' => $forum->id(),
+			'title'	=> $title,
+			'last_post_create_time' => time(),
+			'is_public' => $is_public,
+			'owner_id' => $user->id(),
+			'author_name' => $user->title(),
+			'last_poster_name' => $user->title(),
+			'num_replies' => 0,
+			'is_repaged' => false,
+			'visits' => 0,
+			'keywords_string' => $keywords_string,
+		), $data);
+
+		$topic = object_new_instance(__CLASS__, $data);
+
+		$post = balancer_board_post::create($topic, $message, $user, $keywords_string, $as_blog);
+
+		$topic->set_first_post_id($post->id(), true);
+		$topic->set_last_post_id($post->id(), true);
+
+		return $topic;
+	}
 }
