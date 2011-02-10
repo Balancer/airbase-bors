@@ -545,6 +545,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		foreach(array_keys($GLOBALS['move_tree_to_topic_changed_topics']) as $tid)
 			object_load('forum_topic', $tid, array('no_load_cache' => true))->recalculate();
+
+		$this->recalculate();
 	}
 
 	private function __move_tree_to_topic($new_tid, $old_tid)
@@ -575,7 +577,10 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		$this->set_topic_id($new_tid, true);
 
 		object_load('forum_topic', $old_tid)->recalculate();
-		object_load('forum_topic', $new_tid)->recalculate();
+		$new_topic = bors_load('balancer_board_topic', $new_tid);
+		$new_topic->recalculate();
+
+		$this->recalculate($new_topic);
 
 		cache_static::drop($this);
 		$this->cache_clean();
@@ -701,5 +706,21 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			$rate = "";
 
 		return "<span style=\"color:$color\">{$score}</span>{$rate}";
+	}
+
+	function auto_objects()
+	{
+		return array_merge(parent::auto_objects(), array(
+			'blog' => 'balancer_board_blog(id)',
+		));
+	}
+
+	function recalculate($topic = NULL)
+	{
+		if(!$topic)
+			$topic = $this->topic();
+
+		if($blog = $this->blog())
+			$blog->recalculate($this, $topic);
 	}
 }
