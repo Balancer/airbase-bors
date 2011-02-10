@@ -24,4 +24,14 @@ class balancer_board_blog extends forum_blog
 
 		return $blog;
 	}
+
+	function recalculate($post = NULL, $topic = NULL)
+	{
+		$this->set_owner_id($post->owner_id(), true);
+		$this->set_topic_id($topic->id(), true);
+		$this->set_forum_id($topic->forum_id(), true);
+		$this->set_is_public($topic->is_public(), true);
+
+		common_keyword_bind::add($this);
+	}
 }

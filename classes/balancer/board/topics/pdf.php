@@ -24,11 +24,13 @@ class balancer_board_topics_pdf extends bors_object
 		$target_dir = dirname($data['local_path']);
 		$target_name = basename($data['local_path']);
 		mkpath($target_dir);
-		system("/usr/local/bin/wkhtmltopdf-amd64 -b --cover $cover_url $helper_url $target_dir/$target_name");
+//		header("X-PDF-INFO: /usr/local/bin/wkhtmltopdf-amd64 --cover $cover_url $helper_url $target_dir/$target_name");
+		system("/usr/local/bin/wkhtmltopdf-amd64 cover $cover_url $helper_url $target_dir/$target_name");
 
 		@header('Content-Type: application/pdf');
-		return file_get_contents("$target_dir/$target_name");
-//		return 'done';
+		$pdf = file_get_contents("$target_dir/$target_name");
+		unlink("$target_dir/$target_name");
+		return $pdf;
 	}
 
 	function url() { return preg_replace('/^(.+)\.html$/', '$1.'.($this->topic()->modify_time()%10000).'.pdf', $this->topic()->url()); }

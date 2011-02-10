@@ -8,8 +8,8 @@ class forum_tools_post_do extends base_page
 
 	function pre_show()
 	{
-		$p = object_load('forum_post', intval($this->id()));
-		$t = $p->topic();
+		$post = object_load('forum_post', intval($this->id()));
+		$topic = $post->topic();
 
 		if(!bors()->user() || !bors()->user()->group()->is_coordinator())
 			return bors_message(ec('У Вас нет прав для выполнения этой операции'));
@@ -17,19 +17,26 @@ class forum_tools_post_do extends base_page
 		switch($this->page())
 		{
 			case 'drop-cache':
-				$p->set_post_body(NULL, true);
-				$p->set_warning_id(NULL, true);
-				$p->set_flag_db(NULL, true);
-				$p->cache_clean();
-				$p->store();
-				$t->cache_clean();
-				$t->set_modify_time(time(), true);
-				$t->store();
+				$post->set_post_body(NULL, true);
+				$post->set_warning_id(NULL, true);
+				$post->set_flag_db(NULL, true);
+				$post->cache_clean();
+				$post->store();
+
+				$topic->cache_clean();
+				$topic->set_modify_time(time(), true);
+				$topic->store();
+
+				$blog = bors_load('balancer_board_blog', $this->id());
+
+				if($blog)
+					$blog->recalculate($post, $topic);
+
 				break;
 			default:
 				break;
 		}
 
-		return go($p->url_in_container());
+		return go($post->url_in_container());
 	}
 }
