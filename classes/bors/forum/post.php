@@ -4,6 +4,7 @@
 
 include_once('engines/lcml.php');
 include_once('inc/browsers.php');
+include_once('inc/clients.php');
 
 class forum_post extends base_page_db
 {
@@ -199,7 +200,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		$this->source();
 
-		if(!$this->post_body() || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
+		if(!$this->post_body() || config('lcml_cache_disable'))
 		{
 			$body = lcml($this->post_source(),
 				array(
@@ -213,6 +214,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 					'self' => $this,
 				)
 			);
+
+//			if(config('is_debug')) echo 'x='.$body."\n";
 
 			$this->set_post_body($body, true);
 		}
@@ -242,43 +245,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		list($os, $browser) = get_browser_info($this->poster_ua());
 
-		$out_os = '';
-		switch($os)
-		{
-			case 'Linux':
-				$out_os = '<img src="/bors-shared/images/os/linux.gif" width="16" height="16" alt="Linux" />';
-				break;
-			case 'FreeBSD':
-				$out_os = '<img src="/bors-shared/images/os/freebsd.png" width="16" height="16" alt="FreeBSD" />';
-				break;
-			case 'MacOSX':
-				$out_os = '<img src="/bors-shared/images/os/macos.gif" width="16" height="16" alt="Mac OS X" />';
-				break;
-			case 'iPhone':
-				$out_os = '<img src="/bors-shared/images/os/iphone.gif" width="16" height="16" alt="iPhone" />';
-				break;
-			case 'Symbian':
-				$out_os = '<img src="/bors-shared/images/os/symbian.gif" width="16" height="16" alt="Symbian" />';
-				break;
-			case 'J2ME':
-				$out_os = '<img src="/bors-shared/images/os/java.gif" width="16" height="16" alt="J2ME" />';
-				break;
-			case 'OS/2':
-				$out_os = '<img src="/bors-shared/images/os/os2.gif" width="16" height="16" alt="OS/2" />';
-				break;
-			case 'PocketPC':
-			case 'J2ME':
-				break;
-			case 'WindowsVista':
-			case 'WindowsXP':
-			case 'Windows2000':
-			case 'Windows98':
-			case 'Windows98':
-			case 'Windows':
-				$out_os = '<img src="/bors-shared/images/os/windows.gif" width="16" height="16" alt="Windows" />';
-				break;
-			default:
-		}
+		$out_os = os_image($os);
 
 		$out_browser = '';
 		switch($browser)
@@ -316,8 +283,20 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			default:
 		}
 
+		if($out_os)
+				$out_os = '<img src="'.$out_os.'" width="16" height="16" alt="'.$os.'" />';
+
 		if((!$out_browser || !$out_os) && $this->poster_ua())
+		{
+			list($client_name, $os) = im_client_detect($this->poster_ua(), NULL); // xmpp для блогов, по типу
+			if($client_name)
+			{
+				$client_image = im_client_image($client_name);
+				return '<span title="'.htmlspecialchars($this->poster_ua())."\"><img src=\"{$client_image}\" width=\"16\" height=\"16\"></span>";
+			}
+
 			debug_hidden_log("user_agent", "Unknown user agent: '".$this->poster_ua()."' in post ".$this->id());
+		}
 
 		return '<span title="'.htmlspecialchars($this->poster_ua())
 			.' ['.htmlspecialchars($os).','.htmlspecialchars($browser).']">'

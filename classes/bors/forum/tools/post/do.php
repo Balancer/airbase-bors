@@ -33,6 +33,12 @@ class forum_tools_post_do extends base_page
 					$blog->recalculate($post, $topic);
 
 				break;
+
+			case 'pinned':
+				$post->set_sort_order(-100, true);
+				$topic->recalculate();
+				break;
+
 			default:
 				break;
 		}

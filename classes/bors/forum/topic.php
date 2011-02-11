@@ -192,7 +192,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		{
 			$posts[$blog_id]->set_blog($blog, false);
 			if($kws = $blog->keywords())
-				$posts[$blog_id]->set_kws_links(common_keyword::linkify($kws, '', ' | ', true), false);
+				$posts[$blog_id]->set_kws_links(balancer_blogs_tag::linkify($kws, '', ' | ', true), false);
 		}
 
 		$data = array(

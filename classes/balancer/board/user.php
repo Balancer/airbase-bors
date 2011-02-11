@@ -113,4 +113,37 @@ class balancer_board_user extends forum_user
 
 		return $image;
 	}
+
+
+	static function find_by_all_names($name)
+	{
+		if($user = bors_find_first(__CLASS__, array('title' => $name)))
+			return $user;
+
+		if($user = bors_find_first(__CLASS__, array('realname' => $name)))
+			return $user;
+
+		return NULL;
+	}
+
+	function notify_text($text)
+	{
+		$client= new GearmanClient();
+		$client->addServer();
+		if($this->jabber())
+		{
+			debug_hidden_log('balabot_talks', "Notify to {$this->jabber()} <= $text", false);
+			$client->doBackground('balabot.jabber.send', serialize(array('to' => $this->jabber(), 'message' => htmlspecialchars($text))));
+		}
+	}
+
+	function friend_action_notify($user_id, $text, $html = NULL)
+	{
+		$friend_binds = bors_find_all('balancer_board_users_friend', array('friend_id' => $user_id));
+		if(!$friend_binds)
+			return;
+
+		foreach(bors_find_all(__CLASS__, array('id IN' => bors_field_array_extract($friend_binds, 'user_id'))) as $u)
+			$u->notify_text($text);
+	}
 }
