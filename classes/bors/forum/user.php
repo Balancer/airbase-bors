@@ -414,7 +414,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 			'is_admin' => $this->is_admin()
 		) as $k => $v)
 		{
-			SetCookie($k, $v, $expired, "/", '.'.$_SERVER['HTTP_HOST']);
+			SetCookie($k, $v, $expired, "/", '.'.@$_SERVER['HTTP_HOST']);
 //			SetCookie($k, $v, $expired, "/", $_SERVER['HTTP_HOST']);
 //			SetCookie($k, $v, $expired, "/");
 		}

@@ -56,7 +56,7 @@ if ($tid < 1 && $fid < 1 || $tid > 0 && $fid > 0)
 if($is_banned)
 	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire));
 
-$topic = object_load('forum_topic', $tid);
+$topic = object_load('balancer_board_topic', $tid);
 $forum_id = $fid ? $fid : $topic->forum_id();
 $forum = object_load('forum_forum', $forum_id);
 
@@ -291,7 +291,7 @@ if (isset($_POST['form_sent']))
 			message("Вы уже отправили это сообщение");
 
 		$me->set_last_message_md($md, true);
-		$answer_to_post = object_load('forum_post', @$qid);
+		$answer_to_post = object_load('balancer_board_post', @$qid);
 
 		// If it's a reply
 		if ($tid)
@@ -316,21 +316,6 @@ if (isset($_POST['form_sent']))
 				$tdb->insert('posts', $data);
 				$data['id'] = $new_pid = $tdb->last_id();
 				$tdb->close();
-
-				if($qid)
-				{
-					// Пометим сообщение, на котрое отвечали, что на него есть ответы.
-					if($x = object_load('forum_post', $qid))
-					{
-						if($x->have_answers())
-						{
-							if($x->have_answers() > 0)
-								$x->set_have_answers(-1, true);
-						}
-						else
-							$x->set_have_answers($new_pid, true);
-					}
-				}
 
 				// To subscribe or not to subscribe, that ...
 				if ($pun_config['o_subscriptions'] == '1' && $subscribe)
@@ -362,6 +347,32 @@ if (isset($_POST['form_sent']))
 			}
 
 			$post = object_load('balancer_board_post', $new_pid);
+			$user = $post->owner();
+
+			if($qid)
+			{
+				// Пометим сообщение, на котрое отвечали, что на него есть ответы.
+				if($answer_to_post = object_load('balancer_board_post', $qid))
+				{
+					if($answer_to_post->have_answers())
+					{
+						if($answer_to_post->have_answers() > 0)
+							$answer_to_post->set_have_answers(-1, true);
+					}
+					else
+						$answer_to_post->set_have_answers($post->id(), true);
+
+					if($answer_to_user = $answer_to_post->owner())
+					{
+						$text = "{$user->title()} отвечает на Ваше сообщение:\n"
+							.trim($post->source())
+							."\n\n// #{$post->id()} {$post->url_for_igo()} в теме «{$post->topic()->title()}»";
+
+						if($answer_to_user->xmpp_notify_enabled())
+							$answer_to_user->notify_text($text);
+					}
+				}
+			}
 
 			// Count number of replies in the topic
 			$result = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'posts WHERE topic_id='.$tid) 
@@ -468,7 +479,7 @@ if (isset($_POST['form_sent']))
 			}
 
 			include_once("engines/bors.php");
-			$topic = object_load('forum_topic', $tid, array('no_load_cache' => true));
+			$topic = object_load('balancer_board_topic', $tid, array('no_load_cache' => true));
 			$is_new_topic = false;
 		}
 		// If it's a new topic
@@ -540,7 +551,7 @@ if (isset($_POST['form_sent']))
 			update_forum($fid);
 
 			include_once("engines/bors.php");
-			$topic = object_load('forum_topic', $new_tid, array('no_load_cache' => true));
+			$topic = object_load('balancer_board_topic', $new_tid, array('no_load_cache' => true));
 			$topic->recalculate(false);
 			$is_new_topic = true;
 		}
@@ -552,6 +563,9 @@ if (isset($_POST['form_sent']))
 
 		$topic->set_modify_time(time(), true);
 		$topic->set_last_post_create_time($post->create_time(), true);
+
+		$topic->topic_updated($post);
+
 		$post->set_modify_time(time(), true);
 
 		$post->parents_answers_recount(0);
@@ -598,7 +612,7 @@ if (isset($_POST['form_sent']))
 			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
 				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
 		// Attachment Mod Block End
-
+/*
 		if($post->owner()->num_posts() < 20 && $post->owner()->create_time() > time() - 7*86400)
 		{
 			$post->set_is_spam(balancer_akismet::factory()->classify($post) ? 1 : 0, true);
@@ -608,19 +622,13 @@ if (isset($_POST['form_sent']))
 //				message('Ваше сообщение похоже на спам. Оно оставлено на проверку координаторам. Если сообщение корректно, оно будет размещено на форуме');
 			}
 		}
+*/
 
 		if(!empty($_POST['as_blog']) && !$post->is_spam())
-		{
-			$blog = new forum_blog($post->id());
-			$blog->new_instance();
-			$blog->set_owner_id($post->owner_id(), true);
-			$blog->set_keywords_string(@$_POST['keywords'], true);
-			$blog->set_topic_id($topic->id(), true);
-			$blog->set_forum_id($topic->forum_id(), true);
-			$blog->set_is_public($topic->is_public(), true);
-			$blog->store();
-			$blog->cache_clean();
+			$blog = balancer_board_blog::create($post, @$_POST['keywords']);
 
+		if(!empty($_POST['is_translate']) && !$post->is_spam())
+		{
 			include_once('engines/blogs/livejournal.com.php');
 			bors_blog_livejournal_com_post(
 				$post->owner_id(),
@@ -888,11 +896,13 @@ if (!$pun_user['is_guest'])
 	if($tid) // Ответ
 	{
 		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\"     value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_blog'])     ? ' checked="checked"' : '')." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '".addslashes("<label><strong>Тэги:</strong>&nbsp;<input                     class='longinput' type='text' name='keywords'    value='".defval($_POST, 'keywords', $topic->keywords_string())."'    size='40' maxlength='255' /><br /></label>")."' : ''\"/>Разместить ответ в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+		$checkboxes[] = "<label><input type=\"checkbox\" name=\"is_translate\"     value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_blog'])     ? ' checked="checked"' : '')." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '".addslashes("<label><strong>Тэги:</strong>&nbsp;<input                     class='longinput' type='text' name='keywords' size='40' maxlength='255' /><br /></label>")."' : ''\"/>Транслировать ответ в ЖЖ";
 		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTML = this.checked ? '".addslashes("<label><strong>{$lang_common['Subject']}</strong><br /><input class='longinput' type='text' name='req_subject' value='".(@$_POST['req_subject'])."' size='80' maxlength='255' /><br /></label>")."' : ''\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
 	}
 	else
 	{
 		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\" checked=\"checked\" />Разместить тему в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+		$checkboxes[] = "<label><input type=\"checkbox\" name=\"is_translate\"     value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_blog'])     ? ' checked="checked"' : '')." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '".addslashes("<label><strong>Тэги:</strong>&nbsp;<input                     class='longinput' type='text' name='keywords' size='40' maxlength='255' /><br /></label>")."' : ''\"/>Транслировать тему в ЖЖ";
 	}
 }
 else if ($pun_config['o_smilies'] == '1')

@@ -19,6 +19,8 @@ class forum_blog extends base_page_db
 			'forum_id',
 			'blogged_time',
 			'is_public',
+			'blog_source_class',
+			'blog_source_id',
 		);
 	}
 
@@ -67,7 +69,7 @@ class forum_blog extends base_page_db
 	function owner() { return object_load('balancer_board_user', $this->owner_id()); }
 	function title() { return object_property($this->topic(), 'title'); }
 
-	function url() { return $this->post()->url(); }
+	function url() { return object_property($this->post(), 'url'); }
 
 	function container() { return $this->topic(); }
 

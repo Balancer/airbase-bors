@@ -80,11 +80,21 @@ class balancer_board_topic extends forum_topic
 
 		$topic = object_new_instance(__CLASS__, $data);
 
-		$post = balancer_board_post::create($topic, $message, $user, $keywords_string, $as_blog);
+		$post = balancer_board_post::create($topic, $message, $user, $keywords_string, $as_blog, $data);
 
 		$topic->set_first_post_id($post->id(), true);
 		$topic->set_last_post_id($post->id(), true);
 
 		return $topic;
+	}
+
+	function topic_updated($post)
+	{
+		$user = $post->owner();
+		$text = "{$user->title()} пишет:\n"
+			.trim($post->source())
+			."\n\n// #{$post->id()} {$post->url_for_igo()} в теме «{$post->topic()->title()}»";
+
+		bors()->do_task('balancer_balabot_notify_post', array('post_id' => $post->id(), 'text' => $text));
 	}
 }
