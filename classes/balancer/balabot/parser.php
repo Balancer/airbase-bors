@@ -8,6 +8,7 @@ class balancer_balabot_parser extends bors_object
 
 	function do_work($data)
 	{
+		debug_hidden_log('users_clients_balabot_parser', print_r($data['payload'], true));
 
 		$this->data = $data;
 
@@ -358,6 +359,28 @@ P Всем привет!
 		$me = $this->user();
 		if(!$me)
 			return $this->send("Не могу найти зарегистрированного пользователя с JID: {$this->from}\n\nПопробуйте сперва авторизоваться командой login <имя> <пароль>");
+
+		if(preg_match('/^#(\d+)$/', $friend_name, $m))
+		{
+			// Это отписка от темы
+			$post_id = $m[1];
+
+			$post = bors_load('balancer_board_post', $post_id);
+			if(!$post)
+				return $this->send('Не могу найти сообщение #'.$post_id);
+
+			$topic = $post->topic();
+			$x = bors_find_first('balancer_board_users_subscription', array('user_id' => $me->id(), 'topic_id' => $topic->id()));
+			if($x)
+			{
+				$x->delete();
+				return $this->send("Вы отписались от темы {$topic->title()}. // {$topic->url()}");
+			}
+
+			return $this->send("Вы не были подписаны на тему {$topic->title()}. // {$topic->url()}");
+		}
+
+
 
 		$friend = balancer_board_user::find_by_all_names($friend_name);
 		if(!$friend)

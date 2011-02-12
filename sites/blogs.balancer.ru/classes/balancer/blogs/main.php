@@ -20,7 +20,14 @@ class balancer_blogs_main extends bors_paginated
 
 	function cache_static() { return config('static_forum') ? 86400*14 : 0; }
 
-	function main_class() { return 'forum_blog'; }
+	function main_class() { return 'balancer_board_blog'; }
 
-	function order() { return '-id'; }
+	function order() { return 'blogged_time'; }
+
+	function on_items_load(&$items)
+	{
+		balancer_board_blogs_lib::load_keywords($items);
+	}
+
+	function is_reversed() { return true; }
 }

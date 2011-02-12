@@ -243,64 +243,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if(!$this->poster_ua())
 			return NULL;
 
-		list($os, $browser) = get_browser_info($this->poster_ua());
-
-		$out_os = os_image($os);
-
-		$out_browser = '';
-		switch($browser)
-		{
-			case 'Opera':
-				$out_browser = '<img src="/bors-shared/images/browsers/opera.gif" width="16" height="16" alt="Opera" />';
-				break;
-			case 'Konqueror':
-				break;
-			case 'SeaMonkey':
-				$out_browser = '<img src="/bors-shared/images/browsers/seamonkey.gif" width="16" height="16" alt="SeaMonkey" />';
-				break;
-			case 'Google Chrome':
-				$out_browser = '<img src="/bors-shared/images/browsers/chrome.png" width="16" height="16" alt="Google Chrome" />';
-				break;
-			case 'Firefox':
-				$out_browser = '<img src="/bors-shared/images/browsers/firefox.gif" width="16" height="16" alt="Firefox" />';
-				break;
-			case 'Iceweasel':
-				$out_browser = '<img src="/bors-shared/images/browsers/iceweasel.png" width="16" height="16" alt="Iceweasel" />';
-				break;
-			case 'Safari':
-				$out_browser = '<img src="/bors-shared/images/browsers/safari.png" width="16" height="16" alt="Safari" />';
-				break;
-			case 'Gecko':
-				$out_browser = '<img src="/bors-shared/images/browsers/mozilla.gif" width="16" height="16" alt="Mozilla" />';
-				break;
-			case 'IE5':
-			case 'IE6':
-			case 'IE7':
-			case 'IE8':
-			case 'MSIE':
-				$out_browser = '<img src="/bors-shared/images/browsers/ie6.gif" width="16" height="16" alt="IE" />';
-				break;
-			default:
-		}
-
-		if($out_os)
-				$out_os = '<img src="'.$out_os.'" width="16" height="16" alt="'.$os.'" />';
-
-		if((!$out_browser || !$out_os) && $this->poster_ua())
-		{
-			list($client_name, $os) = im_client_detect($this->poster_ua(), NULL); // xmpp для блогов, по типу
-			if($client_name)
-			{
-				$client_image = im_client_image($client_name);
-				return '<span title="'.htmlspecialchars($this->poster_ua())."\"><img src=\"{$client_image}\" width=\"16\" height=\"16\"></span>";
-			}
-
-			debug_hidden_log("user_agent", "Unknown user agent: '".$this->poster_ua()."' in post ".$this->id());
-		}
-
-		return '<span title="'.htmlspecialchars($this->poster_ua())
-			.' ['.htmlspecialchars($os).','.htmlspecialchars($browser).']">'
-			.$out_browser.$out_os.'</span>';
+		return bors_browser_images($this->poster_ua(), $this->poster_ip());
 	}
 
 	private $__answer_to = 0;

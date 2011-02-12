@@ -39,6 +39,11 @@ class forum_tools_post_do extends base_page
 				$topic->recalculate();
 				break;
 
+			case 'unpinned':
+				$post->set_sort_order(NULL, true);
+				$topic->recalculate();
+				break;
+
 			default:
 				break;
 		}

@@ -132,7 +132,7 @@ function set_default_user()
 
 	$pun_user = $db->fetch_assoc($result);
 
-	list($os, $browser) = get_browser_info($_SERVER['HTTP_USER_AGENT']);
+	list($os, $browser) = get_browser_info($_SERVER['HTTP_USER_AGENT'], false);
 
 	// Update online list
 	if (!$pun_user['logged'])
