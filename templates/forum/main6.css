@@ -377,7 +377,7 @@ span.clear {
 
 /* previene allargamento floats (hidden) */
 .inleft, .incenter {
-	width: 100%;
+	width: 99%;
 	overflow: hidden;
 	padding: 4px;
 }

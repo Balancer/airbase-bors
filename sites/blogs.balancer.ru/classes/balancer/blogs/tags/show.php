@@ -3,7 +3,7 @@
 class balancer_blogs_tags_show extends base_page
 {
 	function can_be_empty() { return false; }
-	function loaded() { return !!$this->items(); }
+	function loaded() { return true; }
 
 	static function keywords_explode($keywords_string)
 	{
@@ -78,18 +78,24 @@ class balancer_blogs_tags_show extends base_page
 
 	}
 
-	function url($page = 1)
+	function url($page = NULL)
 	{
+		if(is_null($page))
+			$page = $this->default_page();
+
 		$keywords = array_map('urlencode', $this->keywords());
 
 		return "http://blogs.balancer.ru/tags/"
 			.join('/', $keywords)."/"
-			.($page > 1 ? $page.'.html' : '');
+			.($page != $this->default_page() ? $page.'.html' : '');
 	}
 
 
 	function pre_show()
 	{
+		if($this->page() > $this->total_pages() || !$this->items())
+			return bors_http_error(404);
+
 		template_noindex();
 		template_jquery();
 		return parent::pre_show();
@@ -103,34 +109,27 @@ class balancer_blogs_tags_show extends base_page
 	function page_data()
 	{
 		$items = array_filter($this->items());
+
 		$post_ids = array();
+		$topics = array();
+		$blogs  = array();
 		foreach($items as $item)
 		{
 			if($item->extends_class_name() == 'forum_topic')
+			{
 				$post_ids[] = $item->first_post_id();
-			else
-				$post_ids[] = $item->id();
-		}
-
-		$posts = bors_find_all('balancer_board_post', array('id IN' => $post_ids, 'order' => 'create_time', 'by_id' => true));
-
-		foreach($items as $i)
-		{
-			if($item->extends_class_name() == 'forum_topic')
-				$pid = $item->first_post_id();
+				$topics[$item->id()] = $item;
+			}
 			else
 			{
-				$pid = $item->id();
-				if($pid)
-					$posts[$pid]->set_blog($i, false);
+				$post_ids[] = $item->id();
+				$blogs[$item->id()] = $item;
 			}
-
-			if(empty($posts[$pid]))
-				continue;
-
-			if($kws = $i->keywords())
-				$posts[$pid]->set_kws_links(balancer_blogs_tag::linkify($kws, '', ' | ', true), false);
 		}
+
+		$posts = bors_find_all('balancer_board_post', array('id IN' => $post_ids, 'order' => '-create_time', 'by_id' => true));
+
+		balancer_board_posts_lib::load_keywords($posts, $topics, $blogs);
 
 		return array(
 			'items' => array_values($posts),
@@ -169,16 +168,18 @@ class balancer_blogs_tags_show extends base_page
 
 	function items()
 	{
+		if(!$this->page())
+			return NULL;
+
 		if($this->__havefc())
 			return $this->__lastc();
-
 		$targets = array();
 		$bindings = objects_array('common_keyword_bind', array(
 			'keyword_id IN' => $this->_selected_keywords(),
 			'target_class_name IN' => array('balancer_board_blog', 'forum_blog', 'balancer_board_topic', 'forum_topic'),
 			'group' => 'target_class_name,target_object_id',
 			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),
-			'order' => '-target_create_time',
+			'order' => 'target_create_time',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
 		));
@@ -194,4 +195,8 @@ class balancer_blogs_tags_show extends base_page
 
 		return $this->__setc($items);
 	}
+
+	function is_reversed() { return true; }
+
+//	function set_args(&$data) { var_dump($data); return parent::set_args($data); }
 }
