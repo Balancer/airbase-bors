@@ -25,7 +25,7 @@ function css_load(elem, value, id, def)
 
 function createCookie(name,value,days)
 {
-	if (days) 
+	if(days)
 	{
 		var date = new Date();
 		date.setTime(date.getTime()+(days*24*60*60*1000));
@@ -35,7 +35,7 @@ function createCookie(name,value,days)
 
 	document.cookie = name+"="+value+expires+"; path=/";
 }
-										
+
 function readCookie(name, def) 
 {
 	var nameEQ = name + "=";

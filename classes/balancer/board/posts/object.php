@@ -24,4 +24,6 @@ class balancer_board_posts_object extends base_object_db
 			'post' => 'balancer_board_post(post_id)',
 		);
 	}
+
+	function ignore_on_new_instance() { return true; }
 }
