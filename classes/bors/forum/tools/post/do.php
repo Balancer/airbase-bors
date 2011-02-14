@@ -14,6 +14,8 @@ class forum_tools_post_do extends base_page
 		if(!bors()->user() || !bors()->user()->group()->is_coordinator())
 			return bors_message(ec('У Вас нет прав для выполнения этой операции'));
 
+		config_set('lcml_cache_disable', true);
+
 		switch($this->page())
 		{
 			case 'drop-cache':
