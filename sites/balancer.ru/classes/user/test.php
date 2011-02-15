@@ -9,8 +9,8 @@ class user_test extends user_main
 
 	function __toString() { return get_class($this).'://'.$this->id(); }
 
-	function main_db_storage() { return 'punbb'; }
-	function main_table_storage() { return 'users'; }
+	function main_db() { return 'punbb'; }
+	function main_table() { return 'users'; }
 
 	function exec()
 	{

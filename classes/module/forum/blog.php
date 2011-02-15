@@ -2,7 +2,7 @@
 
 class module_forum_blog extends base_page
 {
-	function main_db_storage(){ return 'punbb'; }
+	function main_db() { return 'punbb'; }
 
 	private $_data = array();
 	function local_data()

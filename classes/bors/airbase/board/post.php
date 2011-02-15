@@ -15,7 +15,7 @@ class airbase_board_post extends base_page_db
 	function main_db_fields()
 	{
 		return array(
-			$this->main_table_storage() => $this->main_table_fields(),
+			$this->main_table() => $this->main_table_fields(),
 			'posts_cached_fields(post_id)' => array(
 				'flag_db' => 'flag',
 				'warning_id',

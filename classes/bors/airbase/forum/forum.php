@@ -2,7 +2,7 @@
 
 class airbase_forum_forum extends base_page_db
 {
-	function main_table_storage() { return 'forums'; }
+	function main_table() { return 'forums'; }
 	function main_db() { return config('punbb.database', 'punbb'); }
 
 	function main_table_fields()
