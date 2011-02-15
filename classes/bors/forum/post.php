@@ -27,6 +27,7 @@ class forum_post extends base_page_db
 				'mark_best_date',
 				'score_positive_raw' => 'score_positive',
 				'score_negative_raw' => 'score_negative',
+				'post_body' => 'html',
 			),
 		));
 	}
@@ -50,7 +51,7 @@ class forum_post extends base_page_db
 			'answer_to_id' => 'answer_to',
 			'answer_to_user_id' => 'anwer_to_user_id',
 			'post_source' => 'source',
-			'post_body' => 'source_html',
+//			'post_body' => 'source_html',
 			'hide_smilies',
 			'have_attach',
 			'have_cross',

@@ -32,7 +32,9 @@ class balancer_board_admin_posts_spam extends bors_paginated
 			'show_spam' => true,
 			'is_filtered_spam' => $this->is_filtered_spam(),
 			'is_filtered_ham'  => $this->is_filtered_ham(),
-			'items' => $this->is_filtered() ? objects_array('balancer_board_post', array('id IN' => $this->selected_posts())) : parent::items(),
+			'items' => $this->is_filtered() ? objects_array('balancer_board_post', array(
+				'id IN' => $this->selected_posts(),
+			)) : parent::items(),
 		));
 	}
 
