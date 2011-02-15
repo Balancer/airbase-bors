@@ -2,8 +2,8 @@
 
 class airbase_user_warning extends base_object_db
 {
-	function main_db_storage() { return 'punbb'; }
-	function main_table_storage() { return 'warnings'; }
+	function main_db() { return 'punbb'; }
+	function main_table() { return 'warnings'; }
 
 	function fields()
 	{

@@ -11,8 +11,8 @@ class forum_topic extends base_page_db
 	function uri_name() { return 't'; }
 	function nav_name() { return truncate($this->title(), 60); }
 
-	function db_name() { return config('punbb.database', 'punbb'); }
-	function table_name() { return 'topics'; }
+	function main_db() { return config('punbb.database', 'punbb'); }
+	function main_table() { return 'topics'; }
 
 	function main_table_fields()
 	{

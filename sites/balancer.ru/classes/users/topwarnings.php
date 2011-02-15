@@ -2,7 +2,7 @@
 
 class users_topwarnings extends base_page
 {
-	function main_db_storage(){ return 'punbb'; }
+	function main_db(){ return 'punbb'; }
 
 	function template()
 	{

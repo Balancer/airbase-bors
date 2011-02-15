@@ -4,7 +4,7 @@ class module_user_blog extends base_page
 {
 	private $user;
 
-	function main_db_storage(){ return 'punbb'; }
+	function main_db() { return 'punbb'; }
 
 	function local_template_data_set()
 	{

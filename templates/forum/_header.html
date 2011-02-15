@@ -157,10 +157,13 @@ createCookie('readedTopics', readed.join(' '), 3)
 <b>Обсудить и задать вопросы <a href="http://balancer.ru/support/2009/02/topic-66122-IE6-bol~she-ne-podderzhivaetsya.8198.html">можно в этой теме</a></b>.
 </dd></dl><![endif]-->
 
+<a name="top"></a>
+
 		{$body}
 
 <br/>
 
+{*
 <!-- AddThis Button BEGIN -->
 <div class="box addthis_toolbox addthis_32x32_style addthis_default_style">
 <a class="addthis_button_livejournal"></a>
@@ -180,8 +183,21 @@ createCookie('readedTopics', readed.join(' '), 3)
 </div>
 <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=balancer73"></script>
 <!-- AddThis Button END -->
+*}
 
-
+<dl class="post_kws box">
+<dd>
+ <a href="#top">в начало темы</a>
+| <a href="http://balancer.ru/forum/punbb/search.php?action=show_new">новое</a>
+{if $me_id}
+| <a href="http://forums.balancer.ru/personal/updated/">нечитанное обновлённое</a>
+| <a href="http://balancer.ru/users/{$me_id}/votes/">оценки</a>
+{if $this->extends_class_name() == 'forum_topic'}
+| <a href="http://balancer.ru/forum/user-{$me_id}-posts-in-topic-{$this->id()}/">Ваше в теме</a>
+{/if}
+{/if}
+</dd>
+</dl>
 
 {if not $skip_ad}
 <div class="center"><div class="top-ad">

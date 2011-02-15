@@ -15,7 +15,7 @@ class forum_post extends base_page_db
 	function main_table() { return 'posts'; }
 
 //	function main_db_fields()
-	function fields_map_db()
+	function fields()
 	{
 		return array($this->main_db() => array(
 			$this->main_table() => $this->main_table_fields(),

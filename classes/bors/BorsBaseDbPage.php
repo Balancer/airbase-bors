@@ -13,8 +13,8 @@ class BorsBaseDbPage extends BorsBasePage
 	
 		function __construct(&$id, $page = 1)
 		{
-			if(method_exists($this, 'main_db_storage'))
-				$this->db = new DataBase($this->main_db_storage());
+			if(method_exists($this, 'main_db'))
+				$this->db = new DataBase($this->main_db());
 			else
 				$this->db = new DataBase($GLOBALS['cms']['mysql_database']);
 			
@@ -48,6 +48,6 @@ class BorsBaseDbPage extends BorsBasePage
 
 	public function __wakeup()
 	{
-		$this->db = new DataBase($this->main_db_storage());
+		$this->db = new DataBase($this->main_db());
 	}
 }
