@@ -365,13 +365,23 @@ if ($cur_category > 0)
 else
 	echo '<div id="idx0" class="block"><div class="box"><div class="inbox"><p>'.$lang_index['Empty board'].'</p></div></div></div>';
 
-// Collect some statistics from the database
-$stats['total_users'] = $cms_db->select($db->prefix.'users', 'COUNT(*)', array());
-$stats['last_user'] = $cms_db->select($db->prefix.'users', 'id, username', array('order' => '-registered', 'limit' => 1));
+$stats_cache = new bors_cache();
+if($stats_cache->get('board', 'stats'))
+{
+	$stats = $stats_cache->last();
+	$stats['total_users'];
+}
+else
+{
+	// Collect some statistics from the database
+	$stats['total_users'] = $cms_db->select($db->prefix.'users', 'COUNT(id)', array('1' => 1));
+	$stats['last_user'] = $cms_db->select($db->prefix.'users', 'id, username', array('order' => '-registered', 'limit' => 1));
 
-//list($stats['total_topics'], $stats['total_posts']) = array_values($cms_db->select($db->prefix.'forums', 'SUM(num_topics), SUM(num_posts)', array()));
-$stats['total_topics'] = $cms_db->select($db->prefix.'topics', 'COUNT(*)', array());
-$stats['total_posts']  = $cms_db->select($db->prefix.'posts',  'COUNT(*)', array());
+	//list($stats['total_topics'], $stats['total_posts']) = array_values($cms_db->select($db->prefix.'forums', 'SUM(num_topics), SUM(num_posts)', array()));
+	$stats['total_topics'] = $cms_db->select($db->prefix.'topics', 'COUNT(id)', array('1' => 1));
+	$stats['total_posts']  = $cms_db->select($db->prefix.'posts',  'COUNT(id)', array('1' => 1));
+	$stats_cache->set($stats, -600);
+}
 
 ?>
 <div id="brdstats" class="block">

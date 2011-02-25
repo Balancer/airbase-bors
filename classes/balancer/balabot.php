@@ -39,8 +39,10 @@ class balancer_balabot extends base_object
 		$pre  = $tpl[0];
 		$post = $tpl[1];
 
-		$pre  = str_replace('%user%', $target->owner()->title(), $pre); // $target->score()
-		$post = $post.$url;
+		$owner_title = $target->owner()->title();
+
+		$pre  = $owner_title.'> '; //str_replace('%user%', $target->owner()->title(), $pre); // $target->score()
+		$post = /*$post.*/ $url;
 
 		$limit = 140 - bors_strlen($post) - bors_strlen($pre);
 		$text = strip_text($target->source(), $limit, '…', true);
@@ -56,6 +58,20 @@ class balancer_balabot extends base_object
 				'blog_class_id' => $twitter_class_id,
 				'blog_object_id' => $blog_object_id,
 			));
+		}
+
+		// Также продублируем всем подписчикам
+		$subscribed = bors_find_all('balancer_board_user', array(
+			'jabber',
+			'xmpp_notify_best' => true,
+		));
+
+		foreach($subscribed as $user)
+		{
+			$user->notify_text("Сообщение пользователя {$owner_title} было признано лучшим:\n"
+				.trim(html_entity_decode(make_quote($user->title(), htmlspecialchars($target->source()), false), ENT_COMPAT, 'UTF-8'))
+				."\n\n// #{$target->id()} {$target->url_for_igo()} в теме «{$target->topic()->title()}»"
+			);
 		}
 
 		debug_hidden_log('balabot', "{$target->debug_title()} posted in twitter as $blog_object_id", false);

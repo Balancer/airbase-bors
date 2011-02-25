@@ -6,5 +6,7 @@
 
 		$txt = preg_replace("!\[flash=(\d+),(\d+),(http://static.video.yandex.ru/.+?)\]!is", '[flash $1x$2]$3[/flash]', $txt);
 
+		$txt = preg_replace("!\[t(\d+)\]!is", "[topic]$1[/topic]", $txt);
+
 		return $txt;
 	}

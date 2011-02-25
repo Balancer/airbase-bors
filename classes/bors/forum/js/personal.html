@@ -32,7 +32,8 @@
 <ul>
 {literal}
 <script>
-if(readCookie('class_name', '0') == 'forum_topic')
+cn = readCookie('class_name', '0')
+if(cn == 'forum_topic' || cn == 'balancer_board_topic')
 {
 	tid = readCookie('object_id', '0')
 	page = readCookie('page', '1')

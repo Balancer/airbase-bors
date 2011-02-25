@@ -10,7 +10,7 @@
 </div>
 {else}
 <a href="{$owner->url()}">
-<img src="http://www.gravatar.com/avatar/{$owner->id()|cat:'balancer-user-gravatar'|md5}?d=wavatar" width="{$avatar_size}" height="{$avatar_size}" alt="" />
+<img src="http://www.gravatar.com/avatar/{$owner->email()|trim|bors_lower|md5}?d=wavatar" width="{$avatar_size}" height="{$avatar_size}" alt="" />
 </a>
 {/if}
 <h4><a href="{$owner->url()}">{$owner->title()}</a></h4>

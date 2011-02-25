@@ -19,7 +19,7 @@ $gmworker->addFunction("balabot.work", "dispatcher");
 $gmworker->setTimeout(1000);
 
 $loop = 100;
-while($loop-->0 && ($gmworker->work() || $gmworker->returnCode() == GEARMAN_TIMEOUT))
+while($loop-->0 && (@$gmworker->work() || @$gmworker->returnCode() == GEARMAN_TIMEOUT))
 {
 	if($gmworker->returnCode() == GEARMAN_TIMEOUT)
 	{

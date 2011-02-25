@@ -361,7 +361,7 @@ while ($cur_post = $db->fetch_assoc($result))
 			'create_time' => time(),
 		));
 	}
-	
+
 	$post_count++;
 	$user_avatar = '';
 	$user_info = array();
@@ -379,7 +379,7 @@ while ($cur_post = $db->fetch_assoc($result))
 		if(strlen($username) > 10)
 		{
 			$username = str_replace('_', '_ ', $username);
-		
+
 			$count = 0;
 			for($i=0; $i<strlen($username); $i++)
 			{
@@ -387,7 +387,7 @@ while ($cur_post = $db->fetch_assoc($result))
 					$count++;
 				else
 					$count = 0;
-				
+
 				if($count >= 12)
 				{
 					$username = substr($username, 0, $i).' '.substr($username, $i);
@@ -395,7 +395,7 @@ while ($cur_post = $db->fetch_assoc($result))
 				}	
 			}
 		}
-		
+
 		$userlink = "<a href=\"{$pun_config['root_uri']}/profile.php?id={$cur_post['poster_id']}\" style=\"font-size: {$size}pt;\">".$username.'</a>';
 
 		$user_title = get_title($poster);
