@@ -27,6 +27,8 @@ $GLOBALS['cms']['cache_disabled'] = true;
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
+require 'inc/design/make_quote.php';
+
 /*
 if(time()-filemtime("/var/log/started.log") < 3600)
 {
@@ -283,6 +285,8 @@ if (isset($_POST['form_sent']))
 	if(!empty($_POST['overquote_confirmed']))
 		$true_text = 100;
 
+	$was_notified = false;
+
 	// Did everything go according to plan?
 	if(empty($errors) && !isset($_POST['preview']) && $true_text > 40)
 	{
@@ -338,7 +342,7 @@ if (isset($_POST['form_sent']))
 					'posted' => $now, 
 					'topic_id' => $tid,
 					'answer_to' => $qid,
-					'anwer_to_user_id' => $answer_to_post->owner_id(),
+					'anwer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
 					'source' => $message,
 				);
 				$tdb->insert('posts', $data);
@@ -346,7 +350,8 @@ if (isset($_POST['form_sent']))
 				$tdb->close();
 			}
 
-			$post = object_load('balancer_board_post', $new_pid);
+			$post = bors_load('balancer_board_post', $new_pid);
+
 			$user = $post->owner();
 
 			if($qid)
@@ -365,11 +370,14 @@ if (isset($_POST['form_sent']))
 					if($answer_to_user = $answer_to_post->owner())
 					{
 						$text = "{$user->title()} отвечает на Ваше сообщение:\n"
-							.trim($post->source())
+							.trim(html_entity_decode(make_quote($user->title(), htmlspecialchars($post->source()), false), ENT_COMPAT, 'UTF-8'))
 							."\n\n// #{$post->id()} {$post->url_for_igo()} в теме «{$post->topic()->title()}»";
 
 						if($answer_to_user->xmpp_notify_enabled())
+						{
 							$answer_to_user->notify_text($text);
+							$was_notified = $answer_to_user;
+						}
 					}
 				}
 			}
@@ -528,7 +536,7 @@ if (isset($_POST['form_sent']))
 					'posted' => $now, 
 					'topic_id' => $new_tid,
 					'answer_to' => $qid,
-					'anwer_to_user_id' => $answer_to_post->owner_id(),
+					'anwer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
 					'source' => $message,
 				);
 
@@ -563,11 +571,9 @@ if (isset($_POST['form_sent']))
 
 		$topic->set_modify_time(time(), true);
 		$topic->set_last_post_create_time($post->create_time(), true);
-
-		$topic->topic_updated($post);
+		$topic->topic_updated($post, $was_notified);
 
 		$post->set_modify_time(time(), true);
-
 		$post->parents_answers_recount(0);
 
 		if($me->xmpp_notify_enabled() && $me->id() != $post->owner_id())
@@ -588,6 +594,7 @@ if (isset($_POST['form_sent']))
 			$topic_page = intval($topic->num_replies()/$topic->items_per_page()) + 1;
 
 		$post->set_topic_page($topic_page, true);
+		$post->answer_to_user_id(); // Читаем, чтобы обновися кеш
 
 		$topic->store();
 		$post->store();
@@ -889,7 +896,8 @@ if (!$pun_user['is_guest'])
 		$checkboxes[] = '<label><input type="checkbox" name="hide_smilies" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['hide_smilies']) ? ' checked="checked"' : '').' />'.$lang_post['Hide smilies'];
 
 	if ($pun_config['o_subscriptions'] == '1')
-		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['subscribe']) || empty($_GET['tid']) ? ' checked="checked"' : '').' />'.$lang_post['Subscribe'];
+		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'" checked="checked" />'.$lang_post['Subscribe'];
+//		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['subscribe']) || empty($_GET['tid']) ? ' checked="checked"' : '').' />'.$lang_post['Subscribe'];
 
 //	$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTMLval = this.checked ? '' : '".addslashes("<label><strong>Заголовок</strong><br /><input class=\"longinput\" type=\"text\" name=\"req_subject\" value=\"\" size=\"80\" maxlength=\"255\" tabindex=\"1\" /><br /></label>")."'\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
 

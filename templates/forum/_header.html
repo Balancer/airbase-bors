@@ -143,6 +143,8 @@ createCookie('readedTopics', readed.join(' '), 3)
 		</dd>
 		</dl>
 
+<a name="top"></a>
+
 {if not $skip_ad}
 {* include file="xfile:forum/ads/top-ad-podarini.html" *}
 {include file="xfile:forum/ads/top-ad-google.html"}
@@ -156,8 +158,6 @@ createCookie('readedTopics', readed.join(' '), 3)
 <a href="http://mozilla.ru/">Mozilla Firefox</a>. <br/><br/>
 <b>Обсудить и задать вопросы <a href="http://balancer.ru/support/2009/02/topic-66122-IE6-bol~she-ne-podderzhivaetsya.8198.html">можно в этой теме</a></b>.
 </dd></dl><![endif]-->
-
-<a name="top"></a>
 
 		{$body}
 
@@ -187,7 +187,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 <dl class="post_kws box">
 <dd>
- <a href="#top">в начало темы</a>
+ <a href="#top">в начало страницы</a>
 | <a href="http://balancer.ru/forum/punbb/search.php?action=show_new">новое</a>
 {if $me_id}
 | <a href="http://forums.balancer.ru/personal/updated/">нечитанное обновлённое</a>
@@ -229,6 +229,11 @@ createCookie('readedTopics', readed.join(' '), 3)
 			</div></form>
 		</dd>
 		</dl>
+{*
+		<dl class="box w200">
+		<dd><a href="http://balancer.ru/support/2002/02/t19084--s-prazdnikom-23-fevralya.9240.html"><img src="http://airbase.ru/cache/images/cards/190x/110223.jpg" /></a></dd>
+		</dl>
+*}
 
 {if not $skip_ad and rand(0,10) == 1}
 		<dl class="box w200">

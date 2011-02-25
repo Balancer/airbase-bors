@@ -36,6 +36,9 @@ class wrk_go extends base_page
 			case 'p':
 				$class_name = 'balancer_board_post';
 				break;
+			case 't':
+				$class_name = 'balancer_board_topic';
+				break;
 			default:
 				return false;
 		}

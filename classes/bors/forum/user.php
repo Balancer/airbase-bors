@@ -76,6 +76,10 @@ class forum_user extends base_object_db
 			'mailing_period',
 			'last_mailing',
 			'xmpp_notify_enabled', // Период нотификации. 0 == запрещено, -1 - мгновенно, иначе - период времени.
+			'xmpp_notify_new', // Подписка на новые темы
+			'xmpp_notify_score', // Подписка на изменения оценок
+			'xmpp_notify_reputation', // Подписка на изменения репутации
+			'xmpp_notify_best', // Подписка на лучшие сообщения
 			'last_mailing',
 			'utmx',
 		);

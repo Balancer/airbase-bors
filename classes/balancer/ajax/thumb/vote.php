@@ -14,10 +14,10 @@ class balancer_ajax_thumb_vote extends base_object
 		switch($this->args('vote'))
 		{
 			case 'down':
-				$score = -1;
+				$score = '-1';
 				break;
 			case 'up':
-				$score = +1;
+				$score = '+1';
 				break;
 			default:
 				return "Ошибка параметров";
@@ -38,7 +38,7 @@ class balancer_ajax_thumb_vote extends base_object
 		if($me->tomonth_posted() < 10)
 			return "<small>У Вас слишком низкая активность на форумах</small>";
 
-		if($score < 0 && $target->modify_time() < time() - 86400*14)
+		if(intval($score) < 0 && $target->modify_time() < time() - 86400*14)
 			return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";
 
 		if($topic = $target->get('topic'))
@@ -68,11 +68,20 @@ class balancer_ajax_thumb_vote extends base_object
 		));
 
 		if(is_null($target->mark_best_date()))
+		{
 			if($positives >= 3)
+			{
 				$target->set_mark_best_date($vote->create_time(), true);
+			}
+		}
 
-		if($positives >= 7)
+		if($target->score() >= 5)
 			balancer_balabot::on_thumb_up($target);
+
+		$user = $target->owner();
+		$text = "Вам выставлена оценка $score за сообщение #{$target->id()} {$target->url_for_igo()} в теме «{$target->topic()->title()}»";
+
+		$user->notify_text($text);
 
 		return $return;
 	}

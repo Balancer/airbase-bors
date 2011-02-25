@@ -26,6 +26,9 @@ class balancer_balabot_parser extends bors_object
 		if(preg_match('/^#(\d+)\s+(.+)$/s', $this->message, $m))
 			return $this->do___answer($m[1], trim($m[2]));
 
+		if(preg_match('/^\*\S+/s', $this->message, $m))
+			return $this->do__post($this->message);
+
 		$message_lower_case = bors_lower($this->message);
 
 		if(preg_match('/^(\w+)$/s', $message_lower_case, $m)
@@ -129,7 +132,16 @@ class balancer_balabot_parser extends bors_object
 			'poster_ip' => @$this->data['payload']['from'],
 		));
 
-		return $this->send("Ваше сообщение #{$post->id()} было размещено в теме {$post->topic()->title()} по адресу {$post->url_for_igo()}");
+		$x = bors_find_first('balancer_board_users_subscription', array('user_id' => $me->id(), 'topic_id' => $topic->id()));
+		if(!$x)
+		{
+			$x = object_new_instance('balancer_board_users_subscription', array('user_id' => $me->id(), 'topic_id' => $topic->id()));
+			$subs = "Также Вы были подписаны на новые ответы в этой теме";
+		}
+		else
+			$subs = '';
+
+		return $this->send("Ваше сообщение #{$post->id()} было размещено в теме {$post->topic()->title()} по адресу {$post->url_for_igo()}. $subs");
 	}
 
 	function do__help()
@@ -271,6 +283,10 @@ P Всем привет!
 				return $this->send('Не могу найти сообщение #'.$post_id);
 
 			$topic = $post->topic();
+			$x = bors_find_first('balancer_board_users_subscription', array('user_id' => $me->id(), 'topic_id' => $topic->id()));
+			if($x)
+				return $this->send("Вы уже были ранее подписаны на тему {$topic->title()} // {$topic->url()}");
+
 			$x = object_new_instance('balancer_board_users_subscription', array('user_id' => $me->id(), 'topic_id' => $topic->id()));
 			return $this->send("Вы подписались на тему {$topic->title()}. Теперь Вы будете получать все ответы в эту тему // {$topic->url()}");
 		}
@@ -286,6 +302,16 @@ P Всем привет!
 
 	function do__search($query)
 	{
+		$topics = bors_find_all('balancer_board_topic', array('subject LIKE "%'.addslashes($query).'%"', 'order' => '-last_post_create_time', 'limit' => 20));
+		$text = array();
+		foreach($topics as $t)
+			$text[] = "[".date('Y-m-d H:i', $t->modify_time())."] ".trim($t->title())." // %{$t->id()} ".wrk_go::make_short_url($t);
+
+		if(empty($text))
+			$text[] = 'Ничего не найдено';
+
+		return $this->send("Найденные по запросу подстроки '$query' темы:\n".join("\n", $text));
+
 		common_keyword::keyword_search_reindex($query, true);
 		$kw = common_keyword::loader($query);
 		$bindings = bors_find_all('common_keyword_bind', array(
@@ -336,6 +362,18 @@ P Всем привет!
 			case 'xmpp_notify':
 				$me->set_xmpp_notify_enabled($val, true);
 				break;
+			case 'xmpp_notify_new':
+				$me->set_xmpp_notify_new($val, true);
+				break;
+			case 'xmpp_notify_score':
+				$me->set_xmpp_notify_score($val, true);
+				break;
+			case 'xmpp_notify_best':
+				$me->set_xmpp_notify_best($val, true);
+				break;
+			case 'xmpp_notify_reputation':
+				$me->set_xmpp_notify_reputation($val, true);
+				break;
 			default:
 				return $this->send('Незвестный параметр '.$var);
 		}
@@ -379,7 +417,6 @@ P Всем привет!
 
 			return $this->send("Вы не были подписаны на тему {$topic->title()}. // {$topic->url()}");
 		}
-
 
 
 		$friend = balancer_board_user::find_by_all_names($friend_name);

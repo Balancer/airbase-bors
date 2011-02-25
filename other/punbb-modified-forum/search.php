@@ -87,8 +87,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 	else if ($action == 'show_user')
 	{
 		$user_id = intval($_GET['user_id']);
-		if ($user_id < 1)
-			message($lang_common['Bad request']);
+		return go('http://balancer.ru/user/'.$user_id.'/posts/');
 	}
 	else
 	{
@@ -304,7 +303,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 				$num_hits = count($search_ids);
 			}
 		}
-		else if ($action == 'show_new' || $action == 'show_24h' || $action == 'show_user' || $action == 'show_subscriptions' || $action == 'show_unanswered')
+		else if ($action == 'show_new' || $action == 'show_24h' || $action == 'show_subscriptions' || $action == 'show_unanswered')
 		{
 			if($cat_ids)
 				$cat_ids = " AND f.cat_id IN($cat_ids) ";
@@ -345,15 +344,6 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 
 				if (!$num_hits)
 					message($lang_search['No recent posts']);
-			}
-			// If it's a search for posts by a specific user ID
-			else if ($action == 'show_user')
-			{
-				$result = $db->query('SELECT t.id FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'posts AS p ON t.id=p.topic_id INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND p.poster_id='.$user_id.' GROUP BY t.id') or error('Unable to fetch topic list', __FILE__, __LINE__, $db->error());
-				$num_hits = $db->num_rows($result);
-
-				if (!$num_hits)
-					message($lang_search['No user posts']);
 			}
 			// If it's a search for subscribed topics
 			else if ($action == 'show_subscriptions')

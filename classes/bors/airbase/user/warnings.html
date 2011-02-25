@@ -61,3 +61,7 @@ if(top.me_is_coordinator)
 {/if}
 
 {$this->pages_links_nul()}
+
+{if not $passive_warnings and not $active_warnings}
+<div class="box"><b>У этого пользователя не было ни одного штрафа.</b></div>
+{/if}

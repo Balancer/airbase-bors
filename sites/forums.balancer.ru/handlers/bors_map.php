@@ -30,6 +30,8 @@ $map = array(
 	'/blogs/ => balancer_board_blogs_main',
 	'(/)blogs/(\d+)\.html => balancer_board_blogs_main(NULL,2)',
 
+	'/dashboard/? => balancer_board_dashboard',
+
 	'/info/ => balancer_board_info_main',
 	'/info/top\-forums\-by\-topics/ => balancer_board_info_topForumsByTopics',
 
