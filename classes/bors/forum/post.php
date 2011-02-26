@@ -314,7 +314,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function url_for_igo() { return 'http://balancer.ru/g/p'.$this->id(); }
 
-	function titled_link($text = NULL, $css=NULL) 
+	function titled_link($title = NULL, $css=NULL)
 	{
 		if(!$title)
 			$title = $this->title();
