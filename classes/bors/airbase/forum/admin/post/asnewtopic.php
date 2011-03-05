@@ -7,19 +7,36 @@ class airbase_forum_admin_post_asnewtopic extends base_page
 	function nav_name() { return ec('в новую тему'); }
 	function post() { return object_load('forum_post', $this->id()); }
 	function target_forum_id() { return $this->post()->topic()->forum_id(); }
-	function new_topic_title() { return $this->post()->topic()->title(); }
+	function new_topic_title()
+	{
+		$post = $this->post();
+		if($blog = $post->blog())
+			return $blog->title();
+
+		return $post->topic()->title();
+	}
+
+	function new_topic_keywords_string()
+	{
+		$post = $this->post();
+		if($blog = $post->blog())
+			return $blog->keywords_string();
+
+		return $post->topic()->keywords_string();
+	}
+
 	function new_topic_description() { return ec('Перенос из темы «').$this->post()->topic()->title().ec('»'); }
 	function dont_move_with_tree() { return false; }
 	function access_engine() { return 'airbase_forum_admin_access_split'; }
-	
+
 	function pre_action($data)
 	{
 		if($data['original_topic_id'] != $this->post()->topic_id())
 			return bors_message(ec('Это сообщение уже было перенесено, пока Вы готовились к той же операции'));
-	
+
 		if($this->check_data($data) === true)
 			return true;
-			
+
 		$old_topic = $this->post()->topic();
 		$new_topic = object_new('forum_topic');
 		$new_topic->set_forum_id($data['target_forum_id'], true);

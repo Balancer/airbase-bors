@@ -42,7 +42,7 @@ table.btab td { background: white; }
 {
 	border-right: 1px solid #9bd;
 	border-bottom: 1px solid #9bd;
-	padding: 2px;
+	padding: 2px 4px;
 	margin: 0;
 }
 
@@ -353,8 +353,9 @@ span.clear {
 }
 
 .outer {
-	margin-left: 200px;  /* L */
+	margin-left: 215px;  /* L */
 }
+
 .tpl_column_center {
 	float: right;
 	width: 100%;
@@ -364,7 +365,7 @@ span.clear {
 	float: left;
 	position: relative;
 	width: 200px;  /* L */
-	margin-left: -201px;  /* -L-1 */
+	margin-left: -210px;  /* -L-1 */
 	margin-right: 2px;
 }
 .minwidth {

@@ -170,14 +170,14 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 
 		return $children_caches;
 	}
-		
+
 /*		function subforums_html()
 		{
 			include_once('other/punbb-modified-forum/include/subforums.php');
 			global $pun_user;
 			$pun_user['g_id'] = 1;
 		}
-*/	
+*/
 	function direct_subforums_ids()
 	{
 		// Получаем одни forum_id для дочерних форумов первого уровня
@@ -199,7 +199,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	function all_subforums(&$processed = array())
 	{
 		$forums = array();
-			
+
 		foreach($this->direct_subforums_ids() as $forum_id)
 		{
 			if(in_array($forum_id, $processed))
@@ -209,7 +209,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 			$subforum = $forums[] = class_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
 			$forums = array_merge($forums, $subforum->all_subforums($processed));
 		}
-			
+
 		return $forums;
 	}
 

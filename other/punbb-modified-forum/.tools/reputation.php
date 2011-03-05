@@ -29,40 +29,13 @@
 		$barb = object_load('bors_user', 5420);
 		$niki = object_load('bors_user', 14);
 
-		echo "killo: {$killo->rep_x()}, {$killo->rep_y()}\n";
+		echo "killo: {$killo->rep_x()}, {$killo->rep_y()} [{$killo->reputation()}, {$killo->pure_reputation()}]\n";
 		echo "aggy : {$aggy->rep_x()}, {$aggy->rep_y()}\n";
 		echo "bal  : {$bal->rep_x()}, {$bal->rep_y()}\n";
 		echo "varba: {$varban->rep_x()}, {$varban->rep_y()}\n";
 		echo "dvit : {$dvit->rep_x()}, {$dvit->rep_y()}\n";
 		echo "barb : {$barb->rep_x()}, {$barb->rep_y()}\n";
 		echo "niki : {$niki->rep_x()}, {$niki->rep_y()}\n\n";
-/*
-		$bal->set_rep_x(100, true);
-		$bal->set_rep_y(100, true);
-		$varban->set_rep_x(100, true);
-		$varban->set_rep_y(100, true);
-		$barb->set_rep_x(-100, true);
-		$barb->set_rep_y(-100, true);
-		$niki->set_rep_x(-100, true);
-		$niki->set_rep_y(-100, true);
-		$killo->set_rep_x(100, true);
-		$killo->set_rep_y(-100, true);
-		$aggy->set_rep_x(-100, true);
-		$aggy->set_rep_y(100, true);
-
-
-//		$killo->set_rep_x(-$aggy->rep_x(), true);
-//		$killo->set_rep_y($aggy->rep_y(), true);
-//		$aggy->set_rep_x(-$killo->rep_y(), true);
-//		$aggy->set_rep_y(-$killo->rep_x(), true);
-		$killo->store();
-		$aggy->store();
-		$bal->store();
-		$dvit->store();
-		$varban->store();
-		$barb->store();
-		$niki->store();
-*/
 
 		$dbf = new driver_mysql('punbb');
 		$dbu1 = new driver_mysql('USERS');
@@ -89,60 +62,83 @@
 		$tdb = $max_b - $min_b +1;
 
 		echo "tdx: $max_x - $min_x = $tdx, tdy: $max_y - $min_y = $tdy\n";
-		$all_reputated_users = array_unique($dbu1->get_array("SELECT DISTINCT user_id FROM `reputation_votes`"));
+		$all_reputated_user_ids = array_unique($dbu1->get_array("SELECT DISTINCT user_id FROM `reputation_votes`"));
 
-		foreach($all_reputated_users as $user)
+		$rnames = explode(' ', 'x y r g b');
+		$cache = array();
+
+		// Большой цикл по всем юзерам
+		foreach($dbf->get_array("SELECT 
+				id as user_id,
+				reputation as o_reput,
+				pure_reputation as o_pure_reput,
+				rep_r as o_rep_r,
+				rep_g as o_rep_g,
+				rep_b as o_rep_b,
+				rep_x as o_rep_x,
+				rep_y  as o_rep_y
+			FROM users WHERE id IN (".join(',', $all_reputated_user_ids).")") as $x)
 		{
 			$total = 0;
 			$pure = 0;
-//			$srep_r= $srep_g= $srep_b= $srep_x= $srep_y = 0;
 
-			$a = $dbf->get("SELECT reputation, pure_reputation, rep_r, rep_g, rep_b, rep_x, rep_y FROM users WHERE id={$user}");
-			list($o_reput, $o_pure_reput, $o_rep_r, $o_rep_g, $o_rep_b, $o_rep_x, $o_rep_y) = array_values($a);
+			extract($x);
 
-			$srep_x = $o_rep_x;
-			$srep_y = $o_rep_y;
-			$srep_r = $o_rep_r;
-			$srep_g = $o_rep_g;
-			$srep_b = $o_rep_b;
+			foreach($rnames as $i)
+				${"srep_$i"} = ${"o_rep_$i"};
 
-//			if($user == 190)
-//				echo "=== start srep_x => $srep_x\n";
+			$count = 1;
 
-			foreach($dbu1->get_array("SELECT voter_id as id, SUM(score) as sum FROM `reputation_votes` WHERE user_id = $user AND time GROUP BY voter_id") as $v)
+			// Считаем изменение координат текущего юзера.
+			// Цикл по всем, кто по нему высказывался:
+			$voters = $dbu1->get_array("SELECT voter_id as id, SUM(score) as sum FROM `reputation_votes` WHERE user_id = $user_id AND time GROUP BY voter_id");
+			$voters_count = count($voters);
+			foreach($voters as $v)
 			{
-				$a = $dbf->get("SELECT reputation, pure_reputation, rep_r, rep_g, rep_b, rep_x, rep_y FROM users WHERE id={$v['id']}");
+				$voter_id = $v['id'];
+				// Извлекаем данные по высказывавшемуся $v:
+				if(array_key_exists($voter_id, $cache))
+					$a = $cache[$voter_id];
+				else
+					$cache[$voter_id] = $a = $dbf->get("SELECT reputation, pure_reputation, rep_r, rep_g, rep_b, rep_x, rep_y FROM users WHERE id={$v['id']}");
+
 				if(!$a)
 					continue;
 
 				list($reput, $pure_reput, $rep_r, $rep_g, $rep_b, $rep_x, $rep_y) = array_values($a);
 
-				$drx = $o_rep_x - $rep_x;
-				$dry = $o_rep_y - $rep_y;
-				$drr = $o_rep_r - $rep_r;
-				$drg = $o_rep_g - $rep_g;
-				$drb = $o_rep_b - $rep_b;
+				// Это разница репутация нашего базового пользователя и сравниваемого
+				foreach($rnames as $i)
+					${"dr$i"} = ${"o_rep_$i"} - ${"rep_$i"};
+
+				$l2 = sqrt($drx*$drx + $dry*$dry) + .01;
+				$l3 = sqrt($drr*$drr + $drg*$drg + $drb*$drb) + .01;
+
+				$scores = atan($v['sum'])*2/pi();
+				$scores2 = $scores * $scores;
+				$need = 50 - ($scores+1)*20; // -1 -> 50, 0 -> 30, +1 ->10
+
+				$srep_x += ($scores2 * $drx * ($need/$l2 - 1))/$voters_count;
+				$srep_y += ($scores2 * $dry * ($need/$l2 - 1))/$voters_count;
+				$srep_r += ($scores2 * $drr * ($need/$l3 - 1))/$voters_count;
+				$srep_g += ($scores2 * $drg * ($need/$l3 - 1))/$voters_count;
+				$srep_b += ($scores2 * $drb * ($need/$l3 - 1))/$voters_count;
+
+//				$srep_y -= ($scores * $scores * $dry * (1 - $need/$l2) + sign($drx)*1/($l2*$l2))/$voters_count/3;
+
+//				$srep_x += $o_rep_x - $scores * $scores * $drx * (1 - $need/$l2) + sign($drx)*10/($l2*$l2);
+//				$srep_y += $o_rep_y - $scores * $scores * $dry * (1 - $need/$l2) + sign($drx)*10/($l2*$l2);
+
+//				$srep_r -= $need*$scores*$drr/$l3 - .1/($l3*$l3);
+//				$srep_g -= $need*$scores*$drg/$l3 - .1/($l3*$l3);
+//				$srep_b -= $need*$scores*$drb/$l3 - .1/($l3*$l3);
+
+				$count++;
 
 				$reput = bors_user_reputation_weight($reput);
 				$pure_reput = bors_user_reputation_weight($pure_reput);
-//				if($v['id'] == 10000) echo "$rep_x -> ";
-				$rep_r = bors_user_reputation_weight_signed($rep_r);
-				$rep_g = bors_user_reputation_weight_signed($rep_g);
-				$rep_b = bors_user_reputation_weight_signed($rep_b);
-				$rep_x = bors_user_reputation_weight_signed($rep_x);
-				$rep_y = bors_user_reputation_weight_signed($rep_y);
+
 				$group = $dbf->get("SELECT group_id FROM users WHERE id={$v['id']}");
-
-/*				$div = (abs($rep_r+$rep_g+$rep_b)+0.01)/3;
-				$rep_r/=$div;
-				$rep_g/=$div;
-				$rep_b/=$div;
-
-				$div = (abs($rep_y+$rep_x)+0.01)/2;
-				$rep_x/=$div;
-				$rep_y/=$div;
-*/
-//				if($v['id'] == 10000) echo "$rep_x\n";
 
 				$weight = @$grw[$group];
 				if(!$weight)
@@ -158,53 +154,32 @@
 				$pure  += atan($v['sum'])*2/pi() * $pure_reput;
 
 				$sco = atan($v['sum'])*2/pi();
-
-//				if($sco < 0)
-//					$sco /= 2;
-
-				foreach(explode(' ', 'x y r g b') as $i)
-				{
-					$rd = 1-${"dr$i"}/${"td$i"};
-
-					if($sco > 0)
-					{
-						$attr = 2 * $sco * ${"rep_$i"} / ($rd * $rd + 0.1);
-						$repuls = 101*$attr/(${"dr$i"}*${"dr$i"}+1);
-					}
-					else
-					{
-						$attr = ${"td$i"} * $sco * ${"rep_$i"}/(${"dr$i"}*${"dr$i"}+1);
-						$repuls = ${"td$i"} / 10 * (1-$sco) * ${"rep_$i"}/(abs(${"dr$i"})+1);
-					}
-
-//					$attr   = $sco * ${"rep_$i"} / (${"dr$i"}/${"td$i"}+0.1) / 10 /* + rand()/getrandmax() - 0.5 */;
-//					$repuls = 26*$attr/(${"dr$i"}*${"dr$i"}+1);
-
-					${"srep_$i"} -= ($attr - $repuls);
-
-//					if($i == 'x' && $user == 190/* && (abs($attr) > 1 || abs($repuls) > 1)*/)
-//						echo "    attr   = $attr\n    repuls = $repuls\n";
-
-				}
-/*
-				$srep_r -=  $sco * $rep_x * $drx / $tdx;
-				$srep_g -=  $sco * $rep_y * $dry / $tdy;
-				$srep_b -=  $sco * $rep_r * $drr / $tdr;
-				$srep_x -=  $sco * $rep_g * $drg / $tdg;
-				$srep_y -=  $sco * $rep_b * $drb / $tdb;
-*/
-//				echo "$user <- {$v['id']}: s={$v['sum']}, t={$v['total']}, r=$reput, w=$weight  --> $total/$pure\n";
 			}
 
 			$totaln = atan($total)*2/pi();
 
-			foreach(explode(' ', 'x y r g b') as $i)
-				${"srep_$i"} = (0.5*${"td$i"}+20) * bors_user_reputation_weight_signed(${"srep_$i"}/5);
-
-			foreach(explode(' ', 'total pure srep_r srep_g srep_b srep_x srep_y') as $var)
+			foreach(explode(' ', 'total pure') as $var)
 				$$var = str_replace(',', '.', $$var);
 
-			if($user == 34059)
+			foreach(explode(' ', 'srep_r srep_g srep_b srep_x srep_y') as $var)
+			{
+//				$$var /= $count;
+
+				$$var -= $$var*$$var*$$var/1e6;
+//				$$var -= 10/sqp(100-$$var, 1);
+//				$$var -= 10/sqp($$var, 1);
+
+				if($$var > 100)
+					$$var = 100;
+				if($$var < -100)
+					$$var = -100;
+
+//				$$var += rand(0,2)-1;
+
+				$$var = str_replace(',', '.', $$var);
+			}
+
+			if($user_id == 34059)
 				echo "pure = $pure, total=$total, srep_x => $srep_x\n";
 
 			$dbf->query("UPDATE users SET 
@@ -215,11 +190,13 @@
 					rep_b = $srep_b,
 					rep_x = $srep_x,
 					rep_y = $srep_y
-				 WHERE id = $user");
-//			$dbf->query("UPDATE users SET pure_reputation = $pure WHERE id = $user");
-//			echo $dbf->get("SELECT username FROM users WHERE id=$user")."[$user]: $total ($totaln)\n";
+				 WHERE id = $user_id");
 		}
 
-		$dbf->query("UPDATE users SET pure_reputation = 0, reputation = 0 WHERE id NOT IN (".join(',', $all_reputated_users).')');
-		$dbf->query("UPDATE users SET rep_r=0, rep_g=0, rep_b=0, rep_x=0, rep_y=0 WHERE id NOT IN (".join(',', $all_reputated_users).')');
+		$dbf->query("UPDATE users SET pure_reputation = 0, reputation = 0 WHERE id NOT IN (".join(',', $all_reputated_user_ids).')');
+		$dbf->query("UPDATE users SET rep_r=0, rep_g=0, rep_b=0, rep_x=0, rep_y=0 WHERE id NOT IN (".join(',', $all_reputated_user_ids).')');
 	}
+
+function sq($x) { return $x*$x; }
+function sqp($x, $diff) { return $x*$x + $diff; }
+function sign($x) { return $x > 0 ? 1 : ($x < 0 ? -1 : 0); }

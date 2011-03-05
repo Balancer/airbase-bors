@@ -4,7 +4,7 @@ class balancer_users_images_repMap extends base_image_svg
 {
 	function show_image()
 	{
-		require_once 'Image/Canvas.php';
+//		require_once 'Image/Canvas.php';
 
 		$dbh = new driver_mysql('punbb');
 		extract($dbh->select('users', '
@@ -31,21 +31,26 @@ class balancer_users_images_repMap extends base_image_svg
 
 		$width = 1024;
 		$height = $width*$dy/$dx;
-		
+
 		$scale = ($width - 100) / $dx;
 
 		// change the output format with the first parameter of factory()
-		$Canvas =& Image_Canvas::factory('svg', array('width' => $width, 'height' => round($height), 'encoding' => 'utf-8'));
+		$Canvas =& Image_Canvas::factory('svg', array(
+			'width' => $width,
+			'height' => round($height),
+			'encoding' => 'utf-8'
+		));
 
 		$Canvas->setLineColor('black');
 //		$Canvas->ellipse(array('x' => 199, 'y' => 149, 'rx' => 50, 'ry' => 50));
 		$Canvas->rectangle(array('x0' => $offset/2, 'y0' => $offset/2, 'x1' => $width-$offset/2, 'y1' => $height-$offset/2));
 
-//		echo ($dx*$scale)."\n";
+		$Canvas->setLineColor('black');
+		$Canvas->line(array('x0' => 0, 'y0' => $min_y, 'x1' => 0, 'y1' => $max_y));
+		$Canvas->addText(array('x' => $min_x+10, 'y' => $min_y+10, 'text' => 'Test', 'color' => '#000000'));
+
 		foreach($dbh->select_array('users', '*', array('rep_x<>0', 'order'=>'last_post DESC', 'limit' => 150)) as $r)
 		{
-//			print_d($x);
-//			echo (($x['rep_x']-$min_x)*$scale)."<br/>\n";
 			$x = ($r['rep_x']-$min_x)*$scale+$offset;
 			$y = ($r['rep_y']-$min_y)*$scale+$offset;
 
@@ -60,37 +65,9 @@ class balancer_users_images_repMap extends base_image_svg
 			));
 			$Canvas->ellipse(array('x' => $x, 'y' => $y, 'rx' => 3, 'ry' => 3));
 			$Canvas->setFont(array('name' => 'Verdana', 'size' => 14));
-//			$Canvas->setLineColor('yellow');
 			$Canvas->addText(array('x' => $x, 'y' => $y, 'text' => $r['username'], 'color'=>sprintf('#%02x%02x%02x', $cr, $cg, $cb)));
 		}
-/*
 
-		$Canvas->setGradientFill(array('direction' => 'horizontal', 'start' => 'red', 'end' => 'blue'));
-		$Canvas->setLineColor('black');
-
-		$Canvas->setFont(array('name' => 'Arial', 'size' => 12));
-		$Canvas->addText(array('x' => 0, 'y' => 0, 'text' => 'Demonstration of what Image_Canvas do!'));
-
-		$Canvas->setFont(array('name' => 'Times New Roman', 'size' => 12));
-		$Canvas->addText(array('x' => 399, 'y' => 20, 'text' => 'This does not demonstrate what is does!', 'alignment' => array('horizontal' => 'right')));
-
-		$Canvas->setFont(array('name' => 'Courier New', 'size' => 7, 'angle' => 270));
-		$Canvas->addText(array('x' => 350, 'y' => 50, 'text' => 'True, but it\'s all independent of the format!', 'alignment' => array('horizontal' => 'right')));
-
-		$Canvas->setFont(array('name' => 'Garamond', 'size' => 10));
-		$Canvas->addText(array('x' => 199, 'y' => 295, 'text' => '[Changing format is done by changing 3 letters in the source]', 'alignment' => 
-		array('horizontal' => 'center', 'vertical' => 'bottom')));
-
-		$Canvas->addVertex(array('x' => 50, 'y' => 200));
-		$Canvas->addVertex(array('x' => 100, 'y' => 200));
-		$Canvas->addVertex(array('x' => 100, 'y' => 250));
-		$Canvas->setFillColor('red@0.2');
-		$Canvas->polygon(array('connect' => true));
-
-//		$Canvas->image(array('x' => 398, 'y' => 298, 'filename' => './pear-icon.png', 'alignment' => array('horizontal' => 'right', 'vertical' => 'bottom')));
-*/
-		$Canvas->show();		
+		$Canvas->show();
 	}
-
-//	function cache_static() { return rand(3600, 7200); }
 }

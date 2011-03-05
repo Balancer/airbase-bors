@@ -70,7 +70,55 @@
 </dd>
 </dl>
 {/if}
+{*
+<table class="nul w100p"><tr><td width="50%">
+{if $scores_positive}
+<table class="btab w100p">
+<caption>Его выше всего ценят</caption>
+<tr><th rowspan="2">Пользователь</th><th colspan="3">оценок за месяц</th></tr>
+<tr><th>всего</th><th>+</th><th>-</th></tr>
+{foreach from=$scores_positive item="s"}
+<tr><td class="green">{$s->owner()->titled_link()}</td><td>{$s->total()}</td><td class="green">{$s->pos()}</td><td class="red">{$s->neg()}</td></tr>
+{/foreach}
+</table>
+{/if}
+</td><td width="50%">
+{if $scores_negative}
+<table class="btab w100p">
+<caption>Его ниже всего ценят</caption>
+<tr><th rowspan="2">Пользователь</th><th colspan="3">оценок за месяц</th></tr>
+<tr><th>всего</th><th>+</th><th>-</th></tr>
+{foreach from=$scores_negative item="s"}
+<tr><td class="green">{$s->owner()->titled_link()}</td><td>{$s->total()}</td><td class="green">{$s->pos()}</td><td class="red">{$s->neg()}</td></tr>
+{/foreach}
+</table>
+{/if}
+</td></tr></table>
 
+<table class="nul w100p"><tr><td width="50%">
+{if $votes_positive}
+<table class="btab w100p">
+<caption>Он выше всего ценит</caption>
+<tr><th rowspan="2">Пользователь</th><th colspan="3">оценок за месяц</th></tr>
+<tr><th>всего</th><th>+</th><th>-</th></tr>
+{foreach from=$votes_positive item="s"}
+<tr><td class="green">{$s->target_user()->titled_link()}</td><td>{$s->total()}</td><td class="green">{$s->pos()}</td><td class="red">{$s->neg()}</td></tr>
+{/foreach}
+</table>
+{/if}
+</td><td width="50%">
+{if $votes_negative}
+<table class="btab w100p">
+<caption>Он ниже всего ценит</caption>
+<tr><th rowspan="2">Пользователь</th><th colspan="3">оценок за месяц</th></tr>
+<tr><th>всего</th><th>+</th><th>-</th></tr>
+{foreach from=$votes_negative item="s"}
+<tr><td class="green">{$s->target_user()->titled_link()}</td><td>{$s->total()}</td><td class="green">{$s->pos()}</td><td class="red">{$s->neg()}</td></tr>
+{/foreach}
+</table>
+{/if}
+</td></tr></table>
+*}
 
 {if $messages_today}
 <table class="btab w100p">

@@ -13,6 +13,7 @@ class forum_blog extends base_page_db
 	{
 		return array(
 			'id' => 'post_id',
+			'title_raw' => 'title',
 			'keywords_string',
 			'owner_id',
 			'topic_id',
@@ -67,7 +68,8 @@ class forum_blog extends base_page_db
 	}
 
 	function owner() { return object_load('balancer_board_user', $this->owner_id()); }
-	function title() { return object_property($this->topic(), 'title'); }
+	function title() { return $this->get('title_raw') ? $this->title_raw() : object_property($this->topic(), 'title'); }
+	function set_title($title, $up) { return $this->set_title_raw($title, $up); }
 
 	function url() { return object_property($this->post(), 'url'); }
 
