@@ -38,6 +38,7 @@ class user_main extends base_page
 	function page_data()
 	{
 		$db = new driver_mysql('punbb');
+		$db_bors = new driver_mysql('BORS');
 
 		$by_forums = $db->select_array('posts', 'forum_id, count(*) AS `count`', array(
 			'posts.poster_id=' => $this->id(), 
@@ -113,6 +114,48 @@ class user_main extends base_page
 		$user = $this->user();
 		$user->set_reg_geo_ip(geoip_place($user->registration_ip()), false);
 
+		$scores_positive = bors_find_all('bors_votes_thumb', array(
+			'*set' => 'SUM(score) AS total,SUM(IF(score>0,score,0)) AS pos,SUM(IF(score<0,score,0)) AS neg',
+			'target_user_id' => $this->id(),
+			'create_time>' => time() - 86400*30,
+			'group' => 'user_id',
+			'order' => 'SUM(score) DESC',
+			'limit' => 10,
+		));
+
+		$scores_negative = bors_find_all('bors_votes_thumb', array(
+			'*set' => 'SUM(score) AS total,SUM(IF(score>0,score,0)) AS pos,SUM(IF(score<0,score,0)) AS neg',
+			'target_user_id' => $this->id(),
+			'create_time>' => time() - 86400*30,
+			'group' => 'user_id',
+			'order' => 'SUM(score)',
+			'limit' => 10,
+		));
+
+		$votes_positive = bors_find_all('bors_votes_thumb', array(
+			'*set' => 'SUM(score) AS total,SUM(IF(score>0,score,0)) AS pos,SUM(IF(score<0,score,0)) AS neg',
+			'user_id' => $this->id(),
+			'create_time>' => time() - 86400*30,
+			'group' => 'target_user_id',
+			'order' => 'SUM(score) DESC',
+			'limit' => 10,
+		));
+
+		$votes_negative = bors_find_all('bors_votes_thumb', array(
+			'*set' => 'SUM(score) AS total,SUM(IF(score>0,score,0)) AS pos,SUM(IF(score<0,score,0)) AS neg',
+			'user_id' => $this->id(),
+			'create_time>' => time() - 86400*30,
+			'group' => 'target_user_id',
+			'order' => 'SUM(score)',
+			'limit' => 10,
+		));
+
+
+
+		bors_objects_preload($scores_positive, 'user_id', 'balancer_board_user');
+		bors_objects_preload($scores_negative, 'user_id', 'balancer_board_user');
+		bors_objects_preload($votes_positive, 'target_user_id', 'balancer_board_user');
+		bors_objects_preload($votes_negative, 'target_user_id', 'balancer_board_user');
 
 		$data = array(
 			'best' => $best,
@@ -133,6 +176,15 @@ class user_main extends base_page
 			)),
 		);
 
-		return array_merge(parent::page_data(), $data, compact('is_watcher', 'interlocutors', 'interlocutor_stats', 'last_ips'));
+		return array_merge(parent::page_data(), $data, compact(
+			'is_watcher',
+			'interlocutors',
+			'interlocutor_stats',
+			'last_ips',
+			'scores_positive',
+			'scores_negative',
+			'votes_positive',
+			'votes_negative'
+		));
 	}
 }

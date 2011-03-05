@@ -38,8 +38,29 @@ class balancer_ajax_thumb_vote extends base_object
 		if($me->tomonth_posted() < 10)
 			return "<small>У Вас слишком низкая активность на форумах</small>";
 
-		if(intval($score) < 0 && $target->modify_time() < time() - 86400*14)
-			return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";
+		if(intval($score) < 0)
+		{
+			if($target->modify_time() < time() - 86400*14)
+				return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";
+
+			$user_limit = $me->messages_daily_limit();
+			if($user_limit > 0)
+			{
+				$today_user_negatives = objects_count('bors_votes_thumb', array(
+					'score<' => 0,
+					'user_id' => $me_id,
+					'create_time>' => time() - 86400,
+				));
+
+				debug_hidden_log('_test_limits', "test user votes limits. user_limit=$user_limit, today_user_negatives=$today_user_negatives", 1);
+
+				if($user_limit < $today_user_negatives)
+				{
+					debug_hidden_log('_test_limits', 'Can not', 1);
+					return "<small>Вы исчерпали сегодняшний лимит отрицательных оценок [$user_limit]</small>";
+				}
+			}
+		}
 
 		if($topic = $target->get('topic'))
 		{

@@ -91,9 +91,9 @@ class balancer_board_topic extends forum_topic
 	function topic_updated($post, $notifyed_user = NULL)
 	{
 		$user = $post->owner();
-		$text = "{$user->title()} пишет:\n"
+		$text = "{$post->topic()->title()}:\n"
 			.trim(html_entity_decode(make_quote($user->title(), htmlspecialchars($post->source()), false), ENT_COMPAT, 'UTF-8'))
-			."\n\n// #{$post->id()} {$post->url_for_igo()} в теме «{$post->topic()->title()}»";
+			."\n\n// #{$post->id()} {$post->url_for_igo()} «{$post->topic()->title()}», подписка";
 
 		bors()->do_task('balancer_balabot_notify_post', array(
 			'post_id' => $post->id(),
