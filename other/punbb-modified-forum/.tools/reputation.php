@@ -29,6 +29,10 @@
 		$barb = object_load('bors_user', 5420);
 		$niki = object_load('bors_user', 14);
 
+//		$killo->set_rep_x(3, true);
+//		$killo->set_rep_y(-10, true);
+//		$killo->store();
+
 		echo "killo: {$killo->rep_x()}, {$killo->rep_y()} [{$killo->reputation()}, {$killo->pure_reputation()}]\n";
 		echo "aggy : {$aggy->rep_x()}, {$aggy->rep_y()}\n";
 		echo "bal  : {$bal->rep_x()}, {$bal->rep_y()}\n";
@@ -87,8 +91,6 @@
 			foreach($rnames as $i)
 				${"srep_$i"} = ${"o_rep_$i"};
 
-			$count = 1;
-
 			// Считаем изменение координат текущего юзера.
 			// Цикл по всем, кто по нему высказывался:
 			$voters = $dbu1->get_array("SELECT voter_id as id, SUM(score) as sum FROM `reputation_votes` WHERE user_id = $user_id AND time GROUP BY voter_id");
@@ -115,7 +117,7 @@
 				$l3 = sqrt($drr*$drr + $drg*$drg + $drb*$drb) + .01;
 
 				$scores = atan($v['sum'])*2/pi();
-				$scores2 = $scores * $scores;
+				$scores2 = sqrt($scores * $scores);
 				$need = 50 - ($scores+1)*20; // -1 -> 50, 0 -> 30, +1 ->10
 
 				$srep_x += ($scores2 * $drx * ($need/$l2 - 1))/$voters_count;
@@ -123,17 +125,6 @@
 				$srep_r += ($scores2 * $drr * ($need/$l3 - 1))/$voters_count;
 				$srep_g += ($scores2 * $drg * ($need/$l3 - 1))/$voters_count;
 				$srep_b += ($scores2 * $drb * ($need/$l3 - 1))/$voters_count;
-
-//				$srep_y -= ($scores * $scores * $dry * (1 - $need/$l2) + sign($drx)*1/($l2*$l2))/$voters_count/3;
-
-//				$srep_x += $o_rep_x - $scores * $scores * $drx * (1 - $need/$l2) + sign($drx)*10/($l2*$l2);
-//				$srep_y += $o_rep_y - $scores * $scores * $dry * (1 - $need/$l2) + sign($drx)*10/($l2*$l2);
-
-//				$srep_r -= $need*$scores*$drr/$l3 - .1/($l3*$l3);
-//				$srep_g -= $need*$scores*$drg/$l3 - .1/($l3*$l3);
-//				$srep_b -= $need*$scores*$drb/$l3 - .1/($l3*$l3);
-
-				$count++;
 
 				$reput = bors_user_reputation_weight($reput);
 				$pure_reput = bors_user_reputation_weight($pure_reput);
@@ -163,18 +154,12 @@
 
 			foreach(explode(' ', 'srep_r srep_g srep_b srep_x srep_y') as $var)
 			{
-//				$$var /= $count;
-
 				$$var -= $$var*$$var*$$var/1e6;
-//				$$var -= 10/sqp(100-$$var, 1);
-//				$$var -= 10/sqp($$var, 1);
 
 				if($$var > 100)
 					$$var = 100;
 				if($$var < -100)
 					$$var = -100;
-
-//				$$var += rand(0,2)-1;
 
 				$$var = str_replace(',', '.', $$var);
 			}
