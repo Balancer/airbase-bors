@@ -89,7 +89,7 @@ class balancer_balabot_parser extends bors_object
 
 	function send($message)
 	{
-		if(preg_match('/vedmed1969@livejournal.com/', $this->from))
+		if(preg_match('/vedmed1969@livejournal.com|mixer@conference.jabber.ru/', $this->from))
 			return;
 
 		$client= new GearmanClient();
