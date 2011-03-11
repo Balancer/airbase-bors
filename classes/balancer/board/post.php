@@ -43,8 +43,11 @@ class balancer_board_post extends forum_post
 	{
 		return array_merge(parent::auto_objects(), array(
 			'avatar_raw' => 'balancer_board_avatar(avatar_raw_id)',
+			'container' => 'balancer_board_topic(topic_id)',
 		));
 	}
+
+	function folder() { return $this->container()->folder(); }
 
 	function avatar()
 	{

@@ -2,6 +2,8 @@
 
 class forum_category extends base_page_db
 {
+	function new_class_name() { return 'balancer_board_category'; }
+
 	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'categories'; }
 	function main_table_fields()

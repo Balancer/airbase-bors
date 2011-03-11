@@ -69,7 +69,7 @@ class balancer_ajax_thumb_vote extends base_object
 //			$target->set_modify_time(time(), true);
 		}
 
-		$vote = object_new_instance('bors_votes_thumb', array(
+		$vote = bors_new('bors_votes_thumb', array(
 			'user_id' => $me_id,
 			'target_class_name' => $target->class_name(),
 			'target_object_id' => $target->id(),
@@ -96,13 +96,15 @@ class balancer_ajax_thumb_vote extends base_object
 			}
 		}
 
-		if($target->score() >= 5)
+		if($target->score() >= 7)
 			balancer_balabot::on_thumb_up($target);
 
 		$user = $target->owner();
 		$text = "Вам выставлена оценка $score за сообщение #{$target->id()} {$target->url_for_igo()} в теме «{$target->topic()->title()}»";
 
 		$user->notify_text($text);
+
+		bal_event::add('balancer_board_actor_vote', $vote, $target, $user);
 
 		return $return;
 	}

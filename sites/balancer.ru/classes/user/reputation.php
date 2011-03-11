@@ -131,12 +131,20 @@ class user_reputation extends base_page
 		$md = md5($_POST['comment'].$uid);
 		if($me->last_message_md() == $md)
 			return bors_message(ec('Вы уже отправили это сообщение'));
-		
+
 		$me->set_last_message_md($md, true);
-	
+
 		if($dbf->get("SELECT num_posts FROM users WHERE id=$me_id") < 50)
 			return bors_message(ec("Репутацию выставлять могут только участники, имеющие более 50 сообщений на форуме."));
 
+		$t = bors_load_uri($_POST['uri']);
+		$f = object_property($t, 'folder');
+		$c = object_property($t, 'category');
+
+		$target_user = class_load('balancer_board_user', $uid);
+
+		if(!config('is_debug'))
+		{
 		$dbu->insert('reputation_votes', array(
 			'user_id'		=> $uid,
 			'time'			=> time(),
@@ -144,7 +152,32 @@ class user_reputation extends base_page
 			'voter_id'		=> $me_id,
 			'uri'			=> $_POST['uri'],
 			'comment'		=> $_POST['comment'],
+			'target_class_name' => object_property($t, 'new_class_name'),
+			'target_object_id' => object_property($t, 'id'),
+			'folder_class_name' => object_property($f, 'new_class_name'),
+			'folder_object_id' => object_property($f, 'id'),
+			'category_class_name' => object_property($c, 'new_class_name'),
+			'category_id' => object_property($c, 'id'),
 		));
+		}
+		else
+		{
+		$rep = bors_new('airbase_user_reputation', array(
+			'user_id'	=> $uid,
+			'voter_id'	=> $me_id,
+			'score'		=> $_POST['score'] > 0 ? 1 : -1,
+			'comment'	=> $_POST['comment'],
+			'refer'		=> $_POST['uri'],
+			'target_class_name'	=> object_property($t, 'new_class_name'),
+			'target_object_id'	=> object_property($t, 'id'),
+			'folder_class_name'	=> object_property($f, 'new_class_name'),
+			'folder_object_id'	=> object_property($f, 'id'),
+			'category_class_name'	=> object_property($c, 'new_class_name'),
+			'category_id'			=> object_property($c, 'id'),
+		));
+
+		bal_event::add('balancer_board_actor_reputation', $rep, $t, $target_user, $me);
+		}
 
 		$grw = array(
 				1 => 7, // admin
@@ -160,31 +193,30 @@ class user_reputation extends base_page
 		{
 			$reput = bors_user_reputation_weight($dbf->get("SELECT reputation FROM users WHERE id={$v['id']}"));
 			$group = $dbf->get("SELECT group_id FROM users WHERE id={$v['id']}");
-				
+
 			$weight = @$grw[$group];
 			if(!$weight)
 				$weight = 1;
 
 			if($v['id'] == 10000)
 				$weight = 9;
-					
+
 			if($dbf->get("SELECT num_posts FROM users WHERE id={$v['id']}") < 50)
 				$weight = 0;
-				
+
 			$sum = atan($v['sum'])*2/pi() * $weight * $reput;
 			$total += $sum;
 		}
 
 		$dbf->query("UPDATE users SET reputation = '".str_replace(",",".",$total)."' WHERE id = $uid");
 
-		$target_user = class_load('balancer_board_user', $uid);
 
 		foreach (glob($target_user->user_dir().'/reputation*.html') as $filename)
 			unlink($filename);
 
 		$target_user->cache_clean_self();
 //		class_load('cache_group', "user-{$uid}-reputation")->clean();
-		
+
 		include_once("inc/navigation.php");
 		return go($this->url($this->total_pages(), false));
 	}

@@ -48,6 +48,7 @@ class forum_user extends base_object_db
 			'warnings',
 			'warnings_total',
 			'reputation',
+			'per_category_reputations' => 'per_forum_reputations',
 			'pure_reputation',
 			'karma',
 			'salt',
@@ -199,10 +200,10 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 	{
 		if($this->_title)
 			return $this->_title;
-			
+
 		if($this->_title = $this->user_title())
 			return $this->_title;
-				
+
 		if($this->_title = $this->group()->user_title())
 			return $this->_title;
 
@@ -217,7 +218,6 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		if($this->__rank !== NULL)
 			return $this->__rank;
 
-		
 		global $bors_forum_user_ranks;
 		if($bors_forum_user_ranks === NULL)
 		{
@@ -225,11 +225,11 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 			$bors_forum_user_ranks = $db->select_array('ranks', 'rank, min_posts', array('order' => '-min_posts'));
 			$db->close();
 		}
-		
+
 		foreach($bors_forum_user_ranks as $x)
 			if($this->num_posts() >= $x['min_posts'])
 				return $this->__rank = $x['rank'];
-		
+
 		return $this->__rank = 'Unknown';
 	}
 
@@ -248,8 +248,8 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 			);
 
 			$this->set_signature_html($body, true);
-		}				
-				
+		}
+
 		return $this->data['signature_html'];
 	}
 
@@ -270,7 +270,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		$res = array(
 			object_load('airbase_user_warnings', $this->id()),
 		);
-			
+
 		return $res;
 	}
 
@@ -415,12 +415,10 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		foreach(array(
 			'user_id' => $this->id(),
 			'cookie_hash' => $this->saltu(),
-			'is_admin' => $this->is_admin()
+			'isa' => $this->is_admin()
 		) as $k => $v)
 		{
 			SetCookie($k, $v, $expired, "/", '.'.@$_SERVER['HTTP_HOST']);
-//			SetCookie($k, $v, $expired, "/", $_SERVER['HTTP_HOST']);
-//			SetCookie($k, $v, $expired, "/");
 		}
 	}
 
@@ -464,7 +462,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 
 	static function do_logout()
 	{
-		foreach(array('user_id', 'cookie_hash', 'is_admin') as $k)
+		foreach(array('user_id', 'cookie_hash', 'isa') as $k)
 		{
 			SetCookie($k, NULL, 0, "/");
 			SetCookie($k, NULL, 0, "/", $_SERVER['HTTP_HOST']);
@@ -599,4 +597,25 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
                 $this->set_utmx($_COOKIE['__utmx'], true);
         }
     }
+
+	function category_reputation($category_id)
+	{
+		$pcr = $this->per_category_reputations();
+		if($pcr)
+		{
+			$pcr = unserialize($pcr);
+			if(array_key_exists($category_id, $pcr))
+				return $pcr[$category_id];
+		}
+
+		$pcr = array();
+		foreach(bors_find_all('airbase_user_reputation', array(
+			'*set' => 'SUM(score) AS summ',
+			'user_id' => $this->id(),
+			'group' => 'voter_id,category_id',
+		)) as $r)
+		{
+			@$pcr[$r->category_id()] += $r->summ() * $r->voter()->weight();
+		}
+	}
 }

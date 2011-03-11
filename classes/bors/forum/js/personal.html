@@ -32,14 +32,14 @@
 <ul>
 {literal}
 <script>
-cn = readCookie('class_name', '0')
-if(cn == 'forum_topic' || cn == 'balancer_board_topic')
+cid = readCookie('cid', 0)
+if(cid == 2 || cid == 89)
 {
-	tid = readCookie('object_id', '0')
-	page = readCookie('page', '1')
+	tid = readCookie('id', '0')
+	page = readCookie('p', '1')
 }
 else
-	tid = readCookie('last_topic_id', '0')
+	tid = readCookie('ltid', '0')
 
 if(tid > 0)
 {

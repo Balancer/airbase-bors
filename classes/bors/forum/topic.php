@@ -8,6 +8,8 @@ class forum_topic extends base_page_db
 //	function storage_engine() { return 'bors_storage_mysql'; }
 	function can_be_empty() { return false; }
 
+	function new_class_name() { return 'balancer_board_topic'; }
+
 	function uri_name() { return 't'; }
 	function nav_name() { return truncate($this->title(), 60); }
 
@@ -104,6 +106,9 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		return $this->__setc($kws ? '"'.join('","', $this->keywords()) .'"' : '');
 	}
 
+	function folder()   { return $this->forum(); }
+	function category() { return $this->forum()->category(); }
+
 	private $forum = false;
 	function forum()
 	{
@@ -180,6 +185,10 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if(!$this->is_repaged() && rand(0,5) == 0)
 			$this->repaging_posts();
 
+		$body_cache = new Cache();
+		if($body_cache->get('bors_page_body', $this->internal_uri_ascii().':'.$this->page().':'.$this->modify_time()))
+			return $this->attr['body'] = $body_cache->last().'<!-- cached -->';
+
 		$GLOBALS['cms']['cache_disabled'] = true;
 
 		require_once("engines/smarty/assign.php");
@@ -218,7 +227,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		bors_objects_preload($data['posts'], 'owner_id', 'balancer_board_user', 'owner');
 
 		$data['this'] = $this;
-		return template_assign_data("xfile:forum/topic.html", $data);
+		return $body_cache->set(template_assign_data("xfile:forum/topic.html", $data), 86400);
 	}
 
 	private $__all_posts_ids;
