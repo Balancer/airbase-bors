@@ -4,6 +4,13 @@ class balancer_board_topic extends forum_topic
 {
 	function extends_class() { return 'forum_topic'; }
 
+	function auto_objects()
+	{
+		return array_merge(parent::auto_objects(), array(
+			'folder' => 'balancer_board_forum(forum_id)',
+		));
+	}
+
 	static function _forum_ids($domain)
 	{
 		static $fcache = array();

@@ -1,3 +1,4 @@
+{if $items}
 {$this->pages_links_nul()}
 
 <table class="btab">
@@ -33,3 +34,6 @@
 </table>
 
 {$this->pages_links_nul()}
+{else}
+<div class="box red_box">Сообщения с этим тэгом не найдено</div>
+{/if}

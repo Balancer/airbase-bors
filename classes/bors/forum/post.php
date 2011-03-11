@@ -11,6 +11,8 @@ class forum_post extends base_page_db
 	function config_class() { return 'balancer_board_config'; }
 	function template() { return 'forum/page.html'; }
 
+	function new_class_name() { return 'balancer_board_post'; }
+
 	function main_db() { return config('punbb.database', 'punbb'); }
 	function main_table() { return 'posts'; }
 
@@ -637,6 +639,9 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			'blog' => 'balancer_board_blog(id)',
 		));
 	}
+
+	function category() { return $this->topic()->category(); }
+	function folder()   { return $this->topic()->folder(); }
 
 	function recalculate($topic = NULL)
 	{

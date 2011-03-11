@@ -12,7 +12,7 @@
 {/if}
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
-	<link rel="stylesheet" type="text/css" href="/_bors/css/balancer-164-min.css" />
+	<link rel="stylesheet" type="text/css" href="/_bors/css/balancer-987-min.css" />
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
@@ -40,12 +40,10 @@ pre { word-wrap: break-word; }
 
 <script type="text/javascript"><!--
 {if $this}
-createCookie('class_name', '{$this->class_name()}')
-createCookie('object_id', '{$this->id()}')
-createCookie('page', '{$this->page()}')
-{if $this->class_name() == 'forum_topic'}
-createCookie('last_topic_id', '{$this->id()}')
-{/if}
+createCookie('cid', '{$this->class_id()}', 60./86400)
+createCookie('id', '{$this->id()|intval}', 60./86400)
+createCookie('p', '{$this->page()}', 60./86400)
+{if $this->new_class_name() == 'balancer_board_topic'}createCookie('ltid', '{$this->id()}', 60./86400){/if}
 {/if}
 
 var me_id = readCookie('user_id', 0)

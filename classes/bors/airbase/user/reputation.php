@@ -3,10 +3,13 @@
 class airbase_user_reputation extends base_page_db
 {
 	function class_title_vp() { return ec('запись репутации'); }
+	function storage_engine() { return 'bors_storage_mysql'; }
 
-	function fields()
+	function db_name() { return 'USERS'; }
+	function table_name() { return 'reputation_votes'; }
+	function table_fields()
 	{
-		return array('USERS' => array('reputation_votes' => array(
+		return array(
 			'id',
 			'user_id',
 			'voter_id',
@@ -14,9 +17,15 @@ class airbase_user_reputation extends base_page_db
 			'create_time' => 'time',
 			'comment',
 			'refer' => 'uri',
+			'target_class_name',
+			'target_object_id',
+			'folder_class_name',
+			'folder_object_id',
+			'category_class_name',
+			'category_id',
 			'score',
 			'is_deleted',
-		)));
+		);
 	}
 
 	function owner() { return object_load('bors_user', $this->owner_id()); }
@@ -57,5 +66,36 @@ class airbase_user_reputation extends base_page_db
 			return $object->titled_url_in_container();
 
 		return $ref;
+	}
+
+	function target()
+	{
+		if($this->target_class_name()
+				&& ($object = bors_load($this->target_class_name(), $this->target_object_id())))
+			return $object;
+
+		$ref = $this->refer();
+		if(preg_match('/^\w+__\d+$/', $ref))
+			return bors_load_uri($ref);
+
+		if(preg_match('!post://(\d+)/?!', $ref, $m))
+			return bors_load('balancer_board_post', $m[1]);
+
+		if(preg_match('!topic://(\d+)/?!', $ref, $m))
+			return bors_load('balancer_board_topic', $m[1]);
+
+		$object = bors_load_uri($ref);
+		if(is_a($object, 'bors_system_go_internal'))
+			return $object->target();
+
+		return $object;
+	}
+
+	function score_html()
+	{
+		if($this->score() > 0)
+			return "<span color=\"green\">+".intval($this->score())."</span>";
+		else
+			return "<span color=\"red\">".$this->score()."</span>";
 	}
 }

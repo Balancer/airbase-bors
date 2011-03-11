@@ -2,7 +2,7 @@
 
 class balancer_board_keywords_tags extends base_page
 {
-	function can_be_empty() { return false; }
+	function can_be_empty() { return !bors()->client()->is_bot(); }
 	function loaded() { return count($this->all_items()) && $this->_items_this_page(); }
 
 	static function keywords_explode($keywords_string)
@@ -95,7 +95,6 @@ class balancer_board_keywords_tags extends base_page
 	{
 		template_noindex();
 		template_jquery();
-//		var_dump(bors_field_array_extract($this->all_items(), 'title'));
 		return parent::pre_show();
 	}
 
