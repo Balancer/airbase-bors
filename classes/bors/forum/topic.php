@@ -186,7 +186,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			$this->repaging_posts();
 
 		$body_cache = new Cache();
-		if($body_cache->get('bors_page_body', $this->internal_uri_ascii().':'.$this->page().':'.$this->modify_time()))
+		if($body_cache->get('bors_page_body', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time()))
 			return $this->attr['body'] = $body_cache->last().'<!-- cached -->';
 
 		$GLOBALS['cms']['cache_disabled'] = true;
