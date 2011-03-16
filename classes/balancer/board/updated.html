@@ -1,0 +1,97 @@
+{literal}<style>
+div.notify {
+	padding: 4px;
+	margin: 0 4px 8px 0;
+	border-radius: 4px;
+	box-shadow: 0 0 2px black; /* Параметры тени */
+	box-shadow: 0 0 4px rgba(0,0,0,0.5); /* Параметры тени */
+	-moz-box-shadow: 0 0 4px rgba(0,0,0,0.5); /* Для Firefox */
+	-webkit-box-shadow: 0 0 4px rgba(0,0,0,0.5); /* Для Safari и Chrome */
+}
+
+div.notify h3 {
+	font-size: 1.0em;
+}
+
+div.notify_reputation_up {
+	border-color: #8c8!important;
+	background-color: #cfc!important;
+}
+
+div.notify_reputation_down {
+	border-color: #c88!important;
+	background-color: #fcc!important;
+}
+
+div.notify_thumb_up {
+	border-color: #8c8!important;
+	background: #cfc url(http://balancer.ru/_bors/i/thumb_up.gif) 10px center no-repeat;
+	padding-left: 35px;
+}
+
+div.notify_thumb_down {
+	border-color: #c88!important;
+	background: #fcc url(http://balancer.ru/_bors/i/thumb_down.gif) 10px center no-repeat;
+	padding-left: 35px;
+}
+
+div.notify_topic {
+	border-color: #9bd;
+	padding: 0;
+}
+
+div.notify_topic div.notice_content {
+	padding: 4px;
+	background: white;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+div.notify_topic h3 {
+	background-color: #9bd;
+	color: white;
+	padding: 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+div.notify_topic h3 a {
+	color: #ffc;
+}
+
+h2.rbox {
+	background-color: #9bd;
+	color: white;
+	padding: 4px;
+	border-radius: 4px;
+	margin: 0 4px 8px 0;
+	box-shadow: 0 0 2px black; /* Параметры тени */
+	box-shadow: 0 0 4px rgba(0,0,0,0.5); /* Параметры тени */
+	-moz-box-shadow: 0 0 4px rgba(0,0,0,0.5); /* Для Firefox */
+	-webkit-box-shadow: 0 0 4px rgba(0,0,0,0.5); /* Для Safari и Chrome */
+}
+
+</style>{/literal}
+
+<br/>
+<h2 class="rbox">Последние события</h2>
+<div class="red_box">В процессе разработки</div>
+
+{$this->pages_links_nul()}
+
+{foreach from=$items item="e"}
+<div class="notify notify_{$e->color()}">
+<h3><span class="time">{$e->modify_time()|airbase_time}</span>: {$e->title()}</h3>
+<div class="notice_content">
+{if $e->handler_class_name() == 'balancer_board_actor_topic'}
+<div class="float_left" style="width: 60px; height: 80px; overflow: hidden; padding: 2px; text-align: center">
+{module class='balancer_board_modules_avatar' user=$e->object()->owner() geo='50x50'}
+</div>
+{/if}
+{$e->text()}
+<div class="clear">&nbsp;</div>
+</div>
+</div>
+{/foreach}
+
+{$this->pages_links_nul()}
