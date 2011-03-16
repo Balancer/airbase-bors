@@ -72,6 +72,7 @@ class balancer_ajax_thumb_vote extends base_object
 		$vote = bors_new('bors_votes_thumb', array(
 			'user_id' => $me_id,
 			'target_class_name' => $target->class_name(),
+			'target_class_id' => $target->class_id(),
 			'target_object_id' => $target->id(),
 			'target_user_id' => $target->owner_id(),
 			'score' => $score,
@@ -104,7 +105,7 @@ class balancer_ajax_thumb_vote extends base_object
 
 		$user->notify_text($text);
 
-		bal_event::add('balancer_board_actor_vote', $vote, $target, $user);
+		bal_event::add('balancer_board_actor_vote', $user, $vote);
 
 		return $return;
 	}

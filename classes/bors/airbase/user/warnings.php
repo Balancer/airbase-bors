@@ -56,7 +56,7 @@ class airbase_user_warnings extends base_page
 	function default_page() { return $this->total_pages(); }
 
 	function url($page = NULL)
-	{	
+	{
 		if(!$page || $this->total_pages() == 1)
 			return "http://balancer.ru/user/".$this->id()."/warnings.html"; 
 		else

@@ -32,6 +32,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 			return bors_message(ec('Пользователь уже получил предупреждение за это сообщение'));
 
 		$data['create_time'] = time();
+		$data['expire_time'] = time() + WARNING_DAYS*86400;
 		$data['score'] = airbase_user_warning_type::score($data['type_id']);
 		$data['moderator_id'] = bors()->user()->id();
 		$data['moderator_name'] = bors()->user()->title();

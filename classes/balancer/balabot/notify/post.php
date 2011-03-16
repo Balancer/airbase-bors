@@ -24,6 +24,8 @@ class balancer_balabot_notify_post extends bors_object
 
 		$post_owner = $post->owner();
 
+		bal_event::add('balancer_board_actor_topic', NULL, $post, $topic);
+
 		$users_subscriptions = bors_find_all('balancer_board_users_subscription', array('topic_id' => $topic->id()));
 		foreach($users_subscriptions as $us)
 		{
@@ -37,6 +39,9 @@ class balancer_balabot_notify_post extends bors_object
 
 			if($user->xmpp_notify_enabled())
 				$user->notify_text($text);
+
+			if($user_id != $post_owner->id())
+				bal_event::add('balancer_board_actor_topic', $user, $post, $topic, array('personal_only' => true));
 		}
 	}
 }
