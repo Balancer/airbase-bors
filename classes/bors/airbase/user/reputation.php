@@ -94,8 +94,8 @@ class airbase_user_reputation extends base_page_db
 	function score_html()
 	{
 		if($this->score() > 0)
-			return "<span color=\"green\">+".intval($this->score())."</span>";
+			return "<span style=\"color:green\">+".intval($this->score())."</span>";
 		else
-			return "<span color=\"red\">".$this->score()."</span>";
+			return "<span style=\"color:red\">".$this->score()."</span>";
 	}
 }

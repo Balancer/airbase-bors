@@ -10,3 +10,16 @@
 </ul>
 </dd>
 </dl>
+
+<dl class="box">
+<dt>Последние события</dt>
+<dd class="small">
+<ul>
+{foreach from=$events item="e"}
+<li><b>{$e->modify_time()|airbase_time}</b>: {$e->title()}</li>
+{foreachelse}
+<li>Для Вас не найдено ни одного активного персонального сообщения</li>
+{/foreach}
+</ul>
+</dd>
+</dl>

@@ -141,27 +141,8 @@ class user_reputation extends base_page
 		$f = object_property($t, 'folder');
 		$c = object_property($t, 'category');
 
-		$target_user = class_load('balancer_board_user', $uid);
+		$target_user = bors_load('balancer_board_user', $uid);
 
-		if(!config('is_debug'))
-		{
-		$dbu->insert('reputation_votes', array(
-			'user_id'		=> $uid,
-			'time'			=> time(),
-			'score'			=> $_POST['score'] > 0 ? 1 : -1,
-			'voter_id'		=> $me_id,
-			'uri'			=> $_POST['uri'],
-			'comment'		=> $_POST['comment'],
-			'target_class_name' => object_property($t, 'new_class_name'),
-			'target_object_id' => object_property($t, 'id'),
-			'folder_class_name' => object_property($f, 'new_class_name'),
-			'folder_object_id' => object_property($f, 'id'),
-			'category_class_name' => object_property($c, 'new_class_name'),
-			'category_id' => object_property($c, 'id'),
-		));
-		}
-		else
-		{
 		$rep = bors_new('airbase_user_reputation', array(
 			'user_id'	=> $uid,
 			'voter_id'	=> $me_id,
@@ -176,8 +157,7 @@ class user_reputation extends base_page
 			'category_id'			=> object_property($c, 'id'),
 		));
 
-		bal_event::add('balancer_board_actor_reputation', $rep, $t, $target_user, $me);
-		}
+		bal_event::add('balancer_board_actor_reputation', $target_user, $rep);
 
 		$grw = array(
 				1 => 7, // admin
