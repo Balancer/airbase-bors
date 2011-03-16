@@ -36,7 +36,8 @@ class forum_user extends base_object_db
 	{
 		return array(
 			'id',
-			'title' => 'username',
+			'login' => 'username',
+			'username',
 			'group_id',
 			'user_title' => 'title',
 			'use_avatar',
@@ -183,6 +184,7 @@ function use_avatar()
 
 	return $this->set_use_avatar($user_avatar, true);
 }
+
 /*
 function avatar_thumb($geo)
 {
@@ -193,7 +195,15 @@ function avatar_thumb($geo)
 	return preg_replace('!^(.+/)([^/]+)$!', '/cache$1');
 }
 */
-function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
+	function title()
+	{
+		if($title = $this->realname())
+			return $title;
+
+		return $this->username();
+	}
+
+	function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
 
 	var $_title = NULL;
 	function group_title()
@@ -290,6 +300,9 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 		if($ban = balancer_board_ban::find_by_name($this->title()))
 			return $this->is_banned = $ban;
 
+		if($ban = balancer_board_ban::find_by_name($this->login()))
+			return $this->is_banned = $ban;
+
 		return $this->is_banned = false;
 	}
 
@@ -301,6 +314,9 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 			return true;
 
 		if($ban = balancer_board_ban::find_by_name($this->title()))
+			return $ban;
+
+		if($ban = balancer_board_ban::find_by_name($this->login()))
 			return $ban;
 
 		if($this->warnings_in($forum_id) >= 5)
@@ -363,9 +379,9 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 
     function check_password($password, $handle_errors = true)
    	{
-		$sha_password = sha1(bors_lower($this->title()) . $password);
+		$sha_password = sha1(bors_lower($this->login()) . $password);
 		$user_sha_password = $this->saltp();
-	
+
 		if(!$handle_errors)
 			return ($password != '') && ($user_sha_password == $sha_password);
 
@@ -381,7 +397,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
             echo "<h3><span style=\"text-color: red;\">Ошибка пароля или логина пользователя {$this->title()}! ({$this->id()})</span></h3>Залогиниться, зарегистрироваться или сменить аккаунт можно <a href=\"http://forums.airbase.ru/\">форуме Авиабазы</a>.<br><span style=\"font-size: xx-small;\">Внимание! Вместо старой системы регистрации теперь будет использоваться новая, объединённая с регистрацией на форумах!";
    	        die();
        	}
-		
+
 		return true;
     }
 
@@ -440,7 +456,7 @@ function group() { return class_load('forum_group', $this->group_id() ? $this->g
 
 	static function do_login($user, $password, $handle_error = true)
    	{
-		$check_user = objects_first('forum_user', array('username' => $user));
+		$check_user = objects_first('forum_user', array('login' => $user));
 
 		if(!$check_user)
 			return ec("Неизвестный пользователь '").$user."'";
