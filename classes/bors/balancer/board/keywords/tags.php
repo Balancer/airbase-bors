@@ -2,8 +2,8 @@
 
 class balancer_board_keywords_tags extends base_page
 {
-	function can_be_empty() { return !bors()->client()->is_bot(); }
-	function loaded() { return count($this->all_items()) && $this->_items_this_page(); }
+//	function can_be_empty() { return !bors()->client()->is_bot(); }
+//	function loaded() { return count($this->items()); }
 
 	static function keywords_explode($keywords_string)
 	{
@@ -41,7 +41,7 @@ class balancer_board_keywords_tags extends base_page
 		$sub_keywords = array();
 		$base_keywords = array();
 
-		foreach($this->all_items() as $x)
+		foreach($this->items() as $x)
 		{
 			$subkw = self::keywords_explode($x->keywords_string());
 			foreach($subkw as $kw)
@@ -53,7 +53,7 @@ class balancer_board_keywords_tags extends base_page
 		arsort($sub_keywords);
 		arsort($base_keywords);
 
-		if(count($this->all_items()) <= 50)
+		if(count($this->items()) <= 50)
 			$filters = '';
 		else
 			$filters = ec("Фильтр: ").
@@ -77,20 +77,6 @@ class balancer_board_keywords_tags extends base_page
 			.($page > 1 ? $page.'.html' : '');
 	}
 
-	private function _items_this_page()
-	{
-		$page = max(1, $this->arg('page'))-1;
-		$offset = $page * $this->items_per_page();
-//		echo "array_slice(".count($this->all_items()).", ".$offset.",{$this->items_per_page()})<br/>";
-
-//		return array_slice($this->all_items(), $offset, $this->items_per_page());
-
-		return $this->__havec('_items_this_page_'.$page) ? $this->__lastc() : $this->__setc(array_slice($this->all_items(),
-				$offset,
-				$this->items_per_page()
-		));
-	}
-
 	function pre_show()
 	{
 		template_noindex();
@@ -103,65 +89,72 @@ class balancer_board_keywords_tags extends base_page
 //		return objects_first('common_keyword', '');
 	}
 
-	function local_data()
+	function body_data()
 	{
+//		print_dd($this->items());
+//		echo $this->page();
 		return array(
-			'items' => $this->_items_this_page(),
+			'items' => $this->items(),
 //			'keyword' => $this->keyword(),
 		);
 	}
 
 	function items_per_page() { return 25; }
-	function total_items() { return count($this->all_items()); }
 
-	private $_all_items = NULL;
-	function all_items()
+	function _selected_keywords()
 	{
-		if(!is_null($this->_all_items))
-			return $this->_all_items;
+		if($this->__havefc())
+			return $this->__lastc();
 
 		$keys = $this->keywords();
-		$keys_norm = array();
+		$keys_ids = array();
 		foreach($keys as $key)
-			if($key_norm = common_keyword::normalize(trim($key)))
-				$keys_norm[] = $key_norm;
+			if($key = common_keyword::loader($key))
+				$keys_ids[] = $key->id();
 
-		$items = array();
-		foreach(bors_find_all('common_keyword', array('keyword IN' => $keys_norm)) as $kw)
+		return $this->__setc(array_unique($keys_ids));
+	}
+
+	function total_items()
+	{
+		if($this->__havefc())
+			return $this->__lastc();
+
+		return $this->__setc(objects_count('common_keyword_bind', array(
+			'keyword_id IN' => $this->_selected_keywords(),
+			'target_object_id=target_container_object_id',
+			'group' => 'target_class_name,target_object_id',
+			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),
+		)));
+	}
+
+
+	function items()
+	{
+		if($this->__havefc())
+			return $this->__lastc();
+
+		$targets = array();
+
+		foreach(bors_find_all('common_keyword_bind', array(
+			'keyword_id IN' => $this->_selected_keywords(),
+			'target_object_id=target_container_object_id',
+			'group' => 'target_class_name,target_object_id',
+			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),
+			'order' => '-target_create_time',
+			'page' => $this->page(),
+			'per_page' => $this->items_per_page(),
+		)) as $bind)
 		{
-			if($binds = bors_find_all('common_keyword_bind', array(
-					'keyword_id' => $kw->id(),
-					'target_container_class_id' => 2,
-				)))
-			{
-				$objects_map = array();
-				foreach($binds as $b)
-					$objects_map[$b->target_container_class_id()][] = $b->target_container_object_id();
-
-				$list = array();
-				foreach($objects_map as $class_id => $objects_ids)
-				{
-					$class_name = class_id_to_name($class_id);
-					foreach(bors_find_all($class_name, array(
-							'id IN' => $objects_ids,
-							'order' => '-modify_time',
-						)) as $x)
-						$list[$x->internal_uri()] = $x;
-				}
-
-				$items[] = $list;
-			}
+			$targets[$bind->target_class_name()][] = $bind->target_object_id();
 		}
 
-		if(count($items) > 1)
-			$items = call_user_func_array('array_intersect', $items);
-		elseif(count($keys) > 1)
-			$items = array();
-		elseif($items)
-			$items = $items[0];
-		else
-			$items = array();
+		$items = array();
+		foreach($targets as $class_name => $ids)
+			$items = array_merge($items, objects_array($class_name, array('id IN' => $ids)));
 
-		return $this->_all_items = $items;
+		uasort($items, create_function('$a,$b', 'return $a->create_time() < $b->create_time();'));
+
+		return $this->__setc($items);
 	}
 }

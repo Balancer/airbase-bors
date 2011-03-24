@@ -18,7 +18,7 @@ class balancer_blogs_tags_main extends base_page
 		));
 
 		$tags = objects_array('balancer_blogs_tag', array(
-				'targets_count>' => 2,
+				'targets_count>' => 1,
 				'order' => 'keyword',
 				'id NOT IN' => array_keys($top),
 //				'limit' => '10,-1'

@@ -1,13 +1,26 @@
+<dl class="box">
+<dd>
 <h2>
 {foreach from=$keywords_top item="x"}
-{$x->titled_url()}&nbsp;({$x->targets_count()})
+{$x->titled_url()}&nbsp;({$x->target_containers_count()})
 {/foreach}
 </h2>
 
 {foreach from=$keywords item="x"}
 {if $x->style()}
-<span style="{$x->style()}">{$x->titled_url()}</span>,
+<span style="{$x->style()}">{$x->titled_url()},</span>
 {else}
 {$x->titled_url()},
 {/if}
 {/foreach}
+</dd>
+</dl>
+
+<dl class="box">
+<dt>Смотри также</dt>
+<dd>
+<ul>
+<li><a href="http://balancer.ru/support/2011/03/t69616--tegi-klyuchevye-slova-metki-tem-forumov.1943.html">Обсуждение этой страницы на форуме</a></li>
+</ul>
+</dd>
+</dl>

@@ -161,6 +161,7 @@ class balancer_blogs_tags_show extends base_page
 		return $this->__setc(objects_count('common_keyword_bind', array(
 			'keyword_id IN' => $this->_selected_keywords(),
 			'target_class_name IN' => array('balancer_board_blog', 'forum_blog', 'balancer_board_topic', 'forum_topic'),
+			'target_object_id<>target_container_object_id',
 			'group' => 'target_class_name,target_object_id',
 			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),
 		)));
@@ -177,6 +178,7 @@ class balancer_blogs_tags_show extends base_page
 		$bindings = objects_array('common_keyword_bind', array(
 			'keyword_id IN' => $this->_selected_keywords(),
 			'target_class_name IN' => array('balancer_board_blog', 'forum_blog', 'balancer_board_topic', 'forum_topic'),
+			'target_object_id<>target_container_object_id',
 			'group' => 'target_class_name,target_object_id',
 			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),
 			'order' => 'target_create_time',
