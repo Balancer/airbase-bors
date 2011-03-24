@@ -197,7 +197,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 			$subforums[] = class_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
 		return $subforums;
 	}
-		
+
 	function all_subforums(&$processed = array())
 	{
 		$forums = array();
@@ -284,6 +284,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	}
 
 	function url() { return $this->category()->category_base_full().'viewforum.php?id='.$this->id(); }
+//	function url() { return 'http://balancer.ru/forum/punbb/viewforum.php?id='.$this->id(); }
 	function cache_static_can_be_dropped() { return false; }
 
 	function cache_groups_parent() { return parent::cache_groups_parent().
@@ -293,7 +294,8 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	{
 		return array(
 			'parent' => 'balancer_board_forum(parent_id)',
-			'parent_forum' => 'forum_forum(parent_forum_id)',
+			'parent_forum' => 'balancer_board_forum(parent_forum_id)',
+			'last_post' => 'balancer_board_post(last_post_id)',
 		);
 	}
 

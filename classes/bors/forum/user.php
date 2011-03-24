@@ -38,6 +38,7 @@ class forum_user extends base_object_db
 			'id',
 			'login' => 'username',
 			'username',
+			'user_nick',
 			'group_id',
 			'user_title' => 'title',
 			'use_avatar',
@@ -51,7 +52,7 @@ class forum_user extends base_object_db
 			'reputation',
 			'per_category_reputations' => 'per_forum_reputations',
 			'pure_reputation',
-			'karma',
+			'karma', 'karma_rate',
 			'salt',
 			'saltp' => 'password',
 			'saltu' => 'user_cookie_hash',
@@ -195,12 +196,13 @@ function avatar_thumb($geo)
 	return preg_replace('!^(.+/)([^/]+)$!', '/cache$1');
 }
 */
+
 	function title()
 	{
-		if($title = $this->realname())
+		if($title = $this->user_nick())
 			return $title;
 
-		return $this->username();
+		return $this->set_user_nick($this->username(), true);
 	}
 
 	function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }

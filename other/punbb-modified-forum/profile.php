@@ -753,7 +753,7 @@ else if (isset($_POST['form_sent']))
 
 		case 'personal':
 		{
-			$form = extract_elements(array('realname', 'url', 'location'));
+			$form = extract_elements(array('realname', 'user_nick', 'url', 'location'));
 
 			if ($pun_user['g_id'] == PUN_ADMIN)
 				$form['title'] = trim($_POST['title']);
@@ -922,7 +922,7 @@ else if (isset($_POST['form_sent']))
 }
 
 
-$result = $db->query('SELECT u.username, u.email, u.title, u.realname, u.url, u.jabber, u.icq, u.msn, u.aim, u.yahoo, u.location, u.use_avatar, u.avatar_height, u.avatar_width, u.signature, u.disp_topics, u.disp_posts, u.email_setting, u.save_pass, u.notify_with_post, u.show_smilies, u.show_img, u.show_img_sig, u.show_avatars, u.show_sig, u.timezone, u.language, u.style, u.num_posts, u.last_post, u.last_visit, u.registered, u.registration_ip, u.admin_note, g.g_id, g.g_user_title FROM '.$db->prefix.'users AS u LEFT JOIN '.$db->prefix.'groups AS g ON g.g_id=u.group_id WHERE u.id='.$id) or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());
+$result = $db->query('SELECT u.username, u.email, u.title, u.realname, u.user_nick, u.url, u.jabber, u.icq, u.msn, u.aim, u.yahoo, u.location, u.use_avatar, u.avatar_height, u.avatar_width, u.signature, u.disp_topics, u.disp_posts, u.email_setting, u.save_pass, u.notify_with_post, u.show_smilies, u.show_img, u.show_img_sig, u.show_avatars, u.show_sig, u.timezone, u.language, u.style, u.num_posts, u.last_post, u.last_visit, u.registered, u.registration_ip, u.admin_note, g.g_id, g.g_user_title FROM '.$db->prefix.'users AS u LEFT JOIN '.$db->prefix.'groups AS g ON g.g_id=u.group_id WHERE u.id='.$id) or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());
 if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
 
@@ -1001,6 +1001,8 @@ if ($pun_user['id'] != $id &&
 							<dd><?php echo ($pun_config['o_censoring'] == '1') ? censor_words($user_title_field) : $user_title_field; ?></dd>
 							<dt><?php echo $lang_profile['Realname'] ?>: </dt>
 							<dd><?php echo ($user['realname'] !='') ? pun_htmlspecialchars(($pun_config['o_censoring'] == '1') ? censor_words($user['realname']) : $user['realname']) : $lang_profile['Unknown']; ?></dd>
+							<dt><?php echo 'Ник (отображаемое имя)' ?>: </dt>
+							<dd><?php echo ($user['user_nick'] !='') ? pun_htmlspecialchars(($pun_config['o_censoring'] == '1') ? censor_words($user['user_nick']) : $user['user_nick']) : $lang_profile['Unknown']; ?></dd>
 							<dt><?php echo $lang_profile['Location'] ?>: </dt>
 							<dd><?php echo ($user['location'] !='') ? pun_htmlspecialchars(($pun_config['o_censoring'] == '1') ? censor_words($user['location']) : $user['location']) : $lang_profile['Unknown']; ?></dd>
 							<dt><?php echo $lang_profile['Website'] ?>: </dt>
@@ -1255,6 +1257,7 @@ else
 						<div class="infldset">
 							<input type="hidden" name="form_sent" value="1" />
 							<label><?php echo $lang_profile['Realname'] ?><br /><input type="text" name="form[realname]" value="<?php echo pun_htmlspecialchars($user['realname']);/*"*/?>" size="40" maxlength="40" /><br /></label>
+							<label><?php echo 'Ник (отображаемое имя)' ?><br /><input type="text" name="form[user_nick]" value="<?php echo pun_htmlspecialchars($user['user_nick']);/*"*/?>" size="40" maxlength="40" /><br /></label>
 <?php if (isset($title_field)): ?>					<?php echo $title_field ?>
 <?php endif; ?>							<label><?php echo $lang_profile['Location'] ?><br /><input type="text" name="form[location]" value="<?php echo pun_htmlspecialchars($user['location']) ?>" size="30" maxlength="30" /><br /></label>
 							<label><?php echo $lang_profile['Website'] ?><br /><input type="text" name="form[url]" value="<?php echo pun_htmlspecialchars($user['url']);/*"*/?>" size="50" maxlength="80" /><br /></label>

@@ -13,6 +13,7 @@ class forum_category extends base_page_db
 			'title' => 'cat_name',
 			'parent_category_id' => 'parent',
 			'order' => 'disp_position',
+			'sort_order' => 'disp_position',
 			'category_base' => 'base_uri',
 			'bors_append',
 			'template',

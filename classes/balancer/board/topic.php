@@ -108,4 +108,9 @@ class balancer_board_topic extends forum_topic
 			'notifyed_user' => $notifyed_user,
 		));
 	}
+
+	function titled_link_new()
+	{
+		return $this->titled_link_ex(array('page' => 'new'));
+	}
 }
