@@ -4,6 +4,40 @@ class balancer_board_topic extends forum_topic
 {
 	function extends_class() { return 'forum_topic'; }
 
+	function storage_engine() { return 'bors_storage_mysql'; }
+	function db_name() { return config('punbb.database', 'punbb'); }
+	function table_name() { return 'topics'; }
+
+	function table_fields()
+	{
+		return array(
+			'id',
+			'forum_id_raw' => 'forum_id',
+			'title'	=> 'subject',
+			'description',
+			'create_time'	=> 'posted',
+			'last_post_create_time'=> 'last_post',
+			'modify_time',
+			'is_public',
+			'owner_id'=> 'poster_id',
+			'last_poster_name' => 'last_poster',
+			'author_name' => 'poster',
+			'num_replies',
+			'is_repaged',
+			'visits' => 'num_views',
+			'first_post_id' => 'first_pid',
+			'last_post_id' => 'last_post_id',
+			'first_visit_time' => 'first_visit',
+			'last_visit_time' => 'last_visit',
+			'last_edit_time' => 'last_edit',
+			'sticky',
+			'moved_to',
+			'joined_to_topic_id', // id темы, к которой была присоединена данная.
+			'closed',
+			'keywords_string_db' => 'keywords_string',
+		);
+	}
+
 	function auto_objects()
 	{
 		return array_merge(parent::auto_objects(), array(
