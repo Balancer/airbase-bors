@@ -85,6 +85,7 @@ class forum_user extends base_object_db
 			'xmpp_notify_best', // Подписка на лучшие сообщения
 			'last_mailing',
 			'utmx',
+			'joke_id',
 		);
 	}
 

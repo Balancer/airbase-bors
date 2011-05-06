@@ -8,7 +8,8 @@ class balancer_balabot extends base_object
 
 	static function on_thumb_up($target)
 	{
-		$bot = bors_find_first('balancer_board_user', array('title' => 'BalaBOT'));
+//		$bot = bors_find_first('balancer_board_user', array('title' => 'BalaBOT'));
+		$bot = bors_load('balancer_board_user', 84069);
 		//balancer_balabot::send_tweet('Ты скучен, Зойдберг.');
 
 		$twitter_class_id = class_name_to_id('bors_external_twitter');
@@ -96,12 +97,13 @@ class balancer_balabot extends base_object
 			$twitter->setOAuth($oauth);
 
 			$msg = $twitter->statuses->update($msg);
-			print_r($msg);
+//			debug_hidden_log('twitter', 'result :'.print_r($msg, true));
+			return $msg;
 		}
 		catch (Services_Twitter_Exception $e)
 		{
-
-			echo $e->getMessage();
+			debug_hidden_log('twitter', 'Exception :'.$e);
+//			echo $e->getMessage();
 		}
 	}
 }

@@ -2,8 +2,9 @@
 
 Ваши:
 <ul>
+<li><a href="http://balancer.ru/forum/punbb/search.php?action=show_new">Новое</a></li>
 <li><a href="http://balancer.ru/user/{$owner->id()}/blog/">Блог</a></li>
-<li><a href="http://balancer.ru/users/favorites/" class="red">Избранное</a></li>
+<li><a href="http://balancer.ru/users/favorites/">Избранное</a></li>
 <li><a href="http://balancer.ru/user/{$owner->id()}/use-topics.html">Темы с участием</a></li>
 <li><a href="http://balancer.ru/user/{$owner->id()}/posts/">Сообщения</a></li>
 <li><a href="http://forums.balancer.ru/personal/answers/">Ответы Вам</a></li>
@@ -16,7 +17,7 @@
 <ul>
 <li><a href="http://forums.airbase.ru/guidelines/">Правила</a></li>
 <li><a href="http://balancer.ru/forum/punbb/search.php?action=show_24h">За сутки</a></li>
-<li><a href="http://balancer.ru/forum/punbb/search.php?action=show_new">Новое</a></li>
+<li><a href="http://balancer.ru/chat/">Чат</a> <small><a href="http://balancer.ru/support/2011/03/t19123--na-aviabaze-zapuschen-novyj-chat.5520.html">[?]</a></small></li>
 <li><a href="http://forums.balancer.ru/tags/">Тэги</a></li>
 <li><a href="http://balancer.ru/tools/search/">Поиск</a></li>
 <li><a href="http://balancer.ru/users/toprep/">Репутации</a></li>
@@ -39,14 +40,20 @@ if(cid == 2 || cid == 89)
 	page = readCookie('p', '1')
 }
 else
+{
 	tid = readCookie('ltid', '0')
+	page = 1
+}
 
 if(tid > 0)
 {
 	document.write('<li><a href="http://balancer.ru/2000/01/t'+tid+'--.pdf">PDF-версия темы</a></li>')
 	document.write('<li><a href="http://balancer.ru/2000/01/01/printable-'+tid+'--.html">Версия для печати</a></li>')
 	document.write('<li><a href="http://balancer.ru/1973/10/tpc'+tid+','+page+'--.html">Печать текущей страницы</a></li>')
-	document.write('<li><a href="http://balancer.ru/2000/01/t'+tid+'/attaches/">Все вложения</a></li>')
+	document.write('<li><a href="http://balancer.ru/1973/10/t'+tid+'/blog" class="red">Блог</a></li>')
+	document.write('<li><a href="http://balancer.ru/1973/10/t'+tid+'/images" class="red">Все картинки</a></li>')
+	document.write('<li><a href="http://balancer.ru/1973/10/t'+tid+'/video" class="red">Все видео</a></li>')
+	document.write('<li><a href="http://balancer.ru/2000/01/t'+tid+'/attaches/">Все аттачи</a></li>')
 	document.write('<li><a href="http://balancer.ru/forum/tools/topic/'+tid+'/">Инструменты темы</a></li>')
 	document.write('<li><a href="http://balancer.ru/forum/tools/topic/'+tid+'/reload/">Сбросить кеш темы</a></li>')
 	document.write('<li><form action="http://balancer.ru/tools/search/result/"><input name="q" size="20" class="text" /><input type="hidden" name="w" value="1" /><br/><input type="submit" value="Найти в теме" /><input type="hidden" name="t" value="'+tid+'" /></form></li>')

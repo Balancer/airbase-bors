@@ -1,5 +1,9 @@
 <?php
 
+config_set('lcml_cache_disable', true); 
+
+mysql_access('l2jdb', 'la2', 'la2kkk');
+
 config_set('default_template', 'bors:http://la2.balancer.ru/cms/templates/default/');
 config_set('sitemap_classes', 'balancer_board_topic');
 

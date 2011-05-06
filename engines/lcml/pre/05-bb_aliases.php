@@ -8,5 +8,8 @@
 
 		$txt = preg_replace("!\[t(\d+)\]!is", "[topic]$1[/topic]", $txt);
 
+		//TODO: жёсткий костыль для фишек, типа [http://balancer.ru/forums/viewtopic.php?id=5465&p=1|[plk.jpg]]
+		$txt = preg_replace('!\[ ( [^\]\|]+? ) \| \[ ( [^\]\|]+? \.jpg ) \]\]!x', '[url=$1][img $2 nohref][/url]', $txt);
+
 		return $txt;
 	}

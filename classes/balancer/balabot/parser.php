@@ -8,7 +8,7 @@ class balancer_balabot_parser extends bors_object
 
 	function do_work($data)
 	{
-		debug_hidden_log('users_clients_balabot_parser', print_r($data['payload'], true));
+//		debug_hidden_log('users_clients_balabot_parser', print_r($data['payload'], true));
 
 		$this->data = $data;
 

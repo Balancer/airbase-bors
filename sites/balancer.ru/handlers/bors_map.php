@@ -108,6 +108,7 @@ $map = array(
 
 		'/js/users/reputation,(\d+)\.js => user_js_reputation(1,2)',
 //		'/js/forum/topvisits\.js => forum_js_topvisits',
+		'/js/board/topics/t(\d+)-similar\.js => balancer_board_topics_similar(1)',
 
 		'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+ => forum_category(1)',
 		'(/)forum/ => forum_main',

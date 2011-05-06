@@ -743,3 +743,8 @@ table.yandex_money input {
 	text-align: center;
 	margin: 5px 0;
 }
+
+.transgray, .transgray a {
+	color: #ccc;
+	font-size: 10pt;
+}

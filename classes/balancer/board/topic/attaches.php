@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_topic_attaches extends base_page_paged
+class balancer_board_topic_attaches extends balancer_board_paged
 {
 	function main_class() { return 'balancer_board_attach'; }
 

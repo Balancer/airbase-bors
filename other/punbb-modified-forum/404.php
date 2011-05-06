@@ -1,12 +1,14 @@
-<?
-	include_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");
-	include_once("inc/navigation.php");
+<?php
+
+define('BORS_CORE', '/var/www/bors/bors-core');
+define('BORS_LOCAL', '/var/www/bors/bors-airbase');
+require_once(BORS_CORE.'/init.php');
 
 	$dir = dirname($_SERVER['PHP_SELF']);
 	if($dir == "/")
 		$dir = "";
 	$pun_config['root_uri'] = $pun_config['o_base_url'] = "http://{$_SERVER['HTTP_HOST']}$dir";
-	
+
 	if(preg_match("!/forum/topic/\d+/(\d+)/?$!", $_SERVER['REQUEST_URI'], $m))
 	{
 		$_GET['id'] = $m[1];
@@ -80,4 +82,3 @@
 	fwrite($fh, $_SERVER['REQUEST_URI']."|".@$_SERVER['HTTP_REFERER']."\n");
 	fclose($fh);
 	go("http://balancer.ru/forum/");
-?>

@@ -1,0 +1,10 @@
+<dl class="box w200">
+<dt>См. также</dt>
+<dd>
+<ul>
+{foreach from=$list item=t}
+<li><a href="{$t->url()}" title="{$t->title()|htmlspecialchars} [{$t->keywords_string()|htmlspecialchars}]">{$t->title()|truncate:75}</a></li>
+{/foreach}
+</ul>
+</dd>
+</dl>

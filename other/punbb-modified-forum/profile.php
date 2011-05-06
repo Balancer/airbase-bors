@@ -99,6 +99,7 @@ if ($action == 'change_pass')
 
 		if ($new_password1 != $new_password2)
 			message($lang_prof_reg['Pass not match']);
+
 		if (strlen($new_password1) < 4)
 			message($lang_prof_reg['Pass too short']);
 
@@ -120,8 +121,11 @@ if ($action == 'change_pass')
 				$authorized = true;
 		}
 
+		if($pun_user['g_id'] == PUN_ADMIN)
+			$authorized = true;
+
 		if (!$authorized)
-			message($lang_profile['Wrong pass']);
+			message($lang_profile['Wrong pass'].'[1]');
 
 		$new_password_hash = pun_hash($new_password1, $target_user_name);
 
@@ -208,7 +212,7 @@ else if ($action == 'change_email')
 	else if (isset($_POST['form_sent']))
 	{
 		if (pun_hash($_POST['req_password'], $pun_user['username']) !== $pun_user['password'])
-			message($lang_profile['Wrong pass']);
+			message($lang_profile['Wrong pass'].'[2]');
 
 		require PUN_ROOT.'include/email.php';
 

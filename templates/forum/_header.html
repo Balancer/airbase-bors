@@ -12,7 +12,7 @@
 {/if}
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
-	<link rel="stylesheet" type="text/css" href="/_bors/css/balancer-987-min.css" />
+	<link rel="stylesheet" type="text/css" href="/_bors/css/balancer-710-min.css" />
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
@@ -43,7 +43,11 @@ pre { word-wrap: break-word; }
 createCookie('cid', '{$this->class_id()}', 60./86400)
 createCookie('id', '{$this->id()|intval}', 60./86400)
 createCookie('p', '{$this->page()}', 60./86400)
-{if $this->new_class_name() == 'balancer_board_topic'}createCookie('ltid', '{$this->id()}', 60./86400){/if}
+{if $this->new_class_name() == 'balancer_board_topic'
+	or $this->class_name() == 'balancer_board_topics_blog'
+	or $this->class_name() == 'balancer_board_topics_images'
+	or $this->class_name() == 'balancer_board_topics_video'
+}createCookie('ltid', '{$this->id()}', 60./86400){/if}
 {/if}
 
 var me_id = readCookie('user_id', 0)
@@ -157,6 +161,11 @@ createCookie('readedTopics', readed.join(' '), 3)
 <b>Обсудить и задать вопросы <a href="http://balancer.ru/support/2009/02/topic-66122-IE6-bol~she-ne-podderzhivaetsya.8198.html">можно в этой теме</a></b>.
 </dd></dl><![endif]-->
 
+<div class="red_box">На форумах
+<a href="http://balancer.ru/support/2011/05/t81991--borba-s-oftopikom.6519.html"><b>ужесточена борьба с офтопиком</b></a>.
+Также жёстко наказываются <a href="http://balancer.ru/support/2011/05/t81993--pro-perekhody-na-lichnosti.8812.html">переходы на личности</a>.</div>
+<div class="yellow_box">А вы знаете, что на форумах <a href="http://balancer.ru/chat/">снова оживлён чат</a>?</div>
+
 		{$body}
 
 <br/>
@@ -183,6 +192,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 <!-- AddThis Button END -->
 *}
 
+
 <dl class="post_kws box">
 <dd>
  <a href="#top">в начало страницы</a>
@@ -194,6 +204,8 @@ createCookie('readedTopics', readed.join(' '), 3)
 | <a href="http://balancer.ru/forum/user-{$me_id}-posts-in-topic-{$this->id()}/">Ваше в теме</a>
 {/if}
 {/if}
+<script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
+<div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="link" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir,lj,friendfeed,moikrug"></div>
 </dd>
 </dl>
 
@@ -271,6 +283,10 @@ else {ldelim}
 <noscript><p>Не работает без JavaScript</p></noscript>
 </dd></dl>
 
+{if $this->new_class_name() == 'balancer_board_topic' && $me}
+<script type="text/javascript" src="http://balancer.ru/js/board/topics/t{$this->id()}-similar.js"></script>
+{/if}
+
 <dl class="box w200"><dt>Новости сайта</dt>
 <dd>{module name="forums/sitenews"}</dd>
 </dl>
@@ -343,14 +359,7 @@ document.write('<a href="http://www.mapyourvisitors.com/map' + kod + '.php"><img
 <br/>
 *}
 
-{literal}<!-- Yandex.Metrika -->
-<script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript"></script>
-<script type="text/javascript">
-try { var yaCounter510488 = new Ya.Metrika(510488); } catch(e){}
-</script>
-<noscript><div style="position: absolute;"><img src="//mc.yandex.ru/watch/510488" alt="" /></div></noscript>
-<!-- /Yandex.Metrika -->
-{/literal}
+{include file="xfile:balancer/count-yandex.html"}
 
 </div>{* /статистика *}
 

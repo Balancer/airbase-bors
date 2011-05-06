@@ -103,7 +103,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		require_once('inc/airbase_keywords.php');
 		$kws = $this->keywords_string();
 //		return $this->__setc($kws ? '"'.join('","', preg_split('/\s*,\s*/', addslashes(airbase_keywords_linkify($kws)))) .'"' : '');
-		return $this->__setc($kws ? '"'.join('","', $this->keywords()) .'"' : '');
+		return $this->__setc($kws ? '"'.join('","', array_map('addslashes', $this->keywords())) .'"' : '');
 	}
 
 	function folder()   { return $this->forum(); }
@@ -140,7 +140,11 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			if(!$me || $me->id() < 2)
 			{
 				$ref = $this->url($this->page());
-				return bors_message(ec('Вы не авторизованы на этом домене. Авторизуйтесь, пожалуйста. Если не поможет - попробуйте стереть cookies вашего браузера.'), array('login_form' => true, 'login_referer' => $ref));
+				return bors_message(ec('Вы не авторизованы на этом домене. Авторизуйтесь, пожалуйста. Если не поможет - попробуйте стереть cookies вашего браузера.'), array(
+					'login_form' => true,
+					'login_referer' => $ref,
+					'template' => $this->template(),
+				));
 			}
 
 			$uid = $me->id();
@@ -416,6 +420,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		$res = array(
 			object_load('forum_printable', $this->id()),
 			object_load('forum_topic_rss', $this->id()),
+			bors_load('balancer_board_topics_similar', $this->id()),
 		);
 
 		if($this->forum_id())

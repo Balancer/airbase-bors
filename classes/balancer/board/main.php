@@ -41,7 +41,7 @@ class balancer_board_main extends base_page
 		$top_visit_topics = objects_array('balancer_board_topic', array(
 				'num_views>=' => 10,
 				'last_visit - first_visit > 600',
-				'select' => array('(86400*num_views)/(last_visit-first_visit) AS views_per_day'),
+				'*set' => '(86400*num_views)/(last_visit-first_visit) AS views_per_day',
 				'order' => '(86400*num_views)/(last_visit-first_visit) DESC',
 				'forum_id NOT IN' => array(37),
 				'limit' => 20,
