@@ -302,7 +302,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	function update_num_topics()
 	{
 		$this->set_num_topics(objects_count('balancer_board_topic', array('forum_id' => $this->id())), true);
-		$this->set_num_posts(objects_count('balancer_board_post', array(
+		$this->set_num_posts(objects_count('balancer_board_posts_pure', array(
 			'inner_join' => 'balancer_board_topic ON (balancer_board_topic.id = balancer_board_post.topic_id AND balancer_board_topic.forum_id='.$this->id().')'
 		)), true);
 	}

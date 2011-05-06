@@ -443,6 +443,8 @@ if($msg = $post->is_edit_disable())
 <?php endif; ?>
 <?php if($blog): ?>
 	<label>Ключевые слова для записи блога<br/><input class="longinput" type="text" name="blog_keywords_string" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?php echo pun_htmlspecialchars(isset($_POST['blog_keywords_string']) ? $_POST['keywords_string'] : $blog->keywords_string()) /*"*/ ?>" /><br /></label>
+<?php else: ?>
+	<div id="here_keywords"></div>
 <?php endif; ?>
 	<label><?php echo $lang_common['Message'] ?><br />
 
@@ -501,7 +503,12 @@ if ($is_admmod)
 
 //print_d($blog);
 
-$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\"".($blog ? ' checked="true"' : '')." />Разместить сообщение в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\"     value=\"1\" tabindex=\"".($cur_index++).'"'
+	.($blog ? ' checked="checked"' : '')
+	." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '"
+		.addslashes("<label><strong>Тэги:</strong>&nbsp;<input class='longinput' type='text' name='blog_keywords_string' value='".defval($_POST, 'blog_keywords_string', $topic->keywords_string())."'    size='40' maxlength='255' /><br /></label>")
+			."' : ''\"/>Разместить ответ в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+//$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\"".($blog ? ' checked="true"' : '')." />Разместить сообщение в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
 
 if (!empty($checkboxes))
 {

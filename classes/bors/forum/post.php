@@ -651,4 +651,15 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if($blog = $this->blog())
 			$blog->recalculate($this, $topic);
 	}
+
+	function joke_owner()
+	{
+/*
+		if($joke_id = object_property($this->owner(), 'joke_id'))
+		{
+			return bors_load('balancer_board_user', $joke_id);
+		}
+*/
+		return $this->owner();
+	}
 }

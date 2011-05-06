@@ -53,7 +53,7 @@ class airbase_user_topics extends base_page
 
 	private $user = false;
 	function user() { if($this->user === false) $this->user = object_load('bors_user', $this->id()); return $this->user; }
-	function title() { return $this->user()->title().ec(': темы с участием за месяц'); }
+	function title() { return object_property($this->user(), 'title').ec(': темы с участием за месяц'); }
 	function nav_name() { return ec('темы с участием за месяц'); }
 
 	function body_template() { return 'xfile:airbase/forum/forum.html'; }

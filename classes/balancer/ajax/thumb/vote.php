@@ -91,7 +91,7 @@ class balancer_ajax_thumb_vote extends base_object
 
 		if(is_null($target->mark_best_date()))
 		{
-			if($positives >= 3)
+			if($positives >= 4)
 			{
 				$target->set_mark_best_date($vote->create_time(), true);
 			}

@@ -68,7 +68,12 @@ function dispatcher($job)
 	// Создаём класс-обработчик
 	$bors_worker = object_load($data['worker_class_name'], NULL);
 	if($bors_worker)
-		$bors_worker->do_work($data);
+	{
+		if(empty($data['worker_method']))
+			$bors_worker->do_work($data);
+		else
+			call_user_func(array($bors_worker, $data['worker_method']), $data);
+	}
 	else
 		echo "Не могу инициализировать класс ".$data['worker_class_name']."\n";
 

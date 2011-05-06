@@ -9,6 +9,7 @@ class balancer_board_posts_lib
 			$pids = array_unique(bors_field_array_extract($posts, 'id'));
 			$blogs  = bors_find_all('balancer_board_blog',  array('id IN' => $pids, 'by_id' => true));
 		}
+
 		if(!$topics)
 		{
 			$tids = array_unique(bors_field_array_extract($posts, 'topic_id'));

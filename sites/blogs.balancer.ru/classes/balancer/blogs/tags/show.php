@@ -22,8 +22,7 @@ class balancer_blogs_tags_show extends base_page
 	function template() { return 'forum/_header.html'; }
 	function keywords_string() { return urldecode($this->id()); }
 //	function body_engine() { return 'body_php'; }
-
-	function default_page() { return $this->total_pages(); }
+//	function default_page() { return $this->total_pages(); }
 
 	function keywords()
 	{
@@ -198,7 +197,6 @@ class balancer_blogs_tags_show extends base_page
 		return $this->__setc($items);
 	}
 
-	function is_reversed() { return true; }
-
+//	function is_reversed() { return true; }
 //	function set_args(&$data) { var_dump($data); return parent::set_args($data); }
 }

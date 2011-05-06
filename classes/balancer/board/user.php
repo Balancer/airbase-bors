@@ -137,6 +137,27 @@ class balancer_board_user extends forum_user
 		}
 	}
 
+	function email_text($text)
+	{
+		if($this->last_mailing() > time() - 3*24*3600)
+		{
+			debug_hidden_log('_answer_test_mailing', "Skip notify to {$this->debug_title()} ({$this->email()}) as |$text|", false);
+			return;
+		}
+
+		$client= new GearmanClient();
+		$client->addServer();
+
+		$this->set_last_mailing(time(), true);
+
+		$client->doBackground('balabot.work', serialize(array(
+			'to' => $this->email(),
+			'text' => $text,
+			'worker_class_name' => 'balancer_board_tasks',
+			'worker_method'     => 'send_email',
+		)));
+	}
+
 	function friend_action_notify($user_id, $text, $html = NULL)
 	{
 		$friend_binds = bors_find_all('balancer_board_users_friend', array('friend_id' => $user_id));

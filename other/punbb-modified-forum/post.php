@@ -369,14 +369,33 @@ if (isset($_POST['form_sent']))
 
 					if($answer_to_user = $answer_to_post->owner())
 					{
-						$text = "{$user->title()} отвечает на Ваше сообщение:\n"
-							.trim(html_entity_decode(make_quote($user->title(), htmlspecialchars($post->source()), false), ENT_COMPAT, 'UTF-8'))
-							."\n\n// #{$post->id()} {$post->url_for_igo()} в теме «{$post->topic()->title()}»";
-
-						if($answer_to_user->xmpp_notify_enabled())
+						if($answer_to_user->id() != $user->id())
 						{
-							$answer_to_user->notify_text($text);
-							$was_notified = $answer_to_user;
+							$text = "{$user->title()} отвечает на Ваше сообщение:\n"
+								.trim(html_entity_decode(make_quote($user->title(), htmlspecialchars($post->source()), false), ENT_COMPAT, 'UTF-8'))
+								."\n\n// #{$post->id()} {$post->url_for_igo()} в теме «{$post->topic()->title()}»";
+
+							if($answer_to_user->xmpp_notify_enabled())
+							{
+								$answer_to_user->notify_text($text);
+								$was_notified = $answer_to_user;
+							}
+
+							if($joke_user = $answer_to_post->joke_owner())
+							{
+								$text = "Здравствуйте, {$joke_user->title()}.\n\n"
+									."{$user->title()} отвечает на Ваше сообщение:\n"
+									."---------------------------------------------------------------\n"
+									.$post->source()."\n"
+									."// {$post->url_for_igo()} в теме «{$post->topic()->title()}»\n"
+									."---------------------------------------------------------------\n"
+									."\nВаше исходное сообщение:\n"
+									."---------------------------------------------------------------\n"
+									.$answer_to_post->source()."\n"
+									."// {$answer_to_post->url_for_igo()}\n";
+
+								$joke_user->email_text($text);
+							}
 						}
 					}
 				}
@@ -680,7 +699,8 @@ if ($tid)
 
 		include_once('inc/design/make_quote.php');
 
-		$quote = make_quote($q_poster, $q_message)."\n";
+		$joke = object_property($post, 'joke_owner');
+		$quote = make_quote($joke ? $joke->title() : $q_poster, $q_message)."\n";
 	}
 
 	$forum_name = "<a href=\"{$pun_config['root_uri']}/viewforum.php?id={$cur_posting['id']}\">".pun_htmlspecialchars($cur_posting['forum_name']).'</a>';
