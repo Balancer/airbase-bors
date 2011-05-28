@@ -31,6 +31,7 @@
 
 {if not $skip_votes}
 <div class="to-right">
+	{if config('is_developer')}<div id="ab_rec_{$p->new_class_name()}__{$p->id()}" class="to-left ab_rec"><img src="/_bors/i16/recommendation.gif" alt="[!]" width="16" height="16" title="Рекомендовать это сообщение" /></div>{/if}
  {if $me}
  <div class="to-left">
   {$p->tools()->favorite_link_ajax()}

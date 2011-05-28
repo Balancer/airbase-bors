@@ -55,8 +55,11 @@ class airbase_user_reputation extends base_page_db
 		if(preg_match('!post://(\d+)/?!', $ref, $m))
 		{
 			$object = object_load('balancer_board_post', $m[1]);
-			return object_property($object, 'titled_url');
+			return object_property($object, 'titled_url_in_container');
 		}
+
+		if(preg_match('!topic://(\d+)/?!', $ref, $m))
+			return object_property(bors_load('balancer_board_topic', $m[1]), 'titled_link');
 
 		$object = object_load($ref);
 		if(is_a($object, 'bors_system_go_internal'))
@@ -77,6 +80,7 @@ class airbase_user_reputation extends base_page_db
 		$ref = $this->refer();
 		if(preg_match('/^\w+__\d+$/', $ref))
 			return bors_load_uri($ref);
+
 
 		if(preg_match('!post://(\d+)/?!', $ref, $m))
 			return bors_load('balancer_board_post', $m[1]);

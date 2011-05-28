@@ -84,7 +84,7 @@ dl.box dt, dl.box dt a {
 	font-weight: bold; 
 }
 
-dl.box dd {margin: 4px; font-size: normal; padding: 4px; }
+dl.box dd {margin: 4px; font-size: medium; padding: 4px; }
 
 dl.w200 dd { margin: 2px; font-size: xx-small; padding: 2px; }
 
