@@ -34,8 +34,8 @@ if($_SERVER['HTTP_HOST']=='la2.wrk.ru' || $_SERVER['HTTP_HOST']=='la2.balancer.r
 
 	if(preg_match("!^/forum/index\.php/board,(\d+)\.(\d+)\.html$!", $_SERVER['REQUEST_URI'], $m))
 	{
-		define('BORS_CORE', '/var/www/.bors/bors-core');
-		define('BORS_LOCAL', '/var/www/.bors/bors-airbase');
+		define('BORS_CORE', '/var/www/bors/bors-core');
+		define('BORS_LOCAL', '/var/www/bors/bors-airbase');
 		define('BORS_HOST', $_SERVER['DOCUMENT_ROOT'].'/cms-local');
 	
 		require_once(BORS_CORE.'/init.php');
@@ -313,7 +313,7 @@ while ($cur_forum = $db->fetch($result))
 	if ($cur_forum['forum_desc'] != '')
 		$forum_field .= "\n\t\t\t\t\t\t\t\t".$cur_forum['forum_desc'];
 
-	if(0 && debug_is_balancer())
+	if(0 && is_developer())
 	{
 		if($subs = $forum->all_readable_subforum_ids())
 			$forum_field .= subforums_text($subs);

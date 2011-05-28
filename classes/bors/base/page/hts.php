@@ -9,6 +9,8 @@ class base_page_hts extends base_page_db
 {
 	static function id_prepare($url)
 	{
+		$url = preg_replace('!^(http://[^/]+):\d+!', '$1', $url);
+
 		if(preg_match('!^(.+/)index\.phtml$!', $url, $m))
 			$url = $m[1];
 		elseif(preg_match('!^(.+)\.phtml$!', $url, $m))
