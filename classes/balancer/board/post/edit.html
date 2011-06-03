@@ -1,5 +1,37 @@
-{form class="forum_post"}
-{textarea name="source" class="w100p"}
-{submit name="send" value="Отправить"}
-{submit name="preview" value="Предварительный просмотр"}
+<style>{literal}
+#text {
+}
+{/literal}</style>
+
+<br/><br/>
+
+{form class="balancer_board_post" action=$this->url() act='post'}
+<table class="btab w100p">
+<tr><th width="10" class="nobr">Заголовок темы:</th><td>{input name="title" class="w100p"}</td></tr>
+<tr><th width="10" class="nobr">Краткое описание темы:<br/><small>(не обязательно)</small></th><td>{input name="description" class="w100p"}</td></tr>
+<tr><th class="nobr">Текст собщения:</th><td>
+	{textarea name="source" class="w100p" id='text' rows="20" cols="40"}
+	<a href="#" onclick="return turn_tinymce()">tinymce</a>
+	<a href="#" onclick="return turn_ckeditor()">ckeditor</a>
+	<a href="#" onclick="return turn_markitup()">markitup</a>
+	<a href="#" onclick="return turn_textarea()">text</a>
+</td></tr>
+<tr><th width="10" class="nobr">Тэги:<br/><small>(ключевые слова, не обязательно)</small></th><td>{input name="keywords_string" class="w100p"}</td></tr>
+<tr><th width="10" class="nobr">Форум:</th><td>{dropdown name="forum_id" list="balancer_board_forums_list"}</td></tr>
+<tr><th colspan="2">
+	{submit name="send" value="Отправить"}
+	{submit name="preview" value="Предварительный просмотр"}
+</th></tr>
+</table>
+{hidden name='topic_id' value=$this->topic_id()}
 {/form}
+
+<br/>
+
+<div class="yellow_box">
+<span class="red b">Важно!</span> Размещая на форуме информацию, авторами которой Вы <b>не</b> являетесь,
+Вы обязуетесь нести всю ответственность за соблюдение прав авторов
+этой информации. В случае претензий правообладателей эта информация
+может быть удалена. Все материалы, автором которых являетесь Вы,
+при опубликовании на форумах приобретают лицензию <a href="http://balancer.ru/support/2009/02/t66269--Prava-publikatsii-avtorskikh-materialov-.html"><b>Creative Commons</b> (by-nc-sa)</a>.
+</div>
