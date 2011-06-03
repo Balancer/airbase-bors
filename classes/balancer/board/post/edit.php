@@ -50,7 +50,7 @@ class balancer_board_post_edit extends bors_page
 		if($this->forum_id())
 			return ec('Создание новой темы');
 
-		return '?';
+		return ec('Создание новой темы');
 	}
 
 	function nav_name()
@@ -79,5 +79,28 @@ class balancer_board_post_edit extends bors_page
 			return array($this->forum()->url());
 
 		return array('http://forums.balancer.ru/');
+	}
+
+	function on_action_post($data)
+	{
+		var_dump($data);
+		exit();
+	}
+
+	function template() { return 'xfile:default/simple.html'; }
+
+	function pre_show()
+	{
+		template_noindex();
+		template_tinymce();
+		template_ckeditor();
+		template_js_include('/js/balancer.js');
+
+		template_css('/_bors3rdp/jquery/plugins/markitup/skins/simple/style.css');
+		template_css('/_bors3rdp/jquery/plugins/markitup/sets/bbcode/style.css');
+		template_js_include('/_bors3rdp/jquery/plugins/markitup/jquery.markitup.js');
+		template_js_include('/_bors3rdp/jquery/plugins/markitup/sets/bbcode/set.js');
+
+		return parent::pre_show();
 	}
 }
