@@ -33,8 +33,9 @@ class user_blog extends base_page
 			return $this->xdata[$page_id];
 
 		$this->xdata[$page_id] = array(
-				'blog_records' => array_reverse(objects_array('forum_blog', array(
-					'where' => array('owner_id=' => $this->id()),
+				'blog_records' => array_reverse(objects_array('balancer_board_blog', array(
+					'owner_id' => $this->id(),
+					'is_microblog' => 0,
 					'order' => 'blogged_time',
 					'page' => $this->page(),
 					'per_page' => $this->items_per_page(),
@@ -53,7 +54,11 @@ class user_blog extends base_page
 	function total_items()
 	{
 		if($this->total === false)
-			$this->total = intval(objects_count('forum_blog', array('where' => array('owner_id=' => $this->id()))));
+			$this->total = intval(objects_count('balancer_board_blog', array(
+				'owner_id' => $this->id(),
+				'is_microblog' => 0,
+				'is_public' => 1,
+			)));
 
 		return $this->total;
 	}
@@ -136,7 +141,7 @@ class user_blog extends base_page
 
 	function page_by_pid($pid)
 	{
-		$before = intval(objects_count('forum_blog', array('where' => array('owner_id=' => $this->id(), 'post_id<' => intval($pid)))));
+		$before = intval(objects_count('balancer_board_blog', array('where' => array('owner_id=' => $this->id(), 'post_id<' => intval($pid)))));
 		return intval(($before) / $this->items_per_page()) + 1;
 	}
 

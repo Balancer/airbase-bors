@@ -19,12 +19,12 @@ class balancer_blog extends user_blog
 	function __construct($id)
 	{
 		$id = 10000;
-		
+
 		$this->set_id($id);
-	
+
 		$this->user = class_load('balancer_board_user', $id);
 		parent::__construct($id);
-			
+
 		$this->add_template_data('user_id', $id);
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url(1)."rss.xml\" title=\"RSS блога пользователя ".addslashes($this->user->title())."\" />");
 	}

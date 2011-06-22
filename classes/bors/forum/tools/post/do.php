@@ -8,7 +8,7 @@ class forum_tools_post_do extends base_page
 
 	function pre_show()
 	{
-		$post = object_load('forum_post', intval($this->id()));
+		$post = bors_load('balancer_board_post', intval($this->id()));
 		$topic = $post->topic();
 
 		if(!bors()->user() || !bors()->user()->group()->is_coordinator())
@@ -50,6 +50,6 @@ class forum_tools_post_do extends base_page
 				break;
 		}
 
-		return go($post->url_in_container());
+		return go($post->url_for_igo());
 	}
 }

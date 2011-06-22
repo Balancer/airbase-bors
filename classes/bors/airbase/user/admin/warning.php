@@ -11,21 +11,21 @@ class airbase_user_admin_warning extends airbase_user_warning
 
 	function check_data(&$data)
 	{
-		$user = object_load('bors_user', $data['user_id']);
+		$user = bors_load('bors_user', $data['user_id']);
 		if(in_array($user->group_id(), array(1,2,5,21)))
 			return bors_message(ec('Нельзя выставлять штрафы координаторам и модераторам'));
 
-		$object = object_load($data['object']);
+		$object = bors_load($data['object']);
 		if(!$object)
 			return bors_message(ec('Неизвестный объект ').$data['object']);
 
 		if($data['user_id'] != $object->owner_id())
 			return bors_message("Попытка выставить штраф пользователю [{$data['user_id']}], не являющемуся автором сообщения [{$object->owner_id()}]");
 
-		$previous_warning = objects_first('airbase_user_warning', array(
-			'user_id=' => $data['user_id'],
-			'warn_class_id=' => $object->class_id(),
-			'warn_object_id=' => $object->id(),
+		$previous_warning = bors_find_first('airbase_user_warning', array(
+			'user_id' => $data['user_id'],
+			'warn_class_id' => $object->class_id(),
+			'warn_object_id' => $object->id(),
 		));
 
 		if($previous_warning)
@@ -54,21 +54,21 @@ class airbase_user_admin_warning extends airbase_user_warning
 	function on_new_instance(&$data)
 	{
 		$uid = $data['user_id'];
-		$user = object_load('bors_user', $uid);
-		$warnings = $this->db()->select('warnings', 'SUM(score)', array('user_id=' => $uid, 'time>' => time()-WARNING_DAYS*86400));
-		$warnings_total = $this->db()->select('warnings', 'SUM(score)', array('user_id=' => $uid));
-		$user->set_warnings($warnings + $data['score'], true);
-		$user->set_warnings_total($warnings_total + $data['score'], true);
+		$user = bors_load('bors_user', $uid);
+		$warnings = $this->db()->select('warnings', 'SUM(score)', array('user_id' => $uid, 'time>' => time()-WARNING_DAYS*86400));
+		$warnings_total = $this->db()->select('warnings', 'SUM(score)', array('user_id' => $uid));
+		$user->set_warnings($warnings, true);
+		$user->set_warnings_total($warnings_total, true);
 		$user->cache_clean();
-		object_load('users_topwarnings')->cache_clean();
+		bors_load('users_topwarnings')->cache_clean();
 
-		$object = object_load($data['object']);
+		$object = bors_load($data['object']);
 		$object->set_warning_id(NULL, true);
 		$object->set_modify_time(time(), true);
 		$object->cache_clean();
 
 		@unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
-		if($object->extends_class() == 'forum_post')
+		if($object->extends_class() == 'forum_post' || $object->new_class_name() == 'balancer_board_post')
 		{
 			$topic = $object->topic();
 			balancer_board_action::add($topic, "Предупреждение пользователю: {$object->nav_named_link()}", true);

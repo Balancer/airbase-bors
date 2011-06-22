@@ -99,9 +99,9 @@ class balancer_board_topic extends forum_topic
 		));
 	}
 
-	static function create($forum, $title, $message, $user, $keywords_string = NULL, $as_blog = true, $data = array())
+	static function create($forum, $title, $message, $user = NULL, $keywords_string = NULL, $as_blog = true, $data = array())
 	{
-		echo "Pass new topic to {$forum->debug_title()}\n";
+//		echo "Pass new topic to {$forum->debug_title()}\n";
 
 		$is_public = defval($data, 'is_public', true);
 
@@ -121,7 +121,10 @@ class balancer_board_topic extends forum_topic
 
 		$topic = object_new_instance(__CLASS__, $data);
 
-		$post = balancer_board_post::create($topic, $message, $user, $keywords_string, $as_blog, $data);
+		if(is_object($message)) // Если это объект — то постинг
+			$post = $message;
+		else // Если не объект — то текст первого постинга
+			$post = balancer_board_post::create($topic, $message, $user, $keywords_string, $as_blog, $data);
 
 		$topic->set_first_post_id($post->id(), true);
 		$topic->set_last_post_id($post->id(), true);

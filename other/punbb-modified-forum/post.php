@@ -40,12 +40,15 @@ if(time()-filemtime("/var/log/started.log") < 3600)
 //!debug_is_balancer())
 //{
 //	header("Status: 302 Moved Temporarily");
-//	header("Location: http://balancer.ru/support/2009/11/t68871--chastichnyj-zapusk-rezhim-tolko-dlya-chteniya.5457.html");
+//	header("Location: http://balancer.endofinternet.net/mybb/thread-436-post-37122.html#pid37122");
+//	echo config('error_message_header');
 //	bors_exit();
 //}
 
+
 if(bors_stop_bots('__nobots_testing', 'post'))
 	return;
+
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);

@@ -48,10 +48,10 @@ h1
   color: #484E56;
 } 
 
-#content, #column2 a, #column2 a:hover
-{ background: transparent;
-  color: #5A6370;
-  border-color: #ccc;
+#content, #column2 a, #column2 a:hover {
+	background: transparent;
+	color: #5A6370;
+	border-color: #ccc;
 }
 
 .sidebaritem, .sidebaritem a, .sidebaritem a:hover
@@ -88,4 +88,10 @@ input, textarea
 div.img_common {
 	border-color: #B7B7B7;
 	background: #D7D7D7;
+}
+
+.pages_select a.current_page {
+	background-color: #ccc !important;
+	color: white !important;
+	border-style: solid !important;
 }

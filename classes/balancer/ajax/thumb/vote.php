@@ -35,18 +35,21 @@ class balancer_ajax_thumb_vote extends base_object
 		if($me_id == $target->owner_id())
 			return "<small>Нельзя ставить оценку себе!</small>";
 
-		if($me->tomonth_posted() < 10)
+		if($me->tomonth_posted() < 15)
 			return "<small>У Вас слишком низкая активность на форумах</small>";
 
 		if(intval($score) < 0)
 		{
+
 			if($target->modify_time() < time() - 86400*14)
 				return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";
 
 			$user_limit = $me->messages_daily_limit();
 			if($user_limit > 0)
 			{
-				$today_user_negatives = objects_count('bors_votes_thumb', array(
+				$user_limit = intval($user_limit / ($me->warnings()+1))+1;
+
+				$today_user_negatives = bors_count('bors_votes_thumb', array(
 					'score<' => 0,
 					'user_id' => $me_id,
 					'create_time>' => time() - 86400,

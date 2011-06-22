@@ -5,6 +5,8 @@ class airbase_board_forum_prss extends base_rss
 	function title() { return ec('Новые сообщения на форуме ').$this->forum()->title(); }
 	function forum() { return object_load('forum_forum', $this->id()); }
 
+	function main_url() { return $this->forum()->url(); }
+
 	function pre_show()
 	{
 		if($this->forum()->can_read())

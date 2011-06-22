@@ -156,9 +156,19 @@ createCookie('readedTopics', readed.join(' '), 3)
 <b>Обсудить и задать вопросы <a href="http://balancer.ru/support/2009/02/topic-66122-IE6-bol~she-ne-podderzhivaetsya.8198.html">можно в этой теме</a></b>.
 </dd></dl><![endif]-->
 
+{*
 <div class="red_box">На форумах
 <a href="http://balancer.ru/support/2011/05/t81991--borba-s-oftopikom.6519.html"><b>ужесточена борьба с офтопиком</b></a>.
-Также жёстко наказываются <a href="http://balancer.ru/support/2011/05/t81993--pro-perekhody-na-lichnosti.8812.html">переходы на личности</a>.</div>
+Также жёстко наказываются <a href="http://balancer.ru/support/2011/05/t81993--pro-perekhody-na-lichnosti.8812.html">переходы на личности</a>.
+</div>
+*}
+
+{*
+<div class="red_box">На форумах временный сбой, ответы не работают.
+Пока общайтесь на <a href="http://balancer.endofinternet.net/mybb/"><b>ЗАПАСНОМ ФОРУМЕ</b></a>.
+</div>
+*}
+
 <div class="yellow_box">А вы знаете, что на форумах <a href="http://balancer.ru/chat/">снова оживлён чат</a>?</div>
 
 		{$body}
@@ -323,7 +333,11 @@ if(11<js)d.write('--'+'&#062');//]]></script>
 
 <span><!--<a href="http://top.airbase.ru/"><img src="http://top.airbase.ru/?id=1" width="88" height="31" alt="АвиаТОП" title="Числа: место в рейтинге, хитов всего и хитов в сутки" /></a>--></span>
 
-<br/>
+{include file="xfile:balancer/board/count-yandex.html"}
+
+
+{* amung.us - 80x15 *}
+<span><!--<a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a>--></span>
 
 <!--LiveInternet counter--><script type="text/javascript"><!--
 document.write("<a href='http://www.liveinternet.ru/click' "+
@@ -336,9 +350,6 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
 " сегодня' "+
 "border='0' width='88' height='15'><\/a>")
 //--></script><!--/LiveInternet-->
-
-{* amung.us - 80x15 *}
-<span><!--<a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a>--></span>
 
 <br />
 
@@ -355,7 +366,6 @@ document.write('<a href="http://www.mapyourvisitors.com/map' + kod + '.php"><img
 <br/>
 *}
 
-{include file="xfile:balancer/count-yandex.html"}
 
 </div>{* /статистика *}
 
