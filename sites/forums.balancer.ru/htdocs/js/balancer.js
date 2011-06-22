@@ -47,6 +47,29 @@ function tinymce_off()
 	}
 }
 
+function js_include(file_name, func)
+{
+	if(!top.js_include_loaded)
+		js_include_loaded = []
+
+	if(top.js_include_loaded[file_name])
+		return
+
+//	var script = document.createElement( 'script' );
+//	script.type = 'text/javascript';
+//	script.src = file_name;
+//	s = '<script src="'+file_name+'"></script>'
+//	$('head').append(s);
+//	$('<script src="'+file_name+'"></script>').appendTo('head')
+//	$(script).appendTo('head')
+//	$('head').append(script)
+//	document.body.appendChild(script);
+//	alert(script)
+	$.getScript(file_name, func)
+	alert(file_name)
+	top.js_include_loaded[file_name] = true
+}
+
 function ckeditor_on()
 {
 	if(top.ckeditor_state)
@@ -54,6 +77,10 @@ function ckeditor_on()
 
 	top.ckeditor_state = true
 
+	js_include('/_bors3rdp/ckeditor-3.6/ckeditor.js');
+	js_include('/_bors3rdp/ckeditor-3.6/adapters/jquery.js', function() {
+
+	alert('loaded')
 	$('#text').ckeditor({
 		skin : 'v2',
 		extraPlugins : 'bbcode',
@@ -87,6 +114,8 @@ function ckeditor_on()
 	})
 
 	createCookie('bcet', 'ckeditor', 365)
+
+	})
 }
 
 function ckeditor_off()

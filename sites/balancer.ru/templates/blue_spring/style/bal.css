@@ -21,3 +21,8 @@ span.q {
 div.box a {
 	border: none !important;
 }
+
+.no-underline a {
+	text-decoration: none !important;
+	border: none !important;
+}

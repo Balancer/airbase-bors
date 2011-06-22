@@ -144,7 +144,32 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function flag_db() { return $this->data['flag_db']; }
 	function warning_id() { return $this->data['warning_id']; }
 
-	function topic() { return object_load('forum_topic', $this->topic_id()); }
+	function topic()
+	{
+		if($this->__havefc())
+			return $this->__lastc();
+
+		if($topic = bors_load('balancer_board_topic', $this->topic_id()))
+			return $this->__setc($topic);
+
+		$topic = balancer_board_topic::create(
+			bors_load('balancer_board_forum', 1), // Флейм и тесты
+			ec('Потерянный топик'),
+			$this,
+			$this->owner(),
+			NULL,
+			false, // as blog
+			array(
+				'id' => $this->topic_id(),
+				'description' => ec('Данный топик был когда-то утерян, сообщения остались. Требуется переименовать и переместить в нужный форум'
+			)
+		));
+
+		debug_hidden_log('topics_lost_recreated', "post={$this}, topic={$topic}", false);
+		$topic->recalculate();
+		return $topic;
+	}
+
 	function parents() { return array("forum_topic://".$this->topic_id()); }
 
 	function set_topic_page($page, $dbupd)
@@ -308,7 +333,12 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function url()
 	{
-		return dirname($this->topic()->url()).'/p'.$this->id().'.html';
+		$topic = $this->topic();
+		if($topic)
+			return dirname($topic->url()).'/p'.$this->id().'.html';
+
+		debug_hidden_log('empty topic', $this, false);
+		return 'http://forums.balancer.ru/0000/00/p'.$this->id().'.html';
 //		require_once("inc/urls.php");
 //		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
 //		return 'http://balancer.ru/_bors/igo?o='.$this->internal_uri_ascii();

@@ -93,7 +93,7 @@ class balancer_board_post_edit extends bors_page
 	{
 		template_noindex();
 		template_tinymce();
-		template_ckeditor();
+//		template_ckeditor();
 		template_js_include('/js/balancer.js');
 
 		template_css('/_bors3rdp/jquery/plugins/markitup/skins/simple/style.css');

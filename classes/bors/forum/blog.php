@@ -20,6 +20,7 @@ class forum_blog extends base_page_db
 			'forum_id',
 			'blogged_time',
 			'is_public',
+			'is_microblog',
 			'blog_source_class',
 			'blog_source_id',
 		);
