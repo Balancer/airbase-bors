@@ -88,7 +88,7 @@ h2.rbox {
 {module class='balancer_board_modules_avatar' user=$e->object()->owner() geo='50x50'}
 </div>
 {/if}
-{$e->text()}
+{$e->text()|bors_close_tags}
 <div class="clear">&nbsp;</div>
 </div>
 </div>

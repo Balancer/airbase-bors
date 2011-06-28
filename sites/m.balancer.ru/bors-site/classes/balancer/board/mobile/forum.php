@@ -3,7 +3,7 @@
 class balancer_board_mobile_forum extends balancer_board_forum
 {
 	function url($page = NULL) { return '/f'.$this->id().($page > 1 ? '.'.$page : NULL); }
-	function extends_class() { return 'forum_forum'; }
+	function extends_class_name() { return 'forum_forum'; }
 
 	function parents()
 	{

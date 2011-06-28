@@ -51,7 +51,7 @@
 
 {if $best_of_month}
 <dl class="box">
-<dt>Лучшие {$best_of_month|@count} сообщени{$best_of_month|@count|sklon:'е я й'} за последний месяц</dt>
+<dt>Лучшие {$best_of_month|@count} сообщени{$best_of_month|@count|sklon:'е,я,й'} за последний месяц</dt>
 <dd>
 {foreach from=$best_of_month item="x"}
 &nbsp;&nbsp;&nbsp;<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_url()} {$x->target()->score_colorized()}<br/>

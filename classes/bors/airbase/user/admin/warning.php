@@ -68,7 +68,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 		$object->cache_clean();
 
 		@unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
-		if($object->extends_class() == 'forum_post' || $object->new_class_name() == 'balancer_board_post')
+		if($object->extends_class_name() == 'forum_post' || $object->new_class_name() == 'balancer_board_post')
 		{
 			$topic = $object->topic();
 			balancer_board_action::add($topic, "Предупреждение пользователю: {$object->nav_named_link()}", true);
