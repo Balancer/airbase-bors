@@ -2,7 +2,7 @@
 
 class balancer_board_topic extends forum_topic
 {
-	function extends_class() { return 'forum_topic'; }
+	function extends_class_name() { return 'forum_topic'; }
 
 	function storage_engine() { return 'bors_storage_mysql'; }
 	function db_name() { return config('punbb.database', 'punbb'); }

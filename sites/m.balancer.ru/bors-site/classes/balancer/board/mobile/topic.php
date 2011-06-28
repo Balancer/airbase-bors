@@ -2,7 +2,7 @@
 
 class balancer_board_mobile_topic extends balancer_board_topic
 {
-	function extends_class() { return 'forum_post'; }
+	function extends_class_name() { return 'forum_post'; }
 
 	function url($page = NULL) { return '/t'.$this->id().($page > 1 ? ".$page" : ""); }
 

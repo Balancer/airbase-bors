@@ -24,7 +24,7 @@ class airbase_board_forum_prss extends base_rss
 			'forum_id' => $this->id(),
 		));
 
-		return objects_array('airbase_board_post', array(
+		return objects_array('balancer_board_post', array(
 			'posted>' => time() - 86400,
 			'order' => '-posted',
 			'topic_id IN' => $tids,

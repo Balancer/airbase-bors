@@ -65,13 +65,15 @@ class forum_post extends base_page_db
 			'is_incorrect',
 			'last_moderator_id',
 			'sort_order' => '`order`',
+			'markup_class_name' => 'field3', // string
 		);
 	}
 
 // Заняты: 	field1 => title
 //			field2 => score
+//			field3 string => markup-type
 
-// Свободны:field3 string
+// Свободны:
 //			field4 => is_spam int(11)
 
 //	function __orm_setters() { return array('';); }
@@ -230,18 +232,25 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		if(!$this->post_body() || config('lcml_cache_disable'))
 		{
-			$body = lcml($this->post_source(),
-				array(
-					'cr_type' => 'save_cr',
-					'forum_type' => 'punbb',
-					'forum_base_uri' => 'http://balancer.ru/forum',
-					'sharp_not_comment' => true,
-					'html_disable' => 'direct',
-					'uri' => $this->internal_uri(),
-					'nocache' => true,
-					'self' => $this,
-				)
-			);
+			if(($mcn = $this->markup_class_name()) && ($mce = bors_load($mcn, NULL)))
+			{
+				$body = $mce->parse($this->post_source(), $this);
+			}
+			else
+			{
+				$body = lcml($this->post_source(),
+					array(
+						'cr_type' => 'save_cr',
+						'forum_type' => 'punbb',
+						'forum_base_uri' => 'http://balancer.ru/forum',
+						'sharp_not_comment' => true,
+						'html_disable' => 'direct',
+						'uri' => $this->internal_uri(),
+						'nocache' => true,
+						'self' => $this,
+					)
+				);
+			}
 
 //			if(config('is_debug')) echo 'x='.$body."\n";
 
@@ -612,7 +621,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			return $this->score_positive_raw();
 
 		return $this->set_score_positive_raw(objects_count('bors_votes_thumb', array(
-			'target_class_name' => $this->extends_class(),
+			'target_class_name' => $this->extends_class_name(),
 			'target_object_id' => $this->id(),
 			'score' => 1,
 		)), true);
@@ -624,7 +633,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			return $this->score_negative_raw();
 
 		return $this->set_score_negative_raw(objects_count('bors_votes_thumb', array(
-			'target_class_name' => $this->extends_class(),
+			'target_class_name' => $this->extends_class_name(),
 			'target_object_id' => $this->id(),
 			'score' => -1,
 		)), true);
