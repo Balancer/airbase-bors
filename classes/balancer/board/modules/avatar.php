@@ -19,6 +19,8 @@ class balancer_board_modules_avatar extends bors_module
 		$user   = $this->args('user');
 		$avatar_id = $this->args('avatar_id');
 		$user_id = $this->args('user_id');
+		$title_css = $this->args('title_css');
+		$title_style = $this->args('title_style');
 
 		if(!$avatar && $avatar_id)
 			$avatar = bors_load('balancer_board_avatar', $avatar_id);
@@ -52,7 +54,8 @@ class balancer_board_modules_avatar extends bors_module
 			'margin_w', 'margin_h',
 			'block_w', 'block_h',
 			'image', 'avatar',
-			'show_group', 'show_title'
+			'show_group', 'show_title',
+			'title_css', 'title_style'
 		));
 	}
 }

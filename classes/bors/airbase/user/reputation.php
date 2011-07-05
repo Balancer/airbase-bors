@@ -42,11 +42,16 @@ class airbase_user_reputation extends base_page_db
 		if(preg_match('/^\w+__\d+$/', $ref))
 		{
 			$object = object_load($ref);
+			if($snip = object_property_args($object, 'snip', array(100)))
+				$snip = " <span class=\"snip\">{$snip}</span>";
+			else
+				$snip = '';
+
 			switch(object_property($object, 'class_name'))
 			{
 				case 'balancer_board_post':
 				case 'forum_post':
-					return object_property($object, 'titled_url_in_container');
+					return object_property($object, 'titled_url_in_container') . $snip;
 				default:
 					return object_property($object, 'titled_url');
 			}

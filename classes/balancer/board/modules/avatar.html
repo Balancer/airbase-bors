@@ -3,12 +3,14 @@
 <a href="{$user->url()}">{$image->html_code()}</a>
 </div>
 {else}
+<div style="width: {$block_w}px; height: {$block_h}px; border: 1px solid #9bd; overflow: hidden">
 <a href="{$user->url()}">
 <img src="http://www.gravatar.com/avatar/{$user->id()|cat:'balancer-user-gravatar'|md5}?d=wavatar" width="{$block_w}" height="{$block_h}" alt="" />
 </a>
+</div>
 {/if}
 {if $show_title}
-<h4>{$user->titled_link()}</h4>
+<h4{if $title_css} class="{$title_css}"{/if}{if $title_style} style="{$title_style}"{/if}>{$user->titled_link()}</h4>
 {if $show_group}
 {if $user->group_title()}<h5>{$user->group_title()}</h5>{/if}
 {if $user->reputation()}<a href="http://balancer.ru/user/{$user->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}" class="rep">{$user->reputation_html()}</a><br/>{/if}

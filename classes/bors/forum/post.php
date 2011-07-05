@@ -701,4 +701,11 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 */
 		return $this->owner();
 	}
+
+	function snip($size = 200)
+	{
+		$text = $this->body();
+		$text = preg_replace('!<span class="q">.+?</span>!', '', $text);
+		return bors_truncate(strip_tags($text), $size);
+	}
 }
