@@ -191,8 +191,8 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 
 <dl class="box"><dt>Авторы лучших сообщений</dt><dd>
 {foreach from=$best_votes_by_authors item="v"}
-<div class="float_left" style="width: 50px; height: 80px; overflow: hidden; padding: 2px; text-align: center;">
-{module class='balancer_board_modules_avatar' user_id=$v->target_user()->id() geo='50x50'}
+<div class="float_left" style="width: 50px!important; height: 80px!important; overflow: hidden; padding: 2px; text-align: center;">
+{module class='balancer_board_modules_avatar' user_id=$v->target_user()->id() geo='50x50' title_style='font-size: 8pt!important'}
 </div>
 {/foreach}
 <div class="clear">&nbsp;</div>

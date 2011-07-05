@@ -62,6 +62,27 @@ class balancer_ajax_thumb_vote extends base_object
 					debug_hidden_log('_test_limits', 'Can not', 1);
 					return "<small>Вы исчерпали сегодняшний лимит отрицательных оценок [$user_limit]</small>";
 				}
+
+				$tomonth_user_negatives = bors_count('bors_votes_thumb', array(
+					'score<' => 0,
+					'user_id' => $me_id,
+					'create_time>' => time() - 86400*30,
+				));
+
+				$tomonth_user_positives = bors_count('bors_votes_thumb', array(
+					'score>' => 0,
+					'user_id' => $me_id,
+					'create_time>' => time() - 86400*30,
+				));
+
+				debug_hidden_log('_test_limits', "test user votes limits. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
+
+				if($tomonth_user_negatives > $tomonth_user_positives + 10)
+				{
+					debug_hidden_log('_test_limits', 'Can not', 1);
+					return "<small>Вы слишком озлоблены. Расслабьтесь и будьте добрее.</small>";
+				}
+
 			}
 		}
 

@@ -375,7 +375,7 @@ if (isset($_POST['form_sent']))
 						if($answer_to_user->id() != $user->id())
 						{
 							$text = "{$user->title()} отвечает на Ваше сообщение:\n"
-								.trim(html_entity_decode(make_quote($user->title(), htmlspecialchars($post->source()), false), ENT_COMPAT, 'UTF-8'))
+								.trim(html_entity_decode(make_quote($user->title(), htmlspecialchars(strip_tags($post->source())), false), ENT_COMPAT, 'UTF-8'))
 								."\n\n// #{$post->id()} {$post->url_for_igo()} в теме «{$post->topic()->title()}»";
 
 							if($answer_to_user->xmpp_notify_enabled())
@@ -698,7 +698,7 @@ if ($tid)
 
 		$q_message = str_replace('[img]', '[url]', $q_message);
 		$q_message = str_replace('[/img]', '[/url]', $q_message);
-		$q_message = pun_htmlspecialchars($q_message);
+		$q_message = pun_htmlspecialchars(strip_tags($q_message));
 
 		include_once('inc/design/make_quote.php');
 
@@ -919,8 +919,8 @@ if (!$pun_user['is_guest'])
 		$checkboxes[] = '<label><input type="checkbox" name="hide_smilies" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['hide_smilies']) ? ' checked="checked"' : '').' />'.$lang_post['Hide smilies'];
 
 	if ($pun_config['o_subscriptions'] == '1')
-		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'" checked="checked" />'.$lang_post['Subscribe'];
-//		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['subscribe']) || empty($_GET['tid']) ? ' checked="checked"' : '').' />'.$lang_post['Subscribe'];
+//		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'" checked="checked" />'.$lang_post['Subscribe'];
+		$checkboxes[] = '<label><input type="checkbox" name="subscribe" value="1" tabindex="'.($cur_index++).'"'.(isset($_POST['subscribe']) || empty($_GET['tid']) ? ' checked="checked"' : '').' />'.$lang_post['Subscribe'];
 
 //	$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTMLval = this.checked ? '' : '".addslashes("<label><strong>Заголовок</strong><br /><input class=\"longinput\" type=\"text\" name=\"req_subject\" value=\"\" size=\"80\" maxlength=\"255\" tabindex=\"1\" /><br /></label>")."'\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
 
