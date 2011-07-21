@@ -26,14 +26,23 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $pid = isset($_GET['pid']) ? intval($_GET['pid']) : 0;
 require_once('include/bors_config.php');
 
+function go_topic($tid, $page = 1)
+{
+	if($topic = bors_load('balancer_board_topic', $tid))
+		return go($topic->url($page), true);
+
+	debug_hidden_log('topics_error', "Can't find topic $tid");
+	return go('http://forums.balancer.ru/', true);
+}
+
 $qs = @$_SERVER['QUERY_STRING'];
 unset($_SERVER['QUERY_STRING']);
 if(preg_match('!^id=(\d+)&p=(\d+)$!', $qs, $m))
-	return go(object_load('forum_topic', $m[1])->url($m[2]), true);
+	return go_topic($m[1], $m[2]);
 if(preg_match('!^id=(\d+)$!', $qs, $m))
-	return go(object_load('forum_topic', $m[1])->url(), true);
+	return go_topic($m[1]);
 if(preg_match('!^id=(\d+)&action=(new|last)$!', $qs, $m))
-	return go(object_load('forum_topic', $m[1])->url($m[2]), true);
+	return go_topic($m[1], $m[2]);
 if(preg_match('!^pid=(\d+)$!', $qs, $m))
 {
 	$post = object_load('forum_post', $m[1]);

@@ -157,6 +157,14 @@ class user_main extends base_page
 		bors_objects_preload($votes_positive, 'target_user_id', 'balancer_board_user');
 		bors_objects_preload($votes_negative, 'target_user_id', 'balancer_board_user');
 
+		if($me_id = bors()->user_id())
+		{
+			$pluses_from = bors_count('bors_votes_thumb', array('target_user_id' => $me_id, 'user_id' => $this->id(), 'score>' => 0));
+			$minuses_from = bors_count('bors_votes_thumb', array('target_user_id' => $me_id, 'user_id' => $this->id(), 'score<' => 0));
+			$pluses_to = bors_count('bors_votes_thumb', array('user_id' => $me_id, 'target_user_id' => $this->id(), 'score>' => 0));
+			$minuses_to = bors_count('bors_votes_thumb', array('user_id' => $me_id, 'target_user_id' => $this->id(), 'score<' => 0));
+		}
+
 		$data = array(
 			'best' => $best,
 			'best_of_month' => $best_of_month,
@@ -174,6 +182,8 @@ class user_main extends base_page
 				'owner_id' => $this->id(),
 				'create_time>' => time()-86400*30,
 			)),
+			'votes_from' => bors_votes_thumb::colorize_pm(@$pluses_from, @$minuses_from),
+			'votes_to'   => bors_votes_thumb::colorize_pm(@$pluses_to  , @$minuses_to  ),
 		);
 
 		return array_merge(parent::page_data(), $data, compact(

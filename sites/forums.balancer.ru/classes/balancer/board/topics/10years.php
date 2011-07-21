@@ -21,8 +21,18 @@ class balancer_board_topics_10years extends base_page_paged
 		return array("posted BETWEEN $start AND $stop", 'is_public' => 1);
 	}
 
-	function local_data()
+	function items()
 	{
-		return array_merge(parent::local_data(), array('years10' => true));
+		$topics = parent::items();
+		foreach($topics as $t)
+			if($t->modify_time() < time() - 86400*365 && rand(0,9) == 0)
+				$t->set_modify_time(time(), true);
+
+		return $topics;
+	}
+
+	function body_data()
+	{
+		return array_merge(parent::body_data(), array('years10' => true));
 	}
 }

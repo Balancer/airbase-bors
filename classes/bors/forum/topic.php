@@ -429,7 +429,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 //		TODO: убедиться, что модифицируется только автор сообщения при постинге: блоги, все сообщения и т.п.
 //		foreach($this->all_users() as $user_id)
 //			$res[] = object_load('balancer_board_user', $user_id);
-			
+
 		return $res;
 	}
 
@@ -449,6 +449,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	}
 
 	function url_engine() { return 'url_titled'; }
+	function url_for_igo() { return 'http://balancer.ru/g/t'.$this->id(); }
 
 	function touch($user_id)
 	{

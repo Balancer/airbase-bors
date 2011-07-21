@@ -42,7 +42,7 @@ class airbase_user_reputation extends base_page_db
 		if(preg_match('/^\w+__\d+$/', $ref))
 		{
 			$object = object_load($ref);
-			if($snip = object_property_args($object, 'snip', array(100)))
+			if($snip = object_property_args($object, 'snip', array(200)))
 				$snip = " <span class=\"snip\">{$snip}</span>";
 			else
 				$snip = '';

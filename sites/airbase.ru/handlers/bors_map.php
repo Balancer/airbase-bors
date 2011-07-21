@@ -26,7 +26,7 @@ $map = array(
 
 	'(/)forum/? => base_page_redirect(NULL,go=http://forums.airbase.ru)',
 
-	'(/)forum/(\d+/\d+)/ => forum_topic_ubb(2)',
+	'(/)forum/(\d+/\d+)/? => forum_topic_ubb(2)',
 	'(/)forum/(\d+/\d+)/index\.htm => forum_topic_ubb(2)',
 	'(/)forum/(\d+/\d+)/(\d+)\.htm => forum_topic_ubb(2,3)',
 

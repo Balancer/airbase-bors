@@ -4,6 +4,7 @@
 	<title>{$browser_title|htmlspecialchars}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="title" content="{$title|htmlspecialchars}" />
+	<meta property="fb:admins" content="100000278666723" />
 {if $this->description()}
 	<meta name="description" content="{$this->description()|htmlspecialchars}"/>
 {/if}
@@ -27,6 +28,7 @@ dd, dt { height: 1%; }
 .wrapper { margin-left: -404px; position: relative; }
 pre { word-wrap: break-word; }
 </style><![endif]-->
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js">{lang: 'ru'}</script>
 {/literal}
 
 {foreach from=$js_include item="s"}
@@ -111,6 +113,11 @@ createCookie('readedTopics', readed.join(' '), 3)
 		<dd>
 			<h1>{$title}</h1>
 			{$description}
+<table class="nul"><tr valign="top">
+<td style="padding-top: 5px"><iframe src="http://www.facebook.com/plugins/like.php?app_id=139039169508594&href={$this->url_for_igo()}&send=false&layout=button_count&width=20&show_faces=false&action=recommend&colorscheme=light&height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:150px; height:21px;" allowTransparency="true"></iframe></td>
+<td><g:plusone size="small" href="{$this->url_for_igo()}"></g:plusone></td>
+</tr></table>
+
 {* if $this->keywords_string()}<br /><i>Ключевые слова: {$this->keywords_string()}</i>{/if *}
 			{if $this->keywords_linked()}<div class="keywords">
 
@@ -135,8 +142,8 @@ createCookie('readedTopics', readed.join(' '), 3)
 {else}
 Тэги: {$this->keywords_linked()}
 {/if}
-</div>{/if}
-
+</div>
+{/if}
 		</dd>
 		</dl>
 
