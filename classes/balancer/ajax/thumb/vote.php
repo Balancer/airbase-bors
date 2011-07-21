@@ -55,11 +55,10 @@ class balancer_ajax_thumb_vote extends base_object
 					'create_time>' => time() - 86400,
 				));
 
-				debug_hidden_log('_test_limits', "test user votes limits. user_limit=$user_limit, today_user_negatives=$today_user_negatives", 1);
 
 				if($user_limit < $today_user_negatives)
 				{
-					debug_hidden_log('_test_limits', 'Can not', 1);
+					debug_hidden_log('_vote_limits', "User votes limits stop. user_limit=$user_limit, today_user_negatives=$today_user_negatives", 1);
 					return "<small>Вы исчерпали сегодняшний лимит отрицательных оценок [$user_limit]</small>";
 				}
 
@@ -75,11 +74,11 @@ class balancer_ajax_thumb_vote extends base_object
 					'create_time>' => time() - 86400*30,
 				));
 
-				debug_hidden_log('_test_limits', "test user votes limits. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
 
+				debug_hidden_log('_test_limits', "User votes limits test. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
 				if($tomonth_user_negatives > $tomonth_user_positives + 10)
 				{
-					debug_hidden_log('_test_limits', 'Can not', 1);
+					debug_hidden_log('_vote_limits', "User votes limits stop. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
 					return "<small>Вы слишком озлоблены. Расслабьтесь и будьте добрее.</small>";
 				}
 

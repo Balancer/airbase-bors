@@ -705,7 +705,11 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function snip($size = 200)
 	{
 		$text = $this->body();
-		$text = preg_replace('!<span class="q">.+?</span>!', '', $text);
-		return bors_truncate(strip_tags($text), $size);
+		$text = preg_replace('!<span class="q">.+?</span>!', ' … ', $text);
+		$text = strip_tags($text);
+		$text = str_replace("\n", " ", $text);
+		$text = preg_replace("/\s{2,}/", ' ', $text);
+		$text = str_replace('… …', '…', $text);
+		return bors_truncate($text, $size);
 	}
 }

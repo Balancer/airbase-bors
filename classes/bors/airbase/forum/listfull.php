@@ -12,8 +12,8 @@ class airbase_forum_listfull extends base_list
 		$ch = new Cache;
 		if($ch->get('airbase_forum_listfull', 'list'))
 			return $this->_list = $ch->last();
-	
-		$forums = objects_array('airbase_forum_forum', array(
+
+		$forums = objects_array('balancer_board_forum', array(
 			'order' => 'cat_id, disp_position',
 			'by_id' => true,
 			'redirect_url IS NULL',
@@ -24,12 +24,12 @@ class airbase_forum_listfull extends base_list
 				$cat_ids[] = $cat_id;
 
 		$cats = objects_array('airbase_forum_category', array('order' => 'disp_position', 'by_id' => true));
-		
+
 		$result = array(0 => ' ');
 		foreach($forums as $id => $f)
 			if($f->can_read())
 				$result[$id] = $f->full_name($forums, $cats);
-		
+
 		asort($result);
 
 		$result[0] = ec('Не указан');

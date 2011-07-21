@@ -69,6 +69,7 @@ if(!empty($_GET['id']) && preg_match('/viewforum\.php/', $_SERVER['REQUEST_URI']
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/colors.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
 <link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css';/*"*/?>" />
+<meta property="fb:admins" content="100000278666723" />
 <link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
 <link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
 <link rel="stylesheet" type="text/css" href="/_bors/css/main6.css" />

@@ -42,6 +42,7 @@
  <div id="ptr{$p->id()}" class="to-left">{if $p->score() != NULL}{$p->score_colorized()}{/if}</div>
  <div class="to-left"><img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$p->id()},'down')" width="16" height="16" /></div>
  <div class="half-transparent to-left">{$p->imaged_edit_url()}</div>
+ {if $is_first_post}<g:plusone size="small"></g:plusone>{/if}
 </div>
 {/if}
 
