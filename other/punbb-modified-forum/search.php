@@ -338,7 +338,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 						LEFT JOIN {$db->prefix}forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id={$pun_user['g_id']}) 
 					WHERE t.forum_id NOT IN (37, 190, 191) AND (fp.read_forum IS NULL OR fp.read_forum=1) 
 						$cat_ids
-						AND t.last_post>".(time() - 86400))
+						AND GREATEST(t.`last_post`, t.`sort_time`) >".(time() - 86400))
 					or error('Unable to fetch topic list', __FILE__, __LINE__, $db->error());
 				$num_hits = $db->num_rows($result);
 
@@ -437,7 +437,8 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 				break;
 
 			case 4:
-				$sort_by_sql = 't.last_post';
+//				$sort_by_sql = 't.last_post';
+				$sort_by_sql = 'GREATEST(t.`last_post`, t.`sort_time`)';
 				break;
 
 			default:
