@@ -25,6 +25,7 @@ class forum_topic extends base_page_db
 			'description',
 			'create_time'	=> 'posted',
 			'last_post_create_time'=> 'last_post',
+			'sort_time',
 			'modify_time',
 			'is_public',
 			'owner_id'=> 'poster_id',

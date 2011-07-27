@@ -28,7 +28,7 @@ class airbase_forum_forum extends base_page_db
 		} while($parent);
 
 		$cat = $cats ? $cats[$current_forum->category_id()] : $current_forum->category();
-		
+
 		return join(' « ', $result).' « '.$cat->full_name();
 	}
 
@@ -42,7 +42,7 @@ class airbase_forum_forum extends base_page_db
 
 		if(isset($this->_can_read[$gid]))
 			return $this->_can_read[$gid];
-	
+
 		if($access = object_load('airbase_forum_access', "{$this->id()}:$gid"))
 			return $this->_can_read[$gid] = $access->can_read() ? 1 : 0;
 

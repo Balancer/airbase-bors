@@ -163,7 +163,7 @@ if ($pun_user['is_guest'] || $pun_config['o_show_dot'] == '0')
 		last_post_id, last_poster, num_views, num_replies, closed, sticky,
 		moved_to FROM '.$db->prefix.'topics 
 		WHERE forum_id='.$id.' ORDER BY sticky DESC,
-		'.(($cur_forum['sort_by'] == '1') ? 'posted' : 'last_post').' DESC
+		'.(($cur_forum['sort_by'] == '1') ? 'posted' : 'GREATEST(`last_post`, `sort_time`)').' DESC
 		LIMIT '.$start_from.', '.$pun_user['disp_topics'];
 }
 else
@@ -173,7 +173,7 @@ else
 	{
 		case 'mysql':
 		case 'mysqli':
-			$sql = 'SELECT p.poster_id AS has_posted, t.id, t.subject, t.description, t.poster, t.posted, t.last_post, t.last_post_id, t.last_poster, t.num_views, t.num_replies, t.closed, t.sticky, t.moved_to FROM '.$db->prefix.'topics AS t LEFT JOIN '.$db->prefix.'posts AS p ON t.id=p.topic_id AND p.poster_id='.$pun_user['id'].' WHERE t.forum_id='.$id.' GROUP BY t.id ORDER BY sticky DESC, '.(($cur_forum['sort_by'] == '1') ? 'posted' : 'last_post').' DESC LIMIT '.$start_from.', '.$pun_user['disp_topics'];
+			$sql = 'SELECT p.poster_id AS has_posted, t.id, t.subject, t.description, t.poster, t.posted, t.last_post, t.last_post_id, t.last_poster, t.num_views, t.num_replies, t.closed, t.sticky, t.moved_to FROM '.$db->prefix.'topics AS t LEFT JOIN '.$db->prefix.'posts AS p ON t.id=p.topic_id AND p.poster_id='.$pun_user['id'].' WHERE t.forum_id='.$id.' GROUP BY t.id ORDER BY sticky DESC, '.(($cur_forum['sort_by'] == '1') ? 'posted' : 'GREATEST(`last_post`, `sort_time`)').' DESC LIMIT '.$start_from.', '.$pun_user['disp_topics'];
 			break;
 
 		case 'sqlite':

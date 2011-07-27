@@ -25,8 +25,11 @@ class balancer_board_topics_10years extends base_page_paged
 	{
 		$topics = parent::items();
 		foreach($topics as $t)
-			if($t->modify_time() < time() - 86400*365 && rand(0,9) == 0)
-				$t->set_modify_time(time(), true);
+			if(($t->sort_time() < time() - 86400*365))
+			{
+				debug_hidden_log('topics-up', "10 years: {$t->title()} ({$t->url()})", false);
+				$t->set_sort_time(time(), true);
+			}
 
 		return $topics;
 	}

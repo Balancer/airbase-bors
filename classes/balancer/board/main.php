@@ -87,7 +87,7 @@ class balancer_board_main extends base_page
 				'owner_id>' => 0,
 			)),
 
-			'best_votes_by_authors' => objects_array('bors_votes_thumb', array(
+			'best_votes_by_authors' => bors_find_all('bors_votes_thumb', array(
 				'select' => array('SUM(score) as sum'),
 				'create_time>' => time()-86400*30,
 				'group' => 'target_user_id',
