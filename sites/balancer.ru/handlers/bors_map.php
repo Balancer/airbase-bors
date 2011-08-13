@@ -128,8 +128,6 @@ $map = array(
 		'(/user/(\d+)/)use\-topics\.html => airbase_user_topics(2)',
 		'(/user/(\d+)/)use\-topics,(\d+)\.html => airbase_user_topics(2,3)',
 
-		'/user/(\d+)/? => user_main(1)',
-
 		'/user/(\d+)/setvars.js => forum_user_js_setvars(1)',
 
 		'/user/(\d+)/blog/ => user_blog(1)',
