@@ -1,11 +1,11 @@
 <?php
 
-class airbase_forum_admin_post_asnewtopic extends base_page
+class airbase_forum_admin_post_asnewtopic extends bors_page
 {
 	function config_class() { return 'airbase_forum_admin_config'; }
 	function title() { return ec('Вынесение сообщения в виде новой темы'); }
 	function nav_name() { return ec('в новую тему'); }
-	function post() { return object_load('forum_post', $this->id()); }
+	function post() { return bors_load('balancer_board_post', $this->id()); }
 	function target_forum_id() { return $this->post()->topic()->forum_id(); }
 	function new_topic_title()
 	{
@@ -31,6 +31,9 @@ class airbase_forum_admin_post_asnewtopic extends base_page
 
 	function pre_action($data)
 	{
+		if(!$this->post())
+			return bors_message(ec('Хрень какая-то. Не найден постинг ').intval($this->id()));
+
 		if($data['original_topic_id'] != $this->post()->topic_id())
 			return bors_message(ec('Это сообщение уже было перенесено, пока Вы готовились к той же операции'));
 

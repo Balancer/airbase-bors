@@ -216,8 +216,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		if($this->is_last_page())
 		{
-			$data['last_actions'] = array_reverse(objects_array('balancer_board_action', array(
-				'target_class_name' => $this->class_name(),
+			$data['last_actions'] = array_reverse(bors_find_all('balancer_board_action', array(
+				'target_class_name IN' => array($this->class_name(), $this->extends_class_name(), $this->new_class_name()),
 				'target_object_id' => $this->id(),
 				'order' => '-create_time',
 				'group' => 'target_class_name, target_object_id, message',
