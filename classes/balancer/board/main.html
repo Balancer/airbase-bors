@@ -145,7 +145,7 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 {if $t->description()}<i>{$t->description()}</i><br/>{/if}
 	</td>
 	<td>{$t->views_per_day()|round}</td>
-	<td>{$t->forum()->nav_named_url()}</td>
+	<td>{$t->forum()|get:nav_named_url}</td>
 	<td>{$t->author_name()}</td>
 </tr>
 {/foreach}

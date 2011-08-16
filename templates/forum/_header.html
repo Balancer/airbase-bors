@@ -111,10 +111,12 @@ createCookie('readedTopics', readed.join(' '), 3)
 		<dl class="box">
 		<dt class="nav">{module name="top-navs"}</dt>
 		<dd>
-			<h1>{$title}</h1>
+			<h1>{$this->page_title()}</h1>
 			{$description}
 <table class="nul"><tr valign="top">
-<td style="padding-top: 5px"><iframe src="http://www.facebook.com/plugins/like.php?app_id=139039169508594&href={$this->url_for_igo()}&send=false&layout=button_count&width=20&show_faces=false&action=recommend&colorscheme=light&height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:150px; height:21px;" allowTransparency="true"></iframe></td>
+{*
+<td style="padding-top: 5px"><iframe src="http://www.facebook.com/plugins/like.php?app_id=139039169508594&href={$this->url_for_igo()}&send=false&layout=button_count&width=20&show_faces=false&action=recommend&colorscheme=light&height=21" scrolling="no" frameborder="0" style="border:none;" allowTransparency="true"></iframe></td>
+*}
 <td><g:plusone size="small" href="{$this->url_for_igo()}"></g:plusone></td>
 </tr></table>
 

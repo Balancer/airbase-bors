@@ -1,39 +1,6 @@
 {if $items}
-{$this->pages_links_nul()}
 
-<table class="btab">
-<tr>
-	<th>*</th>
-	<th>Тема</th>
-	<th>Создано</th>
-	<th>Обновлено</th>
-	<th>Информация</th>
-</tr>
-{foreach from=$items item="x"}
-<tr>
-  <td>*</td>
-  <td>
-	<big>{$x->titled_url()|bors_hypher}</big>
-	{if $x->total_pages() > 1}{$x->pages_links_nul('pginlist', '', '', false)}{/if}
-	{if $x->description()}<small><br/>{$x->description()|bors_hypher}</small>{/if}
-  </td>
-  <td class="small nobr">
-	<b>{$x->author_name()}</b><br/>
-	{$x->create_time()|full_time}
-  </td>
-  <td class="small nobr">
-	<b>{$x->last_poster_name()}</b><br/>
-    {$x->last_post_create_time()|full_time}
-  </td>
-  <td class="small">
-  	Форум: <b>{$x->forum()|get:titled_url}</b><br/>
-	Тэги: {$x->keywords_string()|keywords_linkify}
-  </td>
-</tr>
-{/foreach}
-</table>
-
-{$this->pages_links_nul()}
+{include file="xfile:airbase/forum/forum.html" topics=$items}
 
 {else}
 <div class="box red_box">Сообщения с этим тэгом не найдено</div>

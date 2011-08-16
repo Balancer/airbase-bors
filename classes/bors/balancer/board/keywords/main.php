@@ -40,6 +40,7 @@ class balancer_board_keywords_main extends base_page
 			$style[] = 'font-size: '.intval(8+pow($x->target_containers_count(), 1/2.5)).'px;';
 
 			$x->set_attr('style', join(' ', $style));
+			$x->set_attr('titled_link', $x->titled_link_ex(array('popup' => $x->target_containers_count())));
 		}
 
 

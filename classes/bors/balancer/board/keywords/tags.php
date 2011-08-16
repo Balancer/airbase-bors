@@ -32,7 +32,8 @@ class balancer_board_keywords_tags extends base_page
 		return $this->_keywords;
 	}
 
-	function title() { return str_replace(',', ', ', $this->keywords_string()); }
+	function title() { return ec('Тэги форумов: ').str_replace(',', ', ', $this->keywords_string()); }
+	function nav_name() { return bors_lower(str_replace(',', ', ', $this->keywords_string())); }
 
 	function description()
 	{
@@ -93,10 +94,10 @@ class balancer_board_keywords_tags extends base_page
 	{
 //		print_dd($this->items());
 //		echo $this->page();
-		return array(
+		return array_merge(parent::body_data(), array(
 			'items' => $this->items(),
 //			'keyword' => $this->keyword(),
-		);
+		));
 	}
 
 	function items_per_page() { return 25; }
@@ -143,7 +144,7 @@ class balancer_board_keywords_tags extends base_page
 //			'target_create_time>' => 0,
 			'group' => 'target_class_name,target_object_id',
 			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),
-			'order' => '-target_create_time',
+			'order' => '-target_modify_time',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
 		)) as $bind)
@@ -155,7 +156,7 @@ class balancer_board_keywords_tags extends base_page
 		foreach($targets as $class_name => $ids)
 			$items = array_merge($items, objects_array($class_name, array('id IN' => $ids)));
 
-		uasort($items, create_function('$a,$b', 'return $a->create_time() < $b->create_time();'));
+		uasort($items, create_function('$a,$b', 'return $a->modify_time() < $b->modify_time();'));
 
 		return $this->__setc($items);
 	}
