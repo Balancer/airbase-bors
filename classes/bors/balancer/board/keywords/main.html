@@ -6,12 +6,11 @@
 {/foreach}
 </h2>
 
-{foreach from=$keywords item="x"}
+{foreach from=$keywords item="x" name="l"}
 {if $x->style()}
-<span style="{$x->style()}">{$x->titled_url()},</span>
-{else}
-{$x->titled_url()},
-{/if}
+<span style="{$x->style()}">{$x->attr('titled_link')}</span>{else}
+{$x->attr('titled_link')}
+{/if}{if not $smarty.foreach.l.first}, {/if}
 {/foreach}
 </dd>
 </dl>

@@ -615,7 +615,13 @@ $(function() {
 		return ($for_post ? $this->last_post_create_time() : $this->modify_time()) > $last;
 	}
 
-	function on_delete_pre() { $this->forum(); }
+	function on_delete_pre()
+	{
+		$this->forum();
+		common_keyword_bind::remove($this);
+//		parent::on_delete_pre();
+	}
+
 	function on_delete_post() { $this->forum()->recalculate(); }
 
 	function fetch_updated_from($time, $format = 'html')
