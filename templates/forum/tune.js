@@ -83,10 +83,10 @@ function createSelect(title, element, values, def)
 			name = value[0]
 			value = value[1]
 		}
-			
+
 		document.write("<option value=\""+value+"\""+(cookie == value ? " selected=\"true\"" : "")+">"+name+"</option>")
 	}
-	
+
 	document.write("</select><br />")
 }
 
