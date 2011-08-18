@@ -13,7 +13,7 @@
 {/if}
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
-	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-230-min.css" />
+	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-100-min.css" />
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
@@ -274,8 +274,8 @@ createCookie('readedTopics', readed.join(' '), 3)
 		<dt>Настройки</dt>
 		<dd>
 			<script type="text/javascript">
-				createSelect("Шрифт", "fontFamily", "default(Verdana):Verdana;Georgia;sans-serif;serif;monospace", "Verdana")
-				createSelect("Размер", "fontSize", "8pt;10pt;default(12pt):12pt;14pt;16pt;20pt;24pt", "12pt")
+				createSelect("Шрифт", "fontFamily", "default(Georgia):Georgia;Verdana;sans-serif;serif;monospace", "Georgia")
+				createSelect("Размер", "fontSize", "8pt;10pt;12pt;default(14pt):14pt;16pt;20pt;24pt", "14pt")
 				createSelect("Расстояние до монитора", "incenter.width", "auto;30cm:14cm;45cm:21cm;70cm:30cm", "auto")
 			</script>
 			<noscript><p>Не работает без JavaScript</p></noscript>
