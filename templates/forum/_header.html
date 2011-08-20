@@ -34,6 +34,7 @@ pre { word-wrap: break-word; }
 {foreach from=$js_include item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
+<script type="text/javascript" src="/_bors/js/tune.js"></script>
 
 <script type="text/javascript"><!--
 {if $this}
@@ -218,14 +219,16 @@ createCookie('readedTopics', readed.join(' '), 3)
 | <a href="http://balancer.ru/forum/user-{$me_id}-posts-in-topic-{$this->id()}/">Ваше в теме</a>
 {/if}
 {/if}
-<script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
+
+{include file="xfile:balancer/inc/yandex-share.html"}
 <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="link" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir,lj,friendfeed,moikrug"></div>
+
 </dd>
 </dl>
 
 {if not $skip_ad}
 <div class="center"><div class="top-ad">
-{include file="xfile:forum/ads/google-ads-bottom.original.html"}
+{include file="xfile:forum/ads/google-ads-bottom.html"}
 </div></div>
 {/if}
 		<dl class="box">
@@ -340,13 +343,12 @@ height="31" width="88" border="0" alt="Рейтинг@Mail.ru" /></a></noscript>
 if(11<js)d.write('--'+'&#062');//]]></script>
 <!--// Rating@Mail.ru counter-->
 
-<span><!--<a href="http://top.airbase.ru/"><img src="http://top.airbase.ru/?id=1" width="88" height="31" alt="АвиаТОП" title="Числа: место в рейтинге, хитов всего и хитов в сутки" /></a>--></span>
+<span class="bors_lazy_load"><!--<a href="http://top.airbase.ru/"><img src="http://top.airbase.ru/?id=1" width="88" height="31" alt="АвиаТОП" title="Числа: место в рейтинге, хитов всего и хитов в сутки" /></a>--></span>
 
 {include file="xfile:balancer/board/count-yandex.html"}
 
-
 {* amung.us - 80x15 *}
-<span><!--<a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a>--></span>
+<span class="bors_lazy_load"><!--<a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a>--></span>
 
 <!--LiveInternet counter--><script type="text/javascript"><!--
 document.write("<a href='http://www.liveinternet.ru/click' "+
@@ -370,10 +372,10 @@ document.write('<a href="http://www.mapyourvisitors.com/map' + kod + '.php"><img
 //--></script>
 <br />
 *}
-{*
-<span><!--<center><a href="http://s02.flagcounter.com/more/NNik"><img src="http://s02.flagcounter.com/count/NNik/bg=FFFFFF/txt=000000/border=CCCCCC/columns=2/maxflags=12/viewers=0/labels=0/" alt="free counters" /></a></center>--></span>
+
+<span class="bors_lazy_load"><!--<center><a href="http://s02.flagcounter.com/more/NNik"><img src="http://s02.flagcounter.com/count/NNik/bg=FFFFFF/txt=000000/border=CCCCCC/columns=2/maxflags=12/viewers=0/labels=0/" alt="free counters" /></a></center>--></span>
 <br/>
-*}
+
 
 
 </div>{* /статистика *}

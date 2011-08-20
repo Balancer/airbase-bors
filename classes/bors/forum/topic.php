@@ -560,8 +560,6 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			return go(object_load('balancer_board_topic', $this->moved_to())->url($this->page()));
 
 		template_jquery();
-//		template_jquery_plugin_lazyload();
-		template_jquery_plugin_lazyload_ad();
 //		template_jquery_plugin_autocomplete();
 /*
 //		http://jqueryui.com/docs/Getting_Started#Click_Download.21

@@ -35,7 +35,11 @@ class balancer_board_ban extends base_object_db
 
 	static function find_by_name($username)
 	{
-		return bors_find_first('balancer_board_ban', array(
+		static $cache = array();
+		if(array_key_exists($username, $cache))
+			return $cache[$username];
+
+		return $cache[$username] = bors_find_first('balancer_board_ban', array(
 			'username' => $username,
 			'(expire IS NULL OR expire >'.time().')',
 			'order' => '-id',

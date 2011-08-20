@@ -130,7 +130,7 @@ class base_page_hts extends base_page_db
 	{
 		return array(
 			ec('Заголовок:') => 'title',
-			ec('Тело страницы:') => 'source|textarea=20',
+			ec('Тело страницы:') => 'source|bbcode=30',
 		);
 	}
 
