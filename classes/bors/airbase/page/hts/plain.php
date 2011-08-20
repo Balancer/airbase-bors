@@ -8,12 +8,12 @@ class airbase_page_hts_plain extends base_page
 	function can_be_empty() { return false; }
 
 	function storage_engine() { return 'storage_fs_hts'; }
-	
+
 	private $parents = array();
 	function parents() { return $this->parents; }
 	function set_parents($arr, $dbup) { return $this->parents = &$arr; }
 
-	var $stb_type = 'hts';
+	var $type = 'hts';
 
 	function init()
 	{

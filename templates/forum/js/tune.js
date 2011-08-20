@@ -33,13 +33,4 @@ function onLoadPage()
 			}
 		}
 	}
-
-	$("span").each(
-		function()
-		{
-			x = $(this)
- 			if(m = x.html().match(/^<!\-\-([\s\S]*)\-\->$/m))
-				x.html(m[1])
-		}
-	)
 }

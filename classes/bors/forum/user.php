@@ -291,22 +291,25 @@ function avatar_thumb($geo)
 	function url() { return "http://balancer.ru/user/{$this->id()}/"; }
 	function parents() { return array("http://balancer.ru/users/"); }
 
-	private $is_banned;
 	function is_banned()
 	{
-		if($this->is_banned !== NULL)
-			return $this->is_banned;
+		if(array_key_exists('is_banned', $this->attr))
+			return $this->attr['is_banned'];
+
+		$ch = new bors_cache_redis;
+		if($ch->check('user[3].is_banned', $this->id()))
+			return $this->attr['is_banned'] = $ch->last();
 
 		if($this->warnings() >= 10)
-			return $this->is_banned = true;
+			return $ch->set($this->attr['is_banned'] = true, 600);
 
 		if($ban = balancer_board_ban::find_by_name($this->title()))
-			return $this->is_banned = $ban;
+			return $ch->set($this->attr['is_banned'] = $ban, 600);
 
 		if($ban = balancer_board_ban::find_by_name($this->login()))
-			return $this->is_banned = $ban;
+			return $ch->set($this->attr['is_banned'] = $ban, 600);
 
-		return $this->is_banned = false;
+		return $ch->set($this->attr['is_banned'] = false, 600);
 	}
 
 	function is_banned_in($forum_id) { return $this->__havec('is_banned_in') ? $this->__lastc() : $this->__setc(_is_banned_in($forum_id)); }

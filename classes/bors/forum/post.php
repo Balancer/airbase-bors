@@ -182,20 +182,6 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		$this->set('topic_page', $page, $dbupd);
 	}
 
-	private $__owner = NULL;
-	function owner()
-	{
-		if($this->__owner === NULL)
-			$this->__owner =  object_load('balancer_board_user', $this->owner_id());
-
-		return $this->__owner;
-	}
-
-	function set_owner($owner, $dbup)
-	{
-		$this->__owner = $owner;
-	}
-
 	function source()
 	{
 		if($ps = $this->post_source())
@@ -676,6 +662,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		return array_merge(parent::auto_objects(), array(
 			'blog' => 'balancer_board_blog(id)',
+			'owner' => 'balancer_board_user(owner_id)'
 		));
 	}
 
