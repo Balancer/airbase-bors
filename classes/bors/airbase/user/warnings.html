@@ -8,23 +8,28 @@ if(top.me_is_coordinator)
 {rdelim}
 --></script>
 {if $show_form}
-<h2>Выставление штрафа</h2>
-<p>За {$object->class_title_vp()|lower} «{$object->titled_url()}»</p>
-{form class="airbase_user_admin_warning"}
-<table>
-<tr><td>Причина штрафа:</td><td>{bors_radio name="type_id" list="airbase_user_warning_typesco" class="w100p"}</td></tr>
-<tr><td>Комментарий:<br /><small>Не обязательно</small></td><td>{textarea name="source" cols="50" rows="5" class="w100p"}</td></tr>
-<tr><td>&nbsp;</td><td>{submit value="Выставить штраф"}</td></tr>
-</table>
-<input type="hidden" name="object" value="{$object->internal_uri()}" />
-<input type="hidden" name="user_id" value="{$this->id()}" />
-{go value=$object->url_in_container()}
-{/form}
+ <h2>Выставление штрафа</h2>
+ <p>За {$object->class_title_vp()|lower} «{$object->titled_url()}»</p>
+ {if not $previous_warning}
+  {form class="airbase_user_admin_warning"}
+   <table>
+   <tr><td>Причина штрафа:</td><td>{bors_radio name="type_id" list="airbase_user_warning_typesco" class="w100p"}</td></tr>
+   <tr><td>Комментарий:<br /><small>Не обязательно</small></td><td>{textarea name="source" cols="50" rows="5" class="w100p"}</td></tr>
+   <tr><td>&nbsp;</td><td>{submit value="Выставить штраф"}</td></tr>
+   </table>
+   <input type="hidden" name="object" value="{$object->internal_uri()}" />
+   <input type="hidden" name="user_id" value="{$this->id()}" />
+   {go value=$object->url_in_container()}
+  {/form}
+ {else}
+  <div class="yellow_box">За это сообщение пользователь уже получил предупреждение «{$previous_warning->description()}»</div>
+ {/if}
 {else}
-{if $warns_from_me>=4}
-Набран предел штрафов этого пользователя от одного координатора/модератора.
+ {if $warns_from_me>=4}
+  Набран предел штрафов этого пользователя от одного координатора/модератора.
+ {/if}
 {/if}
-{/if}
+
 
 {$this->pages_links_nul()}
 
@@ -63,5 +68,5 @@ if(top.me_is_coordinator)
 {$this->pages_links_nul()}
 
 {if not $passive_warnings and not $active_warnings}
-<div class="box"><b>У этого пользователя не было ни одного штрафа.</b></div>
+<div class="box"><b>У этого пользователя не было ни одного {if $skip_passive}активного{/if} штрафа.</b></div>
 {/if}
