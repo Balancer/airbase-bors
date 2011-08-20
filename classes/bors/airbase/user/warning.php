@@ -33,6 +33,17 @@ class airbase_user_warning extends base_object_db
 		));
 	}
 
+	function auto_objects()
+	{
+		return array_merge(parent::auto_objects(), array(
+			'type' => 'airbase_user_warning_type(type_id)',
+			'type_scored' => 'airbase_user_warning_typesco(type_id)',
+		));
+	}
+
+	function title() { return $this->type_scored(); }
+	function description() { return ec('Штраф <b>').$this->type_scored().($this->source() ? " [{$this->source()}]" : '').'</b>'.ec(' пользователю <i>').$this->user()->title().'</i> '.ec(' от <i>').$this->moderator()->title().'</i>'; }
+
 	function moderator() { return object_load('balancer_board_user', $this->moderator_id()); }
 	function user() { return object_load('balancer_board_user', $this->user_id()); }
 

@@ -18,12 +18,13 @@ class airbase_user_warnings extends base_page
 		return $this->user;
 	}
 
-	function local_data($skip_passive = false)
+	function body_data($skip_passive = false)
 	{
 		template_noindex();
 
 		$data = array(
 			'ref' => urldecode(@$_GET['ref']) or @$_SERVER['HTTP_REFERER'],
+			'skip_passive' => $skip_passive,
 		);
 
 		if(!$skip_passive)
