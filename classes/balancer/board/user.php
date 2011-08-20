@@ -167,4 +167,20 @@ class balancer_board_user extends forum_user
 		foreach(bors_find_all(__CLASS__, array('id IN' => bors_field_array_extract($friend_binds, 'user_id'))) as $u)
 			$u->notify_text($text);
 	}
+
+	function _warnings_update()
+	{
+		$warnings_active = bors_find_first('airbase_user_warning', array(
+			'*set' => 'SUM(score) as total',
+			'user_id' => $this->id(),
+			'time>' => time()-WARNING_DAYS*86400,
+		));
+		$warnings_total = bors_find_first('airbase_user_warning', array(
+			'*set' => 'SUM(score) as total',
+			'user_id' => $this->id(),
+		));
+
+		$this->set_warnings($warnings_active->total(), true);
+		$this->set_warnings_total($warnings_total->total(), true);
+	}
 }

@@ -18,7 +18,7 @@ if(top.me_is_coordinator)
 </table>
 <input type="hidden" name="object" value="{$object->internal_uri()}" />
 <input type="hidden" name="user_id" value="{$this->id()}" />
-{go value=$object->url()}
+{go value=$object->url_in_container()}
 {/form}
 {else}
 {if $warns_from_me>=4}

@@ -2,17 +2,19 @@
 
 class airbase_user_warning extends base_object_db
 {
-	function main_db() { return 'punbb'; }
-	function main_table() { return 'warnings'; }
+	function storage_engine() { return 'bors_storage_mysql'; }
 
-	function fields()
+	function db_name() { return 'punbb'; }
+	function table_name() { return 'warnings'; }
+
+	function table_fields()
 	{
-		return array('punbb' => array('warnings' => array(
+		return array(
 			'id',
 			'user_id',
 //			'create_time' => array('name' => 'time', 'comment' => 'Дата выставления'),
 			'create_time' => 'time',
-			'expire_time' => 'FROM_UNIXTIME(expired_timestamp)',
+			'expire_time' => array('name' => 'FROM_UNIXTIME(`expired_timestamp`)'),
 			'score_db' => 'score',
 			'type_id',
 			'moderator_id',
@@ -21,7 +23,7 @@ class airbase_user_warning extends base_object_db
 			'source' => 'comment',
 			'warn_class_id',
 			'warn_object_id',
-		)));
+		);
 	}
 
 	function auto_targets()
@@ -79,5 +81,11 @@ class airbase_user_warning extends base_object_db
 			ec('Комментарий:') => 'source|textarea=4',
 			ec('Количество штрафных баллов:') => 'score',
 		);
+	}
+
+	function post_save(&$data)
+	{
+		$this->user()->_warnings_update();
+		return parent::post_save($data);
 	}
 }
