@@ -54,11 +54,8 @@ class airbase_user_admin_warning extends airbase_user_warning
 	function on_new_instance(&$data)
 	{
 		$uid = $data['user_id'];
-		$user = bors_load('bors_user', $uid);
-		$warnings = $this->db()->select('warnings', 'SUM(score)', array('user_id' => $uid, 'time>' => time()-WARNING_DAYS*86400));
-		$warnings_total = $this->db()->select('warnings', 'SUM(score)', array('user_id' => $uid));
-		$user->set_warnings($warnings, true);
-		$user->set_warnings_total($warnings_total, true);
+		$user = bors_load('balancer_board_user', $uid);
+		$user->_warnings_update();
 		$user->cache_clean();
 		bors_load('users_topwarnings')->cache_clean();
 
