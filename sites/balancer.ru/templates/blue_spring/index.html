@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-  <title>{$title} // Balancer.Ru</title>
+  <title>{$this->browser_title()} // Balancer.Ru</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta property="fb:admins" content="100000278666723" />
   <link rel="stylesheet" type="text/css" href="/_bors/css/layout.css" />
@@ -10,6 +10,9 @@
   <link rel="stylesheet" type="text/css" href="/templates/blue_spring/style/style.css" />
   <link rel="stylesheet" type="text/css" href="/templates/blue_spring/style/colour.css" />
   <link rel="stylesheet" type="text/css" href="/templates/blue_spring/style/bal.css" />
+{if not empty($css_list)}{foreach item=css from=$css_list}
+<style type="text/css" media="all">@import url("{$css}");</style>
+{/foreach}{/if}
 {if not empty($js_include)}{foreach from=$js_include item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}{/if}
@@ -75,8 +78,11 @@
 
 
       </div>
+
+
       <div id="column2">
-        <h1>{$title}</h1>
+		<div class="top-nav">{module class="nav_top" id=$this}</div>
+        <h1>{$this->page_title()}</h1>
 
 		{$body}
 
