@@ -183,8 +183,8 @@ if ($cur_topic['closed'] == '0')
 {
 	if (($cur_topic['post_replies'] == '' && $pun_user['g_post_replies'] == '1') || $cur_topic['post_replies'] == '1' || $is_admmod)
 		$post_link = "[
-			<a href=\"{$pun_config['root_uri']}/post.php?tid=$id\">{$lang_topic['Post reply']}</a> |
-			<a href=\"{$pun_config['root_uri']}/post.php?fid={$cur_topic['forum_id']}\">{$lang_forum['Post topic']}</a>
+			<a rel=\"nofollow\" href=\"{$pun_config['root_uri']}/post.php?tid=$id\">{$lang_topic['Post reply']}</a> |
+			<a rel=\"nofollow\" href=\"{$pun_config['root_uri']}/post.php?fid={$cur_topic['forum_id']}\">{$lang_forum['Post topic']}</a>
 ]";
 	else
 		$post_link = '&nbsp;';
@@ -194,7 +194,7 @@ else
 	$post_link = $lang_topic['Topic closed'];
 
 	if ($is_admmod)
-		$post_link .= " / <a href=\"{$pun_config['root_uri']}/post.php?tid=$id\">".$lang_topic['Post reply'].'</a>';
+		$post_link .= " / <a rel=\"nofollow\" href=\"{$pun_config['root_uri']}/post.php?tid=$id\">".$lang_topic['Post reply'].'</a>';
 }
 
 // Determine the post offset (based on $_GET['p'])
@@ -493,15 +493,15 @@ while ($cur_post = $db->fetch_assoc($result))
 				if ((($start_from + $post_count) == 1 && $pun_user['g_delete_topics'] == '1') || (($start_from + $post_count) > 1 && $pun_user['g_delete_posts'] == '1'))
 					$post_actions[] = "<li class=\"postdelete\"><a href=\"{$pun_config['root_uri']}/delete.php?id={$cur_post['id']}\">".$lang_topic['Delete'].'</a>';
 				if ($pun_user['g_edit_posts'] == '1')
-					$post_actions[] = "<li class=\"postedit\"><a href=\"{$pun_config['root_uri']}/edit.php?id={$cur_post['id']}\">".$lang_topic['Edit'].'</a>';
+					$post_actions[] = "<li class=\"postedit\"><a rel=\"nofollow\" href=\"{$pun_config['root_uri']}/edit.php?id={$cur_post['id']}\">".$lang_topic['Edit'].'</a>';
 			}
 
 			if (($cur_topic['post_replies'] == '' && $pun_user['g_post_replies'] == '1') || $cur_topic['post_replies'] == '1')
-				$post_actions[] = "<li class=\"postquote\"><a href=\"{$pun_config['root_uri']}/post.php?tid=$id&amp;qid={$cur_post['id']}\">".$lang_topic['Quote'].'</a>';
+				$post_actions[] = "<li class=\"postquote\"><a rel=\"nofollow\" href=\"{$pun_config['root_uri']}/post.php?tid=$id&amp;qid={$cur_post['id']}\">".$lang_topic['Quote'].'</a>';
 		}
 	}
 	else
-		$post_actions[] = "<li class=\"postreport\"><a href=\"{$pun_config['root_uri']}/misc.php?report={$cur_post['id']}\">".$lang_topic['Report'].'</a>'.$lang_topic['Link separator']."</li><li class=\"postdelete\"><a href=\"{$pun_config['root_uri']}/delete.php?id={$cur_post['id']}\">".$lang_topic['Delete'].'</a>'.$lang_topic['Link separator']."</li><li class=\"postedit\"><a href=\"{$pun_config['root_uri']}/edit.php?id={$cur_post['id']}\">".$lang_topic['Edit'].'</a>'.$lang_topic['Link separator']."</li><li class=\"postquote\"><a href=\"{$pun_config['root_uri']}/post.php?tid=$id&amp;qid={$cur_post['id']}\">".$lang_topic['Quote'].'</a>';
+		$post_actions[] = "<li class=\"postreport\"><a rel=\"nofollow\" href=\"{$pun_config['root_uri']}/misc.php?report={$cur_post['id']}\">".$lang_topic['Report'].'</a>'.$lang_topic['Link separator']."</li><li class=\"postdelete\"><a href=\"{$pun_config['root_uri']}/delete.php?id={$cur_post['id']}\">".$lang_topic['Delete'].'</a>'.$lang_topic['Link separator']."</li><li class=\"postedit\"><a href=\"{$pun_config['root_uri']}/edit.php?id={$cur_post['id']}\">".$lang_topic['Edit'].'</a>'.$lang_topic['Link separator']."</li><li class=\"postquote\"><a href=\"{$pun_config['root_uri']}/post.php?tid=$id&amp;qid={$cur_post['id']}\">".$lang_topic['Quote'].'</a>';
 
 
 	// Switch the background color for every message.
