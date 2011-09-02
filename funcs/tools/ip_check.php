@@ -6,7 +6,7 @@
 
 		$uip = $m[1]<<24 | $m[2]<<16 | $m[3]<<8 | $m[4];
 	
-		foreach(file("/var/www/files.balancer.ru/htdocs/runet2.txt") as $ip)
+		foreach(file("/var/www/files.balancer.ru/htdocs/runet.txt") as $ip)
 		{
 			if(preg_match("!^(\d+)\.(\d+)\.(\d+)\.(\d+)/(\d+)$!", $ip, $m))
 			{

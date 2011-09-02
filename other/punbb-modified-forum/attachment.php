@@ -1,6 +1,8 @@
 <?php
+
+//	require_once('/var/www/bors/bors-airbase/funcs/tools/ip_check.php');
 //	agava_ip_check();
-	
+
 /*
 
 also it is possible to make your php script resume downloads, to do this you need to check $_SERVER['HTTP_RANGE'] which may contain something like this

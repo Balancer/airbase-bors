@@ -65,6 +65,7 @@ if(empty($pun_user['g_id']))
 	$pun_user['g_id'] = 3;
 
 $forum = object_load('balancer_board_forum', $id);
+$GLOBALS['forum_id'] = $id;
 
 // Fetch some info about the forum
 $result = $db->query('SELECT f.forum_name, f.redirect_url, f.moderators, f.num_topics, f.sort_by, fp.post_topics FROM '.$db->prefix.'forums AS f LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND f.id='.$id)

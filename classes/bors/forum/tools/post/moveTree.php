@@ -93,7 +93,9 @@ class forum_tools_post_moveTree extends base_page
 	function on_action_by_post_id(&$data)
 	{
 		$pid = @$data['target_post_id'];
-		if(preg_match('!post\-(\d+)!', $pid, $m))
+		if(preg_match('!p(\d+)$!', $pid, $m))
+			$pid = $m[1];
+		elseif(preg_match('!post\-(\d+)!', $pid, $m))
 			$pid = $m[1];
 		elseif(preg_match('!\?pid=(\d+)!', $pid, $m))
 			$pid = $m[1];
