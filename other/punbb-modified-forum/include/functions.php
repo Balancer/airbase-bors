@@ -224,6 +224,8 @@ function generate_navlinks()
 		$links[] = "<li id=\"navrules\"><a href=\"{$pun_config['root_uri']}/misc.php?action=rules\">".$lang_common['Rules'].'</a>';
 
 	$search_url = 'http://balancer.ru/tools/search/';
+	if(!empty($GLOBALS['forum_id']))
+		$search_url .= '?f%5B%5D='.intval($GLOBALS['forum_id']);
 
 	if ($pun_user['is_guest'])
 	{
