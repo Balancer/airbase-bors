@@ -10,7 +10,7 @@ class user_blog_rss extends base_rss
 
 	function rss_items()
 	{
-		return objects_array('forum_blog', array(
+		return bors_find_all('balancer_board_blog', array(
 			'where' => array('owner_id=' => $this->id()),
 			'order' => '-blogged_time',
 			'create_time>' => time()-31*86400,
@@ -21,6 +21,6 @@ class user_blog_rss extends base_rss
 	function cache_static() { return config('static_forum') ? rand(600, 1200) : 0; }
 
 	function url() { return $this->blog()->url().'rss.xml'; }
-	function rss_url() { return $this->blog()->url(); }
+//	function rss_url() { return $this->blog()->url(); }
+	function main_url() { return $this->blog()->url(); }
 }
-
