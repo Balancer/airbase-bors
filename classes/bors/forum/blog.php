@@ -85,4 +85,7 @@ class forum_blog extends base_page_db
 			common_keyword_bind::add($this);
 		return $keywords;
 	}
+
+	function create_time() { return $this->post()->create_time(); }
+	function modify_time() { return $this->post()->modify_time(); }
 }
