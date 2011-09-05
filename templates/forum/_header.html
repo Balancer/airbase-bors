@@ -37,16 +37,9 @@ pre { word-wrap: break-word; }
 <script type="text/javascript" src="/_bors/js/tune.js"></script>
 
 <script type="text/javascript"><!--
-{if $this}
-createCookie('cid', '{$this->class_id()}', 60./86400)
-createCookie('id', '{$this->id()|intval}', 60./86400)
-createCookie('p', '{$this->page()}', 60./86400)
-{if $this->new_class_name() == 'balancer_board_topic'
-	or $this->class_name() == 'balancer_board_topics_blog'
-	or $this->class_name() == 'balancer_board_topics_images'
-	or $this->class_name() == 'balancer_board_topics_video'
-}createCookie('ltid', '{$this->id()}', 60./86400){/if}
-{/if}
+top.class_name='{$this->class_name()}'
+top.object_id='{$this->id()}'
+top.page='{$this->page()}'
 
 var me_id = readCookie('user_id', 0)
 var me_hash = readCookie('cookie_hash', 0)

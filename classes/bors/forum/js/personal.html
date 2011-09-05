@@ -31,17 +31,12 @@
 
 {literal}
 <script>
-cid = readCookie('cid', 0)
-if(cid == 2 || cid == 89)
-{
-	tid = readCookie('id', '0')
-	page = readCookie('p', '1')
-}
+tid = top.object_id
+
+if(top.class_name == 'forum_topic' || top.class_name == 'balancer_board_topic')
+	page = top.page
 else
-{
-	tid = readCookie('ltid', '0')
 	page = 1
-}
 
 if(tid > 0)
 {
