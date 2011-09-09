@@ -1,0 +1,23 @@
+{*
+	$avatar_size = 100
+*}
+{if not $avatar_size}{assign var="avatar_size" value=100}{/if}
+{if $this->use_avatar()}
+<div style="height: {$this->avatar_height($avatar_size)}px; margin: {math equation="max(0,floor((s-w)/2))" w=$this->avatar_width() s=$avatar_size}px 0">
+<a href="{$this->url()}">
+<img src="http://s.wrk.ru/a/{$this->use_avatar()}" width="{$this->avatar_width($avatar_size)}" height="{$this->avatar_height($avatar_size)}" alt="" />
+</a>
+</div>
+{else}
+<a href="{$this->url()}">
+<img src="http://www.gravatar.com/avatar/{$this->email()|trim|bors_lower|md5}?d=wavatar" width="{$avatar_size}" height="{$avatar_size}" alt="" />
+</a>
+{/if}
+<h4><a href="{$this->url()}">{$this->title()}</a></h4>
+{if $avatar_size == 100}
+{if $this->group_title()}<h5>{$this->group_title()}</h5>{/if}
+{* {if $this->reputation()}<a href="http://balancer.ru/user/{$this->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}"><img src="http://balancer.ru/user/{$this->id()}/rep.gif" class="rep" alt="" /></a>{/if} *}
+{if $this->reputation()}<a href="http://balancer.ru/user/{$this->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}" class="rep">{$this->reputation_html()}</a><br/>{/if}
+{* {if $this->warnings() || $this->is_banned()}<a href="http://balancer.ru/user/{$this->id()}/warnings/"><img src="http://balancer.ru/user/{$this->id()}/warnings.gif" class="warn" alt="" /></a>{/if} *}
+{if $this->warnings() || $this->is_banned()}<a href="http://balancer.ru/user/{$this->id()}/warnings/" class="warn">{$this->warnings_html()}</a><br/>{/if}
+{/if}
