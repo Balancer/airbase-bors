@@ -68,7 +68,7 @@ function set_num_replies($v, $dbup) { return $this->set('num_replies', $v, $dbup
 function is_repaged() { return @$this->data['is_repaged']; }
 function set_is_repaged($v, $dbup) { return $this->set('is_repaged', $v, $dbup); }
 function visits() { return @$this->data['visits']; }
-function set_visits($v, $dbup) { return $this->set('visits', $v, $dbup); }
+function set_visits($v, $dbup = true) { return $this->set('visits', $v, $dbup); }
 function first_post_id() { return @$this->data['first_post_id']; }
 function set_first_post_id($v, $dbup) { return $this->set('first_post_id', $v, $dbup); }
 function last_post_id() { return @$this->data['last_post_id']; }
@@ -577,6 +577,7 @@ $(function() {
 '		);
 */
 		$this->tools()->use_ajax();
+		$this->visits_inc();
 		return parent::pre_show();
 	}
 

@@ -1,0 +1,88 @@
+{if !$this->is_deleted()}
+<a name="p{$this->id()}"></a>
+{assign var="owner" value=$this->owner()}
+{assign var=a value=$this->answer_to()}
+<div class="post pby{$this->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $this->is_moderatorial()} moderatorial_post{/if}">
+<div class="head">
+<div class="to-left">
+{if $this->is_moderatorial()}<div class="red small">Данное сообщение является официальным предупреждением</div>{/if}
+{$this->flag()}
+{if $this->joke_owner()}{$this->joke_owner()->title()}{else}{$this->author_name()}{/if}
+<a href="{$this->url_for_igo()}">#{$this->create_time()|full_time}</a>
+{if $this->answer_to_id() and $a}&nbsp;<span class="answer">@{if $a->joke_owner()}{$a->joke_owner()->title()}{else}{$a->author_name()}{/if}<a href="{$a->url_in_container()}">#{$a->create_time()|full_time}</a></span>{/if}
+</div>
+
+{* Меню шапки сообщения. Голоса и прочее. *}
+<div class="to-right">
+	{if config('is_developer')}<div id="ab_rec_{$this->new_class_name()}__{$this->id()}" class="to-left ab_rec"><img src="/_bors/i16/recommendation.gif" alt="[!]" width="16" height="16" title="Рекомендовать это сообщение" /></div>{/if}
+ {if $me}
+ <div class="to-left">
+  {$this->tools()->favorite_link_ajax()}
+  {if $me->is_coordinator()}<div id="pttools_{$this->id()}" class="to-left"></div><img src="/_bors/i/tools.gif" alt="*" onclick="sh('pttools', {$this->id()})"  width="16" height="16" title="Инструменты координатора" />{/if}
+ </div>
+ {/if}
+ <div class="to-left"><img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$this->id()},'up')"  width="16" height="16" /></div>
+ <div id="ptr{$this->id()}" class="to-left">{if $this->score() != NULL}{$this->score_colorized()}{/if}</div>
+ <div class="to-left"><img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$this->id()},'down')" width="16" height="16" /></div>
+ <div class="half-transparent to-left">{$this->imaged_edit_url()}</div>
+ {if $is_first_post}<g:plusone size="small"></g:plusone>{/if}
+</div>
+
+<div class="clear">&nbsp;</div>
+</div>{*/head*}
+
+<div class="body">
+{if $owner}
+{if not $avatar_size}{assign var="avatar_size" value=100}{/if}
+<div class="avatar_block">{include file="xfile:forum/post-avatar.html" object=$this avatar_size=$avatar_size owner=$this->joke_owner()}</div>{/if}
+{assign var="keyword_links" value=$this|get:'keyword_links'}
+{if $keyword_links}<div class="post_kws">{$keyword_links}</div>{/if}
+{if $this->is_spam() && $this->topic()->forum_id() != 191 && not $show_spam}
+<div class="box">** Это сообщение от непроверенного пользователя и похоже на спам. После проверки его координаторами оно будет или уничтожено, или разрешено к показу **</div>
+{else}
+{$this->body()}
+{/if}
+
+{if $this->attaches()}
+<hr />
+Прикреплённые файлы:
+{foreach from=$this->attaches() item="attach"}
+<div class="box float_left center" style="width: 300px; ">{$attach->thumbnail_link('300x300')}<a href="{$attach->url()}">{$attach->title()}</a> [{$attach->size()|smart_size}, {$attach->downloads()} {$attach->downloads()|sklon:'загрузка':'загрузки':'загрузок'}]</div>
+{/foreach}
+{/if}
+
+<div class="postsignature">
+{if $this->joke_owner() and $this->joke_owner()->signature()}{$this->joke_owner()->signature_html()}{/if}
+<span class="img_middle">
+&nbsp;{$this->owner_user_agent()}
+</span>
+</div>
+
+{if $this->edited() && $this->edited() > $this->create_time() + 300}<div class="edited_note">
+Это сообщение редактировалось {$this->edited()|strftime:"%d.%m.%Y в %H:%M"}
+</div>{/if}
+
+{if $this->warning()}<div class="warning_note">
+<b>{$this->warning()|get:moderator_name}:</b> предупреждение ({$this->warning()|get:score})
+{if $this->warning()|get:type_id} по категории «<b>{$this->warning()|get:type_id|bors_list_item_name:"airbase_user_warning_type"}</b>»
+{if $this->warning()|get:source}(<i>{$this->warning()|get:source}</i>){/if}
+{/if}.
+</div>{/if}
+
+<div id="pfo{$this->id()}"></div>
+
+<ul class="postfooter">
+<li><script type="text/javascript"><!--
+if(top.me_is_coordinator)
+document.writeln('<label><input type="checkbox" id="_chkbx_p{$this->id()}" onclick="return apfgp(this, {$this->id()})" />&nbsp;отметить</label>')
+--></script></li>
+<li><a href="#" onclick="pdsh('{$this->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;инструменты</a></li>
+<li class="pages_select">
+ <a href="{$this->topic()->forum()->category()->category_base_full()}post.php?tid={$this->topic_id()}&amp;qid={$this->id()}" 
+  class="current_page">Ответить на сообщение</a>
+</li>
+</ul>
+
+</div>{*/body*}
+</div>{*/post*}
+{/if}

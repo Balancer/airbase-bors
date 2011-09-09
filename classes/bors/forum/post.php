@@ -30,6 +30,7 @@ class forum_post extends base_page_db
 				'score_positive_raw' => 'score_positive',
 				'score_negative_raw' => 'score_negative',
 				'post_body' => 'html',
+				'full_html_content' => 'html_full_post',
 			),
 		));
 	}
