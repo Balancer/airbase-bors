@@ -63,4 +63,6 @@ class balancer_board_blog extends forum_blog
 
 		common_keyword_bind::add($this);
 	}
+
+	function html() { return $this->post()->html(); }
 }

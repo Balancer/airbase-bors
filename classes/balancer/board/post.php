@@ -25,6 +25,15 @@ class balancer_board_post extends forum_post
 		return bors_templates_smarty::render_data('xfile:/var/www/bors/bors-airbase/templates/forum/post.html', $data);
 	}
 
+	function html2()
+	{
+		$data = array(
+			'this' => $this,
+		);
+
+		return bors_templates_smarty::render_data('xfile:'.str_replace('.php', '.html', $this->class_file()), $data);
+	}
+
 	function text($data = array())
 	{
 		$data = array_merge(array(
