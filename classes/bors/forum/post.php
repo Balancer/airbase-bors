@@ -556,7 +556,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			'warn_object_id='=>$this->id(),
 			'order' => '-time'));
 
-		$db = new driver_mysql('punbb');
+		$db = new driver_mysql(config('punbb.database', 'punbb'));
 		$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
 		$db->close();
 		$this->set_warning_id($warn ? $warn->id() : -1, true);
