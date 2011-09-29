@@ -19,11 +19,13 @@ class forum_tools_post_do extends base_page
 		switch($this->page())
 		{
 			case 'drop-cache':
+				config_set('lcml_cache_disable_full', true);
 				$post->set_post_body(NULL, true);
 				$post->set_warning_id(NULL, true);
 				$post->set_flag_db(NULL, true);
 				$post->cache_clean();
 				$post->store();
+				$post->body();
 
 				$topic->cache_clean();
 				$topic->set_modify_time(time(), true);

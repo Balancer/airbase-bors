@@ -1,6 +1,6 @@
 <?php
 
-config_set('lcml_cache_disable', true); 
+//config_set('lcml_cache_disable', true); 
 
 mysql_access('l2jdb', 'la2', 'la2kkk');
 

@@ -1,6 +1,6 @@
 <?php
 
-config_set('lcml_cache_disable', true);
+//config_set('lcml_cache_disable', true);
 
 class balancer_page_db extends base_page_db
 {
