@@ -599,7 +599,7 @@ $(function() {
 			'topic_id=' => $this->id())));
 	}
 
-	function was_updated_for_user($user, $for_post = false)
+	function was_updated_for_user($user, $for_post = false, $real_visits = false)
 	{
 		if(!$user)
 		{
@@ -608,8 +608,12 @@ $(function() {
 		}
 
 		$last = $this->last_visit_time_for_user($user);
-		if(!$last)
+
+		if(!$last && !$real_visits)
 			$last = $user->previous_session_end();
+
+		if(!$last)
+			return true;
 
 		return ($for_post ? $this->last_post_create_time() : $this->modify_time()) > $last;
 	}
