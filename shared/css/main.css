@@ -748,3 +748,17 @@ table.yandex_money input {
 	color: #ccc;
 	font-size: 10pt;
 }
+
+.round_box h2 {
+	font-size: 1.2em;
+	margin-top: 0;
+}
+
+.round_box {
+	font-size: 0.7em;
+	border: 1px solid #9bd;
+	background-color: #def;
+	margin: 0 4px 4px 4px;
+	padding: 8px;
+	border-radius: 4px;
+}

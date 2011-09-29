@@ -21,7 +21,7 @@ class forum_post extends base_page_db
 	{
 		return array($this->main_db() => array(
 			$this->main_table() => $this->main_table_fields(),
-			'posts_cached_fields(post_id)' => array(
+			'left posts_cached_fields(post_id)' => array(
 //			'posts_cached_fields' => array(	'id' => 'post_id',
 				'flag_db' => 'flag',
 				'warning_id',
@@ -136,10 +136,11 @@ function set_have_answers($v, $dbup) { return $this->set('have_answers', $v, $db
 function score() { return @$this->data['score']; }
 function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
-	function set_post_body($value, $dbupd)
+	function set_post_body($value, $dbupd = true)
 	{
 		if($value == '' && $value !== NULL && $dbupd)
 			debug_hidden_log('body', 'Set empty body');
+
 		$this->set('post_body', $value, $dbupd); 
 	}
 
@@ -239,9 +240,10 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 				);
 			}
 
-//			if(config('is_debug')) echo 'x='.$body."\n";
+//			if(config('is_developer')) { echo 'x='.$body."\n"; exit(); }
 
 			$this->set_post_body($body, true);
+			$this->store();
 		}
 
 		return $this->post_body();
