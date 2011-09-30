@@ -264,7 +264,7 @@ while ($cur_forum = $db->fetch($result))
 
 ?>
 <div id="idx<?php echo $cat_count;/*"*/?>" class="blocktable">
-	<h2><span><a href="<?echo pun_htmlspecialchars($cur_forum['cat_base_uri'])?>"><?php echo pun_htmlspecialchars($cur_forum['cat_name']) ?></a></span></h2>
+	<h2><span><a href="<?= pun_htmlspecialchars($cur_forum['cat_base_uri'])?>"><?php echo pun_htmlspecialchars($cur_forum['cat_name']) ?></a></span></h2>
 	<div class="box">
 		<div class="inbox">
 			<table cellspacing="0">
@@ -396,7 +396,7 @@ else
 			</dl>
 			<dl class="conl">
 				<dt><strong><?php echo $lang_index['User info'] ?></strong></dt>
-				<dd><?php echo $lang_index['Newest user'] ?>: <a href="<?echo $pun_config['root_uri']?>/profile.php?id=<?php echo $stats['last_user']['id'];/*"*/?>"><?php echo pun_htmlspecialchars($stats['last_user']['username']) ?></a></dd>
+				<dd><?php echo $lang_index['Newest user'] ?>: <a href="<?= $pun_config['root_uri']?>/profile.php?id=<?php echo $stats['last_user']['id'];/*"*/?>"><?php echo pun_htmlspecialchars($stats['last_user']['username']) ?></a></dd>
 <?php
 
 if ($pun_config['o_users_online'] == '1')

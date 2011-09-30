@@ -158,12 +158,12 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 		}
 	?>
 <div id="msg" class="block">
-	<h2><span>Исходная тема: <a href="<?echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?echo "$attach_post_id#p$attach_post_id";/*"*/?>"><?echo $title;?></a></span></h2>
+	<h2><span>Исходная тема: <a href="<?= $pun_config['root_uri'];?>/viewtopic.php?pid=<?= "$attach_post_id#p$attach_post_id";/*"*/?>"><?= $title;?></a></span></h2>
 
 	<div class="box">
 		<div class="inbox">
-		<div class="imgbox"><div class="scrollbox"><img src="<?echo $pun_config['root_uri'];?>/attachment.php?item=<?php echo $_GET['item']; ?>&amp;download=1" alt="<?php echo $attach_filename;/*"*/?>" /></div></div><p>
-		<?php echo $lang_attach['Download:']; ?> <a href="<?echo $pun_config['root_uri'];?>/attachment.php?item=<?php echo $_GET['item']; ?>&amp;download=1"><?php echo $attach_filename; ?></a></p>
+		<div class="imgbox"><div class="scrollbox"><img src="<?= $pun_config['root_uri'];?>/attachment.php?item=<?php echo $_GET['item']; ?>&amp;download=1" alt="<?php echo $attach_filename;/*"*/?>" /></div></div><p>
+		<?php echo $lang_attach['Download:']; ?> <a href="<?= $pun_config['root_uri'];?>/attachment.php?item=<?php echo $_GET['item']; ?>&amp;download=1"><?php echo $attach_filename; ?></a></p>
 	<p>Сообщение с этим аттачем: <?php echo $post->titled_url(); ?></p>
 
 		<p><a href="javascript: history.go(-1)">Go back</a></p>

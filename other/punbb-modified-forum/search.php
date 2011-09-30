@@ -685,7 +685,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 
 ?>
 <div class="blockpost searchposts<?php echo $vtbg;/*"*/?>">
-	<h2><?php echo $forum;?>&nbsp;&raquo;&nbsp;<?php echo $subject ?>&nbsp;&raquo;&nbsp;<a href="<?echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $search_set[$i]['pid'].'#p'.$search_set[$i]['pid'];/*"*/?>"><?php echo format_time($search_set[$i]['pposted']) ?></a></h2>
+	<h2><?php echo $forum;?>&nbsp;&raquo;&nbsp;<?php echo $subject ?>&nbsp;&raquo;&nbsp;<a href="<?= $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $search_set[$i]['pid'].'#p'.$search_set[$i]['pid'];/*"*/?>"><?php echo format_time($search_set[$i]['pposted']) ?></a></h2>
 	<div class="box">
 		<div class="inbox">
 			<div class="postleft">
@@ -693,7 +693,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 					<dt><?php echo $pposter ?></dt>
 					<dd>Replies: <?php echo $search_set[$i]['num_replies'] ?></dd>
 					<dd><?php echo $icon; ?></dd>
-					<dd><p class="clearb"><a href="<?echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $search_set[$i]['pid'].'#p'.$search_set[$i]['pid'];/*"*/ ?>"><?php echo $lang_search['Go to post'] ?></a></p></dd>
+					<dd><p class="clearb"><a href="<?= $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $search_set[$i]['pid'].'#p'.$search_set[$i]['pid'];/*"*/ ?>"><?php echo $lang_search['Go to post'] ?></a></p></dd>
 				</dl>
 			</div>
 			<div class="postright">
@@ -850,8 +850,8 @@ while ($cur_forum = $db->fetch_assoc($result))
 						<br /></label>
 						<label class="conl"><?php echo $lang_search['Search in'] ?>
 						<br /><select id="search_in" name="search_in">
-<?/*							<option value="all"><?php echo $lang_search['Message and subject'] ?></option>*/?>
-<?/*							<option value="message"><?php echo $lang_search['Message only'] ?></option>*/?>
+<?php/*							<option value="all"><?php echo $lang_search['Message and subject'] ?></option>*/?>
+<?php/*							<option value="message"><?php echo $lang_search['Message only'] ?></option>*/?>
 							<option value="topic"><?php echo $lang_search['Topic only'] ?></option>
 						</select>
 						<br /></label>

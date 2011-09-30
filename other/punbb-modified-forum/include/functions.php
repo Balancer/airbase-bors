@@ -292,13 +292,13 @@ function generate_profile_menu($page = '')
 		<div class="box">
 			<div class="inbox">
 				<ul>
-					<li<?php if ($page == 'essentials') echo ' class="isactive"'; ?>><a href="<?echo $pun_config['root_uri'];?>/profile.php?section=essentials&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section essentials'] ?></a></li>
-					<li<?php if ($page == 'personal') echo ' class="isactive"'; ?>><a href="<?echo $pun_config['root_uri'];?>/profile.php?section=personal&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section personal'] ?></a></li>
-					<li<?php if ($page == 'messaging') echo ' class="isactive"'; ?>><a href="<?echo $pun_config['root_uri'];?>/profile.php?section=messaging&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section messaging'] ?></a></li>
-					<li<?php if ($page == 'personality') echo ' class="isactive"'; ?>><a href="<?echo $pun_config['root_uri'];?>/profile.php?section=personality&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section personality'] ?></a></li>
-					<li<?php if ($page == 'display') echo ' class="isactive"'; ?>><a href="<?echo $pun_config['root_uri'];?>/profile.php?section=display&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section display'] ?></a></li>
-					<li<?php if ($page == 'privacy') echo ' class="isactive"'; ?>><a href="<?echo $pun_config['root_uri'];?>/profile.php?section=privacy&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section privacy'] ?></a></li>
-<?php if ($pun_user['g_id'] == PUN_ADMIN || ($pun_user['g_id'] == PUN_MOD && $pun_config['p_mod_ban_users'] == '1')): ?>					<li<?php if ($page == 'admin') echo ' class="isactive"'; ?>><a href="<?echo $pun_config['root_uri'];?>/profile.php?section=admin&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section admin'] ?></a></li>
+					<li<?php if ($page == 'essentials') echo ' class="isactive"'; ?>><a href="<?= $pun_config['root_uri'];?>/profile.php?section=essentials&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section essentials'] ?></a></li>
+					<li<?php if ($page == 'personal') echo ' class="isactive"'; ?>><a href="<?= $pun_config['root_uri'];?>/profile.php?section=personal&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section personal'] ?></a></li>
+					<li<?php if ($page == 'messaging') echo ' class="isactive"'; ?>><a href="<?= $pun_config['root_uri'];?>/profile.php?section=messaging&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section messaging'] ?></a></li>
+					<li<?php if ($page == 'personality') echo ' class="isactive"'; ?>><a href="<?= $pun_config['root_uri'];?>/profile.php?section=personality&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section personality'] ?></a></li>
+					<li<?php if ($page == 'display') echo ' class="isactive"'; ?>><a href="<?= $pun_config['root_uri'];?>/profile.php?section=display&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section display'] ?></a></li>
+					<li<?php if ($page == 'privacy') echo ' class="isactive"'; ?>><a href="<?= $pun_config['root_uri'];?>/profile.php?section=privacy&amp;id=<?php echo $id;/*"*/?>"><?php echo $lang_profile['Section privacy'] ?></a></li>
+<?php if ($pun_user['g_id'] == PUN_ADMIN || ($pun_user['g_id'] == PUN_MOD && $pun_config['p_mod_ban_users'] == '1')): ?>					<li<?php if ($page == 'admin') echo ' class="isactive"'; ?>><a href="<?= $pun_config['root_uri'];?>/profile.php?section=admin&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section admin'] ?></a></li>
 <?php endif;/*"*/?>				</ul>
 			</div>
 		</div>
@@ -777,9 +777,9 @@ function maintenance_message()
 
 ?>
 <title><?php echo pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_common['Maintenance'] ?></title>
-<link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/colors.css" />
-<link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
-<link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css' ?>" />
+<link rel="stylesheet" type="text/css" href="<?= $pun_config['root_uri'];?>/style/imports/colors.css" />
+<link rel="stylesheet" type="text/css" href="<?= $pun_config['root_uri'];?>/style/imports/fixes.css" />
+<link rel="stylesheet" type="text/css" href="<?= $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css' ?>" />
 <?php
 
 	$tpl_temp = trim(ob_get_contents());
@@ -853,9 +853,9 @@ function redirect($destination_url, $message)
 ?>
 <meta http-equiv="refresh" content="<?php echo $pun_config['o_redirect_delay'] ?>;URL=<?php echo str_replace(array('<', '>', '"'), array('&lt;', '&gt;', '&quot;'), $destination_url) ?>" />
 <title><?php echo pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_common['Redirecting'] ?></title>
-<link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/colors.css" />
-<link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
-<link rel="stylesheet" type="text/css" href="<?echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css' ?>" />
+<link rel="stylesheet" type="text/css" href="<?= $pun_config['root_uri'];?>/style/imports/colors.css" />
+<link rel="stylesheet" type="text/css" href="<?= $pun_config['root_uri'];?>/style/imports/fixes.css" />
+<link rel="stylesheet" type="text/css" href="<?= $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css' ?>" />
 <?php /*"*/
 
 	$tpl_temp = trim(ob_get_contents());

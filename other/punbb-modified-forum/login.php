@@ -223,8 +223,8 @@ require PUN_ROOT.'header.php';
 							<label class="conl"><strong><?php echo $lang_common['Username'] ?></strong><br /><input type="text" name="req_username" size="25" maxlength="25" tabindex="1" /><br /></label>
 							<label class="conl"><strong><?php echo $lang_common['Password'] ?></strong><br /><input type="password" name="req_password" size="16" maxlength="16" tabindex="2" /><br /></label>
 							<p class="clearb"><?php echo $lang_login['Login info'] ?></p>
-							<p><a href="<?echo $pun_config['root_uri'];?>/register.php" tabindex="4"><?php echo $lang_login['Not registered'] ?></a>&nbsp;&nbsp;
-							<a href="<?echo $pun_config['root_uri'];?>/login.php?action=forget" tabindex="5"><?php echo $lang_login['Forgotten pass'] ?></a></p>
+							<p><a href="<?= $pun_config['root_uri'];?>/register.php" tabindex="4"><?php echo $lang_login['Not registered'] ?></a>&nbsp;&nbsp;
+							<a href="<?= $pun_config['root_uri'];?>/login.php?action=forget" tabindex="5"><?php echo $lang_login['Forgotten pass'] ?></a></p>
 						</div>
 				</fieldset>
 			</div>

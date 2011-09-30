@@ -248,7 +248,7 @@ generate_admin_menu('categories');
 		list(, list($cat_id, $cat_name, $position, $parent, $base_uri)) = @each($cat_list);
 
 ?>
-		<tr><td><?echo $cat_id?>:&nbsp;<input type="text" name="cat_name[<?php echo $i;?>]" value="<?php echo pun_htmlspecialchars($cat_name);/*"*/?>" size="35" maxlength="80" /></td>
+		<tr><td><?= $cat_id?>:&nbsp;<input type="text" name="cat_name[<?php echo $i;?>]" value="<?php echo pun_htmlspecialchars($cat_name);/*"*/?>" size="35" maxlength="80" /></td>
 			<td><input type="text" name="cat_order[<?php echo $i;?>]" value="<?php echo $position?>" size="4" maxlength="4" /></td>
 			<td><input type="text" name="parent[<?php echo $i;?>]" value="<?php echo $parent?>" size="4" maxlength="4" /></td>
 			<td><input type="text" name="base_uri[<?php echo $i;?>]" value="<?php echo pun_htmlspecialchars($base_uri);?>" size="35" maxlength="255" /></td>

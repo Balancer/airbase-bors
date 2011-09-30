@@ -125,7 +125,7 @@ while ($cur_forum = $db->fetch_assoc($result))
 ?>
 </li></b></ul>
 
-<div id="idx<?echo $cat_count;/*"*/?>" class="blocktable">
+<div id="idx<?php echo $cat_count;/*"*/?>" class="blocktable">
 	<h2><span><?php echo pun_htmlspecialchars($cur_forum['cat_name']) ?></span></h2>
 	<div class="box">
 		<div class="inbox">
@@ -244,7 +244,7 @@ list($stats['total_topics'], $stats['total_posts']) = $db->fetch_row($result);
 			</dl>
 			<dl class="conl">
 				<dt><strong><?php echo $lang_index['User info'] ?></strong></dt>
-				<dd><?php echo $lang_index['Newest user'] ?>: <a href="<? echo $pun_config['root_uri'];?>/profile.php?id=<?php echo $stats['last_user']['id'];/*"*/?>"><?php echo pun_htmlspecialchars($stats['last_user']['username']) ?></a></dd>
+				<dd><?php echo $lang_index['Newest user'] ?>: <a href="<?php echo $pun_config['root_uri'];?>/profile.php?id=<?php echo $stats['last_user']['id'];/*"*/?>"><?php echo pun_htmlspecialchars($stats['last_user']['username']) ?></a></dd>
 <?php
 
 if ($pun_config['o_users_online'] == '1')
