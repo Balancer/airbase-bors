@@ -26,7 +26,7 @@
 				</tr>
 			</thead>
 			<tbody>
-<?	
+<?php
 		foreach($db->get_array("
 			SELECT 
 				f.id AS fid, 

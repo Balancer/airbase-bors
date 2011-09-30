@@ -290,12 +290,12 @@ if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun
 	return;
 }
 ?>
-<script type="text/javascript" src="<? echo $pun_config['root_uri'];?>/js/common.js"></script>
+<script type="text/javascript" src="<?= $pun_config['root_uri'];?>/js/common.js"></script>
 
 <a name="page_top"></a>
 <div class="linkst">
 	<div class="inbox">
-		<ul><li><a href="<? echo $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<a href="<? echo $pun_config['root_uri'];?>/viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_topic['subject']); /*"*/ ?></li></ul>
+		<ul><li><a href="<?= $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<a href="<?= $pun_config['root_uri'];?>/viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_topic['subject']); /*"*/ ?></li></ul>
 		<br/>
 		<ul><li>
 				<span class="pagelink conl">
@@ -587,12 +587,12 @@ while ($cur_post = $db->fetch_assoc($result))
 ?>
 <div id="p<?php echo $cur_post['id'] ?>" class="blockpost<?php echo $vtbg ?><?php if (($post_count + $start_from) == 1) echo ' firstpost'; ?>">
 	<h2><b>
-		<span onClick="setImageId('post_<?echo $cur_post['id'];?>_moreimg', toggleVisId('post_<?echo $cur_post['id'];?>_more') == 1, 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')">
-			<img id="post_<?echo $cur_post['id'];?>_moreimg" src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif" alt="*" />
-			<?echo $username;?></span></b>,
+		<span onClick="setImageId('post_<?= $cur_post['id'];?>_moreimg', toggleVisId('post_<?= $cur_post['id'];?>_more') == 1, 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')">
+			<img id="post_<?= $cur_post['id'];?>_moreimg" src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif" alt="*" />
+			<?= $username;?></span></b>,
 	<?
 		echo $cur_post['flag'];
-	?> <a href="<? echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']); /*"*/ ?>
+	?> <a href="<?= $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']); /*"*/ ?>
 	<span class="conr">#<?php echo ($start_from + $post_count) ?>&nbsp;</span></a><?
 	if($cur_post['answer_to'])
 		echo "; Ответ на <a href=\"{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['answer_to']}#p{$cur_post['answer_to']}\">{$cur_post['up_poster']} (". format_time($cur_post['up_posted']) . ")</a>";
@@ -604,25 +604,25 @@ while ($cur_post = $db->fetch_assoc($result))
 				<div class="postmsg">
 					<div class="userinfo" style="width: 100px; float: right; margin: 0px 0px 8px 16px; display: inline; border: 1px solid; background-color: white;">
 						<div align="center">
-							<? if($user_avatar) echo "<div style=\"width: 100px; height: 100px; text-align: center; vertical-align: middle; overflow: hidden;\" onClick=\"setImageId('post_{$cur_post['id']}_moreimg', toggleVisId('post_{$cur_post['id']}_more') == 1, 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')\">$user_avatar</div>";?>
-							<div style="font-size: x-small; font-weight: 900;"><?echo $userlink;?></div>
-							<div style="font-size: xx-small;"><?echo$user_title;?></div>
+							<?php if($user_avatar) echo "<div style=\"width: 100px; height: 100px; text-align: center; vertical-align: middle; overflow: hidden;\" onClick=\"setImageId('post_{$cur_post['id']}_moreimg', toggleVisId('post_{$cur_post['id']}_more') == 1, 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')\">$user_avatar</div>";?>
+							<div style="font-size: x-small; font-weight: 900;"><?= $userlink;?></div>
+							<div style="font-size: xx-small;"><?= $user_title;?></div>
 							<center>
-							<?
+							<?php
 								if($poster['reputation'])
 									echo "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation.html?post://{$cur_post['id']}\"><img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/rep.gif\" width=\"100\" height=\"16\" border=\"0\" alt=\"*\" /></a>\n";
 							?>
-							<div><?echo $user_warn;?></div>
+							<div><?= $user_warn;?></div>
 							</center>
 						</div>
 					</div>
-					<div id="post_<?echo $cur_post['id'];?>_more" style="margin: 0; padding: 0; display: none; font-size: 80%;">
+					<div id="post_<?= $cur_post['id'];?>_more" style="margin: 0; padding: 0; display: none; font-size: 80%;">
 <ul>
-<? if (count($user_info))
+<?php if (count($user_info))
 	foreach($user_info as $ui)
 		echo "<li>$ui</li>\n";
 ?>
-<? if (count($user_contacts))
+<?php if (count($user_contacts))
 	foreach($user_contacts as $ui)
 		echo "<li>$ui</li>\n";
 ?>
@@ -665,7 +665,7 @@ while ($cur_post = $db->fetch_assoc($result))
 				<span class="postlink conr"><?php echo $post_link ?></span>
 		</li></ul>
 		<br/>
-		<ul><li><a href="<? echo $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<a href="<? echo $pun_config['root_uri'];?>/viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php /*"*/ echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_topic['subject']) ?></li></ul>
+		<ul><li><a href="<?= $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<a href="<?= $pun_config['root_uri'];?>/viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php /*"*/ echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_topic['subject']) ?></li></ul>
 		<?php echo $subscraction ?>
 	</div>
 </div>
@@ -688,9 +688,9 @@ if ($quickpost)
 						<input type="hidden" name="form_sent" value="1" />
 						<label><textarea name="req_message" rows="7" cols="75" tabindex="1"></textarea></label>
 						<ul class="bblinks">
-							<li><a href="<? echo $pun_config['root_uri'];?>/help.php#bbcode" onclick="window.open(this.href); return false;"><?php echo $lang_common['BBCode'] ?></a>: <?php echo ($pun_config['p_message_bbcode'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
-							<li><a href="<? echo $pun_config['root_uri'];?>/help.php#img" onclick="window.open(this.href); return false;"><?php echo $lang_common['img tag'] ?></a>: <?php echo ($pun_config['p_message_img_tag'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
-							<li><a href="<? echo $pun_config['root_uri'];?>/help.php#smilies" onclick="window.open(this.href); return false;"><?php echo $lang_common['Smilies'] ?></a>: <?php echo ($pun_config['o_smilies'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
+							<li><a href="<?= $pun_config['root_uri'];?>/help.php#bbcode" onclick="window.open(this.href); return false;"><?php echo $lang_common['BBCode'] ?></a>: <?php echo ($pun_config['p_message_bbcode'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
+							<li><a href="<?= $pun_config['root_uri'];?>/help.php#img" onclick="window.open(this.href); return false;"><?php echo $lang_common['img tag'] ?></a>: <?php echo ($pun_config['p_message_img_tag'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
+							<li><a href="<?= $pun_config['root_uri'];?>/help.php#smilies" onclick="window.open(this.href); return false;"><?php echo $lang_common['Smilies'] ?></a>: <?php echo ($pun_config['o_smilies'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
 						</ul>
 					</div>
 				</fieldset>

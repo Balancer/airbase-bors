@@ -1,4 +1,5 @@
-<?
+<?php
+
 	function punbb_get_all_subforums($forum_id)
 	{
 		static $loaded = array();
