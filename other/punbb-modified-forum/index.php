@@ -22,6 +22,8 @@
 
 ************************************************************************/
 
+require_once('include/bors_config.php');
+
 $fdiff = 0;
 $tdiff = 0;
 $pdiff = 0;
@@ -34,18 +36,111 @@ if($_SERVER['HTTP_HOST']=='la2.wrk.ru' || $_SERVER['HTTP_HOST']=='la2.balancer.r
 
 	if(preg_match("!^/forum/index\.php/board,(\d+)\.(\d+)\.html$!", $_SERVER['REQUEST_URI'], $m))
 	{
-		define('BORS_CORE', '/var/www/bors/bors-core');
-		define('BORS_LOCAL', '/var/www/bors/bors-airbase');
-		define('BORS_HOST', $_SERVER['DOCUMENT_ROOT'].'/cms-local');
-	
-		require_once(BORS_CORE.'/init.php');
-
 		$forum_id = $_GET['id'] = $m[1]+$fdiff;
 		$page = $_GET['p'] = $m[2];
 		go("/forum/viewforum.php?id={$forum_id}&p={$page}", true);
 		exit();
 	}
 
+	if(preg_match("!^/forum/index\.php/topic,(\d+)\.msg(\d+)!", $_SERVER['REQUEST_URI'], $m))
+	{
+		$topic_id = $m[1] + $fdiff;
+		$post_id = $m[2] + $pdiff;
+		if($post = bors_load('balancer_board_post', $post_id))
+			return go($post->url_in_container());
+		elseif($topic = bors_load('balancer_board_topic', $topic_id))
+			return go($topic->url());
+		else
+			debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
+
+		return go('/forum/');
+	}
+
+	if(preg_match("!^/forum/index\.php/topic,(\d+)\.(\d+)!", $_SERVER['REQUEST_URI'], $m))
+	{
+		$topic_id = $m[1] + $fdiff;
+
+		if($topic = bors_load('balancer_board_topic', $topic_id))
+			return go($topic->url($m[2]+1));
+		else
+			debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
+
+		return go('/forum/');
+	}
+
+	if(preg_match("!^/forum/index\.php/topic,(\d+)\.new!", $_SERVER['REQUEST_URI'], $m))
+	{
+		$topic_id = $m[1] + $fdiff;
+
+		if($topic = bors_load('balancer_board_topic', $topic_id))
+			return go($topic->url('last'));
+		else
+			debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
+
+		return go('/forum/');
+	}
+}
+
+if($_SERVER['HTTP_HOST']=='forums.airbase.ru')
+{
+//	if(config('is_developer')) { var_dump($_SERVER); exit(); }
+	if(preg_match("!viewtopic\.php\?pid=(\d+)$!", $_SERVER['REQUEST_URI'], $m))
+	{
+		if($post = bors_load('balancer_board_post', intval($m[1])))
+			return go($post->url_in_container());
+	}
+	elseif(preg_match("!^/index\.php/board,(\d+)\.(\d+)\.html$!", $_SERVER['REQUEST_URI'], $m))
+	{
+		$forum_id = $_GET['id'] = $m[1];
+		$page = $_GET['p'] = $m[2];
+		go("/forum/viewforum.php?id={$forum_id}&p={$page}", true);
+		exit();
+	}
+
+	if(preg_match("!^/index\.php/topic,(\d+)\.msg(\d+)!", $_SERVER['REQUEST_URI'], $m))
+	{
+		$topic_id = $m[1];
+		$post_id = $m[2];
+		if($post = bors_load('balancer_board_post', $post_id))
+			return go($post->url_in_container());
+		elseif($topic = bors_load('balancer_board_topic', $topic_id))
+			return go($topic->url());
+		else
+			debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
+
+		return go('/');
+	}
+
+	if(preg_match("!^/index\.php/topic,(\d+)\.(\d+)!", $_SERVER['REQUEST_URI'], $m))
+	{
+		$topic_id = $m[1];
+
+		if($topic = bors_load('balancer_board_topic', $topic_id))
+			return go($topic->url($m[2]+1));
+		else
+			debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
+
+		return go('/');
+	}
+
+	if(preg_match("!^/index\.php/topic,(\d+)\.new!", $_SERVER['REQUEST_URI'], $m))
+	{
+		$topic_id = $m[1];
+
+		if($topic = bors_load('balancer_board_topic', $topic_id))
+			return go($topic->url('last'));
+		else
+			debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
+
+		return go('/');
+	}
+}
+
+if(preg_match("!^(/forum/|/)index\.php/(\w+)!", $_SERVER['REQUEST_URI'], $m))
+{
+	if($m[2] != 'style')
+		debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
+	return go($m[1]);
 }
 
 define('PUN_ROOT', dirname(__FILE__).'/');
@@ -92,18 +187,11 @@ if(!empty($_GET['showforum']))
 	go("http://forums.airbase.ru/viewforum.php?id={$_GET['showforum']}");
 }
 
-function punbb_index_bors_load()
-{
-	require_once('include/bors_config.php');
-}
-
-
 if(!empty($_GET['view']))
 {
 	//http://forums.airbase.ru/?showtopic=3938&view=findpost&p=362293
 	if($_GET['view'] == 'findpost' && !empty($_GET['p']))
 	{
-		punbb_index_bors_load();
 		$obj = object_load('forum_post', intval($_GET['p']));
 		return go($obj ? $obj->url() : '/');
 	}
@@ -121,11 +209,10 @@ if(!empty($_GET['act']))
 	switch($_GET['act'])
 	{
 		case 'SF':
-			punbb_index_bors_load();
 			$obj = object_load('forum_forum', intval($_GET['f']));
 			return go($obj->url());
 	}
-	
+
 	//http://forums.airbase.ru/index.php?act=Print&client=printer&f=61&t=25524
 	if(!empty($_GET['t']))
 	{
@@ -138,12 +225,9 @@ if(!empty($_GET['act']))
 
 if(!empty($_GET['showtopic']))
 {
-	punbb_index_bors_load();
 	$obj = object_load('forum_topic_ipbst', $_GET['showtopic'] + $tdiff, array('page' => intval($_GET['st'])));
 	return go($obj->url());
 }
-
-
 
 //print_r($_GET); exit();
 
