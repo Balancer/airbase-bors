@@ -13,7 +13,7 @@ $map = array(
 	'(/top/)\?img=(\d+) => airbase_top_logo(2)',
 	'(/top/)(\d+)\.png => airbase_top_logo(2)',
 	'(/top/)(\d+)/logo\.png => airbase_top_logo(2)',
-	'(/forums/)index\.php\?showtopic=(\d+) => redirect:forum_topic(2)',
+	'(/forums/)index\.php\?showtopic=(\d+) => redirect:balancer_board_topic(2)',
 	'(/forums/)index\.php\?act=ST&f=\d+&t=(\d+) => redirect:forum_topic(2)',
 	'(/)cgi\-bin/forum/ultimatebb\.cgi\?ubb=get_topic&(f=\d+&t=\d+) => forum_topic_ubb(2)',
 	'/forum/Forum(\d+/HTML/\d+)\.html => forum_topic_ubb(1)',
