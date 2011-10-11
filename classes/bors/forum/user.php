@@ -13,7 +13,7 @@ class forum_user extends base_object_db
 		if(!($cookie = @$_COOKIE['cookie_hash']))
 			return NULL;
 
-		return objects_first('forum_user', array('user_cookie_hash' => $cookie));
+		return bors_find_first('balancer_board_user', array('user_cookie_hash' => $cookie));
 	}
 
 	function __construct($id)
@@ -53,9 +53,11 @@ class forum_user extends base_object_db
 			'per_category_reputations' => 'per_forum_reputations',
 			'pure_reputation',
 			'karma', 'karma_rate',
-			'salt',
-			'saltp' => 'password',
-			'saltu' => 'user_cookie_hash',
+			'password_hash_old' => 'password',
+			'password_hash_new',
+			'password_salt_new',
+			'user_cookie_hash',
+			'cookie_salt' => 'salt',
 			'create_time' => 'registered',
 			'registration_ip',
 			'last_post_time' => 'last_post',
@@ -113,12 +115,12 @@ function pure_reputation() { return @$this->data['pure_reputation']; }
 function set_pure_reputation($v, $dbup) { return $this->set('pure_reputation', $v, $dbup); }
 function karma() { return @$this->data['karma']; }
 function set_karma($v, $dbup) { return $this->set('karma', $v, $dbup); }
-function salt() { return @$this->data['salt']; }
-function set_salt($v, $dbup) { return $this->set('salt', $v, $dbup); }
-function saltp() { return @$this->data['saltp']; }
-function set_saltp($v, $dbup) { return $this->set('saltp', $v, $dbup); }
-function saltu() { return @$this->data['saltu']; }
-function set_saltu($v, $dbup) { return $this->set('saltu', $v, $dbup); }
+function cookie_salt() { return @$this->data['cookie_salt']; }
+function set_cookie_salt($v, $dbup) { return $this->set('cookie_salt', $v, $dbup); }
+function password_hash_old() { return @$this->data['password_hash_old']; }
+function set_password_hash_old($v, $dbup) { return $this->set('password_hash_old', $v, $dbup); }
+function user_cookie_hash() { return @$this->data['user_cookie_hash']; }
+function set_user_cookie_hash($v, $dbup) { return $this->set('user_cookie_hash', $v, $dbup); }
 function last_post_time() { return @$this->data['last_post_time']; }
 function set_last_post_time($v, $dbup) { return $this->set('last_post_time', $v, $dbup); }
 function www() { return @$this->data['www']; }
@@ -162,13 +164,13 @@ function use_avatar()
 {
 	if($this->data['use_avatar'] && !is_numeric($this->data['use_avatar']))
 		return $this->data['use_avatar'];
-			
+
 	if(preg_match('/^\d+\.\w+/', $this->data['use_avatar']) && $this->data['avatar_width'])
 		return $this->data['use_avatar'];
 
 	$avatars_dir = '/var/www/balancer.ru/htdocs/forum/punbb/img/avatars';
 	$id = $this->id();
-		
+
 	if($img_size = @getimagesize("$avatars_dir/$id.gif"))
 		$user_avatar = "$id.gif";
 	elseif($img_size = @getimagesize("$avatars_dir/$id.png"))
@@ -383,33 +385,45 @@ function avatar_thumb($geo)
 		}
 	}
 
-    function check_password($password, $handle_errors = true)
+	function check_password($password, $handle_errors = true, $test_new_engine = true)
    	{
-		$sha_password = sha1(bors_lower($this->login()) . $password);
-		$user_sha_password = $this->saltp();
+		if($test_new_engine && ($password_hash = $this->password_hash_new()))
+		{
+	   		// Новая проверка, на рандомной соли
+			$test_hash = sha1($password.$this->password_salt_new());
+		}
+		else
+		{
+			// Старая проверка
+			$test_hash = sha1(bors_lower($this->login()) . $password);
+			$password_hash = $this->password_hash_old();
+		}
 
 		if(!$handle_errors)
-			return ($password != '') && ($user_sha_password == $sha_password);
+			return ($password != '') && ($test_hash == $password_hash);
 
-       	if(!$password)
-        {
-   	        $nick = user_data('nick');
-       	    echo "<h3><span style=\"text-color: red;\">Пароль пользователя $nick ($member_id) не может быть пустой!</span></h3>Залогиниться, зарегистрироваться или сменить аккаунт можно <a href=\"http://forums.airbase.ru/\">форуме Авиабазы</a>.<br><span style=\"font-size: xx-small;\">Внимание! Вместо старой системы регистрации теперь будет использоваться новая, объединённая с регистрацией на форумах!";
-            die();
-        }
+	   	if(!$password)
+		{
+   			$nick = user_data('nick');
+			echo "<h3><span style=\"text-color: red;\">Пароль пользователя $nick ($member_id) не может быть пустой!</span></h3>Залогиниться, зарегистрироваться или сменить аккаунт можно <a href=\"http://forums.airbase.ru/\">форуме Авиабазы</a>.<br><span style=\"font-size: xx-small;\">Внимание! Вместо старой системы регистрации теперь будет использоваться новая, объединённая с регистрацией на форумах!";
+			die();
+		}
 
-   	    if($sha_password != $user_sha_password)
-       	{
-            echo "<h3><span style=\"text-color: red;\">Ошибка пароля или логина пользователя {$this->title()}! ({$this->id()})</span></h3>Залогиниться, зарегистрироваться или сменить аккаунт можно <a href=\"http://forums.airbase.ru/\">форуме Авиабазы</a>.<br><span style=\"font-size: xx-small;\">Внимание! Вместо старой системы регистрации теперь будет использоваться новая, объединённая с регистрацией на форумах!";
-   	        die();
-       	}
+   		if($password_hash != $test_hash)
+	   	{
+			echo "<h3><span style=\"text-color: red;\">Ошибка пароля или логина пользователя {$this->title()}! ({$this->id()})</span></h3>Залогиниться, зарегистрироваться или сменить аккаунт можно <a href=\"http://forums.airbase.ru/\">форуме Авиабазы</a>.<br><span style=\"font-size: xx-small;\">Внимание! Вместо старой системы регистрации теперь будет использоваться новая, объединённая с регистрацией на форумах!";
+   			die();
+	   	}
 
 		return true;
-    }
+	}
 
 	function cookie_hash()
 	{
-		return sha1(bors_lower($this->salt()) . $this->saltp());
+		if($password_hash = $this->password_hash_new())
+			return sha1($this->cookie_salt() . $this->password_hash_new());
+
+		return sha1(bors_lower($this->cookie_salt()) . $this->password_hash_old());
 	}
 
 	function cookie_hash_update($expired = -1, $all_domains = true)
@@ -417,13 +431,13 @@ function avatar_thumb($geo)
 		if($expired == -1)
 			$expired = time()+86400*365;
 
-		$salt = sha1(rand());
-		$this->set_salt($salt, true);
-		$this->set_saltu($this->cookie_hash(), true);
+		$cookie_salt = sha1(rand());
+		$this->set_cookie_salt($cookie_salt, true);
+		$this->set_user_cookie_hash($this->cookie_hash(), true);
 		$this->store();
 
 		$this->cookie_hash_set($expired, $all_domains);
-		return $this->saltu();
+		return $this->user_cookie_hash();
 	}
 
 	function cookie_hash_set($expired = -1)
@@ -431,12 +445,12 @@ function avatar_thumb($geo)
 		if($expired == -1)
 			$expired = time()+86400*30;
 
-		if(!$this->saltu())
+		if(!$this->user_cookie_hash())
 			return $this->cookie_hash_update();
 
 		foreach(array(
 			'user_id' => $this->id(),
-			'cookie_hash' => $this->saltu(),
+			'cookie_hash' => $this->user_cookie_hash(),
 			'isa' => $this->is_admin()
 		) as $k => $v)
 		{
@@ -450,7 +464,7 @@ function avatar_thumb($geo)
 			foreach(bors_vhosts() as $host)
 			{
 				echo "Set $host<br/>";
-//				file_get_contents("http://{$host}/user/cookie-hash-update.bas?".$this->saltu());
+//				file_get_contents("http://{$host}/user/cookie-hash-update.bas?".$this->user_cookie_hash());
 				curl_setopt_array($ch, array(CURLOPT_TIMEOUT => 1));
 				curl_exec($ch);
 				$content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
@@ -460,24 +474,44 @@ function avatar_thumb($geo)
 		bors_exit(">$all_domains");
 */
 
+	function change_password($new_password)
+   	{
+		$this->set_password_salt_new(md5(rand()));
+		$this->set_password_hash_new(sha1($new_password.$this->password_salt_new()));
+		$this->store();
+	}
+
 	static function do_login($user, $password, $handle_error = true)
    	{
-		$check_user = objects_first('forum_user', array('login' => $user));
+		$check_user = bors_find_first('balancer_board_user', array('login' => $user));
 
 		if(!$check_user)
 			return ec("Неизвестный пользователь '").$user."'";
 
+		// Если пользователь не активровал новый механизм хранения пароля
+		if(!$check_user->password_hash_new())
+		{
+			if($check_user->check_password($password, false, false))
+			{
+				// Если старый пароль был верный, то обновляем механизм
+				$check_user->set_password_salt_new(md5(rand()));
+				$check_user->set_password_hash_new(sha1($password.$check_user->password_salt_new()));
+//				$check_user->set_password_hash_old(NULL);
+			}
+		}
+
 		$test = $check_user->check_password($password, $handle_error);
+
 		if(!$test)
 			return ec("Ошибка пароля пользователя '").$user."'";
 
-		if($check_user->saltu())
+		if($check_user->user_cookie_hash())
 			$check_user->cookie_hash_set();
 		else
 			$check_user->cookie_hash_update();
 
 //		SetCookie("user_id", $check_user->id(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
-//		SetCookie("cookie_hash", $check_user->saltu(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
+//		SetCookie("cookie_hash", $check_user->user_cookie_hash(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
 
 		return $check_user;
 	}
@@ -602,23 +636,23 @@ function avatar_thumb($geo)
 
 	function blog() { return object_load('forum_blog', $this->id()); }
 
-    function utmx_update()
-    {
-        if(empty($_COOKIE['__utmx']))
-        {
+	function utmx_update()
+	{
+		if(empty($_COOKIE['__utmx']))
+		{
 			$utmx = $this->utmx();
 			if(!$utmx)
 				$utmx = $this->set_utmx(md5(rand(0, time()).time()), true);
 
 			SetCookie("__utmx", $utmx, time()+365*86400, "/", $_SERVER['HTTP_HOST']);
 			$_COOKIE['__utmx'] = $utmx;
-        }
-        else
-        {
-            if(!$this->utmx())
-                $this->set_utmx($_COOKIE['__utmx'], true);
-        }
-    }
+		}
+		else
+		{
+			if(!$this->utmx())
+				$this->set_utmx($_COOKIE['__utmx'], true);
+		}
+	}
 
 	function category_reputation($category_id)
 	{
