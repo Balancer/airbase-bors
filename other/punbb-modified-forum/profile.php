@@ -108,7 +108,7 @@ if ($action == 'change_pass')
 
 		$authorized = false;
 
-		if (!empty($db_password_hash))
+		if(!empty($db_password_hash))
 		{
 			$sha1_in_db = (strlen($db_password_hash) == 40) ? true : false;
 			$sha1_available = (function_exists('sha1') || function_exists('mhash')) ? true : false;
@@ -131,10 +131,11 @@ if ($action == 'change_pass')
 
 		$db->query('UPDATE '.$db->prefix.'users SET password=\''.$new_password_hash.'\' WHERE id='.$id) or error('Unable to update password', __FILE__, __LINE__, $db->error());
 
-		if ($pun_user['id'] == $id)
+		if($pun_user['id'] == $id)
 		{
-			$me = new User($id);
+			$me = bors_load('balancer_board_user', $id);
 			$me->cookie_hash_update($save_pass ? -1 : 0);
+			$me->change_password($new_password1);
 		}
 
 		redirect('profile.php?section=essentials&amp;id='.$id, $lang_profile['Pass updated redirect']);
