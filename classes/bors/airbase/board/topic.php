@@ -172,7 +172,7 @@ class airbase_board_topic extends forum_topic
 			$data['page'] = $page;
 			$data['per_page'] = $this->items_per_page();
 		}
-			
+
 		return objects_array('airbase_board_post', $data);
 	}
 
