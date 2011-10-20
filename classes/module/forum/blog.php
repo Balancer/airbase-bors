@@ -1,5 +1,7 @@
 <?php
 
+require_once('inc/lists.php');
+
 class module_forum_blog extends base_page
 {
 	function main_db() { return 'punbb'; }
@@ -9,22 +11,28 @@ class module_forum_blog extends base_page
 	{
 		$limit = $this->args('limit', 25);
 //		$page  = $this->args('limit', 25);
-	
+
 		$page_id = $this->page().','.$limit;
-	
+
 		if(isset($this->_data[$page_id]))
 			return $this->_data[$page_id];
 
 		$skip_forums = array(19, 37, 102, 138, 170);
 		if($sfs = $this->args('skip_forums'))
-			$skip_forums = array_merge($skip_forums, explode(',', $sfs));
+			$skip_forums = array_merge($skip_forums, parse_condensed_list($sfs));
 
-		$blogs = objects_array('forum_blog', array(
-					'order' => '-blogged_time',
-					'page' => max(1,$this->page()),
-					'per_page' => $limit,
-					'forum_id NOT IN' => $skip_forums,
-		));
+		$where = array(
+			'order' => '-blogged_time',
+			'page' => max(1,$this->page()),
+			'per_page' => $limit,
+		);
+
+		if($fids = $this->arg('forum_ids'))
+			$where['forum_id IN'] = parse_condensed_list($fids);
+		else
+			$where['forum_id NOT IN'] = $skip_forums;
+
+		$blogs = objects_array('forum_blog', $where);
 
 		$x = bors_fields_array_extract($blogs, array('id', 'owner_id', 'forum_id'));
 		$posts = objects_array('forum_post', array('id IN' => array_filter(array_unique($x['id'])), 'by_id' => true));
