@@ -1,4 +1,5 @@
-<?
+<?php
+
 	function modules_design_navleft_get($uri)
 	{
 		include_once("engines/smarty/assign.php");
@@ -50,15 +51,13 @@
 			$d['indent'] = $max - $d['indent'];
 			$data2[] = $d;
 		}
-		
-		$tpl = "navleft.htm";
-		if(!empty($GLOBALS['module_data']['template']))
-			$tpl = $GLOBALS['module_data']['template'];
+
+		$tpl = defval($GLOBALS['module_data'], 'template', 'navleft.htm');
 
 		unset($GLOBALS['module_data']);
-		return template_assign_data($tpl, array('links'=>$data2));
+		return bors_templates_smarty::fetch($tpl, array('links'=>$data2));
 	}
-	
+
 
 	function modules_design_navleft_get_parent($obj, $children, $indent)
 	{
@@ -66,12 +65,12 @@
 			return $children;
 
 		$list = array();
-		
+
 		$we = array();
 
 		if(empty($GLOBALS['module_data']['self_hide']))
 			$we[$obj->url()] = modules_design_navleft_fill($obj, $indent);
-	
+
 		if($children)
 			$we = array_merge($we, $children);
 

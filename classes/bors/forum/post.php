@@ -8,6 +8,8 @@ include_once('inc/clients.php');
 
 class forum_post extends base_page_db
 {
+	function storage_engine() { return 'storage_db_mysql_smart'; }
+
 	function config_class() { return 'balancer_board_config'; }
 	function template() { return 'forum/page.html'; }
 
@@ -21,7 +23,7 @@ class forum_post extends base_page_db
 	{
 		return array($this->main_db() => array(
 			$this->main_table() => $this->main_table_fields(),
-			'left posts_cached_fields(post_id)' => array(
+			'posts_cached_fields(post_id)' => array(
 //			'posts_cached_fields' => array(	'id' => 'post_id',
 				'flag_db' => 'flag',
 				'warning_id',

@@ -148,6 +148,9 @@ class balancer_board_post extends forum_post
 
 	static function create($topic, $message, $user, $keywords_string = NULL, $as_blog = NULL, $data = array())
 	{
+		if(is_numeric($topic))
+			$topic = bors_load('balancer_board_topic', $topic);
+
 //		echo "Pass post to $topic_id\n";
 		$data = array_merge($data, array(
 			'author_name' => $user->title(),
