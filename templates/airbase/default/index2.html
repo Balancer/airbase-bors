@@ -38,10 +38,10 @@
 {load_data page="/cms/modules/counters/hidden/" key="source"}
 {include_html file="airbase/counters/yandex-metrika.html"}
 </noindex>
-</td><td colSpan="3" height="10" vAlign="top" bgColor="#F0F4F8" style="padding: 8px; 4px; 0px; 0px;">
+</td><td colSpan="3" height="10" vAlign="top" bgColor="#F0F4F8" style="padding: 8px 4px 0px 0px;">
 
 <noindex><table class="nav"><tr><td>
-{call func=module param="top-navs.php"}
+{bors_call func=module param="top-navs.php"}
 </td></tr></table></noindex>
 <small><i>{$description}</i></small>
 
@@ -61,11 +61,11 @@
 </div>
 					
 </td>
-<td width="150" vAlign="top" bgColor="#F0F4F8" style="border-bottom: 1px solid #0066cc; padding: 8px; 4px; 4px; 0px;">
+<td width="150" vAlign="top" bgColor="#F0F4F8" style="border-bottom: 1px solid #0066cc; padding: 8px 4px 4px 0px">
 					
 <noindex>
-{call func=module param="child-pages.php"}
-{call func=module param="forum-title-keyword.php"}
+{bors_call func=module param="child-pages.php"}
+{bors_call func=module param="forum-title-keyword.php"}
 {* call func=module param="referers.php" *}
 {* call func=module param="page_history.php" *}
 {$right_column}
@@ -88,8 +88,8 @@ template[3] = {$template}
 make_time = {$make_time}  
 template = {$page_template}  
 created = {$now|strftime:"%d.%m.%Y %H:%M"}  
-{if $this}{math assign=exp equation="x+y" x=$this->cache_static() y=$now}static expire = {$exp|strftime:"%d.%m.%Y %H:%M"}  
-{/if}  
+{if $this}{math assign=exp equation="x+y" x=$this->cache_static() y=time()}static expire = {$exp|strftime:"%d.%m.%Y %H:%M"}
+{/if}
 -->
 </body>
 </html>

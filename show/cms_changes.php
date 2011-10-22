@@ -1,4 +1,4 @@
-<?
+<?php
     ini_set('default_charset','utf-8');
     @header("Cache-Control: no-cache, must-revalidate, max-age=0");
     @header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
