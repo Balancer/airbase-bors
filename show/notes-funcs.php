@@ -1,4 +1,4 @@
-<?
+<?php
     require_once("{$_SERVER['DOCUMENT_ROOT']}/inc/config.site.php");
     require_once('funcs/DataBaseHTS.php');
     ini_set('default_charset','utf-8');

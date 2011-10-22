@@ -1,4 +1,4 @@
-<?
+<?php
     require_once("funcs/DataBaseHTS.php");
     require_once("funcs/Cache.php");
 

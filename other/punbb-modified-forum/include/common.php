@@ -38,7 +38,7 @@ if (!defined('PUN_ROOT'))
 	exit('The constant PUN_ROOT must be defined and point to a valid PunBB installation root directory.');
 }
 
-ini_set('include_path', ini_get('include_path') . ":/var/www/balancer.ru/htdocs/forum/punbb");
+ini_set('include_path', ini_get('include_path') . ':' . dirname(dirname(__FILE__)));
 
 require_once('bors_config.php');
 

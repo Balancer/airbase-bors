@@ -3,7 +3,7 @@ ul.children{margin: 0 0 0 16px; padding: 0px; font-size: xx-small; font-family: 
 li.folder{margin-bottom: 2px; list-style-image: URL("/img/design/icons/folder-12x10.png");}
 li.document{margin-bottom: 2px; list-style-image: URL("/img/design/icons/document-8x10.png");}
 </style>
-<?
+<?php
 
 //    require_once("/home/airbase/html/inc/config.php");
 //    require_once("obsolete/DataBaseHTS.php");
