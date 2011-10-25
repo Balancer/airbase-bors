@@ -13,6 +13,18 @@
 {* <li><input type="checkbox" id="_chkbx_p{$id}" onclick="return apfgp(this, {$id})"{if $smarty.cookies.selected_posts|regex_match:$id} checked="checked"{/if} /><label for="_chkbx_p{$id}">&nbsp;Отметить тему для переноса</label></li> *}
 <li><a href="/admin/forum/posts/move-tree">Перенести все <b>отмеченные</b> сообщения в другую тему</a></li>
 {if $me->is_admin()}<li><a href="http://balancer.ru/forum/punbb/delete.php?id={$id}">Удалить это сообщение</a></li>{/if}
+
+{if not $p->sort_order()}
+<li><a href="http://balancer.ru/admin/forum/post/{$id}/do-pinned.bas">Закрепить сообщение в начале темы</a></li>
+{else}
+<li><a href="http://balancer.ru/admin/forum/post/{$id}/do-unpinned.bas">Открепить сообщение от начала темы</a></li>
+{/if}
+
+{if $p->is_hidden()}
+<li><a href="http://balancer.ru/admin/forum/post/{$id}/do-show.bas">Показать сообщение</a></li>
+{else}
+<li><a href="http://balancer.ru/admin/forum/post/{$id}/do-hide.bas">Скрыть сообщение</a></li>
+{/if}
 </ul>
 
 {/if}{*/is_coordinator*}
@@ -33,11 +45,6 @@
 <h6>Инструменты автора темы</h6>
 <ul>
 <li>{$p->admin()->imaged_edit_link('Редактировать')}</li>
-{if not $p->sort_order()}
-<li><a href="http://balancer.ru/admin/forum/post/{$id}/do-pinned.bas">Закрепить сообщение в начале темы</a></li>
-{else}
-<li><a href="http://balancer.ru/admin/forum/post/{$id}/do-unpinned.bas">Открепить сообщение от начала темы</a></li>
-{/if}
 </ul>
 {/if}
 
