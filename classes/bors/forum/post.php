@@ -64,6 +64,7 @@ class forum_post extends base_page_db
 			'score' => 'field2',
 			'is_moderatorial',
 			'is_deleted',
+			'is_hidden',
 			'is_spam',
 			'is_incorrect',
 			'last_moderator_id',

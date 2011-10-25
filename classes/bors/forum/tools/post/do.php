@@ -40,17 +40,27 @@ class forum_tools_post_do extends base_page
 
 			case 'pinned':
 				$post->set_sort_order(-100, true);
-				$topic->recalculate();
 				break;
 
 			case 'unpinned':
 				$post->set_sort_order(NULL, true);
-				$topic->recalculate();
+				break;
+
+			case 'hide':
+				$post->set_is_hidden(true);
+				break;
+
+			case 'show':
+				$post->set_is_hidden(NULL);
 				break;
 
 			default:
 				break;
 		}
+
+		$post->cache_clean();
+		$topic->cache_clean();
+		$topic->recalculate();
 
 		return go($post->url_for_igo());
 	}
