@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_topics_view extends bors_view_container
+class balancer_board_topic_view extends bors_view_container
 {
 	function container_class() { return 'balancer_board_topic'; }
 	function nested_class() { return 'balancer_board_post'; }
@@ -144,6 +144,7 @@ $(function() {
 		}
 
 		$data['topic'] = $this->topic();
+		$data['forum'] = $this->topic()->forum();
 		return array_merge(parent::body_data(), $data);
 	}
 

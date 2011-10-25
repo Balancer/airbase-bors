@@ -56,7 +56,8 @@ class forum_blog extends base_page_db
 //		bors_exit('tid='.$this->post()->topic_id());
 		$this->set_topic_id(object_load('balancer_board_post', $this->id())->topic_id(), true);
 		$this->set_forum_id(object_load('balancer_board_topic', $this->topic_id())->forum_id(), true);
-		common_keyword_bind::add($this);
+		if(!bors()->client()->is_bot())
+			common_keyword_bind::add($this);
 	}
 
 	function auto_objects()
