@@ -7,6 +7,8 @@
 
 class base_page_hts extends base_page_db
 {
+	function access_engine() { return 'balancer_board_access_public'; }
+
 	static function id_prepare($url)
 	{
 		$url = preg_replace('!^(http://[^/]+):\d+!', '$1', $url);
