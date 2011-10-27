@@ -7,7 +7,7 @@
 
 class base_page_hts extends base_page_db
 {
-	function access_engine() { return 'balancer_board_access_public'; }
+	function access_engine() { return config('hts_access', 'balancer_board_access_public'); }
 
 	static function id_prepare($url)
 	{
