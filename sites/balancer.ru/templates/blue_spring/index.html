@@ -23,6 +23,9 @@
 {/foreach}
 --></script>
 {/if}
+{if $bors_touch_params}
+<script type="text/javascript">$(function(){literal}{{/literal}$.getScript('/_bors/js/touch?{$bors_touch_params}'){literal}}{/literal});</script>
+{/if}
 </head>
 
 <body>
