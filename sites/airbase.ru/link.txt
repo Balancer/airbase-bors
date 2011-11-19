@@ -1,0 +1,1 @@
+Пока лежит в /data/var/www/airbase.ru/.bors-host
