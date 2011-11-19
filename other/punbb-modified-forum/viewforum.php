@@ -312,7 +312,7 @@ else
 	<div class="inbox">
 		<p class="pagelink conl"><?php echo $paging_links ?></p>
 <?php echo $post_link ?>
-		<ul><li><a href="<?= $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a>&nbsp;</li><li>&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_forum['forum_name']) ?></li></ul>
+		<ul><li><a href="<?php echo $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a>&nbsp;</li><li>&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_forum['forum_name']) ?></li></ul>
 		<div class="clearer"></div>
 	</div>
 </div>

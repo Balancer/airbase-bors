@@ -155,7 +155,7 @@ try { var yaCounter510488 = new Ya.Metrika(510488); } catch(e){}
 <div class="clear">&nbsp;</div>
 
 			<p class="conr">Powered by <a href="http://bors.balancer.ru">BORS(c) Framework</a> and modified <a href="http://www.punbb.org/">PunBB</a><?php if ($pun_config['o_show_version'] == '1') echo ' '.$pun_config['o_cur_version']; ?><br />
-			&copy; Copyright 1998&#8211;<?=date('Y');?> Balancer<br />
+			&copy; Copyright 1998&#8211;<?php echo date('Y');?> Balancer<br />
 			&copy; Copyright 2002&#8211;2005 Rickard Andersson</p>
 <?php
 

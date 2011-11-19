@@ -66,9 +66,9 @@ if(!empty($_GET['id']) && preg_match('/viewforum\.php/', $_SERVER['REQUEST_URI']
 <title><?php echo $page_title ?></title>
 <meta name="Description" content="Форумы Balancer'а и Авиабазы. Свободное общение на всевозможные интересные темы. Военная и гражданская техника, авиация, космонавтика, компютеры и информационные технологии, Linux, люди, страны, политика, просто радости и горести жизни. У нас есть всё!">
 <meta name="Keywords" content="форум, форумы, доска объявлений, авиабаза, люди, коллектив, клуб, сообщество, BORS, PHP, фреймворк, CMS, CMF, новости, мероприятия, авиация, видео, юмор, байки, космос, межпланетная космонавтика, ПВО, ПРО, флот, танки, наука, техника, радиоэлектроника, автомобили, метро, рельсовый транспорт, ракетостроение, ракетомоделизм, МосГИРД, Jabber, искусство, фантастика, города и страны, соционика, химия, биология">
-<link rel="stylesheet" type="text/css" href="<?= $pun_config['root_uri'];?>/style/imports/colors.css" />
-<link rel="stylesheet" type="text/css" href="<?= $pun_config['root_uri'];?>/style/imports/fixes.css" />
-<link rel="stylesheet" type="text/css" href="<?= $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css';/*"*/?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo $pun_config['root_uri'];?>/style/imports/colors.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css';/*"*/?>" />
 <meta property="fb:admins" content="100000278666723" />
 <link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
 <link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
@@ -234,7 +234,7 @@ if(($diff = time() - $restart) < 3600)
 
 <?php
 //include("/usr/local/share/bors/sites/bors-airbase/templates/forum/ads/podarini.html");
-include("/usr/local/share/bors/sites/bors-airbase/templates/forum/ads/google-ads.html");
+bors_include("templates/forum/ads/google-ads.html");
 ?>
 
 </div>

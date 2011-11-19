@@ -115,8 +115,8 @@ require PUN_ROOT.'include/parser.php';
 <div class="linkst">
 	<div class="inbox">
 		<ul>
-			<li><a href="<?= $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li>&nbsp;&raquo;&nbsp;<a href="<?= $pun_config['root_uri'];?>/viewforum.php?id=<?php echo $cur_post['fid'];/*"*/?>"><?php echo pun_htmlspecialchars($cur_post['forum_name']) ?></a></li>
+			<li><a href="<?php echo $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li>
+			<li>&nbsp;&raquo;&nbsp;<a href="<?php echo $pun_config['root_uri'];?>/viewforum.php?id=<?php echo $cur_post['fid'];/*"*/?>"><?php echo pun_htmlspecialchars($cur_post['forum_name']) ?></a></li>
 			<li>&nbsp;&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_post['subject']) ?></li></ul>
 	</div>
 </div>

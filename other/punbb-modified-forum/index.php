@@ -247,7 +247,8 @@ if(@$_GET['action'] == 'unreadreplies')
 }
 
 
-if($_SERVER['HTTP_HOST'] != 'balancer.ru' || !preg_match("!^/forum!", $_SERVER['REQUEST_URI']))
+if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'balancer.local'))
+	|| !preg_match("!^/forum!", $_SERVER['REQUEST_URI']))
 {
 	include(PUN_ROOT.'viewcat.php');
 	exit();
@@ -305,7 +306,7 @@ else
 	$ich->set($subforums, -7200);
 }
 
-$db = new driver_mysql('punbb');
+$db = new driver_mysql(config('punbb.database', 'punbb'));
 
 // Print the categories and forums
 $result = $db->query("SELECT c.id AS cid, 

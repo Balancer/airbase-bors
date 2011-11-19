@@ -8,7 +8,7 @@
 		if(!empty($loaded[$forum_id]))
 			return $loaded[$forum_id];
 
-		$db = new driver_mysql('punbb');
+		$db = new driver_mysql(config('punbb.database', 'punbb'));
 
 		forum_forum::all_forums_preload(true);
 		$forum = object_load('forum_forum', $forum_id);
@@ -24,10 +24,11 @@
 
 		$cids    = array();
 		$checked = array();
-		
+
 		$cids[] = $cat_id;
-				
-		$db = new DataBase('punbb');
+
+		$db = new driver_mysql(config('punbb.database', 'punbb'));
+
 		do
 		{
 			$append = false;
