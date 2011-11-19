@@ -1227,7 +1227,7 @@ else
 						<div class="infldset">
 							<p><?php echo $lang_common['Registered'] ?>: <?php echo format_time($user['registered'], true); if ($pun_user['g_id'] < PUN_GUEST) echo " (<a href=\"{$pun_config['root_uri']}/moderate.php?get_host=".pun_htmlspecialchars($user['registration_ip']).'">'.pun_htmlspecialchars($user['registration_ip']).'</a>)'; ?></p>
 							<p><?php echo $lang_common['Last post'] ?>: <?php echo $last_post ?></p>
-							<p>Последний визит: <?= $last_visit;?></p>
+							<p>Последний визит: <?php echo $last_visit;?></p>
 								<?php echo $posts_field ?>
 <?php if ($pun_user['g_id'] < PUN_GUEST): ?>							<label><?php echo $lang_profile['Admin note'] ?><br />
 							<input id="admin_note" type="text" name="admin_note" value="<?php echo pun_htmlspecialchars($user['admin_note']);/*"*/?>" size="30" maxlength="30" /><br /></label>
@@ -1346,7 +1346,7 @@ else
 					<fieldset id="profileavatar">
 						<legend><?php echo $lang_profile['Avatar legend'] ?></legend>
 						<div class="infldset">
-<?php if (isset($avatar_format)): ?>					<img src="<?= $pun_config['root_uri'];?>/<?php echo $pun_config['o_avatars_dir'].'/'.$id.'.'.$avatar_format;/*"*/?>" <?php echo $img_size[3] ?> alt="" />
+<?php if (isset($avatar_format)): ?>					<img src="<?php echo $pun_config['root_uri'];?>/<?php echo $pun_config['o_avatars_dir'].'/'.$id.'.'.$avatar_format;/*"*/?>" <?php echo $img_size[3] ?> alt="" />
 <?php endif; ?>					<p><?php echo $lang_profile['Avatar info'] ?></p>
 							<div class="rbox">
 								<label><input type="checkbox" name="form[use_avatar]" value="1"<?php if ($user['use_avatar']) echo ' checked="checked"' ?> /><?php echo $lang_profile['Use avatar'] ?><br /></label>
@@ -1365,9 +1365,9 @@ else
 								<textarea name="signature" rows="4" cols="65"><?php echo pun_htmlspecialchars($user['signature']) ?></textarea><br /></label>
 							</div>
 							<ul class="bblinks">
-								<li><a href="<?= $pun_config['root_uri'];?>/help.php#bbcode" onclick="window.open(this.href); return false;"><?php echo $lang_common['BBCode'] ?></a>: <?php echo ($pun_config['p_sig_bbcode'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
-								<li><a href="<?= $pun_config['root_uri'];?>/help.php#img" onclick="window.open(this.href); return false;"><?php echo $lang_common['img tag'] ?></a>: <?php echo ($pun_config['p_sig_img_tag'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
-								<li><a href="<?= $pun_config['root_uri'];?>/help.php#smilies" onclick="window.open(this.href); return false;"><?php echo $lang_common['Smilies'] ?></a>: <?php echo ($pun_config['o_smilies_sig'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
+								<li><a href="<?php echo $pun_config['root_uri'];?>/help.php#bbcode" onclick="window.open(this.href); return false;"><?php echo $lang_common['BBCode'] ?></a>: <?php echo ($pun_config['p_sig_bbcode'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
+								<li><a href="<?php echo $pun_config['root_uri'];?>/help.php#img" onclick="window.open(this.href); return false;"><?php echo $lang_common['img tag'] ?></a>: <?php echo ($pun_config['p_sig_img_tag'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
+								<li><a href="<?php echo $pun_config['root_uri'];?>/help.php#smilies" onclick="window.open(this.href); return false;"><?php echo $lang_common['Smilies'] ?></a>: <?php echo ($pun_config['o_smilies_sig'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
 							</ul>
 							<?php echo $signature_preview ?>
 						</div>

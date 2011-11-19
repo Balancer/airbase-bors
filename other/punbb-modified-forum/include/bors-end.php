@@ -19,7 +19,7 @@ function bors_punbb_end($content)
 	$x = object_new_instance('bors_access_log', $data);
 	$x->store();
 
-	if(!is_developer())
+	if(!config('is_developer'))
 		return $content;
 
     $time = microtime(true) - $GLOBALS['stat']['start_microtime'];

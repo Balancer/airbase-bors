@@ -1,13 +1,14 @@
-<?
+<?php
+
 	include_once(PUN_ROOT.'tools/inc.php');
 
 	function get_subforums_html($forum)
 	{
 		$forum = intval($forum);
-	
+
 		global $pun_user, $pun_config;
-		
-		$db = new DataBase('punbb');
+
+		$db = new driver_mysql(config('punbb.database', 'punbb'));
 
 		if($db->get("SELECT COUNT(*) FROM forums WHERE parent = $forum") == 0)
 			return "";
@@ -122,7 +123,7 @@
 					<td class="tc3"><?php echo $num_posts ?></td>
 					<td class="tcr"><?php echo $last_post ?></td>
 				</tr>
-<?
+<?php
 		}
 ?>
 			</tbody>
@@ -130,7 +131,7 @@
 		</div>
 	</div>
 </div>
-<?
+<?php
 	}
 
 function subforums_text($forum)
@@ -149,10 +150,10 @@ function get_subforums_text($forums)
 {
 		if(empty($forums))
 			return "";
-	
+
 		global $pun_user, $pun_config, $lang_index;
-		
-		$db = new DataBase('punbb');
+
+		$db = new driver_mysql(config('punbb.database', 'punbb'));
 
 		$subforums = array();
 		foreach($forums as $fid)
@@ -169,7 +170,7 @@ function get_subforums_text($forums)
 					last_post_id, 
 					last_poster 
 				FROM forums WHERE id = $fid");
-		
+
 			// Is this a redirect forum?
 			if($cur_forum['redirect_url'] != '')
 				$subforums[] = "<a href=\"".htmlspecialchars($cur_forum['redirect_url'])."\" title=\"{$lang_index['Link to']} ".htmlspecialchars($cur_forum['redirect_url']).'">'.htmlspecialchars($cur_forum['forum_name'])."</a>";
