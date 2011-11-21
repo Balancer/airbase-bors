@@ -93,8 +93,15 @@ class base_page_hts extends base_page_db
 
 	function template()
 	{
+//		if(config('is_developer'))
+//			var_dump($this->attr);
+//			var_dump(parent::template());
+
 		if($tpl = $this->template_db())
 			return $tpl;
+
+		//WTF? Найти, где оно присваивается.
+		unset($this->attr['template']);
 
 		return parent::template();
 	}
