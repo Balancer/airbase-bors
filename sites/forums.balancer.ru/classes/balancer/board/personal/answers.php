@@ -1,5 +1,7 @@
 <?php
 
+bors_function_include('time/smart');
+
 class balancer_board_personal_answers extends base_page
 {
 	function title() { return ec('Ответы на Ваши сообщения за последние 3 месяца'); }

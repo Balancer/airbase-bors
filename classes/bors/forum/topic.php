@@ -47,7 +47,7 @@ class forum_topic extends base_page_db
 		);
 	}
 
-function set_forum_id($v, $dbup)
+function set_forum_id($v, $dbup = true)
 {
 	if(($new_forum = object_load('balancer_board_forum', $v)))
 		$this->set_is_public($new_forum->is_public(), true);

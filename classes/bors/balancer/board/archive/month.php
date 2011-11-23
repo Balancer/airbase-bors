@@ -1,5 +1,7 @@
 <?php
 
+bors_function_include('time/month_name');
+
 class balancer_board_archive_month extends base_page
 {
 	function nav_name() { return strtolower(month_name(date('n', $this->id()))); }

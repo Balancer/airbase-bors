@@ -49,9 +49,10 @@ class user_posts_day extends base_page
 
 		return $this->_user;
 	}
-	
+
 	function title()
 	{
+		bors_function_include('time/month_name_rp');
 		if(!$this->user())
 			return ec("Неизвестный пользователь с ID={$this->id()}");
 

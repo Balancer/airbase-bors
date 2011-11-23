@@ -1,5 +1,7 @@
 <?php
 
+bors_function_include('time/smart');
+
 class balancer_board_main extends base_page
 {
 	function title() { return ec("Форумы Balancer'а"); }

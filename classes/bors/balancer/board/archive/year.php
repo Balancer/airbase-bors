@@ -4,7 +4,7 @@ class balancer_board_archive_year extends base_page
 {
 	function nav_name() { return $this->id(); }
 	function title() { return ec('Архив тем форума за ').$this->id().ec(' год'); }
-	
+
 	function local_data()
 	{
 		return array(

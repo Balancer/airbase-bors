@@ -1,5 +1,7 @@
 <?php
 
+bors_function_include('time/month_name_rp');
+
 class balancer_board_archive_day extends base_page_list
 {
 	function nav_name() { return date('d', $this->id()); }
@@ -22,7 +24,7 @@ class balancer_board_archive_day extends base_page_list
 	{
 		$begin = $this->id();
 		$end   = $this->id() + 86400;
-	
+
 		return array_merge(parent::where(), array(
 			"posted BETWEEN $begin AND $end",
 		));
