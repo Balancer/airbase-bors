@@ -252,6 +252,10 @@ function avatar_thumb($geo)
 	{
 		if(empty($this->data['signature_html']) || !empty($GLOBALS['bors_data']['lcml_cache_disabled']))
 		{
+			$savet = config('lcml_tags_enabled');
+			$savef = config('lcml_functions_enabled');
+			config_set('lcml_tags_enabled', explode(' ', 'b blue br color green i red u url'));
+			config_set('lcml_functions_enabled', explode(' ', 'lcml_text lcml_color lcml_classic_bb_url'));
 			$body = lcml(preg_replace("!\n+$!", '', $this->signature()),
 				array(
 					'cr_type' => 'save_cr',
@@ -261,6 +265,8 @@ function avatar_thumb($geo)
 					'html_disable' => 'full',
 				)
 			);
+			config_set('lcml_tags_enabled', $savet);
+			config_set('lcml_functions_enabled', $savef);
 
 			$this->set_signature_html($body, true);
 		}

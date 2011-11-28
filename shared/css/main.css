@@ -469,12 +469,13 @@ textarea.quickreplyform {
 	width: 98%;
 }
 
-DIV.postsignature {
+div.postsignature {
 	text-align: right;
 	color: #bbc;
 	font-size: 0.8em;
 	margin-top: 10px;
 	clear: both;
+	border-top: 1px dotted #ccc;
 }
 
 a tt.warnings {
