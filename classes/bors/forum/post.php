@@ -158,7 +158,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		if($topic = bors_load('balancer_board_topic', $this->topic_id()))
 			return $this->__setc($topic);
-
+/*
 		$topic = balancer_board_topic::create(
 			bors_load('balancer_board_forum', 1), // Флейм и тесты
 			ec('Потерянный топик'),
@@ -171,10 +171,11 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 				'description' => ec('Данный топик был когда-то утерян, сообщения остались. Требуется переименовать и переместить в нужный форум'
 			)
 		));
-
+*/
 		debug_hidden_log('topics_lost_recreated', "post={$this}, topic={$topic}", false);
-		$topic->recalculate();
-		return $topic;
+//		$topic->recalculate();
+//		return $topic;
+		return NULL;
 	}
 
 	function parents() { return array("forum_topic://".$this->topic_id()); }

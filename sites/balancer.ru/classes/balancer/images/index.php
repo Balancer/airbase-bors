@@ -1,6 +1,7 @@
 <?php
 
 require_once('inc/images.php');
+bors_function_include('time/month_name');
 
 class balancer_images_index extends bors_page
 {
