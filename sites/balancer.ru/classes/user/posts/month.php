@@ -1,6 +1,7 @@
 <?php
 
 include_once('inc/strings.php');
+bors_function_include('time/month_name');
 
 class user_posts_month extends base_page
 {
@@ -18,17 +19,17 @@ class user_posts_month extends base_page
 	{
 		template_noindex();
 		return 'forum/_header.html';
-	}	
+	}
 
 	private $_user = false;
 	function user()
 	{
 		if($this->_user === false)
 			$this->_user = bors_user($this->id());
-		
+
 		return $this->_user;
 	}
-	
+
 	function title() { return $this->user()->title().ec(': Все сообщения за ').strtolower(month_name($this->month)).' '.$this->year.ec(' года'); }
 	function nav_name() { return strtolower(month_name($this->month)); }
 	function parents() { return array("http://balancer.ru/user/{$this->id()}/posts/{$this->year}/"); }
