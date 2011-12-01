@@ -9,8 +9,9 @@ class airbase_user_warning extends base_object_db
 	function db_name() { return 'punbb'; }
 	function table_name() { return 'warnings'; }
 
-	function can_delete() { return bors()->user()->is_admin(); }
-	function access_engine() { return 'balancer_board_access_balancer'; }
+//	function can_delete() { return bors()->user()->is_admin(); }
+//	Осторожно! У координаторов должен быть action-доступ
+//	function access_engine() { return 'balancer_board_access_balancer'; }
 
 	function table_fields()
 	{

@@ -7,7 +7,8 @@ class balancer_board_updated extends bors_paginated
 	function nav_name() { return ec('обновления'); }
 	function template() { return 'forum/_header.html'; }
 
-	function order() { return '-modify_time'; }
+	//TODO: вернуть -modify_time после исправления преобразований, чтобы не было UNIX_TIMESTAMP(`modify_time`) ... ORDER BY modify_time
+	function order() { return '`modify_time` DESC'; }
 
 	function main_class() { return 'bal_event'; }
 	function where()
