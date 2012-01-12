@@ -1,5 +1,7 @@
 <?php
 
+require_once('inc/datetime.php');
+
 class aviatop_main extends base_page_paged
 {
 	function config_class() { return 'aviatop_config'; }

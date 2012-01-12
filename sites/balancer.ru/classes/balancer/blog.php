@@ -29,9 +29,9 @@ class balancer_blog extends user_blog
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url(1)."rss.xml\" title=\"RSS блога пользователя ".addslashes($this->user->title())."\" />");
 	}
 
-	function url($page = 1)
-	{	
-		if($page == 0)
+	function url($page = NULL)
+	{
+		if(!$page || $page == $this->default_page())
 			return "http://balancer.ru/blog/"; 
 		else
 			return "http://balancer.ru/blog/$page.html"; 

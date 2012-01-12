@@ -172,7 +172,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			)
 		));
 */
-		debug_hidden_log('topics_lost_recreated', "post={$this}, topic={$topic}", false);
+//		debug_hidden_log('topics_lost_recreated', "post={$this}, topic={$topic}", false);
 //		$topic->recalculate();
 //		return $topic;
 		return NULL;

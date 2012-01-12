@@ -105,4 +105,6 @@ class airbase_user_warning extends base_object_db
 		$this->user()->_warnings_update();
 		return parent::post_save($data);
 	}
+
+	function url() { return NULL; }
 }

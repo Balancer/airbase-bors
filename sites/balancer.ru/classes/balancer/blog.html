@@ -1,4 +1,4 @@
-{if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
+{$this->pages_links('pages_select', '', '&nbsp;')}
 
 {assign var="skip_author_name" value=1}
 {assign var="skip_message_footer" value=1}
@@ -17,4 +17,5 @@
 <dl class="box"><dd>У данного пользователя нет записей в блоге.</dd></dl>
 {/foreach}
 
-{if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
+{$this->pages_links('pages_select', '', '&nbsp;')}
+

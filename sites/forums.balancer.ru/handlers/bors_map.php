@@ -62,4 +62,7 @@ $map = array(
 	'/user/(\d+)/reputation\.html => user_reputation(1)',
 	'/user/(\d+)/reputation\.html(.+) => user_reputation(1,2)',
 	'/\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+)\-\-.+\.html => forum_printable(1)',
+
+	'/warnings/? => balancer_board_warnings_main',
+	'(/)warnings/(\d+)\.html => balancer_board_warnings_main(NULL,2)',
 );

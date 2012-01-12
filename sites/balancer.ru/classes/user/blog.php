@@ -22,8 +22,6 @@ class user_blog extends base_page
 
 	function parents() { return array("balancer_board_user://".$this->id()); }
 
-	function is_reversed() { return true; }
-
 	private $xdata = array();
 	function local_data()
 	{
@@ -45,8 +43,6 @@ class user_blog extends base_page
 
 		return $this->xdata[$page_id];
 	}
-
-	function default_page() { return $this->total_pages(); }
 
 	function items_per_page() { return 20; }
 
@@ -126,15 +122,6 @@ class user_blog extends base_page
 			return rand(3*86400, 20*86400);
 	}
 
-	function pages_links()
-	{
-		if($this->total_pages() < 2)
-			return "";
-
-		include_once('funcs/design/page_split.php');
-		return join(" ", pages_show($this, $this->total_pages(), 12));
-	}
-
 	function num_blog() { return $this->db()->get('SELECT COUNT(*) FROM topics WHERE poster_id='.$this->id()); }
 
 	function can_be_empty() { return true; }
@@ -157,4 +144,7 @@ class user_blog extends base_page
 		for($page = $start; $page <= $stop; $page++)
 			@unlink('/var/www/balancer.ru/htdocs/user/'.$this->id().'/blog/'.$page.'.html');
 	}
+
+	function is_reversed() { return true; }
+	function default_page() { return $this->total_pages(); }
 }
