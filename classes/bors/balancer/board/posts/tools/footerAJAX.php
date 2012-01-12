@@ -19,7 +19,7 @@ class balancer_board_posts_tools_footerAJAX extends base_page
 	{
 		$x = $this->object();
 		$over = $x ? bors_overquote_rate($x->source()) : NULL;
-
+/*
 		if(is_null($x->is_spam()) && (!$x->owner() || ($x->owner()->num_posts() < 20 && $x->owner()->create_time() > time() - 7*86400)))
 		{
 			$x->set_is_spam(balancer_akismet::factory()->classify($x) ? 1 : 0, true);
@@ -32,7 +32,7 @@ class balancer_board_posts_tools_footerAJAX extends base_page
 					debug_hidden_log('spam-ajax', "Marked as spam: [owner={$x->owner()}]".$x->source());
 			}
 		}
-
+*/
 		return array(
 			'p' => $x,
 			'overquote' => $over,

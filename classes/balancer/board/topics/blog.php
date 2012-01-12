@@ -13,8 +13,14 @@ class balancer_board_topics_blog extends balancer_board_paged
 
 	function url($page = NULL)
 	{
-		return $this->topic()->category()->url()
-			.date("Y/m", $this->topic()->create_time())."/t{$this->id()}/blog"
+		$cat_url = $this->topic()->category()->url();
+		if(preg_match('/viewcat.php/', $cat_url))
+		{
+			debug_hidden_log('error_category', "Incorrect category '{$this->topic()->category()->debug_title()}' URL: ".$cat_url);
+			$cat_url = "http://balancer.ru/";
+		}
+
+		return $cat_url.date("Y/m", $this->topic()->create_time())."/t{$this->id()}/blog"
 			.(is_null($page) || $page == $this->default_page() ? '' : "/{$page}.html");
 	}
 

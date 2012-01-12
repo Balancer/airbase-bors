@@ -61,17 +61,14 @@ if ($action == 'change_pass')
 
 		$key = $_GET['key'];
 
-		$result = $db->query('SELECT activate_string, activate_key FROM '.$db->prefix.'users WHERE id='.$id) or error('Unable to fetch new password', __FILE__, __LINE__, $db->error());
-		list($new_password_hash, $new_password_key) = $db->fetch_row($result);
+		$user = bors_find_first('airbase_user', array('activate_key' => $key));
 
-		if ($key == '' || $key != $new_password_key)
+		if(!$key || !$user)
 			message($lang_profile['Pass key bad'].' <a href="mailto:'.$pun_config['o_admin_email'].'">'.$pun_config['o_admin_email'].'</a>.');
-		else
-		{
-			$db->query('UPDATE '.$db->prefix.'users SET password=\''.$new_password_hash.'\', activate_string=NULL, activate_key=NULL WHERE id='.$id) or error('Unable to update password', __FILE__, __LINE__, $db->error());
 
-			message($lang_profile['Pass updated'], true);
-		}
+		$user->set_password_hash_new($user->activate_string());
+
+		message($lang_profile['Pass updated'], true);
 	}
 
 	// Make sure we are allowed to change this users password
@@ -90,53 +87,29 @@ if ($action == 'change_pass')
 		}
 	}
 
-
 	if (isset($_POST['form_sent']))
 	{
 		$old_password = isset($_POST['req_old_password']) ? trim($_POST['req_old_password']) : '';
 		$new_password1 = trim($_POST['req_new_password1']);
 		$new_password2 = trim($_POST['req_new_password2']);
 
-		if ($new_password1 != $new_password2)
+		$user = bors_load('airbase_user', $id);
+		if(!$user)
+			message(ec('Не могу найти пользователя с ID=').$id);
+
+		$is_admin = $pun_user['g_id'] == PUN_ADMIN;
+
+		if(!$is_admin && !$user->check_password($old_password, false))
+			message($lang_profile['Wrong pass'].' [1]');
+
+		if($new_password1 != $new_password2)
 			message($lang_prof_reg['Pass not match']);
 
-		if (strlen($new_password1) < 4)
+		if(strlen($new_password1) < 4)
 			message($lang_prof_reg['Pass too short']);
 
-		$result = $db->query('SELECT username, password, save_pass FROM '.$db->prefix.'users WHERE id='.$id) or error('Unable to fetch password', __FILE__, __LINE__, $db->error());
-		list($target_user_name, $db_password_hash, $save_pass) = $db->fetch_row($result);
-
-		$authorized = false;
-
-		if(!empty($db_password_hash))
-		{
-			$sha1_in_db = (strlen($db_password_hash) == 40) ? true : false;
-			$sha1_available = (function_exists('sha1') || function_exists('mhash')) ? true : false;
-
-			$old_password_hash = pun_hash($old_password, $target_user_name);	// This could result in either an SHA-1 or an MD5 hash
-
-			if (($sha1_in_db && $sha1_available && $db_password_hash == $old_password_hash) ||
-				(!$sha1_in_db && $db_password_hash == md5($old_password)) ||
-				$pun_user['g_id'] < PUN_GUEST)
-				$authorized = true;
-		}
-
-		if($pun_user['g_id'] == PUN_ADMIN)
-			$authorized = true;
-
-		if (!$authorized)
-			message($lang_profile['Wrong pass'].'[1]');
-
-		$new_password_hash = pun_hash($new_password1, $target_user_name);
-
-		$db->query('UPDATE '.$db->prefix.'users SET password=\''.$new_password_hash.'\' WHERE id='.$id) or error('Unable to update password', __FILE__, __LINE__, $db->error());
-
-		if($pun_user['id'] == $id)
-		{
-			$me = bors_load('balancer_board_user', $id);
-			$me->cookie_hash_update($save_pass ? -1 : 0);
-			$me->change_password($new_password1);
-		}
+		$user->change_password($new_password1);
+		$user->cookie_hash_update($save_pass ? -1 : 0);
 
 		redirect('profile.php?section=essentials&amp;id='.$id, $lang_profile['Pass updated redirect']);
 	}

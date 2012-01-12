@@ -535,7 +535,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function template()
 	{
-		if($this->forum()->category()->category_template())
+		if(0 && $this->forum()->category()->category_template())
 		{
 			$app = $this->forum()->category()->bors_append();
 			if(!defined('BORS_APPEND'))

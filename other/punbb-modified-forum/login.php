@@ -128,43 +128,37 @@ else if ($action == 'forget' || $action == 'forget_2')
 		if (!is_valid_email($email))
 			message($lang_common['Invalid e-mail']);
 
-		$result = $db->query('SELECT id, username FROM '.$db->prefix.'users WHERE email=\''.$db->escape($email).'\'') or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());
-
-		if ($db->num_rows($result))
-		{
-			// Load the "activate password" template
-			$mail_tpl = trim(file_get_contents(PUN_ROOT.'lang/'.$pun_user['language'].'/mail_templates/activate_password.tpl'));
-
-			// The first row contains the subject
-			$first_crlf = strpos($mail_tpl, "\n");
-			$mail_subject = trim(substr($mail_tpl, 8, $first_crlf-8));
-			$mail_message = trim(substr($mail_tpl, $first_crlf));
-
-			// Do the generic replacements first (they apply to all e-mails sent out here)
-			$mail_message = str_replace('<base_url>', $pun_config['o_base_url'].'/', $mail_message);
-			$mail_message = str_replace('<board_mailer>', $pun_config['o_board_title'].' '.$lang_common['Mailer'], $mail_message);
-
-			// Loop through users we found
-			while ($cur_hit = $db->fetch_assoc($result))
-			{
-				// Generate a new password and a new password activation code
-				$new_password = random_pass(8);
-				$new_password_key = random_pass(8);
-
-				$db->query('UPDATE '.$db->prefix.'users SET activate_string=\''.pun_hash($new_password, $cur_hit['username']).'\', activate_key=\''.$new_password_key.'\' WHERE id='.$cur_hit['id']) or error('Unable to update activation data', __FILE__, __LINE__, $db->error());
-
-				// Do the user specific replacements to the template
-				$cur_mail_message = str_replace('<username>', $cur_hit['username'], $mail_message);
-				$cur_mail_message = str_replace('<activation_url>', $pun_config['o_base_url'].'/profile.php?id='.$cur_hit['id'].'&action=change_pass&key='.$new_password_key, $cur_mail_message);
-				$cur_mail_message = str_replace('<new_password>', $new_password, $cur_mail_message);
-
-				pun_mail($email, $mail_subject, $cur_mail_message);
-			}
-
-			message($lang_login['Forget mail'].' <a href="mailto:'.$pun_config['o_admin_email'].'">'.$pun_config['o_admin_email'].'</a>.');
-		}
-		else
+		$user = bors_find_first('airbase_user', array('email' => $email, 'order' => '-id'));
+		if(!$user)
 			message($lang_login['No e-mail match'].' '.htmlspecialchars($email).'.');
+
+		// Load the "activate password" template
+		$mail_tpl = trim(file_get_contents(PUN_ROOT.'lang/'.$pun_user['language'].'/mail_templates/activate_password.tpl'));
+
+		// The first row contains the subject
+		$first_crlf = strpos($mail_tpl, "\n");
+		$mail_subject = trim(substr($mail_tpl, 8, $first_crlf-8));
+		$mail_message = trim(substr($mail_tpl, $first_crlf));
+
+		// Do the generic replacements first (they apply to all e-mails sent out here)
+		$mail_message = str_replace('<base_url>', $pun_config['o_base_url'].'/', $mail_message);
+		$mail_message = str_replace('<board_mailer>', $pun_config['o_board_title'].' '.$lang_common['Mailer'], $mail_message);
+
+		// Generate a new password and a new password activation code
+		$new_password = random_pass(8);
+		$new_password_key = random_pass(8);
+
+		$user->set_activate_string($user->password_hashing($new_password));
+		$user->set_activate_key($new_password_key);
+
+		// Do the user specific replacements to the template
+		$cur_mail_message = str_replace('<username>', $cur_hit['username'], $mail_message);
+		$cur_mail_message = str_replace('<activation_url>', $pun_config['o_base_url'].'/profile.php?id='.$user->id().'&action=change_pass&key='.$new_password_key, $cur_mail_message);
+		$cur_mail_message = str_replace('<new_password>', $new_password, $cur_mail_message);
+
+		pun_mail($email, $mail_subject, $cur_mail_message);
+
+		message($lang_login['Forget mail'].' <a href="mailto:'.$pun_config['o_admin_email'].'">'.$pun_config['o_admin_email'].'</a>.');
 	}
 
 

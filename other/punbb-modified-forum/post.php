@@ -86,6 +86,7 @@ if($messages_limit >= 0)
 
 	if($messages_rest <= 0)
 	{
+		require_once('inc/datetime.php');
 		message("Вы не можете больше отправить ни одного сообщения в этот форум до <b>".full_time($me->next_can_post($messages_limit, $forum_id))."</b>. 
 		Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>»");
 	}

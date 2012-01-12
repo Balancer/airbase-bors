@@ -64,7 +64,7 @@ class balancer_akismet extends base_object
 		$this->akismet->setCommentContent($object->source());
 		$this->akismet->setPermalink($object->url());
 
-		debug_hidden_log('akismet-submit-ham', "{$object->debug_title()}: {$object->source()}");
+//		debug_hidden_log('akismet-submit-ham', "{$object->debug_title()}: {$object->source()}");
 
 		return $this->akismet->submitHam();
 	}

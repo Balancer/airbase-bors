@@ -88,6 +88,9 @@ class forum_user extends base_object_db
 			'last_mailing',
 			'utmx',
 			'joke_id',
+
+			'activate_string',	// Хэш нового пароля с текущей солью при смене пароля
+			'activate_key',		// Ключ нового пароля при его смене
 		);
 	}
 
@@ -480,10 +483,15 @@ function avatar_thumb($geo)
 		bors_exit(">$all_domains");
 */
 
+	function password_hashing($string_password)
+	{
+		return sha1($string_password.$this->password_salt_new());
+	}
+
 	function change_password($new_password)
    	{
 		$this->set_password_salt_new(md5(rand()));
-		$this->set_password_hash_new(sha1($new_password.$this->password_salt_new()));
+		$this->set_password_hash_new($this->password_hashing($new_password));
 		$this->store();
 	}
 

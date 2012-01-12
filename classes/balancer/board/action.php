@@ -34,7 +34,7 @@ class balancer_board_action extends base_page_db
 
 	static function add($object, $message, $is_moderatorial = false, $is_public = true)
 	{
-		debug_hidden_log('__0test-message', "{$object}: {$message}");
+//		debug_hidden_log('__0test-message', "{$object}: {$message}");
 		bors_new('balancer_board_action', array(
 			'target_class_name' => $object->class_name(),
 			'target_object_id' => $object->id(),
