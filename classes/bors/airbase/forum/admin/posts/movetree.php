@@ -55,7 +55,9 @@ class airbase_forum_admin_posts_movetree extends base_page
 
 	function pre_parse()
 	{
-		session_register('bba_last_target_topic_id');
+//TODO: проверить, запоминает ли последний топик
+//		session_register('bba_last_target_topic_id');
+		return parent::pre_parse();
 	}
 
 	function on_action_by_topic_id(&$data)
