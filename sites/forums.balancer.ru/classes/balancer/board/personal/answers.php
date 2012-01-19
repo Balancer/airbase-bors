@@ -1,6 +1,6 @@
 <?php
 
-bors_function_include('time/smart');
+bors_function_include('time/smart_time');
 
 class balancer_board_personal_answers extends base_page
 {
