@@ -140,11 +140,15 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	//TODO: тут гости у нас строго 3-я группа!
 	function is_public_access()
 	{
+		$ch = new bors_cache;
+		if($ch->get('forum_permissions', "{$this->id()}:3"))
+			return $ch->last();
+
 		$access = object_load('airbase_forum_access', "{$this->id()}:3", array('no_load_cache' => true));
 		if($access)
-			return $access->can_read();
+			return $this->set($access->can_read(), 600);
 
-		return object_load('forum_group', 3)->can_read();
+		return $this->set(object_load('forum_group', 3)->can_read(), 600);
 	}
 
 	function can_read()
@@ -154,11 +158,15 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		if(!$gid)
 			$gid = 3;
 
+		$ch = new bors_cache;
+		if($ch->get('forum_permissions', "{$this->id()}:{$gid}"))
+			return $ch->last();
+
 		$access = object_load('airbase_forum_access', "{$this->id()}:{$gid}");
 		if($access)
-			return $access->can_read();
+			return $ch->set($access->can_read(), 600);
 
-		return object_load('forum_group', $gid)->can_read();
+		return $ch->set(object_load('forum_group', $gid)->can_read(), 600);
 	}
 
 	function cache_children()

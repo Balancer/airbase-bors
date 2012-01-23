@@ -74,11 +74,10 @@
 {/if}
 
 {if $p->attaches()}
-<hr />
-Прикреплённые файлы:
-{foreach from=$p->attaches() item="attach"}
-<div class="box float_left center" style="width: 300px; ">{$attach->thumbnail_link('300x300')}<a href="{$attach->url()}">{$attach->title()}</a> [{$attach->size()|smart_size}, {$attach->downloads()} {$attach->downloads()|sklon:'загрузка':'загрузки':'загрузок'}]</div>
-{/foreach}
+<div style="margin-top: 10px; clear: both; border-top: 1px dotted #ccc;">
+<i style="margin-left: 8px">Прикреплённые файлы:</i><br/>
+{$p|post_attaches}
+</div>
 {/if}
 
 {if not $skip_message_footer}

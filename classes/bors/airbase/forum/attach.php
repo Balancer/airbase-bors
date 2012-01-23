@@ -41,11 +41,15 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 
 	function url() { return "http://balancer.ru/forum/punbb/attachment.php?item=".$this->id(); }
 
-	function thumbnail_link($geometry)
+	function thumbnail_link($geometry, $css_class = NULL)
 	{
-		if(preg_match("!(jpe?g|png|gif)!i", $this->extension()))
-			return "<br /><a href=\"{$this->url()}\"><img src=\"http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/$geometry/$1", $this->location())."\" alt=\"\" /></a>";
-		return '';
+		if(!preg_match("!(jpe?g|png|gif)!i", $this->extension()))
+			return '';
+
+		if($css_class)
+			$css_class = " class=\"$css_class\"";
+
+		return "<a href=\"{$this->url()}\"><img src=\"http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/$geometry/$1", $this->location())."\" alt=\"\"{$css_class} /></a>";
 	}
 
 	function auto_objects()
@@ -53,5 +57,51 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 		return array(
 			'post' => 'balancer_board_post(post_id)',
 		);
+	}
+
+	static function show_attaches($post)
+	{
+		$attaches = $post->attaches();
+		if(count($attaches) == 1)
+		{
+			$attach = $attaches[0];
+			return $attach->html(640);
+		}
+
+		$html = array();
+		foreach($attaches as $attach)
+			$html[] = $attach->html(300);
+
+		return join("\n", $html);
+	}
+
+	function html($size)
+	{
+		$width = $size;
+		if(preg_match("!(jpe?g|png|gif)!i", $this->extension()))
+		{
+			$thumb_url = "http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/{$size}x{$size}/$1", $this->location());
+			if($ss = @getimagesize($thumb_url))
+			{
+				$width = @$ss[0];
+				$height = @$ss[1];
+				$wxh = @$ss[3];
+				$thumb = "<a href=\"{$this->url()}\"><img src=\"{$thumb_url}\" {$wxh} alt=\"\" class=\"main\" /></a>";
+			}
+			else
+			{
+				$thumb = ec('Ошибка изображения');
+				$width = 300;
+			}
+		}
+		else
+		{
+			$thumb = '';
+			$width = 300;
+		}
+
+		return "<div class=\"rs_box float_left center\" style=\"width: {$width}px;\">{$thumb}<br/>"
+			."<a href=\"{$this->url()}\">{$this->title()}</a> "
+			."[".smart_size($this->size()).",&nbsp;{$this->downloads()}&nbsp;".sklon($this->downloads(), 'загрузка', 'загрузки', 'загрузок')."]</div>";
 	}
 }
