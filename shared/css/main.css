@@ -786,10 +786,12 @@ table.yandex_money input {
 	padding: 0 0 4px 0 !important;
 }
 
-.rs_box img.main {
+.rs_box img.main, .rs_box iframe {
 	border-radius: 8px 8px 0 0;
 }
 
 .rs_box_nd img.main {
 	border-radius: 8px;
 }
+
+small.inbox { display: block; margin: 0 8px; }
