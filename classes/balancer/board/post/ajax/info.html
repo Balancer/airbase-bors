@@ -1,0 +1,13 @@
+<div class="footer-info">
+<h5>Ответы на сообщение (+число вторичных ответов)</h5>
+{if $post->answers_count()}
+<h6>Всего ответов: {$post->answers_count()}</h6>
+<ul>
+{foreach from=$post->direct_answers() item="p"}
+<li>{$p->titled_url_in_container($post->topic())}&nbsp;(+{$p->answers_count()})</li>
+{/foreach}
+</ul>
+{else}
+<p>Нет ни одного ответа</p>
+{/if}
+</div>

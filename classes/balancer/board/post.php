@@ -118,25 +118,22 @@ class balancer_board_post extends forum_post
 
 	function answers_count($recount = false)
 	{
-//		echo "answers_count({$this})\n";
 		if(!$recount && !is_null($this->answers_count_raw()))
 			return $this->answers_count_raw();
 
 		$summ = 0;
 		foreach($this->direct_answers() as $a)
-		{
-//			echo "sum{$a}\n";
 			$summ += $a->answers_count($recount) + 1;
-		}
 
-		return $this->set_answers_count_raw($summ, true);
+		debug_hidden_log('__answers', "{$this->debug_title}=$summ");
+		return $this->set_answers_count_raw($summ);
 	}
 
 	function parents_answers_recount($set = false)
 	{
 //		echo "par({$this})\n";
 		if($set !== false)
-			$this->set_answers_count_raw($set, true);
+			$this->set_answers_count_raw($set);
 
 		if($parent = bors_load('balancer_board_post', $this->answer_to_id()))
 		{
@@ -178,5 +175,15 @@ class balancer_board_post extends forum_post
 		$topic->recalculate();
 
 		return $post;
+	}
+
+	function titled_url_in_container($base_container = NULL)
+	{
+		if($base_container && $base_container->title() == $this->container()->title())
+			$title = $this->nav_name();
+		else
+			$title = $this->title_in_container();
+
+		return "<a href=\"{$this->url_in_container()}\">{$title}</a>";
 	}
 }

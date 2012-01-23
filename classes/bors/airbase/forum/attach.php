@@ -101,7 +101,7 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 		}
 
 		return "<div class=\"rs_box float_left center\" style=\"width: {$width}px;\">{$thumb}<br/>"
-			."<a href=\"{$this->url()}\">{$this->title()}</a> "
+			."<a href=\"{$this->url()}\">".wordwrap($this->title(), 30, ' ', true)."</a> "
 			."[".smart_size($this->size()).",&nbsp;{$this->downloads()}&nbsp;".sklon($this->downloads(), 'загрузка', 'загрузки', 'загрузок')."]</div>";
 	}
 }
