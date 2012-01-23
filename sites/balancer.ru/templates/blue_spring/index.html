@@ -48,6 +48,14 @@
       </div>
       <div id="column1">
 
+		{if $this->description()}
+        <div class="sidebaritem"><div class="sbihead"><h1>На полях</h1></div>
+          <div class="sbicontent">
+			{$this->description()|lcml}
+          </div>
+        </div>
+		{/if}
+
         <div class="sidebaritem"><div class="sbihead"><h1>Информация</h1></div>
           <div class="sbicontent">
 			Сайт в стадии реконструкции. Пользуйтесь <a href="http://balancer.ru/forum/">форумами</a>.
