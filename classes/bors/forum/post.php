@@ -27,12 +27,22 @@ class forum_post extends base_page_db
 //			'posts_cached_fields' => array(	'id' => 'post_id',
 				'flag_db' => 'flag',
 				'warning_id',
-				'answers_count_raw' => 'answers_count',
+//				'answers_count_raw' => 'answers_count',
 				'mark_best_date',
 				'score_positive_raw' => 'score_positive',
 				'score_negative_raw' => 'score_negative',
 				'post_body' => 'html',
 				'full_html_content' => 'html_full_post',
+			),
+
+			'posts_calculated_fields(post_id)' => array(
+				'answers_count_raw' => 'answers_total',
+				'answers_in_other_topics_count_raw' => 'answers_other_topics',
+			),
+
+			'posts_dropable_fields(post_id)' => array(
+				'cached_html' => 'html',
+				'cached_html_ts' => 'UNIX_TIMESTAMP(html_ts)',
 			),
 		));
 	}
@@ -199,7 +209,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	var $_source_changed = false;
 
-	function set_source($message, $db_update)
+	function set_source($message, $db_update = true)
 	{
 		if(!$message)
 		{
@@ -247,6 +257,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 //			if(config('is_developer')) { echo 'x='.$body."\n"; exit(); }
 
 			$this->set_post_body($body, true);
+			$this->set_cached_html($body);
+			$this->set_cached_html_ts(time());
 			$this->store();
 		}
 
@@ -468,8 +480,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function answers()
 	{
-		return objects_array('forum_post', array(
-			'where' => array('answer_to=' => intval($this->id())),
+		return bors_find_all('balancer_board_post', array(
+			'answer_to' => intval($this->id()),
 			'order' => 'id',
 		));
 	}
