@@ -78,6 +78,7 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 	function html($size)
 	{
 		$width = $size;
+
 		if(preg_match("!(jpe?g|png|gif)!i", $this->extension()))
 		{
 			$thumb_url = "http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/{$size}x{$size}/$1", $this->location());

@@ -226,7 +226,45 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		return $this->_post_source = $message;
 	}
 
-	function set_body($html, $dbup) { return $this->set_post_body($html, $dbup); }
+	function set_body($html, $dbup=true) { return $this->set_post_body($html, $dbup); }
+
+	function _make_html($fast = false)
+	{
+		if(($mcn = $this->markup_class_name()) && ($mce = bors_load($mcn, NULL)))
+		{
+			$html = $mce->parse($this->post_source(), $this);
+		}
+		else
+		{
+			$html = lcml($this->post_source(),
+				array(
+					'cr_type' => 'save_cr',
+					'forum_type' => 'punbb',
+					'forum_base_uri' => 'http://balancer.ru/forum',
+					'sharp_not_comment' => true,
+					'html_disable' => 'direct',
+					'uri' => $this->internal_uri(),
+					'nocache' => true,
+					'self' => $this,
+					'fast' => $fast,
+				)
+			);
+		}
+
+		return $html;
+	}
+
+	function do_lcml_full_compile()
+	{
+		$this->set_html($this->_make_html(true));
+	}
+
+	function set_html($html, $db_up = true)
+	{
+		$this->set_post_body($html);
+		$this->set_cached_html($html);
+		$this->set_cached_html_ts(time());
+	}
 
 	function body()
 	{
@@ -234,31 +272,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		if(!$this->post_body() || config('lcml_cache_disable'))
 		{
-			if(($mcn = $this->markup_class_name()) && ($mce = bors_load($mcn, NULL)))
-			{
-				$body = $mce->parse($this->post_source(), $this);
-			}
-			else
-			{
-				$body = lcml($this->post_source(),
-					array(
-						'cr_type' => 'save_cr',
-						'forum_type' => 'punbb',
-						'forum_base_uri' => 'http://balancer.ru/forum',
-						'sharp_not_comment' => true,
-						'html_disable' => 'direct',
-						'uri' => $this->internal_uri(),
-						'nocache' => true,
-						'self' => $this,
-					)
-				);
-			}
-
-//			if(config('is_developer')) { echo 'x='.$body."\n"; exit(); }
-
-			$this->set_post_body($body, true);
-			$this->set_cached_html($body);
-			$this->set_cached_html_ts(time());
+			$this->set_html($this->_make_html());
 			$this->store();
 		}
 

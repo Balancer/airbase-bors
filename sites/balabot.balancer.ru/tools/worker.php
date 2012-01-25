@@ -18,6 +18,8 @@ $gmworker->addServer();
 $gmworker->addFunction("balabot.work", "dispatcher");
 $gmworker->setTimeout(10000);
 
+echo "Worker started\n";
+
 $loop = 100;
 while($loop-->0 && (@$gmworker->work() || @$gmworker->returnCode() == GEARMAN_TIMEOUT))
 {
@@ -53,6 +55,7 @@ function dispatcher($job)
 //			pcntl_signal($child_pid, SIG_IGN); // Сообщаем ОС, что нам пофиг на этот процесс
 			// Это основная ветка. Был запущен форк. Возвращаемся за следующим заданием.
 //			echo "запущен форк\n";
+			usleep(500);
 			return;
 		}
 

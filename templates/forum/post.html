@@ -32,9 +32,9 @@
 {if not $skip_votes}
 <div class="to-right">
 	{if config('is_developer')}<div id="ab_rec_{$p->new_class_name()}__{$p->id()}" class="to-left ab_rec"><img src="/_bors/i16/recommendation.gif" alt="[!]" width="16" height="16" title="Рекомендовать это сообщение" /></div>{/if}
- {if $me}
+ {if 0 && $me}
  <div class="to-left">
-  {$p->tools()->favorite_link_ajax()}
+  {* $p->tools()->favorite_link_ajax() *}
   {if $me->is_coordinator()}<div id="pttools_{$p->id()}" class="to-left"></div><img src="/_bors/i/tools.gif" alt="*" onclick="sh('pttools', {$p->id()})"  width="16" height="16" title="Инструменты координатора" />{/if}
  </div>
  {/if}
@@ -107,6 +107,7 @@
 if(top.me_is_coordinator)
 document.writeln('<label><input type="checkbox" id="_chkbx_p{$p->id()}" onclick="return apfgp(this, {$p->id()})" />&nbsp;отметить</label>')
 --></script></li>
+<li><a href="/_bors/ajax/post/info?post={$p->id()}" class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;инфо</a></li>
 <li><a href="#" onclick="pdsh('{$p->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;инструменты</a></li>
 <li class="pages_select">
  <a href="{$p->topic()->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 

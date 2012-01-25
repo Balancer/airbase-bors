@@ -10,7 +10,7 @@ class balancer_board_post extends forum_post
 	{
 		$data = array_merge(array(
 			'p' => $this,	//	сам постинг
-			'forum' => $this->topic()->forum(), // форум, если нужно показать ссылку на него
+			'forum' => object_property($this->topic(), 'forum'), // форум, если нужно показать ссылку на него
 //			'$no_show_answers = true, если не показывать ответы.
 			'show_title' => true, // если нужна печать заголовка.
 //$skip_author_name
@@ -125,7 +125,7 @@ class balancer_board_post extends forum_post
 		foreach($this->direct_answers() as $a)
 			$summ += $a->answers_count($recount) + 1;
 
-		debug_hidden_log('__answers', "{$this->debug_title}=$summ");
+//		debug_hidden_log('__answers', "{$this->debug_title}=$summ");
 		return $this->set_answers_count_raw($summ);
 	}
 

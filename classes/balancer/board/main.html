@@ -104,7 +104,12 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 
 <table class="btab w100p">
 <caption>Обновлённые темы форумов</caption>
-<tr><th>Время</th><th>тема</th><th>форум</th><th>отвечал</th></tr>
+<tr>
+	<th>Время</th>
+	<th>тема</th>
+	<th>форум</th>
+	<th>отвечали</th>
+</tr>
 {foreach from=$updated_topics item="t"}
 <tr><td>{$t->modify_time()|date:'H:i'}</td>
 	<td>{$t->titled_url('new')}</td>
@@ -117,7 +122,12 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 
 <table class="btab w100p">
 <caption>Новые темы форумов</caption>
-<tr><th>Время</th><th>тема</th><th>форум</th><th>автор</th></tr>
+<tr>
+	<th>Время</th>
+	<th>тема</th>
+	<th>форум</th>
+	<th>авторы</th>
+</tr>
 {foreach from=$new_topics item="t"}
 <tr><td>{$t->create_time()|smart_time}</td>
 	<td>{$t->titled_url('new')}<br/>
@@ -138,7 +148,13 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 
 <table class="btab w100p">
 <caption>Популярные темы</caption>
-<tr><th>Время</th><th>тема</th><th>Просмотров в сутки</th><th>форум</th><th>автор</th></tr>
+<tr>
+	<th>Время</th>
+	<th>тема</th>
+	<th>Просмотров в сутки</th>
+	<th>форум</th>
+	<th>авторы</th>
+</tr>
 {foreach from=$top_visit_topics item="t"}
 <tr><td>{$t->create_time()|smart_time}</td>
 	<td>{$t->titled_url('new')}<br/>
