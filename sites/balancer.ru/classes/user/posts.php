@@ -2,6 +2,9 @@
 
 class user_posts extends base_page
 {
+	function can_be_empty() { return false; }
+	function loaded() { return (bool) $this->user(); }
+
 	function cache_static() { return config('static_forum') ? 600 : 0; }
 
 	function template()
@@ -15,10 +18,11 @@ class user_posts extends base_page
 	{
 		if($this->_user === false)
 			$this->_user = bors_user($this->id());
-		
+
 		return $this->_user;
 	}
-	
+
+
 	function title() { return $this->user()->title().ec(': Все сообщения'); }
 	function nav_name() { return ec('все сообщения'); }
 
@@ -31,7 +35,7 @@ class user_posts extends base_page
 		$y9 = strftime('%Y', $last);
 		for($y0; $y0<=$y9; $y0++)
 			$years[] = $y0;
-*/		
+*/
 		$ynow = strftime('%Y');
 		for($y=2000; $y<=$ynow; $y++)
 		{
@@ -40,7 +44,7 @@ class user_posts extends base_page
 			if($cnt = $this->db('punbb')->select('posts', 'count(*)', array('poster_id' => $this->id(), "posted BETWEEN $d0 AND $d9")))
 				$years[$y] = $cnt;
 		}
-		
+
 		return array('years' => $years);
 	}
 }

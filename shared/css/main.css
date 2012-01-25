@@ -794,4 +794,4 @@ table.yandex_money input {
 	border-radius: 8px;
 }
 
-small.inbox { display: block; margin: 0 8px; }
+.rs_box small.inbox { display: block; margin: 0 8px; }

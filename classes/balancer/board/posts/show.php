@@ -9,7 +9,11 @@ class balancer_board_posts_show extends bors_view
 	function can_be_empty() { return false; }
 	function loaded() { return $this->post() != NULL; }
 
-	function parents() { return array($this->post()->topic()->url()); }
+	function parents()
+	{
+		$topic = $this->post()->topic();
+		return array($topic ? $topic->url() : 'http://forums.balancer.ru/');
+	}
 
 	function auto_objects()
 	{
@@ -22,7 +26,7 @@ class balancer_board_posts_show extends bors_view
 	function nav_name() { return $this->post()->nav_name(); }
 	function description() { return $this->post()->description(); }
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'post' => $this->post(),
@@ -35,10 +39,16 @@ class balancer_board_posts_show extends bors_view
 
 	function pre_show()
 	{
-    	if(!$this->post()->topic()->forum()->can_read())
+		if(!($topic = $this->post()->topic()))
+		{
+			debug_hidden_log('error_post_lost', "Lost post (not found topic {$this->post()->topic_id()}) ".$this->post()->id(), false);
+			return bors_message(ec("Тема данного сообщения была утеряна<br/>\n=====================================<br/>\n<small>").lcml_bbh($this->post()->source())."</small>");
+		}
+
+    	if(!$topic->forum()->can_read())
 		{
 			template_noindex();
-			return bors_message("Извините, доступ к этому ресурсу закрыт для Вас");
+			return bors_message(ec("Извините, доступ к этому ресурсу закрыт для Вас"));
 		}
 
 		return false;

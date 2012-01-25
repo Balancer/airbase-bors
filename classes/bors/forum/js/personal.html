@@ -1,3 +1,4 @@
+{if $owner}
 <p><b>Здравствуйте, {$owner->titled_url()}!</b></p>
 
 <b>Ваши:</b>
@@ -12,6 +13,13 @@
 <li><a href="http://balancer.ru/users/{$owner->id()}/votes/">Оценки</a></li>
 <li><a href="/actions/do-logout/">Выход</a></li>
 </ul>
+{else}
+<p><b>Здравствуйте, гость!</b></p>
+Гостевой функционал сайта ограничен. Для
+полноценной работы
+<a href="http://balancer.ru/forum/punbb/register.php">зарегистрируйтесь</a>,
+пожалуйста.
+{/if}
 
 <b>Форум:</b>
 <ul>
@@ -24,7 +32,7 @@
 <li><a href="http://balancer.ru/tools/votes/">Оценки</a></li>
 <li><a href="http://balancer.ru/users/warnings/">Штрафы</a></li>
 <li><a href="http://forums.balancer.ru/tools/">Инструменты</a></li>
-{if $owner->is_coordinator()}
+{if $owner && $owner->is_coordinator()}
 <li><a href="http://forums.balancer.ru/admin/">Админка</a></li>
 {/if}
 </ul>
