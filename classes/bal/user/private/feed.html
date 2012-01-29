@@ -1,0 +1,14 @@
+{foreach from=$feed item="e"}
+<div class="notify small notify_{$e->color()}">
+	<h3><span class="time">{$e->modify_time()|airbase_time}</span>: {$e->title()}</h3>
+	<div class="notice_content">
+		{if $e->handler_class_name() == 'balancer_board_actor_topic'}
+			<div class="float_left" style="width: 60px; height: 80px; overflow: hidden; padding: 2px; text-align: center">
+			{module class='balancer_board_modules_avatar' user=$e->object()->owner() geo='50x50'}
+			</div>
+		{/if}
+		{$e->html()}
+		<div class="clear">&nbsp;</div>
+	</div>
+</div>
+{/foreach}

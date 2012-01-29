@@ -116,14 +116,14 @@ class balancer_board_post extends forum_post
 		));
 	}
 
-	function answers_count($recount = false)
+	function answers_count($recount = false, $recount_child = false)
 	{
 		if(!$recount && !is_null($this->answers_count_raw()))
 			return $this->answers_count_raw();
 
 		$summ = 0;
 		foreach($this->direct_answers() as $a)
-			$summ += $a->answers_count($recount) + 1;
+			$summ += $a->answers_count($recount_child) + 1;
 
 //		debug_hidden_log('__answers', "{$this->debug_title}=$summ");
 		return $this->set_answers_count_raw($summ);
@@ -137,9 +137,10 @@ class balancer_board_post extends forum_post
 
 		if($parent = bors_load('balancer_board_post', $this->answer_to_id()))
 		{
-//			echo "par={$parent}\n";
-			$parent->answers_count(false);
+//			echo "par={$parent} from ".$parent->answers_count(false)." to \n";
+			$parent->answers_count(true);
 			$parent->parents_answers_recount();
+//			echo "\t".$parent->answers_count(false)."\n";
 		}
 	}
 
@@ -185,5 +186,10 @@ class balancer_board_post extends forum_post
 			$title = $this->title_in_container();
 
 		return "<a href=\"{$this->url_in_container()}\">{$title}</a>";
+	}
+
+	static function posts_preload($posts)
+	{
+		bors_objects_preload($posts, 'owner_id', 'balancer_board_user', 'owner');
 	}
 }

@@ -12,8 +12,11 @@ class airbase_user_admin_warning extends airbase_user_warning
 	function check_data(&$data)
 	{
 		$user = bors_load('bors_user', $data['user_id']);
-		if(in_array($user->group_id(), array(1,2,5,21)))
-			return bors_message(ec('Нельзя выставлять штрафы координаторам и модераторам'));
+		if(bors()->user()->warnings())
+			return bors_message(ec('При наличии активных штрафов нельзя штрафовать других пользователей'));
+
+//		if(in_array($user->group_id(), array(1,2,5,21)))
+//			return bors_message(ec('Нельзя выставлять штрафы координаторам и модераторам'));
 
 		$object = bors_load_uri($data['object']);
 		if(!$object)

@@ -10,15 +10,18 @@ class balancer_board_posts_best extends bors_page
 
 	function body_data()
 	{
+		template_css('/_bors/css/bors/style.css');
 		$cached = bors_find_all('balancer_board_posts_cached', array(
 			'mark_best_date IS NOT NULL',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
-			'order' => '-mark_best_date',
+			'order' => 'mark_best_date',
 		));
 
 		$post_ids = bors_field_array_extract($cached, 'id');
 		$posts = bors_find_all('balancer_board_post', array('id IN' => $post_ids, 'order' => '-mark_best_date'));
+
+		balancer_board_post::posts_preload($posts);
 
 		return array_merge(parent::body_data(), compact('posts'));
 	}
@@ -34,4 +37,8 @@ class balancer_board_posts_best extends bors_page
 			'mark_best_date IS NOT NULL',
 		)));
 	}
+
+	function is_reversed() { return true; }
+	function default_page() { return $this->total_pages(); }
+	function url($page = NULL) { return '/best/'.($page == $this->default_page() || is_null($page) ? '' : "$page.html"); }
 }

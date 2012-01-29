@@ -40,12 +40,17 @@
 
 {literal}
 <script>
-tid = top.object_id
 
 if(top.class_name == 'forum_topic' || top.class_name == 'balancer_board_topic')
+{
+	tid = top.object_id
 	page = top.page
+}
 else
+{
 	page = 1
+	tid = 0
+}
 
 if(tid > 0)
 {
@@ -60,7 +65,7 @@ if(tid > 0)
 	document.write('<li><a href="http://balancer.ru/2000/01/t'+tid+'/attaches/">Все аттачи</a></li>')
 	document.write('<li><a href="http://balancer.ru/forum/tools/topic/'+tid+'/">Инструменты темы</a></li>')
 	document.write('<li><a href="http://balancer.ru/forum/tools/topic/'+tid+'/reload/">Сбросить кеш темы</a></li>')
-	document.write('<li><form action="http://balancer.ru/tools/search/result/"><input name="q" size="20" class="text" /><input type="hidden" name="w" value="1" /><br/><input type="submit" value="Найти в теме" /><input type="hidden" name="t" value="'+tid+'" /></form></li>')
+	document.write('<li><form action="http://balancer.ru/tools/search/result/"><input name="q" size="20" class="text" type="text" /><input type="hidden" name="w" value="1" /><br/><input type="submit" value="Найти в теме" /><input type="hidden" name="t" value="'+tid+'" /></form></li>')
 	document.write('</ul>')
 }
 </script>
