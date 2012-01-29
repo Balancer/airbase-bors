@@ -73,6 +73,9 @@ dl.box {
 	margin: 10px 0px 4px 0px; 
 	padding: 0px; 
 	background-color: white;
+	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
 dl.box dt, dl.box dt a {
@@ -148,6 +151,9 @@ div.post {
 	padding: 0px; 
 	clear: both;
 	background-color: #ffffff;
+	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
 div.post div.head, div.post {
@@ -223,6 +229,12 @@ a.select_page:hover {
 .topic_pages_links {
 	font-size: 0.8em;
 	white-space: nowrap;
+}
+
+.pages_select a {
+	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
 small a.current_page, small a.select_page {
@@ -765,21 +777,21 @@ table.yandex_money input {
 }
 
 .shadow8 {
-	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.5);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.5);
-	box-shadow: 0 0 8px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
 .rs_box, .rs_box_nd {
 	font-size: 0.7em;
 	border: 1px solid #9bd;
 	background-color: #fff;
-	margin: 8px !important;
-	padding: 0 !important;
+	margin: 0 8px 8px 8px;
+	padding: 0;
 	border-radius: 8px;
-	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.5);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.5);
-	box-shadow: 0 0 8px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
 .rs_box {
@@ -795,3 +807,30 @@ table.yandex_money input {
 }
 
 .rs_box small.inbox { display: block; margin: 0 8px; }
+
+/* Кнопка ответа на сообщения */
+a.reply_link {
+	background-image: url(/_bors/i16/reply.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding: 2px 20px 2px 2px !important;
+}
+
+input[type="text"] {
+	box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+}
+
+input[type="submit"] {
+	box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+div.spinner {
+	background-image: url(/_bors/i/wait-16.gif);
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding: 2px 2px 2px 20px !important;
+}
+
+.mtop8 {
+	margin-top: 8px !important;
+}

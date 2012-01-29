@@ -1,5 +1,6 @@
-{$this->pages_links_nul()}
+<div class="yellow_box"><b>&beta;:</b> Страница в стадии глубокой разработки</div>
 
+{$this->pages_links_nul()}
 {foreach from=$posts item="p"}
 {if $p and $p->topic()->is_public()}
    {include file="xfile:forum/post-wrk.html" 

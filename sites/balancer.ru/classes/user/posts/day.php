@@ -79,7 +79,7 @@ class user_posts_day extends base_page
 		else
 			return NULL;
 	}
-	
+
 	function next_day_link()
 	{
 		$next = $this->db('punbb')->select('posts', 'MIN(posted)', array(
@@ -93,7 +93,7 @@ class user_posts_day extends base_page
 			return NULL;
 	}
 
-    function local_data()
+    function body_data()
 	{
 		$year	= $this->year;
 		$month	= $this->month;
@@ -120,7 +120,7 @@ class user_posts_day extends base_page
 					'title' => $total.' '.sklon($total, ec('сообщение'), ec('сообщения'), ec('сообщений')),
 			);
 		}
-		
+
 		return array(
 			'year' => $year, 
 			'month' => $month, 

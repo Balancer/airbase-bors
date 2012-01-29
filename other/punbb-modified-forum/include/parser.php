@@ -69,7 +69,7 @@ function parse_message($text, $hide_smilies, $nocache=false)
 
 	if($nocache)
 		config_set('lcml_cache_disable', true);
-
+/*
 	$body = lcml($text, 
 		array(
 			'cr_type' => 'save_cr',
@@ -80,6 +80,7 @@ function parse_message($text, $hide_smilies, $nocache=false)
 			'uri' => "post://{$cur_post['id']}/",
 		)
 	);
-
+*/
+	$body = pun_lcml($text, false);
 	return $ch->set($body, 60*86400);
 }

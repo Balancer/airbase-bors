@@ -43,6 +43,9 @@ class airbase_user_admin_warnings extends airbase_user_warnings
 
 	function pre_show()
 	{
+		if(!bors()->user())
+			return bors_message(ec('А аутентифицироваться кто будет??'));
+
 		if(!$this->args('object'))
 			return go(object_load('airbase_user_warnings', $this->id())->url());
 		else

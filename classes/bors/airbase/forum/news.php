@@ -2,25 +2,26 @@
 
 class airbase_forum_news extends base_page
 {
-	function title() { return ec('Лента тем форума «').$this->forum()->title().ec('» и его подфорумов'); }
-	
+	function title() { return ec('Лента тем форума «').$this->forum()->title().ec('» и его подфорумов за год'); }
+
 	private $forum = false;
 	function forum()
 	{
 		if($this->forum !== false)
 			return $this->forum;
-		
+
 		return $this->forum = object_load('forum_forum', $this->id());
 	}
-	
+
 	function nav_name(){ return ec('Лента'); }
 	function parents() { return array($this->forum()->internal_uri()); }
-	
-	function local_data()
+
+	function body_data()
 	{
 		return array(
-			'topics' =>array_reverse(objects_array('forum_topic', array(
+			'topics' =>array_reverse(objects_array('balancer_board_topic', array(
 				'forum_id IN' => $this->forum()->all_public_subforum_ids(),
+				'create_time>' => floor(time() - 86400*365.24),
 				'order' => 'create_time',
 				'page' => $this->page(),
 				'per_page' => $this->items_per_page(),
@@ -28,7 +29,15 @@ class airbase_forum_news extends base_page
 		);
 	}
 
-	function total_items() { return $this->__havec('total_items') ? $this->__lastc() : $this->__setc(intval(objects_count('forum_topic', array('forum_id IN' => $this->forum()->all_public_subforum_ids())))); }
+	function total_items()
+	{
+		if($this->__havefc())
+			return $this->__lastc();
+		return $this->__setc(intval(bors_count('balancer_board_topic', array(
+			'forum_id IN' => $this->forum()->all_public_subforum_ids(),
+			'create_time>' => floor(time() - 86400*365.24),
+		))));
+	}
 
 	function default_page() { return $this->total_pages(); }
 	function reverse_pages() { return true; }

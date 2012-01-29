@@ -9,7 +9,8 @@ class balancer_board_archive_day extends base_page_list
 
 	function parents() { return array('/archive/'.date('Y/m/', $this->id())); }
 
-	function main_class() { return 'forum_topic'; }
+	function main_class() { return 'balancer_board_topic'; }
+
 	static function id_prepare($id)
 	{
 		if(preg_match('!^(\d+)/(\d+)/(\d+)$!', $id, $m))
@@ -27,6 +28,42 @@ class balancer_board_archive_day extends base_page_list
 
 		return array_merge(parent::where(), array(
 			"posted BETWEEN $begin AND $end",
+		));
+	}
+
+	function previous_day_link()
+	{
+		$prev = $this->db('punbb')->select('topics', 'MAX(posted)', array(
+			'posted<' => strtotime("{$this->year}-{$this->month}-{$this->day}"),
+		));
+
+		if($prev)
+			return 'http://forums.balancer.ru/archive/'.date('Y/m/d', $prev).'/';
+		else
+			return NULL;
+	}
+
+	function next_day_link()
+	{
+		$next = $this->db('punbb')->select('topics', 'MIN(posted)', array(
+			'posted>=' => strtotime("{$this->year}-{$this->month}-{$this->day}")+86400,
+		));
+
+		if($next)
+			return 'http://forums.balancer.ru/archive/'.date('Y/m/d', $next).'/';
+		else
+			return NULL;
+	}
+
+	function body_data()
+	{
+		$this->year = date('Y', $this->id());
+		$this->month = date('m', $this->id());
+		$this->day = date('d', $this->id());
+
+		return array_merge(parent::body_data(), array(
+			'previous_day_link' => $this->previous_day_link(),
+			'next_day_link' => $this->next_day_link(),
 		));
 	}
 }

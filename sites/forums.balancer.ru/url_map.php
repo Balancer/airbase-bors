@@ -2,6 +2,8 @@
 
 bors_url_map(array(
 	'/best/ => balancer_board_posts_best',
+	'/worst/? => balancer_board_posts_worst',
+	'(/)worst/(\d+)\.html => balancer_board_posts_worst(NULL,2)',
 	'(/)best/(\d+)\.html => balancer_board_posts_best(NULL,2)',
 ));
 
