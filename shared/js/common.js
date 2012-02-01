@@ -35,7 +35,7 @@ function post_ajax_reload(el)
 
 
 	setInterval(function() {
-		alert(post_id)
+//		alert(post_id)
 		el.load('/_bal/ajax/body?object=balancer_board_post__'+post_id) 
 	}, 2000);
 }

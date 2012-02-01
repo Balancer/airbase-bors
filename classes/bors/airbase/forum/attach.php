@@ -81,13 +81,19 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 
 		if(preg_match("!(jpe?g|png|gif)!i", $this->extension()))
 		{
+			$full_url = 'http://balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2';
 			$thumb_url = "http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/{$size}x{$size}/$1", $this->location());
 			if($ss = @getimagesize($thumb_url))
 			{
 				$width = @$ss[0];
 				$height = @$ss[1];
 				$wxh = @$ss[3];
-				$thumb = "<a href=\"{$this->url()}\"><img src=\"{$thumb_url}\" {$wxh} alt=\"\" class=\"main\" /></a>";
+				if($width > $size*1.1 || $height > $size*1.1)
+					$thumb = "<a href=\"{$full_url}\" class=\"cloud-zoom\" id=\"zoom-".rand()."\" rel=\"position:'inside'\">";
+				else
+					$thumb = "<a href=\"{$this->url()}\">";
+
+				$thumb .= "<img src=\"{$thumb_url}\" {$wxh} alt=\"\" class=\"main\" /></a>";
 			}
 			else
 			{
@@ -101,8 +107,9 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 			$width = 300;
 		}
 
-		return "<div class=\"rs_box float_left center\" style=\"width: {$width}px;\">{$thumb}<br/>"
-			."<a href=\"{$this->url()}\">".wordwrap($this->title(), 30, ' ', true)."</a> "
+		// {$this->url()}
+		return "<div class=\"rs_box float_left center mtop8\" style=\"width: {$width}px;\">{$thumb}<br/>"
+			."<a href=\"{$this->url()}\">".wordwrap($this->title(), 30, ' ', true)." (скачать)</a> "
 			."[".smart_size($this->size()).",&nbsp;{$this->downloads()}&nbsp;".sklon($this->downloads(), 'загрузка', 'загрузки', 'загрузок')."]"
 			." [attach={$this->id()}]</div>";
 	}

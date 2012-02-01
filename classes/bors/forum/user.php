@@ -107,7 +107,7 @@ function num_posts() { return @$this->data['num_posts']; }
 function set_num_posts($v, $dbup) { return $this->set('num_posts', $v, $dbup); }
 function signature() { return @$this->data['signature']; }
 function set_signature($v, $dbup) { return $this->set('signature', $v, $dbup); }
-function set_signature_html($v, $dbup) { return $this->set('signature_html', $v, $dbup); }
+function set_signature_html($v, $dbup = true) { return $this->set('signature_html', $v, $dbup); }
 function warnings() { return @$this->data['warnings']; }
 function set_warnings($v, $dbup) { return $this->set('warnings', $v, $dbup); }
 function warnings_total() { return @$this->data['warnings_total']; }
@@ -257,7 +257,7 @@ function avatar_thumb($geo)
 		{
 			$savet = config('lcml_tags_enabled');
 			$savef = config('lcml_functions_enabled');
-			config_set('lcml_tags_enabled', explode(' ', 'b blue br color green i red u url'));
+			config_set('lcml_tags_enabled', explode(' ', 'b black blue br color green i red u url'));
 			config_set('lcml_functions_enabled', explode(' ', 'lcml_text lcml_color lcml_classic_bb_url'));
 			$body = lcml(preg_replace("!\n+$!", '', $this->signature()),
 				array(

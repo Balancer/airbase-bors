@@ -1,5 +1,6 @@
 {if $owner}
-<p><b>Здравствуйте, {$owner->titled_url()}!</b></p>
+<p><b>Здравствуйте, {$owner->titled_url()}!</b> [&nbsp;<a href="/actions/do-logout/">Выход</a>&nbsp;]
+</p>
 
 <b>Ваши:</b>
 <ul>
@@ -11,7 +12,6 @@
 <li><a href="http://forums.balancer.ru/personal/answers/">Ответы Вам</a></li>
 <li><a href="http://balancer.ru/user/{$owner->id()}/reputation/">Репутация</a></li>
 <li><a href="http://balancer.ru/users/{$owner->id()}/votes/">Оценки</a></li>
-<li><a href="/actions/do-logout/">Выход</a></li>
 </ul>
 {else}
 <p><b>Здравствуйте, гость!</b></p>

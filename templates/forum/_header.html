@@ -378,4 +378,14 @@ static expire = {$this->cache_static_expire()|date:'r'}
 class_template = {$this->template()}
 -->
 </body>
+{foreach from=$js_include_post item="s"}
+<script type="text/javascript" src="{$s}"></script>
+{/foreach}
+{if $javascript_post}
+<script type="text/javascript"><!--
+{foreach from=$javascript_post item="s"}
+{$s}
+{/foreach}
+--></script>
+{/if}
 </html>
