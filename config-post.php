@@ -12,3 +12,8 @@ template_js_include('/_bal/js/common.js?');
 template_js_include('/_bors/js/bors-jquery.js');
 
 config_set('locked_db', @file_get_contents('/tmp/mysqldump.lock'));
+
+template_jquery_cloud_zoom();
+template_jquery_hoverZoom();
+
+

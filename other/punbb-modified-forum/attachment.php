@@ -99,9 +99,9 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 			$req->addPostData("from", "1/".strftime("%m/%y"));
 			$req->addPostData("to", strftime("%d/%m/%y"));
 			$req->addPostData("ip", "ALL");
-		
+
 			$resp = $req->sendRequest();
-		
+
 			if (!PEAR::isError($resp))
     	 		$resp = $req->getResponseBody();
 	 		else 
@@ -114,11 +114,11 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 			$diff = $m[2] - $m[1] + 3000;
 			$ch->set($diff, -7200);
 		}
-	
+
 		if($diff >= 0)
 			message($ret."<br /><br />Дефицит трафика на данный момент составляет $diff Мб. При отсутствии дефицита доступ к аттачам зарегистрированным зарубежным пользователям разрешён!".$anon);
 	}
-	
+
 
 	//check that there is such an item
 	$result = $db->query("SELECT post_id, filename, extension, mime, location, size FROM {$db->prefix}attach_2_files WHERE id={$attach_item} LIMIT 1")
@@ -134,7 +134,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 	// so if one isn't allowed to download, give them the no permission message...
 	if(!$attach_allow_download)
 		message($lang_common['No permission']);
-	
+
 // ok, if you've got to here you may download the file ...
 // later add possibility to resume files ... but not in Attachment Mod 2.0 ;-)
 	if(($attach_extension=='jpg' 
@@ -174,7 +174,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 		require 'footer.php';
 		exit();
 	}
-	else
+	elseif($_GET['download'] == 1)
 	{ 	// put the file out for download
 		// update number of downloads
 		ini_set('zlib.output_compression',  0);
@@ -184,7 +184,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 		// open a pointer to the file
 		if(!file_exists($pun_config['attach_basefolder'].$attach_location))
 			debug_exit('Not exists file attach '.$attach_item.': '.$pun_config['attach_basefolder'].$attach_location);
-		
+
 		$fp = fopen($pun_config['attach_basefolder'].$attach_location, "rb");
 		if(!$fp)
 		{
@@ -200,13 +200,45 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 				header('Content-Type: ' . $attach_mime );
 			else
 				header('Content-type: application/octet-stream'); // a default mime is nothing is defined for the file
-		
+
 			header('Pragma: no-cache'); //hmm, I suppose this might be possible to skip, to save some bw, but I'm far from sure, so I let the 'no cache stuff' be...
 			header('Expires: 0'); 
 			header('Connection: close'); // Thanks to Dexus for figuring out this header (on some systems there was a delay for 5-7s for downloading)
 			if($attach_size!=0)
 				header('Content-Length: '.$attach_size);
-		
+
+			// and finally send the file, fpassthru might be replaced later, rumors say fpassthru use alot of memory...
+			fpassthru($fp);
+		}
+	}
+	else
+	{
+		ini_set('zlib.output_compression',  0);
+
+		// open a pointer to the file
+		if(!file_exists($pun_config['attach_basefolder'].$attach_location))
+			debug_exit('Not exists file attach '.$attach_item.': '.$pun_config['attach_basefolder'].$attach_location);
+
+		$fp = fopen($pun_config['attach_basefolder'].$attach_location, "rb");
+		if(!$fp)
+			message($lang_common['Bad request']);
+		else
+		{
+			$attach_filename=rawurlencode($attach_filename);	// fix filename (spaces may still mess things up, perhaps add a specific MSIE thing later, not sure though)
+
+			// send some headers
+
+			if(strlen($attach_mime)!=0)
+				header('Content-Type: ' . $attach_mime );
+			else
+				header('Content-type: application/octet-stream'); // a default mime is nothing is defined for the file
+
+			header('Pragma: no-cache'); //hmm, I suppose this might be possible to skip, to save some bw, but I'm far from sure, so I let the 'no cache stuff' be...
+			header('Expires: 0'); 
+			header('Connection: close'); // Thanks to Dexus for figuring out this header (on some systems there was a delay for 5-7s for downloading)
+			if($attach_size!=0)
+				header('Content-Length: '.$attach_size);
+
 			// and finally send the file, fpassthru might be replaced later, rumors say fpassthru use alot of memory...
 			fpassthru($fp);
 		}
