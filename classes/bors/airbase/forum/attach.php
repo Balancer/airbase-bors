@@ -88,12 +88,12 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 				$width = @$ss[0];
 				$height = @$ss[1];
 				$wxh = @$ss[3];
-				if($width > $size*1.1 || $height > $size*1.1)
+//				if($width > $size*1.1 || $height > $size*1.1)
 					$thumb = "<a href=\"{$full_url}\" class=\"cloud-zoom\" id=\"zoom-".rand()."\" rel=\"position:'inside'\">";
-				else
-					$thumb = "<a href=\"{$this->url()}\">";
+//				else
+//					$thumb = "<a href=\"{$this->url()}\">";
 
-				$thumb .= "<img src=\"{$thumb_url}\" {$wxh} alt=\"\" class=\"main\" /></a>";
+				$thumb .= "{$width}/{$size}<img src=\"{$thumb_url}\" {$wxh} alt=\"\" class=\"main\" /></a>";
 			}
 			else
 			{
