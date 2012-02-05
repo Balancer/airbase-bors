@@ -56,8 +56,9 @@ class forum_blog extends base_page_db
 //		bors_exit('tid='.$this->post()->topic_id());
 		$this->set_topic_id(object_load('balancer_board_post', $this->id())->topic_id(), true);
 		$this->set_forum_id(object_load('balancer_board_topic', $this->topic_id())->forum_id(), true);
-		if(!bors()->client()->is_bot())
-			common_keyword_bind::add($this);
+//TODO: непонятно, откуда огромный трафик
+//		if(!bors()->client()->is_bot())
+//			common_keyword_bind::add($this);
 	}
 
 	function auto_objects()
@@ -89,4 +90,9 @@ class forum_blog extends base_page_db
 
 	function create_time() { return $this->post()->create_time(); }
 	function modify_time() { return $this->post()->modify_time(); }
+
+	// При уброке проверить http://forums.balancer.ru/tags/лингвистика/
+	function num_replies() { return $this->post()->answers_count(); }
+	// При уброке проверить http://forums.balancer.ru/tags/лингвистика/
+	function author_name() { return $this->post()->author_name(); }
 }
