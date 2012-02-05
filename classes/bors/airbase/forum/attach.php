@@ -93,7 +93,7 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 //				else
 //					$thumb = "<a href=\"{$this->url()}\">";
 
-				$thumb .= "{$width}/{$size}<img src=\"{$thumb_url}\" {$wxh} alt=\"\" class=\"main\" /></a>";
+				$thumb .= "<img src=\"{$thumb_url}\" {$wxh} alt=\"\" class=\"main\" /></a>";
 			}
 			else
 			{

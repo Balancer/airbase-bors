@@ -141,7 +141,7 @@ class balancer_board_user extends forum_user
 	{
 		if($this->last_mailing() > time() - 3*24*3600)
 		{
-			debug_hidden_log('_answer_test_mailing', "Skip notify to {$this->debug_title()} ({$this->email()}) as |$text|", false);
+//			debug_hidden_log('_answer_test_mailing', "Skip notify to {$this->debug_title()} ({$this->email()}) as |$text|", false);
 			return;
 		}
 

@@ -23,7 +23,8 @@ class forum_tools_post_do extends base_page
 				$post->set_post_body(NULL, true);
 				$post->set_warning_id(NULL, true);
 				$post->set_flag_db(NULL, true);
-				$post->owner()->set_signature_html(NULL);
+				if($owner = $post->owner())
+					$owner->set_signature_html(NULL);
 				$post->cache_clean();
 				$post->store();
 				$post->body();

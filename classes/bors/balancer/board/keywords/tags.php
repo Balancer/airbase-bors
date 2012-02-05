@@ -124,6 +124,7 @@ class balancer_board_keywords_tags extends base_page
 		return $this->__setc(objects_count('common_keyword_bind', array(
 			'keyword_id IN' => $this->_selected_keywords(),
 			'target_object_id=target_container_object_id',
+			'target_class_name IN' => array('forum_topic', 'balancer_board_topic'),
 //			'target_create_time>' => 0,
 			'group' => 'target_class_name,target_object_id',
 			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),
@@ -140,7 +141,8 @@ class balancer_board_keywords_tags extends base_page
 
 		foreach(bors_find_all('common_keyword_bind', array(
 			'keyword_id IN' => $this->_selected_keywords(),
-			'target_object_id=target_container_object_id',
+//			'target_object_id=target_container_object_id',
+			'target_class_name IN' => array('forum_topic', 'balancer_board_topic'),
 //			'target_create_time>' => 0,
 			'group' => 'target_class_name,target_object_id',
 			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),

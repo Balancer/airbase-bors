@@ -17,7 +17,7 @@
 {foreach from=$topics item=t}
 {assign var=f value=$t->forum()}
 {assign var=o value=$t->owner()}
-{if $me}{assign var="updated" value=$t->was_updated_for_user($me,true)}{/if}
+{* if $me}{assign var="updated" value=$t->was_updated_for_user($me,true)}{/if *}
 <tr class="tr_forum_{$f->id()}{if $updated} b{/if}">
 	<td id="vtt_{$t->id()}">
 		<a href="{$t->url('new')}">{$t->title()}</a>{if $t->description()}<br /><small><i>{$t->description}</i></small>{/if}
