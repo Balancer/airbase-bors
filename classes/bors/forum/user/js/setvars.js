@@ -5,3 +5,6 @@ top.me_is_coordinator={$me->group()|get:is_coordinator|intval}
 top.me_can_move=0
 top.me_is_coordinator=0
 {/if}
+{if $profile}
+top.me_need_trafic_save={$profile->need_trafic_save()|intval}
+{/if}

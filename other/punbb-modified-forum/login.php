@@ -40,24 +40,14 @@ if (isset($_POST['form_sent']) && $action == 'in')
 	$form_username = trim($_POST['req_username']);
 	$form_password = trim($_POST['req_password']);
 
-
-//	$username_sql = ($db_type == 'mysql' || $db_type == 'mysqli') ? 'username=\''.$db->escape($form_username).'\'' : 'LOWER(username)=LOWER(\''.$db->escape($form_username).'\')';
-
-//	$result = $db->query('SELECT id, group_id, password, save_pass FROM '.$db->prefix.'users WHERE '.$username_sql) or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());
-//	list($user_id, $group_id, $db_password_hash, $save_pass) = $db->fetch_row($result);
-
 	$authorized = false;
 
-//	if (!empty($db_password_hash))
-	{
-//		exit("Server error");
-//		include_once("obsolete/users.php");
-//		$us = new User();
-		$me = bors_user::do_login($form_username, $form_password, false);
-//		$errno = $us->do_login($form_username, $form_password, false);
-//		$authorized = !$errno;
-		$authorized = is_object($me);
-	}
+	config_set('redirect_to', $_POST['redirect_url']);
+	$me = bors_user::do_login($form_username, $form_password, false);
+
+	exit(ec('Идёт отладка, скоро заработает.'));
+
+	$authorized = is_object($me);
 
 	if(!$me || !is_object($me) || !$authorized)
 		message($lang_login['Wrong user/pass']." <a href=\"{$pun_config['root_uri']}/login.php?action=forget\">".$lang_login['Forgotten pass'].'</a>');
@@ -98,11 +88,6 @@ else if ($action == 'out')
 		exit;
 	}
 
-	if($me = bors()->user())
-		$me->do_logout();
-
-	bors()->changed_save();
-
 	// Remove user from "users online" list.
 	$db->query('DELETE FROM '.$db->prefix.'online WHERE user_id='.$pun_user['id']) or error('Unable to delete from online list', __FILE__, __LINE__, $db->error());
 
@@ -110,7 +95,13 @@ else if ($action == 'out')
 	if (isset($pun_user['logged']))
 		$db->query('UPDATE '.$db->prefix.'users SET last_visit='.$pun_user['logged'].' WHERE id='.$pun_user['id']) or error('Unable to update user visit data', __FILE__, __LINE__, $db->error());
 
-	redirect('index.php', $lang_login['Logout redirect']);
+	bors()->changed_save();
+
+	if($me = bors()->user())
+		$me->do_logout();
+
+	bors_exit();
+//	redirect('index.php', $lang_login['Logout redirect']);
 }
 
 
