@@ -457,31 +457,23 @@ function avatar_thumb($geo)
 		if(!$this->user_cookie_hash())
 			return $this->cookie_hash_update();
 
-		foreach(array(
-			'user_id' => $this->id(),
+		$domains = config('balancer_board_domains');
+		$next_domain = $domains[0];
+
+//		$referer = isset($_GET['redirect_url']) ? $_GET['redirect_url'] : @$_SERVER['HTTP_REFERER'];
+		$redirect = config('redirect_to', bors()->request()->url()); // isset($_GET['redirect_url']) ? $_GET['redirect_url'] : @$_SERVER['HTTP_REFERER'];
+
+		$haction = bal_user_haction::add($this->id(), 'bal_users_helper', 'haction_domain_login', 120, array(
+			'domain' => $next_domain,
+			'redirect' => $redirect,
 			'cookie_hash' => $this->user_cookie_hash(),
-			'isa' => $this->is_admin()
-		) as $k => $v)
-		{
-			SetCookie($k, $v, $expired, "/", '.'.@$_SERVER['HTTP_HOST']);
-		}
+			'is_admin' => $this->is_admin(),
+			'expired' => $expired,
+		));
+
+		config_set('__login_redir', true);
+		return go($haction->url($next_domain), false, 0, true);
 	}
-
-/*		if($all_domains)
-		{
-			$ch = curl_init($url);
-			foreach(bors_vhosts() as $host)
-			{
-				echo "Set $host<br/>";
-//				file_get_contents("http://{$host}/user/cookie-hash-update.bas?".$this->user_cookie_hash());
-				curl_setopt_array($ch, array(CURLOPT_TIMEOUT => 1));
-				curl_exec($ch);
-				$content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-			}
-		}
-
-		bors_exit(">$all_domains");
-*/
 
 	function password_hashing($string_password)
 	{
@@ -495,8 +487,9 @@ function avatar_thumb($geo)
 		$this->store();
 	}
 
-	static function do_login($user, $password, $handle_error = true)
+	static function do_login($user, $password, $handle_error = true, $referer = NULL)
    	{
+//		config_set('redirect_by_html', true);
 		$check_user = bors_find_first('balancer_board_user', array('login' => $user));
 
 		if(!$check_user)
@@ -510,7 +503,6 @@ function avatar_thumb($geo)
 				// Если старый пароль был верный, то обновляем механизм
 				$check_user->set_password_salt_new(md5(rand()));
 				$check_user->set_password_hash_new(sha1($password.$check_user->password_salt_new()));
-//				$check_user->set_password_hash_old(NULL);
 			}
 		}
 
@@ -524,21 +516,29 @@ function avatar_thumb($geo)
 		else
 			$check_user->cookie_hash_update();
 
-//		SetCookie("user_id", $check_user->id(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
-//		SetCookie("cookie_hash", $check_user->user_cookie_hash(), time() + 86400*365, "/", $_SERVER['HTTP_HOST']);
+		if(config('__login_redir'))
+			return true;
 
 		return $check_user;
 	}
 
 	static function do_logout()
 	{
-		foreach(array('user_id', 'cookie_hash', 'isa') as $k)
-		{
-			SetCookie($k, NULL, 0, "/");
-			SetCookie($k, NULL, 0, "/", $_SERVER['HTTP_HOST']);
-			SetCookie($k, NULL, 0, "/", '.'.$_SERVER['HTTP_HOST']);
-			SetCookie($k, NULL, 0, "/", 'airbase.ru');
-		}
+		$domains = config('balancer_board_domains');
+		$next_domain = $domains[0];
+
+		$redirect = bors()->request()->referer(); // isset($_GET['redirect_url']) ? $_GET['redirect_url'] : @$_SERVER['HTTP_REFERER'];
+//		$refo = object_load($redirect);
+//		if(!object_property($refo, 'is_public'))
+//			$redirect = NULL;
+
+		$haction = bal_user_haction::add(bors()->user_id(), 'bal_users_helper', 'haction_domain_logout', 120, array(
+			'domain' => $next_domain,
+			'redirect' => $redirect,
+		));
+
+//		config_set('redirect_by_html', true);
+		return go($haction->url($next_domain));
 	}
 
 	function reputation_titled_url() { return "<a href=\"http://balancer.ru/user/{$this->id()}/reputation/\">{$this->title()}</a>"; }

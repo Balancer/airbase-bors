@@ -15,5 +15,3 @@ config_set('locked_db', @file_get_contents('/tmp/mysqldump.lock'));
 
 template_jquery_cloud_zoom();
 template_jquery_hoverZoom();
-
-
