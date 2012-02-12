@@ -487,7 +487,7 @@ function avatar_thumb($geo)
 		$this->store();
 	}
 
-	static function do_login($user, $password, $handle_error = true, $referer = NULL)
+	static function do_login($user, $password, $handle_error = true)
    	{
 //		config_set('redirect_by_html', true);
 		$check_user = bors_find_first('balancer_board_user', array('login' => $user));

@@ -31,9 +31,11 @@ class forum_tools_post_moveTree extends base_page
 	{
 		$topics = array();
 		if(!empty($_SESSION['bba_last_target_topic_id']))
-			$topics[] = object_load('forum_topic', $_SESSION['bba_last_target_topic_id']);
+			$topics[] = object_load('balancer_board_topic', $_SESSION['bba_last_target_topic_id']);
 
-		$topics = array_merge($topics, objects_array('forum_topic', array('order' => '-last_post' , 'limit' => 200)));
+		$latest_topics = objects_array('balancer_board_topic', array('order' => '-last_post' , 'limit' => 500));
+		usort($latest_topics, function($x, $y) { return strcasecmp($x, $y); });
+		$topics = array_merge($topics, $latest_topics);
 
 		return array(
 			'last_topics' => $topics,
@@ -62,7 +64,7 @@ class forum_tools_post_moveTree extends base_page
 
 		$tid = intval($tid);
 
-		$new_topic = object_load('forum_topic', $tid, array('no_load_cache' => true));
+		$new_topic = object_load('balancer_board_topic', $tid, array('no_load_cache' => true));
 		if(!$new_topic || !$new_topic->id())
 			return bors_message(ec('Тема с номером ').$tid.ec(' не существует'));
 
