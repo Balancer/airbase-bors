@@ -189,6 +189,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if(!$this->is_repaged() && rand(0,5) == 0)
 			$this->repaging_posts();
 
+		$this->template_data_fill();
+
 		$body_cache = new Cache();
 		if($body_cache->get('bors_page_body-v3', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time()))
 			return $this->attr['body'] = $body_cache->last().'<!-- cached -->';

@@ -12,7 +12,7 @@ class airbase_forum_admin_posts_movetree extends base_page
 	{
 		if($this->post_ids === false)
 			$this->post_ids = array_filter(@explode(',', @$_COOKIE['selected_posts'])); 
-		
+
 		return $this->post_ids;
 	}
 
@@ -32,9 +32,11 @@ class airbase_forum_admin_posts_movetree extends base_page
 	{
 		$topics = array();
 		if(!empty($_SESSION['bba_last_target_topic_id']))
-			$topics[] = object_load('forum_topic', $_SESSION['bba_last_target_topic_id']);
+			$topics[] = object_load('balancer_board_topic', $_SESSION['bba_last_target_topic_id']);
 
-		$topics = array_merge($topics, objects_array('forum_topic', array('order' => '-last_post' , 'limit' => 200)));
+		$latest_topics = objects_array('balancer_board_topic', array('order' => '-last_post' , 'limit' => 500));
+		usort($latest_topics, function($x, $y) { return strcasecmp($x, $y); });
+		$topics = array_merge($topics, $latest_topics);
 
 		return array(
 			'posts' => $this->posts(),
@@ -74,10 +76,10 @@ class airbase_forum_admin_posts_movetree extends base_page
 			$tid = intval($m[1]);
 		else
 			$tid = intval($tid);
-	
+
 		$_SESSION['bba_last_target_topic_id'] = $tid;
-	
-		$new_topic = object_load('forum_topic', $tid);
+
+		$new_topic = object_load('balancer_board_topic', $tid);
 		if(!$new_topic || !$new_topic->id())
 			return bors_message(ec('Тема с номером ').$tid.ec(' не существует'));
 
@@ -88,14 +90,14 @@ class airbase_forum_admin_posts_movetree extends base_page
 			$old_topic = NULL;
 		else
 			$old_topic = $posts[0]->topic();
-			
+
 		if(empty($data['dont_move_tree']))
 			foreach($posts as $post)
 				$post->move_tree_to_topic($new_topic->id());
 		else
 			foreach($posts as $post)
 				$post->move_to_topic($new_topic->id());
-	   
+
 	   	SetCookie('selected_posts', NULL, 0, '/');
 
 		if($old_topic && $old_topic->id() != $new_topic->id())
@@ -110,6 +112,6 @@ class airbase_forum_admin_posts_movetree extends base_page
 			'new_topic' => $new_topic,
 		)); 
 	}
-	
+
 	function can_cached() { return false; }
 }
