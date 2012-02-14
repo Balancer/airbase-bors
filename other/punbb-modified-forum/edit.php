@@ -22,6 +22,7 @@
 
 ************************************************************************/
 
+$GLOBALS['cms']['cant_lock'] = true;
 
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
@@ -89,7 +90,7 @@ if (isset($_POST['form_sent']))
 {
 	if($msg = $post->is_edit_disable())
 		return bors_message($msg);
-	
+
 	if ($is_admmod)
 		confirm_referrer('edit.php');
 

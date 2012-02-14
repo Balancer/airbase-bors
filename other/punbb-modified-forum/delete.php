@@ -22,6 +22,7 @@
 
 ************************************************************************/
 
+$GLOBALS['cms']['cant_lock'] = true;
 
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';

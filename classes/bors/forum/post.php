@@ -608,14 +608,26 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function is_edit_disable()
 	{
+		// Первое сообщение темы разрешаем редактировать всегда.
 		if($this->id() == $this->topic()->first_post_id())
 			return false;
 
+		// Координаторы могут редактировать всегда.
 		if(($me = bors()->user()) && $me->group()->is_coordinator())
 			return false;
 
-		if($this->create_time() < time() - 86400)
-			return ec("Вы не можете редактировать это сообщение, так как прошло более суток с момента его создания");
+		// В течении суток с момента размещения могут редактировать все.
+		if($this->create_time() > time() - 86400)
+			return false;
+
+		$edit_count = bors_count('balancer_board_post', array(
+			'owner_id' => bors()->user_id(),
+			'edited>' => time() - 86400,
+			'posted<' => time() - 86400,
+		));
+
+		if($edit_count >= 3)
+			return ec("Вы не можете редактировать это сообщение, так как прошло более суток с момента его создания и на сегодня вы исчерпали лимит редактирования таких сообщений");
 
 		return false;
 	}

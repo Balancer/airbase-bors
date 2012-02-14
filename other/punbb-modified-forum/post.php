@@ -24,8 +24,11 @@
 
 $GLOBALS['cms']['cache_disabled'] = true;
 
+$GLOBALS['cms']['cant_lock'] = true;
+
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
+
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
 require 'inc/design/make_quote.php';
 
@@ -48,7 +51,6 @@ if(time()-filemtime("/var/log/started.log") < 3600)
 
 if(bors_stop_bots('__nobots_testing', 'post'))
 	return;
-
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
@@ -94,7 +96,7 @@ if($messages_limit >= 0)
 
 if($warnings_total = $me->warnings())
 	if(($warnings_in = $me->warnings_in($forum_id)) >= 5)
-		message("Вы не можете больше отправить ни одного сообщения в этот форум, пока количество активных штрафнах баллов равно пяти или более. Сейчас оно равно $warnings_in. 
+		message("Вы не можете больше отправить ни одного сообщения в этот форум, пока количество активных штрафных баллов равно пяти или более. Сейчас оно равно $warnings_in. 
 		Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>.");
 
 $forum = object_load('forum_forum', $forum_id);
@@ -862,14 +864,14 @@ if ($pun_user['is_guest'])
 	$email_form_name = ($pun_config['p_force_guest_email'] == '1') ? 'req_email' : 'email';
 
 ?>						<label class="conl"><strong><?php echo $lang_post['Guest name'] ?></strong><br /><input type="text" name="req_username" value="<?php if (isset($_POST['req_username'])) echo pun_htmlspecialchars($username); /*"*/ ?>" size="25" maxlength="25" tabindex="<?php echo $cur_index++; ?>" /><br /></label>
-						<label class="conl"><?php echo $email_label; ?><br /><input type="text" name="<?php echo $email_form_name ?>" value="<?php if (isset($_POST[$email_form_name])) echo pun_htmlspecialchars($email); ?>" size="50" maxlength="50" tabindex="<?php echo $cur_index++; ?>" /><br /></label>
+						<label class="conl"><?php echo $email_label; ?><br /><input type="text" name="<?php echo $email_form_name ?>" value="<?php if (isset($_POST[$email_form_name])) echo pun_htmlspecialchars($email); ?>" size="50" maxlength="50" tabindex="<?php echo $cur_index++; /*"*/?>" /><br /></label>
 						<div class="clearer"></div>
 <?php
 
 }
 
 if ($fid): ?>
-						<label><strong><?php echo $lang_common['Subject'] ?></strong><br /><input class="longinput" type="text" name="req_subject" value="<?php if (isset($_POST['req_subject'])) echo pun_htmlspecialchars($subject); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++; ?>" /><br /></label>
+						<label><strong><?php echo $lang_common['Subject'] ?></strong><br /><input class="longinput" type="text" name="req_subject" value="<?php if (isset($_POST['req_subject'])) echo pun_htmlspecialchars($subject); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++; /*"*/?>" /><br /></label>
 						<label>Подзаголовок (описание темы, не обязательно)<br /><input class="longinput" type="text" name="nreq_description" value="<?php if (isset($_POST['nreq_description'])) echo pun_htmlspecialchars($description); ?>" size="80" maxlength="255" tabindex="<?php echo $cur_index++; ?>" /><br /></label>
 						<label>Ключевые слова (через запятую)<br/><input class="longinput" type="text" name="keywords_string" size="80" maxlength="255" tabindex="<?php echo $cur_index++ ?>" value="<?php echo pun_htmlspecialchars(isset($_POST['keywords_string']) || !$forum ? $_POST['keywords_string'] : $forum->keywords_string()) ?>" /><br /></label>
 <?php else: ?>
@@ -877,6 +879,9 @@ if ($fid): ?>
 						<div id="here_subject"></div>
 <?php endif; ?>
 						<label><strong><?php echo $lang_common['Message'] ?></strong><br />
+<?php
+if(($profile = config('client_profile')) && $profile->textarea_type() == 'markitup')
+{?>
 <div id="emoticons">
 	<a href="#" title=":)"><img src="http://airbase.ru/forum/smilies/smile.gif" /></a>
 	<a href="#" title=":("><img src="http://airbase.ru/forum/smilies/frown.gif" /></a>
@@ -885,6 +890,7 @@ if ($fid): ?>
 	<a href="#" title=";)"><img src="http://airbase.ru/forum/smilies/wink.gif" /></a>
 	<a href="#" title=":D"><img src="http://airbase.ru/forum/smilies/biggrin.gif" /></a>
 </div>
+<?php } ?>
 						<textarea name="req_message" id="bbcode" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo isset($_POST['req_message']) ? pun_htmlspecialchars($message) : (isset($quote) ? $quote : ''); ?></textarea><br /></label>
 						<ul class="bblinks">
 							<li><a href="<?php echo $pun_config['root_uri'];?>/help.php#bbcode" onclick="window.open(this.href); return false;"><?php echo $lang_common['BBCode'] ?></a>: <?php echo ($pun_config['p_message_bbcode'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>
