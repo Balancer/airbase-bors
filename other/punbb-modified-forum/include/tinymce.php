@@ -1,5 +1,10 @@
 <?php
 
+if(($profile = config('client_profile')) && $profile->textarea_type() != 'markitup')
+	return;
+
+//var_dump(@$client_profile);
+
 global $header;
 
 $header[] = <<< __EOT__
