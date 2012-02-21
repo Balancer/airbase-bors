@@ -42,7 +42,7 @@ if (isset($_POST['form_sent']) && $action == 'in')
 
 	$authorized = false;
 
-	if(preg_match('/(login|index)\.php/', $_POST['redirect_url']))
+	if(preg_match('/(login|hactions/index.php)\.php/', $_POST['redirect_url']))
 		$_POST['redirect_url'] = 'http://forums.balancer.ru/';
 
 	config_set('redirect_to', $_POST['redirect_url']);

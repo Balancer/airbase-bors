@@ -1,10 +1,11 @@
-<?
-    function print_top_navs($uri=NULL)
-    {
+<?php
+
+function print_top_navs($uri=NULL)
+{
 //		echo "\n<!--Get nav for $uri-->\n";
-	
+
         $ch = new Cache();
-        if($ch->get('top_navs-v7', $uri) && false)
+        if($ch->get('top_navs-v7', $uri))
         {
 			echo $ch->last();
 			return;
@@ -70,7 +71,7 @@
 		unset($GLOBALS['module_data']);
 		echo $ch->set(template_assign_data($tpl, array('links'=>$data)), -600);
 		return;
-    }
+}
 
     function link_line($uri)
     {

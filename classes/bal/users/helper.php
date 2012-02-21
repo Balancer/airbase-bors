@@ -5,6 +5,8 @@
 	не загружать _user-класс
 */
 
+//config_set('debug_redirect_trace', true);
+
 class bal_users_helper extends bors_object
 {
 	function haction_domain_logout($attrs, $haction)
@@ -12,6 +14,8 @@ class bal_users_helper extends bors_object
 		extract($attrs);
 
 		$domains = config('balancer_board_domains');
+		$domains[] = 'forums.airbase.ru';
+		$domains[] = 'forums.balancer.ru';
 
 		foreach(array('user_id', 'cookie_hash', 'isa') as $k)
 		{
