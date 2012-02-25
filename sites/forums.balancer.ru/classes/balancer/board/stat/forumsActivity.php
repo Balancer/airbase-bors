@@ -13,7 +13,7 @@ class balancer_board_stat_forumsActivity extends base_image_png
 //	function body_data()
 	{
 		$db = new driver_mysql('punbb');
-		$this->first = $first = /*strtotime('1.1.2008');/ */ $db->select('posts', 'MIN(posted)', array());
+		$this->first = $first = /*strtotime('1.1.2008');/ */ $db->select('posts', 'MIN(posted)', array('posted>' => 100000));
 		$this->last  = $last  = $db->select('posts', 'MAX(posted)', array());
 		$this->age   = $age   = $last - $first;
 
@@ -29,6 +29,7 @@ class balancer_board_stat_forumsActivity extends base_image_png
 			foreach($db->select_array('posts', 'forum_id, COUNT(*) as total', array(
 				'posts.posted BETWEEN' => array($begin, $end),
 				'inner_join' => 'topics ON topics.id = posts.topic_id',
+//				'use_index' => 'index_for_joins',
 				'group' => 'forum_id',
 			)) as $s)
 			{
@@ -120,6 +121,7 @@ class balancer_board_stat_forumsActivity extends base_image_png
 				.'|fвзрыв самолётов,'.$direct_colors[78].','.$series[78].','.$this->dt(strtotime('24.08.2004')).',10'
 				.'|fвзрыв метро,'.$direct_colors[78].','.$series[78].','.$this->dt(strtotime('01.09.2004')).',10'
 				.'|fПАК ФА,'.$direct_colors[3].','.$series[3].','.$this->dt(strtotime('29.01.2010')).',10'
+				.'|fвыборы в Думу,'.$direct_colors[10].','.$series[10].','.$this->dt(strtotime('04.11.2011')).',10'
 				,
 		);
 

@@ -4,6 +4,8 @@ class user_reputation extends base_page
 {
 	var $user;
 
+	function loaded() { return (bool) $this->user; }
+
 	function title() { return $this->user ? $this->user->title().ec(": Репутация") : ''; }
 	function nav_name() { return ec("репутация"); }
 
@@ -101,7 +103,7 @@ class user_reputation extends base_page
 
 	function template() { return "forum/common.html"; }
 
-	function can_be_empty() { return true; }
+	function can_be_empty() { return false; }
 	function can_cached() { return false; }
 
 	function cache_groups() { return "user-{$this->id()}-reputation"; }
