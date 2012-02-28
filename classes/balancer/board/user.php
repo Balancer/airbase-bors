@@ -145,6 +145,9 @@ class balancer_board_user extends forum_user
 			return;
 		}
 
+		if($this->has_invalid_email())
+			return;
+
 		$client= new GearmanClient();
 		$client->addServer();
 
