@@ -84,6 +84,9 @@ class forum_user extends base_object_db
 			'language',
 			'admin_note',
 			'email',
+			'has_invalid_email',
+			'email_setting',
+			'invalid_mail_message',
 			'rep_r', 'rep_g', 'rep_b',
 			'rep_x', 'rep_y',
 			'last_message_md',
@@ -94,7 +97,6 @@ class forum_user extends base_object_db
 			'xmpp_notify_score', // Подписка на изменения оценок
 			'xmpp_notify_reputation', // Подписка на изменения репутации
 			'xmpp_notify_best', // Подписка на лучшие сообщения
-			'last_mailing',
 			'utmx',
 			'joke_id',
 
