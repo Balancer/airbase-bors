@@ -1,5 +1,14 @@
 <?php
 
+if(!defined('PUN_UNVERIFIED'))
+{
+	define('PUN_UNVERIFIED', 3);
+	define('PUN_ADMIN', 1);
+	define('PUN_MOD', 2);
+	define('PUN_GUEST', 3);
+	define('PUN_MEMBER', 4);
+}
+
 class forum_user extends base_object_db
 {
 	function main_db() { return config('punbb.database', 'punbb'); }
@@ -211,7 +220,7 @@ function avatar_thumb($geo)
 		return $this->set_user_nick($this->username(), true);
 	}
 
-	function group() { return class_load('forum_group', $this->group_id() ? $this->group_id() : 3); }
+	function group() { return bors_load('balancer_board_group', $this->group_id() ? $this->group_id() : 3); }
 
 	var $_title = NULL;
 	function group_title()
@@ -510,6 +519,12 @@ function avatar_thumb($geo)
 
 		if(!$test)
 			return ec("Ошибка пароля пользователя '").$user."'";
+
+		if($check_user->group_id() == PUN_UNVERIFIED)
+		{
+			$check_user->set_group_id(PUN_MEMBER, true);
+			$check_user->store();
+		}
 
 		if($check_user->user_cookie_hash())
 			$check_user->cookie_hash_set();

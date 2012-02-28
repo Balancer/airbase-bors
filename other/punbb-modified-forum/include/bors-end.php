@@ -1,6 +1,11 @@
 <?php
+
+
 function bors_punbb_end($content)
 {
+	bors_use('debug_count_info_all');
+	bors_use('debug_timing_info_all');
+
 	$dbt = debug_backtrace();
 
 	$data = array(

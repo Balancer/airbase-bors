@@ -52,6 +52,8 @@ class balancer_user_votes extends base_page
 			'last' => $last,
 			'best' => $best,
 			'worst' => $worst,
+			'pos_count' => bors_count('bors_votes_thumb', array('target_user_id' => $this->id(), 'score>' => 0)),
+			'neg_count' => bors_count('bors_votes_thumb', array('target_user_id' => $this->id(), 'score<' => 0)),
 		);
 	}
 
