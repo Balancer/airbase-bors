@@ -69,9 +69,8 @@ $forum = object_load('forum_forum', $forum_id);
 
 $me = bors()->user();
 if(!$me)
-	message("Вы не авторизованы на этом домене. 
-	Попробуйте <a href=\"{$forum->category()->category_base_full()}login.php\">авторизоваться</a> снова. 
-	Помните, что в разных доменах (например, balancer.ru и forums.airbase.ru) нужно авторизоваться отдельно)");
+	message("Вы не авторизованы на форуме.
+	Попробуйте <a href=\"{$forum->category()->category_base_full()}login.php\">авторизоваться</a> снова.");
 
 if($fid && !$tid && ($me->num_posts() < 3 || $me->create_time() > time() - 86400))
 {
@@ -99,7 +98,7 @@ if($warnings_total = $me->warnings())
 		message("Вы не можете больше отправить ни одного сообщения в этот форум, пока количество активных штрафных баллов равно пяти или более. Сейчас оно равно $warnings_in. 
 		Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>.");
 
-$forum = object_load('forum_forum', $forum_id);
+$forum = bors_load('balancer_board_forum', $forum_id);
 
 // Fetch some info about the topic and/or the forum
 if ($tid)
@@ -120,11 +119,13 @@ if ($cur_posting['redirect_url'] != '')
 $mods_array = ($cur_posting['moderators'] != '') ? unserialize($cur_posting['moderators']) : array();
 $is_admmod = ($pun_user['g_id'] == PUN_ADMIN || ($pun_user['g_id'] == PUN_MOD && array_key_exists($pun_user['username'], $mods_array))) ? true : false;
 
+//var_dump($cur_posting); var_dump($pun_user);
 // Do we have permission to post?
-if ((($tid && (($cur_posting['post_replies'] == '' && $pun_user['g_post_replies'] == '0') || $cur_posting['post_replies'] == '0')) ||
-	($fid && (($cur_posting['post_topics'] == '' && $pun_user['g_post_topics'] == '0') || $cur_posting['post_topics'] == '0')) ||
-	(isset($cur_posting['closed']) && $cur_posting['closed'] == '1')) &&
-	!$is_admmod)
+if((
+		($tid && (($cur_posting['post_replies'] == '' && $pun_user['g_post_replies'] == '0') || $cur_posting['post_replies'] == '0'))
+		|| ($fid && (($cur_posting['post_topics'] == '' && $pun_user['g_post_topics'] == '0') || $cur_posting['post_topics'] == '0'))
+		|| (isset($cur_posting['closed']) && $cur_posting['closed'] == '1')
+	) && !$is_admmod)
 	message($lang_common['No permission']);
 
 // Load the post.php language file

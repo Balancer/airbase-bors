@@ -1,11 +1,12 @@
 <?php
 
-class forum_group extends base_page_db
+class forum_group extends bors_object_db
 {
-	function main_db() { return config('punbb.database', 'punbb'); }
-	function main_table() { return 'groups'; }
+	function db_name() { return config('punbb.database', 'punbb'); }
+	function table_name() { return 'groups'; }
+	function storage_engine() { return 'bors_storage_mysql'; }
 
-	function main_table_fields()
+	function table_fields()
 	{
 		return array(
 			'id' => 'g_id',

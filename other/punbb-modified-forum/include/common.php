@@ -88,11 +88,14 @@ if (get_magic_quotes_gpc())
 mt_srand((double)microtime()*1000000);
 
 // Define a few commonly used constants
-define('PUN_UNVERIFIED', 3);
-define('PUN_ADMIN', 1);
-define('PUN_MOD', 2);
-define('PUN_GUEST', 3);
-define('PUN_MEMBER', 4);
+if(!defined('PUN_UNVERIFIED'))
+{
+	define('PUN_UNVERIFIED', 3);
+	define('PUN_ADMIN', 1);
+	define('PUN_MOD', 2);
+	define('PUN_GUEST', 3);
+	define('PUN_MEMBER', 4);
+}
 
 // Load DB abstraction layer and connect
 require PUN_ROOT.'include/dblayer/common_db.php';
