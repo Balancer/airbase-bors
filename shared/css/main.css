@@ -680,6 +680,7 @@ dt span.colright-100 {
 	margin: 10px;
 	width: 738px;
 	height: 98px;
+	margin: 10px auto 0 auto;
 }
 
 div.footer-info {

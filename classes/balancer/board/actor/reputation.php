@@ -8,7 +8,8 @@ class balancer_board_actor_reputation extends bors_page
 		$target_user = $rep->target_user();
 		$owner = $rep->owner();
 		$target = $rep->target();
-		return "Пользователь {$target_user->titled_link()} получил репутационный голос {$rep->score_html()} от {$owner->titled_link()} за {$target->object_titled_vp_link()}";
+		return "Пользователь {$target_user->titled_link()} получил репутационный голос {$rep->score_html()} от {$owner->titled_link()}"
+			.($target ? " за {$target->object_titled_vp_link()}" : "");
 	}
 
 	function personal_title()

@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_posts_list extends base_page_paged
+class balancer_board_posts_list extends bors_paginated
 {
 	function main_class() { return 'balancer_board_post'; }
 	function order() { return 'create_time'; }
@@ -8,7 +8,7 @@ class balancer_board_posts_list extends base_page_paged
 	function template()
 	{
 		template_jquery();
-		return 'templates/forum/_header.html';
+		return 'xfile:forum/_header.html';
 	}
 
 	function class_file() { return __FILE__; }

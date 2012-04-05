@@ -1,8 +1,7 @@
 {$this->pages_links_nul()}
 
-{foreach from=$items item="p"}
-{assign var="forum" value=$p->topic()->forum()}
-{include file="xfile:forum/post.html}
+{foreach $items as $p}
+{$p->html()}
 {/foreach}
 
 {$this->pages_links_nul()}

@@ -98,7 +98,8 @@ class forum_user extends base_object_db
 			'xmpp_notify_reputation', // Подписка на изменения репутации
 			'xmpp_notify_best', // Подписка на лучшие сообщения
 			'utmx',
-			'joke_id',
+
+			'joke_id', 'joke_ban',
 
 			'activate_string',	// Хэш нового пароля с текущей солью при смене пароля
 			'activate_key',		// Ключ нового пароля при его смене
@@ -553,7 +554,7 @@ function avatar_thumb($geo)
 			'domain' => $next_domain,
 			'redirect' => $redirect,
 		));
-
+//		exit('go '.$haction->url($next_domain));
 //		config_set('redirect_by_html', true);
 		return go($haction->url($next_domain));
 	}

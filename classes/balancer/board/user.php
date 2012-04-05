@@ -78,7 +78,7 @@ class balancer_board_user extends forum_user
 			return "<span style=\"color: red; font-size: 7pt\">бан до ".strftime("%d.%m.%Y", $this->expired = $time+WARNING_DAYS*86400)."</span>";
 		}
 
-//		☠
+//		☠😸🐱❤
 		$skulls = str_repeat('☠', $full_skulls = intval($warnings/2));
 		if($full_skulls*2 != $warnings)
 			$skulls .= '<span style="color:#999">☠</span>';

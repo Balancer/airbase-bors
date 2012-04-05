@@ -112,7 +112,12 @@ function set_edited($v, $dbup) { return $this->set('edited', $v, $dbup); }
 function edited_by() { return @$this->data['edited_by']; }
 function set_edited_by($v, $dbup) { return $this->set('edited_by', $v, $dbup); }
 function owner_id() { return @$this->data['owner_id']; }
-function set_owner_id($v, $dbup) { return $this->set('owner_id', $v, $dbup); }
+function set_owner_id($v, $dbup = true)
+{
+//	if($dbup && config('is_developer')) echo debug_trace();
+	return $this->set('owner_id', $v, $dbup);
+}
+
 function poster_ip() { return @$this->data['poster_ip']; }
 function set_poster_ip($v, $dbup) { return $this->set('poster_ip', $v, $dbup); }
 function poster_email() { return @$this->data['poster_email']; }
@@ -132,7 +137,11 @@ function author_name()
 
 	return $this->data['author_name'];
 }
-function set_author_name($v, $dbup) { return $this->set('author_name', $v, $dbup); }
+function set_author_name($v, $dbup = true)
+{
+//	if($dbup && config('is_developer')) echo debug_trace();
+	return $this->set('author_name', $v, $dbup);
+}
 function answer_to_id() { return @$this->data['answer_to_id']; }
 function set_answer_to_id($v, $dbup) { return $this->set('answer_to_id', $v, $dbup); }
 function post_source() { return @$this->data['post_source']; }

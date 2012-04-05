@@ -100,11 +100,11 @@ class airbase_user_reputation extends base_page_db
 		return $object;
 	}
 
-	function score_html()
+	function score_html($append_text = '')
 	{
 		if($this->score() > 0)
-			return "<span style=\"color:green\">+".intval($this->score())."</span>";
+			return "<span style=\"color:green\">+".intval($this->score()).($append_text ? ": $append_text" : '')."</span>";
 		else
-			return "<span style=\"color:red\">".$this->score()."</span>";
+			return "<span style=\"color:red\">".$this->score().($append_text ? ": $append_text" : '')."</span>";
 	}
 }
