@@ -14,8 +14,17 @@
 
 {if not $this->is_public_access()}<div class="yellow_box">Тема с ограниченным доступом</div>{/if}
 
-{foreach from=$posts item=p}
+{if $prev_actions}
+<br/><div class="box small"><ul>
+{foreach from=$prev_actions item="a"}
+<li{$a->type_class()} style="font-size: 8pt">{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}</li>
+{/foreach}
+</ul></div>
+{/if}
+
+{foreach $posts as $p}
 {include file="xfile:forum/post.html"}
+{if $p@first}{include file="xfile:forum/ads/top-ad-google.html"}{/if}
 {/foreach}
 
 {if $last_actions}

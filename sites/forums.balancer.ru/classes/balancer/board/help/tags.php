@@ -31,10 +31,19 @@ class balancer_board_help_tags extends balancer_board_page
 
 				$type = "Тип тэга: ".($mt[2] == 'pair' ? 'парный' : 'одиночый');
 				$desc = $md[1];
+				$sample = "";
+				if(preg_match("/\n\s+Ссылка с примером: (.+?)\n/", $desc, $msampl))
+				{
+					$desc = preg_replace("/\n\s+Ссылка с примером: (.+?)\n/", "\n", $desc);
+					if($example_object = bors_load_uri($msampl[1]))
+						$sample = "<i>Ссылка с примером: ".$example_object->titled_link()."</i><br/>";
+				}
+
 				$modify = bors_lib_time::short(filemtime($file));
 
 				$tags[$mt[3]] = "<small>$type</small><br/>
 <xmp>$desc</xmp>
+$sample
 <small>Дата модификации: $modify</small><br/>";
 			}
 		}

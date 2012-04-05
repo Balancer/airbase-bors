@@ -12,7 +12,7 @@ class balancer_board_post extends forum_post
 			'p' => $this,	//	сам постинг
 			'forum' => object_property($this->topic(), 'forum'), // форум, если нужно показать ссылку на него
 //			'$no_show_answers = true, если не показывать ответы.
-			'show_title' => true, // если нужна печать заголовка.
+//			'show_title' => true, // если нужна печать заголовка.
 //$skip_author_name
 //	$skip_avatar_block
 //	$skip_date
@@ -22,7 +22,7 @@ class balancer_board_post extends forum_post
 			'strip' => 1024, // - сколько резать символов.
 		), $data);
 
-		return bors_templates_smarty::render_data('xfile:/var/www/bors/bors-airbase/templates/forum/post.html', $data);
+		return bors_templates_smarty::fetch('xfile:/var/www/bors/bors-airbase/templates/forum/post.html', $data);
 	}
 
 	function html2()

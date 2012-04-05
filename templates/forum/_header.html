@@ -145,7 +145,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 <a name="top"></a>
 
-{if not $skip_ad}
+{if not $skip_ad && not $skip_top_ad}
 {* include file="xfile:forum/ads/top-ad-podarini.html" *}
 {include file="xfile:forum/ads/top-ad-google.html"}
 {/if}
@@ -172,7 +172,9 @@ createCookie('readedTopics', readed.join(' '), 3)
 </div>
 *}
 
+{*
 <div class="yellow_box">А вы знаете, что на форумах <a href="http://balancer.ru/chat/">снова оживлён чат</a>?</div>
+*}
 
 {if $error_message}<div class="red_box"   >{$error_message}</div>{/if}
 {if $notice_message}<div class="yellow_box">{$notice_message}</div>{/if}
@@ -282,6 +284,8 @@ createCookie('readedTopics', readed.join(' '), 3)
 			<noscript><p>Не работает без JavaScript</p></noscript>
 		</dd>
 		</dl>
+
+{include file="xfile:forum/ads/google-ads-left-200x200-lazy.html"}
 
 <dl class="box w200">
 <dt>Персональное</dt>

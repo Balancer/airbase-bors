@@ -35,6 +35,7 @@ class balancer_board_topic extends forum_topic
 			'joined_to_topic_id', // id темы, к которой была присоединена данная.
 			'closed',
 			'keywords_string_db' => 'keywords_string',
+			'bot_note',
 		);
 	}
 

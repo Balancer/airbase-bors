@@ -59,7 +59,7 @@ class forum_tools_post extends base_page
 			return bors_message(ec('Неверный ID пользователя'));
 
 		if(empty($data['author_name']))
-			$data['author_name'] = $owner->title();																							
+			$data['author_name'] = $owner->title();
 
 		$post = object_load('forum_post', $this->id());
 		$post->set_owner_id($owner->id(), true);

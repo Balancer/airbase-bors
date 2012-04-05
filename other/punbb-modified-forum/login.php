@@ -83,7 +83,7 @@ else if ($action == 'out')
 {
 	if ($pun_user['is_guest'] || !isset($_GET['id']) || $_GET['id'] != $pun_user['id'])
 	{
-		header('Location: index.php');
+		header('Location: http://forums.balancer.ru/');
 		exit;
 	}
 

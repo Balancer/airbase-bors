@@ -43,6 +43,7 @@ class forum_topic extends base_page_db
 			'joined_to_topic_id', // id темы, к которой была присоединена данная.
 			'closed',
 			'keywords_string_db' => 'keywords_string',
+			'bot_note',
 		);
 	}
 
@@ -119,7 +120,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			if(!$this->forum_id())
 				debug_exit('Empty forum_id for topic '.$this->id());
 			else
-				$this->forum = object_load('balancer_board_forum', $this->forum_id()); 
+				$this->forum = bors_load_ex('balancer_board_forum', $this->forum_id(), array('memcache' => 600));
 
 		return $this->set_forum($this->forum);
 	}
@@ -184,6 +185,13 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function is_last_page() { return $this->page() == $this->total_pages(); }
 
+	function page_data()
+	{
+		return array(
+			'skip_top_ad' => true,
+		) + parent::page_data();
+	}
+
 	function body()
 	{
 		if(!$this->is_repaged() && rand(0,5) == 0)
@@ -200,6 +208,18 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		require_once("engines/smarty/assign.php");
 
 		$posts = $this->posts();
+
+		$first_post_time = time()+1;
+		$last_post_time = -1;
+		foreach($posts as $p)
+		{
+			if($p->create_time() > $last_post_time)
+				$last_post_time = $p->create_time();
+
+			if($p->create_time() < $first_post_time)
+				$first_post_time = $p->create_time();
+		}
+
 		$post_ids = array_keys($posts);
 		$blogs = bors_find_all('balancer_board_blog', array('id IN' => $post_ids, 'by_id' => true));
 
@@ -210,9 +230,78 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 				$posts[$blog_id]->set_keyword_links(balancer_blogs_tag::linkify($kws, '', ' | ', true), false);
 		}
 
+		// Прописываем изменения репутации по постингам.
+		$reps = bors_find_all('airbase_user_reputation', array(
+			'target_class_name IN' => array('forum_post', 'balancer_board_post'),
+			'target_object_id IN' => $post_ids,
+			'order' => 'target_object_id, id',
+		));
+
+		foreach($reps as $r)
+		{
+			$post = $posts[$r->target_object_id()];
+			$post_reps = $post->get('reputation_records', array());
+			$post_reps[] = $r;
+			$post->set_attr('reputation_records', $post_reps);
+		}
+
+		$prev_post_time = $this->page() > 1 ? $first_post_time : 0;
+		$next_post = $this->is_last_page() ? NULL : bors_find_first('balancer_board_post', array('topic_id' => $this->id(), 'order' => '`order`, posted', 'create_time>' => $last_post_time));
+
+		$next_post_time = object_property($next_post, 'create_time', time()+1);
+
+		$actions = bors_find_all('balancer_board_action', array(
+			'create_time BETWEEN' => array($prev_post_time, $next_post_time),
+			'target_class_name IN' => array($this->class_name(), $this->extends_class_name(), $this->new_class_name()),
+			'target_object_id' => $this->id(),
+			'order' => 'create_time',
+		));
+
+		$post_values = array_values($posts);
+
+		// Соберём события, бывшие первого сообщения темы
+		$prev_actions = array();
+		if($actions)
+		{
+			for($action_pos = 0; $action_pos < count($actions); $action_pos++)
+			{
+				$x = $actions[$action_pos];
+
+				if($x->create_time() > $first_post_time)
+					break;
+
+				$prev_actions[] = $x;
+			}
+
+
+			for($post_pos = 0; $post_pos<count($post_values); $post_pos++)
+			{
+				$post_actions = array();
+				$p = $post_values[$post_pos];
+
+				if($action_pos < count($actions))
+				{
+					$next_time = $post_pos+1 >= count($post_values) ? time()+1 : $post_values[$post_pos+1]->create_time();
+
+					for($action_pos; $action_pos < count($actions); $action_pos++)
+					{
+						$x = $actions[$action_pos];
+
+						if($x->create_time() > $next_time)
+							break;
+
+						$post_actions[] = $x;
+					}
+				}
+
+				$p->set_attr('actions', $post_actions);
+			}
+		}
+
 		$data = array(
-			'posts' => array_values($posts),
+			'posts' => $post_values,
 			'is_last_page' => $this->is_last_page(),
+			'prev_actions' => $prev_actions,
 		);
 
 		if($this->is_last_page())
@@ -222,7 +311,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 				'target_object_id' => $this->id(),
 				'order' => '-create_time',
 				'group' => 'target_class_name, target_object_id, message',
-				'limit' => 20,
+				'limit' => 10,
 			)));
 
 			bors_objects_preload($data['last_actions'], 'owner_id', 'balancer_board_user', 'owner');

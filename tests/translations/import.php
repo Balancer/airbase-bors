@@ -33,7 +33,7 @@ foreach(objects_array('bors_external_feed', array('is_suspended!=' => 1)) as $fe
 	echo "[".date('d.m.Y H:i')."] Feed {$feed->feed_url()}\n";
 	$feed->update();
 	bors()->changed_save();
-	sleep(2);
+	sleep(1);
 }
 
 bors_exit();
