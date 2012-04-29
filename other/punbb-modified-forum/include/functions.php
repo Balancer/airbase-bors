@@ -1075,24 +1075,6 @@ function unregister_globals()
 		return pun_lcml($s);
 	}
 
-//
-// Dump contents of variable(s)
-//
-function dump()
-{
-	echo '<pre>';
-
-	$num_args = func_num_args();
-
-	for ($i = 0; $i < $num_args; ++$i)
-	{
-		print_r(func_get_arg($i));
-		echo "\n\n";
-	}
-
-	echo '</pre>';
-	exit;
-}
 
 function pun_exit($message = 0, $redirect = false)
 {

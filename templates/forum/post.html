@@ -129,7 +129,7 @@ document.writeln('<label><input type="checkbox" id="_chkbx_p{$p->id()}" onclick=
 	<div class="head small">Изменения в репутации автора за это сообщение:</div>
 	<div class="body small">
 	{foreach $reputation_records as $r}
-		{$r->create_time()|date:"d.m.Y H:i"}, {$r->owner()->titled_link()}: {$r->score_html($r->comment())}<br/>
+		{$r->create_time()|date:"d.m.Y H:i"}, {$r->owner()->titled_link()}: {$r->score_html(lcml_bb($r->comment()))}<br/>
 	{/foreach}
 	</div>
 </div>
