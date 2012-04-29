@@ -4,7 +4,9 @@
 
 mysql_access('l2jdb', 'la2', 'la2kkk');
 
-config_set('default_template', 'bors:http://la2.balancer.ru/cms/templates/default/');
+if(config('is_developer'))
+	config_set('default_template', 'bors:http://la2.balancer.ru/cms/templates/default/');
+
 config_set('sitemap_classes', 'balancer_board_topic');
 
 register_vhost('airbase.ru', NULL, '/var/www/airbase.ru/.bors-host');
