@@ -246,7 +246,6 @@ if(@$_GET['action'] == 'unreadreplies')
 	exit();
 }
 
-
 if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'balancer.local'))
 	|| !preg_match("!^/forum!", $_SERVER['REQUEST_URI']))
 {
@@ -259,10 +258,8 @@ if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'balancer.local'))
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
 
-
 // Load the index.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/index.php';
-
 
 $page_title = pun_htmlspecialchars($pun_config['o_board_title']);
 define('PUN_ALLOW_INDEX', 1);
