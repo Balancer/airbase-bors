@@ -113,4 +113,6 @@ class forum_tools_post_moveTree extends base_page
 		$data['target_topic_id'] = $new_post->topic()->id();
 		return $this->on_action_by_topic_id($data);
 	}
+
+	function igo() { return $this->post()->titled_link_ex(array('url' => 'http://balancer.ru/g/p'.$this->post()->id())); }
 }

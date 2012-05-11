@@ -487,6 +487,14 @@ function avatar_thumb($geo)
 		return go($haction->url($next_domain), false, 0, true);
 	}
 
+	function cookies_set($ttl=3600, $fake_login = false)
+	{
+		$expiried = time() + $ttl;
+
+		foreach(array('user_id' => $this->id(), 'cookie_hash' => $this->user_cookie_hash(), 'isa' => $this->is_admin()) as $k => $v)
+			SetCookie($k, $v, $expired, "/", '.'.$_SERVER['HTTP_HOST']);
+	}
+
 	function password_hashing($string_password)
 	{
 		return sha1($string_password.$this->password_salt_new());

@@ -40,9 +40,3 @@ BORS© (игра слов, boršč - борщ, обычно название с�
 
 Текущий ход работ всегда можно посмотреть в [http://trac.balancer.ru/bors-core/timeline Trac'е ядра системы]. Также может представлять интерес открытый [http://trac.balancer.ru/bors-airbase/timeline Trac кода Авиабазы].
 
-[module class="bors_module_multicomments"
-	disqus="borsc"
-	fb_app_id="258088860889406"
-	vk_api_id="2460610"
-	uid="http://bors.balancer.ru/"
-]

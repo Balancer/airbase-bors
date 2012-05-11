@@ -470,9 +470,14 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		$this->set_is_public($this->forum()->is_public(), true);
 
-		$num_replies = $this->db()->select('posts', 'COUNT(*)', array('topic_id='=>$this->id())) - 1;
+		$num_replies = $this->db()->select('posts', 'COUNT(*)', array(
+			'topic_id' => $this->id(),
+			'is_deleted' => false,
+		)) - 1;
 		$this->set_num_replies($num_replies, true);
+
 		$first_pid = $this->db()->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));
+
 		$this->set_first_post_id($first_pid, true);
 		if($first_post = object_load('balancer_board_post', $first_pid))
 		{

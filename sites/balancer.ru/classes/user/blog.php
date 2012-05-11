@@ -38,6 +38,7 @@ class user_blog extends base_page
 					'page' => $this->page(),
 					'per_page' => $this->items_per_page(),
 					'is_public' => 1,
+					'is_deleted' => false,
 				)))
 			);
 
@@ -54,6 +55,7 @@ class user_blog extends base_page
 				'owner_id' => $this->id(),
 				'is_microblog' => 0,
 				'is_public' => 1,
+				'is_deleted' => false,
 			)));
 
 		return $this->total;
@@ -128,7 +130,11 @@ class user_blog extends base_page
 
 	function page_by_pid($pid)
 	{
-		$before = intval(objects_count('balancer_board_blog', array('where' => array('owner_id=' => $this->id(), 'post_id<' => intval($pid)))));
+		$before = intval(objects_count('balancer_board_blog', array('where' => array(
+			'owner_id=' => $this->id(),
+			'post_id<' => intval($pid),
+			'is_deleted' => false,
+		))));
 		return intval(($before) / $this->items_per_page()) + 1;
 	}
 
