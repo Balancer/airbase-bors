@@ -127,6 +127,9 @@ class user_reputation extends base_page
 		if($me->is_banned())
 			return bors_message(ec('Вы не можете изменять репутацию  по причине запрета общения на форуме.'));
 
+		if($me->warnings() > 3)
+			return bors_message(ec('У Вас более трёх активных штрафов'));
+
 		if($me_id == $uid)
 			return bors_message(ec("Нельзя ставить репутацию самому себе."));
 

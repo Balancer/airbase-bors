@@ -1,0 +1,3 @@
+extends: bors_page_dropbox
+webroot: /var/www/balancer.ru/dropbox-webroot
+
