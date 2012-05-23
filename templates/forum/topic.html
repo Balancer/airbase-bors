@@ -23,6 +23,7 @@
 {/if}
 
 {foreach $posts as $p}
+<!-- {$p->id()} -->
 {include file="xfile:forum/post.html"}
 {if $p@first}{include file="xfile:forum/ads/top-ad-google.html"}{/if}
 {/foreach}

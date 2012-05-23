@@ -18,4 +18,9 @@ class balancer_board_posts_list extends bors_paginated
 	function can_read() { template_noindex(); return bors()->user(); }
 
 //	function where() { return array(); }
+
+	function post_html($p)
+	{
+		return $p->html(array('strip' => 8192));
+	}
 }
