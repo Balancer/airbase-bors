@@ -31,7 +31,7 @@ class balancer_board_modules_avatar extends bors_module
 
 		if(preg_match('/^(\d*)x(\d*)/', $geo, $m))
 		{
-			$block_w = intval($m[1]);
+			$block_w = $height = intval($m[1]);
 			$block_h = intval($m[2]);
 		}
 
@@ -47,6 +47,8 @@ class balancer_board_modules_avatar extends bors_module
 
 		$show_title = $this->args('show_title', true);
 		$show_group = $this->args('show_group', $block_w >= 100);
+
+		$block_h = $height;
 
 		return array_merge(parent::body_data(), compact(
 			'user', 'geo',

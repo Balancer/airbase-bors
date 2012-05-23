@@ -206,14 +206,18 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 </ul>
 </dd></dl>
 
-<dl class="box"><dt>Авторы лучших сообщений</dt><dd>
-{foreach from=$best_votes_by_authors item="v"}
-<div class="float_left" style="width: 50px!important; height: 80px!important; overflow: hidden; padding: 2px; text-align: center;">
-{module class='balancer_board_modules_avatar' user_id=$v->target_user()->id() geo='50x50' title_style='font-size: 8pt!important'}
-</div>
-{/foreach}
-<div class="clear">&nbsp;</div>
-</dd></dl>
+<dl class="box">
+<dt>Авторы лучших сообщений</dt>
+<dd>
+	<table><tr><td>
+	{foreach from=$best_voted_users item="u"}
+		<div class="float_left" style="width: 50px!important; height: 80px!important; overflow: hidden; padding: 2px; text-align: center;">
+		{module class='balancer_board_modules_avatar' user=$u geo='50x50' title_style='font-size: 6pt!important'}
+		</div>
+	{/foreach}
+	</td></tr></table>
+</dd>
+</dl>
 
 {* Конец центральной колонки *}
 

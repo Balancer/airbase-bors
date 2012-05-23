@@ -583,7 +583,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	{
 		if($this->owner === false)	
 			$this->owner = object_load('bors_user', $this->owner_id());
-		
+
 		return $this->owner;
 	}
 
@@ -593,8 +593,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		$this->db()->query("
 			UPDATE posts AS t 
-				SET t.page = FLOOR((SELECT @rn:= @rn + 1 FROM (SELECT @rn:= -1) s)/{$this->items_per_page()})+1 
-				WHERE t.topic_id = {$this->id()}
+				SET t.page = FLOOR((SELECT @rn:= @rn + 1 FROM (SELECT @rn:= -1) s)/{$this->items_per_page()})+1
+				WHERE t.topic_id = {$this->id()} AND is_deleted = 0
 				ORDER BY t.`order`, t.`posted`;
 		");
 		$this->set_is_repaged(1, true);
