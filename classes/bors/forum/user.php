@@ -581,6 +581,7 @@ function avatar_thumb($geo)
 				5 => 4, // coordin
 				6 => 2, // старожилы
 				21 => 4, // координатор-литератор
+				26 => 0, // пария
 		);
 
 		$weight = @$this->_group_weights[$group];

@@ -137,10 +137,9 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 
 // ok, if you've got to here you may download the file ...
 // later add possibility to resume files ... but not in Attachment Mod 2.0 ;-)
-	if(($attach_extension=='jpg' 
-			|| $attach_extension=='jpeg' 
-			|| $attach_extension=='gif' 
-			|| $attach_extension=='png')
+
+	// Если это картинка и не установлено download=1, то рисуем страницу с картинкой.
+	if(in_array(bors_lower($attach_extension), array('jpg', 'jpeg', 'gif', 'png'))
 		&& !isset($_GET['download']))
 	{ // show the imageview page
 		$page_title = htmlspecialchars($pun_config['o_board_title']).' / Image view - '.$attach_filename.' - ';
@@ -169,12 +168,12 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 		<p><a href="javascript: history.go(-1)">Go back</a></p>
 		</div>
 	</div>
-</div>	
-	<?php	
+</div>
+	<?php
 		require 'footer.php';
 		exit();
 	}
-	elseif($_GET['download'] == 1)
+	elseif(@$_GET['download'] <> 2)
 	{ 	// put the file out for download
 		// update number of downloads
 		ini_set('zlib.output_compression',  0);
@@ -211,7 +210,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 			fpassthru($fp);
 		}
 	}
-	else
+	else // Отдаём как есть (download=2)
 	{
 		ini_set('zlib.output_compression',  0);
 

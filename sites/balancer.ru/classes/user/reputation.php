@@ -168,6 +168,7 @@ class user_reputation extends base_page
 				1 => 7, // admin
 				2 => 5, // moder
 				3 => 0, // guest
+				26 => 0, // пария
 				5 => 3, // coordinator
 				6 => 2, // старожилы
 				21 => 3, // координатор-литератор
