@@ -1,0 +1,23 @@
+- echo $self->pages_links_nul()
+
+%dl.box
+	%dd Репутация считается только за последний год. Сортировка производится исходя из доли положительных голосов и общего их числа без учёта веса голосов. Обсуждение и подробности в теме <a href="http://balancer.ru/g/p2819091">Репутация</a>.
+
+%table.btab.w100p
+	%tr
+		%th{:rowspan=>"2"} Место
+		%th{:rowspan=>"2"} Пользователь
+		%th{:colspan=>"2"} Репутация
+	%tr
+		%th Положительная
+		%th Отрицательная
+	- $count = ($self->page()-1)*$self->items_per_page() + 1
+	- foreach($items as $x)
+		%tr
+			%td= $count++
+			%td{:style=>"font-size: 24pt"}= $x->avatared_titled_link()
+			%td.green= $x->pos()
+			%td.red= $x->neg()
+
+- echo $self->pages_links_nul()
+

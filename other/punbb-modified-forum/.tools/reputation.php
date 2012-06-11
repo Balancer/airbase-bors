@@ -19,6 +19,7 @@
 				5 => 3, // coordin
 				6 => 2, // старожилы
 				21 => 3, // координатор-литератор
+				26 => 0, // пария
 			);
 
 		$killo = object_load('bors_user', 190);
@@ -136,7 +137,7 @@
 					$weight = 1;
 
 				if($v['id'] == 10000)
-					$weight = 9;
+					$weight = 10;
 
 				if($dbf->get("SELECT num_posts FROM users WHERE id={$v['id']}") < 50)
 					$weight = 0;
