@@ -51,7 +51,7 @@ class forum_post extends base_page_db
 	{
 		return array(
 			'id',
-			'title_raw' => 'field1',
+			'title_raw' => 'title',
 			'topic_id',
 			'topic_page' => 'page',
 			'create_time'	=> 'posted',
@@ -63,15 +63,15 @@ class forum_post extends base_page_db
 			'poster_email',
 			'poster_ua',
 			'author_name' => 'poster',
-			'answer_to_id' => 'answer_to',
-			'answer_to_user_id' => 'anwer_to_user_id',
+			'answer_to_id' => 'answer_to_post_id',
+			'answer_to_user_id',
 			'post_source' => 'source',
 //			'post_body' => 'source_html',
 			'hide_smilies',
 			'have_attach',
 			'have_cross',
 			'have_answers',
-			'score' => 'field2',
+			'score',
 			'is_moderatorial',
 			'is_deleted',
 			'is_hidden',
@@ -79,7 +79,7 @@ class forum_post extends base_page_db
 			'is_incorrect',
 			'last_moderator_id',
 			'sort_order' => '`order`',
-			'markup_class_name' => 'field3', // string
+			'markup_class_name',
 		);
 	}
 
@@ -504,7 +504,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function answers()
 	{
 		return bors_find_all('balancer_board_post', array(
-			'answer_to' => intval($this->id()),
+			'answer_to_post_id' => intval($this->id()),
 			'order' => 'id',
 		));
 	}
@@ -512,7 +512,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function answers_in_other_topics()
 	{
 		$result = array();
-		foreach($this->select_array('id', array('answer_to=' => $this->id(), 'topic_id<>' => $this->topic_id())) as $pid)
+		foreach($this->select_array('id', array('answer_to_post_id=' => $this->id(), 'topic_id<>' => $this->topic_id())) as $pid)
 			if($post = object_load('forum_post', $pid))
 				$result[] = $post;
 
@@ -522,7 +522,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function answers_in_this_topic()
 	{
 		$result = array();
-		foreach($this->select_array('id', array('answer_to=' => $this->id(), 'topic_id=' => $this->topic_id())) as $pid)
+		foreach($this->select_array('id', array('answer_to_post_id=' => $this->id(), 'topic_id=' => $this->topic_id())) as $pid)
 			if($post = object_load('forum_post', $pid))
 				$result[] = $post;
 

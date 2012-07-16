@@ -80,7 +80,7 @@ class user_main extends base_page
 		{
 			$interlocutors = $db->select_array('posts', 'poster_id, COUNT(*) as answers_count', array(
 				'posted>' => time() - 365*86400,
-				'anwer_to_user_id' => $this->id(),
+				'answer_to_user_id' => $this->id(),
 				'group' => 'poster_id',
 //				'order' => 'COUNT(*) DESC',
 			));

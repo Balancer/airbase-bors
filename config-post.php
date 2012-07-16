@@ -20,3 +20,25 @@ if($fm = @filemtime('/tmp/mysqldump.lock'))
 
 template_jquery_cloud_zoom();
 template_jquery_hoverZoom();
+
+function balancer_anniversary_html()
+{
+	$file = '/var/www/bors/bors-airbase/data/anniversary/'.date('md').'.txt';
+	if(!file_exists($file))
+		return '';
+
+	$data = explode("\n", trim(file_get_contents($file)));
+	list($year, $title, $image, $url) = explode(' | ', $data[rand(0, count($data)-1)]);
+	if(!$image)
+		return '';
+
+	$info = getimagesize($image);
+
+	$html = "
+		<dl class=\"box w200\">
+		<dd><a href=\"$url\"><img src=\"$image\" title=\"$title\" {$info[3]} /></a></dd>
+		</dl>
+";
+
+	return $html;
+}

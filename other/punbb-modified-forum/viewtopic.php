@@ -336,12 +336,12 @@ $q = "
 		p.posted, 
 		p.edited, 
 		p.edited_by,
-		p.answer_to,
+		p.answer_to_post_id,
 		up.posted as up_posted,
 		up.poster as up_poster,
 		cf.flag
 	FROM {$db->prefix}posts AS p
-		LEFT JOIN {$db->prefix}posts AS up ON (p.answer_to = up.id)
+		LEFT JOIN {$db->prefix}posts AS up ON (p.answer_to_post_id = up.id)
 		LEFT JOIN {$db->prefix}posts_cached_fields AS cf ON (p.id = cf.post_id)
 	WHERE p.topic_id=$id 
 	ORDER BY p.id 
@@ -594,8 +594,8 @@ while ($cur_post = $db->fetch_assoc($result))
 		echo $cur_post['flag'];
 	?> <a href="<?php echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']); /*"*/ ?>
 	<span class="conr">#<?php echo ($start_from + $post_count) ?>&nbsp;</span></a><?
-	if($cur_post['answer_to'])
-		echo "; Ответ на <a href=\"{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['answer_to']}#p{$cur_post['answer_to']}\">{$cur_post['up_poster']} (". format_time($cur_post['up_posted']) . ")</a>";
+	if($cur_post['answer_to_post_id'])
+		echo "; Ответ на <a href=\"{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['answer_to_post_id']}#p{$cur_post['answer_to_post_id']}\">{$cur_post['up_poster']} (". format_time($cur_post['up_posted']) . ")</a>";
 ?>
 	</h2>
 	<div class="box">

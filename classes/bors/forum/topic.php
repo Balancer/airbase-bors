@@ -474,6 +474,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			'topic_id' => $this->id(),
 			'is_deleted' => false,
 		)) - 1;
+
 		$this->set_num_replies($num_replies, true);
 
 		$first_pid = $this->db()->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));

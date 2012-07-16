@@ -31,7 +31,7 @@ class balancer_board_topics_blog extends balancer_board_paged
 		return array_merge(parent::where(), array(
 			'left_join' => array('`blog` ON `blog`.`post_id` = `posts`.`id`'),
 			'topic_id' => $this->id(),
-			'(`answer_to` = 0 OR `blog`.`post_id` IS NOT NULL)',
+			'(`answer_to_post_id` = 0 OR `blog`.`post_id` IS NOT NULL)',
 		));
 	}
 
