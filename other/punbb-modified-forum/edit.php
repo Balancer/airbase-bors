@@ -449,6 +449,9 @@ if($msg = $post->is_edit_disable())
 <?php endif; ?>
 	<label><?php echo $lang_common['Message'] ?><br />
 
+<?php
+if(($profile = config('client_profile')) && $profile->textarea_type() == 'markitup')
+{?>
 <div id="emoticons">
 	<a href="#" title=":)"><img src="http://airbase.ru/forum/smilies/smile.gif" /></a>
 	<a href="#" title=":("><img src="http://airbase.ru/forum/smilies/frown.gif" /></a>
@@ -457,6 +460,8 @@ if($msg = $post->is_edit_disable())
 	<a href="#" title=";)"><img src="http://airbase.ru/forum/smilies/wink.gif" /></a>
 	<a href="#" title=":D"><img src="http://airbase.ru/forum/smilies/biggrin.gif" /></a>
 </div>
+<?php } ?>
+
 						<textarea name="req_message" id="bbcode" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo pun_htmlspecialchars(isset($_POST['req_message']) ? $message : $cur_post['message']) ?></textarea><br /></label>
 						<ul class="bblinks">
 							<li><a href="<?php echo $pun_config['root_uri'];?>/help.php#bbcode" onclick="window.open(this.href); return false;"><?php echo $lang_common['BBCode'] ?></a>: <?php echo ($pun_config['p_message_bbcode'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></li>

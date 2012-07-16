@@ -1,11 +1,42 @@
 <?php
 
-if(($profile = config('client_profile')) && $profile->textarea_type() != 'markitup')
+//if(($profile = config('client_profile')) && $profile->textarea_type() != 'markitup')
+
+if($profile = config('client_profile'))
+	$profile = $profile->textarea_type();
+
+if($profile == 'textarea')
 	return;
+
+global $header;
+global $footer;
+
+if($profile == 'wysibb')
+{
+	wysibb::init("'#bbcode'");
+
+	$jsinc = bors_page::template_data('js_include');
+	if($jsinc)
+		foreach($jsinc as $j)
+			$header[] = "<script type=\"text/javascript\" src=\"{$j}\"></script>\n";
+
+	if($jss = bors_page::template_data('js_include_post'))
+		foreach($jss as $js)
+			$footer[] = "<script type=\"text/javascript\" src=\"{$js}\"></script>\n";
+
+	if($code = bors_page::template_data('jquery_document_ready'))
+	{
+		$footer[] = "<script type=\"text/javascript\"><!--\n\$(document).ready(function(){\n";
+		foreach($code as $c)
+			$footer[] = "$c\n";
+		$footer[] = "})\n--></script>\n";
+	}
+
+	return;
+}
 
 //var_dump(@$client_profile);
 
-global $header;
 
 // template_jquery_markitup('#bbcode', 'myBbcodeSettings');
 

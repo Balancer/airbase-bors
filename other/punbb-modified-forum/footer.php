@@ -183,11 +183,15 @@ if (defined('PUN_DEBUG'))
 if (defined('PUN_SHOW_QUERIES'))
 	display_saved_queries();
 
+global $footer;
+if(!empty($footer))
+	foreach($footer as $s)
+		echo $s;
+
 $tpl_temp = trim(ob_get_contents());
 $tpl_main = str_replace('<pun_footer>', $tpl_temp, $tpl_main);
 ob_end_clean();
 // END SUBST - <pun_footer>
-
 
 // START SUBST - <pun_include "*">
 while (preg_match('#<pun_include "([^/\\\\]*?)">#', $tpl_main, $cur_include))
