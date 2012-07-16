@@ -319,8 +319,8 @@ if (isset($_POST['form_sent']))
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $tid,
-					'answer_to' => $qid,
-					'anwer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
+					'answer_to_post_id' => $qid,
+					'answer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
 					'source' => $message,
 				);
 
@@ -348,8 +348,8 @@ if (isset($_POST['form_sent']))
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $tid,
-					'answer_to' => $qid,
-					'anwer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
+					'answer_to_post_id' => $qid,
+					'answer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
 					'source' => $message,
 				);
 				$tdb->insert('posts', $data);
@@ -409,7 +409,7 @@ if (isset($_POST['form_sent']))
 			}
 
 			// Count number of replies in the topic
-			$result = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'posts WHERE topic_id='.$tid) 
+			$result = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'posts WHERE topic_id='.$tid.' AND is_deleted=0') 
 				or error('Unable to fetch post count for topic', __FILE__, __LINE__, $db->error());
 
 			$num_replies = $db->result($result, 0) - 1;
@@ -536,8 +536,8 @@ if (isset($_POST['form_sent']))
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $new_tid,
-					'answer_to' => $qid,
-					'anwer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
+					'answer_to_post_id' => $qid,
+					'answer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
 					'source' => $message,
 				);
 
@@ -561,8 +561,8 @@ if (isset($_POST['form_sent']))
 					'hide_smilies' => $hide_smilies, 
 					'posted' => $now, 
 					'topic_id' => $new_tid,
-					'answer_to' => $qid,
-					'anwer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
+					'answer_to_post_id' => $qid,
+					'answer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
 					'source' => $message,
 				);
 

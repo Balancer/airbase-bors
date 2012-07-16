@@ -116,19 +116,25 @@ class balancer_board_keywords_tags extends base_page
 		return $this->__setc(array_unique($keys_ids));
 	}
 
+	function items_where($data = array())
+	{
+		return array_merge($data, array(
+			'keyword_id IN' => $this->_selected_keywords(),
+			'target_class_name IN' => array('forum_topic', 'balancer_board_topic'),
+			'group' => 'target_class_name,target_object_id',
+			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),
+		));
+	}
+
 	function total_items()
 	{
 		if($this->__havefc())
 			return $this->__lastc();
 
-		return $this->__setc(objects_count('common_keyword_bind', array(
-			'keyword_id IN' => $this->_selected_keywords(),
+		return $this->__setc(objects_count('common_keyword_bind', $this->items_where(array(
 			'target_object_id=target_container_object_id',
-			'target_class_name IN' => array('forum_topic', 'balancer_board_topic'),
 //			'target_create_time>' => 0,
-			'group' => 'target_class_name,target_object_id',
-			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),
-		)));
+		))));
 	}
 
 
@@ -139,17 +145,13 @@ class balancer_board_keywords_tags extends base_page
 
 		$targets = array();
 
-		foreach(bors_find_all('common_keyword_bind', array(
-			'keyword_id IN' => $this->_selected_keywords(),
+		foreach(bors_find_all('common_keyword_bind', $this->items_where(array(
 //			'target_object_id=target_container_object_id',
-			'target_class_name IN' => array('forum_topic', 'balancer_board_topic'),
 //			'target_create_time>' => 0,
-			'group' => 'target_class_name,target_object_id',
-			'having' => 'COUNT(*) = '.count($this->_selected_keywords()),
 			'order' => '-target_modify_time',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
-		)) as $bind)
+		))) as $bind)
 		{
 			$targets[$bind->target_class_name()][] = $bind->target_object_id();
 		}

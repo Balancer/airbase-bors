@@ -356,7 +356,7 @@ function avatar_thumb($geo)
 
 	function warnings_in($forum_id)
 	{
-		return intval($this->db(config('punbb.database', 'punbb'))->select('warnings', 'SUM(score)', array(
+		return intval($this->db(config('punbb.database', 'punbb'))->select('warnings', 'SUM(warnings.score)', array(
 			'user_id' => $this->id(),
 			'posts.posted>' => time()-86400*14,
 			'inner_join' => array('forum_post ON forum_post.id = airbase_user_warning.warn_object_id', 'topics ON topics.id = posts.topic_id'),
