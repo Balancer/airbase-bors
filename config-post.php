@@ -20,7 +20,7 @@ if($fm = @filemtime('/tmp/mysqldump.lock'))
 
 template_jquery_cloud_zoom();
 template_jquery_hoverZoom();
-template_js_include('/_bors3rdp/js/'.config('js.flowplayer.path').'/'.config('js.flowplayer.include'));
+// template_js_include('/_bors3rdp/js/'.config('js.flowplayer.path').'/'.config('js.flowplayer.include'));
 
 function balancer_anniversary_html()
 {

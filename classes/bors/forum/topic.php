@@ -201,7 +201,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		$body_cache = new Cache();
 		if($body_cache->get('bors_page_body-v3', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time()))
-			return $this->attr['body'] = $body_cache->last().'<!-- cached -->';
+			return $this->attr['body'] = bors_lcml::output_parse($body_cache->last().'<!-- cached -->');
 
 //		$GLOBALS['cms']['cache_disabled'] = true;
 
@@ -322,7 +322,9 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		bors_objects_preload($data['posts'], 'owner_id', 'balancer_board_user', 'owner');
 
 		$data['this'] = $this;
-		return $body_cache->set(template_assign_data("xfile:forum/topic.html", $data), 86400);
+		$html = template_assign_data("xfile:forum/topic.html", $data);
+
+		return bors_lcml::output_parse($body_cache->set($html, 86400));
 	}
 
 	private $__all_posts_ids;
