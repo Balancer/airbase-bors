@@ -360,6 +360,8 @@ $page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_pos
 $required_fields = array('req_subject' => $lang_common['Subject'], 'req_message' => $lang_common['Message']);
 $focus_element = array('edit', 'req_message');
 
+$header[] = "<script type=\"text/javascript\" src=\"/_bors3rdp/js/flowplayer-3.2.12/flowplayer-3.2.11.min.js\"></script>";
+
 include('include/tinymce.php');
 require PUN_ROOT.'header.php';
 

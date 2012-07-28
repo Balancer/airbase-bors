@@ -744,6 +744,7 @@ $attach_allowed = $pun_user['g_id'] != PUN_GUEST;
 
 //Attachment Mod Block End
 
+$header[] = "<script type=\"text/javascript\" src=\"/_bors3rdp/js/flowplayer-3.2.12/flowplayer-3.2.11.min.js\"></script>";
 include('include/tinymce.php');
 require PUN_ROOT.'header.php';
 
