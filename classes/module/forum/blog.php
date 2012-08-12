@@ -17,11 +17,12 @@ class module_forum_blog extends base_page
 		if(isset($this->_data[$page_id]))
 			return $this->_data[$page_id];
 
-		$skip_forums = array(19, 37, 102, 138, 170);
+		$skip_forums = array(19, 37, 73, 102, 138, 170);
 		if($sfs = $this->args('skip_forums'))
 			$skip_forums = array_merge($skip_forums, parse_condensed_list($sfs));
 
 		$where = array(
+			'is_public' => true,
 			'order' => '-blogged_time',
 			'page' => max(1,$this->page()),
 			'per_page' => $limit,
