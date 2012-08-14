@@ -125,4 +125,21 @@ class bal_users_helper extends bors_object
 
 		return $redirect ? $redirect : 'http://forums.balancer.ru/personal/clients/';
 	}
+
+	static function all_flags($user, $where = array())
+	{
+		$posts = bors_find_all('forum_post2', array_merge($where, array(
+			'*set' => 'COUNT(*) AS `total`',
+			'poster_id' => $user->id(),
+			'group' => '`poster_ip`',
+			'limit' => 100,
+			'order' => 'COUNT(*) DESC',
+		)));
+
+		$flags = array();
+		foreach($posts as $post)
+			$flags[] = bors_client::factory($post->poster_ip())->flag().'&nbsp;('.$post->total().')';
+
+		return join(', ', $flags);
+	}
 }

@@ -1,9 +1,12 @@
 <table class="btab">
-<tr><th>Пользователь</th><th>Число сообщений</th></tr>
+<tr><th>Пользователь</th><th>Число сообщений</th><th>По географии</th></tr>
 {foreach from=$users_list item="x"}
 {bors_object_load class="bors_user" id=$x.poster_id var="u"}
 {if $u}
-<tr><td>{$u->titled_url()}</td><td>{$x.count}</td></tr>
+<tr><td>{$u->titled_url()}</td>
+	<td>{$x.count}</td>
+	<td>{bal_users_helper::all_flags($u, $ips_where)}</td>
+</tr>
 {/if}
 {/foreach}
 </table>
