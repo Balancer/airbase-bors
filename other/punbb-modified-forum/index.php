@@ -448,7 +448,7 @@ else
 	echo '<div id="idx0" class="block"><div class="box"><div class="inbox"><p>'.$lang_index['Empty board'].'</p></div></div></div>';
 
 $stats_cache = new bors_cache();
-if($stats_cache->get('board', 'stats'))
+if($stats_cache->get('board', 'stats2'))
 {
 	$stats = $stats_cache->last();
 	$stats['total_users'];
@@ -457,7 +457,7 @@ else
 {
 	// Collect some statistics from the database
 	$stats['total_users'] = $cms_db->select($db->prefix.'users', 'COUNT(id)', array('1' => 1));
-	$stats['last_user'] = $cms_db->select($db->prefix.'users', 'id, username', array('order' => '-registered', 'limit' => 1));
+	$stats['last_user'] = $cms_db->select($db->prefix.'users', 'id, username', array('last_post>' => 0, 'order' => '-registered', 'limit' => 1));
 
 	//list($stats['total_topics'], $stats['total_posts']) = array_values($cms_db->select($db->prefix.'forums', 'SUM(num_topics), SUM(num_posts)', array()));
 	$stats['total_topics'] = $cms_db->select($db->prefix.'topics', 'COUNT(id)', array('1' => 1));
@@ -478,7 +478,7 @@ else
 			</dl>
 			<dl class="conl">
 				<dt><strong><?php echo $lang_index['User info'] ?></strong></dt>
-				<dd><?php echo $lang_index['Newest user'] ?>: <a href="<?php echo $pun_config['root_uri']?>/profile.php?id=<?php echo $stats['last_user']['id'];/*"*/?>"><?php echo pun_htmlspecialchars($stats['last_user']['username']) ?></a></dd>
+				<dd><?php echo $lang_index['Newest user'] ?>: <a href="http://balancer.ru/users/<?php echo $stats['last_user']['id'];?>/"><?php echo pun_htmlspecialchars($stats['last_user']['username']) ?></a></dd>
 <?php
 
 if ($pun_config['o_users_online'] == '1')

@@ -2,6 +2,7 @@
 
 config_set('cache_static', true);
 config_set('classes_auto_base', 'bors_site');
+config_set('project.name', 'bors_site');
 config_set('classes_skip', array('storage_fs_xml', 'page_fs_xml'));
 config_set('debug_hidden_log_dir', '/var/www/bors.balancer.ru/htdocs/logs');
 config_set('default_template', 'default');
