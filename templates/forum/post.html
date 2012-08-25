@@ -58,7 +58,7 @@
 {if $strip}
 {assign var="body" value=$p->body()}
 {$body|strip_text:$strip}
-{if strlen($body) >= $strip}
+{if bors_strlen($body) >= $strip}
 <br /><br /><a href="{$p->url_in_container()}">Дальше »»»</a>
 {/if}
 {else}

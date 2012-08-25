@@ -2,6 +2,8 @@
 
 // bors_exit('Форум в стадии модификации базы данных. Минут 30 (до ~03:50) будет недоступен. Можете пока сходить на <a href="http://balancer.endofinternet.net/mybb/index.php">Запасные форумы</a>.');
 
+// Эксперименты по переносу forum_post на bors_storage_mysql. Не сносить, есть использующие!
+
 include_once('engines/lcml.php');
 include_once('inc/browsers.php');
 include_once('inc/clients.php');

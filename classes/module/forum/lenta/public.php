@@ -2,7 +2,7 @@
 
 require_once('inc/lists.php');
 
-class module_forum_lenta_public extends base_page
+class module_forum_lenta_public extends bors_module
 {
 	function main_db() { return config('punbb.database', 'punbb'); }
 
