@@ -756,8 +756,20 @@ table.yandex_money input {
 .post_kws, .post_kws a {
 	font-size: 9pt !important;
 	color: #999 !important;
-	text-align: center;
+	text-align: left;
 	margin: 5px 0;
+}
+
+.post_kws a {
+	background-color:#eee;
+	padding: 1px 2px;
+	border-radius:4px;
+	border: 1px solid #ddd;
+}
+
+.post_kws {
+	padding-left: 20px;
+	background: url(/_bors/i16/tags.png) 0 1px no-repeat;
 }
 
 .transgray, .transgray a {

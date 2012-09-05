@@ -15,7 +15,7 @@ class balancer_board_blogs_lib
 			if($blog = @$blogs[$pid])
 			{
 				if($kws = $blog->keywords())
-					$p->set_keyword_links(balancer_blogs_tag::linkify($kws, '', ' | ', true), false);
+					$p->set_keyword_links(balancer_blogs_tag::linkify($kws, '', ' ', true), false);
 
 				continue;
 			}
@@ -23,7 +23,7 @@ class balancer_board_blogs_lib
 			if($topic = @$topics[$p->topic_id()])
 			{
 				if($kws = $topic->keywords())
-					$p->set_keyword_links(balancer_blogs_tag::linkify($kws, '', ' | ', true), false);
+					$p->set_keyword_links(balancer_blogs_tag::linkify($kws, '', ' ', true), false);
 
 				continue;
 			}
