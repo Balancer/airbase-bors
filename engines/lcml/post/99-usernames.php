@@ -5,7 +5,7 @@ function lcml_usernames($text)
 	if(!config('is_developer'))
 		return $text;
 
-	if(preg_match_all("!@([\wа-яА-ЯёЁ\.\-]+[\wa-яА-ЯёЁ])!u", $text, $match, PREG_SET_ORDER))
+	if(preg_match_all("!@([\wа-яА-ЯёЁ\.\-\(]+[\wa-яА-ЯёЁ\)])!u", $text, $match, PREG_SET_ORDER))
 	{
 //		var_dump($match);
 		foreach($match as $m)

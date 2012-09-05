@@ -1,0 +1,8 @@
+.post_kws, .post_kws a {
+	color: #9bd !important;
+}
+
+.post_kws a {
+	background-color:#fff;
+	border-color: #def;
+}
