@@ -16,8 +16,8 @@
 <h4><a href="{$this->url()}">{$this->title()}</a></h4>
 {if $avatar_size == 100}
 {if $this->group_title()}<h5>{$this->group_title()}</h5>{/if}
-{* {if $this->reputation()}<a href="http://balancer.ru/user/{$this->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}"><img src="http://balancer.ru/user/{$this->id()}/rep.gif" class="rep" alt="" /></a>{/if} *}
-{if $this->reputation()}<a href="http://balancer.ru/user/{$this->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}" class="rep">{$this->reputation_html()}</a><br/>{/if}
-{* {if $this->warnings() || $this->is_banned()}<a href="http://balancer.ru/user/{$this->id()}/warnings/"><img src="http://balancer.ru/user/{$this->id()}/warnings.gif" class="warn" alt="" /></a>{/if} *}
-{if $this->warnings() || $this->is_banned()}<a href="http://balancer.ru/user/{$this->id()}/warnings/" class="warn">{$this->warnings_html()}</a><br/>{/if}
+{* {if $this->reputation()}<a href="http://www.balancer.ru/user/{$this->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}"><img src="http://www.balancer.ru/user/{$this->id()}/rep.gif" class="rep" alt="" /></a>{/if} *}
+{if $this->reputation()}<a href="http://www.balancer.ru/user/{$this->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}" class="rep">{$this->reputation_html()}</a><br/>{/if}
+{* {if $this->warnings() || $this->is_banned()}<a href="http://www.balancer.ru/user/{$this->id()}/warnings/"><img src="http://www.balancer.ru/user/{$this->id()}/warnings.gif" class="warn" alt="" /></a>{/if} *}
+{if $this->warnings() || $this->is_banned()}<a href="http://www.balancer.ru/user/{$this->id()}/warnings/" class="warn">{$this->warnings_html()}</a><br/>{/if}
 {/if}

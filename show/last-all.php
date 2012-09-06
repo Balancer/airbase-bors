@@ -87,7 +87,7 @@ if ($rows=mysql_num_rows($query) )
         $thread_title = strip_text($thread_title ,28);
         $forum_url = "http://forums.airbase.ru/?act=SF&f=".$out['forum_id'];
         $date       = $date;
-        $profile_link   = "http://airbase.ru/forums/?act=Profile&CODE=03&MID=".$out['author_id'];
+        $profile_link   = "http://www.airbase.ru/forums/?act=Profile&CODE=03&MID=".$out['author_id'];
         $message = strip_text($out['post'],100-strlen("$forum_name$date"));
         $description=!empty($out['description'])?" (".strip_text($out['description'],64).")":"";
         $message=preg_replace("!<br>|<p>!i"," ",$message);
@@ -129,7 +129,7 @@ echo $to_echo;
         $text = strip_text($text,100);
         $text = preg_replace("!<br>|<p>!i"," ",$text);
         $time = strftime("%d.%m.%y %H:%M",$time);
-        echo "<tr><td><font size=\"1\">$text, <i>$author, <a href=\"http://airbase.ru/chat/?r=$chat\">$name</a>, $time</i></font></td></tr>\n";
+        echo "<tr><td><font size=\"1\">$text, <i>$author, <a href=\"http://www.airbase.ru/chat/?r=$chat\">$name</a>, $time</i></font></td></tr>\n";
     }
     
 ?>

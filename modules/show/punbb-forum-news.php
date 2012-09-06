@@ -3,7 +3,7 @@
     require_once("funcs/lcml.php");
 
 //	if(intval(user_data('level')) > 2)
-//		echo "<a href=\"http://balancer.ru/forums/post.php?fid=8\">Новое сообщение</a>";
+//		echo "<a href=\"http://www.balancer.ru/forums/post.php?fid=8\">Новое сообщение</a>";
 
     echo module_show_punbb_forum_news();
     
@@ -26,7 +26,7 @@
 			echo "<div class=\"box\"><h3>$title</h3>\n";
 			echo "$post<br /><br />\n";
 			echo "<table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-			echo "<td><small><a href=\"http://balancer.ru/forums/viewtopic.php?id={$t['id']}\"><i>Комментариев: {$t['posts']}</i></a></small></td>\n";
+			echo "<td><small><a href=\"http://www.balancer.ru/forums/viewtopic.php?id={$t['id']}\"><i>Комментариев: {$t['posts']}</i></a></small></td>\n";
 			echo "<td><small><div align=\"right\"><i>{$t['poster']}, $date</i></div></small></td></tr></table></div>\n";
 		}
 //	print_r($pages);	

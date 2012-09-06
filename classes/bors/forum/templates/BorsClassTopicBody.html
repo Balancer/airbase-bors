@@ -15,10 +15,10 @@
 {$p->body()}
 {if $owner->signature()}<div class="postsignature">{$owner->signature_html()}</div>{/if}
 <ul class="postfooter">
-<li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
-<li class="postdelete"><a href="http://balancer.ru/forum/punbb/delete.php?id={$p->id()}">Удалить</a></li>
-<li class="postedit"><a href="http://balancer.ru/forum/punbb/edit.php?id={$p->id()}">Редактировать</a></li>
-<li class="postquote"><a href="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}">Цитировать</a></li>
+<li class="postreport"><a href="http://www.balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
+<li class="postdelete"><a href="http://www.balancer.ru/forum/punbb/delete.php?id={$p->id()}">Удалить</a></li>
+<li class="postedit"><a href="http://www.balancer.ru/forum/punbb/edit.php?id={$p->id()}">Редактировать</a></li>
+<li class="postquote"><a href="http://www.balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}&amp;qid={$p->id()}">Цитировать</a></li>
 </ul>
 </dd>
 </dl>
@@ -30,7 +30,7 @@
 <dl class="forumposting quickform">
 <dt>Форма быстрого ответа</dt>
 <dd>
-<form method="post" action="http://balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}" onsubmit="{literal}this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}{/literal}">
+<form method="post" action="http://www.balancer.ru/forum/punbb/post.php?tid={$p->topic_id()}" onsubmit="{literal}this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}{/literal}">
 	<div class="inform">
 	<fieldset>
 		<legend>Напишите ваше сообщение и нажмите отправить</legend>
@@ -38,9 +38,9 @@
 			<input type="hidden" name="form_sent" value="1" />
 			<label><textarea class="quickreplyform" name="req_message" rows="7" cols="60" tabindex="1"></textarea></label>
 			<ul class="postfooter">
-				<li><a href="http://balancer.ru/forum/punbb/help.php#bbcode" onclick="window.open(this.href); return false;">BBCode</a>: включён</li>
-				<li><a href="http://balancer.ru/forum/punbb/help.php#img" onclick="window.open(this.href); return false;">[img] тег</a>: включён</li>
-				<li><a href="http://balancer.ru/forum/punbb/help.php#smilies" onclick="window.open(this.href); return false;">Смайлики</a>: включён</li>
+				<li><a href="http://www.balancer.ru/forum/punbb/help.php#bbcode" onclick="window.open(this.href); return false;">BBCode</a>: включён</li>
+				<li><a href="http://www.balancer.ru/forum/punbb/help.php#img" onclick="window.open(this.href); return false;">[img] тег</a>: включён</li>
+				<li><a href="http://www.balancer.ru/forum/punbb/help.php#smilies" onclick="window.open(this.href); return false;">Смайлики</a>: включён</li>
 			</ul>
 		</div>
 	</fieldset>

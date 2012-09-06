@@ -7,7 +7,7 @@ class aviatop_main extends base_page_paged
 	function config_class() { return 'aviatop_config'; }
 	function title() { return 'АвиаТОП'; }
 	function description() { return 'Самые популярные русскоязычные сайты авиационной тематики'; }
-	function parents() { return array('http://airbase.ru/'); }
+	function parents() { return array('http://www.airbase.ru/'); }
 	function create_time() { return strtotime('07.08.2000'); }
 
 	function main_class() { return 'aviatop_week'; }

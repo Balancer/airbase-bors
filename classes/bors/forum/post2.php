@@ -220,7 +220,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 				array(
 					'cr_type' => 'save_cr',
 					'forum_type' => 'punbb',
-					'forum_base_uri' => 'http://balancer.ru/forum',
+					'forum_base_uri' => 'http://www.balancer.ru/forum',
 					'sharp_not_comment' => true,
 					'html_disable' => 'direct',
 					'uri' => $this->internal_uri(),
@@ -329,11 +329,11 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		return dirname($this->topic()->url()).'/p'.$this->id().'.html';
 //		require_once("inc/urls.php");
-//		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
-//		return 'http://balancer.ru/_bors/igo?o='.$this->internal_uri_ascii();
+//		return 'http://www.balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
+//		return 'http://www.balancer.ru/_bors/igo?o='.$this->internal_uri_ascii();
 	}
 
-	function url_for_igo() { return 'http://balancer.ru/g/p'.$this->id(); }
+	function url_for_igo() { return 'http://www.balancer.ru/g/p'.$this->id(); }
 
 	function titled_link($text = NULL, $css=NULL) 
 	{

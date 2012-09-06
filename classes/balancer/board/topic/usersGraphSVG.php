@@ -34,7 +34,7 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 				$users[$user_id] = array(
 					'name' => $p->author_name(),
 //					'reputation' => $user->reputation(), !! сделать учёт на !$user
-					'link' => "http://balancer.ru/forum/user-{$user_id}-posts-in-topic-{$this->id()}/",
+					'link' => "http://www.balancer.ru/forum/user-{$user_id}-posts-in-topic-{$this->id()}/",
 					'count' => 1,
 				);
 			else
@@ -103,7 +103,7 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 					$graph->addNode(
 						$to_id,
 						array(
-							'URL'   => "http://balancer.ru/forum/user-{$to_id}-posts-in-topic-{$this->id()}/",
+							'URL'   => "http://www.balancer.ru/forum/user-{$to_id}-posts-in-topic-{$this->id()}/",
 							'label' => $user ? $user->title() : $to_id,
 						)
 					);
@@ -115,7 +115,7 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 					$graph->addNode(
 						$from_id,
 						array(
-							'URL'   => "http://balancer.ru/forum/user-{$from_id}-posts-in-topic-{$this->id()}/",
+							'URL'   => "http://www.balancer.ru/forum/user-{$from_id}-posts-in-topic-{$this->id()}/",
 							'label' => $user ? $user->title() : $from_id,
 						)
 					);

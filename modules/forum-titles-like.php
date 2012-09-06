@@ -85,7 +85,7 @@
 	                if(!preg_match("!^From:!", $t['title']))
 	                {
 	                	$n++;
-	    	            $out .= "<a href=\"http://forums.airbase.ru/index.php?showtopic={$t['tid']}\" title=\"".addslashes($t['description'] . " [{$w}]" )."\"><img src=\"http://airbase.ru/img/design/icons/topic-9x10.png\" width=\"9\" heght=\"10\" border=\"0\" align=\"absmiddle\">&nbsp;{$t['title']}</a><br />\n";//&nbsp;&#183;&nbsp;
+	    	            $out .= "<a href=\"http://forums.airbase.ru/index.php?showtopic={$t['tid']}\" title=\"".addslashes($t['description'] . " [{$w}]" )."\"><img src=\"http://www.airbase.ru/img/design/icons/topic-9x10.png\" width=\"9\" heght=\"10\" border=\"0\" align=\"absmiddle\">&nbsp;{$t['title']}</a><br />\n";//&nbsp;&#183;&nbsp;
 	    	       	}
 				}
             }

@@ -75,7 +75,7 @@ if(!$me)
 if($fid && !$tid && ($me->num_posts() < 3 || $me->create_time() > time() - 86400))
 {
 	debug_hidden_log('new-user-try-post', "Новичок пытается создать сообщение: [owner={$me}, num_posts={$me->num_posts()}, registered={$me->create_time()}]");
-	message('Извините, но с целью борьбы со спамерами только что зарегистрированным пользователям запрещено создавать новые темы. Поучаствуйте сперва в обсуждениях уже имеющихся тем (<a href="http://balancer.ru/tools/search/">Поиск в Вашем распоряжении</a>) или подождите сутки с момента регистрации. Можете также начать новое обсуждение в продолжение уже имеющейся темы с просьбой к координаторам о выносе сообщения с ответами в новую тему.');
+	message('Извините, но с целью борьбы со спамерами только что зарегистрированным пользователям запрещено создавать новые темы. Поучаствуйте сперва в обсуждениях уже имеющихся тем (<a href="http://www.balancer.ru/tools/search/">Поиск в Вашем распоряжении</a>) или подождите сутки с момента регистрации. Можете также начать новое обсуждение в продолжение уже имеющейся темы с просьбой к координаторам о выносе сообщения с ответами в новую тему.');
 }
 
 
@@ -89,14 +89,14 @@ if($messages_limit >= 0)
 	{
 		require_once('inc/datetime.php');
 		message("Вы не можете больше отправить ни одного сообщения в этот форум до <b>".full_time($me->next_can_post($messages_limit, $forum_id))."</b>. 
-		Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>»");
+		Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>»");
 	}
 }
 
 if($warnings_total = $me->warnings())
 	if(($warnings_in = $me->warnings_in($forum_id)) >= 5)
 		message("Вы не можете больше отправить ни одного сообщения в этот форум, пока количество активных штрафных баллов равно пяти или более. Сейчас оно равно $warnings_in. 
-		Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>.");
+		Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>.");
 
 $forum = bors_load('balancer_board_forum', $forum_id);
 
@@ -817,7 +817,7 @@ if($true_text <= 40)
 в части окна под полем ввода текста и редактирования. В этом случае, если избыточное
 цитирование было необоснованным, модераторы сайта могут выставить Вам штрафной балл.
 Посмотреть подробности и задать вопросы можно по ссылке 
-«<a href=\"http://balancer.ru/support/2009/07/t67978--ob-izbytochnom-tsitirovanii.195.html\">Об избыточном цитировании</a>».
+«<a href=\"http://www.balancer.ru/support/2009/07/t67978--ob-izbytochnom-tsitirovanii.195.html\">Об избыточном цитировании</a>».
 </div><br/>";
 }
 
@@ -831,7 +831,7 @@ if($messages_limit >= 0)
 	else
 		echo "Вы можете отправить ещё {$messages_rest}. ";
 
-	echo "Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>»";
+	echo "Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>»";
 	echo "</div><br />";
 }
 
@@ -842,8 +842,8 @@ if($warn_count = $me->warnings())
 	echo " и ".$me->warnings_in($forum->id())." в текущем форуме. ";
 	echo "При достижении 10 общих штрафов, Вы будете автоматически переведены в режим \"только чтение\" на срок до истечения самого старого из активных штрафов (срок их активности - две недели с момента выставления) во всех форумах. ";
 	echo "При достижении 5 активных штрафов в данном форумы Вы автоматически будете лишены возможности писать в него, но будете иметь возможность писать в другие. ";
-	echo "Посмотреть список своих штрафов Вы можете на <a href=\"http://balancer.ru/users/{$me->id()}/warnings/\">странице Ваших штрафов</a>. ";
-	echo "Подробности в теме «<a href=\"http://balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>»";
+	echo "Посмотреть список своих штрафов Вы можете на <a href=\"http://www.balancer.ru/users/{$me->id()}/warnings/\">странице Ваших штрафов</a>. ";
+	echo "Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>»";
 	echo "</div><br/>";
 }
 
@@ -885,12 +885,12 @@ if ($fid): ?>
 if(($profile = config('client_profile')) && $profile->textarea_type() == 'markitup')
 {?>
 <div id="emoticons">
-	<a href="#" title=":)"><img src="http://airbase.ru/forum/smilies/smile.gif" /></a>
-	<a href="#" title=":("><img src="http://airbase.ru/forum/smilies/frown.gif" /></a>
-	<a href="#" title=":eek:"><img src="http://airbase.ru/forum/smilies/eek.gif" /></a>
-	<a href="#" title=":p"><img src="http://airbase.ru/forum/smilies/tongue.gif" /></a>
-	<a href="#" title=";)"><img src="http://airbase.ru/forum/smilies/wink.gif" /></a>
-	<a href="#" title=":D"><img src="http://airbase.ru/forum/smilies/biggrin.gif" /></a>
+	<a href="#" title=":)"><img src="http://www.airbase.ru/forum/smilies/smile.gif" /></a>
+	<a href="#" title=":("><img src="http://www.airbase.ru/forum/smilies/frown.gif" /></a>
+	<a href="#" title=":eek:"><img src="http://www.airbase.ru/forum/smilies/eek.gif" /></a>
+	<a href="#" title=":p"><img src="http://www.airbase.ru/forum/smilies/tongue.gif" /></a>
+	<a href="#" title=";)"><img src="http://www.airbase.ru/forum/smilies/wink.gif" /></a>
+	<a href="#" title=":D"><img src="http://www.airbase.ru/forum/smilies/biggrin.gif" /></a>
 </div>
 <?php } ?>
 						<textarea name="req_message" id="bbcode" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo isset($_POST['req_message']) ? pun_htmlspecialchars($message) : (isset($quote) ? $quote : ''); ?></textarea><br /></label>
@@ -935,13 +935,13 @@ if (!$pun_user['is_guest'])
 
 	if($tid) // Ответ
 	{
-		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\"     value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_blog'])     ? ' checked="checked"' : '')." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '".addslashes("<label><strong>Тэги:</strong>&nbsp;<input                     class='longinput' type='text' name='keywords'    value='".defval($_POST, 'keywords', $topic->keywords_string())."'    size='40' maxlength='255' /><br /></label>")."' : ''\"/>Разместить ответ в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\"     value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_blog'])     ? ' checked="checked"' : '')." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '".addslashes("<label><strong>Тэги:</strong>&nbsp;<input                     class='longinput' type='text' name='keywords'    value='".defval($_POST, 'keywords', $topic->keywords_string())."'    size='40' maxlength='255' /><br /></label>")."' : ''\"/>Разместить ответ в <a href=\"http://www.balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
 		$checkboxes[] = "<label><input type=\"checkbox\" name=\"is_translate\"     value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_blog'])     ? ' checked="checked"' : '')." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '".addslashes("<label><strong>Тэги:</strong>&nbsp;<input                     class='longinput' type='text' name='keywords' size='40' maxlength='255' /><br /></label>")."' : ''\"/>Транслировать ответ в ЖЖ";
 		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_new_post\" value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_new_post']) ? ' checked="checked"' : '')." onClick=\"getElementById('here_subject').innerHTML = this.checked ? '".addslashes("<label><strong>{$lang_common['Subject']}</strong><br /><input class='longinput' type='text' name='req_subject' value='".(@$_POST['req_subject'])."' size='80' maxlength='255' /><br /></label>")."' : ''\"/>Разместить ответ как новую тему (требуется ввести заголовок)";
 	}
 	else
 	{
-		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\" checked=\"checked\" />Разместить тему в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+		$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\" checked=\"checked\" />Разместить тему в <a href=\"http://www.balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
 		$checkboxes[] = "<label><input type=\"checkbox\" name=\"is_translate\"     value=\"1\" tabindex=\"".($cur_index++).'"'.(isset($_POST['as_blog'])     ? ' checked="checked"' : '')." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '".addslashes("<label><strong>Тэги:</strong>&nbsp;<input                     class='longinput' type='text' name='keywords' size='40' maxlength='255' /><br /></label>")."' : ''\"/>Транслировать тему в ЖЖ";
 	}
 }
@@ -979,7 +979,7 @@ if($qid) echo "<input type=\"hidden\" name=\"qid\" value=\"$qid\">\n";
 Вы обязуетесь нести всю ответственность за соблюдение прав авторов
 этой информации. В случае претензий правообладателей эта информация
 может быть удалена. Все материалы, автором которых являетесь Вы,
-при опубликовании на форумах приобретают лицензию <a href="http://balancer.ru/support/2009/02/t66269--Prava-publikatsii-avtorskikh-materialov-.html"><b>Creative Commons</b> (by-nc-sa)</a>.
+при опубликовании на форумах приобретают лицензию <a href="http://www.balancer.ru/support/2009/02/t66269--Prava-publikatsii-avtorskikh-materialov-.html"><b>Creative Commons</b> (by-nc-sa)</a>.
 </div>
 			<p><input type="submit" name="submit" value="<?php echo $lang_common['Submit'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="s" /><input type="submit" name="preview" value="<?php echo $lang_post['Preview'] ?>" tabindex="<?php echo $cur_index++ /*"*/?>" accesskey="p" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
 		</form>

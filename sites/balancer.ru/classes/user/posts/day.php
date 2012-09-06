@@ -63,9 +63,9 @@ class user_posts_day extends base_page
 	}
 
 	function nav_name() { return $this->day; }
-	function parents() { return array("http://balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/"); }
+	function parents() { return array("http://www.balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/"); }
 
-	function url() { return "http://balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/{$this->day}/"; }
+	function url() { return "http://www.balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/{$this->day}/"; }
 
 	function previous_day_link()
 	{
@@ -75,7 +75,7 @@ class user_posts_day extends base_page
 		));
 
 		if($prev)
-			return 'http://balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $prev).'/';
+			return 'http://www.balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $prev).'/';
 		else
 			return NULL;
 	}
@@ -88,7 +88,7 @@ class user_posts_day extends base_page
 		));
 
 		if($next)
-			return 'http://balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $next).'/';
+			return 'http://www.balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $next).'/';
 		else
 			return NULL;
 	}
@@ -116,7 +116,7 @@ class user_posts_day extends base_page
 
 			if($total)
 				$list[$day] = array(
-					'url' => "http://balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/{$day}/",
+					'url' => "http://www.balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/{$day}/",
 					'title' => $total.' '.sklon($total, ec('сообщение'), ec('сообщения'), ec('сообщений')),
 			);
 		}

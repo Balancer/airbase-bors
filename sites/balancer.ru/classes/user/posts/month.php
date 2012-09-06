@@ -32,9 +32,9 @@ class user_posts_month extends base_page
 
 	function title() { return $this->user()->title().ec(': Все сообщения за ').strtolower(month_name($this->month)).' '.$this->year.ec(' года'); }
 	function nav_name() { return strtolower(month_name($this->month)); }
-	function parents() { return array("http://balancer.ru/user/{$this->id()}/posts/{$this->year}/"); }
+	function parents() { return array("http://www.balancer.ru/user/{$this->id()}/posts/{$this->year}/"); }
 
-	function url() { return "http://balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/"; }
+	function url() { return "http://www.balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/"; }
 
     function local_data()
 	{
@@ -51,7 +51,7 @@ class user_posts_month extends base_page
 
 			if($total)
 				$list[$day] = array(
-					'url' => "http://balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/{$day}/",
+					'url' => "http://www.balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/{$day}/",
 					'title' => $total.' '.sklon($total, ec('сообщение'), ec('сообщения'), ec('сообщений')),
 			);
 		}

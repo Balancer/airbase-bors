@@ -17,7 +17,7 @@ require_once('engines/lcml/main.php');
 			array(
 				'cr_type' => 'save_cr',
 				'forum_type' => 'punbb',
-				'forum_base_uri' => 'http://balancer.ru/forum',
+				'forum_base_uri' => 'http://www.balancer.ru/forum',
 				'sharp_not_comment' => true,
 				'html_disable' => true,
 				'uri' => "post://{$cur_post['id']}/",

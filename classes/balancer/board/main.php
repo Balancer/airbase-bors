@@ -6,7 +6,7 @@ class balancer_board_main extends base_page
 {
 	function title() { return ec("Форумы Balancer'а"); }
 	function nav_name() { return ec('форумы'); }
-	function parents() { return array('http://balancer.ru/'); }
+	function parents() { return array('http://www.balancer.ru/'); }
 	function template() { return 'forum/wide.html'; }
 
 	function pre_show()

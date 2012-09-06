@@ -9,7 +9,7 @@ class lor_board_topic_usersGraphSVG extends base_image_svg
 		if(bors()->client()->is_bot())
 		{
 //			debug_hidden_log('002', 'bot trapped!');
-			return go('http://balancer.ru/forum/');
+			return go('http://www.balancer.ru/forum/');
 		}
 
 		return false;

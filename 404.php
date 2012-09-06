@@ -329,11 +329,11 @@
     }
 
     if(!$_SERVER['REQUEST_URI'])
-        $page="http://airbase.ru/alpha/$suffix$first_char/$res/$file_name";
+        $page="http://www.airbase.ru/alpha/$suffix$first_char/$res/$file_name";
     else
         $page=$full_uri;
 
-    $dest_file=preg_replace("!^http://airbase.ru(.+?)\.hts!","$1",$page);
+    $dest_file=preg_replace("!^http://www.airbase.ru(.+?)\.hts!","$1",$page);
     if(file_exists("{$_SERVER['DOCUMENT_ROOT']}$dest_file.hts") || file_exists("{$_SERVER['DOCUMENT_ROOT']}$dest_file.phtml"))
     {
         header("Location: $dest_file.phtml");

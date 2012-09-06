@@ -39,7 +39,7 @@ function set_downloads($v, $dbup) { return $this->set('downloads', $v, $dbup); }
 function location() { return @$this->data['location']; }
 function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 
-	function url() { return "http://balancer.ru/forum/punbb/attachment.php?item=".$this->id(); }
+	function url() { return "http://www.balancer.ru/forum/punbb/attachment.php?item=".$this->id(); }
 
 	function thumbnail_link($geometry, $css_class = NULL)
 	{
@@ -81,7 +81,7 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 
 		if(preg_match("!(jpe?g|png|gif)!i", $this->extension()))
 		{
-			$full_url = 'http://balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2';
+			$full_url = 'http://www.balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2';
 			$thumb_url = "http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/{$size}x{$size}/$1", $this->location());
 			if($ss = @getimagesize($thumb_url))
 			{

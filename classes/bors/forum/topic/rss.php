@@ -49,7 +49,7 @@ class forum_topic_rss extends forum_topic
 
 			$item->description = $html;
 			$item->date = $post->create_time(); 
-			$item->source = "http://balancer.ru/forum/";
+			$item->source = "http://www.balancer.ru/forum/";
 			if($post->owner())
 				$item->author = $post->owner()->title();
 			else

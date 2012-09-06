@@ -62,7 +62,7 @@ class user_image_reputation extends base_image_gif
 		imagedestroy($star_empty);
 	}
 
-	function url() { return "http://balancer.ru/user/{$this->id()}/rep.gif"; }
+	function url() { return "http://www.balancer.ru/user/{$this->id()}/rep.gif"; }
 
 	function cache_static() { return config('static_forum') ? rand(3600*10, 3600*30) : 0; }
 

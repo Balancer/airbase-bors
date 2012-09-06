@@ -24,13 +24,13 @@ div.notify_reputation_down {
 
 div.notify_thumb_up {
 	border-color: #8c8!important;
-	background: #cfc url(http://balancer.ru/_bors/i/thumb_up.gif) 10px center no-repeat;
+	background: #cfc url(http://www.balancer.ru/_bors/i/thumb_up.gif) 10px center no-repeat;
 	padding-left: 35px;
 }
 
 div.notify_thumb_down {
 	border-color: #c88!important;
-	background: #fcc url(http://balancer.ru/_bors/i/thumb_down.gif) 10px center no-repeat;
+	background: #fcc url(http://www.balancer.ru/_bors/i/thumb_down.gif) 10px center no-repeat;
 	padding-left: 35px;
 }
 

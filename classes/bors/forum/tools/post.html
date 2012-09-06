@@ -1,19 +1,19 @@
 <h2>Ссылки сообщения</h2>
 <ul>
-<li><a href="http://balancer.ru/forum/user-{$this->post()|get:owner_id}-posts-in-topic-{$this->post()|get:topic_id}/">Показать все сообщения</a> пользователя {$this->post()|get:owner|get:titled_url} в топике {$this->post()|get:topic|get:titled_url}</li>
+<li><a href="http://www.balancer.ru/forum/user-{$this->post()|get:owner_id}-posts-in-topic-{$this->post()|get:topic_id}/">Показать все сообщения</a> пользователя {$this->post()|get:owner|get:titled_url} в топике {$this->post()|get:topic|get:titled_url}</li>
 </ul>
 
 {if $this->can_action()}
 <h2>Операции над сообщением</h2>
 <ul>
 {if $this->post()|get:topic|get:is_public_access}
-<li><a href="http://balancer.ru/admin/users/{$this->post()|get:owner_id}/warnings.html?object={$this->post()|get:internal_uri}">Выставить штраф</a></li>
+<li><a href="http://www.balancer.ru/admin/users/{$this->post()|get:owner_id}/warnings.html?object={$this->post()|get:internal_uri}">Выставить штраф</a></li>
 {/if}
-<li><a href="http://balancer.ru/forum/punbb/delete.php?id={$this->id()}">Удалить</a></li>
-<li><a href="http://balancer.ru/admin/forum/post/{$this->id()}/as-new-topic">Вынести сообщение со всеми ответами в новую тему</a></li>
-<li><a href="http://balancer.ru/admin/forum/post/{$this->id()}/move-tree">Перенести сообщение со всеми ответами в другую тему</a></li>
-<li><a href="http://balancer.ru/admin/forum/post/{$this->id()}/do-drop-cache.bas">Сбросить кеш сообщения</a></li>
-<li><a href="http://balancer.ru/forum/punbb/viewtopic.php?pid={$this->id()}#p{$this->id()}">Это сообщение на старом движке</a></li>
+<li><a href="http://www.balancer.ru/forum/punbb/delete.php?id={$this->id()}">Удалить</a></li>
+<li><a href="http://www.balancer.ru/admin/forum/post/{$this->id()}/as-new-topic">Вынести сообщение со всеми ответами в новую тему</a></li>
+<li><a href="http://www.balancer.ru/admin/forum/post/{$this->id()}/move-tree">Перенести сообщение со всеми ответами в другую тему</a></li>
+<li><a href="http://www.balancer.ru/admin/forum/post/{$this->id()}/do-drop-cache.bas">Сбросить кеш сообщения</a></li>
+<li><a href="http://www.balancer.ru/forum/punbb/viewtopic.php?pid={$this->id()}#p{$this->id()}">Это сообщение на старом движке</a></li>
 </ul>
 
 <table class="btab">

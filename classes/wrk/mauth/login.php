@@ -20,9 +20,9 @@ class wrk_mauth_login extends bors_page
 	static function _domains()
 	{
 		return array(
-			'wrk.ru' => 'http://balancer.ru/login/',
-			'balancer.ru' => 'http://airbase.ru/login/',
-			'airbase.ru' => 'http://wrk.ru/login/',
+			'wrk.ru' => 'http://www.balancer.ru/login/',
+			'balancer.ru' => 'http://www.airbase.ru/login/',
+			'airbase.ru' => 'http://www.wrk.ru/login/',
 		);
 	}
 

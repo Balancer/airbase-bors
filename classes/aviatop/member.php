@@ -53,5 +53,5 @@ class aviatop_member extends base_page_db
 		return $pw->per_week();
 	}
 
-	function url() { return 'http://airbase.ru/top/'.$this->id().'/'; }
+	function url() { return 'http://www.airbase.ru/top/'.$this->id().'/'; }
 }

@@ -96,7 +96,7 @@ if($head_append)
 <a href="http://www.microsoft.com/rus/windows/downloads/ie/getitnow.mspx">версии 7.0</a> или более новой. Ещё лучше - поставьте
 браузер <a href="http://www.opera.com/">Opera</a> или 
 <a href="http://mozilla.ru/">Mozilla Firefox</a>. <br/><br/>
-<b>Обсудить и задать вопросы <a href="http://balancer.ru/support/2009/02/topic-66122-IE6-bol~she-ne-podderzhivaetsya.8198.html">можно в этой теме</a></b>.
+<b>Обсудить и задать вопросы <a href="http://www.balancer.ru/support/2009/02/topic-66122-IE6-bol~she-ne-podderzhivaetsya.8198.html">можно в этой теме</a></b>.
 </dd></dl><![endif]-->
 
 		<?=$body?>
@@ -125,7 +125,7 @@ if($views_average)
 		<dl class="box w200">
 		<dt>Поиск</dt>
 		<dd>
-			<form method="get" action="http://balancer.ru/tools/search/result/"><div>
+			<form method="get" action="http://www.balancer.ru/tools/search/result/"><div>
 			<input type="text" class="text" name="q" value="Су-27" />
 			<input type="submit" class="submit" value="искать" />
 			</div></form>
@@ -163,7 +163,7 @@ else {
 </dl>
 
 <dl class="box w200"><dt>Популярные темы</dt>
-<dd><script type="text/javascript" src="http://balancer.ru/js/forum/topvisits.js"></script></dd>
+<dd><script type="text/javascript" src="http://www.balancer.ru/js/forum/topvisits.js"></script></dd>
 </dl>
 
 <script type="text/javascript"><!--

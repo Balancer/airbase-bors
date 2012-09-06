@@ -147,7 +147,7 @@ function is_numeric( mixed_var ) { return !isNaN( mixed_var ); }
 
 function warn_icon(o, uid) {
 if(top.me_is_coordinator)
-	document.write('<a href="http://balancer.ru/admin/users/'+uid+'/warnings.html?object='+o+'"><img src="http://balancer.ru/img/web/skull.gif"></a>')
+	document.write('<a href="http://www.balancer.ru/admin/users/'+uid+'/warnings.html?object='+o+'"><img src="http://www.balancer.ru/img/web/skull.gif"></a>')
 }
 
 // Изменяем контент индикатора рейтинга сообщения

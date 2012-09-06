@@ -56,7 +56,7 @@ function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 			if($this->parent_category_id())
 				return array("forum_category://". $this->parent_category_id());
 
-			return array("http://balancer.ru/forum/");
+			return array("http://www.balancer.ru/forum/");
 		}
 
 		function direct_subcats_ids()

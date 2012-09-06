@@ -87,7 +87,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 	else if ($action == 'show_user')
 	{
 		$user_id = intval($_GET['user_id']);
-		return go('http://balancer.ru/user/'.$user_id.'/posts/');
+		return go('http://www.balancer.ru/user/'.$user_id.'/posts/');
 	}
 	else
 	{
@@ -576,7 +576,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 ?>
 <ul><li><b>
 <?
-	$self = object_load('http://balancer.ru/forum/');
+	$self = object_load('http://www.balancer.ru/forum/');
 	$nav = object_load('module_nav_top', $self);
 	echo $nav->body();
 ?>

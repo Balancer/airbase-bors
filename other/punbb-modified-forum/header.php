@@ -60,7 +60,7 @@ ob_start();
 //if (!defined('PUN_ALLOW_INDEX'))
 	echo '<meta name="ROBOTS" content="NOINDEX, FOLLOW" />'."\n";
 if(!empty($_GET['id']) && preg_match('/viewforum\.php/', $_SERVER['REQUEST_URI']))
-	echo "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"http://balancer.ru/forum/{$_GET['id']}/posts-rss.xml\" title=\"Новые сообщения в этом форуме\" />";
+	echo "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"http://www.balancer.ru/forum/{$_GET['id']}/posts-rss.xml\" title=\"Новые сообщения в этом форуме\" />";
 	
 ?>
 <title><?php echo $page_title ?></title>
@@ -190,8 +190,8 @@ else
  &middot; <a href=\"{$pun_config['root_uri']}/search.php?action=show_new\">{$lang_common['Show new posts']}</a><br />
 <!-- &middot; <a href=\"{$pun_config['root_uri']}/search.php?action=show_24h\">{$lang_common['Show recent posts']}</a><br /> -->
  &middot; <a class=\"red\" href=\"http://forums.balancer.ru/personal/answers/\">Показать все ответы на Ваши сообщения</a><br />
-<!-- &middot; <a class=\"red\" href=\"http://balancer.ru/users/favorites/\">Ваше избранное</a><br /> -->
- &middot; <a href=\"http://balancer.ru/user/{$pun_user['id']}/use-topics.html\">Показать все темы с Вашим участием</a><br />
+<!-- &middot; <a class=\"red\" href=\"http://www.balancer.ru/users/favorites/\">Ваше избранное</a><br /> -->
+ &middot; <a href=\"http://www.balancer.ru/user/{$pun_user['id']}/use-topics.html\">Показать все темы с Вашим участием</a><br />
  	</li></ul>
 	<div class=\"clearer\"></div>\n\t\t</div>";
 }
@@ -207,7 +207,7 @@ if ($pun_config['o_announcement'] == '1')
 
 ?>
 
-<!-- script language="JavaScript1.2" src="http://balancer.ru/js/snow.js" script -->
+<!-- script language="JavaScript1.2" src="http://www.balancer.ru/js/snow.js" script -->
 
 <div id="announce" class="block">
 	<h2><span><?php echo $lang_common['Announcement'] ?></span></h2>

@@ -24,7 +24,7 @@
 <html>
 <head>
 <title><?echo $title?> /Авиабаза =KRoN=/</title>
-<link rel="stylesheet" type="text/css" href="http://airbase.ru/inc/css/style.phtml">
+<link rel="stylesheet" type="text/css" href="http://www.airbase.ru/inc/css/style.phtml">
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
 <body>

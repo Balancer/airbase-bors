@@ -50,7 +50,7 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 		if($this->parent_category_id())
 			return array("airbase_board_category://". $this->parent_category_id());
 
-		return array("http://balancer.ru/forum/");
+		return array("http://www.balancer.ru/forum/");
 	}
 
 	function direct_subcats_ids()

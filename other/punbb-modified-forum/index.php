@@ -160,7 +160,7 @@ if(
 if(!empty($_GET['topic']) && preg_match("!^(\d+)\.msg(\d+)$!", $_GET['topic'], $m))
 {
 	//http://forums.airbase.ru/index.php?topic=27581.msg415049
-	go("http://balancer.ru/forum/punbb/viewtopic.php?pid={$m[2]}#p{$m[2]}");
+	go("http://www.balancer.ru/forum/punbb/viewtopic.php?pid={$m[2]}#p{$m[2]}");
 }
 
 if(!empty($_GET['topic']) && (
@@ -169,16 +169,16 @@ if(!empty($_GET['topic']) && (
 ))
 {
 	//http://forums.airbase.ru/index.php?topic=27581.msg415049
-	go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}");
+	go("http://www.balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}");
 }
 
 if(!empty($_SERVER['REQUEST_URI']) && preg_match("!topic,(\d+).(\d+)\.html$!", $_SERVER['REQUEST_URI'], $m))
 {
 	//http://forums.airbase.ru/index.php/topic,2760.0.html
 	if(empty($m[2]))
-		go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}");
+		go("http://www.balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}");
 	else
-		go("http://balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}&p=".(intval(($m[2]-1)/25)+1));
+		go("http://www.balancer.ru/forum/punbb/viewtopic.php?id={$m[1]}&p=".(intval(($m[2]-1)/25)+1));
 }
 
 if(!empty($_GET['showforum']))
@@ -246,7 +246,7 @@ if(@$_GET['action'] == 'unreadreplies')
 	exit();
 }
 
-if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'balancer.local'))
+if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru', 'balancer.local'))
 	|| !preg_match("!^/forum!", $_SERVER['REQUEST_URI']))
 {
 	include(PUN_ROOT.'viewcat.php');
@@ -270,7 +270,7 @@ forum_forum::all_forums_preload(true);
 ?>
 <ul><li><b>
 <?php
-	$self = object_load('http://balancer.ru/forum/');
+	$self = object_load('http://www.balancer.ru/forum/');
 	$nav = object_load('module_nav_top', $self);
 	echo $nav->body();
 ?>
@@ -478,14 +478,14 @@ else
 			</dl>
 			<dl class="conl">
 				<dt><strong><?php echo $lang_index['User info'] ?></strong></dt>
-				<dd><?php echo $lang_index['Newest user'] ?>: <a href="http://balancer.ru/users/<?php echo $stats['last_user']['id'];?>/"><?php echo pun_htmlspecialchars($stats['last_user']['username']) ?></a></dd>
+				<dd><?php echo $lang_index['Newest user'] ?>: <a href="http://www.balancer.ru/users/<?php echo $stats['last_user']['id'];?>/"><?php echo pun_htmlspecialchars($stats['last_user']['username']) ?></a></dd>
 <?php
 
 if ($pun_config['o_users_online'] == '1')
 {
-	echo "<script  type=\"text/javascript\" src=\"http://balancer.ru/js/stat-users.js\"></script>\n";
-	echo "<script  type=\"text/javascript\" src=\"http://balancer.ru/js/stat-os.js\"></script>\n";
-	echo "<script  type=\"text/javascript\" src=\"http://balancer.ru/js/stat-browsers.js\"></script>\n";
+	echo "<script  type=\"text/javascript\" src=\"http://www.balancer.ru/js/stat-users.js\"></script>\n";
+	echo "<script  type=\"text/javascript\" src=\"http://www.balancer.ru/js/stat-os.js\"></script>\n";
+	echo "<script  type=\"text/javascript\" src=\"http://www.balancer.ru/js/stat-browsers.js\"></script>\n";
 
 }
 else

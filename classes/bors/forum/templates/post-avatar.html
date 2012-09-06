@@ -1,7 +1,7 @@
 {if $owner->use_avatar()}
 <div title="{$owner->avatar_width()}x{$owner->avatar_height()}" style="height: {$owner->avatar_height()}px; margin: {math equation="max(0,floor((100-w)/2))" w=$owner->avatar_width()}px 0">
 <a href="{$owner->url()}">
-<img src="http://balancer.ru/forum/punbb/img/avatars/{$owner->use_avatar()}" width="{$owner->avatar_width()}" height="{$owner->avatar_height()}" alt="" />
+<img src="http://www.balancer.ru/forum/punbb/img/avatars/{$owner->use_avatar()}" width="{$owner->avatar_width()}" height="{$owner->avatar_height()}" alt="" />
 </a>
 </div>
 {else}
@@ -11,5 +11,5 @@
 {/if}
 <h4><a href="{$owner->url()}">{$owner->title()}</a></h4>
 {if $owner->group_title()}<h5>{$owner->group_title()}</h5>{/if}
-{if $owner->reputation()}<a href="http://balancer.ru/user/{$owner->id()}/reputation.html{if $ref}?{$ref}{/if}"><img src="http://balancer.ru/user/{$owner->id()}/rep.gif" class="rep" alt="" /></a>{/if}
-{if $owner->warnings()}<a href="http://balancer.ru/user/{$owner->id()}/warnings/"><img src="http://balancer.ru/user/{$owner->id()}/warnings.gif" class="warn" alt="" /></a>{/if}
+{if $owner->reputation()}<a href="http://www.balancer.ru/user/{$owner->id()}/reputation.html{if $ref}?{$ref}{/if}"><img src="http://www.balancer.ru/user/{$owner->id()}/rep.gif" class="rep" alt="" /></a>{/if}
+{if $owner->warnings()}<a href="http://www.balancer.ru/user/{$owner->id()}/warnings/"><img src="http://www.balancer.ru/user/{$owner->id()}/warnings.gif" class="warn" alt="" /></a>{/if}

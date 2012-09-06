@@ -40,8 +40,8 @@ top.data = <?
         $s=str_replace("\"","\\\"",$s);
 //        $s=str_replace("\n"," ",$s);
         $s=str_replace("\r","",$s);
-        $s=preg_replace("! src=(\")?/!", " src=$1http://airbase.ru/", $s);
-        $s=preg_replace("! href=(\")?/!", " href=$1http://airbase.ru/", $s);
+        $s=preg_replace("! src=(\")?/!", " src=$1http://www.airbase.ru/", $s);
+        $s=preg_replace("! href=(\")?/!", " href=$1http://www.airbase.ru/", $s);
         $out[] = "\"$s\\n\"";
     }
     echo join("+\n", $out);
