@@ -43,7 +43,7 @@ function update_users_online()
 	foreach($db->get_array('SELECT user_id, ident FROM online WHERE idle=0 ORDER BY ident') as $pun_user_online)
 	{
 		if ($pun_user_online['user_id'] > 1)
-			$users[] = "\n\t\t\t\t"."<dd><a href=\"http://balancer.ru/forum/punbb/profile.php?id={$pun_user_online['user_id']}\">".htmlspecialchars($pun_user_online['ident']).'</a>';
+			$users[] = "\n\t\t\t\t"."<dd><a href=\"http://www.balancer.ru/forum/punbb/profile.php?id={$pun_user_online['user_id']}\">".htmlspecialchars($pun_user_online['ident']).'</a>';
 		else
 			$num_guests++;
 	}

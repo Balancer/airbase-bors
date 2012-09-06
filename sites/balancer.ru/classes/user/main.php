@@ -28,10 +28,10 @@ class user_main extends base_page
 
 		function parents()
 		{
-			return array("http://balancer.ru/users/");
+			return array("http://www.balancer.ru/users/");
 		}
 
-		function url() { return "http://balancer.ru/user/".$this->id()."/"; }
+		function url() { return "http://www.balancer.ru/user/".$this->id()."/"; }
 
 	function cache_static() { return false; } // Не кешировать. Нет обработки админ-инфо
 

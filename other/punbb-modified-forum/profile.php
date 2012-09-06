@@ -26,10 +26,10 @@
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 
-if($_SERVER['HTTP_HOST'] != 'balancer.ru' || !preg_match('!^/forum/punbb/!', $_SERVER['REQUEST_URI']))
+if($_SERVER['HTTP_HOST'] != 'www.balancer.ru' || !preg_match('!^/forum/punbb/!', $_SERVER['REQUEST_URI']))
 {
 	include_once('inc/navigation.php');
-	go("http://balancer.ru/forum/punbb/profile.php" . (empty($_SERVER['QUERY_STRING']) ? "" : "?".$_SERVER['QUERY_STRING']), true);
+	go("http://www.balancer.ru/forum/punbb/profile.php" . (empty($_SERVER['QUERY_STRING']) ? "" : "?".$_SERVER['QUERY_STRING']), true);
 	exit("Redirected");
 }
 
@@ -972,7 +972,7 @@ if ($pun_user['id'] != $id &&
 					<div class="infldset">
 						<dl>
 							<dt>Новый профиль:</dt>
-							<dd><a href="http://balancer.ru/user/<?php echo $id?>/">http://balancer.ru/user/<?php echo $id?>/</a></dd>
+							<dd><a href="http://www.balancer.ru/user/<?php echo $id?>/">http://www.balancer.ru/user/<?php echo $id?>/</a></dd>
 							<dt><?php echo $lang_common['Username'] ?>: </dt>
 							<dd><?php echo pun_htmlspecialchars($user['username']) ?></dd>
 							<dt><?php echo $lang_common['Title'] ?>: </dt>

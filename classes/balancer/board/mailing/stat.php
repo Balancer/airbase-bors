@@ -32,7 +32,7 @@ class balancer_board_mailing_stat extends base_object_db
 			if($user_stat->mail_format() != 'text')
 				$mail = '
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="http://balancer.ru/_bors/css/balancer-378-min.css" />
+<link rel="stylesheet" type="text/css" href="http://www.balancer.ru/_bors/css/balancer-378-min.css" />
 ';
 			else
 				$mail = '';

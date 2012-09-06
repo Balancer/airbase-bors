@@ -4,7 +4,7 @@
 <h2>Информация</h2>
 <ul>
 <li>Зарегистрирован: {$user->create_time()|full_time}</li>
-<li>Последнее сообщение: <a href="http://balancer.ru/user/{$user->id()}/posts/last/">{$user->last_post_time()|full_time}</a><li>
+<li>Последнее сообщение: <a href="http://www.balancer.ru/user/{$user->id()}/posts/last/">{$user->last_post_time()|full_time}</a><li>
 {if $user->messages_daily_limit() >= 0}<li>Ограничение числа сообщений в день на один форум: <span class="red">{$user->messages_daily_limit()}</span></li>{/if}
 <li>Сообщений на форуме за последние 24 часа: <b>{$today_total}</b></li>
 <li>Сообщений на форуме за последние 30 суток: <b>{$tomonth_total}</b></li>
@@ -27,8 +27,8 @@
 <li><a href="/users/{$this->id()}/aliases/">Пользователи, писавшие с тех же IP</a></li>
 <li><a href="reputation/">Репутация</a></li>
 <li><a href="warnings/">Предупреждения</a></li>
-<li><a href="http://balancer.ru/forum/punbb/misc.php?email={$this->id()}">Отправить сообщение на e-mail пользователя</a></li>
-<li><a href="http://balancer.ru/forum/punbb/profile.php?id={$this->id()}">Профиль на старом форуме</a></li>
+<li><a href="http://www.balancer.ru/forum/punbb/misc.php?email={$this->id()}">Отправить сообщение на e-mail пользователя</a></li>
+<li><a href="http://www.balancer.ru/forum/punbb/profile.php?id={$this->id()}">Профиль на старом форуме</a></li>
 </ul>
 
 {if $is_watcher}
@@ -58,7 +58,7 @@
 <dt>Лучшие {$best_of_month|@count} сообщени{$best_of_month|@count|sklon:'е,я,й'} за последний месяц</dt>
 <dd>
 {foreach from=$best_of_month item="x"}
-&nbsp;&nbsp;&nbsp;<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_url()} {$x->target()->score_colorized()}<br/>
+&nbsp;&nbsp;&nbsp;<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_url()} {$x->target()->score_colorized()}<br/>
 {/foreach}
 </dd>
 </dl>
@@ -70,7 +70,7 @@
 <dd>
 {foreach from=$best item="x"}
 {if $x->target()}
-&nbsp;&nbsp;&nbsp;<img src="http://balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_url()} {$x->target()->score_colorized()}<br/>
+&nbsp;&nbsp;&nbsp;<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_url()} {$x->target()->score_colorized()}<br/>
 {/if}
 {/foreach}
 </dd>

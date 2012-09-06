@@ -62,9 +62,9 @@ class airbase_user_warnings extends base_page
 	function url($page = NULL)
 	{
 		if(!$page || $this->total_pages() == 1)
-			return "http://balancer.ru/user/".$this->id()."/warnings.html"; 
+			return "http://www.balancer.ru/user/".$this->id()."/warnings.html"; 
 		else
-			return "http://balancer.ru/user/".$this->id()."/warnings,{$page}.html"; 
+			return "http://www.balancer.ru/user/".$this->id()."/warnings,{$page}.html"; 
 	}
 
 	function cache_static() { return config('static_forum') ? rand(80000, 90000) : 0; }

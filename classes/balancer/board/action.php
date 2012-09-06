@@ -46,7 +46,7 @@ class balancer_board_action extends base_page_db
 
 	function message()
 	{
-//<li class="red">marata [17.10.2010 11:00]: Предупреждение пользователю KILLO: <a href="http://balancer.ru/support/2008/09/p2262128.html">Обсуждение модераториалов [KILLO#17.10.10 05:38]</a></li>
+//<li class="red">marata [17.10.2010 11:00]: Предупреждение пользователю KILLO: <a href="http://www.balancer.ru/support/2008/09/p2262128.html">Обсуждение модераториалов [KILLO#17.10.10 05:38]</a></li>
 		return preg_replace('!(Предупреждение пользователю).+?:( <a href=".+?">).+?\[(.+?)\]!', '$1$2$3', $this->message_raw());
 	}
 }

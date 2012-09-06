@@ -20,7 +20,7 @@
 
 		function url()
 		{
-			return "http://balancer.ru/user/".$this->id()."/use-topics.html";
+			return "http://www.balancer.ru/user/".$this->id()."/use-topics.html";
 		}
 	
 		function title()

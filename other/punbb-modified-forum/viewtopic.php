@@ -50,7 +50,7 @@ if(preg_match('!^pid=(\d+)$!', $qs, $m))
 	{
 		debug_hidden_log('__trap', "Пустой постинг {$m[1]}");
 		@header("HTTP/1.0 404 Not Found");
-		return go('http://balancer.ru/forum/', true);
+		return go('http://www.balancer.ru/forum/', true);
 	}
 	return go($post->url_in_container(), true);
 }
@@ -299,7 +299,7 @@ if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun
 		<br/>
 		<ul><li>
 				<span class="pagelink conl">
-					<a href="#page_bottom"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif" alt="#bottom" border="0"/></a>
+					<a href="#page_bottom"><img src="http://www.balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif" alt="#bottom" border="0"/></a>
 					<?php echo $paging_links ?>
 				</span>
 				<span class="postlink conr"><?php echo $post_link ?></span>
@@ -453,17 +453,17 @@ while ($cur_post = $db->fetch_assoc($result))
 		
 		if($is_coordinator)
 		{
-			$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warn_add/?ref=".urlencode("{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['id']}#p{$cur_post['id']}")."\" style=\"color: red;\">Выставить штраф</a>";
+			$user_info[] = "<a href=\"http://www.balancer.ru/user/{$cur_post['poster_id']}/warn_add/?ref=".urlencode("{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['id']}#p{$cur_post['id']}")."\" style=\"color: red;\">Выставить штраф</a>";
 		}
 		
-		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation.html?post://{$cur_post['id']}\">Репутация участника</a>";
-		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/blog.html\">Блог участника</a>";
-		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/use-topics.html\">Темы с его участием</a>";
-		$user_info[] = "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/posts/\">Все сообщения участника</a>";
+		$user_info[] = "<a href=\"http://www.balancer.ru/user/{$cur_post['poster_id']}/reputation.html?post://{$cur_post['id']}\">Репутация участника</a>";
+		$user_info[] = "<a href=\"http://www.balancer.ru/user/{$cur_post['poster_id']}/blog.html\">Блог участника</a>";
+		$user_info[] = "<a href=\"http://www.balancer.ru/user/{$cur_post['poster_id']}/use-topics.html\">Темы с его участием</a>";
+		$user_info[] = "<a href=\"http://www.balancer.ru/user/{$cur_post['poster_id']}/posts/\">Все сообщения участника</a>";
 
 		if($is_coordinator)
 		{
-			$user_info[] = "<a href=\"http://balancer.ru/forum/tools/post/{$cur_post['id']}/\">Операции над сообщением</a>";
+			$user_info[] = "<a href=\"http://www.balancer.ru/forum/tools/post/{$cur_post['id']}/\">Операции над сообщением</a>";
 		}
 
 	}
@@ -532,7 +532,7 @@ while ($cur_post = $db->fetch_assoc($result))
 					array(
 						'cr_type' => 'save_cr',
 						'forum_type' => 'punbb',
-						'forum_base_uri' => 'http://balancer.ru/forum',
+						'forum_base_uri' => 'http://www.balancer.ru/forum',
 						'sharp_not_comment' => true,
 						'html_disable' => true,
 				));
@@ -582,13 +582,13 @@ while ($cur_post = $db->fetch_assoc($result))
 	// Attachment Mod Block End
 
 	$user_warn_count	= intval($poster['warnings']);
-	$user_warn = $user_warn_count ? "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings/\"><img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings.gif\" width=\"100\" height=\"16\" border=\"0\"></a>\n" : "";
-//	$user_warn = $user_warn_count ? "<script src=\"http://balancer.ru/user/{$cur_post['poster_id']}/warnings.js\" type=\"text/javascript\"></script>\n" : "";
+	$user_warn = $user_warn_count ? "<a href=\"http://www.balancer.ru/user/{$cur_post['poster_id']}/warnings/\"><img src=\"http://www.balancer.ru/user/{$cur_post['poster_id']}/warnings.gif\" width=\"100\" height=\"16\" border=\"0\"></a>\n" : "";
+//	$user_warn = $user_warn_count ? "<script src=\"http://www.balancer.ru/user/{$cur_post['poster_id']}/warnings.js\" type=\"text/javascript\"></script>\n" : "";
 ?>
 <div id="p<?php echo $cur_post['id'] ?>" class="blockpost<?php echo $vtbg ?><?php if (($post_count + $start_from) == 1) echo ' firstpost'; ?>">
 	<h2><b>
-		<span onClick="setImageId('post_<?php echo $cur_post['id'];?>_moreimg', toggleVisId('post_<?php echo $cur_post['id'];?>_more') == 1, 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')">
-			<img id="post_<?php echo $cur_post['id'];?>_moreimg" src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif" alt="*" />
+		<span onClick="setImageId('post_<?php echo $cur_post['id'];?>_moreimg', toggleVisId('post_<?php echo $cur_post['id'];?>_more') == 1, 'http://www.balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://www.balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')">
+			<img id="post_<?php echo $cur_post['id'];?>_moreimg" src="http://www.balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif" alt="*" />
 			<?php echo $username;?></span></b>,
 	<?
 		echo $cur_post['flag'];
@@ -604,13 +604,13 @@ while ($cur_post = $db->fetch_assoc($result))
 				<div class="postmsg">
 					<div class="userinfo" style="width: 100px; float: right; margin: 0px 0px 8px 16px; display: inline; border: 1px solid; background-color: white;">
 						<div align="center">
-							<?php if($user_avatar) echo "<div style=\"width: 100px; height: 100px; text-align: center; vertical-align: middle; overflow: hidden;\" onClick=\"setImageId('post_{$cur_post['id']}_moreimg', toggleVisId('post_{$cur_post['id']}_more') == 1, 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')\">$user_avatar</div>";?>
+							<?php if($user_avatar) echo "<div style=\"width: 100px; height: 100px; text-align: center; vertical-align: middle; overflow: hidden;\" onClick=\"setImageId('post_{$cur_post['id']}_moreimg', toggleVisId('post_{$cur_post['id']}_more') == 1, 'http://www.balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://www.balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')\">$user_avatar</div>";?>
 							<div style="font-size: x-small; font-weight: 900;"><?php echo $userlink;?></div>
 							<div style="font-size: xx-small;"><?php echo $user_title;?></div>
 							<center>
 							<?php
 								if($poster['reputation'])
-									echo "<a href=\"http://balancer.ru/user/{$cur_post['poster_id']}/reputation.html?post://{$cur_post['id']}\"><img src=\"http://balancer.ru/user/{$cur_post['poster_id']}/rep.gif\" width=\"100\" height=\"16\" border=\"0\" alt=\"*\" /></a>\n";
+									echo "<a href=\"http://www.balancer.ru/user/{$cur_post['poster_id']}/reputation.html?post://{$cur_post['id']}\"><img src=\"http://www.balancer.ru/user/{$cur_post['poster_id']}/rep.gif\" width=\"100\" height=\"16\" border=\"0\" alt=\"*\" /></a>\n";
 							?>
 							<div><?php echo $user_warn;?></div>
 							</center>
@@ -659,7 +659,7 @@ while ($cur_post = $db->fetch_assoc($result))
 	<div class="inbox">
 		<ul><li>
 				<span class="pagelink conl">
-					<a href="#page_top"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/actions/up.gif" alt="#top" border="0"/></a>
+					<a href="#page_top"><img src="http://www.balancer.ru/cms/templates/forum/icons/16x16/actions/up.gif" alt="#top" border="0"/></a>
 					<?php echo $paging_links ?>
 				</span>
 				<span class="postlink conr"><?php echo $post_link ?></span>

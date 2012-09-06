@@ -17,7 +17,7 @@ class balancer_board_topics_blog extends balancer_board_paged
 		if(preg_match('/viewcat.php/', $cat_url))
 		{
 			debug_hidden_log('error_category', "Incorrect category '{$this->topic()->category()->debug_title()}' URL: ".$cat_url);
-			$cat_url = "http://balancer.ru/";
+			$cat_url = "http://www.balancer.ru/";
 		}
 
 		return $cat_url.date("Y/m", $this->topic()->create_time())."/t{$this->id()}/blog"

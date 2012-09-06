@@ -13,7 +13,7 @@
 <h4{if $title_css} class="{$title_css}"{/if}{if $title_style} style="{$title_style}"{/if}>{$user->titled_link()}</h4>
 {if $show_group}
 {if $user->group_title()}<h5>{$user->group_title()}</h5>{/if}
-{if $user->reputation()}<a href="http://balancer.ru/user/{$user->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}" class="rep">{$user->reputation_html()}</a><br/>{/if}
-{if $user->warnings() || $user->is_banned()}<a href="http://balancer.ru/user/{$user->id()}/warnings/" class="warn">{$user->warnings_html()}</a><br/>{/if}
+{if $user->reputation()}<a href="http://www.balancer.ru/user/{$user->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}" class="rep">{$user->reputation_html()}</a><br/>{/if}
+{if $user->warnings() || $user->is_banned()}<a href="http://www.balancer.ru/user/{$user->id()}/warnings/" class="warn">{$user->warnings_html()}</a><br/>{/if}
 {/if}
 {/if}

@@ -101,7 +101,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		if($this->category())
 			return array("airbase_board_category://" . $this->category_id());
 
-		return array("http://balancer.ru/forum/");
+		return array("http://www.balancer.ru/forum/");
 	}
 
 	function pre_show()
@@ -292,7 +292,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	}
 
 	function url() { return $this->category()->category_base_full().'viewforum.php?id='.$this->id(); }
-//	function url() { return 'http://balancer.ru/forum/punbb/viewforum.php?id='.$this->id(); }
+//	function url() { return 'http://www.balancer.ru/forum/punbb/viewforum.php?id='.$this->id(); }
 	function cache_static_can_be_dropped() { return false; }
 
 	function cache_groups_parent() { return parent::cache_groups_parent().

@@ -35,7 +35,7 @@ class airbase_forum_category extends base_object_db
 		if($this->parent_category_id())
 			return array("airbase_forum_category://". $this->parent_category_id());
 
-		return array("http://balancer.ru/forum/");
+		return array("http://www.balancer.ru/forum/");
 	}
 
 	function direct_subcats_ids()

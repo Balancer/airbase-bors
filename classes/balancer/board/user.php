@@ -21,7 +21,7 @@ class balancer_board_user extends forum_user
 
 	function reputation_html()
 	{
-//		return "<img src=\"http://balancer.ru/user/{$this->id()}/rep.gif\" class=\"rep\" alt=\"\" />";
+//		return "<img src=\"http://www.balancer.ru/user/{$this->id()}/rep.gif\" class=\"rep\" alt=\"\" />";
 
 		$reputation = $this->reputation_percents();
 

@@ -108,9 +108,9 @@ class user_blog extends base_page
 	function url($page = NULL)
 	{
 		if(!$page || $page == $this->default_page())
-			return "http://balancer.ru/user/".$this->id()."/blog/"; 
+			return "http://www.balancer.ru/user/".$this->id()."/blog/"; 
 		else
-			return "http://balancer.ru/user/".$this->id()."/blog/$page.html"; 
+			return "http://www.balancer.ru/user/".$this->id()."/blog/$page.html"; 
 	}
 
 	function cache_static()

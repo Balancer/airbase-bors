@@ -50,7 +50,7 @@ class user_reputation extends base_page_db
 		return $result;
 	}
 
-	function url() { return "http://balancer.ru/user/".$this->id()."/reputation.html"; }
+	function url() { return "http://www.balancer.ru/user/".$this->id()."/reputation.html"; }
 
 	function cache_static() { return config('static_forum') ? 86400*30 : 0; }
 
@@ -130,7 +130,7 @@ class user_reputation extends base_page_db
 		class_load('cache_group', "user-{$uid}-reputation")->clean();
 		
 		include_once("funcs/navigation/go.php");
-		go("http://balancer.ru/user/$uid/reputation.html?");
+		go("http://www.balancer.ru/user/$uid/reputation.html?");
 	}
 	
 	function access() { return $this; }

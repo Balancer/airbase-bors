@@ -19,5 +19,5 @@ class forum_main extends base_page
 
 //	function cache_static() { return 300; }
 
-	function url() { return 'http://balancer.ru/forum/'; }
+	function url() { return 'http://www.balancer.ru/forum/'; }
 }

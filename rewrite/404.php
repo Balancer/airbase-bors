@@ -354,8 +354,8 @@
         $last_type=$type;
     }
 
-    $page="http://airbase.ru/alpha/$suffix$first_char/$res/$file_name";
-    $dest_file=preg_replace("!^http://airbase.ru(.+?)\.hts!","$1",$page);
+    $page="http://www.airbase.ru/alpha/$suffix$first_char/$res/$file_name";
+    $dest_file=preg_replace("!^http://www.airbase.ru(.+?)\.hts!","$1",$page);
     if(file_exists("$DOCUMENT_ROOT$dest_file.hts") || file_exists("$DOCUMENT_ROOT$dest_file.phtml"))
     {
         header("Location: $dest_file.phtml");
@@ -365,7 +365,7 @@
     if(!empty($title) && !empty($page))
     {
         $ref = empty($GLOBALS['HTTP_REFERER']) ? '' : $GLOBALS['HTTP_REFERER'];
-        go("http://airbase.ru/admin/edit.php?title=".urlencode($GLOBALS['title'])."&page=$page&ref=$ref");
+        go("http://www.airbase.ru/admin/edit.php?title=".urlencode($GLOBALS['title'])."&page=$page&ref=$ref");
     }
     
 ?>
@@ -433,7 +433,7 @@ if($dh)
     if(strpos($query,"/")===false)
     {
         $keyword="&keyword=$query";
-        echo "<li><a href=http://airbase.ru/admin/edit.php?page=$page$keyword&ref=$ref>создать страницу</a> <font color=red>$QUERY_ENCODED</font> в новом формате (<a href=/admin/edit.php?page=$page>$page</a>)\n";
+        echo "<li><a href=http://www.airbase.ru/admin/edit.php?page=$page$keyword&ref=$ref>создать страницу</a> <font color=red>$QUERY_ENCODED</font> в новом формате (<a href=/admin/edit.php?page=$page>$page</a>)\n";
     }
     else
         $keyword="";
@@ -468,7 +468,7 @@ if($dh)
 
     $nick=user_data("nick");
     $page="http://{$_SERVER['HTTP_HOST']}".preg_replace("!^(/.+)\.phtml$!","$1.hts",$script);
-    $edit_uri = "http://airbase.ru/admin/edit.php?page=$page&ref=$ref";
+    $edit_uri = "http://www.airbase.ru/admin/edit.php?page=$page&ref=$ref";
     if(!preg_match("![\x80-\xFF]!",$query))
         echo "<li><a href=\"$edit_uri\">создать страницу</a> <font color=red>$QUERY_ENCODED</font> в старом формате (<a href=\"$edit_uri\">$page</a>)\n";
 ?>

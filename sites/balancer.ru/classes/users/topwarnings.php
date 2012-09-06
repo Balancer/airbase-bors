@@ -13,7 +13,7 @@ class users_topwarnings extends base_page
 	function title() { return ec("Штрафы пользователей форума"); }
 	function nav_name() { return ec("штрафы"); }
 
-	function parents() { return array("http://balancer.ru/users/"); }
+	function parents() { return array("http://www.balancer.ru/users/"); }
 
 	function local_data()
 	{
@@ -42,7 +42,7 @@ class users_topwarnings extends base_page
 		);
 	}
 
-	function url() { return "http://balancer.ru/users/warnings/"; }
+	function url() { return "http://www.balancer.ru/users/warnings/"; }
 
 	function cache_static() { return config('static_forum') ? 86400*14 : 0; }
 }

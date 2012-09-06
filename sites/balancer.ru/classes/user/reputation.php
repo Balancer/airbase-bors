@@ -85,13 +85,13 @@ class user_reputation extends base_page
 		return NULL;
 	}
 
-//	function url($page=1) { return "http://balancer.ru/user/".$this->id()."/reputation".($page && $page != 1 ? ','.$page : '').".html"; }
+//	function url($page=1) { return "http://www.balancer.ru/user/".$this->id()."/reputation".($page && $page != 1 ? ','.$page : '').".html"; }
 	function url($page = 0, $append_query = true)
 	{
 		if($page == 0 || $this->total_pages() == 1)
-			$url = "http://balancer.ru/user/".intval($this->id())."/reputation.html";
+			$url = "http://www.balancer.ru/user/".intval($this->id())."/reputation.html";
 		else
-			$url = "http://balancer.ru/user/".intval($this->id())."/reputation,{$page}.html";
+			$url = "http://www.balancer.ru/user/".intval($this->id())."/reputation,{$page}.html";
 
 		if($append_query && $this->ref())
 			$url .= '?'.$this->ref();

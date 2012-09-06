@@ -275,7 +275,7 @@ function avatar_thumb($geo)
 				array(
 					'cr_type' => 'save_cr',
 					'forum_type' => 'punbb',
-					'forum_base_uri' => 'http://balancer.ru/forum',
+					'forum_base_uri' => 'http://www.balancer.ru/forum',
 					'sharp_not_comment' => true,
 					'html_disable' => 'full',
 				)
@@ -311,8 +311,8 @@ function avatar_thumb($geo)
 	}
 
 
-	function url() { return "http://balancer.ru/user/{$this->id()}/"; }
-	function parents() { return array("http://balancer.ru/users/"); }
+	function url() { return "http://www.balancer.ru/user/{$this->id()}/"; }
+	function parents() { return array("http://www.balancer.ru/users/"); }
 
 	function is_banned()
 	{
@@ -570,7 +570,7 @@ function avatar_thumb($geo)
 		return go($haction->url($next_domain));
 	}
 
-	function reputation_titled_url() { return "<a href=\"http://balancer.ru/user/{$this->id()}/reputation/\">{$this->title()}</a>"; }
+	function reputation_titled_url() { return "<a href=\"http://www.balancer.ru/user/{$this->id()}/reputation/\">{$this->title()}</a>"; }
 
 	function weight()
 	{

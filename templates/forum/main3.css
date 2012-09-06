@@ -2,7 +2,7 @@ body {
 	font-size: 10pt;
 	font-family: Verdana;
 	color: #358;
-    background: #D8F0FF url(http://airbase.ru/images/web/sky-back.jpg);
+    background: #D8F0FF url(http://www.airbase.ru/images/web/sky-back.jpg);
 	margin: 0px; 
 	padding: 0px 0px 32px 4px;
 	clear: both;
@@ -81,7 +81,7 @@ dl.box dt a {color: #ffffd0;}
 }
 
 a.external {
-    background: url(http://airbase.ru/img/design/system/external.png) center right no-repeat;
+    background: url(http://www.airbase.ru/img/design/system/external.png) center right no-repeat;
     padding-right: 13px;
 }
 
@@ -304,7 +304,7 @@ td.post {
 }
 
 .wrapper {
-    background: #D8F0FF url(http://airbase.ru/images/web/sky-back.jpg);
+    background: #D8F0FF url(http://www.airbase.ru/images/web/sky-back.jpg);
 }
 
 .outer {
@@ -393,7 +393,7 @@ ul.postfooter {
 }
 
 ul.postfooter li {
-    list-style-image:URL(http://airbase.ru/img/web/li/arrow_blue.gif);
+    list-style-image:URL(http://www.airbase.ru/img/web/li/arrow_blue.gif);
 	display: inline;
 	margin: 0;
 	padding: 0;

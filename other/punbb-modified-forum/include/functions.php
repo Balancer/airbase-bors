@@ -223,7 +223,7 @@ function generate_navlinks()
 	if ($pun_config['o_rules'] == '1')
 		$links[] = "<li id=\"navrules\"><a href=\"{$pun_config['root_uri']}/misc.php?action=rules\">".$lang_common['Rules'].'</a>';
 
-	$search_url = 'http://balancer.ru/tools/search/';
+	$search_url = 'http://www.balancer.ru/tools/search/';
 	if(!empty($GLOBALS['forum_id']))
 		$search_url .= '?f%5B%5D='.intval($GLOBALS['forum_id']);
 
@@ -269,7 +269,7 @@ function generate_navlinks()
 
 	$ret = '<ul>'."\n\t\t\t\t".implode($lang_common['Link separator'].'</li>'."\n\t\t\t\t", $links).'</li>'."\n\t\t\t".'</ul>';
 	$ret .= "<ul><li><b>Группы форумов:</b></li>";
-	$ret .= "<li><a href=\"http://balancer.ru/forum/\">Все вместе</a></li>";
+	$ret .= "<li><a href=\"http://www.balancer.ru/forum/\">Все вместе</a></li>";
 
 	$db = new driver_mysql(config('punbb.database', 'punbb'));
 

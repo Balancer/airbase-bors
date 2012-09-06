@@ -11,7 +11,7 @@ class balancer_board_users_reputationGraphSVG extends base_image_svg
 		if(bors()->client()->is_bot())
 		{
 			debug_hidden_log('002', 'bot trapped!');
-			return go('http://balancer.ru/forum/');
+			return go('http://www.balancer.ru/forum/');
 		}
 
 		return false;
@@ -78,7 +78,7 @@ class balancer_board_users_reputationGraphSVG extends base_image_svg
 			'label' => $title,
 			'labelloc' => 't',
 //			'splines' => true,
-			'URL' => 'http://balancer.ru/users/toprep/',
+			'URL' => 'http://www.balancer.ru/users/toprep/',
 		));
 
 		foreach($users as $uid => $ud)

@@ -67,5 +67,5 @@
 		class_load('cache_group', "user-{$uid}-reputation")->clean();
 		
 		include_once("funcs/navigation/go.php");
-		go("http://balancer.ru/user/$uid/reputation/");
+		go("http://www.balancer.ru/user/$uid/reputation/");
 	}

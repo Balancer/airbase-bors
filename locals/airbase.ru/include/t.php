@@ -45,7 +45,7 @@
 	if(empty($page))
 	{
 ?>
-<link rel="stylesheet" type="text/css" href="http://airbase.ru/inc/css/style.phtml">
+<link rel="stylesheet" type="text/css" href="http://www.airbase.ru/inc/css/style.phtml">
 <style>
 h1 { font: bold x-large Verdana, sans-serif; border-bottom: 2px solid #003366; margin: 0px; padding: 0px;}
 h2 { font: bold large Verdana, sans-serif; border-bottom: 1px solid #003366; margin: 8px 0px 4px 0px; padding: 0px;}
@@ -106,7 +106,7 @@ div.tabs a:hover {
 }
 
 a.external {
-    background: url(http://airbase.ru/img/design/system/external.png) center right no-repeat;
+    background: url(http://www.airbase.ru/img/design/system/external.png) center right no-repeat;
     padding-right: 13px;
 }
 </style>

@@ -14,7 +14,7 @@ class balancer_blogs_main extends bors_paginated
 	function title() { return ec('Блоги на Balancer.ru'); }
 	function nav_name() { return ec("блоги"); }
 
-	function parents() { return array('http://balancer.ru/'); }
+	function parents() { return array('http://www.balancer.ru/'); }
 
 	function config_class() { return 'balancer_board_config'; }
 

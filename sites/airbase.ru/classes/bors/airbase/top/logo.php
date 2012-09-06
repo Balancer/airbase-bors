@@ -33,7 +33,7 @@ class airbase_top_logo extends base_image_png
 
 		imagedestroy($img);
 
-		return "http://airbase.ru/top/logos/$id.png";
+		return "http://www.airbase.ru/top/logos/$id.png";
 	}
 
 	function image()
@@ -86,7 +86,7 @@ class airbase_top_logo extends base_image_png
 		ImageString($img, 1, 86-ImageFontWidth(1)*strlen($s), $y, $s, $c);
 	}
 
-	function url() { return "http://airbase.ru/top/logos/{$this->id()}.png"; }
+	function url() { return "http://www.airbase.ru/top/logos/{$this->id()}.png"; }
 
 //	function cache_static() { return 600; }
 

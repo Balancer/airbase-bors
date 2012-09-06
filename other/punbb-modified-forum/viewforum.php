@@ -148,7 +148,7 @@ echo get_subforums_html($id);
 						<div class="intd">
 							<div class="><div class="nosize"></div></div>
 							<div class="tclcon">
-								<h3><a href="http://balancer.ru/forum/<?php echo $id?>/news/">Лента новых тем этого форума и его подфорумов</a></h3>
+								<h3><a href="http://www.balancer.ru/forum/<?php echo $id?>/news/">Лента новых тем этого форума и его подфорумов</a></h3>
 							</div>
 						</div>
 					</td>

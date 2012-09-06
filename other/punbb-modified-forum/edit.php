@@ -455,12 +455,12 @@ if($msg = $post->is_edit_disable())
 if(($profile = config('client_profile')) && $profile->textarea_type() == 'markitup')
 {?>
 <div id="emoticons">
-	<a href="#" title=":)"><img src="http://airbase.ru/forum/smilies/smile.gif" /></a>
-	<a href="#" title=":("><img src="http://airbase.ru/forum/smilies/frown.gif" /></a>
-	<a href="#" title=":eek:"><img src="http://airbase.ru/forum/smilies/eek.gif" /></a>
-	<a href="#" title=":p"><img src="http://airbase.ru/forum/smilies/tongue.gif" /></a>
-	<a href="#" title=";)"><img src="http://airbase.ru/forum/smilies/wink.gif" /></a>
-	<a href="#" title=":D"><img src="http://airbase.ru/forum/smilies/biggrin.gif" /></a>
+	<a href="#" title=":)"><img src="http://www.airbase.ru/forum/smilies/smile.gif" /></a>
+	<a href="#" title=":("><img src="http://www.airbase.ru/forum/smilies/frown.gif" /></a>
+	<a href="#" title=":eek:"><img src="http://www.airbase.ru/forum/smilies/eek.gif" /></a>
+	<a href="#" title=":p"><img src="http://www.airbase.ru/forum/smilies/tongue.gif" /></a>
+	<a href="#" title=";)"><img src="http://www.airbase.ru/forum/smilies/wink.gif" /></a>
+	<a href="#" title=":D"><img src="http://www.airbase.ru/forum/smilies/biggrin.gif" /></a>
 </div>
 <?php } ?>
 
@@ -515,8 +515,8 @@ $checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\"     value=\"1\
 	.($blog ? ' checked="checked"' : '')
 	." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '"
 		.addslashes("<label><strong>Тэги:</strong>&nbsp;<input class='longinput' type='text' name='blog_keywords_string' value='".defval($_POST, 'blog_keywords_string', $topic->keywords_string())."'    size='40' maxlength='255' /><br /></label>")
-			."' : ''\"/>Разместить ответ в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
-//$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\"".($blog ? ' checked="true"' : '')." />Разместить сообщение в <a href=\"http://balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+			."' : ''\"/>Разместить ответ в <a href=\"http://www.balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+//$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\"".($blog ? ' checked="true"' : '')." />Разместить сообщение в <a href=\"http://www.balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
 
 if (!empty($checkboxes))
 {

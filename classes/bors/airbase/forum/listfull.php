@@ -10,7 +10,7 @@ class airbase_forum_listfull extends base_list
 			return $this->_list;
 
 		$ch = new Cache;
-		if($ch->get('airbase_forum_listfull', 'list'))
+		if($ch->get('airbase_forum_listfull', 'v2'))
 			return $this->_list = $ch->last();
 
 		$forums = objects_array('balancer_board_forum', array(

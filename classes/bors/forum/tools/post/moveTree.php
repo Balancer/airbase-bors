@@ -48,7 +48,7 @@ class forum_tools_post_moveTree extends base_page
 	function target_topic_id() { return @$_SESSION['bba_last_target_topic_id']; }
 	function target_post_id() { return ''; }
 
-	function url() { return 'http://balancer.ru/admin/forum/post/'.$this->id().'/move-tree'; }
+	function url() { return 'http://www.balancer.ru/admin/forum/post/'.$this->id().'/move-tree'; }
 
 	function template() { return "forum/_header.html"; }
 
@@ -114,5 +114,5 @@ class forum_tools_post_moveTree extends base_page
 		return $this->on_action_by_topic_id($data);
 	}
 
-	function igo() { return $this->post()->titled_link_ex(array('url' => 'http://balancer.ru/g/p'.$this->post()->id())); }
+	function igo() { return $this->post()->titled_link_ex(array('url' => 'http://www.balancer.ru/g/p'.$this->post()->id())); }
 }

@@ -71,10 +71,10 @@
 </div>{/if}
 
 <ul class="postfooter">
-<li><a href="http://balancer.ru/user/{$p->owner_id()}/reputation.html?{$p->url()}">Репутация автору</a></li>
+<li><a href="http://www.balancer.ru/user/{$p->owner_id()}/reputation.html?{$p->url()}">Репутация автору</a></li>
 <li>|</li>
-<li class="postreport"><a href="http://balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
-<li class="postdelete"><a href="http://balancer.ru/forum/tools/post/{$p->id()}/">Инструменты</a></li>
+<li class="postreport"><a href="http://www.balancer.ru/forum/punbb/misc.php?report={$p->id()}">Сообщить модератору</a></li>
+<li class="postdelete"><a href="http://www.balancer.ru/forum/tools/post/{$p->id()}/">Инструменты</a></li>
 {if $this->is_public_access() and $owner}<li><script type="text/javascript">warn_icon('{$p->internal_uri()}', {$owner->id()})</script></li>{/if}
 <li>{$p->imaged_edit_url()}Редактор</li>
 <li>|</li>
@@ -110,9 +110,9 @@
 			<input type="hidden" name="form_sent" value="1" />
 			<label><textarea class="quickreplyform" name="req_message" rows="7" cols="60" tabindex="1"></textarea></label>
 			<ul class="postfooter">
-				<li><a href="http://balancer.ru/forum/punbb/help.php#bbcode" onclick="window.open(this.href); return false;">BBCode</a>: включён</li>
-				<li><a href="http://balancer.ru/forum/punbb/help.php#img" onclick="window.open(this.href); return false;">[img] тег</a>: включён</li>
-				<li><a href="http://balancer.ru/forum/punbb/help.php#smilies" onclick="window.open(this.href); return false;">Смайлики</a>: включён</li>
+				<li><a href="http://www.balancer.ru/forum/punbb/help.php#bbcode" onclick="window.open(this.href); return false;">BBCode</a>: включён</li>
+				<li><a href="http://www.balancer.ru/forum/punbb/help.php#img" onclick="window.open(this.href); return false;">[img] тег</a>: включён</li>
+				<li><a href="http://www.balancer.ru/forum/punbb/help.php#smilies" onclick="window.open(this.href); return false;">Смайлики</a>: включён</li>
 			</ul>
 		</div>
 	</fieldset>

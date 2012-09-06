@@ -32,9 +32,9 @@ class balancer_blog extends user_blog
 	function url($page = NULL)
 	{
 		if(!$page || $page == $this->default_page())
-			return "http://balancer.ru/blog/"; 
+			return "http://www.balancer.ru/blog/"; 
 		else
-			return "http://balancer.ru/blog/$page.html"; 
+			return "http://www.balancer.ru/blog/$page.html"; 
 	}
 
 	function cache_static() { return config('static_forum') ? 86400*14 : 0; }

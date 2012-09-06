@@ -13,7 +13,7 @@ class forum_topic_ipbst extends base_page
 		if(!$topic)
 		{
 			debug_hidden_log('incorrect-urls', $this->id());
-			return 'http://balancer.ru/forums/';
+			return 'http://www.balancer.ru/forums/';
 		}
 
 		return $topic->url(intval($this->page()/25) + 1);

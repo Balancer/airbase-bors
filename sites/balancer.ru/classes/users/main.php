@@ -11,9 +11,9 @@ class users_main extends base_page
 	function title() { return ec("Пользователи Balancer.ru"); }
 	function nav_name() { return ec("пользователи"); }
 
-	function parents() { return array("http://balancer.ru/forum/"); }
+	function parents() { return array("http://www.balancer.ru/forum/"); }
 
-	function url() { return "http://balancer.ru/users/"; }
+	function url() { return "http://www.balancer.ru/users/"; }
 
 	function cache_static() { return config('static_forum') ? 86400*7 : 0; }
 }

@@ -1,8 +1,8 @@
 {foreach from=$topics item=t}
 <div class="lenta_record">
-<h3><a href="http://balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">{$t.subject}</a></h3>
+<h3><a href="http://www.balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">{$t.subject}</a></h3>
 <div class="lenta_record_content">
-<small><strong>{$t.poster}, {$t.posted|strftime:"%Y-%m-%d %H:%M"}</strong>, <i><a href="http://balancer.ru/forum/{$t.forum_id}/">{$t.forum_name}</a></i>.</small>
+<small><strong>{$t.poster}, {$t.posted|strftime:"%Y-%m-%d %H:%M"}</strong>, <i><a href="http://www.balancer.ru/forum/{$t.forum_id}/">{$t.forum_name}</a></i>.</small>
 {bors_class_load var="p" class="balancer_board_user" id=$t.owner_id}
 {bors_class_load var="owner" class="balancer_board_user" id=$t.owner_id}
 {if $owner}<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>{/if}
@@ -13,9 +13,9 @@
 <p>{$t.message}</p>
 </div>
 
-{if $t.more}<div align="right"><i><a href="http://balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">Дальше &#187;&#187;&#187;</a></i></div>{/if}
+{if $t.more}<div align="right"><i><a href="http://www.balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">Дальше &#187;&#187;&#187;</a></i></div>{/if}
 <div style="font-size: xx-small; border-top: 1px solid; margin-top: 16px;">
-<a href="http://balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">Ссылка</a> -
+<a href="http://www.balancer.ru/forum/punbb/viewtopic.php?id={$t.id}">Ссылка</a> -
 {$t.num_replies} {$t.num_replies|sklon:"комментарий":"комментария":"комментариев"},
 {$t.num_views} {$t.num_views|sklon:"просмотр":"просмотра":"просмотров"}.
 </div>

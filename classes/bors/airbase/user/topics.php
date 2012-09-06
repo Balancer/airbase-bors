@@ -27,7 +27,7 @@ class airbase_user_topics extends base_page
 		return $this->ids;
 	}
 
-	function url() { return "http://balancer.ru/user/".$this->id()."/use-topics.html"; }
+	function url() { return "http://www.balancer.ru/user/".$this->id()."/use-topics.html"; }
 
 	function local_data()
 	{

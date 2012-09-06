@@ -548,7 +548,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	}
 
 	function url_engine() { return 'url_titled'; }
-	function url_for_igo() { return 'http://balancer.ru/g/t'.$this->id(); }
+	function url_for_igo() { return 'http://www.balancer.ru/g/t'.$this->id(); }
 
 	function touch($user_id)
 	{

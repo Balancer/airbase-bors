@@ -81,4 +81,4 @@ require_once(BORS_CORE.'/init.php');
 	$fh = fopen("{$_SERVER['DOCUMENT_ROOT']}/forum/404.log", "at");
 	fwrite($fh, $_SERVER['REQUEST_URI']."|".@$_SERVER['HTTP_REFERER']."\n");
 	fclose($fh);
-	go("http://balancer.ru/forum/");
+	go("http://www.balancer.ru/forum/");

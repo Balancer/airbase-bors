@@ -11,7 +11,7 @@
     {assign var="img" value="status/folder-open"}
    {/if}
   {/if}
-<a href="{$links[i].uri}" class="plain" title="{$links[i].title}"><img src="http://balancer.ru/cms/templates/forum/icons/16x16/{$img}.png" alt="*" title="{$links[i].title}" height="16" width="16" border="0" /></a>&nbsp;<a href="{$links[i].uri}" class="plain" title="{$links[i].title}">{$links[i].title}</a>
+<a href="{$links[i].uri}" class="plain" title="{$links[i].title}"><img src="http://www.balancer.ru/cms/templates/forum/icons/16x16/{$img}.png" alt="*" title="{$links[i].title}" height="16" width="16" border="0" /></a>&nbsp;<a href="{$links[i].uri}" class="plain" title="{$links[i].title}">{$links[i].title}</a>
  </span>
 </div>
 {/section}

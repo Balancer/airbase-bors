@@ -44,7 +44,7 @@ class user_blog_rss extends user_blog
 			
 			$item->description = $html;
 			$item->date = $topic->create_time(); 
-			$item->source = "http://balancer.ru/forum/";
+			$item->source = "http://www.balancer.ru/forum/";
 			$item->author = $topic->owner()->title();
 							     
 			$rss->addItem($item); 

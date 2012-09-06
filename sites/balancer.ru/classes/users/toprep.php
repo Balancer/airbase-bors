@@ -11,7 +11,7 @@ class users_toprep extends base_page
 	function title() { return ec("Репутации пользователей форума"); }
 	function nav_name() { return ec("репутации"); }
 
-	function parents() { return array("http://balancer.ru/users/"); }
+	function parents() { return array("http://www.balancer.ru/users/"); }
 
 	function local_template_data_set()
 	{
@@ -32,7 +32,7 @@ class users_toprep extends base_page
 		);
 	}
 
-	function url() { return "http://balancer.ru/users/toprep/"; }
+	function url() { return "http://www.balancer.ru/users/toprep/"; }
 
 	function cache_static() { return config('static_forum') ? 600 : 0; }
 }

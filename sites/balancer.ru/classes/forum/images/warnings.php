@@ -108,7 +108,7 @@ class forum_images_warnings extends base_image_gif
 		return $result;
 	}
 
-	function url() { return "http://balancer.ru/user/{$this->id()}/warnings.gif"; }
+	function url() { return "http://www.balancer.ru/user/{$this->id()}/warnings.gif"; }
 
 	function cache_static() { return $this->expired && config('static_forum') ? $this->expired - time() : 86400; }
 

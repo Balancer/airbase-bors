@@ -14,7 +14,7 @@ class balancer_board_topic_view extends bors_view_container
 
 	function forum() { return $this->topic()->forum(); }
 
-	function url($page = NULL) { return 'http://balancer.ru/board/topics/view/'.$this->topic()->id().'/'.($page && $page != 1 ? $page.'.html' : ''); }
+	function url($page = NULL) { return 'http://www.balancer.ru/board/topics/view/'.$this->topic()->id().'/'.($page && $page != 1 ? $page.'.html' : ''); }
 
 	function keywords_linked()
 	{

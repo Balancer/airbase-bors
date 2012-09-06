@@ -16,7 +16,7 @@ class balancer_board_topic_usersGraphPng extends base_image_png
 			if(empty($users[$user_id]))
 				$users[$user_id] = array(
 					'name' => $user->title(),
-					'link' => "http://balancer.ru/forum/user-{$user_id}-posts-in-topic-{$this->id()}/",
+					'link' => "http://www.balancer.ru/forum/user-{$user_id}-posts-in-topic-{$this->id()}/",
 					'count' => 1,
 				);
 			else

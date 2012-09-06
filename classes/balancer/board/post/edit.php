@@ -1,6 +1,6 @@
 <?php
 
-// http://balancer.ru/support/post?tid=69886
+// http://www.balancer.ru/support/post?tid=69886
 
 class balancer_board_post_edit extends bors_page
 {

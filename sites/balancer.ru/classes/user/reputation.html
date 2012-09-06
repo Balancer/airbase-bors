@@ -16,7 +16,7 @@
 {* for(i in document.location)
 	document.write(i + '=' + document.location[i] + '<br />')
 *}
-document.write('<s'+'cript type="text/javascript" src="http://balancer.ru/js/users/reputation,{$user_id}.js?ref='+(document.location.search.substring(1) ? document.location.search.substring(1) : document.referrer)+'"></s'+'cript>')
+document.write('<s'+'cript type="text/javascript" src="http://www.balancer.ru/js/users/reputation,{$user_id}.js?ref='+(document.location.search.substring(1) ? document.location.search.substring(1) : document.referrer)+'"></s'+'cript>')
 </script>
 <td>
 {bors_class_load var=owner class="balancer_board_user" id=$user_id}
@@ -31,7 +31,7 @@ function add_warn(o,uid)
 {ldelim}
 if(top.me_is_coordinator)
 	document.write('<div class="float right">'
-		+'<a href="http://balancer.ru/admin/users/'+uid+'/warnings.html?object='+o+'"><img src="http://balancer.ru/img/web/skull.gif"></a>'
+		+'<a href="http://www.balancer.ru/admin/users/'+uid+'/warnings.html?object='+o+'"><img src="http://www.balancer.ru/img/web/skull.gif"></a>'
 		+'<a href="/_bors/admin/mark/delete/?object='+o+'"><img src="/_bors/images/drop-16.png"></a>'
 		+'</div>')
 {rdelim}
@@ -54,8 +54,8 @@ if(top.me_is_coordinator)
 	<td class="{$backcolor}">{$r->create_time()|full_time}</td>
 	<td class="{$backcolor}">{if $r->score() > 0}+{/if}{$r->score()}</td>
 	<td class="{$backcolor}">
-		<a href="http://balancer.ru/user/{$r->voter_id()}/">{$u->title()}</a><br />
-		<a href="http://balancer.ru/user/{$r->voter_id()}/reputation/"><img src="http://balancer.ru/user/{$r->voter_id()}/rep.gif" width="100" height="16" border="0" /></a></td> 
+		<a href="http://www.balancer.ru/user/{$r->voter_id()}/">{$u->title()}</a><br />
+		<a href="http://www.balancer.ru/user/{$r->voter_id()}/reputation/"><img src="http://www.balancer.ru/user/{$r->voter_id()}/rep.gif" width="100" height="16" border="0" /></a></td> 
 	<td class="{$backcolor}">{$r->comment()|truncate:500|lcml_bb}
 		<script>add_warn('{$r->internal_uri()}', {$r->voter_id()})</script>
 		{if $r->refer()}

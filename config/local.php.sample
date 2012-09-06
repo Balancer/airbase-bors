@@ -10,10 +10,10 @@
 		'base_dir' => "{$_SERVER['DOCUMENT_ROOT']}/cms",
 		'local_dir' => "{$_SERVER['DOCUMENT_ROOT']}/cms-local",
 		'base_uri' => "http://{$_SERVER['HTTP_HOST']}/cms",
-		'default_template' => "http://airbase.ru/cms/templates/skins/default/body/",
+		'default_template' => "http://www.airbase.ru/cms/templates/skins/default/body/",
 
 		'main_host_dir' => "/var/www/airbase.ru/htdocs",
-		'main_host_uri' => "http://airbase.ru",
+		'main_host_uri' => "http://www.airbase.ru",
 
 		'mysql_database' => 'HTS',
 		'mysql_login' => '<login>',

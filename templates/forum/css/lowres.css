@@ -85,7 +85,7 @@ dl.box dt a {color: #ffffd0;}
 }
 
 a.external {
-    background: url(http://airbase.ru/img/design/system/external.png) center right no-repeat;
+    background: url(http://www.airbase.ru/img/design/system/external.png) center right no-repeat;
     padding-right: 13px;
 }
 
@@ -285,7 +285,7 @@ ul.postfooter {
 }
 
 ul.postfooter li {
-    list-style-image:URL(http://airbase.ru/img/web/li/arrow_blue.gif);
+    list-style-image:URL(http://www.airbase.ru/img/web/li/arrow_blue.gif);
 	display: inline;
 	margin: 0;
 	padding: 0;
