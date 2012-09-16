@@ -239,6 +239,9 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 		foreach($reps as $r)
 		{
+			if($r->is_deleted())
+				continue;
+
 			$post = $posts[$r->target_object_id()];
 			$post_reps = $post->get('reputation_records', array());
 			$post_reps[] = $r;
