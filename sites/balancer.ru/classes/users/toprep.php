@@ -13,20 +13,20 @@ class users_toprep extends base_page
 
 	function parents() { return array("http://www.balancer.ru/users/"); }
 
-	function local_template_data_set()
+	function body_data()
 	{
-		$latest = objects_array('airbase_user_reputation', array('order' => '-create_time', 'limit' => 50));
+		$latest = bors_find_all('airbase_user_reputation', array('is_deleted' => false, 'order' => '-create_time', 'limit' => 50));
 		$user_ids = array();
 		foreach($latest as $rep)
 			$user_ids[$rep->user_id()] = $user_ids[$rep->voter_id()] = true;
-		
+
 		return array(
 			'high' => objects_array('balancer_board_user', array('order' => '-reputation', 'limit' => 50)),
 			'low' => objects_array('balancer_board_user', array('order' => 'reputation', 'limit' => 50)),
 
 			'pure_high' => objects_array('balancer_board_user', array('order' => '-pure_reputation', 'limit' => 50)),
 			'pure_low' => objects_array('balancer_board_user', array('order' => 'pure_reputation', 'limit' => 50)),
-			
+
 			'latest' => $latest,
 			'users'	=> objects_array('balancer_board_user', array('id IN' => array_keys($user_ids), 'by_id' => true)),
 		);

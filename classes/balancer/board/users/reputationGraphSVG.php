@@ -19,7 +19,7 @@ class balancer_board_users_reputationGraphSVG extends base_image_svg
 
 	function image()
 	{
-		$reps = objects_array('airbase_user_reputation', array('order' => '-create_time', 'limit' => REPUTATION_GRAPH_LIMIT));
+		$reps = objects_array('airbase_user_reputation', array('is_deleted' => false, 'order' => '-create_time', 'limit' => REPUTATION_GRAPH_LIMIT));
 
 		$users = array();
 		$edges = array();

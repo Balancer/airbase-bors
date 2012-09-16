@@ -1,13 +1,14 @@
 <?php
 
-class forum_forum extends base_page_db
+class forum_forum extends bors_object_db
 {
-	function main_table() { return 'forums'; }
-	function main_db() { return config('punbb.database', 'punbb'); }
+	function table_name() { return 'forums'; }
+	function db_name() { return config('punbb.database', 'punbb'); }
+	function storage_engine() { return 'bors_storage_mysql'; }
 
 	function new_class_name() { return 'balancer_board_forum'; }
 
-	function main_table_fields()
+	function table_fields()
 	{
 		return array(
 			'id',
