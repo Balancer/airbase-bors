@@ -23,7 +23,10 @@
 {if $p->is_moderatorial()}<div class="red small">Данное сообщение является официальным предупреждением</div>{/if}
 {$p->flag()}
 {if $show_title}{$show_title} {/if}
-{if not $skip_author_name}{if $p->joke_owner()}{$p->joke_owner()->title()}{else}{$p->author_name()}{/if}{/if}
+{if not $skip_author_name}
+	{* {if $p->joke_owner()}{$p->joke_owner()->title()}{else}{$p->author_name()}{/if *}
+	{$p->author_name()}
+{/if}
 {if not $skip_date} <a href="{$p->url_for_igo()}">#{$p->create_time()|full_time}</a>{/if}
 {if not $no_show_answers and $p->answer_to_id() and $a}&nbsp;<span class="answer">@{if $a->joke_owner()}{$a->joke_owner()->title()}{else}{$a->author_name()}{/if}<a href="{$a->url_in_container()}">#{$a->create_time()|full_time}</a></span>{/if}
 {if $forum and not $skip_forums} <small>// {$forum->titled_url()}</small>{/if}
@@ -52,7 +55,7 @@
 <div class="body">
 {if $owner and not $skip_avatar_block}
 {if not $avatar_size}{assign var="avatar_size" value=100}{/if}
-<div class="avatar_block">{include file="xfile:forum/post-avatar.html" object=$p avatar_size=$avatar_size owner=$p->joke_owner()}</div>{/if}
+<div class="avatar_block">{include file="xfile:forum/post-avatar.html" object=$p avatar_size=$avatar_size owner=$p->owner()}</div>{/if}
 {assign var="keyword_links" value=$p|get:'keyword_links'}
 {if $keyword_links}<div class="post_kws">{$keyword_links}</div>{/if}
 {if $strip}
