@@ -135,6 +135,7 @@ function author_name()
 			$this->set_author_name('Неизвестный', true);
 	}
 
+//	if(config('is_developer')) { echo "Get author name for {$this->id()}: {$this->data['author_name']}/{$this->owner()->title()}<br/>"; exit(); }
 	return $this->data['author_name'];
 }
 function set_author_name($v, $dbup = true)

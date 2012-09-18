@@ -196,7 +196,7 @@ if (isset($_POST['form_sent']))
 	// If the user is logged in we get the username and e-mail from $pun_user
 	if (!$pun_user['is_guest'])
 	{
-		$username = $pun_user['username'];
+		$username = $me->title(); // $pun_user['username'];
 		$email = $pun_user['email'];
 	}
 	// Otherwise it should be in $_POST
