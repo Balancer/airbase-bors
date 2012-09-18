@@ -75,7 +75,7 @@
 			if(file_exists($path) && filesize($path)>0)
 			{
 				$remote = $image;
-				$image = str_replace(config('sites_store_path'), config('sites_store_uri'), $path);
+				$image = str_replace(config('sites_store_path'), config('sites_store_url'), $path);
 				$data['local'] = true;
 				if(!$hts->get_data($image,'origin_uri'))
 					$hts->set_data($image, 'origin_uri', $remote);
