@@ -2,11 +2,13 @@
 
 class airbase_user_warning extends base_object_db
 {
+	function class_title() { return ec('Штраф'); }
+
 	function main_db_storage() { return config('punbb.database', 'punbb'); }
 	function main_table_storage() { return 'warnings'; }
 	function storage_engine() { return 'bors_storage_mysql'; }
 
-	function db_name() { return 'punbb'; }
+	function db_name() { return config('punbb.database', 'punbb'); }
 	function table_name() { return 'warnings'; }
 
 //	function can_delete() { return bors()->user()->is_admin(); }
@@ -96,7 +98,7 @@ class airbase_user_warning extends base_object_db
 		return array(
 			ec('Тип штрафа:') => 'type_id|dropdown=airbase_user_warning_typesco',
 			ec('Комментарий:') => 'source|textarea=4',
-			ec('Количество штрафных баллов:') => 'score',
+			ec('Количество штрафных баллов:') => 'score|int',
 		);
 	}
 

@@ -30,7 +30,7 @@ $GLOBALS['log_level'] = 2;
 
     $GLOBALS['cms'] = array(
 		'sites_store_path' => "{$_SERVER['DOCUMENT_ROOT']}/sites",
-		'sites_store_uri' => "http://{$_SERVER['HTTP_HOST']}/sites",
+		'sites_store_url' => "http://{$_SERVER['HTTP_HOST']}/sites",
 //		'cache_dir' => "{$_SERVER['DOCUMENT_ROOT']}/cache/system",
 		'base_dir' => BORS_INCLUDE,
 		'local_dir' => @BORS_INCLUDE_LOCAL,
