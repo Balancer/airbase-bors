@@ -2,7 +2,7 @@
 <div style="white-space: nowrap;">
  <span>
   {if $x.indent > 4}{assign var="x.indent" value=4}{/if}
-  {if $x.indent}{""|indent:$x.indent:"&nbsp;"}{/if}
+  {if $x.indent}{"&nbsp;"|str_repeat: 4*$x.indent}{/if}
   {assign var="img" value="mimetypes/empty"}
   {if $x.here}{assign var="img" value="status/folder-visiting"}{/if}
   {if $x.children_count}

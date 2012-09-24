@@ -5,6 +5,9 @@ bors_function_include('time/month_name');
 
 class user_posts_month extends base_page
 {
+	function can_be_empty() { return false; }
+	function loaded() { return (bool) $this->user(); }
+
 	function cache_static() { return config('static_forum') ? 600 : 0; }
 
 	private $year, $month;

@@ -53,7 +53,7 @@
 	{
 		$out = "with(document){\n";
 
-	    foreach(split("\n", $txt) as $s)
+	    foreach(explode("\n", $txt) as $s)
     	{
 	        $s=str_replace("\\","\\\\",$s);
     	    $s=str_replace("\"","\\\"",$s);
