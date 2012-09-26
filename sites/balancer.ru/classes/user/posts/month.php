@@ -3,7 +3,7 @@
 include_once('inc/strings.php');
 bors_function_include('time/month_name');
 
-class user_posts_month extends base_page
+class user_posts_month extends balancer_board_page
 {
 	function can_be_empty() { return false; }
 	function loaded() { return (bool) $this->user(); }
@@ -12,10 +12,10 @@ class user_posts_month extends base_page
 
 	private $year, $month;
 
-	function init()
+	function _configure()
 	{
 		list($this->year, $this->month) = explode('/', $this->args('page'));
-		return parent::init();
+		return parent::_configure();
 	}
 
 	function template()

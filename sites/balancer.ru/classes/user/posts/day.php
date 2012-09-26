@@ -2,7 +2,7 @@
 
 include_once('inc/strings.php');
 
-class user_posts_day extends base_page
+class user_posts_day extends balancer_board_page
 {
 	private $year, $month, $day;
 
