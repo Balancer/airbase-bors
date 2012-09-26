@@ -1,6 +1,6 @@
 <?php
 
-class user_posts_year extends base_page
+class user_posts_year extends balancer_board_page
 {
 	function can_be_empty() { return false; }
 	function loaded() { return (bool) $this->user(); }
@@ -27,7 +27,7 @@ class user_posts_year extends base_page
 	function title() { return $this->user()->title().ec(': Все сообщения за ').$this->args('page').ec(' год'); }
 	function nav_name() { return $this->args('page'); }
 
-	function local_template_data_set()
+	function body_data()
 	{
 		$month = array();
 		$y = $this->page();
@@ -41,7 +41,7 @@ class user_posts_year extends base_page
 			if($cnt = $this->db('punbb')->select('posts', 'count(*)', array('poster_id' => $this->id(), "posted BETWEEN $d0 AND $d9")))
 				$month[$m] = $cnt;
 		}
-		
+
 		return array('month' => $month);
 	}
 }
