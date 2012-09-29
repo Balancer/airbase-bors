@@ -1,4 +1,18 @@
 <table class="btab w100p">
+<caption>Активность координаторов по нештрафным действиям за месяц</caption>
+<tr>
+	<th>Координатор</th>
+	<th>Число действий</th>
+</tr>
+{foreach from=$month_actions item="x"}
+<tr>
+	<td>{$x.coordinator_name}</td>
+	<td>{$x.actions_count}</td>
+{/foreach}
+</table>
+
+
+<table class="btab w100p">
 <caption>Активность координаторов по числу штрафов за месяц</caption>
 <tr>
 	<th>Координатор</th>
@@ -8,6 +22,19 @@
 <tr>
 	<td>{$x.coordinator_name}</td>
 	<td>{$x.warnings_count}</td>
+{/foreach}
+</table>
+
+<table class="btab w100p">
+<caption>Активность координаторов по нештрафным действиям за год</caption>
+<tr>
+	<th>Координатор</th>
+	<th>Число действий</th>
+</tr>
+{foreach from=$year_actions item="x"}
+<tr>
+	<td>{$x.coordinator_name}</td>
+	<td>{$x.actions_count}</td>
 {/foreach}
 </table>
 
