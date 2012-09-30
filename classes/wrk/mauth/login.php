@@ -22,7 +22,8 @@ class wrk_mauth_login extends bors_page
 		return array(
 			'wrk.ru' => 'http://www.balancer.ru/login/',
 			'balancer.ru' => 'http://www.airbase.ru/login/',
-			'airbase.ru' => 'http://www.wrk.ru/login/',
+			'airbase.ru' => 'http://www.tanzpol.org/login/',
+			'tanzpol.org' => 'http://www.wrk.ru/login/',
 		);
 	}
 
@@ -43,12 +44,13 @@ class wrk_mauth_login extends bors_page
 		// Начинаем авторизацю _всегда_ с wrk.ru!
 
 		$sig  = bors()->request()->data('sig');
-		$host = bors()->server()->host();
+		$host = bors()->server()->host_strip();
 		$ref  = bors()->request()->data('ref');
+
 		if(!$ref)
 			$ref  = bors()->client()->referer();
 
-		if(preg_match('!^http://wrk.ru/login/!', $ref))
+		if(preg_match('!^http://(www\.)?wrk\.ru/login/!', $ref))
 			$ref = NULL;
 
 		if($host == 'wrk.ru' && !$sig)
@@ -71,16 +73,16 @@ class wrk_mauth_login extends bors_page
 	function pre_show()
 	{
 		$sig = bors()->request()->data('sig');
-		$host = bors()->server()->host();
+		$host = bors()->server()->host_strip();
 		$ref  = bors()->client()->referer();
 
-		if(preg_match('!^http://wrk.ru/login/!', $ref))
+		if(preg_match('!^http://(www\.)?wrk\.ru/login/!', $ref))
 			$ref = NULL;
 
 		// Если это вызов авторизации на одном из промежуточных доменов.
 		// запоминаем реферер и идём в начало цикла.
 		if($host != 'wrk.ru' && !$sig)
-			return go('http://wrk.ru/login/?ref='.$ref);
+			return go('http://www.wrk.ru/login/?ref='.$ref);
 
 		if($host == 'wrk.ru' && !$sig)
 		{
@@ -98,7 +100,8 @@ class wrk_mauth_login extends bors_page
 			// Сперва - чистим авторизационную куку.
 			if($auth)
 				$auth->delete();
-			return go($ref ? $ref : 'http://wrk.ru/');
+
+			return go($ref ? $ref : 'http://www.wrk.ru/');
 		}
 
 		// Иначе - это промежуточная авторизация на домене.
