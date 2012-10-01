@@ -1,6 +1,6 @@
 <?php
 
-class airbase_board_config extends base_config
+class airbase_board_config extends bors_config
 {
 	function config_data()
 	{

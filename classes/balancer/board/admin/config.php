@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_admin_config extends base_config
+class balancer_board_admin_config extends bors_config
 {
 	function config_data()
 	{

@@ -1,6 +1,6 @@
 <?php
 
-class aviatop_config extends base_config
+class aviatop_config extends bors_config
 {
 	function config_data()
 	{
