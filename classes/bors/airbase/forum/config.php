@@ -1,6 +1,6 @@
 <?php
 
-class airbase_forum_config extends base_config
+class airbase_forum_config extends bors_config
 {
 	function config_data()
 	{
