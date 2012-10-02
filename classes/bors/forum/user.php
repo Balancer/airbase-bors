@@ -220,7 +220,7 @@ function avatar_thumb($geo)
 
 	function title()
 	{
-		if($title = $this->user_nick())
+		if(($title = trim($this->user_nick())) && !preg_match('/[\wà-ÿ¸À-ß¨]/', $title))
 			return $title;
 
 		return $this->set_user_nick($this->username(), true);
