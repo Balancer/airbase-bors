@@ -220,10 +220,12 @@ function avatar_thumb($geo)
 
 	function title()
 	{
-		if(($title = trim($this->user_nick())) && !preg_match('/[\wà-ÿ¸À-ß¨]/', $title))
-			return $title;
+		$title = trim($this->user_nick());
+		if(!preg_match('/[a-zA-Z0-9Ð°-ÑÑ‘Ð-Ð¯Ð]+/ui', $title))
+			$title = $this->set_user_nick($this->username(), true);
 
-		return $this->set_user_nick($this->username(), true);
+		return $title;
+		return wordwrap($title, 10, ' ', true);
 	}
 
 	function group() { return bors_load('balancer_board_group', $this->group_id() ? $this->group_id() : 3); }
