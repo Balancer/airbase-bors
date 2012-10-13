@@ -19,7 +19,7 @@
 {if not $owner_title}
 	{assign var="owner_title" value=$owner->title()}
 {/if}
-<h4><a href="{$owner->url()}">{$owner_title}</a></h4>
+<h4><a href="{$owner->url()}">{$owner_title}</a>{if $owner_title != $owner->login()}<div style="font-size: 8pt; color: #ccc;">{$owner->login()}</div>{/if}</h4>
 {if $avatar_size == 100}
 {if $owner->group_title()}<h5>{$owner->group_title()}</h5>{/if}
 {* {if $owner->reputation()}<a href="http://www.balancer.ru/user/{$owner->id()}/reputation.html{if $object}?{$object->internal_uri_ascii()}{/if}"><img src="http://www.balancer.ru/user/{$owner->id()}/rep.gif" class="rep" alt="" /></a>{/if} *}
