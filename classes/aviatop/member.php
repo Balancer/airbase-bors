@@ -1,15 +1,15 @@
 <?php
 
-class aviatop_member extends base_page_db
+class aviatop_member extends bors_page_db
 {
 	function config_class() { return 'aviatop_config'; }
 	function template() { return 'forum/page.html'; }
 
 	function parents() { return array('http://top.airbase.ru/'); }
 
-	function main_db() { return 'top'; }
-	function main_table() { return 'aviatop_members'; }
-	function main_table_fields()
+	function db_name() { return 'top'; }
+	function table_name() { return 'aviatop_members'; }
+	function table_fields()
 	{
 		return array(
 			'id',

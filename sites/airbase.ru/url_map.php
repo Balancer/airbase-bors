@@ -41,3 +41,7 @@ $map = array(
 	'/([^/]+)/ => airbase_keywords_old(1)',
 	'/([^/]+) => airbase_keywords_old(1)',
 );
+
+set_bors_project('airbase');
+
+// bors_auto_class('!(.*/)files/?!', 'auto_files', 'bors_auto_files')

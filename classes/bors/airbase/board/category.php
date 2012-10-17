@@ -2,12 +2,12 @@
 
 require_once('inc/strings.php');
 
-class airbase_board_category extends base_object_db
+class airbase_board_category extends bors_object_db
 {
-	function main_db() { return config('punbb.database', 'punbb'); }
-	function main_table() { return 'categories'; }
+	function db_name() { return config('punbb.database', 'punbb'); }
+	function table_name() { return 'categories'; }
 
-	function main_table_fields()
+	function table_fields()
 	{
 		return array(
 			'id',

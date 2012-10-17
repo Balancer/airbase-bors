@@ -1,10 +1,10 @@
 <?php
 
-class aviatop_week extends base_object_db
+class aviatop_week extends bors_object_db
 {
-	function main_db() { return 'top'; }
-	function main_table() { return 'aviatop_week'; }
-	function main_table_fields()
+	function db_name() { return 'top'; }
+	function table_name() { return 'aviatop_week'; }
+	function table_fields()
 	{
 		return array(
 			'id',

@@ -9,10 +9,10 @@ if(!defined('PUN_UNVERIFIED'))
 	define('PUN_MEMBER', 4);
 }
 
-class forum_user extends base_object_db
+class forum_user extends balancer_board_object_db
 {
-	function main_db() { return config('punbb.database', 'punbb'); }
-	function main_table() { return 'users'; }
+	function db_name() { return config('punbb.database', 'punbb'); }
+	function table_name() { return 'users'; }
 
 	static function id_prepare($id)
 	{
@@ -41,7 +41,7 @@ class forum_user extends base_object_db
 		return parent::loaded() && $this->id() > 1;
 	}
 
-	function main_table_fields()
+	function table_fields()
 	{
 		return array(
 			'id',
