@@ -1,10 +1,10 @@
 <?php
 
-class balancer_board_action extends base_page_db
+class balancer_board_action extends bors_page_db
 {
-	function main_db() { return config('punbb.database', 'punbb'); }
-	function main_table() { return 'board_actions'; }
-	function main_table_fields()
+	function db_name() { return config('punbb.database', 'punbb'); }
+	function table_name() { return 'board_actions'; }
+	function table_fields()
 	{
 		return array(
 			'id',

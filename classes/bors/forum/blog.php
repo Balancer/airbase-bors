@@ -1,15 +1,15 @@
 <?php
 
-class forum_blog extends base_page_db
+class forum_blog extends bors_page_db
 {
 //	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function storage_engine() { return 'bors_storage_mysql'; }
 	function can_be_empty() { return false; }
 
-	function main_db() { return config('punbb.database', 'punbb'); }
-	function main_table() { return 'blog'; }
+	function db_name() { return config('punbb.database', 'punbb'); }
+	function table_name() { return 'blog'; }
 
-	function main_table_fields()
+	function table_fields()
 	{
 		return array(
 			'id' => 'post_id',

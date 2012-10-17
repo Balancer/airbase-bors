@@ -145,7 +145,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		if($ch->get('forum_permissions', "{$this->id()}:3"))
 			return $ch->last();
 
-		$access = object_load('airbase_forum_access', "{$this->id()}:3", array('no_load_cache' => true));
+		$access = airbase_forum_access::load_fg($this->id(), '3');
 		if($access)
 			return $this->set($access->can_read(), 600);
 
@@ -156,6 +156,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	{
 		$user = bors()->user();
 		$gid = $user ? $user->group_id() : 3;
+
 		if(!$gid)
 			$gid = 3;
 
@@ -163,7 +164,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		if($ch->get('forum_permissions', "{$this->id()}:{$gid}"))
 			return $ch->last();
 
-		$access = object_load('airbase_forum_access', "{$this->id()}:{$gid}");
+		$access = airbase_forum_access::load_fg($this->id(), $gid);
 		if($access)
 			return $ch->set($access->can_read(), 600);
 
