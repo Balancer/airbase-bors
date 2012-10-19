@@ -2,12 +2,7 @@
 
 class airbase_user_admin_warning extends airbase_user_warning
 {
-	function attr_preset()
-	{
-		return array_merge(parent::attr_preset(), array(
-			'access_engine'	=> 'airbase_user_admin_access',
-		));
-	}
+	function _access_engine_def() { return 'airbase_user_admin_access'; }
 
 	function check_data(&$data)
 	{
