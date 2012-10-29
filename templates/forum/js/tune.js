@@ -8,13 +8,19 @@ with(document)
 		write('<link rel="stylesheet" type="text/css" href="http://forums.balancer.ru/tpl/default/css/main3.css" />')
 */
 	write('<style>')
-	if(ff=readCookie('body.fontFamily'))
-		write('body {font-family: '+ff+'}')
-	if(fs=readCookie('body.fontSize'))
-		write('body {font-size: '+fs+'}')
-	if((cw=readCookie('incenter.width')) && size[0] >= 640)
-		write('.incenter {width: '+cw+'}')
+	if(fontFamily=readCookie('body.fontFamily'))
+		write('body {font-family: '+fontFamily+'}')
+	if(fontSize=readCookie('body.fontSize'))
+		write('body {font-size: '+fontSize+'}')
+
+	if((textWidth=readCookie('incenter.width')) && size[0] >= 640)
+		write('.incenter {width: '+textWidth+'}')
 	write('</style>');
+
+	if(fontFamily == 'Play')
+		write("<link href='http://fonts.googleapis.com/css?family=Play&subset=cyrillic' rel='stylesheet' type='text/css'>")
+	if(fontFamily == 'Ubuntu')
+		write("<link href='http://fonts.googleapis.com/css?family=Ubuntu&subset=cyrillic' rel='stylesheet' type='text/css'>")
 }
 
 function onLoadPage()

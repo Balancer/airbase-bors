@@ -13,10 +13,10 @@
 {/if}
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
-	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-929-min.css" />
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
+	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-929-min.css" />
 
 {literal}
 <!--[if IE]><style>
@@ -91,7 +91,10 @@ createCookie('readedTopics', readed.join(' '), 3)
 </head>
 
 <body onload="onLoadPage()" id="body">
-
+{if config('css_bootstrap_is_loaded')}
+{include file="xfile:airbase/navbar.html"}
+<div style="margin-bottom: 10px"></div>
+{/if}
 <div class="minwidth"><div class="wrapper">
 
 <div class="wide top">
@@ -258,6 +261,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 		<dd><a href="http://www.balancer.ru/g/p2804037"><img src="http://www.balancer.ru/cache/img/events/190x/0509.jpg" /></a></dd>
 *}
 
+{if not config('css_bootstrap_is_loaded')}
 		<dl class="box w200">
 		<dt>Поиск</dt>
 		<dd>
@@ -267,6 +271,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 			</div></form>
 		</dd>
 		</dl>
+{/if}
 
 {if not $skip_ad and rand(0,10) == 1}
 		<dl class="box w200">
@@ -282,7 +287,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 		<dt>Настройки</dt>
 		<dd>
 			<script type="text/javascript">
-				createSelect("Шрифт", "fontFamily", "default(Georgia):Georgia;Verdana;sans-serif;serif;monospace", "Georgia")
+				createSelect("Шрифт", "fontFamily", "default(Georgia):Georgia;Verdana;Ubuntu;Play;sans-serif;serif;monospace", "Georgia")
 				createSelect("Размер", "fontSize", "8pt;10pt;12pt;default(14pt):14pt;16pt;20pt;24pt", "14pt")
 				createSelect("Расстояние до монитора", "incenter.width", "auto;30cm:14cm;45cm:21cm;70cm:30cm", "auto")
 			</script>

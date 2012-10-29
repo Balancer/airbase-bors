@@ -113,10 +113,13 @@ if(top.me_is_coordinator)
 document.writeln('<label><input type="checkbox" id="_chkbx_p{$p->id()}" onclick="return apfgp(this, {$p->id()})" />&nbsp;отметить</label>')
 --></script></li>
 <li><a href="/_bors/ajax/post/info?post={$p->id()}" class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;инфо</a></li>
-<li><a href="#" onclick="pdsh('{$p->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;инструменты</a></li>
-<li class="pages_select">
+<li><a href="#" onclick="pdsh('{$p->id()}'); return false;"
+	{if config('css_bootstrap_is_loaded')}class="btn btn-mini"{/if}
+><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;инструменты</a></li>
+<li{if not config('css_bootstrap_is_loaded')} class="pages_select"{/if}>
  <a href="{$p->topic()->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
-  class="current_page reply_link">Ответить на сообщение</a>
+	class="{if config('css_bootstrap_is_loaded')}btn btn-mini btn-info{else}current_page reply_link{/if}"
+  >Ответить на сообщение</a>
 </li>
 </ul>
 
