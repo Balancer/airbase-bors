@@ -24,6 +24,12 @@ template_jquery_cloud_zoom();
 template_jquery_hoverZoom();
 // template_js_include('/_bors3rdp/js/'.config('js.flowplayer.path').'/'.config('js.flowplayer.include'));
 
+if(config('is_developer'))
+{
+//	twitter_bootstrap::load();
+//	css_plusstrap::load();
+}
+
 function balancer_anniversary_html()
 {
 	$file = '/var/www/bors/bors-airbase/data/anniversary/'.date('md').'.txt';

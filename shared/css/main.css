@@ -849,3 +849,22 @@ div.spinner {
 .mtop8 {
 	margin-top: 8px !important;
 }
+
+
+.bors_lazy_ad code {
+	display: none;
+}
+
+body {
+	font-size: 14pt;
+	font-family: Georgia;
+	line-height: 1.2;
+}
+
+li {
+	line-height: 1.0;
+}
+
+.navbar {
+	font-size: 14px;
+}
