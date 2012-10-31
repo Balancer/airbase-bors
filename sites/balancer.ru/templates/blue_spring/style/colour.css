@@ -28,13 +28,13 @@ blockquote {
 }
 
 #logo
-{ background: #FFFFFF url(logo.jpg) no-repeat;
+{ background: #FFFFFF url(logo-2.jpeg) no-repeat;
   color: #5A6370;
 }
 
-#logo h1
-{ background: transparent;
-  color: #FFFFFF;
+#logo h1, #logo h1 a {
+	background: transparent;
+	color: #FFFFFF;
 }
 
 h1

@@ -1,6 +1,6 @@
 <?php
 
-class balancer_main extends base_page
+class balancer_main extends balancer_page
 {
 	function title() { return ec('Сайт расходящихся тропок'); }
 	function nav_name() { return 'Balancer.Ru'; }

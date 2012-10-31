@@ -11,7 +11,6 @@ if(!defined('PUN_UNVERIFIED'))
 
 class forum_user extends balancer_board_object_db
 {
-	function db_name() { return config('punbb.database', 'punbb'); }
 	function table_name() { return 'users'; }
 
 	static function id_prepare($id)
@@ -316,7 +315,7 @@ function avatar_thumb($geo)
 	}
 
 
-	function url() { return "http://www.balancer.ru/user/{$this->id()}/"; }
+	function url($page=NULL) { return "http://www.balancer.ru/user/{$this->id()}/"; }
 	function parents() { return array("http://www.balancer.ru/users/"); }
 
 	function is_banned()
