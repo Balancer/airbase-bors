@@ -188,6 +188,15 @@ class balancer_board_post extends forum_post
 		return "<a href=\"{$this->url_in_container()}\">{$title}</a>";
 	}
 
+	function pure_titled_link()
+	{
+		$title = @$this->data['title'];
+		if(empty($title))
+			$title = $this->topic()->title();
+
+		return "<a href=\"{$this->url_in_container()}\">{$title}</a>";
+	}
+
 	static function posts_preload($posts)
 	{
 		bors_objects_preload($posts, 'owner_id', 'balancer_board_user', 'owner');

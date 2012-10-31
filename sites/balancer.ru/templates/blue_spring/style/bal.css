@@ -38,3 +38,8 @@ div.box a {
 	text-decoration: none !important;
 	border: none !important;
 }
+
+.transgray, .transgray a {
+	color: #ccc !important;
+	font-size: 8pt !important;
+}
