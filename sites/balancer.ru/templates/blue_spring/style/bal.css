@@ -4,13 +4,15 @@ div.post {
 }
 
 div.post div.head, div.post div.head a {
-	font-size: 14pt;
+	font-size: 12pt;
 	background: url(menu.png);
 	color: white !important;
 	border-color: #D7D7D7;
 	height: 42px;
 	line-height: 37px;
 	padding: 0 10px;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .post .body {
