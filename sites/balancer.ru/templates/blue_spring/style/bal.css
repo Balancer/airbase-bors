@@ -15,8 +15,16 @@ div.post div.head, div.post div.head a {
 	overflow: hidden;
 }
 
-.post .body {
+div.post div.head {
+	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+
+div.post div.body {
 	padding: 10px 0;
+	margin: 0;
+	font-size: 14pt;
 }
 
 span.answer {
@@ -43,3 +51,55 @@ div.box a {
 	color: #ccc !important;
 	font-size: 8pt !important;
 }
+
+.round_box h2 {
+	font-size: 12pt;
+	margin-top: 0;
+}
+
+.round_box h2:first-line { font-size: 120%; }
+
+.round_box {
+	font-size: 0.7em;
+	border: 1px solid #ccc;
+	background-color: #F0F0F0;
+	margin: 0 0px 4px 0px;
+	padding: 8px;
+	border-radius: 8px;
+}
+
+.shadow8 {
+	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+
+.mtop8 {
+	margin-top: 8px !important;
+}
+
+.rs_box, .rs_box_nd {
+	font-size: 0.7em;
+	border: 1px solid #ccc;
+	background-color: #F0F0F0;
+	margin: 0 0px 8px 0px;
+	padding: 0;
+	border-radius: 8px;
+	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+
+.rs_box {
+	padding: 0 0 4px 0 !important;
+}
+
+.rs_box img.main, .rs_box iframe {
+	border-radius: 8px 8px 0 0;
+}
+
+.rs_box_nd img.main {
+	border-radius: 8px;
+}
+
+.rs_box small.inbox { display: block; margin: 0 8px; }
