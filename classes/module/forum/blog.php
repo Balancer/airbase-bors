@@ -1,7 +1,5 @@
 <?php
 
-require_once('inc/lists.php');
-
 class module_forum_blog extends base_page
 {
 	function main_db() { return 'punbb'; }
@@ -19,7 +17,7 @@ class module_forum_blog extends base_page
 
 		$skip_forums = array(19, 37, 73, 102, 138, 170);
 		if($sfs = $this->args('skip_forums'))
-			$skip_forums = array_merge($skip_forums, parse_condensed_list($sfs));
+			$skip_forums = array_merge($skip_forums, blib_list::parse_condensed($sfs));
 
 		$where = array(
 			'is_public' => true,
