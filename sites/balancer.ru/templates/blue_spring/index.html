@@ -10,6 +10,7 @@
   <link rel="stylesheet" type="text/css" href="/templates/blue_spring/style/style.css" />
   <link rel="stylesheet" type="text/css" href="/templates/blue_spring/style/colour.css" />
   <link rel="stylesheet" type="text/css" href="/templates/blue_spring/style/bal.css" />
+	<link href='http://fonts.googleapis.com/css?family=Scada&subset=cyrillic' rel='stylesheet' type='text/css'>
 {if not empty($css_list)}{foreach item=css from=$css_list}
 <style type="text/css" media="all">@import url("{$css}");</style>
 {/foreach}{/if}
@@ -42,8 +43,9 @@
     <div id="content">
       <div id="menu">
         <ul>
-          <li><a id="selected" href="/">Balancer.Ru</a></li>
-          <li><a href="http://www.balancer.ru/user/10000/blog/">Блог</a></li>
+          <li><a id="selected" href="/">Главная</a></li>
+          <li><a href="/welcome/">Добро пожаловать</a></li>
+          <li><a href="/blog/">Блог</a></li>
         </ul>
       </div>
       <div id="column1">
@@ -66,6 +68,7 @@
           <div class="sbicontent">
 			<ul>
 				<li><a href="/blog/">Блог</a></li>
+				<li><a href="/sky/photos/">Астрофото</a></li>
 				<li><a href="/webapps/">Web-компоненты</a></li>
 				<li><a href="/socionics/">Соционика</a></li>
 			</ul>

@@ -21,6 +21,10 @@ with(document)
 		write("<link href='http://fonts.googleapis.com/css?family=Play&subset=cyrillic' rel='stylesheet' type='text/css'>")
 	if(fontFamily == 'Ubuntu')
 		write("<link href='http://fonts.googleapis.com/css?family=Ubuntu&subset=cyrillic' rel='stylesheet' type='text/css'>")
+	if(fontFamily == 'Scada')
+		write("<link href='http://fonts.googleapis.com/css?family=Scada:400italic,700italic,400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>")
+	if(fontFamily == 'PT Sans')
+		write("<link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=cyrillic' rel='stylesheet' type='text/css'>")
 }
 
 function onLoadPage()

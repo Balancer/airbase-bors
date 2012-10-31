@@ -24,7 +24,8 @@ div.post div.head {
 div.post div.body {
 	padding: 10px 0;
 	margin: 0;
-	font-size: 14pt;
+	font-family: Scada;
+	font-size: 13pt;
 }
 
 span.answer {
