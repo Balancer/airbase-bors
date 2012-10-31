@@ -27,7 +27,7 @@ class module_forum_blog extends base_page
 		);
 
 		if($fids = $this->arg('forum_ids'))
-			$where['forum_id IN'] = parse_condensed_list($fids);
+			$where['forum_id IN'] = blib_list::parse_condensed($fids);
 		else
 			$where['forum_id NOT IN'] = $skip_forums;
 
