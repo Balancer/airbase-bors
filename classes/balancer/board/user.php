@@ -186,4 +186,13 @@ class balancer_board_user extends forum_user
 		$this->set_warnings($warnings_active->total(), true);
 		$this->set_warnings_total($warnings_total->total(), true);
 	}
+
+	static function me_group()
+	{
+		$me = bors()->user();
+		if($me)
+			return $me->group();
+
+		return bors_load('balancer_board_group', PUN_GUEST);
+	}
 }
