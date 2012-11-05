@@ -14,6 +14,7 @@ class forum_forum extends bors_object_db
 			'id',
 			'title' => 'forum_name',
 			'description' => 'forum_desc',
+			'image_id',
 			'parent_forum_id' => 'parent',
 			'parent_id' => 'parent',
 			'tree_map',
@@ -171,6 +172,21 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		return $ch->set(object_load('forum_group', $gid)->can_read(), 600);
 	}
 
+	function can_read_by_group($group)
+	{
+		$gid = $group->id();
+
+		$ch = new bors_cache;
+		if($ch->get('forum_permissions', "{$this->id()}:{$gid}"))
+			return $ch->last();
+
+		$access = airbase_forum_access::load_fg($this->id(), $gid);
+		if($access)
+			return $ch->set($access->can_read(), 600);
+
+		return $ch->set(object_load('forum_group', $gid)->can_read(), 600);
+	}
+
 	function cache_children()
 	{
 		$children_caches = array();
@@ -306,6 +322,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 			'parent' => 'balancer_board_forum(parent_id)',
 			'parent_forum' => 'balancer_board_forum(parent_forum_id)',
 			'last_post' => 'balancer_board_post(last_post_id)',
+			'image' => 'balancer_board_image(image_id)',
 		);
 	}
 

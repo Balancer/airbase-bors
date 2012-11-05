@@ -1,0 +1,43 @@
+{foreach $forums as $cat_id => $subforums}
+<table class="btab w100p shadow8">
+<thead>
+<caption>{$categories[$cat_id]->titled_link()}</caption>
+<tr>
+	<th style="width: 64px;">&nbsp;</th>
+	<th class="small">Форум</th>
+	<th class="small" style="width: 6ex!important">Тем</th>
+	<th class="small" style="width: 7ex!important">Сообщений</th>
+	<th class="small" style="width: 20ex!important">Последний ответ</th>
+</tr>
+</thead>
+<tbody>
+	{foreach $subforums as $fid => $x}
+	{assign var="f" value=$x.self}
+	{if $f}
+<tr>
+	<td>{if $f->image()}{$f->image()->thumbnail('64x64(up,crop)')->html_code()}{else}&nbsp;{/if}</td>
+	<td>
+		<b>{$f->titled_link()}</b>
+		{if $f->description()}
+			<br/><small>{$f->description()}</small>
+		{/if}
+		{if $x.children}
+			<br/><small><i><img src="http://s.wrk.ru/i/f/subforums.gif" style="margin-bottom: 0px" />&nbsp;Подфорумы: {$x.children|nav_named_links_join}</i></small>
+		{/if}
+	</td>
+	<td class="small">{$f->num_topics()}</td>
+	<td class="small">{$f->num_posts()}</td>
+	<td class="small">{if $f->last_post()}
+		<a href="{$f->last_post()->url()}">{$f->last_post_time()|airbase_time}</a><br/>
+			<span class="byuser">{$f->last_poster()}</span>
+		{else}
+		—
+		{/if}
+	</td>
+
+</tr>
+	{/if}
+	{/foreach}
+</tbody>
+</table>
+{/foreach}
