@@ -455,7 +455,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		if($this->have_attach() === NULL)
 		{
-			$attaches = objects_array('airbase_forum_attach', array('post_id' => $this->id()));
+			$attaches = bors_find_all('balancer_board_attach', array('post_id' => $this->id()));
 
 			if($this->_attaches = $attaches)
 			{
@@ -472,13 +472,14 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			return $this->_attaches = array();
 
 		if($this->have_attach() == -1)
-			return $this->_attaches = objects_array('airbase_forum_attach', array('post_id' => $this->id()));
+			return $this->_attaches = bors_find_all('balancer_board_attach', array('post_id' => $this->id()));
 
-		if(!($attach = object_load('airbase_forum_attach', $this->have_attach())))
+		if(!($attach = bors_load('balancer_board_attach', $this->have_attach())))
 		{
 			debug_hidden_log('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
 			return array();
 		}
+
 		return $this->_attaches = array($attach);
 	}
 

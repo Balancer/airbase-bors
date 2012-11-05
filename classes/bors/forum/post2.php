@@ -95,7 +95,7 @@ function topic_page()
 	if(!$page)
 	{
 		$this->topic()->repaging_posts();
-		$post = object_load('forum_post', $this->id(), array('no_load_cache' => true));
+		$post = bors_load('forum_post', $this->id(), array('no_load_cache' => true));
 		$page = @$post->data['topic_page'];
 	}
 
@@ -155,7 +155,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function flag_db() { return $this->data['flag_db']; }
 	function warning_id() { return $this->data['warning_id']; }
 
-	function topic() { return object_load('forum_topic', $this->topic_id()); }
+	function topic() { return bors_load('forum_topic', $this->topic_id()); }
 	function parents() { return array("forum_topic://".$this->topic_id()); }
 
 	function set_topic_page($page, $dbupd)
@@ -170,7 +170,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function owner()
 	{
 		if($this->__owner === NULL)
-			$this->__owner =  object_load('balancer_board_user', $this->owner_id());
+			$this->__owner =  bors_load('balancer_board_user', $this->owner_id());
 
 		return $this->__owner;
 	}
@@ -300,7 +300,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			if(!$tid)
 				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
 
-			$topic = object_load('forum_topic', $tid);
+			$topic = bors_load('forum_topic', $tid);
 
 			if(!$topic)
 				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
@@ -309,7 +309,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if(!$topic->is_repaged())
 		{
 			$topic->repaging_posts();
-			$post = object_load($this->class_name(), $this->id());
+			$post = bors_load($this->class_name(), $this->id());
 		}
 		else
 			$post = $this;
@@ -406,7 +406,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		if($this->have_attach() === NULL)
 		{
-			$attaches = objects_array('airbase_forum_attach', array('post_id' => $this->id()));
+			$attaches = bors_find_all('balancer_board_attach', array('post_id' => $this->id()));
 
 			if($this->_attaches = $attaches)
 			{
@@ -423,9 +423,9 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			return $this->_attaches = array();
 
 		if($this->have_attach() == -1)
-			return $this->_attaches = objects_array('airbase_forum_attach', array('post_id' => $this->id()));
+			return $this->_attaches = bors_find_all('balancer_board_attach', array('post_id' => $this->id()));
 
-		if(!($attach = object_load('airbase_forum_attach', $this->have_attach())))
+		if(!($attach = bors_load('balancer_board_attach', $this->have_attach())))
 		{
 			debug_hidden_log('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
 			return array();
@@ -455,7 +455,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function answers()
 	{
-		return objects_array('forum_post', array(
+		return bors_find_all('forum_post', array(
 			'where' => array('answer_to=' => intval($this->id())),
 			'order' => 'id',
 		));
@@ -465,7 +465,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		$result = array();
 		foreach($this->select_array('id', array('answer_to=' => $this->id(), 'topic_id<>' => $this->topic_id())) as $pid)
-			if($post = object_load('forum_post', $pid))
+			if($post = bors_load('forum_post', $pid))
 				$result[] = $post;
 
 		return $result;
@@ -475,7 +475,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		$result = array();
 		foreach($this->select_array('id', array('answer_to=' => $this->id(), 'topic_id=' => $this->topic_id())) as $pid)
-			if($post = object_load('forum_post', $pid))
+			if($post = bors_load('forum_post', $pid))
 				$result[] = $post;
 
 		return $result;
@@ -488,7 +488,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		$this->__move_tree_to_topic($new_tid, $this->topic_id());
 
 		foreach(array_keys($GLOBALS['move_tree_to_topic_changed_topics']) as $tid)
-			object_load('forum_topic', $tid, array('no_load_cache' => true))->recalculate();
+			bors_load('forum_topic', $tid, array('no_load_cache' => true))->recalculate();
 
 		$this->recalculate();
 	}
@@ -520,7 +520,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		$this->set_topic_id($new_tid, true);
 
-		object_load('forum_topic', $old_tid)->recalculate();
+		bors_load('forum_topic', $old_tid)->recalculate();
 		$new_topic = bors_load('balancer_board_topic', $new_tid);
 		$new_topic->recalculate();
 
@@ -542,7 +542,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			return $this->warning = NULL;
 
 		if($this->warning_id())
-			return $this->warning = object_load('airbase_user_warning', $this->warning_id());
+			return $this->warning = bors_load('airbase_user_warning', $this->warning_id());
 
 		$warn = objects_first('airbase_user_warning', array(
 			'warn_class_id' => $this->extends_class_id(),
@@ -559,9 +559,9 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function cache_children()
 	{
 		$res = array(
-			object_load('forum_topic', $this->topic_id()),
-			object_load('airbase_user_topics', $this->owner_id()),
-			object_load('balancer_board_blog', $this->id()),
+			bors_load('forum_topic', $this->topic_id()),
+			bors_load('airbase_user_topics', $this->owner_id()),
+			bors_load('balancer_board_blog', $this->id()),
 		);
 
 		return $res;
