@@ -1,9 +1,0 @@
-{foreach from=$links item=linkline}
-{assign var=first value=1}
-{foreach from=$linkline item=link}
-{if not $first} &#187; {/if}
-{assign var=first value=0}
-<a href="{$link.uri}" title="{$link.title|htmlspecialchars}">{$link.title|truncate:30|htmlspecialchars}</a>
-{/foreach}
-<br />
-{/foreach}

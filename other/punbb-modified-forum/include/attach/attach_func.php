@@ -98,10 +98,11 @@ function attach_generate_filename($storagepath, $filename, $messagelenght=0, $fi
 		$newfile = md5(attach_generate_pathname().$messagelenght.$filesize.'Some more salt keyworbs, change if you want to').'.'.attach_get_extension($filename);
 		if(!is_file($storagepath.$newfile))
 			return $newfile;
-	}	
+	}
 }
 
-function attach_create_attachment($name='', $mime='', $size=0, $tmp_name='', $post_id=0, $messagelenght=0){
+function attach_create_attachment($name='', $mime='', $size=0, $tmp_name='', $post_id=0, $messagelenght=0)
+{
 		global $db, $pun_user, $pun_config;
 
 		// fetch an unique name for the file
@@ -110,7 +111,7 @@ function attach_create_attachment($name='', $mime='', $size=0, $tmp_name='', $po
 			$name,
 			$messagelenght,
 			$size);
-			
+
 		$sub1 = substr($unique_name, 0, 2);
 		$sub2 = substr($unique_name, 2, 2);
 		@mkdir($pun_config['attach_basefolder'].$sub1, 0775);
@@ -121,10 +122,10 @@ function attach_create_attachment($name='', $mime='', $size=0, $tmp_name='', $po
 		if(!move_uploaded_file($tmp_name,$pun_config['attach_basefolder']."$sub1/$sub2/".$unique_name))
 			error('Unable to move file from: '.$tmp_name.' to '.$pun_config['attach_basefolder']."$sub1/$sub2/".$unique_name.'',__FILE__,__LINE__);
 			//return false;
-			
+
 		if(strlen($mime)==0)
 			$mime = attach_create_mime(attach_find_extension($name));
-		
+
 		$post = object_load('forum_post', $post_id);
 		$post->set_have_attach(NULL, true);
 		$post->store();

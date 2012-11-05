@@ -13,13 +13,6 @@ template_js_include('/_bors/js/bors-jquery.js');
 
 jquery_lazyLoadAd::on("'.bors_lazy_ad'");
 
-config_set('locked_db', @file_get_contents('/tmp/mysqldump.lock'));
-if($fm = @filemtime('/tmp/mysqldump.lock'))
-{
-	config_set('locked_db_time', bors_lib_time::smart_interval_vp(time() - $fm));
-	config_set('locked_db_message', @file_get_contents('/tmp/mysqldump-message.lock'));
-}
-
 // template_js_include('/_bors3rdp/js/'.config('js.flowplayer.path').'/'.config('js.flowplayer.include'));
 
 if(config('is_developer'))

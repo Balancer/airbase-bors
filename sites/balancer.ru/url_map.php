@@ -8,4 +8,6 @@ bors_url_map(array(
 	'/users?/(\d+)/? => user_main(1)',
 
 	'/memo/theo/mmorpg/ => balancer_page_dropbox',
+
+	'/forums/attaches/(\d+)/? => balancer_board_attaches_view(1)',
 ));
