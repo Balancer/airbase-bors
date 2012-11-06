@@ -2,6 +2,8 @@
 
 class balancer_board_personal_main extends base_page
 {
+	var $nav_name_ec = 'личный кабинет';
+
 	function title() { return ec('Персональный раздел'); }
 	function is_auto_url_mapped_class() { return true; }
 	function nav_name() { return ec('персональное'); }
