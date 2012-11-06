@@ -2,6 +2,8 @@
 
 class balancer_user_votes extends base_page
 {
+	var $nav_name = 'оценки';
+
 	function title() { return ec('Оценки сообщений пользователя ').$this->user()->title(); }
 	function config_class() { return 'balancer_board_config'; }
 
