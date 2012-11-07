@@ -3,5 +3,5 @@
 class balancer_board_page extends bors_page
 {
 	function config_class() { return 'balancer_board_config'; }
-	function template() { return 'forum/page.html'; }
+	function template() { return 'xfile:forum/page.html'; }
 }
