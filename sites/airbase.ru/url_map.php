@@ -14,7 +14,7 @@ $map = array(
 	'(/top/)(\d+)\.png => airbase_top_logo(2)',
 	'(/top/)(\d+)/logo\.png => airbase_top_logo(2)',
 	'(/forums/)index\.php\?showtopic=(\d+) => redirect:balancer_board_topic(2)',
-	'(/forums/)index\.php\?act=ST&f=\d+&t=(\d+) => redirect:forum_topic(2)',
+	'(/forums/)index\.php\?act=ST&f=\d+&t=(\d+) => redirect:balancer_board_topic(2)',
 	'(/)cgi\-bin/forum/ultimatebb\.cgi\?ubb=get_topic&(f=\d+&t=\d+) => forum_topic_ubb(2)',
 	'/forum/Forum(\d+/HTML/\d+)\.html => forum_topic_ubb(1)',
 
@@ -33,8 +33,8 @@ $map = array(
 	'(.*/)index\.htm => common_redirect(1)',
 	'(.*/)index\-t\.htm => common_redirect(1)',
 
-//	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => forum_topic(1,2)',
-//	'.*viewtopic\.php\?id=(\d+).* => forum_topic(1)',
+//	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => balancer_board_topic(1,2)',
+//	'.*viewtopic\.php\?id=(\d+).* => balancer_board_topic(1)',
 //	'(.*) => base_page_hts(1,host=0)',
 //	'(.*) => airbase_page(1,host=0)',
 

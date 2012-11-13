@@ -1,20 +1,23 @@
 <?php
 
-class forum_tools_topic extends base_page
+class forum_tools_topic extends balancer_board_page
 {
-	function can_be_empty() { return true; }
+	function parents() { return array('balancer_board_topic://'.$this->id()); }
+	function topic() { return bors_load('balancer_board_topic', $this->id()); }
 
-	function parents() { return array('forum_topic://'.$this->id()); }
-	function topic() { return object_load('forum_topic', $this->id()); }
+	function title() { 	return ec('Операции над темой ').$this->topic()->title(); }
+	function nav_name() { return ec('операции над темой'); }
 
-	function title() { 	return ec('Операции над темой'); }
-	function template()
+	function template() { return 'xfile:forum/common.html'; }
+
+	function pre_show()
 	{
-		return 'forum/common.html';
+		template_noindex();
+		return parent::pre_show();
 	}
 
 	function access() { return $this; }
-	function can_read() { template_noindex(); return true; }
+	function can_read() { return true; }
 	function can_action()
 	{
 		$me = bors()->user();
@@ -36,7 +39,7 @@ class forum_tools_topic extends base_page
 		return go($this->topic()->url());
 	}
 
-	function local_data()
+	function body_data()
 	{
 		$db = new driver_mysql(config('punbb.database', 'punbb'));
 		$user_ids = $db->select_array('posts', 'DISTINCT poster_id', array(

@@ -108,10 +108,6 @@
 <div id="pfo{$p->id()}"></div>
 
 <ul class="postfooter">
-<li><script type="text/javascript"><!--
-if(top.me_is_coordinator)
-document.writeln('<label><input type="checkbox" id="_chkbx_p{$p->id()}" onclick="return apfgp(this, {$p->id()})" />&nbsp;отметить</label>')
---></script></li>
 <li><a href="/_bors/ajax/post/info?post={$p->id()}" class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;инфо</a></li>
 <li><a href="#" onclick="pdsh('{$p->id()}'); return false;"
 	{if config('css_bootstrap_is_loaded')}class="btn btn-mini"{/if}

@@ -26,21 +26,3 @@ with(document)
 	if(fontFamily == 'PT Sans')
 		write("<link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=cyrillic' rel='stylesheet' type='text/css'>")
 }
-
-function onLoadPage()
-{
-	if(top.me_is_coordinator)
-	{
-		posts = readCookie('selected_posts', '').split(/,/)
-		for(i in posts)
-		{
-			pid = posts[i]
-			if(is_numeric(pid))
-			{
-				el = document.getElementById('_chkbx_p'+pid)
-				if(el)
-					el.checked = true
-			}
-		}
-	}
-}
