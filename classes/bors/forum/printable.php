@@ -4,7 +4,7 @@ class forum_printable extends forum_topic
 {
 	function uri_name() { return 'printable'; }
 
-    function parents() { return array("forum_topic://".$this->id()); }
+    function parents() { return array("balancer_board_topic://".$this->id()); }
     function nav_name() { return ec('Версия для печати'); }
 
 	function body()

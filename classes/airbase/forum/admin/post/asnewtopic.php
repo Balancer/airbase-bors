@@ -41,7 +41,7 @@ class airbase_forum_admin_post_asnewtopic extends bors_page
 			return true;
 
 		$old_topic = $this->post()->topic();
-		$new_topic = object_new('forum_topic');
+		$new_topic = object_new('balancer_board_topic');
 		$new_topic->set_forum_id($data['target_forum_id'], true);
 		$new_topic->set_title($data['new_topic_title'], true);
 		$new_topic->set_description($data['new_topic_description'], true);

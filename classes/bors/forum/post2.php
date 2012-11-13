@@ -155,8 +155,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function flag_db() { return $this->data['flag_db']; }
 	function warning_id() { return $this->data['warning_id']; }
 
-	function topic() { return bors_load('forum_topic', $this->topic_id()); }
-	function parents() { return array("forum_topic://".$this->topic_id()); }
+	function topic() { return bors_load('balancer_board_topic', $this->topic_id()); }
+	function parents() { return array("balancer_board_topic://".$this->topic_id()); }
 
 	function set_topic_page($page, $dbupd)
 	{
@@ -300,7 +300,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			if(!$tid)
 				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
 
-			$topic = bors_load('forum_topic', $tid);
+			$topic = bors_load('balancer_board_topic', $tid);
 
 			if(!$topic)
 				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
@@ -488,7 +488,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		$this->__move_tree_to_topic($new_tid, $this->topic_id());
 
 		foreach(array_keys($GLOBALS['move_tree_to_topic_changed_topics']) as $tid)
-			bors_load('forum_topic', $tid, array('no_load_cache' => true))->recalculate();
+			bors_load('balancer_board_topic', $tid, array('no_load_cache' => true))->recalculate();
 
 		$this->recalculate();
 	}
@@ -520,7 +520,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		$this->set_topic_id($new_tid, true);
 
-		bors_load('forum_topic', $old_tid)->recalculate();
+		bors_load('balancer_board_topic', $old_tid)->recalculate();
 		$new_topic = bors_load('balancer_board_topic', $new_tid);
 		$new_topic->recalculate();
 
@@ -559,7 +559,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function cache_children()
 	{
 		$res = array(
-			bors_load('forum_topic', $this->topic_id()),
+			bors_load('balancer_board_topic', $this->topic_id()),
 			bors_load('airbase_user_topics', $this->owner_id()),
 			bors_load('balancer_board_blog', $this->id()),
 		);

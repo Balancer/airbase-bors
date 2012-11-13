@@ -24,7 +24,7 @@ class user_test extends user_main
 
 		$post = object_load('forum_post', 1339072);
 		$post->move_tree_to_topic(54897);
-//		object_load('forum_topic', 54897)->recalculate();
+//		object_load('balancer_board_topic', 54897)->recalculate();
 		// 31143
 		// 54897
 		return "Moved";
