@@ -9,7 +9,7 @@ class forum_topic_ipbst extends base_page
 	
 	function url()
 	{
-		$topic = object_load('forum_topic', $this->id());
+		$topic = object_load('balancer_board_topic', $this->id());
 		if(!$topic)
 		{
 			debug_hidden_log('incorrect-urls', $this->id());

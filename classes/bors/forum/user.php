@@ -658,8 +658,8 @@ function avatar_thumb($geo)
 		return $this->__havec('today_posted') ? $this->__lastc() : $this->__setc(objects_count('forum_post', array(
 			'owner_id' => $this->id(), 
 			'create_time>' => time()-86400,
-			'inner_join' => 'forum_topic ON (forum_post.topic_id = forum_topic.id)',
-			'forum_topic.forum_id=' => $forum_id,
+			'inner_join' => 'balancer_board_topic ON (forum_post.topic_id = balancer_board_topic.id)',
+			'balancer_board_topic.forum_id=' => $forum_id,
 		))); 
 	}
 
@@ -673,8 +673,8 @@ function avatar_thumb($geo)
 			'create_time>' => time()-86400*2,
 			'order' => '-create_time',
 			'limit' => $limit,
-			'inner_join' => 'forum_topic ON (forum_post.topic_id = forum_topic.id)',
-			'forum_topic.forum_id=' => $forum_id,
+			'inner_join' => 'balancer_board_topic ON (forum_post.topic_id = balancer_board_topic.id)',
+			'balancer_board_topic.forum_id=' => $forum_id,
 		));
 
 		$first_in_day = $first_in_day[count($first_in_day)-1];

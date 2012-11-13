@@ -5,7 +5,7 @@
 {foreach from=$blog_records item=r}
 {bors_class_load class="forum_post"  id=$r->id() var="p"}
 {if $p}
-{bors_class_load class="forum_topic" id=$p->topic_id() var="t"}
+{bors_class_load class="balancer_board_topic" id=$p->topic_id() var="t"}
 {if $t}
 {assign var="f" value=$t->forum()}
 {* assign var="p" value=$t->first_post() *}

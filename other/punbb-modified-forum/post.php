@@ -685,7 +685,7 @@ if ($tid)
 	$action = $lang_post['Post a reply'];
 //	$form = '<form id="post" method="post" action="post.php?action=post&amp;tid='.$tid.'" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">';
 
-	$topic = object_load('forum_topic', $tid);
+	$topic = object_load('balancer_board_topic', $tid);
 	
 	$form = "";
 //	if($topic->num_replies() >= 500)

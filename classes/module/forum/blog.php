@@ -37,7 +37,7 @@ class module_forum_blog extends base_page
 		$posts = objects_array('forum_post', array('id IN' => array_filter(array_unique($x['id'])), 'by_id' => true));
 		$users = objects_array('balancer_board_user', array('id IN' => array_filter(array_unique($x['owner_id'])), 'by_id' => true));
 		$forums = objects_array('forum_forum', array('id IN' => array_filter(array_unique($x['owner_id'])), 'by_id' => true));
-		$topics = objects_array('forum_topic', array('id IN' => array_filter(array_unique(bors_field_array_extract($posts, 'topic_id')))));
+		$topics = objects_array('balancer_board_topic', array('id IN' => array_filter(array_unique(bors_field_array_extract($posts, 'topic_id')))));
 
 		$this->_data[$page_id] = array(
 				'blog_records' => $blogs,

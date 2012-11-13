@@ -96,7 +96,7 @@ if (isset($_POST['delete']))
 		delete_post($id, $cur_post['tid']);
 
 		update_forum($cur_post['fid']);
-		$topic = object_load('forum_topic', $cur_post['tid'], array('no_load_cache' => true));
+		$topic = object_load('balancer_board_topic', $cur_post['tid'], array('no_load_cache' => true));
 		$topic->cache_clean();
 
 		redirect('viewtopic.php?id='.$cur_post['tid'], $lang_delete['Post del redirect']);

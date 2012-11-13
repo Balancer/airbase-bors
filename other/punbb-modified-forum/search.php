@@ -626,7 +626,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		$forum_list = array();
 		while ($forum_list[] = $db->fetch_row($result));
 
-		$topics = objects_array('forum_topic', array('id IN' => $topic_ids, 'by_id' => true));
+		$topics = objects_array('balancer_board_topic', array('id IN' => $topic_ids, 'by_id' => true));
 
 		// Finally, lets loop through the results and output them
 		for ($i = 0; $i < count($search_set); ++$i)

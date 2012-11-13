@@ -47,7 +47,7 @@
 			{/if}
 			{if $i.uri|regex_match:"^topic://(\d+)"}
 				{assign var="topic_id" value=$i.uri|regex_replace:"!^topic://(\d+).*!":"\\1"}
-				{bors_object_load var="obj" class="forum_topic" id=$topic_id}
+				{bors_object_load var="obj" class="balancer_board_topic" id=$topic_id}
 			{/if}
 			{if $obj}
 				<a href="{$obj->url()}">{$obj->title()}</a>

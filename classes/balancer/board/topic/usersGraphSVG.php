@@ -9,7 +9,7 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 		if(bors()->client()->is_bot())
 		{
 			debug_hidden_log('002', 'bot trapped!');
-			return go(object_load('forum_topic', $this->id())->url());
+			return go(object_load('balancer_board_topic', $this->id())->url());
 		}
 
 		return false;
@@ -20,7 +20,7 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 		debug_hidden_log('000', 'check for balancer_board_topic_usersGraphSVG');
 
 		$posts = objects_array('forum_post', array('topic_id' => $this->id()));
-		$topic = object_load('forum_topic', $this->id());
+		$topic = object_load('balancer_board_topic', $this->id());
 
 		$users = array();
 		$edges = array();

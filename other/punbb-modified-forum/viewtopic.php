@@ -148,7 +148,7 @@ if($pun_user['is_guest'])
 	if($pid)
 		go(class_load("forum_post", intval($pid))->url(), true);
 	else
-		go(class_load("forum_topic", intval($id))->url(max(1, intval(@$_GET['p']))), true);
+		go(class_load("balancer_board_topic", intval($id))->url(max(1, intval(@$_GET['p']))), true);
 }
 
 for($ii=0; $ii<2; $i++)

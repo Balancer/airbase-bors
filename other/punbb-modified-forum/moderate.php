@@ -509,7 +509,7 @@ else if (isset($_REQUEST['open']) || isset($_REQUEST['close']))
 
 		foreach($topics as $topic_id)
 		{
-			$topic = class_load('forum_topic', $topic_id);
+			$topic = class_load('balancer_board_topic', $topic_id);
 			$topic->set_closed($action, true);
 		}
 		
@@ -528,7 +528,7 @@ else if (isset($_REQUEST['open']) || isset($_REQUEST['close']))
 		if ($topic_id < 1)
 			message($lang_common['Bad request']);
 
-		$topic = class_load('forum_topic', $topic_id);
+		$topic = class_load('balancer_board_topic', $topic_id);
 		$topic->set_closed($action, true);
 		balancer_board_action::add($topic, "Тема ".($action?'закрыта':'открыта'), true);
 
@@ -547,7 +547,7 @@ else if (isset($_GET['stick']))
 	if ($stick < 1)
 		message($lang_common['Bad request']);
 
-	$topic = class_load('forum_topic', $stick);
+	$topic = class_load('balancer_board_topic', $stick);
 	$topic->set_sticky(1, true);
 
 	redirect('viewtopic.php?id='.$stick, $lang_misc['Stick topic redirect']);
@@ -563,7 +563,7 @@ else if (isset($_GET['unstick']))
 	if ($unstick < 1)
 		message($lang_common['Bad request']);
 
-	$topic = class_load('forum_topic', $unstick);
+	$topic = class_load('balancer_board_topic', $unstick);
 	$topic->set_sticky(0, true);
 
 	redirect('viewtopic.php?id='.$unstick, $lang_misc['Unstick topic redirect']);

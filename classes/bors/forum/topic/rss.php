@@ -9,7 +9,7 @@ class forum_topic_rss extends forum_topic
 	
 	function render($object)
 	{
-		$topic = object_load('forum_topic', $object->id());
+		$topic = object_load('balancer_board_topic', $object->id());
 		$forum = object_load('forum_forum', $topic->forum_id());
 		
 		if(!$forum->can_read())
