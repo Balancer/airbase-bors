@@ -69,7 +69,7 @@ if($head_append)
 ?>
 </head>
 
-<body onload="onLoadPage()" id="body">
+<body id="body">
 
 <div class="minwidth"><div class="wrapper">
 

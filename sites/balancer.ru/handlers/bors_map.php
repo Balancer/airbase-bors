@@ -23,8 +23,8 @@ $map = array(
 	'/_bors/ajax/thumb\-(up|down)\?object=(.+) => balancer_ajax_thumb_vote(2,vote=1)',
 	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
 
-	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => forum_topic(1,2)',
-	'.*viewtopic\.php\?id=(\d+).* => forum_topic(1)',
+	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => balancer_board_topic(1,2)',
+	'.*viewtopic\.php\?id=(\d+).* => balancer_board_topic(1)',
 	'.*viewforum\.php\?id=(\d+).* => forum_forum(1)',
 	'.*/index.php => forum_main',
 
@@ -32,7 +32,7 @@ $map = array(
 	'/tools/search/result/ => bors_tools_search_result',
 	'/tools/search/ => bors_tools_search',
 
-	'(/forum/)topic/\d+/(\d+),new/ => forum_topic(2)',
+	'(/forum/)topic/\d+/(\d+),new/ => balancer_board_topic(2)',
 	'(/)forum(\d+)/ => redirect:forum_forum(2)',
 
 	'/\d{4}/\d{1,2}/\d{1,2}/post\-(\d+)\.html => forum_post(1)',
@@ -41,24 +41,24 @@ $map = array(
 	"{$forums}\d{4}/\d{1,2}/t(\d+)/attaches/(\d+)\.html => balancer_board_topic_attaches(2,3)",
 
 	"{$forums}forum/punbb/viewtopic\.php\?pid=(\d+) => forum_post(2)",
-	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-.+\.html\?? => redirect:forum_topic(2,4)",
-	"{$forums}\d{4}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+\.html\?? => forum_topic(2,4)",
-	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-\-.+\.html\?? => forum_topic(2,4)",
-	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-.+\.html\?? => redirect:forum_topic(2,4)",
-	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+ => redirect:forum_topic(2,4)",
-	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(\d+).* => redirect:forum_topic(2,3)",
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-.+\.html\?? => redirect:balancer_board_topic(2,4)",
+	"{$forums}\d{4}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+\.html\?? => balancer_board_topic(2,4)",
+	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-\-.+\.html\?? => balancer_board_topic(2,4)",
+	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-.+\.html\?? => redirect:balancer_board_topic(2,4)",
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+ => redirect:balancer_board_topic(2,4)",
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(\d+).* => redirect:balancer_board_topic(2,3)",
 	"{$forums}\d{4}/\d{1,2}/printable\-(\d+)\-\-.* => forum_printable(2)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+)\-\-.* => redirect:forum_printable(2)",
 
-	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(last|new).* => forum_topic(2,3)",
-	"{$forums}\d{4}/\d{1,2}/topic\-(\d+),(last|new).* => forum_topic(2,3)",
-	"{$forums}\d{4}/\d{1,2}/t(\d+),(last|new).* => forum_topic(2,3)",
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(last|new).* => balancer_board_topic(2,3)",
+	"{$forums}\d{4}/\d{1,2}/topic\-(\d+),(last|new).* => balancer_board_topic(2,3)",
+	"{$forums}\d{4}/\d{1,2}/t(\d+),(last|new).* => balancer_board_topic(2,3)",
 
-	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+).* => forum_topic(2)",
-	"{$forums}\d{4}/\d{1,2}/topic\-(\d+).* => forum_topic(2)",
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+).* => balancer_board_topic(2)",
+	"{$forums}\d{4}/\d{1,2}/topic\-(\d+).* => balancer_board_topic(2)",
 
-	'/forum/topic/\d+/(\d+)/ => redirect:forum_topic(1)',
-	'/forum/topic/\d+/(\d+),(\d+)/ => redirect:forum_topic(1,2)',
+	'/forum/topic/\d+/(\d+)/ => redirect:balancer_board_topic(1)',
+	'/forum/topic/\d+/(\d+),(\d+)/ => redirect:balancer_board_topic(1,2)',
 
 	'/test/ => airbase_main',
 

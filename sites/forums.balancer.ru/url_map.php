@@ -13,7 +13,7 @@ $map = array(
 	'/index.html => balancer_board_main',
 	'/index\-(\d+)\.html => balancer_board_main(1,1)',
 
-	'/\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+\.html => forum_topic(1,3)',
+	'/\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+\.html => balancer_board_topic(1,3)',
 	'/\d{4}/\d{1,2}/\d{1,2}/forum\-(\d+)(,(\d+))?\-\-.+\.html => forum_forum(1,3)',
 	'/\d{4}/\d{1,2}/\d{1,2}/forum\-(\d+)/? => forum_forum(1,3)',
 	'/\d{4}/\d{1,2}/\d{1,2}/category\-(\d+)\-\-.+\.html => forum_category(1)',

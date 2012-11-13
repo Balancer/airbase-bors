@@ -151,4 +151,10 @@ class balancer_board_topic extends forum_topic
 	{
 		return $this->titled_link_ex(array('page' => 'new'));
 	}
+
+	function pre_show()
+	{
+		balancer_board_posts_view::container_init();
+		return parent::pre_show();
+	}
 }

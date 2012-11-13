@@ -72,10 +72,6 @@
 <div id="pfo{$this->id()}"></div>
 
 <ul class="postfooter">
-<li><script type="text/javascript"><!--
-if(top.me_is_coordinator)
-document.writeln('<label><input type="checkbox" id="_chkbx_p{$this->id()}" onclick="return apfgp(this, {$this->id()})" />&nbsp;отметить</label>')
---></script></li>
 <li><a href="#" onclick="pdsh('{$this->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;инструменты</a></li>
 <li class="pages_select">
  <a href="{$this->topic()->forum()->category()->category_base_full()}post.php?tid={$this->topic_id()}&amp;qid={$this->id()}" 
