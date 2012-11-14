@@ -219,7 +219,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 {if $me_id}
 | <a href="http://forums.balancer.ru/personal/updated/">нечитанное обновлённое</a>
 | <a href="http://www.balancer.ru/users/{$me_id}/votes/">оценки</a>
-{if $this->extends_class_name() == 'balancer_board_topic'}
+{if $this->class_name() == 'balancer_board_topic'}
 | <a href="http://www.balancer.ru/forum/user-{$me_id}-posts-in-topic-{$this->id()}/">Ваше в теме</a>
 {/if}
 {/if}
