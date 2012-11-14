@@ -36,7 +36,7 @@ class balancer_board_blog extends forum_blog
 	function feed_entry()
 	{
 		return bors_find_first('bors_external_feeds_entry', array(
-			'target_class_name' => 'balancer_board_post',
+			'target_class_name IN' => array('balancer_board_post', 'forum_post'),
 			'target_object_id' => $this->id(),
 		));
 	}

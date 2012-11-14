@@ -88,7 +88,7 @@ if (isset($_POST['delete']))
 	}
 	else
 	{
-		if($blog = object_load('forum_blog', $id))
+		if($blog = object_load('balancer_board_blog', $id))
 			$blog->delete();
 
 		attach_delete_post($id);	// Attachment Mod , delete the attachments in this post (orphan check is checked in this function)
