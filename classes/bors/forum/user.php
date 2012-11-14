@@ -682,7 +682,7 @@ function avatar_thumb($geo)
 		return $this->set_attr('next_can_post', $first_in_day ? $first_in_day->create_time()+86400 : NULL);
 	}
 
-	function blog() { return object_load('forum_blog', $this->id()); }
+	function blog() { return object_load('balancer_board_blog', $this->id()); }
 
 	function utmx_update()
 	{

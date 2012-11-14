@@ -31,7 +31,7 @@ class module_forum_blog extends base_page
 		else
 			$where['forum_id NOT IN'] = $skip_forums;
 
-		$blogs = objects_array('forum_blog', $where);
+		$blogs = objects_array('balancer_board_blog', $where);
 
 		$x = bors_fields_array_extract($blogs, array('id', 'owner_id', 'forum_id'));
 		$posts = objects_array('forum_post', array('id IN' => array_filter(array_unique($x['id'])), 'by_id' => true));

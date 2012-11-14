@@ -56,7 +56,7 @@ if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
 
 $cur_post = $db->fetch_assoc($result);
-$blog = object_load('forum_blog', $id);
+$blog = object_load('balancer_board_blog', $id);
 $post = object_load('balancer_board_post', $id);
 $topic = $post->topic();
 $forum = $topic->forum();
@@ -186,7 +186,7 @@ if (isset($_POST['form_sent']))
 		{
 			if(!$blog)
 			{
-				$blog = new forum_blog($post->id());
+				$blog = new balancer_board_blog($post->id());
 				$blog->new_instance();
 			}
 

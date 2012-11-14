@@ -1,5 +1,7 @@
 <?php
 
+// exit();
+
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Это реально занятый в системе скрипт! Не экспериментировать!
 
@@ -21,10 +23,9 @@ echo 'Found topic for '.$kws." = {$topic->debug_title()}\n";
 exit();
 */
 
-foreach(objects_array('bors_external_feeds_entry', array('target_object_id' => 0, 'is_suspended IS NULL')) as $entry)
-	$entry->set_pub_date(0, true);
-
-bors()->changed_save();
+//foreach(objects_array('bors_external_feeds_entry', array('target_object_id' => 0, 'is_suspended IS NULL')) as $entry)
+//	$entry->set_pub_date(0, true);
+//bors()->changed_save();
 
 //$feed = bors_load('bors_external_feed', 14);
 foreach(objects_array('bors_external_feed', array('is_suspended!=' => 1)) as $feed)
