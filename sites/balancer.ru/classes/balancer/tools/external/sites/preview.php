@@ -46,12 +46,14 @@ class balancer_tools_external_sites_preview extends bors_image_png
 
 		$thumb_file = $_SERVER['DOCUMENT_ROOT'].$thumb_url;
 
+		debug_hidden_log('sites_preview_log', "Thumbnail $url ($geo)");
+
 		if(!file_exists($file))
 		{
 			mkpath(dirname($file));
 			system(config('bin.wkhtmltoimage', "/opt/bin/wkhtmltoimage-amd64")
 				." --width 1024 --height 768"
-				." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
+//				." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
 				." --minimum-font-size 20"
 				." --enable-plugins"
 				." ".escapeshellcmd($url)." ".escapeshellcmd($file)

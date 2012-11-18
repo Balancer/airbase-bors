@@ -344,30 +344,34 @@ pageTracker._trackPageview();
 {* amung.us - 80x15 *}
 <span class="bors_lazy_load"><!--<a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a>--></span>
 
-<!--LiveInternet counter--><script type="text/javascript"><!--
-document.write("<a href='http://www.liveinternet.ru/click' "+
-"target=_blank><img src='//counter.yadro.ru/hit?t26.10;r"+
-escape(document.referrer)+((typeof(screen)=="undefined")?"":
-";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
-screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
-";h"+escape(document.title.substring(0,80))+";"+Math.random()+
-"' alt='' title='LiveInternet: показано число посетителей за"+
-" сегодня' "+
-"border='0' width='88' height='15'><\/a>")
-//--></script><!--/LiveInternet-->
+<div id="liveinternet" style="width: 88px; height: 15px; margin: 0 0 4px 0"><span class="bors_lazy_load"><!--
+<script type="text/javascript">
+$('#liveinternet').html("<a href='http://www.liveinternet.ru/click' "+
+	"target=_blank><img src='//counter.yadro.ru/hit?t26.10;r"+
+	escape(document.referrer)+((typeof(screen)=="undefined")?"":
+	";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+	screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+	";h"+escape(document.title.substring(0,80))+";"+Math.random()+
+	"' alt='' title='LiveInternet: показано число посетителей за"+
+	" сегодня' "+
+	"border='0' width='88' height='15'><\/a>")
+</script>
+--></span>
+</div>
 
-<br />
+<div id="mapyourvisitors" style="width: 185px; height: 93px; margin: 0 0 4px 2px">
+<span class="bors_lazy_load"><!--
+<script type="text/javascript">
+$('#mapyourvisitors').html('<a href="http://www.mapyourvisitors.com/map2537.php"><img src="http://www.mapyourvisitors.com/185/2537.jpg?r=' + escape(document.referrer) + '&u=' + escape(document.URL) + '" border="0" alt="MapYourVisitors.COM - My visitors map" /></a>');
+</script>
+--></span>
+</div>
 
-{*
-<script type="text/javascript"><!--
-kod = 2537;
-width = 185;
-document.write('<a href="http://www.mapyourvisitors.com/map' + kod + '.php"><img src="http://www.mapyourvisitors.com/' + width + '/' + kod + '.jpg?r=' + escape(document.referrer) + '&u=' + escape(document.URL) + '" border="0" alt="MapYourVisitors.COM - My visitors map" /></a>');
-//--></script>
-<br />
-*}
-
-{* <span class="bors_lazy_load"><!--<center><a href="http://s02.flagcounter.com/more/NNik"><img src="http://s02.flagcounter.com/count/NNik/bg=FFFFFF/txt=000000/border=CCCCCC/columns=2/maxflags=12/viewers=0/labels=0/" alt="free counters" /></a></center>--></span> *}
+<span class="bors_lazy_load"><!--
+<center><a href="http://s02.flagcounter.com/more/NNik">
+<img src="http://s02.flagcounter.com/count/NNik/bg=FFFFFF/txt=000000/border=CCCCCC/columns=2/maxflags=12/viewers=0/labels=0/" alt="free counters" /></a>
+</center>
+--></span>
 <br/>
 
 </div>{* /статистика *}
