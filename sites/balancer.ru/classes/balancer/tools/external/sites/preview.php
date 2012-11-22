@@ -12,17 +12,24 @@ class balancer_tools_external_sites_preview extends bors_image_png
 			$id = $this->id();
 			if(preg_match('/^(\S+)\-(\d+x\d+)$/', $id, $m))
 			{
-				$url = base64_decode($m[1]);
+				$url = blib_string::base64_decode2($m[1]);
 				$geo = $m[2];
 			}
 			else
 			{
-				$url = base64_decode($id);
+				$url = blib_string::base64_decode2($id);
 				$geo = '400x300';
 			}
 
-			$store_path = "/_cg/_st/{$id[0]}/{$id[1]}/";
-			$file_name = $id.'.png';
+			$url_data = parse_url($url);
+			$host = preg_replace('/^www\./', '', $url_data['host']);
+			$host_parts = array_reverse(explode('.', $host));
+
+			$id = blib_string::base64_encode2($url);
+
+			$store_path = "/_cg/_st/{$host_parts[0]}/{$host_parts[1][0]}/{$host_parts[1]}/";
+
+			$file_name = "{$id}-{$geo}.png";
 			$thumb_url = NULL;
 			$file = $_SERVER['DOCUMENT_ROOT'] . $store_path . $file_name;
 			$resize = $geo;
@@ -46,23 +53,52 @@ class balancer_tools_external_sites_preview extends bors_image_png
 
 		$thumb_file = $_SERVER['DOCUMENT_ROOT'].$thumb_url;
 
-		debug_hidden_log('sites_preview_log', "Thumbnail $url ($geo)");
+		debug_hidden_log('sites_preview', "Thumbnail $url ($geo); ".escapeshellcmd($url));
 
-		if(!file_exists($file))
+		$bin = config('bin.wkhtmltoimage', "/opt/bin/wkhtmltoimage-amd64");
+
+		if(preg_match('/wikipedia/', $url))
+			$bin = "$bin -p 127.0.0.1:8118";
+
+//		var_dump($bin); exit('x');
+
+		$cmd = $bin
+			." --width 1024 --height 768"
+//			." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
+			." --minimum-font-size 20"
+			." --enable-plugins --encoding \"utf-8\""
+			." ".escapeshellcmd($url)." ".escapeshellcmd($file);
+
+		$cmdn = "$bin -n"
+			." --width 1024 --height 768"
+//			." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
+			." --minimum-font-size 20"
+			." --enable-plugins --encoding \"utf-8\""
+			." ".escapeshellcmd($url)." ".escapeshellcmd($file);
+
+		mkpath(dirname($file));
+
+		if(!file_exists($file) || !filesize($file))
 		{
-			mkpath(dirname($file));
-			system(config('bin.wkhtmltoimage', "/opt/bin/wkhtmltoimage-amd64")
-				." --width 1024 --height 768"
-//				." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
-				." --minimum-font-size 20"
-				." --enable-plugins"
-				." ".escapeshellcmd($url)." ".escapeshellcmd($file)
-			);
+			@unlink($file);
+			system($cmd);
+		}
+
+		if(!file_exists($file) || !filesize($file))
+		{
+			@unlink($file);
+			system($cmdn);
 		}
 
 		if(!file_exists($file))
 		{
-			debug_hidden_log('sites_preview', "Image $url ($geo) error", 1);
+			debug_hidden_log('sites_preview', "Image $url ($geo) error. Empty file. cmd=$cmd", 1);
+			return NULL;
+		}
+
+		if(!filesize($file))
+		{
+			debug_hidden_log('sites_preview', "Image $url ($geo) error: zero size. cmd=$cmd", 1);
 			return NULL;
 		}
 
