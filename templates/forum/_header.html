@@ -119,7 +119,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 </tr></table>
 
 {* if $this->keywords_string()}<br /><i>Ключевые слова: {$this->keywords_string()}</i>{/if *}
-			{if $this->keywords_linked()}<div class="keywords">
+			{if $this->get('keywords_linked')}<div class="keywords">
 
 {if $me_id > 0}
 <script>{literal}
@@ -337,14 +337,22 @@ pageTracker._trackPageview();
 
 {include file="xfile:balancer/board/count-mail.ru.html"}
 
+<div style="width: 88px; height: 31px; float: left; margin: 0 0 4px 7px;">
 <span class="bors_lazy_load"><!--<a href="http://top.airbase.ru/"><img src="http://top.airbase.ru/?id=1" width="88" height="31" alt="АвиаТОП" title="Числа: место в рейтинге, хитов всего и хитов в сутки" /></a>--></span>
+</div>
+
+<div class="clear">&nbsp;</div>
 
 {include file="xfile:balancer/board/count-yandex.html"}
 
 {* amung.us - 80x15 *}
+<div style="width: 80px; height: 15px; float: left; margin: 0 0 4px 7px;">
 <span class="bors_lazy_load"><!--<a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a>--></span>
+</div>
 
-<div id="liveinternet" style="width: 88px; height: 15px; margin: 0 0 4px 0"><span class="bors_lazy_load"><!--
+<div class="clear">&nbsp;</div>
+
+<div id="liveinternet" style="width: 88px; height: 15px; margin: 0 7px 4px 0"><span class="bors_lazy_load"><!--
 <script type="text/javascript">
 $('#liveinternet').html("<a href='http://www.liveinternet.ru/click' "+
 	"target=_blank><img src='//counter.yadro.ru/hit?t26.10;r"+
@@ -359,10 +367,10 @@ $('#liveinternet').html("<a href='http://www.liveinternet.ru/click' "+
 --></span>
 </div>
 
-<div id="mapyourvisitors" style="width: 185px; height: 93px; margin: 0 0 4px 2px">
+<div id="mapyourvisitors" style="width: 190px; height: 95px; margin: 0 0 5px 0">
 <span class="bors_lazy_load"><!--
 <script type="text/javascript">
-$('#mapyourvisitors').html('<a href="http://www.mapyourvisitors.com/map2537.php"><img src="http://www.mapyourvisitors.com/185/2537.jpg?r=' + escape(document.referrer) + '&u=' + escape(document.URL) + '" border="0" alt="MapYourVisitors.COM - My visitors map" /></a>');
+$('#mapyourvisitors').html('<a href="http://www.mapyourvisitors.com/map2537.php"><img src="http://www.mapyourvisitors.com/190/2537.jpg?r=' + escape(document.referrer) + '&u=' + escape(document.URL) + '" border="0" alt="MapYourVisitors.COM - My visitors map" /></a>');
 </script>
 --></span>
 </div>
