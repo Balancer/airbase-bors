@@ -100,7 +100,12 @@ if ($action == 'change_pass')
 		$is_admin = $pun_user['g_id'] == PUN_ADMIN;
 
 		if(!$is_admin && !$user->check_password($old_password, false))
+		{
+			debug_hidden_log('_pass_ch_err', "old=$old_password, new={$_POST['req_new_password1']}");
 			message($lang_profile['Wrong pass'].' [1]');
+		}
+		else
+			debug_hidden_log('_pass_ch_ok', "old=$old_password, new={$_POST['req_new_password1']}");
 
 		if($new_password1 != $new_password2)
 			message($lang_prof_reg['Pass not match']);

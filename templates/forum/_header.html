@@ -16,7 +16,7 @@
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
-	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-929-min.css" />
+	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-495-min.css" />
 
 {literal}
 <!--[if IE]><style>
@@ -179,6 +179,10 @@ createCookie('readedTopics', readed.join(' '), 3)
 {*
 <div class="yellow_box">А вы знаете, что на форумах <a href="http://www.balancer.ru/chat/">снова оживлён чат</a>?</div>
 *}
+
+{if $me_id}
+<div class="yellow_box" style="font-size: 14pt!important">Всем рекомендуется <a href="http://www.balancer.ru/support/2012/11/t87135--rekomenduyu-pomenyat-paroli.3718.html">сменить пароли</a></div>
+{/if}
 
 {if $error_message}<div class="red_box"   >{$error_message}</div>{/if}
 {if $notice_message}<div class="yellow_box">{$notice_message}</div>{/if}
