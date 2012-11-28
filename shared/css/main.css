@@ -327,6 +327,11 @@ table.small td.small {
 	padding: 2px;
 }
 
+.big {
+	font-size: 2em;
+	padding: 2px;
+}
+
 .copyright {
 	margin: 24px 0px 0px 0px;
 	text-align: right;
@@ -559,7 +564,7 @@ blockquote .box {
 	padding: 2px;
 	margin: 2px 0;
 	background-color: #ffc;
-	font-size: xx-small;
+	font-size: x-small;
 	color: #884;
 }
 
