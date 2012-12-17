@@ -1,0 +1,2 @@
+extends: bors_page_meta_main
+config_class: balancer_board_config

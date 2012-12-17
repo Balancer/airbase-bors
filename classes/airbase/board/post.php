@@ -141,7 +141,7 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 				array(
 					'cr_type' => 'save_cr',
 					'forum_type' => 'punbb',
-					'forum_base_uri' => 'http://balancer.ru/forum',
+					'forum_base_uri' => 'http://www.balancer.ru/forum',
 					'sharp_not_comment' => true,
 					'html_disable' => 'direct',
 					'uri' => $this->internal_uri(),
@@ -311,7 +311,7 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 
 	function url() 
 	{ 
-		return 'http://balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
+		return 'http://www.balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
 	}
 		
 	function title() { return $this->topic()->title()." <small>[".$this->nav_name()."]</small>"; }

@@ -36,6 +36,13 @@ class airbase_user_reputation extends base_page_db
 
 	function cache_groups_parent() { return "user-{$this->user_id()}-reputation"; }
 
+	function auto_objects()
+	{
+		return array_merge(parent::auto_objects(), array(
+			'voter' => 'balancer_board_user(owner_id)',
+		));
+	}
+
 	function refer_link()
 	{
 		$ref = $this->refer();
@@ -106,5 +113,31 @@ class airbase_user_reputation extends base_page_db
 			return "<span style=\"color:green\">+".intval($this->score()).($append_text ? ": $append_text" : '')."</span>";
 		else
 			return "<span style=\"color:red\">".$this->score().($append_text ? ": $append_text" : '')."</span>";
+	}
+
+	function comment_short()
+	{
+		$html = lcml_bb(truncate($this->comment(), 500));
+
+		$html .= "<script>add_warn('{$this->internal_uri()}', {$this->voter_id()})</script>";
+		if($this->refer())
+			$html .= "<div style=\"font-size: 6pt; border-top: 1px dotted #888; color: #888;\">// За: {$this->refer_link()}</div>";
+
+		return $html;
+	}
+
+	function items_list_table_row_class()
+	{
+		return array( ($this->score() > 0 ? 'pos' : 'neg' ) . '_reputation');
+	}
+
+	function item_list_fields()
+	{
+		return array(
+			'ctime' => 'Дата',
+			'user()->reputation_titled_url()' => 'Кому',
+			'voter()->titled_link()' => 'От кого',
+			'comment_short' => 'Комментарий',
+		);
 	}
 }
