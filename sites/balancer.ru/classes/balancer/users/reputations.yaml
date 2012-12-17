@@ -1,2 +1,5 @@
 extends: balancer_board_meta_main
 main_class: airbase_user_reputation
+
+where[]:
+	is_deleted: 0
