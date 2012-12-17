@@ -15,10 +15,11 @@ class users_toprep extends base_page
 
 	function body_data()
 	{
-		$latest = bors_find_all('airbase_user_reputation', array('is_deleted' => false, 'order' => '-create_time', 'limit' => 50));
+		$latest = bors_find_all('airbase_user_reputation', array('is_deleted' => false, 'order' => '-create_time', 'limit' => 30));
 		$user_ids = array();
 		foreach($latest as $rep)
 			$user_ids[$rep->user_id()] = $user_ids[$rep->voter_id()] = true;
+
 
 		return array(
 			'high' => objects_array('balancer_board_user', array('order' => '-reputation', 'limit' => 50)),
@@ -29,6 +30,8 @@ class users_toprep extends base_page
 
 			'latest' => $latest,
 			'users'	=> objects_array('balancer_board_user', array('id IN' => array_keys($user_ids), 'by_id' => true)),
+
+			'total_votes' => bors_count('airbase_user_reputation', array('is_deleted' => false)),
 		);
 	}
 

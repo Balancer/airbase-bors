@@ -28,8 +28,6 @@ class airbase_user_reputation extends base_page_db
 		);
 	}
 
-	function owner() { return object_load('bors_user', $this->owner_id()); }
-	function target_user() { return object_load('bors_user', $this->user_id()); }
 	function class_title() { return 'Запись в репутации'; }
 	function title() { return ($this->score() > 0 ? '+1' : '-1').' от '.$this->owner()->title().' к '.$this->target_user()->title(); }
 	function titled_url() { return $this->title(); }
@@ -39,7 +37,8 @@ class airbase_user_reputation extends base_page_db
 	function auto_objects()
 	{
 		return array_merge(parent::auto_objects(), array(
-			'voter' => 'balancer_board_user(owner_id)',
+			'owner' => 'balancer_board_user(owner_id)',
+			'target_user' => 'balancer_board_user(user_id)',
 		));
 	}
 
@@ -135,8 +134,8 @@ class airbase_user_reputation extends base_page_db
 	{
 		return array(
 			'ctime' => 'Дата',
-			'user()->reputation_titled_url()' => 'Кому',
-			'voter()->titled_link()' => 'От кого',
+			'target_user()->reputation_titled_url()' => 'Кому',
+			'owner()->titled_link()' => 'От кого',
 			'comment_short' => 'Комментарий',
 		);
 	}

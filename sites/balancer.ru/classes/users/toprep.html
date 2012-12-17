@@ -30,7 +30,7 @@
 
 </td></table>
 
-<h3>Крайние изменения репутации</h3>
+<h3>Последние изменения репутации</h3>
 <table class="btab w100p">
 <tr><th>Дата</th><th>Кому</th><th>От кого</th><th>Комментарий</th></tr>
 {foreach from=$latest item="r"}
@@ -46,7 +46,11 @@
 	</td>
 </tr>
 {/foreach}
+<tr><td colspan="4">
+	<a href="/users/reputations/">»»» Все записи репутаций ({$total_votes}) »»»</a>
+</tr></tr>
 </table>
+
 
 <h3>Значения репутации на основе равных весов голосовавших</h3>
 <table width="100%" cellPadding="0" cellSpacing="0"><tr><td>
