@@ -9,7 +9,8 @@ class balancer_board_full extends balancer_board_page
 	function title() { return 'Все форумы Balancer.ru'; }
 	function nav_name() { return 'все'; }
 	function auto_map() { return true; }
-	function template() { return 'xfile:forum/wide.html'; }
+//	function template() { return 'xfile:forum/wide.html'; }
+	function template() { return config('is_developer') ? 'xfile:airbase/wide.html' : 'xfile:forum/wide.html'; }
 
 	function body()
 	{
