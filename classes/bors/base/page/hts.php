@@ -12,6 +12,7 @@ class base_page_hts extends base_page_db
 	static function id_prepare($url)
 	{
 		$url = preg_replace('!^(http://[^/]+):\d+!', '$1', $url);
+		$url = preg_replace('!^http://www\.!', 'http://', $url);
 
 		if(preg_match('!^(.+/)index\.phtml$!', $url, $m))
 			$url = $m[1];
@@ -119,7 +120,12 @@ class base_page_hts extends base_page_db
 	}
 
 	function cache_static() { return config('static_forum') ? rand(86400, 7*86400) : 0; }
-	function url() { return $this->id(); }
+
+	function url()
+	{
+		$url = preg_replace('!http://airbase\.ru!', 'http://www.airbase.ru', $this->id());
+		return $url;
+	}
 
 	function post_set($data)
 	{

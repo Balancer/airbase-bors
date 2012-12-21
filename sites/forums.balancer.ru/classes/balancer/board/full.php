@@ -12,6 +12,12 @@ class balancer_board_full extends balancer_board_page
 //	function template() { return 'xfile:forum/wide.html'; }
 	function template() { return config('is_developer') ? 'xfile:airbase/wide.html' : 'xfile:forum/wide.html'; }
 
+	function pre_show()
+	{
+		twitter_bootstrap::load();
+		return parent::pre_show();
+	}
+
 	function body()
 	{
 		$me_group = balancer_board_user::me_group();

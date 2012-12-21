@@ -1,5 +1,7 @@
 extends: balancer_board_meta_main
 main_class: airbase_user_reputation
 
+title: Изменения репутации пользователей
+
 where[]:
 	is_deleted: 0

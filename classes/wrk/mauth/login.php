@@ -23,7 +23,8 @@ class wrk_mauth_login extends bors_page
 			'wrk.ru' => 'http://www.balancer.ru/login/',
 			'balancer.ru' => 'http://www.airbase.ru/login/',
 			'airbase.ru' => 'http://www.tanzpol.org/login/',
-			'tanzpol.org' => 'http://www.wrk.ru/login/',
+			'tanzpol.org' => 'http://www.bionco.ru/login/',
+			'bionco.ru' => 'http://www.wrk.ru/login/',
 		);
 	}
 
