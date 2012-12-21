@@ -26,9 +26,9 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Пользователи <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="http://www.balancer.ru/users/toprep/">Репутация</a></li>
-							<li><a href="http://www.balancer.ru/tools/votes/">Оценки</a></li>
-							<li><a href="http://www.balancer.ru/users/warnings/">Штрафы</a></li>
+							<li><a href="http://www.balancer.ru/users/toprep/"><i class="icon-star"></i> Репутация</a></li>
+							<li><a href="http://www.balancer.ru/tools/votes/"><i class="icon-thumbs-up"></i> Оценки</a></li>
+							<li><a href="http://www.balancer.ru/users/warnings/"><i class="icon-remove-circle"></i> Штрафы</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -61,6 +61,7 @@
 						<button type="submit" class="btn btn-inverse"><i class="icon-search icon-white"></i></button>
 					</div>
 				</form>
+
 
 {if not $me}
 
@@ -97,7 +98,42 @@
 					</li>
 				</ul>
 {/if}
+
+				<ul class="nav pull-right" id="font-select">
+					<li class="dropdown">
+						<a class="dropdown-toggle" href="#" data-toggle="dropdown">Внешний вид <strong class="caret"></strong></a>
+						<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+							<form id="font-select-form">
+								<label>Шрифт</label>
+								<select style="margin-bottom: 15px;" name="font_family">
+									<option>Verdana</option>
+									<option>sans-serif</option>
+									<option>по умолчанию</option>
+								</select>
+								<label>Расстояние от глаз до монитора</label>
+								<select style="margin-bottom: 15px;" name="font_family">
+									<option>30 см</option>
+									<option>45 см</option>
+									<option>70 см</option>
+									<option>по умолчанию</option>
+								</select>
+								<span class="help-block">Размер шрифта и ширина колонки подберутся автоматически</span>
+								<input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Закрыть" />
+							</form>
+						</div>
+					</li>
+				</ul>
+
+
+
 			</div>{* /.nav-collapse *}
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$('#font-select-form').submit(function() {
+		$('#font-select').click();
+		return false;
+	});
+</script>
