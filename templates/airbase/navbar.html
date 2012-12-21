@@ -1,0 +1,103 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li class="dropdown">
+						<a href="http://forums.balancer.ru/" class="brand dropdown-toggle" data-toggle="dropdown"><i class="icon-home icon-white"></i> Форумы <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="http://forums.airbase.ru/guidelines/">Правила</a></li>
+							<li class="only-coordinators"><a href="http://forums.balancer.ru/admin/">Панель управления</a></li>
+							<li><a href="http://forums.balancer.ru/help/">Помощь</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-list icon-white"></i> Темы <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li class="only-registered"><a href="http://www.balancer.ru/forum/punbb/search.php?action=show_new">Обновившиеся с последнего визита</a></li>
+							<li><a href="http://www.balancer.ru/forum/punbb/search.php?action=show_24h">Обновившиеся за сутки</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Пользователи <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="http://www.balancer.ru/users/toprep/">Репутация</a></li>
+							<li><a href="http://www.balancer.ru/tools/votes/">Оценки</a></li>
+							<li><a href="http://www.balancer.ru/users/warnings/">Штрафы</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-globe icon-white"></i> Наши проекты <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li class="dropdown-submenu"><a href="http://balancer.ru/forum/">Форумы</a>
+								<ul class="dropdown-menu">
+									<li><a href="http://forums.airbase.ru/">Форумы Авиабазы</a></li>
+									<li><a href="http://www.balancer.ru/tech/forum/">Наука и техника</a></li>
+									<li><a href="http://www.balancer.ru/community/">Клуб</a></li>
+									<li><a href="http://www.balancer.ru/society/">Человек и общество (в т.ч. политика)</a></li>
+									<li><a href="http://www.balancer.ru/socionics/forum/">Соционика</a></li>
+									<li><a href="http://la2.balancer.ru/forum/">LBR (Игры и Lineage II)</a></li>
+									<li><a href="http://la2.wrk.ru/forum/">L2Fortress</a></li>
+									<li><a href="http://www.balancer.ru/support/">Новости и обратная связь с администрацией</a></li>
+								</ul>
+							</li>
+							<li><a href="http://club.balancer.ru/">Клуб</a></li>
+							<li><a href="http://ls.balancer.ru/">Блоги</a></li>
+							<li><a href="http://airbase.ru/">Авиабаза</a></li>
+							<li><a href="http://navy.balancer.ru/">Флот</a></li>
+							<li><a href="http://tanzpol.org/">Танцпол</a></li>
+						</ul>
+					</li>
+				</ul>
+
+				<form class="form-search navbar-search pull-left" action="http://www.balancer.ru/tools/search/result/" method="get">
+					<div class="input-append">
+						<input type="text" class="search-query" placeholder="Введите слова для поиска" name="q" />
+						<button type="submit" class="btn btn-inverse"><i class="icon-search icon-white"></i></button>
+					</div>
+				</form>
+
+{if not $me}
+
+{* http://mifsud.me/adding-dropdown-login-form-bootstraps-navbar/ *}
+				<ul class="nav pull-right">
+					<li><a href="http://www.balancer.ru/forum/punbb/register.php">Зарегистрироваться</a></li>
+					<li class="divider-vertical"></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" href="http://www.balancer.ru/forum/punbb/login.php" data-toggle="dropdown">Войти <strong class="caret"></strong></a>
+						<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+							<form action="/do-login/" method="post" accept-charset="UTF-8">
+								<input id="user_username" style="margin-bottom: 15px;" type="text" name="req_username" size="30" placeholder="Логин" />
+								<input id="user_password" style="margin-bottom: 15px;" type="password" name="req_password" size="30" placeholder="Пароль" />
+{*
+								<input id="user_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="user[remember_me]" value="1" />
+								<label class="string optional" for="user_remember_me"> Запомнить меня</label> 
+*}
+								<input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Войти" />
+							</form>
+						</div>
+					</li>
+				</ul>
+{else}
+				<ul class="nav pull-right">
+					<li class="divider-vertical"></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" href="{$me->url()}" data-toggle="dropdown"><i class="icon-user icon-white"></i> {$me->title()} <strong class="caret"></strong></a>
+						<ul class="dropdown-menu">
+							<li><a href="{$me->url()}">Ваш профиль</a></li>
+							<li><a href="http://forums.balancer.ru/personal/clients/">Профили браузера</a></li>
+							<li><a href="http://www.balancer.ru/actions/do-logout/">Выход</a></li>
+						</ul>
+
+					</li>
+				</ul>
+{/if}
+			</div>{* /.nav-collapse *}
+		</div>
+	</div>
+</div>

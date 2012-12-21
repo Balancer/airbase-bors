@@ -1,0 +1,26 @@
+{extends file="xfile:meta/xhtml.html"}
+
+{block name="navbar"}
+{if config('css_bootstrap_is_loaded')}
+{include file="xfile:airbase/navbar.html"}
+<div style="margin-bottom: 10px"></div>
+{/if}
+{/block}
+
+{block name="html_head_css"}
+	{foreach $css_list as $css}
+	<link rel="stylesheet" type="text/css" href="{$css}" />
+	{/foreach}
+
+	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/core.css" />
+	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
+	<link rel="stylesheet" type="text/css" href="http://s.wrk.ru/css/airbase-new.css" />
+	<link rel="stylesheet" type="text/css" href="http://s.wrk.ru/css/airbase-new-sky.css" />
+{/block}
+
+{block name="body_title"}
+<div class="body_title">
+<h1>{$this->page_title()}</h1>
+<div class="top-nav">{module class="nav_top" id=$this}</div>
+</div>
+{/block}
