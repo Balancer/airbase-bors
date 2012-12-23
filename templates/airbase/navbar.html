@@ -110,13 +110,8 @@
 									<option>sans-serif</option>
 									<option>по умолчанию</option>
 								</select>
-								<label>Расстояние от глаз до монитора</label>
-								<select style="margin-bottom: 15px;" name="font_family">
-									<option>30 см</option>
-									<option>45 см</option>
-									<option>70 см</option>
-									<option>по умолчанию</option>
-								</select>
+								<label>Расстояние от глаз до монитора, см</label>
+								<div id="mon-distance"></div>
 								<span class="help-block">Размер шрифта и ширина колонки подберутся автоматически</span>
 								<input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Закрыть" />
 							</form>
@@ -132,8 +127,17 @@
 </div>
 
 <script type="text/javascript">
+$(function () {
 	$('#font-select-form').submit(function() {
 		$('#font-select').click();
 		return false;
 	});
+
+	$('#mon-distance').slider({
+		range: 'min',
+		min: 30,
+		max: 300,
+		value: 45,
+	 });
+})
 </script>

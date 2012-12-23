@@ -15,6 +15,7 @@ class balancer_board_full extends balancer_board_page
 	function pre_show()
 	{
 		twitter_bootstrap::load();
+		twitter_bootstrap::jquery_ui();
 		return parent::pre_show();
 	}
 
