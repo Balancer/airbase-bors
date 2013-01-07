@@ -173,11 +173,14 @@ class balancer_board_user extends forum_user
 
 	function _warnings_update()
 	{
+		// SET @t = UNIX_TIMESTAMP()-14*86400;
+		// UPDATE users u SET u.warnings = (SELECT sum(score) FROM warnings w WHERE w.user_id = u.id AND `time` > @t);
 		$warnings_active = bors_find_first('airbase_user_warning', array(
 			'*set' => 'SUM(score) as total',
 			'user_id' => $this->id(),
 			'time>' => time()-WARNING_DAYS*86400,
 		));
+
 		$warnings_total = bors_find_first('airbase_user_warning', array(
 			'*set' => 'SUM(score) as total',
 			'user_id' => $this->id(),
