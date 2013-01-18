@@ -2,7 +2,7 @@
 
 class balancer_board_favorite extends base_object_db
 {
-	function main_db() { return 'punbb'; }
+	function main_db() { return 'AB_FORUMS'; }
 	function main_table() { return 'favorites'; }
 	function main_table_fields()
 	{

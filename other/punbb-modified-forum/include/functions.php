@@ -271,7 +271,7 @@ function generate_navlinks()
 	$ret .= "<ul><li><b>Группы форумов:</b></li>";
 	$ret .= "<li><a href=\"http://www.balancer.ru/forum/\">Все вместе</a></li>";
 
-	$db = new driver_mysql(config('punbb.database', 'punbb'));
+	$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 
 	foreach($db->get_array("SELECT * FROM categories WHERE base_uri != '' ORDER BY disp_position") as $c)
 		$ret .= "<li><a href=\"{$c['base_uri']}\">{$c['cat_name']}</a></li>";
@@ -357,7 +357,7 @@ function delete_topic($topic_id)
 		strip_search_index($post_ids);
 
 		// Delete posts in topic
-		$cms_db = new driver_mysql('punbb');
+		$cms_db = new driver_mysql('AB_FORUMS');
 		$posts = join(",", $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$topic_id"));
 		$db->query('DELETE FROM '.$db->prefix.'posts WHERE topic_id='.$topic_id) or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
 //		$db->query("DELETE FROM {$db->prefix}messages WHERE id IN ($posts)") 
@@ -473,7 +473,7 @@ function get_title($user)
 
 	if(empty($GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']]))
 	{
-		$cdb = new DataBase('punbb');
+		$cdb = new DataBase('AB_FORUMS');
 		$group  = $cdb->get("SELECT * FROM groups WHERE g_id = ".intval($user['group_id']));
 		$GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']] = serialize($group);
 //		$cdb->close();

@@ -2,7 +2,7 @@
 
 class airbase_board_topic extends forum_topic
 {
-	function main_db() { return config('punbb.database', 'punbb'); }
+	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
 	function main_table() { return 'topics'; }
 
 	function uri_name() { return 't'; }
@@ -319,9 +319,9 @@ class airbase_board_topic extends forum_topic
 	{
 		parent::cache_clean_self($page);
 		
-//		$this->db('punbb')->query('UPDATE posts SET source_html=NULL WHERE topic_id = '.$this->id());
+//		$this->db('AB_FORUMS')->query('UPDATE posts SET source_html=NULL WHERE topic_id = '.$this->id());
 //		if($posts = $this->all_posts_ids())
-//			$this->db('punbb')->query('UPDATE messages SET html=\'\' WHERE id IN (' . join(',', $posts) . ')');
+//			$this->db('AB_FORUMS')->query('UPDATE messages SET html=\'\' WHERE id IN (' . join(',', $posts) . ')');
 		
 		//TODO: подумать на тему неполной чистки.
 		foreach(glob($this->cache_dir().'/t'.$this->id().'*.html') as $f)

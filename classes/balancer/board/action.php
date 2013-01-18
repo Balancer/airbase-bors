@@ -2,7 +2,7 @@
 
 class balancer_board_action extends bors_page_db
 {
-	function db_name() { return config('punbb.database', 'punbb'); }
+	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'board_actions'; }
 	function table_fields()
 	{

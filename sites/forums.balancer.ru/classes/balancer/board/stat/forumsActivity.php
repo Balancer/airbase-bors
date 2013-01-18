@@ -12,7 +12,7 @@ class balancer_board_stat_forumsActivity extends base_image_png
 	function show_image()
 //	function body_data()
 	{
-		$db = new driver_mysql('punbb');
+		$db = new driver_mysql('AB_FORUMS');
 		$this->first = $first = /*strtotime('1.1.2008');/ */ $db->select('posts', 'MIN(posted)', array('posted>' => 100000));
 		$this->last  = $last  = $db->select('posts', 'MAX(posted)', array());
 		$this->age   = $age   = $last - $first;

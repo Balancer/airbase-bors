@@ -20,7 +20,7 @@ class forum_images_warnings extends base_image_gif
 
 		if($user_id)
 		{
-//			$db = new driver_mysql('punbb');
+//			$db = new driver_mysql('AB_FORUMS');
 //			$warn_count = min(10, intval($db->get("SELECT SUM(score) FROM warnings WHERE user_id = $user_id AND time > ".(time()-WARNING_DAYS*86400))));
 			$warn_count = $user->warnings();
 		}
@@ -59,7 +59,7 @@ class forum_images_warnings extends base_image_gif
 
 		if($warn_count >= 10 || $user->is_banned())
 		{
-			$db = new driver_mysql('punbb');
+			$db = new driver_mysql('AB_FORUMS');
 			$total = 0;
 			$time  = 0;
 			foreach($db->get_array("SELECT score, time FROM warnings WHERE user_id = {$user_id} ORDER BY time DESC LIMIT 20") as $w)

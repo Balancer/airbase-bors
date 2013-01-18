@@ -18,7 +18,7 @@ class airbase_user_admin_warnings extends airbase_user_warnings
 		else
 			$previous_warning = false;
 
-		$warns_from_me = intval($this->db('punbb')->select('warnings', 'SUM(score)', array(
+		$warns_from_me = intval($this->db('AB_FORUMS')->select('warnings', 'SUM(score)', array(
 			'user_id' => $this->id(),
 			'moderator_id' => bors()->user_id(),
 			'time>' => time()-86400*WARNING_DAYS, 

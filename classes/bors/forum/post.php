@@ -15,7 +15,7 @@ class forum_post extends base_page_db
 
 	function new_class_name() { return 'balancer_board_post'; }
 
-	function main_db() { return config('punbb.database', 'punbb'); }
+	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
 	function main_table() { return 'posts'; }
 
 //	function main_db_fields()
@@ -295,7 +295,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if(!$this->flag_db() || !preg_match("!>$!", $this->flag_db()))
 		{
 			require_once('inc/clients/geoip-place.php');
-//			$db = new driver_mysql(config('punbb.database', 'punbb'));
+//			$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 //			$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
 			$this->set_flag_db(geoip_flag($this->poster_ip(), $this->owner_id() == 10000), true);
 //			$db->close();
@@ -425,7 +425,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		if($this->have_attach() === NULL)
 		{
-			$db = new driver_mysql('punbb');
+			$db = new driver_mysql('AB_FORUMS');
 			$ids = $db->select_array('attach_2_files', 'id', array('post_id' => $this->id()));
 			$db->close();
 			if($this->_attach_ids = $ids)
@@ -494,7 +494,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		return 0;
 
-//		$db = new DataBase('punbb');
+//		$db = new DataBase('AB_FORUMS');
 //		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
 	}
 
@@ -599,7 +599,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			'warn_object_id='=>$this->id(),
 			'order' => '-time'));
 
-		$db = new driver_mysql(config('punbb.database', 'punbb'));
+		$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 		$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
 		$db->close();
 		$this->set_warning_id($warn ? $warn->id() : -1, true);

@@ -55,7 +55,7 @@ if(preg_match('!^pid=(\d+)$!', $qs, $m))
 	return go($post->url_in_container(), true);
 }
 
-$cms_db = new driver_mysql('punbb');
+$cms_db = new driver_mysql('AB_FORUMS');
 
 $archive_loaded = false;
 

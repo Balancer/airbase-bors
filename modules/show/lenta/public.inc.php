@@ -5,7 +5,7 @@
 		include_once("inc/lists.php");
 		include_once("other/punbb-modified-forum/include/pun_bal.php");
 	
-		$db = new DataBase('punbb');
+		$db = new DataBase('AB_FORUMS');
 
 		$topics = array();
 		foreach($db->get_array("

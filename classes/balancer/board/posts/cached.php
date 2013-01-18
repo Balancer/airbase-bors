@@ -3,7 +3,7 @@
 class balancer_board_posts_cached extends base_object_db
 {
 	function storage_engine() { return 'bors_storage_mysql'; }
-	function db_name() { return config('punbb.database', 'punbb'); }
+	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'posts_cached_fields'; }
 
 	function table_fields()

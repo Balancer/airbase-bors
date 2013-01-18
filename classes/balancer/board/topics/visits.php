@@ -3,7 +3,7 @@
 class balancer_board_topics_visit extends base_object_db
 {
 	function storage_engine() { return 'bors_storage_mysql'; }
-	function db_name() { return 'punbb'; }
+	function db_name() { return 'AB_FORUMS'; }
 	function table_name() { return 'topic_visits'; }
 	function table_fields()
 	{

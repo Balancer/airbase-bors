@@ -9,7 +9,7 @@ class balancer_board_stat_forums extends bors_page
 
 	function body_data()
 	{
-		$dbh = new driver_mysql('punbb');
+		$dbh = new driver_mysql('AB_FORUMS');
 /*		$forums_by_topics = $dbh->select_array('topics', 'forum_id, COUNT(*) as updated', array(
 			'last_post>' => time() - 30*86400,
 			'group' => 'forum_id',

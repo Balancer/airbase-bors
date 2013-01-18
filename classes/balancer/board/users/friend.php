@@ -3,7 +3,7 @@
 class balancer_board_users_friend extends base_object_db
 {
 	function storage_engine() { return 'bors_storage_mysql'; }
-	function db_name() { return 'punbb'; }
+	function db_name() { return 'AB_FORUMS'; }
 	function table_name() { return 'friends'; }
 	function table_fields()
 	{

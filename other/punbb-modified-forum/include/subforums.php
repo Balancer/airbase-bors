@@ -8,7 +8,7 @@
 
 		global $pun_user, $pun_config;
 
-		$db = new driver_mysql(config('punbb.database', 'punbb'));
+		$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 
 		if($db->get("SELECT COUNT(*) FROM forums WHERE parent = $forum") == 0)
 			return "";
@@ -153,7 +153,7 @@ function get_subforums_text($forums)
 
 		global $pun_user, $pun_config, $lang_index;
 
-		$db = new driver_mysql(config('punbb.database', 'punbb'));
+		$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 
 		$subforums = array();
 		foreach($forums as $fid)

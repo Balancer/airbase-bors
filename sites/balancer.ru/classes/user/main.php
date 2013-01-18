@@ -37,7 +37,7 @@ class user_main extends base_page
 
 	function page_data()
 	{
-		$db = new driver_mysql('punbb');
+		$db = new driver_mysql('AB_FORUMS');
 		$db_bors = new driver_mysql('BORS');
 
 		$by_forums = $db->select_array('posts', 'forum_id, count(*) AS `count`', array(
