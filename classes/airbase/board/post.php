@@ -9,7 +9,7 @@ class airbase_board_post extends base_page_db
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function can_be_empty() { return false; }
 
-	function main_db() { return config('punbb.database', 'punbb'); }
+	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
 	function main_table() { return 'posts'; }
 
 	function main_db_fields()
@@ -161,7 +161,7 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 		if(!$this->flag_db() || !preg_match("!>$!", $this->flag_db()))
 		{
 			require_once('inc/clients/geoip-place.php');
-			$db = new driver_mysql(config('punbb.database', 'punbb'));
+			$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 			$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
 			$this->set_flag_db(geoip_flag($this->poster_ip(), $this->owner_id() == 10000), true);
 			$db->close();
@@ -396,7 +396,7 @@ function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup);
 	{
 		return 0;
 		
-//		$db = new DataBase('punbb');
+//		$db = new DataBase('AB_FORUMS');
 //		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
 	}
 

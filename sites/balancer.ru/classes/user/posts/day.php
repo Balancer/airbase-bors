@@ -14,12 +14,12 @@ class user_posts_day extends balancer_board_page
 
 		if($page == 'last')
 		{
-			$max = $this->db('punbb')->select('posts', 'MAX(posted)', array('poster_id' => $this->id()));
+			$max = $this->db('AB_FORUMS')->select('posts', 'MAX(posted)', array('poster_id' => $this->id()));
 			$page = date('Y/m/d', $max);
 		}
 		elseif($page == 'first')
 		{
-			$min = $this->db('punbb')->select('posts', 'MIN(posted)', array('poster_id' => $this->id()));
+			$min = $this->db('AB_FORUMS')->select('posts', 'MIN(posted)', array('poster_id' => $this->id()));
 			$page = date('Y/m/d', $min);
 		}
 
@@ -69,7 +69,7 @@ class user_posts_day extends balancer_board_page
 
 	function previous_day_link()
 	{
-		$prev = $this->db('punbb')->select('posts', 'MAX(posted)', array(
+		$prev = $this->db('AB_FORUMS')->select('posts', 'MAX(posted)', array(
 			'poster_id' => $this->id(), 
 			'posted<' => strtotime("{$this->year}-{$this->month}-{$this->day}"),
 		));
@@ -82,7 +82,7 @@ class user_posts_day extends balancer_board_page
 
 	function next_day_link()
 	{
-		$next = $this->db('punbb')->select('posts', 'MIN(posted)', array(
+		$next = $this->db('AB_FORUMS')->select('posts', 'MIN(posted)', array(
 			'poster_id' => $this->id(), 
 			'posted>=' => strtotime("{$this->year}-{$this->month}-{$this->day}")+86400,
 		));

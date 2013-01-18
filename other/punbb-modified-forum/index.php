@@ -303,7 +303,7 @@ else
 	$ich->set($subforums, -7200);
 }
 
-$db = new driver_mysql(config('punbb.database', 'punbb'));
+$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 
 // Print the categories and forums
 $result = $db->query("SELECT c.id AS cid, 

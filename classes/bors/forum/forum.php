@@ -3,7 +3,7 @@
 class forum_forum extends bors_object_db
 {
 	function table_name() { return 'forums'; }
-	function db_name() { return config('punbb.database', 'punbb'); }
+	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function storage_engine() { return 'bors_storage_mysql'; }
 
 	function new_class_name() { return 'balancer_board_forum'; }
@@ -123,7 +123,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		$topics_per_page = $this->items_per_page();
 		$start_from = ($this->page() - 1) * $topics_per_page;
 
-		$db = new driver_mysql(config('punbb.database', 'punbb'));
+		$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 		$data['topics'] = $db->get_array("SELECT id FROM topics WHERE forum_id IN (".join(",", $this->all_readable_subforum_ids()).") ORDER BY last_post DESC LIMIT $start_from, $topics_per_page");
 		$data['forum_topic_class'] = config('punbb.forum_topic_class', 'forum_topic');
 		$db->close(); $db = NULL;
@@ -209,7 +209,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	function direct_subforums_ids()
 	{
 		// Получаем одни forum_id для дочерних форумов первого уровня
-		$db = new driver_mysql(config('punbb.database', 'punbb'));
+		$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 		$result =  $db->get_array("SELECT id FROM forums WHERE parent = {$this->id()}");
 		$db->close(); 
 		$db = NULL;

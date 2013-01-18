@@ -4,7 +4,7 @@ class forum_category extends bors_page_db
 {
 	function new_class_name() { return 'balancer_board_category'; }
 
-	function db_name() { return config('punbb.database', 'punbb'); }
+	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'categories'; }
 	function table_fields()
 	{

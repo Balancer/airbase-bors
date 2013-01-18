@@ -2,7 +2,7 @@
 
 class balancer_board_forum extends base_page_db
 {
-	function main_db() { return config('punbb.database', 'punbb'); }
+	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
 	function main_table() { return 'forums'; }
 
 	function main_table_fields()

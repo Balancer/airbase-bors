@@ -2,7 +2,7 @@
 
 class user_blog extends base_page
 {
-	function main_db(){ return 'punbb'; }
+	function main_db(){ return 'AB_FORUMS'; }
 
 	function auto_objects()
 	{

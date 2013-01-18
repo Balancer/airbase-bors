@@ -41,7 +41,7 @@ class forum_tools_topic extends balancer_board_page
 
 	function body_data()
 	{
-		$db = new driver_mysql(config('punbb.database', 'punbb'));
+		$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 		$user_ids = $db->select_array('posts', 'DISTINCT poster_id', array(
 			'topic_id' => $this->id(),
 		));

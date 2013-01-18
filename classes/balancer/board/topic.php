@@ -5,7 +5,7 @@ class balancer_board_topic extends forum_topic
 	function extends_class_name() { return 'forum_topic'; }
 
 	function storage_engine() { return 'bors_storage_mysql'; }
-	function db_name() { return config('punbb.database', 'punbb'); }
+	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'topics'; }
 
 	function table_fields()
@@ -82,7 +82,7 @@ class balancer_board_topic extends forum_topic
 
 	static function sitemap_last_modify_time($domain, $page, $per_page)
 	{
-		$dbh = new driver_mysql(config('punbb.database', 'punbb'));
+		$dbh = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
 		$dates = $dbh->select_array('topics', 'last_post', array(
 			'forum_id IN' => self::_forum_ids($domain),
 			'page' => $page,

@@ -34,7 +34,7 @@ class balancer_board_archive_day extends base_page_list
 
 	function previous_day_link()
 	{
-		$prev = $this->db('punbb')->select('topics', 'MAX(posted)', array(
+		$prev = $this->db('AB_FORUMS')->select('topics', 'MAX(posted)', array(
 			'posted<' => strtotime("{$this->year}-{$this->month}-{$this->day}"),
 		));
 
@@ -46,7 +46,7 @@ class balancer_board_archive_day extends base_page_list
 
 	function next_day_link()
 	{
-		$next = $this->db('punbb')->select('topics', 'MIN(posted)', array(
+		$next = $this->db('AB_FORUMS')->select('topics', 'MIN(posted)', array(
 			'posted>=' => strtotime("{$this->year}-{$this->month}-{$this->day}")+86400,
 		));
 

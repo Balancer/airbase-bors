@@ -6,7 +6,7 @@ class balancer_users_images_repMap extends base_image_svg
 	{
 //		require_once 'Image/Canvas.php';
 
-		$dbh = new driver_mysql('punbb');
+		$dbh = new driver_mysql('AB_FORUMS');
 		$dbh->query('CREATE TEMPORARY TABLE __minmaxrep SELECT rep_x, rep_y, rep_r, rep_g, rep_b FROM users WHERE rep_x<>0 ORDER BY last_post DESC LIMIT 150');
 		extract($dbh->get('SELECT
 			MIN(rep_x) as min_x,

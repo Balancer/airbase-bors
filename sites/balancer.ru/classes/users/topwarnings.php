@@ -2,7 +2,7 @@
 
 class users_topwarnings extends base_page
 {
-	function main_db(){ return 'punbb'; }
+	function main_db(){ return 'AB_FORUMS'; }
 
 	function template()
 	{
@@ -18,7 +18,7 @@ class users_topwarnings extends base_page
 	function local_data()
 	{
 /*		$warns = array();
-		foreach($this->db('punbb')->select_array('warnings', 'user_id, sum(score) as `sum`', array(
+		foreach($this->db('AB_FORUMS')->select_array('warnings', 'user_id, sum(score) as `sum`', array(
 					'time>' => time()-30*86400,
 					'group' => 'user_id',
 				)) as $x)

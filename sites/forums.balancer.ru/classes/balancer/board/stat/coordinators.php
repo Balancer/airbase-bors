@@ -9,7 +9,7 @@ class balancer_board_stat_coordinators extends bors_page
 
 	function body_data()
 	{
-		$dbh = new driver_mysql('punbb');
+		$dbh = new driver_mysql('AB_FORUMS');
 		$month_warns = $dbh->select_array('warnings', 'users.username as coordinator_name, count(*) as warnings_count', array(
 			'inner_join' => 'users ON users.id = moderator_id',
 			'time>' => time()-30.6*86400,

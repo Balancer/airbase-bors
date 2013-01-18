@@ -12,7 +12,7 @@ class forum_topic extends base_page_db
 	function uri_name() { return 't'; }
 	function nav_name() { return truncate($this->title(), 60); }
 
-	function db_name() { return config('punbb.database', 'punbb'); }
+	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'topics'; }
 
 	function table_fields()

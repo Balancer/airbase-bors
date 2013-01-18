@@ -4,7 +4,7 @@ require_once('inc/lists.php');
 
 class module_forum_lenta_public extends bors_module
 {
-	function main_db() { return config('punbb.database', 'punbb'); }
+	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
 
 	private $bdata = array();
 	function local_template_data_set()

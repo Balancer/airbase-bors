@@ -29,8 +29,8 @@ class user_posts extends base_page
 	function local_data()
 	{
 		$years = array();
-/*		$first = $this->db('punbb')->select('posts', 'MIN(posted)', array('poster_id' => $this->id()));
-		$last  = $this->db('punbb')->select('posts', 'MAX(posted)', array('poster_id' => $this->id()));
+/*		$first = $this->db('AB_FORUMS')->select('posts', 'MIN(posted)', array('poster_id' => $this->id()));
+		$last  = $this->db('AB_FORUMS')->select('posts', 'MAX(posted)', array('poster_id' => $this->id()));
 		$y0 = strftime('%Y', $first);
 		$y9 = strftime('%Y', $last);
 		for($y0; $y0<=$y9; $y0++)
@@ -41,7 +41,7 @@ class user_posts extends base_page
 		{
 			$d0 = strtotime("$y-01-01 00:00:00");
 			$d9 = strtotime("$y-12-31 23:59:59")+1;
-			if($cnt = $this->db('punbb')->select('posts', 'count(*)', array('poster_id' => $this->id(), "posted BETWEEN $d0 AND $d9")))
+			if($cnt = $this->db('AB_FORUMS')->select('posts', 'count(*)', array('poster_id' => $this->id(), "posted BETWEEN $d0 AND $d9")))
 				$years[$y] = $cnt;
 		}
 

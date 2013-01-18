@@ -5,7 +5,7 @@ class airbase_forum_admin_posts_movetree extends base_page
 	function class_file() { return __FILE__; }
 	function dont_move_tree() { return false; }
 
-	function main_db() { return config('punbb.database', 'punbb'); }
+	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
 
 	private $post_ids = false;
 	function post_ids()

@@ -6,7 +6,7 @@ class forum_blog extends bors_page_db
 	function storage_engine() { return 'bors_storage_mysql'; }
 	function can_be_empty() { return false; }
 
-	function db_name() { return config('punbb.database', 'punbb'); }
+	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'blog'; }
 
 	function table_fields()

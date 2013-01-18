@@ -42,7 +42,7 @@
 		echo "barb : {$barb->rep_x()}, {$barb->rep_y()}\n";
 		echo "niki : {$niki->rep_x()}, {$niki->rep_y()}\n\n";
 
-		$dbf = new driver_mysql('punbb');
+		$dbf = new driver_mysql('AB_FORUMS');
 		$dbu1 = new driver_mysql('USERS');
 		$dbu2 = new driver_mysql('USERS');
 

@@ -62,7 +62,7 @@ class balancer_board_user extends forum_user
 
 		if($warnings >= 10)
 		{
-			$db = new driver_mysql('punbb');
+			$db = new driver_mysql('AB_FORUMS');
 			$total = 0;
 			$time  = 0;
 			foreach($db->get_array("SELECT score, time FROM warnings WHERE user_id = {$this->id()} ORDER BY time DESC LIMIT 20") as $w)

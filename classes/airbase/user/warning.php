@@ -4,11 +4,11 @@ class airbase_user_warning extends base_object_db
 {
 	function class_title() { return ec('Штраф'); }
 
-	function main_db_storage() { return config('punbb.database', 'punbb'); }
+	function main_db_storage() { return config('punbb.database', 'AB_FORUMS'); }
 	function main_table_storage() { return 'warnings'; }
 	function storage_engine() { return 'bors_storage_mysql'; }
 
-	function db_name() { return config('punbb.database', 'punbb'); }
+	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'warnings'; }
 
 //	function can_delete() { return bors()->user()->is_admin(); }

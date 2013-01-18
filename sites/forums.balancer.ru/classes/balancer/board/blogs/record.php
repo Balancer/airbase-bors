@@ -2,7 +2,7 @@
 
 class balancer_board_blogs_record extends base_page_db
 {
-	function main_db() { return 'punbb'; }
+	function main_db() { return 'AB_FORUMS'; }
 	function main_table() { return 'blog'; }
 
 	function main_table_fields()

@@ -102,7 +102,7 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = new DataBase('punbb');
+		$db = new DataBase('AB_FORUMS');
 
 		$Stemmer = new Lingua_Stem_Ru();
 				
@@ -181,7 +181,7 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = new DataBase('punbb');
+		$db = new DataBase('AB_FORUMS');
 
 		$Stemmer = new Lingua_Stem_Ru();
 				
@@ -285,7 +285,7 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = new DataBase('punbb');
+		$db = new DataBase('AB_FORUMS');
 
 		$Stemmer = new Lingua_Stem_Ru();
 				
