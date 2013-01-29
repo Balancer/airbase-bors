@@ -151,17 +151,17 @@ if (isset($_GET['tid']))
 <div class="blockform">
 	<h2><span><?php echo $lang_misc['Delete posts'] ?></span></h2>
 	<div class="box">
-		<form method="post" action="moderate.php?fid=<?php echo $fid ?>&amp;tid=<?php echo $tid ?>">
+		<form method="post" action="moderate.php?fid=<?php echo $fid ?>&amp;tid=<?php echo $tid /*"*/ ?>">
 			<div class="inform">
 				<fieldset>
 					<legend><?php echo $lang_misc['Confirm delete legend'] ?></legend>
 					<div class="infldset">
-						<input type="hidden" name="posts" value="<?php echo implode(',', array_keys($posts)) ?>" />
+						<input type="hidden" name="posts" value="<?php echo implode(',', array_keys($posts)) /*"*/ ?>" />
 						<p><?php echo $lang_misc['Delete posts comply'] ?></p>
 					</div>
 				</fieldset>
 			</div>
-			<p><input type="submit" name="delete_posts_comply" value="<?php echo $lang_misc['Delete'] ?>" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
+			<p><input type="submit" name="delete_posts_comply" value="<?php echo $lang_misc['Delete'] /*"*/ ?>" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
 		</form>
 	</div>
 </div>
@@ -201,12 +201,12 @@ if (isset($_GET['tid']))
 <div class="linkst">
 	<div class="inbox">
 		<p class="pagelink conl"><?php echo $paging_links ?></p>
-		<ul><li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<a href="viewforum.php?id=<?php echo $fid ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_topic['subject']) ?></li></ul>
+		<ul><li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<a href="viewforum.php?id=<?php echo $fid /*"*/ ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_topic['subject']) ?></li></ul>
 		<div class="clearer"></div>
 	</div>
 </div>
 
-<form method="post" action="moderate.php?fid=<?php echo $fid ?>&amp;tid=<?php echo $tid ?>">
+<form method="post" action="moderate.php?fid=<?php echo $fid ?>&amp;tid=<?php echo $tid /*"*/ ?>">
 <?php
 
 	require PUN_ROOT.'include/parser.php';
@@ -220,7 +220,7 @@ if (isset($_GET['tid']))
 	while ($cur_post = $db->fetch_assoc($result))
 	{
 		$cur_post['message'] = $cms_db->get("SELECT message FROM messages WHERE id = ".intval($cur_post['id']));
-		
+
 		$post_count++;
 
 		// If the poster is a registered user.
@@ -253,9 +253,9 @@ if (isset($_GET['tid']))
 
 ?>
 
-<div class="blockpost<?php echo $vtbg ?>">
+<div class="blockpost<?php echo $vtbg /*"*/ ?>">
 	<a name="<?php echo $cur_post['id'] ?>"></a>
-	<h2><span><span class="conr">#<?php echo ($start_from + $post_count) ?>&nbsp;</span><a href="viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']) ?></a></span></h2>
+	<h2><span><span class="conr">#<?php echo ($start_from + $post_count) ?>&nbsp;</span><a href="viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] /*"*/ ?>"><?php echo format_time($cur_post['posted']) ?></a></span></h2>
 	<div class="box">
 		<div class="inbox">
 			<div class="postleft">
@@ -288,7 +288,7 @@ if (isset($_GET['tid']))
 <div class="postlinksb">
 	<div class="inbox">
 		<p class="pagelink conl"><?php echo $paging_links ?></p>
-		<p class="conr"><input type="submit" name="delete_posts" value="<?php echo $lang_misc['Delete'] ?>"<?php echo $button_status ?> /></p>
+		<p class="conr"><input type="submit" name="delete_posts" value="<?php echo $lang_misc['Delete'] /*"*/ ?>"<?php echo $button_status ?> /></p>
 		<div class="clearer"></div>
 	</div>
 </div>
@@ -302,7 +302,7 @@ if (isset($_GET['tid']))
 // Move one or more topics
 if (isset($_REQUEST['move_topics']) || isset($_POST['move_topics_to']))
 {
-	if (isset($_POST['move_topics_to']))
+	if (isset($_POST['move_topics_to'])) // Это кнопка Submit, так определяем, что не страница открылась, а реальный перенос начался.
 	{
 		confirm_referrer('moderate.php');
 
@@ -313,6 +313,10 @@ if (isset($_REQUEST['move_topics']) || isset($_POST['move_topics_to']))
 		$move_to_forum = isset($_POST['move_to_forum']) ? intval($_POST['move_to_forum']) : 0;
 		if (empty($topics) || $move_to_forum < 1)
 			message($lang_common['Bad request']);
+
+		$x_topics = bors_find_all('balancer_board_topic', array('id IN' => $topics));
+		foreach($x_topics as $xt)
+			$xt->move_to_forum($move_to_forum);
 
 		// Delete any redirect topics if there are any (only if we moved/copied the topic back to where it where it was once moved from)
 		$db->query('DELETE FROM '.$db->prefix.'topics WHERE forum_id='.$move_to_forum.' AND moved_to IN('.implode(',',$topics).')') or error('Unable to delete redirect topics', __FILE__, __LINE__, $db->error());

@@ -15,9 +15,11 @@ class module_forum_blog extends base_page
 		if(isset($this->_data[$page_id]))
 			return $this->_data[$page_id];
 
-		$skip_forums = array(19, 37, 73, 102, 138, 170);
+		$skip_forums = array(19, 37, 73, 102, 138, 170, 184);
 		if($sfs = $this->args('skip_forums'))
 			$skip_forums = array_merge($skip_forums, blib_list::parse_condensed($sfs));
+
+// var_dump($skip_forums);
 
 		$where = array(
 			'is_public' => true,
@@ -31,7 +33,7 @@ class module_forum_blog extends base_page
 		else
 			$where['forum_id NOT IN'] = $skip_forums;
 
-		$blogs = objects_array('balancer_board_blog', $where);
+		$blogs = bors_find_all('balancer_board_blog', $where);
 
 		$x = bors_fields_array_extract($blogs, array('id', 'owner_id', 'forum_id'));
 		$posts = objects_array('forum_post', array('id IN' => array_filter(array_unique($x['id'])), 'by_id' => true));

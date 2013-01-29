@@ -157,4 +157,13 @@ class balancer_board_topic extends forum_topic
 		balancer_board_posts_view::container_init();
 		return parent::pre_show();
 	}
+
+	function move_to_forum($forum_id)
+	{
+		// Перекинуть потом подготовку из moderate.php:320
+		// А тут пока только перенос связанных forum_id
+		// В блогах:
+		foreach(bors_find_all('balancer_board_blog', array('topic_id' => $this->id())) as $blog)
+			$blog->set_forum_id($forum_id);
+	}
 }
