@@ -63,5 +63,5 @@ class forum_topic_rss extends forum_topic
 		return $result;
 	}
 
-	function cache_groups() { return parent::cache_groups()." airbase-forum-topic-".$this->id(); }
+	function cache_group_depends() { return parent::cache_group_depends() + "balancer-board-topic-".$this->id(); }
 }

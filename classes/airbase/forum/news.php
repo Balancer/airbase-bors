@@ -42,7 +42,7 @@ class airbase_forum_news extends base_page
 	function default_page() { return $this->total_pages(); }
 	function reverse_pages() { return true; }
 	function items_per_page() { return 10; }
-	function cache_groups_parent() { return "forum-topics"; }
+	function cache_group_parents() { return "forum-topics"; }
 
 	function template()
 	{

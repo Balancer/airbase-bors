@@ -175,11 +175,10 @@ if (isset($_POST['form_sent']))
 
 		if(empty($_POST['as_blog']))
 		{
+			// Если метки «блог» нет, но есть предыдущая запись блога, то удаляем.
 			if($blog)
 			{
 				$blog->delete();
-				include_once('engines/blogs/livejournal.com.php');
-				bors_blog_livejournal_com_delete($post->owner_id(), $post);
 			}
 		}
 		else
@@ -195,14 +194,24 @@ if (isset($_POST['form_sent']))
 			$blog->set_is_public($topic->is_public(), true);
 			$blog->set_keywords_string($_POST['blog_keywords_string'], true);
 			$blog->cache_clean();
+		}
 
+		if(empty($_POST['export_blog']))
+		{
+			// Если метки «транслировать» нет, то удаляем.
+			include_once('engines/blogs/livejournal.com.php');
+			bors_blog_livejournal_com_delete($post->owner_id(), $post);
+		}
+		else
+		{
+			// Иначе делаем кросспост
 			include_once('engines/blogs/livejournal.com.php');
 			bors_blog_livejournal_com_edit(
 				$post->owner_id(),
 				$topic,
 				$topic->first_post()->id() == $post->id() ? $topic : $post,
 				$post,
-				$blog->keywords_string() ? $blog : $topic
+				object_property($blog, 'keywords_string') ? $blog : $topic
 			);
 		}
 
@@ -514,9 +523,18 @@ if ($is_admmod)
 $checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\"     value=\"1\" tabindex=\"".($cur_index++).'"'
 	.($blog ? ' checked="checked"' : '')
 	." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '"
-		.addslashes("<label><strong>Тэги:</strong>&nbsp;<input class='longinput' type='text' name='blog_keywords_string' value='".defval($_POST, 'blog_keywords_string', $topic->keywords_string())."'    size='40' maxlength='255' /><br /></label>")
-			."' : ''\"/>Разместить ответ в <a href=\"http://www.balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+		.addslashes("<label><strong>Тэги:</strong>&nbsp;<input class='longinput' type='text' name='blog_keywords_string' value='"
+			.htmlspecialchars(defval($_POST, 'blog_keywords_string', $topic->keywords_string()))
+			."' size='40' maxlength='255' /><br /></label>")
+		."' : ''\"/>Разместить ответ в <a href=\"http://www.balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
 //$checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\" value=\"1\" tabindex=\"".($cur_index++)."\"".($blog ? ' checked="true"' : '')." />Разместить сообщение в <a href=\"http://www.balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
+$checkboxes[] = "<label><input type=\"checkbox\" name=\"export_blog\" value=\"1\" tabindex=\""
+	.($cur_index++).'"'.(isset($_POST['as_blog']) ? ' checked="checked"' : '')
+	." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '"
+		.addslashes("<label><strong>Тэги:</strong>&nbsp;<input class='longinput' type='text' name='keywords' size='40' maxlength='255' value='"
+			.htmlspecialchars(defval($_POST, 'blog_keywords_string', $topic->keywords_string()))
+			."' size='40' maxlength='255' /><br /></label>")
+	."' : ''\"/>Транслировать ответ в ЖЖ";
 
 if (!empty($checkboxes))
 {
