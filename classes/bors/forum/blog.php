@@ -21,6 +21,8 @@ class forum_blog extends bors_page_db
 			'blogged_time',
 			'is_public',
 			'is_deleted',
+			'is_paste',
+			'is_owned',
 			'is_microblog',
 			'blog_source_class',
 			'blog_source_id',

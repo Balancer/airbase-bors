@@ -107,7 +107,7 @@ class user_reputation extends base_page
 	function can_be_empty() { return false; }
 	function can_cached() { return false; }
 
-	function cache_groups() { return "user-{$this->id()}-reputation"; }
+	function cache_group_depends() { return array("user-{$this->id()}-reputation"); }
 
 	function on_action_reputation_add_do($data)
 	{

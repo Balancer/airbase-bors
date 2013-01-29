@@ -88,6 +88,7 @@ class forum_user extends balancer_board_object_db
 			'email',
 			'has_invalid_email',
 			'email_setting',
+			'is_destructive',
 			'invalid_mail_message',
 			'rep_r', 'rep_g', 'rep_b',
 			'rep_x', 'rep_y',

@@ -606,8 +606,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		$this->set_is_repaged(1, true);
 	}
 
-//	function cache_groups() { return parent::cache_groups()." airbase-forum-topic-{$this->id()}"; }
-	function cache_groups_parent() { return parent::cache_groups_parent()." airbase-board-forum-{$this->forum_id()}"; }
+	function cache_group_parents() { return parent::cache_group_parents() + array("balancer-board-forum-{$this->forum_id()}"); }
+	function cache_group_provides() { return parent::cache_group_provides() + array("balancer-board-topic-{$this->id()}"); }
 
 	function keywords_string()
 	{

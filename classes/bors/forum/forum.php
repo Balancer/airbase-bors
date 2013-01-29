@@ -313,8 +313,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 //	function url() { return 'http://www.balancer.ru/forum/punbb/viewforum.php?id='.$this->id(); }
 	function cache_static_can_be_dropped() { return false; }
 
-	function cache_groups_parent() { return parent::cache_groups_parent().
-		" airbase-board-forum-{$this->id()}"; }
+	function cache_group_provides() { return parent::cache_group_provides() + array("balancer-board-forum-{$this->id()}"); }
 
 	function auto_objects()
 	{
