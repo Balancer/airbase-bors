@@ -3,7 +3,7 @@
 {* <li><a href="http://www.balancer.ru/forum/punbb/delete.php?id="></a></li> *}
 {* <li><a href="http://www.balancer.ru/forum/punbb/moderate.php?fid={$this->topic()|get:forum_id}&tid={$this->id()}&p=$p">".$lang_common['Delete posts'].'</a></li> *}
 <li><a href="http://www.balancer.ru/forum/punbb/moderate.php?fid={$this->topic()|get:forum_id}&move_topics={$this->id()}" class="select_page">Перенести тему</a></li>
-<li><a href="http://www.balancer.ru/forum/punbb/moderate.php?fid={$this->topic()|get:forum_id}&topics={$this->id()}&move_to_forum=191&move_topics_to=Переместить" class="select_page">Перенести тему в спам-отстойник</a> (без запросов, использовать для сноса спама. В остальных случаях <a href="http://www.balancer.ru/2008/05/27/post-1544716.html">читать тут</a>)</li>
+{* <li><a href="http://www.balancer.ru/forum/punbb/moderate.php?fid={$this->topic()|get:forum_id}&topics={$this->id()}&move_to_forum=191&move_topics_to=Переместить" class="select_page">Перенести тему в спам-отстойник</a> (без запросов, использовать для сноса спама. В остальных случаях <a href="http://www.balancer.ru/2008/05/27/post-1544716.html">читать тут</a>)</li> *}
 
 {if $this->topic()|get:is_closed}
 <li><a href="http://www.balancer.ru/forum/punbb/moderate.php?fid={$this->topic()|get:forum_id}&open={$this->id()}" class="select_page">Открыть тему</a> (сейчас тема закрыта)</li>
