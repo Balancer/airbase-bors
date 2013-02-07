@@ -640,7 +640,7 @@ function avatar_thumb($geo)
 
 	function today_posted()
 	{
-		return $this->__havec('today_posted') ? $this->__lastc() : $this->__setc(objects_count('forum_post', array(
+		return $this->__havec('today_posted') ? $this->__lastc() : $this->__setc(bors_count('balancer_board_post', array(
 			'owner_id' => $this->id(), 
 			'create_time>' => time()-86400,
 		)));
@@ -648,7 +648,7 @@ function avatar_thumb($geo)
 
 	function tomonth_posted()
 	{
-		return $this->__havec('tomonth_posted') ? $this->__lastc() : $this->__setc(objects_count('forum_post', array(
+		return $this->__havec('tomonth_posted') ? $this->__lastc() : $this->__setc(bors_count('balancer_board_post', array(
 			'owner_id' => $this->id(), 
 			'create_time>' => time()-86400*31,
 		)));
@@ -656,12 +656,12 @@ function avatar_thumb($geo)
 
 	function today_posted_in_forum($forum_id)
 	{
-		return $this->__havec('today_posted') ? $this->__lastc() : $this->__setc(objects_count('forum_post', array(
-			'owner_id' => $this->id(), 
+		return $this->__havec('today_posted') ? $this->__lastc() : $this->__setc(bors_count('balancer_board_post', array(
+			'balancer_board_post.owner_id=' => $this->id(), 
 			'create_time>' => time()-86400,
 			'inner_join' => 'balancer_board_topic ON (forum_post.topic_id = balancer_board_topic.id)',
 			'balancer_board_topic.forum_id=' => $forum_id,
-		))); 
+		)));
 	}
 
 	function next_can_post($limit, $forum_id)
@@ -669,7 +669,7 @@ function avatar_thumb($geo)
 		if($this->attr('next_can_post'))
 			return $this->attr('next_can_post');
 
-		$first_in_day = objects_array('forum_post', array(
+		$first_in_day = objects_array('balancer_board_post', array(
 			'owner_id' => $this->id(), 
 			'create_time>' => time()-86400*2,
 			'order' => '-create_time',

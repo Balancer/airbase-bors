@@ -55,6 +55,11 @@ if(preg_match('!^pid=(\d+)$!', $qs, $m))
 	return go($post->url_in_container(), true);
 }
 
+if(preg_match('!/topic/\d+/(\d+),(\d+)$!', $_SERVER['REQUEST_URI'], $m))
+	return go_topic($m[1], $m[2]);
+
+debug_hidden_log('old-topic-link-format',  $_SERVER['REQUEST_URI']);
+
 $cms_db = new driver_mysql('AB_FORUMS');
 
 $archive_loaded = false;
