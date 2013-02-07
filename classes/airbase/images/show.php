@@ -8,7 +8,7 @@ class airbase_images_show extends base_page
 	private $image_f = NULL;
 	private $image_url = NULL;
 
-	function loaded() { return $this->image_f != NULL; }
+	function is_loaded() { return $this->image_f != NULL; }
 
 	function _parent()
 	{

@@ -10,7 +10,7 @@ class balancer_board_topics_printableCurrent extends balancer_board_paged
 	}
 
 	function can_be_empty() { return false; }
-	function loaded() { return $this->topic() != NULL; }
+	function is_loaded() { return $this->topic() != NULL; }
 	function title() { return $this->topic()->title().', страница '.max(1, $this->page()); }
 	function nav_name() { return 'версия для печати страницы '.max(1, $this->page()); }
 	function parents() { return array($this->topic()->url($this->page())); }

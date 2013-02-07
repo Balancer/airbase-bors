@@ -4,7 +4,7 @@ class user_reputation extends base_page
 {
 	var $user;
 
-	function loaded() { return (bool) $this->user; }
+	function is_loaded() { return (bool) $this->user; }
 
 	function title() { return $this->user ? $this->user->title().ec(": Репутация") : ''; }
 	function nav_name() { return ec("репутация"); }

@@ -3,7 +3,7 @@
 class balancer_board_users_attaches extends balancer_board_paged
 {
 	function can_be_empty() { return false; }
-	function loaded() { return (bool) $this->user(); }
+	function is_loaded() { return (bool) $this->user(); }
 
 	function main_class() { return 'balancer_board_attach'; }
 	function where() { return array(

@@ -29,14 +29,14 @@ class storage_fs_hts extends base_null
 		$dir = $object->dir();
 		
 		if(!file_exists($file = "{$dir}/index.hts"))
-			return $object->set_loaded(false);
+			return $object->set_is_loaded(false);
 
 		// По дефолту в index.hts разрешёны HTML и все BB-тэги.
 		$object->set_html_disable(false, false);
 		$object->set_lcml_tags_enabled(NULL, false);
 		
 		if(!($hts = @file_get_contents($file)))
-			return $object->set_loaded(false);
+			return $object->set_is_loaded(false);
 
 		$hts = str_replace("\r", "", $hts);
 
@@ -146,7 +146,7 @@ class storage_fs_hts extends base_null
 		
 //		print_d($object->source());
 		
-		return $object->set_loaded(true);
+		return $object->set_is_loaded(true);
 	}
 	
 	function save($object)

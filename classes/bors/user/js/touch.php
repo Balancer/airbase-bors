@@ -1,26 +1,20 @@
 <?php
 
-class user_js_touch extends base_page
+class user_js_touch extends bors_js
 {
-	function template() { return 'empty.html'; }
-
-	function init()
+	function pre_show()
 	{
 		template_nocache();
 
-		$this->set_loaded();
+		parent::pre_show();
+
+		$this->set_is_loaded(true);
 
 		$obj = object_load($this->id());
 		if(!$obj || !bors()->user())
-			return;
+			return 'true;';
 
 		$obj->touch(bors()->user()->id());
+		return 'true;';
 	}
-
-	function __wakeup()
-	{
-		$this->init();
-	}
-
-	function empty_body() { return 'true;'; }
 }

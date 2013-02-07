@@ -36,7 +36,7 @@ class forum_topic_ubb extends base_object
 	function pre_show() { return true; }
 
 	function can_be_empty() { return false; }
-	function loaded() { return $this->topic_id() > 0; }
+	function is_loaded() { return $this->topic_id() > 0; }
 
 	function title() { return $this->topic()->title(); }
 	function url($page = NULL) { return $this->topic()->url($page>0 ? $page : $this->args('page')); }
