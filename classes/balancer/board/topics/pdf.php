@@ -10,7 +10,7 @@ class balancer_board_topics_pdf extends bors_object
 	}
 
 	function can_be_empty() { return false; }
-	function loaded() { return $this->topic() != NULL; }
+	function is_loaded() { return $this->topic() != NULL; }
 
 	function render_engine() { return $this; }
 

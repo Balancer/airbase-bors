@@ -3,7 +3,7 @@
 class balancer_board_keywords_tags extends base_page
 {
 //	function can_be_empty() { return !bors()->client()->is_bot(); }
-//	function loaded() { return count($this->items()); }
+//	function is_loaded() { return count($this->items()); }
 
 	static function keywords_explode($keywords_string)
 	{

@@ -3,7 +3,7 @@
 class forum_tools_topic_reload extends base_object
 {
 	function can_be_empty() { return false; }
-	function loaded() { return (bool) $this->topic(); }
+	function is_loaded() { return (bool) $this->topic(); }
 
 	function pre_parse($data)
 	{

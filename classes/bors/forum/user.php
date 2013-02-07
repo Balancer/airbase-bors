@@ -35,9 +35,9 @@ class forum_user extends balancer_board_object_db
 		parent::__construct($id);
 	}
 
-	function loaded()
+	function is_loaded()
 	{
-		return parent::loaded() && $this->id() > 1;
+		return parent::is_loaded() && $this->id() > 1;
 	}
 
 	function table_fields()

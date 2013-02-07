@@ -10,7 +10,7 @@ class balancer_board_topics_pdfCover extends bors_page
 	}
 
 	function can_be_empty() { return false; }
-	function loaded() { return $this->topic() != NULL; }
+	function is_loaded() { return $this->topic() != NULL; }
 
 	function template() { return "null.html"; }
 

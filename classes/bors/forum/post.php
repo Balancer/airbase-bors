@@ -6,48 +6,16 @@ include_once('engines/lcml.php');
 include_once('inc/browsers.php');
 include_once('inc/clients.php');
 
-class forum_post extends base_page_db
+class forum_post extends balancer_board_object_db
 {
-	function storage_engine() { return 'storage_db_mysql_smart'; }
-
 	function config_class() { return 'balancer_board_config'; }
 	function template() { return 'forum/page.html'; }
 
 	function new_class_name() { return 'balancer_board_post'; }
 
-	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
-	function main_table() { return 'posts'; }
+	function table_name() { return 'posts'; }
 
-//	function main_db_fields()
-	function fields()
-	{
-		return array($this->main_db() => array(
-			$this->main_table() => $this->main_table_fields(),
-			'posts_cached_fields(post_id)' => array(
-//			'posts_cached_fields' => array(	'id' => 'post_id',
-				'flag_db' => 'flag',
-				'warning_id',
-//				'answers_count_raw' => 'answers_count',
-				'mark_best_date',
-				'score_positive_raw' => 'score_positive',
-				'score_negative_raw' => 'score_negative',
-				'post_body' => 'html',
-				'full_html_content' => 'html_full_post',
-			),
-
-			'posts_calculated_fields(post_id)' => array(
-				'answers_count_raw' => 'answers_total',
-				'answers_in_other_topics_count_raw' => 'answers_other_topics',
-			),
-
-			'posts_dropable_fields(post_id)' => array(
-				'cached_html' => 'html',
-				'cached_html_ts' => 'UNIX_TIMESTAMP(html_ts)',
-			),
-		));
-	}
-
-	function main_table_fields()
+	function table_fields()
 	{
 		return array(
 			'id',
@@ -89,6 +57,35 @@ class forum_post extends base_page_db
 
 // Свободны:
 //			field4 => is_spam int(11)
+
+
+	function left_join_fields()
+	{
+		return array(
+			$this->main_db() => array(
+				'posts_cached_fields(post_id)' => array(
+					'flag_db' => 'flag',
+					'warning_id',
+//					'answers_count_raw' => 'answers_count',
+					'mark_best_date',
+					'score_positive_raw' => 'score_positive',
+					'score_negative_raw' => 'score_negative',
+					'post_body' => 'html',
+					'full_html_content' => 'html_full_post',
+				),
+
+				'posts_calculated_fields(post_id)' => array(
+					'answers_count_raw' => 'answers_total',
+					'answers_in_other_topics_count_raw' => 'answers_other_topics',
+				),
+
+				'posts_dropable_fields(post_id)' => array(
+					'cached_html' => 'droppable_html',
+					'cached_html_ts' => 'UNIX_TIMESTAMP(`html_ts`)',
+				),
+			)
+		);
+	}
 
 //	function __orm_setters() { return array('';); }
 

@@ -5,7 +5,7 @@
 
 class airbase_board_show_latest extends base_page
 {
-	function loaded() { return @$_COOKIE['user_id'] == 10000 && parent::loaded(); }
+	function is_loaded() { return @$_COOKIE['user_id'] == 10000 && parent::is_loaded(); }
 	function config_class() { return 'airbase_board_config'; }
 	function body_engine() { return 'body_php'; }
 	function can_cache() { return false; }
@@ -15,17 +15,17 @@ class airbase_board_show_latest extends base_page
 
 	function local_template_data_set()
 	{
-		$topics = objects_array('airbase_board_topic', array(
+		$topics = objects_array('balancer_board_topic', array(
 				'limit' => 50,
 				'order' => '-modify_time',
 		));
-	
+
 		$forum_ids = array();
 		foreach($topics as $t)
 			$forum_ids[$t->forum_id()] = $t->forum_id();
 
 		objects_array('airbase_board_forum', array('id IN' => array_keys($forum_ids)));
-	
+
 		return array(
 			'topics' => $topics,
 		);

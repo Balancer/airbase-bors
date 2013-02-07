@@ -5,7 +5,7 @@ class balancer_retranslate_googlereader extends base_page
 	function render_engine() { return __CLASS__; }
 	function is_auto_url_mapped_class() { return true; }
 	function can_be_empty() { return true; }
-	function loaded() { return true; }
+	function is_loaded() { return true; }
 
 	function render()
 	{

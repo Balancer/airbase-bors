@@ -7,7 +7,7 @@ class balancer_board_posts_show extends bors_view
 	function config_class() { return 'balancer_board_config'; }
 
 	function can_be_empty() { return false; }
-	function loaded() { return $this->post() != NULL; }
+	function is_loaded() { return $this->post() != NULL; }
 
 	function parents()
 	{

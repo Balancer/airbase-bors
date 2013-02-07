@@ -5,7 +5,7 @@ class airbase_user_warnings extends base_page
 	function class_file() { return __FILE__; } // Не сносить, так как есть класс-наследник с этим же шаблоном!
 
 	function can_be_empty() { return false; }
-	function loaded() { return (bool) $this->user(); }
+	function is_loaded() { return (bool) $this->user(); }
 
 	function template()
 	{

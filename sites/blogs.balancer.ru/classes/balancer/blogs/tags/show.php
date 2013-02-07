@@ -3,7 +3,7 @@
 class balancer_blogs_tags_show extends base_page
 {
 	function can_be_empty() { return false; }
-	function loaded() { return true; }
+	function is_loaded() { return true; }
 
 	static function keywords_explode($keywords_string)
 	{

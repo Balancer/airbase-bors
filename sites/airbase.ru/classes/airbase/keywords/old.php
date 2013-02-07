@@ -7,7 +7,7 @@ class airbase_keywords_old extends base_object
 	function can_be_empty() { return false; }
 	static function id_prepare($id) { return trim(trim(urldecode($id)), '/'); }
 
-	function loaded()
+	function is_loaded()
 	{
 		$found = false;
 		$kw = $this->id();
