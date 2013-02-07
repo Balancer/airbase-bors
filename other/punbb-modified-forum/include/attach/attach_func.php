@@ -90,8 +90,25 @@ function attach_generate_pathname($storagepath='')
 
 
 
-function attach_generate_filename($storagepath, $filename, $messagelenght=0, $filesize=0)
+function attach_generate_filename($storagepath, $filename, $messagelenght=0, $filesize=0, $post_id = 0)
 {
+	require_once('inc/urls.php');
+
+	if(!$post_id)
+		$post_id = 'z'.rand(1000,1999);
+
+	$ext = attach_get_extension($filename);
+
+	$filename = translite_path_simple($filename);
+	$filename = preg_replace('/^(.{1,200}).*?(\.\w+)$/', '$1$2', $filename);
+	$filename = preg_replace('/^(.{1,210}).*?$/', '$1', $filename);
+
+	$filename = date('d')."-$post_id-$filename";
+
+//	var_dump($filename); exit();
+
+	return $filename;
+
 	$not_unique=true;
 	while($not_unique)
 	{
@@ -105,33 +122,45 @@ function attach_create_attachment($name='', $mime='', $size=0, $tmp_name='', $po
 {
 		global $db, $pun_user, $pun_config;
 
+		$base = $pun_config['attach_basefolder'];
+
 		// fetch an unique name for the file
 		$unique_name = attach_generate_filename(
-			$pun_config['attach_basefolder'].$pun_config['attach_subfolder'].'/',
+			$base.$pun_config['attach_subfolder'].'/',
 			$name,
 			$messagelenght,
-			$size);
+			$size, $post_id);
 
+		$rel_path = date('Y/m');
+
+/*
 		$sub1 = substr($unique_name, 0, 2);
 		$sub2 = substr($unique_name, 2, 2);
 		@mkdir($pun_config['attach_basefolder'].$sub1, 0775);
 		@mkdir($pun_config['attach_basefolder']."$sub1/$sub2", 0775);
+*/
 
-//		exit("attach_basefolder = {$pun_config['attach_basefolder']}, sub1=$sub1, sub2=$sub2, unique_name=$unique_name<br/>\n");
+		mkpath($base.$rel_path, 0775);
+
+//		exit("Аттачи в процессе отладки. Подождите минут 10-15.<br/>attach_basefolder = {$base}, rel=$rel_path, unique_name=$unique_name<br/>\n");
 		// move the uploaded file from temp to the attachment folder and rename the file to the unique name
-		if(!move_uploaded_file($tmp_name,$pun_config['attach_basefolder']."$sub1/$sub2/".$unique_name))
-			error('Unable to move file from: '.$tmp_name.' to '.$pun_config['attach_basefolder']."$sub1/$sub2/".$unique_name.'',__FILE__,__LINE__);
+		if(!move_uploaded_file($tmp_name, $base."$rel_path/".$unique_name))
+			error('Unable to move file from: '.$tmp_name.' to '.$base."$rel_path/".$unique_name.'',__FILE__,__LINE__);
 			//return false;
 
 		if(strlen($mime)==0)
 			$mime = attach_create_mime(attach_find_extension($name));
 
-		$post = object_load('forum_post', $post_id);
+		$post = bors_load('balancer_board_post', $post_id);
 		$post->set_have_attach(NULL, true);
 		$post->store();
 		// update the database with this info
-		$result = $db->query('INSERT INTO '.$db->prefix.'attach_2_files (owner,post_id,filename,extension,mime,location,size) VALUES (\''.$pun_user['id'].'\',\''.$post_id.'\',\''.$db->escape($name).'\',\''.attach_get_extension($name).'\',\''.$db->escape($mime).'\',\''.$db->escape("$sub1/$sub2/".$unique_name).'\',\''.$size.'\')')
-			or error('Unable to insert attachment record into database.',__FILE__,__LINE__,$db->error());
+		$result = $db->query('INSERT INTO '.$db->prefix
+			.'attach_2_files (owner,post_id,filename,extension,mime,location,size) VALUES (\''
+			.$pun_user['id'].'\',\''.$post_id.'\',\''.$db->escape($name).'\',\''
+			.attach_get_extension($name).'\',\''.$db->escape($mime).'\',\''
+			.$db->escape("$rel_path/".$unique_name).'\',\''.$size.'\')')
+				or error('Unable to insert attachment record into database.',__FILE__,__LINE__,$db->error());
 		return true;
 }
 
@@ -222,7 +251,7 @@ function attach_delete_attachment($item=0){
 			// this thing overrides if no orphans should be created, and thus the user must always be able to delete all attachments in threads or posts when using delete.php or moderate.php
 		}
 	}
-	
+
 	if($attach_allowed_delete){
 		// fetch the info for the file
 		$result = $db->query('SELECT af.location FROM '.$db->prefix.'attach_2_files AS af WHERE af.id = \''.$item.'\' LIMIT 1')or error('Unable to load file info',__FILE__,__LINE__,$db->error());
@@ -233,6 +262,10 @@ function attach_delete_attachment($item=0){
 		if (!$fp)
 			error('Error creating filepointer for file to delete/reset size, for attachment with id: "'.$item.'"',__FILE__,__LINE__);
 		fclose($fp); // file should now be 0 bytes, 'w' will place the pointer at start, and trunate the file... and I don't put anything in there...
+
+		// Непонятно, зачем они их затирали, если можно стереть? :-/
+		unlink($pun_config['attach_basefolder'].$attach_location);
+
 		// if successful, remove the database entry
 		$result = $db->query('DELETE FROM '.$db->prefix.'attach_2_files WHERE id = \''.$item.'\' LIMIT 1')or error('Unable to delete attachment record in database',__FILE__,__LINE__,$db->error());
 		return true;

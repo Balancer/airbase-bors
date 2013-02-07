@@ -78,12 +78,12 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 			|| $_SERVER['REMOTE_ADDR'] == '91.145.222.44'
 			|| $_SERVER['REMOTE_ADDR'] == '66.249.70.155'
 			|| $_SERVER['REMOTE_ADDR'] == '140.78.165.22' // 2	28438	0.43%	27980	0.73%	707.42 MB	1.59%	362	0.10%	140.78.165.22	Austria
-		
+
 			|| preg_match('!^66\.249\.!', $_SERVER['REMOTE_ADDR'])
 			|| preg_match('!^62\.80\.17!', $_SERVER['REMOTE_ADDR'])  //62.80.175.58, '62.80.172.224'
 		)
 			message("Ваш IP заблокирован в аттачах за создание очень высокого зарубежного трафика. Подробнее - http://www.balancer.ru/forum/punbb/viewtopic.php?pid=967737#p967737 ".$anon);
-		
+
 		$ch = new Cache();
 		if(!($diff = $ch->get('stat', 'agava-rate')))
 		{
