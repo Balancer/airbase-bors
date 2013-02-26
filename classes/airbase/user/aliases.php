@@ -4,14 +4,15 @@ class airbase_user_aliases extends base_page
 {
 	function title() { return ec('Пользователи, писавшие с тех же IP, что и ').$this->user()->title().ec(' c ').date('d.m.Y', $this->last_post_time()-86400*30).ec(' по ').date('d.m.Y', $this->last_post_time()); }
 	function config_class() { return 'airbase_forum_config'; }
-	function user() { return object_load('bors_user', $this->id()); }
+	function user() { return bors_load('balancer_board_user', $this->id()); }
 	function can_be_empty() { return false; }
-	function is_loaded() { $this->init(); return $this->user() != NULL; }
+	function is_loaded() { $this->data_load(); return $this->user() != NULL; }
 
 	function last_post_time()
 	{
 		if($this->__havefc())
 			return $this->__lastc();
+
 		return $this->__setc($this->db('AB_FORUMS')->select('posts', 'MAX(posted)', array('poster_id' => $this->id())) + 1);
 	}
 

@@ -124,7 +124,7 @@ set_magic_quotes_runtime(0);
 
 
 // Load the functions script
-require PUN_ROOT.'include/functions.php';
+require_once PUN_ROOT.'include/functions.php';
 
 // Load DB abstraction layer and try to connect
 require PUN_ROOT.'include/dblayer/common_db.php';

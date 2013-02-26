@@ -669,8 +669,8 @@ function avatar_thumb($geo)
 		if($this->attr('next_can_post'))
 			return $this->attr('next_can_post');
 
-		$first_in_day = objects_array('balancer_board_post', array(
-			'owner_id' => $this->id(), 
+		$first_in_day = bors_find_all('balancer_board_post', array(
+			'balancer_board_post.owner_id=' => $this->id(), 
 			'create_time>' => time()-86400*2,
 			'order' => '-create_time',
 			'limit' => $limit,
@@ -678,12 +678,15 @@ function avatar_thumb($geo)
 			'balancer_board_topic.forum_id=' => $forum_id,
 		));
 
-		$first_in_day = $first_in_day[count($first_in_day)-1];
+		if($first_in_day)
+			$first_in_day = $first_in_day[count($first_in_day)-1];
+		else
+			$first_in_day = NULL;
 
 		return $this->set_attr('next_can_post', $first_in_day ? $first_in_day->create_time()+86400 : NULL);
 	}
 
-	function blog() { return object_load('balancer_board_blog', $this->id()); }
+	function blog() { return bors_load('balancer_board_blog', $this->id()); }
 
 	function utmx_update()
 	{

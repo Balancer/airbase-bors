@@ -584,15 +584,6 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function visits_per_day() { return (86400.0*$this->visits())/($this->last_visit_time() - $this->first_visit_time() + 1); }
 
-	private $owner = false;
-	function owner()
-	{
-		if($this->owner === false)	
-			$this->owner = object_load('bors_user', $this->owner_id());
-
-		return $this->owner;
-	}
-
 	function repaging_posts($page = NULL)
 	{
 		bors()->changed_save();
@@ -685,6 +676,7 @@ $(function() {
 	function auto_objects()
 	{
 		return array(
+			'owner' => 'balancer_board_user(owner_id)',
 			'first_post' => 'balancer_board_post(first_post_id)',
 			'last_post' => 'balancer_board_post(last_post_id)',
 		);
@@ -694,6 +686,9 @@ $(function() {
 	{
 		if(!is_object($user))
 			return 0;
+
+		if($user->id() == bors()->user_id() && ($lv = $this->get('joined_last_visit')))
+			return $lv;
 
 		return intval($this->db()->select('topic_visits', 'last_visit', array(
 			'user_id=' => $user->id(),
