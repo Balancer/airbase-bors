@@ -1,9 +1,10 @@
 <?php
 
-class balancer_blogs_tags_show extends base_page
+class balancer_blogs_tags_show extends balancer_board_page
 {
-	function can_be_empty() { return false; }
-	function is_loaded() { return true; }
+//TODO: разобраться, почему не работает!
+//	function can_be_empty() { return false; }
+//	function is_loaded() { return true; }
 
 	static function keywords_explode($keywords_string)
 	{

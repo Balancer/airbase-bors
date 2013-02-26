@@ -1,9 +1,7 @@
 <?php
 
-class balancer_board_topics_visit extends base_object_db
+class balancer_board_topics_visit extends balancer_board_object_db
 {
-	function storage_engine() { return 'bors_storage_mysql'; }
-	function db_name() { return 'AB_FORUMS'; }
 	function table_name() { return 'topic_visits'; }
 	function table_fields()
 	{
@@ -15,6 +13,7 @@ class balancer_board_topics_visit extends base_object_db
 			'count',
 			'first_visit',
 			'last_post_id',
+			'is_disabled',
 		);
 	}
 }

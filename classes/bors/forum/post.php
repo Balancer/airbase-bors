@@ -210,7 +210,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if($ps = $this->post_source())
 			return $ps;
 
-		debug_hidden_log('messages-lost-3', 'Empty post source!');
+		debug_hidden_log('messages-lost-3', 'Empty post '.$this->id().' source!');
 		return '';
 	}
 

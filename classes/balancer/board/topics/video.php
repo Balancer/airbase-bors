@@ -7,9 +7,9 @@ class balancer_board_topics_video extends balancer_board_topics_blog
 
 	function url($page = NULL)
 	{
-		return $this->topic()->category()->url()
-			.date("Y/m", $this->topic()->create_time())."/t{$this->id()}/video"
-			.(is_null($page) || $page == $this->default_page() ? '' : "/{$page}.html");
+		return $this->topic()->category()->category_base_full()
+			.date("Y/m", $this->topic()->create_time())."/t{$this->id()}/video/"
+			.(is_null($page) || $page == $this->default_page() ? '' : "{$page}.html");
 	}
 
 	function order() { return 'create_time'; }

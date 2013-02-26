@@ -47,7 +47,7 @@ if(defined('PUN_ADMIN_CONSOLE'))
 		return;
 
 // Load the functions script
-require PUN_ROOT.'include/functions.php';
+require_once PUN_ROOT.'include/functions.php';
 
 // Reverse the effect of register_globals
 if (@ini_get('register_globals'))
