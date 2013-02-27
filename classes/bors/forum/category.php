@@ -45,7 +45,7 @@ function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 		{
 			$cat = $this;
 			while(!$cat->category_base() && $this->parent_category_id())
-				$cat = class_load('forum_category', $this->parent_category_id());
+				$cat = bors_load('balancer_board_category', $this->parent_category_id());
 
 			return $cat->category_base();
 		}
@@ -69,7 +69,7 @@ function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 		{
 			$subcats = array();
 			foreach($this->direct_subcats_ids() as $cat_id)
-				$subcats[] = class_load('forum_category', $cat_id);
+				$subcats[] = bors_load('balancer_board_category', $cat_id);
 			return $subcats;
 		}
 
@@ -83,7 +83,7 @@ function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 					continue;
 
 				$processed[] = $forum_id;
-				$subforum = $cats[] = class_load('forum_category', $forum_id);
+				$subforum = $cats[] = bors_load('balancer_board_category', $forum_id);
 				$cats = array_merge($cats, $subforum->all_subforums($processed));
 			}
 

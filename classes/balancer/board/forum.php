@@ -26,7 +26,7 @@ class balancer_board_forum extends forum_forum
 		do {
 			$result[] = $current_forum->nav_name();
 			if($parent = $current_forum->parent_forum_id())
-				$current_forum = $forums ? $forums[$parent] : object_load('airbase_forum_forum', $parent);
+				$current_forum = $forums ? $forums[$parent] : bors_load('balancer_board_forum', $parent);
 		} while($parent);
 
 		$cat = $cats ? $cats[$current_forum->category_id()] : $current_forum->category();
