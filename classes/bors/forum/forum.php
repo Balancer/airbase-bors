@@ -92,7 +92,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		while($f->category_id() == 0)
 			$f = object_load(config('punbb.forum_class', 'forum_forum'), $f->parent_forum_id());
 
-		return $this->__category = object_load('forum_category', $f->category_id());
+		return $this->__category = object_load('balancer_board_category', $f->category_id());
 	}
 
 	function parents()
@@ -129,7 +129,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		$db->close(); $db = NULL;
 
 //			foreach($topics as $tid)
-//				$data['topics'][] = class_load('forum/borsForumTopic', $tid);
+//				$data['topics'][] = bors_load('forum/borsForumTopic', $tid);
 
 		$data['this'] = $this;
 
@@ -191,10 +191,10 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	{
 		$children_caches = array();
 		if($this->parent_forum_id())
-			$children_caches[] = class_load(config('punbb.forum_class', 'forum_forum'), $this->parent_forum_id());
+			$children_caches[] = bors_load(config('punbb.forum_class', 'forum_forum'), $this->parent_forum_id());
 
 		if($this->category_id())
-			$children_caches[] = class_load('forum_category', $this->category_id());
+			$children_caches[] = bors_load('balancer_board_category', $this->category_id());
 
 		return $children_caches;
 	}
@@ -220,7 +220,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	{
 		$subforums = array();
 		foreach($this->direct_subforums_ids() as $forum_id)
-			$subforums[] = class_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
+			$subforums[] = bors_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
 		return $subforums;
 	}
 
@@ -234,7 +234,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 				continue;
 
 			$processed[] = $forum_id;
-			$subforum = $forums[] = class_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
+			$subforum = $forums[] = bors_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
 			$forums = array_merge($forums, $subforum->all_subforums($processed));
 		}
 
