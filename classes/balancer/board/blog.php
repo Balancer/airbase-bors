@@ -33,8 +33,18 @@ class balancer_board_blog extends forum_blog
 		return $blog;
 	}
 
+	function auto_targets()
+	{
+		return array_merge(parent::auto_targets(), array(
+			'blog_source' => 'blog_source_class(blog_source_id)',
+		));
+	}
+
 	function feed_entry()
 	{
+		if($f = $this->blog_source())
+			return $f;
+
 		return bors_find_first('bors_external_feeds_entry', array(
 			'target_class_name IN' => array('balancer_board_post', 'forum_post'),
 			'target_object_id' => $this->id(),

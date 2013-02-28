@@ -45,11 +45,11 @@ if (defined('PUN_SHOW_QUERIES'))
 switch ($db_type)
 {
 	case 'mysql':
-		require PUN_ROOT.'include/dblayer/mysql.php';
+		require_once PUN_ROOT.'include/dblayer/mysql.php';
 		break;
 
 	case 'mysqli':
-		require PUN_ROOT.'include/dblayer/mysqli.php';
+		require_once PUN_ROOT.'include/dblayer/mysqli.php';
 		break;
 
 	case 'pgsql':

@@ -3,9 +3,12 @@
 class airbase_board_forum_prss extends base_rss
 {
 	function title() { return ec('Новые сообщения на форуме ').$this->forum()->title(); }
-	function forum() { return object_load('forum_forum', $this->id()); }
+	function forum() { return bors_load('balancer_board_forum', $this->id()); }
 
 	function main_url() { return $this->forum()->url(); }
+
+	function can_be_empty() { return false; }
+	function is_loaded() { return (bool) $this->forum(); }
 
 	function pre_show()
 	{

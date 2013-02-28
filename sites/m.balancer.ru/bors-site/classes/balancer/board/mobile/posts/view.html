@@ -4,4 +4,5 @@
 {if $prev}««« {$prev->nav_named_link()}{/if} 
 {if $prev and $next} | {/if} 
 {if $next} {$next->nav_named_link()} »»»{/if} 
-]
+]<br/>
+<small>Полная версия: <a href="{$this->post()->url_in_container()}">{$this->post()->title()}</small>
