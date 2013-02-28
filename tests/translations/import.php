@@ -1,6 +1,6 @@
 <?php
 
-// exit();
+exit();
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Это реально занятый в системе скрипт! Не экспериментировать!
@@ -32,7 +32,7 @@ foreach(objects_array('bors_external_feed', array('is_suspended!=' => 1)) as $fe
 {
 	//$feed = object_load('bors_external_feed', 4);
 	echo "[".date('d.m.Y H:i')."] Feed {$feed->feed_url()}\n";
-	$feed->update();
+	$feed->update(false, true); // test, rss-reread
 	bors()->changed_save();
 	sleep(1);
 }

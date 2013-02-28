@@ -5,7 +5,13 @@ class balancer_board_mobile_topics_view extends balancer_board_mobile_page
 	function url($page = NULL) { return '/t'.$this->id().($page > 1 ? ".$page" : ""); }
 	function title() { return ($t = $this->topic()) ? $t->title() : 'Ошибочный топик'; }
 
-	function pre_parse() { if(!$this->topic()) return bors_http_error(404); else return parent::pre_parse(); }
+	function pre_parse()
+	{
+		if(!$this->topic() || !$this->topic()->first_post() || !$this->topic()->last_post())
+			return bors_http_error(404);
+
+		return parent::pre_parse();
+	}
 
 	function can_read() { return ($t = $this->topic()) && $t->is_public(); }
 

@@ -54,7 +54,7 @@ if(top.me_is_coordinator)
 	<td class="{$backcolor}">{$r->create_time()|full_time}</td>
 	<td class="{$backcolor}">{if $r->score() > 0}+{/if}{$r->score()}</td>
 	<td class="{$backcolor}">
-		<a href="http://www.balancer.ru/user/{$r->voter_id()}/">{$u->title()}</a><br />
+		<a href="http://www.balancer.ru/user/{$r->voter_id()}/">{object_property($u, 'title')}</a><br />
 		<a href="http://www.balancer.ru/user/{$r->voter_id()}/reputation/"><img src="http://www.balancer.ru/user/{$r->voter_id()}/rep.gif" width="100" height="16" border="0" /></a></td> 
 	<td class="{$backcolor}">{$r->comment()|truncate:500|lcml_bb}
 		<script>add_warn('{$r->internal_uri()}', {$r->voter_id()})</script>
