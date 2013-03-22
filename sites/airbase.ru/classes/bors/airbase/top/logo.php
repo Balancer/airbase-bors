@@ -47,7 +47,8 @@ class airbase_top_logo extends base_image_png
 
 		$id = $this->id();
 
-		$cache = new bors_cache_file(NULL);
+//		$cache = new bors_cache_file(NULL);
+		$cache = new bors_cache_redis(NULL);
 		if($cache->get('aviatop_logo', $id))
 			return $cache->last();
 
