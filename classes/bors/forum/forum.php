@@ -109,7 +109,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	function pre_show()
 	{
 		if(!$this->can_read())
-			return bors_message(ec("Извините, доступ к этому ресурсу закрыт для Вас."));
+			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
 
 		return parent::pre_show();
 	}

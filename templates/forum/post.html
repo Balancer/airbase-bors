@@ -78,7 +78,7 @@
 	{/if}
 {/if}
 
-{if $p->attaches()}
+{if $p->attaches() && !$p->is_hidden()}
 <div style="margin-top: 10px; clear: both; border-top: 1px dotted #ccc;">
 <i style="margin-left: 8px">Прикреплённые файлы:</i><br/>
 {$p|post_attaches}

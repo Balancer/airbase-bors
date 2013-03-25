@@ -83,7 +83,7 @@ class balancer_board_topic_view extends bors_view_container
 		if(!$this->topic()->forum() || !$this->forum()->can_read())
 		{
 			template_noindex();
-			return bors_message("Извините, доступ к этому ресурсу закрыт для Вас");
+			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
 		}
 
 		if($this->page() > $this->topic()->total_pages())
