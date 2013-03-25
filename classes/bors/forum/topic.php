@@ -177,7 +177,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if(!$this->forum() || !$this->forum()->can_read())
 		{
 			template_noindex();
-			return bors_message("Извините, доступ к этому ресурсу закрыт для Вас");
+			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
 		}
 
 		return false;

@@ -10,9 +10,9 @@ class forum_printable extends forum_topic
 	function body()
 	{
 		$forum = class_load('forum_forum', $this->forum_id());
-		
+
 		if(!$forum->can_read())
-			return ec("Извините, доступ к этому ресурсу закрыт для Вас");
+			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
 
 		$GLOBALS['cms']['cache_disabled'] = true;
 
@@ -30,7 +30,7 @@ class forum_printable extends forum_topic
 
 		return template_assign_data("templates/printable.html", $data);
 	}
-		
+
 	function template()
 	{
 		return "forum/printable.html";

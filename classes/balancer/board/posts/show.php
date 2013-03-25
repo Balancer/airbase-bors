@@ -48,7 +48,7 @@ class balancer_board_posts_show extends bors_view
     	if(!$topic->forum()->can_read())
 		{
 			template_noindex();
-			return bors_message(ec("Извините, доступ к этому ресурсу закрыт для Вас"));
+			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
 		}
 
 		return false;
