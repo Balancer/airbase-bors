@@ -77,8 +77,8 @@ class airbase_user_warning_type extends base_list
 			'22' => 1,
 			'23' => 4,
 			'24' => 5,
-			'25' => 5,
-			'26' => 10,
+			'25' => 10,
+			'26' => 5,
 		);
 
 		return $scores[$id];

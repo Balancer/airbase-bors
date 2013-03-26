@@ -1,0 +1,4 @@
+extends: bors_db_page
+config_class: airbase_config
+db_name: AB_RESOURCES
+table_name: pages

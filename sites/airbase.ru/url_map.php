@@ -2,6 +2,7 @@
 
 bors_url_map(array(
 	'/login/ => wrk_mauth_login',
+	'/alpha/rus/n/nk/144/ => airbase_db_page(url)',
 ));
 
 $map = array(
