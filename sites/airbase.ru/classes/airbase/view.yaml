@@ -1,0 +1,7 @@
+#- http://www.airbase.ru/alpha/rus/n/nk/144/
+
+extends: bors_view
+model(): "$this->id()"
+main_class(): "$this->id()->class_name()"
+model_class(): "$this->id()->class_name()"
+
