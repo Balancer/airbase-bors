@@ -12,7 +12,7 @@ template_js_include('/_bal/js/common.js?');
 template_js_include('/_bors/js/bors-jquery.js');
 
 jquery_lazyLoadAd::on("'.bors_lazy_ad'");
-jquery_cloudZoom::load();
+// jquery_cloudZoom::load(); Перенесено в _topic
 
 // template_js_include('/_bors3rdp/js/'.config('js.flowplayer.path').'/'.config('js.flowplayer.include'));
 

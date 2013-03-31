@@ -44,11 +44,11 @@ $markitup_base = config('jquery.markitup.base');
 $markitup_sets = config('jquery.markitup.sets.bbcode');
 
 $header[] = <<< __EOT__
-<link rel="stylesheet" type="text/css" href="/_bors3rdp/jquery/plugins/$markitup_base/skins/simple/style.css" />
+<link rel="stylesheet" type="text/css" href="$markitup_base/skins/simple/style.css" />
 <link rel="stylesheet" type="text/css" href="/_bors3rdp/jquery/plugins/$markitup_sets/style.css" />
 
 <script type="text/javascript" src="/_bors3rdp/jquery/jquery.js"></script>
-<script type="text/javascript" src="/_bors3rdp/jquery/plugins/$markitup_base/jquery.markitup.js"></script>
+<script type="text/javascript" src="$markitup_base/jquery.markitup.js"></script>
 <script type="text/javascript" src="/_bors3rdp/jquery/plugins/$markitup_sets/set.js"></script>
 
 <script language="javascript">

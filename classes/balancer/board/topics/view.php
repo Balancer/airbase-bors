@@ -1,20 +1,21 @@
 <?php
 
-class balancer_board_topic_view extends bors_view_container
+class balancer_board_topics_view extends bors_view_container
 {
 	function container_class() { return 'balancer_board_topic'; }
 	function nested_class() { return 'balancer_board_post'; }
 
-	function is_auto_url_mapped_class() { return true; }
+	function auto_map() { return true; }
 
 	function config_class() { return 'balancer_board_config'; }
 
 	function uri_name() { return 't'; }
 	function nav_name() { return truncate($this->title(), 60); }
+	function order() { return 'id'; }
 
 	function forum() { return $this->topic()->forum(); }
 
-	function url($page = NULL) { return 'http://www.balancer.ru/board/topics/view/'.$this->topic()->id().'/'.($page && $page != 1 ? $page.'.html' : ''); }
+//	function url($page = NULL) { return 'http://www.balancer.ru/board/topics/view/'.$this->topic()->id().'/'.($page && $page != 1 ? $page.'.html' : ''); }
 
 	function keywords_linked()
 	{
@@ -55,16 +56,23 @@ class balancer_board_topic_view extends bors_view_container
 			}
 
 			$uid = $me->id();
-			$x = $this->db()->select('topic_visits', 'last_visit, last_post_id', array('user_id='=>$uid, 'topic_id='=>$this->id()));
-			$last_visit = @$x['last_visit'];
+			$v = bors_find_first('balancer_board_topics_visit', array('user_id' => $uid, 'topic_id' => $this->id()));
+			$last_visit = object_property($v, 'last_visit');
 
 			if(empty($last_visit))
-				$last_visit = $this->db()->select('topic_visits', 'MIN(last_visit)', array('last_visit>' => 0));
+			{
+				$x = bors_find_first('balancer_board_topics_visit', array('last_visit>' => 0, 'order' => 'last_visit'));
+				if($x)
+					$last_visit = $x->last_visit();
+				else
+					$last_visit = 0;
+			}
 
-			$first_new_post_id = intval($this->db()->select('posts', 'MIN(id)', array(
+			$first_new_post_id = intval(object_property(bors_find_first('balancer_board_post', array(
 				'topic_id' => $this->id(),
 				'posted>' => $last_visit,
-			)));
+				'order' => 'id',
+			)), 'id'));
 
 			if($first_new_post_id)
 			{
@@ -125,7 +133,6 @@ $(function() {
 
 	function body_data()
 	{
-
 		$data = array(
 			'is_last_page' => $this->is_last_page(),
 		);
@@ -145,6 +152,7 @@ $(function() {
 
 		$data['topic'] = $this->topic();
 		$data['forum'] = $this->topic()->forum();
+
 		return array_merge(parent::body_data(), $data);
 	}
 
@@ -184,37 +192,32 @@ $(function() {
 
 	function touch($user_id)
 	{
-		$visits = intval($this->db()->select('topic_visits', 'count', array('user_id=' => $user_id, 'topic_id=' => $this->id()))) + 1;
+		$v = bors_find_first('balancer_board_topics_visit', array('user_id' => $user_id, 'target_object_id' => $this->id()));
+		// intval($this->db()->select('topic_visits', 'count', array('user_id=' => $user_id, 'topic_id=' => $this->id()))) + 1;
 
-		$data = array(
-			'target_class_id' => $this->class_id(),
-			'topic_id' => $this->id(),
-			'user_id' => $user_id,
-			'count' => $visits,
-			'last_visit' => time(),
-			'last_post_id' => $this->last_post_id(),
-		);
 
-		if($visits == 1)
-		{
-			$data['first_visit'] = time();
-			$this->db()->replace('topic_visits', $data);
-		}
-		else
-		{
-			$this->db()->update('topic_visits', array(
-					'user_id' => intval($user_id),
-					'topic_id' => intval($this->id())
-				), $data);
-		}
+		if(!$v)
+			$v = bors_new('balancer_board_topics_visit', array(
+				'target_class_id' => $this->class_id(),
+				'target_object_id' => $this->id(),
+				'user_id' => $user_id,
+				'count' => 0,
+				'last_visit' => time(),
+				'last_post_id' => $this->last_post_id(),
+			));
+
+		$v->set_count($this->count() + 1);
+		$v->set_last_visit(time());
+		$v->set_last_post_id($this->last_post_id());
 	}
 
 	function visits_counting() { return true; }
 
 	function visits_per_day() { return (86400.0*$this->visits())/($this->last_visit_time() - $this->first_visit_time() + 1); }
 
-	function keywords() { return array_map('trim', explode(',', $this->object()->keywords())); }
-	function keywords_string() { return array_map('trim', explode(',', $this->object()->keywords_string())); }
+	function keywords() { return array_map('trim', $this->model()->keywords()); }
+	function keywords_string() { return join(",", array_map('trim', explode(',', $this->object()->keywords_string()))); }
+//	function keywords_string() { return $this->model()->keywords_string(); }
 
 	function template()
 	{

@@ -223,7 +223,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 {if $me_id}
 | <a href="http://forums.balancer.ru/personal/updated/">нечитанное обновлённое</a>
 | <a href="http://www.balancer.ru/users/{$me_id}/votes/">оценки</a>
-{if $this->class_name() == 'balancer_board_topic'}
+{if $this->class_name() == 'balancer_board_topic' || $this->class_name() == 'balancer_board_topics_view' }
 | <a href="http://www.balancer.ru/forum/user-{$me_id}-posts-in-topic-{$this->id()}/">Ваше в теме</a>
 {/if}
 {/if}
@@ -312,7 +312,7 @@ if(me_id < 2 || !me_hash)
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/templates/login.js\"></"+"script>")
 else {ldelim}
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
-{if $this && $this->class_name() == 'balancer_board_topic'}
+{if $this && ($this->class_name() == 'balancer_board_topic' || $this->class_name() == 'balancer_board_topics_view')}
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?{$this->class_name()}://{$this->id()}&"+Math.random()+"\"></"+"script>")
 {/if}
 {rdelim}
@@ -320,7 +320,7 @@ else {ldelim}
 <noscript><p>Не работает без JavaScript</p></noscript>
 </dd></dl>
 
-{if $this->new_class_name() == 'balancer_board_topic' && $me}
+{if ($this->new_class_name() == 'balancer_board_topic' || $this->new_class_name() == 'balancer_board_topics_view') && $me}
 <script type="text/javascript" src="http://www.balancer.ru/js/board/topics/t{$this->id()}-similar.js"></script>
 {/if}
 
