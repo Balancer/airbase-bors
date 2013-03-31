@@ -1,5 +1,16 @@
 <?php
 
+// define('USE_BOOTSTRAP', config('is_developer'));
+
+if(bors()->user_id() == 10000)
+{
+	//config_set('debug_mysql_queries_log', true); // — только строки запросов, без стека
+	config_set('debug_mysql_queries_log', 20);
+}
+else
+	debug_hidden_log('Unknown-user', 'unknown user in topic');
+
+
 class balancer_board_topics_view extends bors_view_container
 {
 	function container_class() { return 'balancer_board_topic'; }
@@ -11,7 +22,12 @@ class balancer_board_topics_view extends bors_view_container
 
 	function uri_name() { return 't'; }
 	function nav_name() { return truncate($this->title(), 60); }
-	function order() { return 'id'; }
+
+	function where() { return array_merge(parent::where(), array(
+		'is_deleted' => false,
+	)); }
+
+	function order() { return 'sort_order,create_time'; }
 
 	function forum() { return $this->topic()->forum(); }
 
@@ -24,7 +40,7 @@ class balancer_board_topics_view extends bors_view_container
 
 		require_once('inc/airbase_keywords.php');
 		$kws = $this->keywords_string();
-		return $this->__setc($kws ? airbase_keywords_linkify($kws) : '');
+		return $this->__setc($kws ? airbase_keywords_linkify($kws, '', 'bootstrap') : '');
 	}
 
 	function keywords_linked_q()
@@ -40,8 +56,24 @@ class balancer_board_topics_view extends bors_view_container
 
 	function parents() { return array($this->topic()->forum()); }
 
+	function body()
+	{
+		$body_cache = new Cache();
+		$state = $body_cache->get('bors_page_body-v3.alt', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time());
+		if($state)
+			return $this->attr['body'] = bors_lcml::output_parse($body_cache->last().'<!-- cached -->');
+
+		return bors_lcml::output_parse($body_cache->set(parent::body(), 86400));
+	}
+
 	function pre_show()
 	{
+		if(USE_BOOTSTRAP)
+		{
+			twitter_bootstrap::load();
+			bors_use('/_bal/css/bootstrap-bb-append.css');
+		}
+
 		if(!$this->topic()->is_repaged() && rand(0,5) == 0)
 			$this->topic()->repaging_posts();
 
@@ -124,12 +156,7 @@ $(function() {
 		return parent::pre_show();
 	}
 
-	function is_last_page() { return $this->page() == $this->total_pages(); }
-
-	function on_nested_load(&$posts)
-	{
-		bors_objects_preload($posts, 'owner_id', 'balancer_board_user', 'owner');
-	}
+	function is_last_page() { return $this->page() == $this->topic()->total_pages(); }
 
 	function body_data()
 	{
@@ -139,8 +166,8 @@ $(function() {
 
 		if($this->is_last_page())
 		{
-			$data['last_actions'] = array_reverse(objects_array('balancer_board_action', array(
-				'target_class_name' => $this->class_name(),
+			$data['last_actions'] = array_reverse(bors_find_all('balancer_board_action', array(
+				'target_class_name IN' => array($this->topic()->class_name(), $this->class_name(), $this->topic()->extends_class_name()),
 				'target_object_id' => $this->id(),
 				'order' => '-create_time',
 				'group' => 'target_class_name, target_object_id, message',
@@ -153,8 +180,120 @@ $(function() {
 		$data['topic'] = $this->topic();
 		$data['forum'] = $this->topic()->forum();
 
+		if(USE_BOOTSTRAP)
+		{
+			$data['tcfg'] = bors_load('balancer_board_themes_bootstrap', NULL);
+			$data['pagination'] = $this->pages_links_list(array(
+				'div_css' => 'pagination pagination-centered pagination-small',
+				'li_current_css' => 'active',
+				'li_skip_css' => 'disabled',
+				'skip_title' => true,
+			));
+		}
+		else
+		{
+			$data['tcfg'] = bors_load('balancer_board_themes_default', NULL);
+			$data['pagination'] = $this->pages_links_nul();
+		}
+
+		$data['use_bootstrap'] = USE_BOOTSTRAP;
+
 		return array_merge(parent::body_data(), $data);
 	}
+
+	function on_items_load(&$items)
+	{
+		parent::on_items_load($items);
+		$owners = bors_objects_preload($items, 'owner_id', 'balancer_board_user', 'owner');
+		bors_objects_preload($owners, 'group_id', 'balancer_board_group', 'group');
+		bors_objects_preload($items, 'answer_to_id', 'balancer_board_post', 'answer_to');
+
+		$first_post_time = time()+1;
+		$last_post_time = -1;
+		foreach($items as $p)
+		{
+			if($p->create_time() > $last_post_time)
+				$last_post_time = $p->create_time();
+
+			if($p->create_time() < $first_post_time)
+				$first_post_time = $p->create_time();
+		}
+
+		$post_ids = bors_field_array_extract($items, 'id');
+
+		// Прописываем изменения репутации по постингам.
+		$reps = bors_find_all('airbase_user_reputation', array(
+			'target_class_name IN' => array('forum_post', 'balancer_board_post'),
+			'target_object_id IN' => $post_ids,
+			'order' => 'target_object_id, id',
+		));
+
+		foreach($reps as $r)
+		{
+			if($r->is_deleted())
+				continue;
+
+			$post = $items[$r->target_object_id()];
+			$post_reps = $post->get('reputation_records', array());
+			$post_reps[] = $r;
+			$post->set_attr('reputation_records', $post_reps);
+		}
+
+		$prev_post_time = $this->page() > 1 ? $first_post_time : 0;
+		$next_post = $this->is_last_page() ? NULL : bors_find_first('balancer_board_post', array('topic_id' => $this->id(), 'order' => '`order`, posted', 'create_time>' => $last_post_time));
+
+		$next_post_time = object_property($next_post, 'create_time', time()+1);
+
+		$actions = bors_find_all('balancer_board_action', array(
+			'create_time BETWEEN' => array($prev_post_time, $next_post_time),
+			'target_class_name IN' => array($this->topic()->class_name(), $this->topic()->extends_class_name(), $this->topic()->new_class_name(), $this->class_name()),
+			'target_object_id' => $this->id(),
+			'order' => 'create_time',
+		));
+
+		$post_values = array_values($items);
+
+		// Соберём события, бывшие первого сообщения темы
+		$prev_actions = array();
+		if($actions)
+		{
+			for($action_pos = 0; $action_pos < count($actions); $action_pos++)
+			{
+				$x = $actions[$action_pos];
+
+				if($x->create_time() > $first_post_time)
+					break;
+
+				$prev_actions[] = $x;
+			}
+
+
+			for($post_pos = 0; $post_pos<count($post_values); $post_pos++)
+			{
+				$post_actions = array();
+				$p = $post_values[$post_pos];
+
+				if($action_pos < count($actions))
+				{
+					$next_time = $post_pos+1 >= count($post_values) ? time()+1 : $post_values[$post_pos+1]->create_time();
+
+					for($action_pos; $action_pos < count($actions); $action_pos++)
+					{
+						$x = $actions[$action_pos];
+
+						if($x->create_time() > $next_time)
+							break;
+
+						$post_actions[] = $x;
+					}
+				}
+
+				$p->set_attr('actions', $post_actions);
+			}
+		}
+	}
+
+	function model() { return bors_load('balancer_board_topic', $this->id()); }
 
 	function items_per_page() { return 25; }
 	function items_around_page() { return 12; }
@@ -221,6 +360,9 @@ $(function() {
 
 	function template()
 	{
+		if(USE_BOOTSTRAP)
+			return 'xfile:bootstrap/index.html';
+
 		if($this->forum()->category()->category_template())
 		{
 			$app = $this->forum()->category()->bors_append();

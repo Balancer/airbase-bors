@@ -1,7 +1,18 @@
 <?php
 
-function airbase_keywords_linkify($keywords_string, $base_keywords = '')
+function airbase_keywords_linkify($keywords_string, $base_keywords = '', $tpl = '')
 {
+	switch($tpl)
+	{
+		case 'bootstrap':
+			$result = array();
+			foreach(explode(',', $keywords_string) as $key)
+				$result[] = "<a href=\"".config('tags_root_url', 'http://forums.balancer.ru/tags')."/".
+					join("/", array_map('urlencode', balancer_board_keywords_tags::keywords_explode($key.','.$base_keywords)))
+				."/\" class=\"badge badge-info\">".trim($key)."</a>";
+			return join(' ', $result);
+	}
+
 	$result = array();
 	foreach(explode(',', $keywords_string) as $key)
 		$result[] = "<a href=\"".config('tags_root_url', 'http://forums.balancer.ru/tags')."/".

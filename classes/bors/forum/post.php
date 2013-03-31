@@ -97,7 +97,7 @@ function topic_page()
 	if(!$page)
 	{
 		$this->topic()->repaging_posts();
-		$post = object_load('forum_post', $this->id(), array('no_load_cache' => true));
+		$post = bors_load('balancer_board_post', $this->id(), array('no_load_cache' => true));
 		$page = @$post->data['topic_page'];
 	}
 
@@ -309,21 +309,12 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		return bors_browser_images($this->poster_ua(), $this->poster_ip());
 	}
 
-	private $__answer_to = 0;
-	function answer_to()
+	function _answer_to_def()
 	{
-		if($this->__answer_to !== 0)
-			return $this->__answer_to;
-
 		if($id = $this->answer_to_id())
-			return $this->__answer_to =  class_load('forum_post', $id);
+			return bors_load('balancer_board_post', $id);
 
-		return $this->__answer_to = false;
-	}
-
-	function set_answer_to($post, $dbup)
-	{
-		return $this->__answer_to = $post;
+		return false;
 	}
 
 	function url_in_container() { return $this->url_in_topic(); }
@@ -512,7 +503,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		$result = array();
 		foreach($this->select_array('id', array('answer_to_post_id=' => $this->id(), 'topic_id<>' => $this->topic_id())) as $pid)
-			if($post = object_load('forum_post', $pid))
+			if($post = bors_load('balancer_board_post', $pid))
 				$result[] = $post;
 
 		return $result;
@@ -522,7 +513,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		$result = array();
 		foreach($this->select_array('id', array('answer_to_post_id=' => $this->id(), 'topic_id=' => $this->topic_id())) as $pid)
-			if($post = object_load('forum_post', $pid))
+			if($post = bors_load('balancer_board_post', $pid))
 				$result[] = $post;
 
 		return $result;

@@ -127,7 +127,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function set_forum($forum) { return $this->set_attr('forum', $forum); }
 
-	function parents() { return array("forum_forum://".$this->forum_id()); }
+	function parents() { return array("balancer_board_forum://".$this->forum_id()); }
 
 	function is_sticky() { return $this->sticky() ? true : false; }
 	function is_closed() { return $this->closed() ? true : false; }
