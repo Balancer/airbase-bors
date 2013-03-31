@@ -126,7 +126,7 @@ class balancer_board_post extends forum_post
 			$summ += $a->answers_count($recount_child) + 1;
 
 //		debug_hidden_log('__answers', "{$this->debug_title}=$summ");
-		return $this->set_answers_count_raw($summ);
+		return $this->set_answers_count_raw($summ, true);
 	}
 
 	function parents_answers_recount($set = false)

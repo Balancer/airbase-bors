@@ -764,7 +764,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 						<div class="intd">
 							<div class="<?php echo $icon_type;/*"*/?>"><div class="nosize"><?php echo trim($icon_text) ?></div></div>
 							<div class="tclcon">
-								<?php echo $subject."\n" ?>
+								<?php echo airbase_fun::replace_2013($subject)."\n" ?>
 							</div>
 						</div>
 					</td>

@@ -6,7 +6,7 @@ bors_url_map(array(
 
 $forums = '(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/|/forum/)';
 
-if(config('is_developer'))
+if(USE_BOOTSTRAP)
 	$topic_view_class = 'balancer_board_topics_view';
 else
 	$topic_view_class = 'balancer_board_topic';

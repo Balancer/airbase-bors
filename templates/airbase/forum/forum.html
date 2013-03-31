@@ -26,7 +26,7 @@
 {/if}
 <tr class="tr_forum_{$f->id()}{if $updated} b{/if}">
 	<td id="vtt_{$t->id()}">
-		<a href="{$t->url('new')}">{$t->title()}</a>{if $t->description()}<br /><small><i>{$t->description}</i></small>{/if}
+		<a href="{$t->url('new')}">{airbase_fun::replace_2013($t->title())}</a>{if $t->description()}<br /><small><i>{$t->description}</i></small>{/if}
 		{if $t->total_pages() > 1}<small><span class="topic_pages_links">{$t->title_pages_links()}</span></small>{/if}
 	</td>
 	<td class="small">{$f->titled_link()}</td>
