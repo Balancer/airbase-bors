@@ -112,7 +112,7 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 </tr>
 {foreach from=$updated_topics item="t"}
 <tr><td>{$t->modify_time()|date:'H:i'}</td>
-	<td>{$t->titled_url('new')}</td>
+	<td>{airbase_fun::replace_2013($t->titled_url('new'))}</td>
 	<td>{$t->forum()->nav_named_url()}</td>
 	<td><a href="{$t->url('new')}">{$t->last_poster_name()}</a></td>
 </tr>
@@ -130,7 +130,7 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 </tr>
 {foreach from=$new_topics item="t"}
 <tr><td>{$t->create_time()|smart_time}</td>
-	<td>{$t->titled_url('new')}<br/>
+	<td>{airbase_fun::replace_2013($t->titled_url('new'))}<br/>
 {if $t->description()}<i>{$t->description()}</i><br/>{/if}
 	</td>
 	<td>{$t->forum()->nav_named_url()}</td>

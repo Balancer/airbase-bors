@@ -602,10 +602,12 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function keywords_string()
 	{
-		if($kws = $this->keywords_string_db())
-			return $kws;
-		else
-			return $this->forum()->keywords_string();
+		$kws = $this->keywords_string_db();
+
+		if(!$kws)
+			$kws = $this->forum()->keywords_string();
+
+		return airbase_fun::replace_2013($kws);
 	}
 
 	function set_keywords_string($words, $db_update)

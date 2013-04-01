@@ -768,7 +768,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 							</div>
 						</div>
 					</td>
-					<td class="tc2"><?php echo $forum ?></td>
+					<td class="tc2"><?php echo airbase_fun::replace_2013($forum) ?></td>
 					<td class="tc3"><?php echo $search_set[$i]['num_replies'] ?></td>
 					<td class="tcr"><?php echo "<a href=\"{$pun_config['root_uri']}/viewtopic.php?pid={$search_set[$i]['last_post_id']}#p{$search_set[$i]['last_post_id']}\">".format_time($search_set[$i]['last_post']).'</a> '.$lang_common['by'].'&nbsp;'.pun_htmlspecialchars($search_set[$i]['last_poster']) ?></td>
 				</tr>
