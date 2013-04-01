@@ -36,6 +36,8 @@ class forum_forum extends bors_object_db
 		);
 	}
 
+function title() { return airbase_fun::replace_2013($this->data['title']); }
+
 function parent_forum_id() { return @$this->data['parent_forum_id']; }
 function set_parent_forum_id($v, $dbup)
 {
