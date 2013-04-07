@@ -882,7 +882,8 @@ if ($fid): ?>
 <?php endif; ?>
 						<label><strong><?php echo $lang_common['Message'] ?></strong><br />
 <?php
-if(($profile = config('client_profile')) && $profile->textarea_type() == 'markitup')
+$profile = config('client_profile');
+if(!$profile || $profile->textarea_type() == 'markitup')
 {?>
 <div id="emoticons">
 	<a href="#" title=":)"><img src="http://www.airbase.ru/forum/smilies/smile.gif" /></a>
