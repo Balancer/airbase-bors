@@ -6,6 +6,11 @@ class balancer_board_post extends forum_post
 
 	function is_public_access() { return $this->topic() && $this->topic()->forum_id() && $this->topic()->forum()->is_public_access(); }
 
+	static function is_post($object)
+	{
+		return is_object($object) && in_array($object->class_name(), array('forum_post', 'balancer_board_post'));
+	}
+
 	function html($data = array())
 	{
 		$data = array_merge(array(

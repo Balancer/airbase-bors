@@ -65,6 +65,12 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 
 	static function show_attaches($post)
 	{
+		$shown_attache_ids = array_keys(bors_find_all('balancer_board_posts_object', array(
+			'post_id' => $post->id(),
+			'target_class_id' => bors_foo(__CLASS__)->class_id(),
+			'by_id' => true,
+		)));
+
 		$attaches = $post->attaches();
 		if(count($attaches) == 1)
 		{

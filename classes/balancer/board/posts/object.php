@@ -1,9 +1,7 @@
 <?php
 
-class balancer_board_posts_object extends base_object_db
+class balancer_board_posts_object extends balancer_board_object_db
 {
-	function storage_engine() { return 'bors_storage_mysql'; }
-	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'board_objects'; }
 	function table_fields()
 	{
@@ -25,7 +23,22 @@ class balancer_board_posts_object extends base_object_db
 		);
 	}
 
+	function auto_targets()
+	{
+		return array(
+			'target' => 'target_class_name(target_object_id)',
+		);
+	}
+
 	function ignore_on_new_instance() { return true; }
+
+	static function register_object($post, $object)
+	{
+		if(is_numeric($post))
+			$post = bors_load('balancer_board_post', $post);
+
+		return self::register($object, array('self' => $post));
+	}
 
 	static function register($object, $params = array())
 	{

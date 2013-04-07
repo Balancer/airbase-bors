@@ -461,7 +461,8 @@ if($msg = $post->is_edit_disable())
 	<label><?php echo $lang_common['Message'] ?><br />
 
 <?php
-if(($profile = config('client_profile')) && $profile->textarea_type() == 'markitup')
+$profile = config('client_profile');
+if(!$profile || $profile->textarea_type() == 'markitup')
 {?>
 <div id="emoticons">
 	<a href="#" title=":)"><img src="http://www.airbase.ru/forum/smilies/smile.gif" /></a>
