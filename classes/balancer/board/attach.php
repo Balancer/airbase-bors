@@ -53,7 +53,7 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 		if($css_class)
 			$css_class = " class=\"$css_class\"";
 
-		return "<a href=\"{$this->url()}\"><img src=\"http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/$geometry/$1", $this->location())."\" alt=\"\"{$css_class} /></a>";
+		return "<a href=\"{$this->url()}\" class=\"thumbnailed-image-link\"><img src=\"http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/$geometry/$1", $this->location())."\" alt=\"\"{$css_class} /></a>";
 	}
 
 	function auto_objects()
@@ -99,7 +99,7 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 
 		if(preg_match("!(jpe?g|png|gif)!i", $this->extension()))
 		{
-			$full_url = 'http://www.balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2';
+			$full_url = 'http://www.balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2&type=.'.$this->extension();
 			$thumb_url = "http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/{$geo}/$1", $this->location());
 
 //			if(config('is_developer'))
@@ -113,7 +113,9 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 				$height = @$ss[1];
 				$wxh = @$ss[3];
 //				if($width > $size*1.1 || $height > $size*1.1)
-					$thumb = "<a href=\"{$full_url}\" class=\"cloud-zoom\" id=\"zoom-".rand()."\" rel=\"position:'inside'\">";
+					$thumb = "<a href=\"{$full_url}\" class=\"cloud-zoom thumbnailed-image-link\" id=\"zoom-"
+						.rand()."\" rel=\"position:'inside'\" title=\""
+						.htmlspecialchars($this->title())."\">";
 //				else
 //					$thumb = "<a href=\"{$this->url()}\">";
 

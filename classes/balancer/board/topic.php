@@ -155,7 +155,8 @@ class balancer_board_topic extends forum_topic
 	function pre_show()
 	{
 		balancer_board_posts_view::container_init();
-		jquery_cloudZoom::load();
+//		jquery_cloudZoom::load();
+		jquery_fancybox::appear_all();
 		return parent::pre_show();
 	}
 
