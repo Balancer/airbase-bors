@@ -205,6 +205,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		$this->set('topic_page', $page, $dbupd);
 	}
 
+	function is_public() { return $this->topic()->is_public(); }
+
 	function source()
 	{
 		if($ps = $this->post_source())
@@ -735,6 +737,9 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function snip($size = 200)
 	{
+		if(!$this->is_public())
+			return ec('<i>Сообщение с ограниченным доступом</i>');
+
 		$text = $this->body();
 		$text = preg_replace('!<span class="q">.+?</span>!', ' … ', $text);
 		$text = strip_tags($text);
