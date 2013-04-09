@@ -44,3 +44,5 @@ function balancer_anniversary_html()
 
 	return $html;
 }
+
+// JS-плагины для топиков теперь в balancer_board_topic::pre_show()
