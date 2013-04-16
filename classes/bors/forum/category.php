@@ -11,6 +11,7 @@ class forum_category extends bors_page_db
 		return array(
 			'id',
 			'title' => 'cat_name',
+			'project',
 			'parent_category_id' => 'parent',
 			'order' => 'disp_position',
 			'sort_order' => 'disp_position',
