@@ -47,7 +47,10 @@ if(!$id)
 	foreach($cms_db->get_array("SELECT * FROM categories ORDER BY parent, disp_position") as $r)
 	{
 //		echo "Check: {$r['base_uri']}<br />\n";
-		if($r['base_uri'] && preg_match("!^{$r['base_uri']}!", $GLOBALS['main_uri']))
+		if($r['base_uri'] && (
+			preg_match("!^{$r['base_uri']}!", $GLOBALS['main_uri'])
+			|| preg_match("!^".str_replace('www.', '', $r['base_uri'])."!", $GLOBALS['main_uri'])
+		))
 		{
 			$id = intval($r['id']);
 			break;
@@ -219,7 +222,7 @@ while ($cur_forum = $db->fetch_assoc($result))
 if ($cur_category > 0)
 	echo "\t\t\t".'</tbody>'."\n\t\t\t".'</table>'."\n\t\t".'</div>'."\n\t".'</div>'."\n".'</div>'."\n\n";
 else
-	echo '<div id="idx0" class="block"><div class="box"><div class="inbox"><p>'.$lang_index['Empty board'].'</p></div></div></div>';
+	echo '<div id="idx0" class="block"><div class="box"><div class="inbox"><p>'.$lang_index['Empty board'].' [2]</p></div></div></div>';
 
 // Collect some statistics from the database
 $result = $db->query('SELECT COUNT(id)-1 FROM '.$db->prefix.'users') or error('Unable to fetch total user count', __FILE__, __LINE__, $db->error());
