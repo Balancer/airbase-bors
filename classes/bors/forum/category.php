@@ -41,94 +41,66 @@ function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
 			return $base;
 	}
 
-		function category_base_full()
-		{
-			$cat = $this;
-			while(!$cat->category_base() && $this->parent_category_id())
-				$cat = bors_load('balancer_board_category', $this->parent_category_id());
+	function category_base_full()
+	{
+		$cat = $this;
+		while(!$cat->category_base() && $this->parent_category_id())
+			$cat = bors_load('balancer_board_category', $this->parent_category_id());
 
-			return $cat->category_base();
+		return $cat->category_base();
+	}
+
+	function parents()
+	{
+//		echo "Get parents for cat ".$this->id();
+		if($this->parent_category_id())
+			return array("forum_category://". $this->parent_category_id());
+
+		return array("http://www.balancer.ru/forum/");
+	}
+
+	function direct_subcats_ids()
+	{
+		// Получаем одни cat_id для дочерних категорий первого уровня
+		return $this->db()->get_array("SELECT id FROM categories WHERE parent = {$this->id()}");
+	}
+
+	function direct_subcats()
+	{
+		$subcats = array();
+		foreach($this->direct_subcats_ids() as $cat_id)
+			$subcats[] = bors_load('balancer_board_category', $cat_id);
+		return $subcats;
+	}
+
+	function all_subcats(&$processed = array())
+	{
+		$cats = array();
+
+		foreach($this->direct_subforums_ids() as $forum_id)
+		{
+			if(in_array($forum_id, $processed))
+				continue;
+
+			$processed[] = $forum_id;
+			$subforum = $cats[] = bors_load('balancer_board_category', $forum_id);
+			$cats = array_merge($cats, $subforum->all_subforums($processed));
 		}
 
-		function parents()
-		{
-//			echo "Get parents for cat ".$this->id();
-			if($this->parent_category_id())
-				return array("forum_category://". $this->parent_category_id());
+		return $cats;
+	}
 
-			return array("http://www.balancer.ru/forum/");
-		}
+	function direct_subforums_ids()
+	{
+		// Получаем одни forum_id для дочерних форумов первого уровня
+		return $this->db()->get_array("SELECT id FROM forums WHERE cat_id = {$this->id()}");
+	}
 
-		function direct_subcats_ids()
-		{
-			// Получаем одни cat_id для дочерних категорий первого уровня
-			return $this->db()->get_array("SELECT id FROM categories WHERE parent = {$this->id()}");
-		}
-
-		function direct_subcats()
-		{
-			$subcats = array();
-			foreach($this->direct_subcats_ids() as $cat_id)
-				$subcats[] = bors_load('balancer_board_category', $cat_id);
-			return $subcats;
-		}
-
-		function all_subcats(&$processed = array())
-		{
-			$cats = array();
-
-			foreach($this->direct_subforums_ids() as $forum_id)
-			{
-				if(in_array($forum_id, $processed))
-					continue;
-
-				$processed[] = $forum_id;
-				$subforum = $cats[] = bors_load('balancer_board_category', $forum_id);
-				$cats = array_merge($cats, $subforum->all_subforums($processed));
-			}
-
-			return $cats;
-		}
-
-		function direct_subforums_ids()
-		{
-			// Получаем одни forum_id для дочерних форумов первого уровня
-			return $this->db()->get_array("SELECT id FROM forums WHERE cat_id = {$this->id()}");
-		}
-
-		function direct_subforums()
-		{
-			$subforums = array();
-			foreach($this->direct_subforums_ids() as $forum_id)
-				$subforums[] = class_load('forum_forum', $forum_id);
-			return $subforums;
-		}
-
-/*		function all_subforums(&$cats_processed = array(), &$forums_processed = array())
-		{
-			$forums = array();
-			
-			foreach(array_merge($this->id(), $this->direct_subcats_ids()) as $cat_id)
-			{
-				if(in_array($cat_id, $cats_processed))
-					continue;
-				
-				$cats_processed[] = $cat_id;
-				$subcat = class_load('forumCategory', $cat_id);
-				
-				foreach($subcat->direct_subforums_ids() as $forum_id)
-				{
-					if(in_array($forum_id, $forums_processed))
-						continue;
-
-					$forumms_processed[] = $forum_id;
-					$subforum = $forums[] = class_load('forum', $forum_id);
-					$forums = array_merge($forums, $subforum->all_subforums(&$cats_processed, &$forums_processed));
-				}
-			}
-					
-			return $forums;
-		}
-*/
-
+	function direct_subforums()
+	{
+		$subforums = array();
+		foreach($this->direct_subforums_ids() as $forum_id)
+			$subforums[] = bors_load('balancer_board_forum', $forum_id);
+		return $subforums;
+	}
 }
