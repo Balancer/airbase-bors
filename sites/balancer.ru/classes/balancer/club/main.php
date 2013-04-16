@@ -6,5 +6,5 @@ class balancer_club_main extends balancer_page
 	var $nav_name_ec = 'клуб';
 
 	function create_time() { return 1319150670; }
-	function parents() { return array('http://balancer.ru/'); }
+//	function parents() { return array('http://www.balancer.ru/community/'); }
 }
