@@ -236,8 +236,8 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 				continue;
 
 			$processed[] = $forum_id;
-			$subforum = $forums[] = bors_load(config('punbb.forum_class', 'balancer_board_forum'), $forum_id);
-			$forums = array_merge($forums, $subforum->all_subforums($processed));
+			$subforum = $forums[$forum_id] = bors_load(config('punbb.forum_class', 'balancer_board_forum'), $forum_id);
+			$forums += $subforum->all_subforums($processed);
 		}
 
 		return $forums;

@@ -37,8 +37,8 @@ class balancer_board_category extends forum_category
 					continue;
 
 				$forums_processed[] = $forum_id;
-				$subforum = $forums[] = bors_load('balancer_board_forum', $forum_id);
-				$forums = array_merge($forums, $subforum->all_subforums($forums_processed));
+				$subforum = $forums[$forum_id] = bors_load('balancer_board_forum', $forum_id);
+				$forums += $subforum->all_subforums($forums_processed);
 			}
 		}
 
@@ -49,14 +49,24 @@ class balancer_board_category extends forum_category
 	{
 		if(!is_array($categories))
 			$categories = array_filter(explode(',', $categories));
+
+		$forums = new blib_array;
+		foreach($categories as $cat_name)
+		{
+			foreach(bors_find_all('balancer_board_category', array('project' => $cat_name)) as $cat)
+				$forums->append_array($cat->all_subforums());
+		}
+
+		return $forums;
 	}
 
 	static function __dev()
 	{
-		$cat = bors_load('balancer_board_category', 1);
+//		$cat = bors_load('balancer_board_category', 1);
+//		$forums = $cat->all_subforums();
+		$forums = self::forums_for_category_names('bionco,balancer_nt');
 //		print_dd($cat->direct_subforums_ids());
-		$forums = $cat->all_subforums();
-		var_dump(BORS_CORE);
+//		var_dump(BORS_CORE);
 		$forums->print_d();
 	}
 }
