@@ -445,7 +445,7 @@ while ($cur_forum = $db->fetch($result))
 if ($cur_category > 0)
 	echo "\t\t\t".'</tbody>'."\n\t\t\t".'</table>'."\n\t\t".'</div>'."\n\t".'</div>'."\n".'</div>'."\n\n";
 else
-	echo '<div id="idx0" class="block"><div class="box"><div class="inbox"><p>'.$lang_index['Empty board'].'</p></div></div></div>';
+	echo '<div id="idx0" class="block"><div class="box"><div class="inbox"><p>'.$lang_index['Empty board'].' [1]</p></div></div></div>';
 
 $stats_cache = new bors_cache();
 if($stats_cache->get('board', 'stats2'))
