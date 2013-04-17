@@ -28,7 +28,12 @@ class module_forum_blog extends base_page
 			'per_page' => $limit,
 		);
 
-		if($fids = $this->arg('forum_ids'))
+		if($cat_names = $this->args('cat_names'))
+		{
+			$where['forum_id IN'] = balancer_board_category::forums_for_category_names($cat_names)->keys();
+			$where['forum_id NOT IN'] = $skip_forums;
+		}
+		elseif($fids = $this->arg('forum_ids'))
 			$where['forum_id IN'] = blib_list::parse_condensed($fids);
 		else
 			$where['forum_id NOT IN'] = $skip_forums;

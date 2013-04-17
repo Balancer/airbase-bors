@@ -20,6 +20,10 @@ if($profile == 'wysibb')
 		foreach($jsinc as $j)
 			$header[] = "<script type=\"text/javascript\" src=\"{$j}\"></script>\n";
 
+	if($happ = bors_page::template_data('head_append'))
+		foreach($happ as $h)
+			$header[] = $h."\n";
+
 	if($jss = bors_page::template_data('js_include_post'))
 		foreach($jss as $js)
 			$footer[] = "<script type=\"text/javascript\" src=\"{$js}\"></script>\n";
@@ -45,11 +49,11 @@ $markitup_sets = config('jquery.markitup.sets.bbcode');
 
 $header[] = <<< __EOT__
 <link rel="stylesheet" type="text/css" href="$markitup_base/skins/simple/style.css" />
-<link rel="stylesheet" type="text/css" href="/_bors3rdp/jquery/plugins/$markitup_sets/style.css" />
+<link rel="stylesheet" type="text/css" href="$markitup_sets/style.css" />
 
 <script type="text/javascript" src="/_bors3rdp/jquery/jquery.js"></script>
 <script type="text/javascript" src="$markitup_base/jquery.markitup.js"></script>
-<script type="text/javascript" src="/_bors3rdp/jquery/plugins/$markitup_sets/set.js"></script>
+<script type="text/javascript" src="$markitup_sets/set.js"></script>
 
 <script language="javascript">
 $(document).ready(function()	{
