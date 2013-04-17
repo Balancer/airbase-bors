@@ -1,0 +1,10 @@
+extends: bors_rss
+items_class_name: balancer_board_blog
+auto_map: true
+title: Блог Клуба Балансера
+main_url: http://www.balancer.ru/club/rss.xml
+order: -blogged_time
+
+where(): "array('forum_id IN' => balancer_club_main::subforums()->keys(), 'is_public' => true)"
+
+
