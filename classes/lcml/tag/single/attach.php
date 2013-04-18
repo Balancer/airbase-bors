@@ -20,6 +20,8 @@ class lcml_tag_single_attach extends bors_lcml_tag_single
 		if(($post = @$params['self']) && balancer_board_post::is_post($post))
 			balancer_board_posts_object::register_object($post, $attach);
 
+//		if(config('is_developer')) { var_dump($post->id()); exit(__CLASS__); }
+
 		$html = $attach->html(defval_ne($params, 'size', 640));
 		return "<div class=\"clear\">&nbsp;</div>$html<div class=\"clear\">&nbsp;</div>";
 	}
