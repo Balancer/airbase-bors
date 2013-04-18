@@ -65,22 +65,30 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 
 	static function show_attaches($post)
 	{
-		$shown_attache_ids = array_keys(bors_find_all('balancer_board_posts_object', array(
+		$lcml_registered_attaches = bors_find_all('balancer_board_posts_object', array(
 			'post_id' => $post->id(),
 			'target_class_id' => bors_foo(__CLASS__)->class_id(),
-			'by_id' => true,
-		)));
+		));
+
+		$shown_attache_ids = bors_field_array_extract($lcml_registered_attaches, 'target_object_id');
 
 		$attaches = $post->attaches();
 		if(count($attaches) == 1)
 		{
 			$attach = $attaches[0];
+
+			if(in_array($attach->id(), $shown_attache_ids))
+				return NULL;
+
 			return $attach->html(640);
 		}
 
 		$html = array();
 		foreach($attaches as $attach)
-			$html[] = $attach->html(300);
+		{
+			if(!in_array($attach->id(), $shown_attache_ids))
+				$html[] = $attach->html(300);
+		}
 
 		return join("\n", $html);
 	}

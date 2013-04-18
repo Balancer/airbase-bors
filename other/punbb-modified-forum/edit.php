@@ -166,7 +166,9 @@ if (isset($_POST['form_sent']))
 		$post->store();
 		$topic->store();
 
+
 		$post->cache_clean_self();
+		$post->set_body(NULL);
 		config_set('lcml_cache_disable', true);
 		$post->body();
 
@@ -232,9 +234,9 @@ if (isset($_POST['form_sent']))
 						or error('Unable to fetch attachment details and forum rules', __FILE__, __LINE__, $db->error());
 					if($db->num_rows($result_attach)>0||$pun_user['g_id']==PUN_ADMIN){
 						list($attach_cur_owner,$attach_rules)=$db->fetch_row($result_attach);
-						
+
 						$attach_allowed = false;
-						
+
 						if($pun_user['g_id']==PUN_ADMIN)//admin overrides
 							$attach_allowed = true;
 						elseif($attach_cur_owner==$pun_user['id'])//it's the owner of the file that want to delete it
@@ -294,8 +296,8 @@ if (isset($_POST['form_sent']))
 					error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
 				}
 			}
-		}		
-		//Attachment Mod 2.0 Block End		
+		}
+		//Attachment Mod 2.0 Block End
 
 		redirect('viewtopic.php?pid='.$id.'#p'.$id, $lang_post['Edit redirect']);
 	}
