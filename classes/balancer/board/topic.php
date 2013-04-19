@@ -168,4 +168,14 @@ class balancer_board_topic extends forum_topic
 		foreach(bors_find_all('balancer_board_blog', array('topic_id' => $this->id())) as $blog)
 			$blog->set_forum_id($forum_id);
 	}
+
+	function sort_title()
+	{
+		return bors_lower(preg_replace('/[^\wа-яА-ЯёЁ]/u', '', $this->title()));
+	}
+
+	function forum_title() { return $this->forum()->title(); }
+	function title_with_forum() { return $this->title().' ['.$this->forum()->title().']'; }
+
+	function list_fields_format() { return '%title% [%forum_title%]'; }
 }

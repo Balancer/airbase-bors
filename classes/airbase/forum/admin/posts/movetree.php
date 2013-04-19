@@ -1,11 +1,22 @@
 <?php
 
-class airbase_forum_admin_posts_movetree extends base_page
+class airbase_forum_admin_posts_movetree extends balancer_board_admin_page
 {
-	function class_file() { return __FILE__; }
+	function title() { return ec('Перемещение отмеченных сообщений в другую тему'); }
+	function nav_name() { return ec('Перемещение сообщений'); }
+
 	function dont_move_tree() { return false; }
 
 	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
+
+	function parents()
+	{
+		$topics = array();
+		foreach($this->posts() as $p)
+			$topics[$p->topic_id()] = $p->topic();
+
+		return $topics;
+	}
 
 	private $post_ids = false;
 	function post_ids()
@@ -18,52 +29,41 @@ class airbase_forum_admin_posts_movetree extends base_page
 
 	private $posts = false;
 	function posts()
-	{	
+	{
 		if($this->posts === false)
 			if($this->post_ids())
-				$this->posts = objects_array('forum_post', array('id IN' => $this->post_ids(), 'order' => 'create_time')); 
+				$this->posts = objects_array('balancer_board_post', array('id IN' => $this->post_ids(), 'order' => 'create_time')); 
 			else
 				$this->posts = array();
 
 		return $this->posts;
 	}
 
-	function local_data()
+	function body_data()
 	{
-		$topics = array();
-		if(!empty($_SESSION['bba_last_target_topic_id']))
-			$topics[] = object_load('balancer_board_topic', $_SESSION['bba_last_target_topic_id']);
+		$latest_topics = bors_list::make('balancer_board_topic', array(
+			'order' => '-modify_time',
+			'limit' => 50,
+		));
 
-		$latest_topics = objects_array('balancer_board_topic', array('order' => '-last_post' , 'limit' => 500));
-		usort($latest_topics, function($x, $y) { return strcasecmp($x, $y); });
-		$topics = array_merge($topics, $latest_topics);
+		uasort($latest_topics, function($x, $y) { return strcasecmp(preg_replace('/[^\wа-яё]/u', '', bors_lower($x)), preg_replace('/[^\wа-яё]/u', '', bors_lower($y))); });
 
-		return array(
+		return array_merge(parent::body_data(), array(
 			'posts' => $this->posts(),
-			'last_topics' => $topics,
-		);
+			'last_topics' => $latest_topics,
+		));
 	}
 
-	function title() { return ec('Перемещение отмеченных сообщений в другую тему'); }
-	function nav_name() { return ec('Перемещение сообщений'); }
 
-	function target_topic_id() { return @$_SESSION['bba_last_target_topic_id']; }
+	function target_topic_id() { return session_var('bba_last_target_topic_id'); }
 	function target_post_id() { return ''; }
 
-	function template() { return "forum/_header.html"; }
-
 	function access_engine() { return "forum_access_move"; }
-//	function post() { }
-
-	function pre_parse()
-	{
-//TODO: проверить, запоминает ли последний топик
-//		session_register('bba_last_target_topic_id');
-		return parent::pre_parse();
-	}
 
 	function on_action_by_topic_id(&$data)
 	{
+		twitter_bootstrap::load();
+
 		$tid = @$data['target_topic_id'];
 		if(preg_match('!\d+/t(\d+)\-\-!', $tid, $m))
 			$tid = $m[1];
@@ -77,11 +77,13 @@ class airbase_forum_admin_posts_movetree extends base_page
 		else
 			$tid = intval($tid);
 
-		$_SESSION['bba_last_target_topic_id'] = $tid;
+		set_session_var('bba_last_target_topic_id', $tid);
 
-		$new_topic = object_load('balancer_board_topic', $tid);
+		$new_topic = bors_load('balancer_board_topic', $tid);
 		if(!$new_topic || !$new_topic->id())
-			return bors_message(ec('Тема с номером ').$tid.ec(' не существует'));
+			return bors_message(ec('Тема с номером ').$tid.ec(' не существует'), array(
+				'template' => 'xfile:bootstrap/index.html',
+			));
 
 		$this->topic = $new_topic;
 
@@ -107,11 +109,23 @@ class airbase_forum_admin_posts_movetree extends base_page
 		}
 
 		return bors_message_tpl("xfile:movetree.has_moved.html", $this, array(
-			'title' => ec('Сообщения успешно перенесены'),
+			'title' => ec('Результат переноса сообщений'),
 			'old_topic' => $old_topic,
 			'new_topic' => $new_topic,
+			'template' => 'xfile:bootstrap/index.html',
+			'save_session' => true, // Не очищать параметры сессии
 		)); 
 	}
 
 	function can_cached() { return false; }
+
+	function pre_show()
+	{
+		jquery_select2::appear_ajax("'#target_topic_id'", 'balancer_board_topic', array(
+			'order' => '-modify_time',
+			'title_field' => 'title_with_forum',
+		));
+
+		return parent::pre_show();
+	}
 }

@@ -1,12 +1,13 @@
 <?php
 
-class forum_tools_post_moveTree extends base_page
+class forum_tools_post_moveTree extends balancer_board_admin_page
 {
-	function can_be_empty() { return true; }
+	function title() { return ec('Перемещение сообщения<br /><i><small>').$this->post->title().'</small></i>'; }
+	function nav_name() { return ec('Перемещение сообщения'); }
 
 	function dont_move_tree() { return false; }
 
-	function parents() { return array('forum_post://'.$this->post()->id()); }
+	function parents() { return array('balancer_board_post://'.$this->post()->id()); }
 
 	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
 
@@ -19,7 +20,7 @@ class forum_tools_post_moveTree extends base_page
 		$this->db = new driver_mysql($this->main_db());
 		if($id)
 		{
-			$this->post = object_load('balancer_board_post', intval($id));
+			$this->post = bors_load('balancer_board_post', intval($id));
 			$this->topic = $this->post->topic();
 		}
 		return parent::__construct($id);
@@ -27,35 +28,32 @@ class forum_tools_post_moveTree extends base_page
 
 	function can_cache() { return false; }
 
-	function local_data()
+	function body_data()
 	{
-		$topics = array();
-		if(!empty($_SESSION['bba_last_target_topic_id']))
-			$topics[] = object_load('balancer_board_topic', $_SESSION['bba_last_target_topic_id']);
+		$latest_topics = bors_list::make('balancer_board_topic', array(
+			'order' => '-modify_time',
+			'limit' => 50,
+		));
 
-		$latest_topics = objects_array('balancer_board_topic', array('order' => '-last_post' , 'limit' => 500));
-		usort($latest_topics, function($x, $y) { return strcasecmp($x, $y); });
-		$topics = array_merge($topics, $latest_topics);
+		uasort($latest_topics, function($x, $y) { return strcasecmp(preg_replace('/[^\wа-яё]/u', '', bors_lower($x)), preg_replace('/[^\wа-яё]/u', '', bors_lower($y))); });
 
-		return array(
-			'last_topics' => $topics,
-		);
+		return array_merge(parent::body_data(), array(
+			'last_topics' => $latest_topics,
+		));
 	}
 
-	function title() { return ec('Перемещение сообщения<br /><i>').$this->post->title().'</i>'; }
-	function nav_name() { return ec('Перемещение сообщения'); }
 
-	function target_topic_id() { return @$_SESSION['bba_last_target_topic_id']; }
+	function target_topic_id() { return session_var('bba_last_target_topic_id'); }
 	function target_post_id() { return ''; }
 
 	function url() { return 'http://www.balancer.ru/admin/forum/post/'.$this->id().'/move-tree'; }
-
-	function template() { return "forum/_header.html"; }
 
 	function access_engine() { return "forum_access_move"; }
 
 	function on_action_by_topic_id(&$data)
 	{
+		twitter_bootstrap::load();
+
 		$tid = @$data['target_topic_id'];
 		if(preg_match('!\d+/t(\d+)!', $tid, $m))
 			$tid = $m[1];
@@ -64,11 +62,13 @@ class forum_tools_post_moveTree extends base_page
 
 		$tid = intval($tid);
 
-		$new_topic = object_load('balancer_board_topic', $tid, array('no_load_cache' => true));
+		$new_topic = bors_load('balancer_board_topic', $tid, array('no_load_cache' => true));
 		if(!$new_topic || !$new_topic->id())
-			return bors_message(ec('Тема с номером ').$tid.ec(' не существует'));
+			return bors_message(ec('Тема с номером ').$tid.ec(' не существует'), array(
+				'template' => 'xfile:bootstrap/index.html',
+			));
 
-		$_SESSION['bba_last_target_topic_id'] = $tid;
+		set_session_var('bba_last_target_topic_id', $tid);
 
 		$this->topic = $new_topic;
 
@@ -86,14 +86,19 @@ class forum_tools_post_moveTree extends base_page
 		}
 
 		return bors_message_tpl("moveTree.has_moved.html", $this, array(
-			'title' => ec('Сообщения успешно перенесены'),
+			'post' => $this->post(),
+			'title' => ec('Результат переноса сообщений'),
 			'old_topic' => $old_topic,
 			'new_topic' => $new_topic,
+			'template' => 'xfile:bootstrap/index.html',
+			'save_session' => true, // Не очищать параметры сессии
 		)); 
 	}
 
 	function on_action_by_post_id(&$data)
 	{
+		twitter_bootstrap::load();
+
 		$pid = @$data['target_post_id'];
 		if(preg_match('!p(\d+)$!', $pid, $m))
 			$pid = $m[1];
@@ -106,13 +111,23 @@ class forum_tools_post_moveTree extends base_page
 
 		$pid = intval($pid);
 
-		$new_post = object_load('forum_post', $pid);
+		$new_post = bors_load('balancer_board_post', $pid);
 		if(!$new_post || !$new_post->id())
-			return bors_message(ec('Сообщение с номером ').$pid.ec(' не существует'));
+			return bors_message(ec('Сообщение с номером ').$pid.ec(' не существует'), array(
+				'template' => 'xfile:bootstrap/index.html',
+			));
 
 		$data['target_topic_id'] = $new_post->topic()->id();
 		return $this->on_action_by_topic_id($data);
 	}
 
-	function igo() { return $this->post()->titled_link_ex(array('url' => 'http://www.balancer.ru/g/p'.$this->post()->id())); }
+	function pre_show()
+	{
+		jquery_select2::appear_ajax("'#target_topic_id'", 'balancer_board_topic', array(
+			'order' => '-modify_time',
+			'title_field' => 'title_with_forum',
+		));
+
+		return parent::pre_show();
+	}
 }

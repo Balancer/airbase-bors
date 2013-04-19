@@ -1,40 +1,59 @@
-<dl class="forumposting">
-<dt>Перемещение в одну из крайних обновившихся тем</dt>
-<dd>
-{form subaction="by_topic_id" id=$this->id()}
+<div class="well">
+<h3>Перемещение с поиском темы</h3>
+{form subaction="by_topic_id" id=$this->id() form_template_class="bors_forms_templates_bootstrap"}
+<div class="control-group">
+	<label class="control-label" for="target_topic_id">Тема</label>
+	<div class="controls">
+		{hidden name="target_topic_id" dom_id="target_topic_id" value="" style="width:600px"}
+		<span class="help-block">Введите часть названия темы и выберите её из списка</span>
+	</div>
+</div>
+{submit value="Переместить" type="button" css_class="btn"}
+{/form}
+</div>
+
+<div class="well">
+<h3>Перемещение в одну из крайних обновившихся тем</h3>
+{form subaction="by_topic_id" id=$this->id() form_template_class="bors_forms_templates_bootstrap"}
 {assign var="curtid" value=$this->topic|get:id}
-<select name="target_topic_id">
-{foreach from=$last_topics item="topic"}
-<option value="{$topic->id()}">{$topic->title()|truncate:80} [{$topic->forum()|get:title}]</option>
-{/foreach}
-</select> {submit value="Переместить"}
-<br />{checkbox name="dont_move_tree"}&nbsp;Не перемещать ответы на это сообщение
+{dropdown name="target_topic_id" list=$last_topics value=$this->target_topic_id()}
+<label class="checkbox">
+{checkbox name="dont_move_tree" value=false label="Не перемещать ответы на это сообщение"}
+</label>
+{submit value="Переместить" type="button" css_class="btn"}
 {/form}
-</dd></dl>
+</div>
 
-<dl class="forumposting"><dt>Перемещение по ID целевой темы:</dt>
-<dd>
-{form subaction="by_topic_id" id=$this->id()}
-ID (можно URL) целевой темы: {input name="target_topic_id"} {submit value="Переместить"}
-<br />{checkbox name="dont_move_tree"}&nbsp;Не перемещать ответы на это сообщение
+<div class="well">
+<h3>Перемещение по ID целевой темы:</h3>
+{form subaction="by_topic_id" id=$this->id() form_template_class="bors_forms_templates_bootstrap"}
+<label>ID (можно URL) целевой темы:</label>
+{input name="target_topic_id"}
+<label class="checkbox">
+{checkbox name="dont_move_tree" value=false label="Не перемещать ответы на это сообщение"}
+</label>
+{submit value="Переместить" type="button" css_class="btn"}
 {/form}
-</dd></dl>
+</div>
 
-
-<dl class="forumposting"><dt>Перемещение по ID любого сообщения в целевой теме:</dt>
-<dd>
-{form subaction="by_post_id" id=$this->id()}
-ID (можно URL) сообщения в целевой теме: {input name="target_post_id"} {submit value="Переместить"}
+<div class="well">
+<h3>Перемещение по ID любого сообщения в целевой теме:</h3>
+{form subaction="by_post_id" id=$this->id() form_template_class="bors_forms_templates_bootstrap"}
+<label>ID (можно URL) сообщения в целевой теме:</label>
+{input name="target_post_id"}<br/>
+{submit value="Переместить" type="button" css_class="btn"}
 {/form}
-</dd></dl>
+</div>
 
-<dl class="forumposting">
-<dt>Сообщение</dt>
-<dd>{$this->post()|get:source|truncate:256}
-</dd></dl>
+<div class="well">
+<h3>Сообщение</h3>
+<blockquote>
+{$this->post()|get:source|truncate:256}
+</blockquote>
+</div>
 
-<dl class="forumposting"><dd>
+<div class="alert">
 <ul>
-<li><a href="http://balancer.ru/forum/punbb/viewtopic.php?id=58928">Тема с обсуждением механизма переноса</a></li>
+<li><a href="http://www.balancer.ru/support/2007/12/t58928,new--nozhnitsy-perenesenie-soobschenij-mezhdu-temami.html">Тема с обсуждением механизма переноса</a></li>
 </ul>
-</dd></dl>
+</div>
