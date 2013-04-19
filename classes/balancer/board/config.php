@@ -2,9 +2,9 @@
 
 class balancer_board_config extends bors_config
 {
-	function config_data()
+	function object_data()
 	{
-		return array_merge(parent::config_data(), array(
+		return array_merge(parent::object_data(), array(
 			'template' => 'forum/_header.html',
 		));
 	}
