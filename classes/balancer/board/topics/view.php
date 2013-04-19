@@ -329,25 +329,9 @@ $(function() {
 
 	function url_engine() { return 'url_titled'; }
 
-	function touch($user_id)
+	function touch($user_id, $time = NULL)
 	{
-		$v = bors_find_first('balancer_board_topics_visit', array('user_id' => $user_id, 'target_object_id' => $this->id()));
-		// intval($this->db()->select('topic_visits', 'count', array('user_id=' => $user_id, 'topic_id=' => $this->id()))) + 1;
-
-
-		if(!$v)
-			$v = bors_new('balancer_board_topics_visit', array(
-				'target_class_id' => $this->class_id(),
-				'target_object_id' => $this->id(),
-				'user_id' => $user_id,
-				'count' => 0,
-				'last_visit' => time(),
-				'last_post_id' => $this->last_post_id(),
-			));
-
-		$v->set_count($this->count() + 1);
-		$v->set_last_visit(time());
-		$v->set_last_post_id($this->last_post_id());
+		$this->topic()->touch($user_id, $time);
 	}
 
 	function visits_counting() { return true; }
