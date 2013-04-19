@@ -185,13 +185,6 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 
 	function is_last_page() { return $this->page() == $this->total_pages(); }
 
-	function page_data()
-	{
-		return array(
-			'skip_top_ad' => true,
-		) + parent::page_data();
-	}
-
 	function body()
 	{
 		if(!$this->is_repaged() && rand(0,5) == 0)
@@ -553,31 +546,33 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	function url_engine() { return 'url_titled'; }
 	function url_for_igo() { return 'http://www.balancer.ru/g/t'.$this->id(); }
 
-	function touch($user_id)
+	function touch($user_id, $time = NULL)
 	{
-		$visits = intval($this->db()->select('topic_visits', 'count', array('user_id=' => $user_id, 'topic_id=' => $this->id()))) + 1;
+		$v = bors_find_first('balancer_board_topics_visit', array('user_id' => $user_id, 'target_object_id' => $this->id()));
 
-		$data = array(
-			'target_class_id' => $this->class_id(),
-			'topic_id' => $this->id(),
-			'user_id' => $user_id,
-			'count' => $visits,
-			'last_visit' => time(),
-			'last_post_id' => $this->last_post_id(),
-		);
+		if(!$time)
+			$time = time();
 
-		if($visits == 1)
+		if(!$v)
 		{
-			$data['first_visit'] = time();
-			$this->db()->replace('topic_visits', $data);
+			$v = bors_new('balancer_board_topics_visit', array(
+				'target_class_id' => $this->class_id(),
+				'target_object_id' => $this->id(),
+				'user_id' => $user_id,
+				'count' => 0,
+				'last_visit' => $time,
+				'last_post_id' => $this->last_post_id(),
+			));
 		}
 		else
 		{
-			$this->db()->update('topic_visits', array(
-					'user_id' => intval($user_id),
-					'topic_id' => intval($this->id())
-				), $data);
+			if($v->last_visit() > $time)
+				$time = $v->last_visit();
 		}
+
+		$v->set_count($v->count() + 1);
+		$v->set_last_visit($time);
+		$v->set_last_post_id($this->last_post_id());
 	}
 
 	function visits_counting() { return true; }
@@ -774,8 +769,15 @@ $(function() {
 			.join("\n".$div."\n", $text)."\n\n";
 	}
 
-	function global_data()
+	function page_data()
 	{
+		$last_post = bors_find_first('balancer_board_post', array(
+			'topic_id' => $this->id(),
+			'`page`=' => max(1,$this->page()),
+			'is_deleted' => false,
+			'order' => '-sort_order,-create_time',
+		));
+
 		$where = array(
 			'target_class_name IN' => array('forum_topic', 'balancer_board_topic'),
 			'target_object_id' => $this->id(),
@@ -788,6 +790,10 @@ $(function() {
 
 		$search_keywords = bors_find_all('bors_referer_search', $where);
 
-		return array_merge(parent::global_data(), compact('search_keywords'));
+		return array_merge(parent::page_data(), array(
+//			'skip_top_ad' => true,
+			'page_last_time' => $last_post->create_time()+1,
+		), compact('search_keywords'));
 	}
+
 }

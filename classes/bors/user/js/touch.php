@@ -10,11 +10,21 @@ class user_js_touch extends bors_js
 
 		$this->set_is_loaded(true);
 
-		$obj = object_load($this->id());
+		$time = bors()->request()->data('time');
+		$obj  = bors()->request()->data('obj');
+
+		if($obj)
+			$obj = bors_load_uri($obj);
+		else
+			$obj = object_load($this->id());
+
+		if(!$time)
+			$time = time();
+
 		if(!$obj || !bors()->user())
 			return 'true;';
 
-		$obj->touch(bors()->user()->id());
+		$obj->touch(bors()->user()->id(), $time);
 		return 'true;';
 	}
 }
