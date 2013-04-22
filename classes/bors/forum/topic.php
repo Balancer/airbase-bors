@@ -149,17 +149,20 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			}
 
 			$uid = $me->id();
-			$x = $this->db()->select('topic_visits', 'last_visit, last_post_id', array('user_id='=>$uid, 'topic_id='=>$this->id()));
+			$x = $this->db()->select('topic_visits', 'UNIX_TIMESTAMP(`modify_ts`) AS last_visit, last_post_id', array('user_id='=>$uid, 'topic_id='=>$this->id()));
 			$last_visit = @$x['last_visit'];
 
+			// Если отметки о чтении топика нет, то считаем за дату последнего посещения
+			// самую старую запись в таблице посещений.
 			if(empty($last_visit))
-				$last_visit = $this->db()->select('topic_visits', 'MIN(last_visit)', array('last_visit>' => 0));
+				$last_visit = $this->db()->select('topic_visits', 'UNIX_TIMESTAMP(MIN(`modify_ts`))', array('last_visit>' => 0));
 
 			$first_new_post_id = intval($this->db()->select('posts', 'MIN(id)', array(
 				'topic_id' => $this->id(),
 				'posted>' => $last_visit,
 			)));
 
+			// Если мы нашли первое нечитанное сообщение, то переходим к нему
 			if($first_new_post_id)
 			{
 				$post = object_load('balancer_board_post', $first_new_post_id);
@@ -168,6 +171,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 					return go($post->url_in_container());
 			}
 
+			// Если не нашли, то тупо переходим на последнюю страницу.
 			$this->set_page('last');
 		}
 
@@ -562,17 +566,23 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 				'count' => 0,
 				'last_visit' => $time,
 				'last_post_id' => $this->last_post_id(),
+				'create_time' => time(),
+				'modify_time' => time(),
 			));
 		}
 		else
 		{
 			if($v->last_visit() > $time)
 				$time = $v->last_visit();
+
+			if(!$v->create_time())
+				$v->set_create_time(time());
 		}
 
 		$v->set_count($v->count() + 1);
 		$v->set_last_visit($time);
 		$v->set_last_post_id($this->last_post_id());
+		$v->set_modify_time(time());
 	}
 
 	function visits_counting() { return true; }
@@ -687,9 +697,9 @@ $(function() {
 		if($user->id() == bors()->user_id() && ($lv = $this->get('joined_last_visit')))
 			return $lv;
 
-		return intval($this->db()->select('topic_visits', 'last_visit', array(
-			'user_id=' => $user->id(),
-			'topic_id=' => $this->id())));
+		return intval($this->db()->select('topic_visits', 'UNIX_TIMESTAMP(`modify_ts`)', array(
+			'user_id' => $user->id(),
+			'topic_id' => $this->id())));
 	}
 
 	function was_updated_for_user($user, $for_post = false, $real_visits = false)
