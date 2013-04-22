@@ -85,8 +85,10 @@ class forum_tools_post_moveTree extends balancer_board_admin_page
 			balancer_board_action::add($old_topic, "Перенос сообщений в {$new_topic->titled_url()}");
 		}
 
+		$new_post = bors_load_ex('balancer_board_post', $this->post()->id(), array('no_load_cache' => true));
+
 		return bors_message_tpl("moveTree.has_moved.html", $this, array(
-			'post' => $this->post(),
+			'post' => $new_post,
 			'title' => ec('Результат переноса сообщений'),
 			'old_topic' => $old_topic,
 			'new_topic' => $new_topic,

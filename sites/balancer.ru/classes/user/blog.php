@@ -1,7 +1,11 @@
 <?php
 
-class user_blog extends base_page
+class user_blog extends balancer_board_page
 {
+	function can_be_empty() { return false; }
+
+	function is_loaded() { return (bool) $this->user(); }
+
 	function main_db(){ return 'AB_FORUMS'; }
 
 	function auto_objects()
@@ -125,8 +129,6 @@ class user_blog extends base_page
 	}
 
 	function num_blog() { return $this->db()->get('SELECT COUNT(*) FROM topics WHERE poster_id='.$this->id()); }
-
-	function can_be_empty() { return true; }
 
 	function page_by_pid($pid)
 	{

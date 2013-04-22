@@ -33,7 +33,7 @@ class balancer_board_topics_pdf extends bors_object
 
 		$log_put = config('debug_hidden_log_dir').'/pdf-maker.log';
 
-		debug_hidden_log('--pdf', "$bin cover $cover_url $helper_url $target_dir/$target_name");
+//		debug_hidden_log('--pdf', "$bin cover $cover_url $helper_url $target_dir/$target_name");
 		system("$bin cover $cover_url $helper_url $target_dir/$target_name &> $log_put");
 
 //		$pdf = file_get_contents("$target_dir/$target_name");
