@@ -16,6 +16,8 @@ jquery_lazyLoadAd::on("'.bors_lazy_ad'");
 
 // template_js_include('/_bors3rdp/js/'.config('js.flowplayer.path').'/'.config('js.flowplayer.include'));
 
+jquery::chrome_alt_fix();
+
 if(config('is_developer'))
 {
 //	css_plusstrap::load();

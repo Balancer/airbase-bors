@@ -99,7 +99,15 @@ class base_page_hts extends base_page_db
 //			var_dump(parent::template());
 
 		if($tpl = $this->template_db())
+		{
+//			if(preg_match('/^\w+$/', $tpl))
+//				$tpl = "xfile:$tpl/index.html";
+
+			if($tpl == 'balancer')
+				$tpl = 'blue_spring';
+
 			return $tpl;
+		}
 
 		//WTF? Найти, где оно присваивается.
 		unset($this->attr['template']);
@@ -124,6 +132,7 @@ class base_page_hts extends base_page_db
 	function url()
 	{
 		$url = preg_replace('!http://airbase\.ru!', 'http://www.airbase.ru', $this->id());
+		$url = preg_replace('!http://balancer\.ru!', 'http://www.balancer.ru', $url);
 		return $url;
 	}
 
