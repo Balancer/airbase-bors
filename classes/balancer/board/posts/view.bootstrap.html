@@ -1,0 +1,147 @@
+{if !$post->is_deleted()}
+<a name="p{$post->id()}"></a>
+	{assign var="owner" value=$post->owner()}
+	{assign var=a value=$post->answer_to()}
+<div class="well">
+<div class="container post pby{$post->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $post->is_moderatorial()} moderatorial_post text-error{/if}">
+	<div class="row head">
+		<div class="span10">
+{block name="title"}
+			<h3>
+				{$post->flag()}	{$post->author_name()}<a href="{$post->url_for_igo()}">#{$post->create_time()|full_time}</a>
+	{if $post->answer_to_id() and $a}
+					&nbsp;<small>@{if $a->owner()}{$a->owner()->title()}{else}{$a->author_name()}{/if}<a href="{$a->url_in_container()}">#{$a->create_time()|full_time}</a></small>
+	{/if}
+			</h3>
+{/block}
+		</div>
+
+		{* Меню шапки сообщения. Голоса и прочее. *}
+		<div class="span2 pull-right">
+	{* if config('is_developer')}
+			<div id="ab_rec_{$post->new_class_name()}__{$post->id()}" class="pull-left ab_rec">
+				<img src="/_bors/i16/recommendation.gif" alt="[!]" width="16" height="16" title="Рекомендовать это сообщение" />
+			</div>
+	{/if *}
+	{* if $me}
+			<div class="pull-left">
+				{$post->tools()->favorite_link_ajax()}
+				{if $me->is_coordinator()}
+				<div id="pttools_{$post->id()}" class="pull-left"></div>
+				<img src="/_bors/i/tools.gif" alt="*" onclick="sh('pttools', {$post->id()})"  width="16" height="16" title="Инструменты координатора" />
+				{/if}
+			</div>
+	{/if *}
+			<span class="badge">
+				<img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$post->id()},'up')"  width="16" height="16" />
+				<span id="ptr{$post->id()}" style="font-size: 130%">{if $post->score() != NULL}{$post->score_colorized()}{/if}</span>
+				<img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$post->id()},'down')" width="16" height="16" />
+			</span>
+			<span class="half-transparent badge">{$post->imaged_edit_url()}</span>
+			{if $is_first_post}<g:plusone size="small"></g:plusone>{/if}
+		</div>
+
+	</div>{*/head*}
+
+	<div class="row">
+		<div class="avatar_block span2 text-center">
+		{if $owner}
+			{if not $avatar_size}{assign var="avatar_size" value=100}{/if}
+				{include file="xfile:forum/post-avatar.html" object=$post avatar_size=$avatar_size owner=$post->owner()}
+			{/if}
+		</div>
+		<div class="span10 post-body">
+	{if $post->is_moderatorial()}
+			<div class="alert alert-error">Данное сообщение является официальным предупреждением</div>
+	{/if}
+
+	{assign var="keyword_links" value=$post|get:'keyword_links'}
+
+	{if $keyword_links}
+			<div class="post_kws">{$keyword_links}</div>
+	{/if}
+	{block name="pre_body"}
+	{/block}
+	{if $post->is_spam() && $post->topic()->forum_id() != 191 && not $show_spam}
+			<div class="alert">** Это сообщение от непроверенного пользователя и похоже на спам. После проверки его координаторами оно будет или уничтожено, или разрешено к показу **</div>
+	{else}
+			{$post->body()}
+	{/if}
+
+	{if $post->attaches()}
+			<hr />
+				Прикреплённые файлы:
+			<div class="container">
+		{foreach from=$post->attaches() item="attach"}
+				<div class="pull-left" style="width: 300px; margin: 8px">
+					{$attach->thumbnail_link('300x300', 'img-polaroid')}
+					<a href="{$attach->url()}">{$attach->title()}</a>
+					[{$attach->size()|smart_size}, {$attach->downloads()} {$attach->downloads()|sklon:'загрузка':'загрузки':'загрузок'}]
+				</div>
+		{/foreach}
+			</div>
+
+	{/if}
+
+	{if $post->edited() && $post->edited() > $post->create_time() + 300}
+			<div class="alert alert-info">Это сообщение редактировалось {$post->edited()|strftime:"%d.%m.%Y в %H:%M"}</div>
+	{/if}
+			<div class="row">
+			<p class="postsignature muted small" style="margin-top: 20px">
+				<span class="img_middle pull-right">
+					&nbsp;{$post->owner_user_agent()}
+				</span>
+				{if $post->owner() and $post->owner()->signature()}{$post->owner()->signature_html()}{/if}
+			</p>
+			</div>
+
+			<div id="pfo{$post->id()}"></div>
+
+			<div class="container">
+				<i class="icon-comment"></i> <a href="/_bors/ajax/post/info?post={$post->id()}" class="bb-ajax-popover">Ответов: {$post->answers_count()}</a>
+				<a href="#" onclick="pdsh('{$post->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;инструменты</a>
+				 <a href="{$post->topic()->forum()->category()->category_base_full()}post.php?tid={$post->topic_id()}&amp;qid={$post->id()}" 
+				  class="btn pull-right">Ответить на сообщение</a>
+			</div>
+
+
+	{if $post->warning()}
+	<br/>
+	<div class="alert alert-error">
+		<b>{$post->warning()|get:moderator_name}:</b> предупреждение ({$post->warning()|get:score})
+		{if $post->warning()|get:type_id} по категории «<b>{$post->warning()|get:type_id|bors_list_item_name:"airbase_user_warning_type"}</b>»
+			{if $post->warning()|get:source}(<i>{$post->warning()|get:source}</i>){/if}
+		{/if}.
+	</div>
+	{/if}
+
+	{assign var="reputation_records" value=$post->get('reputation_records')}
+	{if $reputation_records}
+	<br/>
+	<div class="body small">
+		{foreach $reputation_records as $r}
+			<div class="alert alert-{if $r->score()<0}error{else}success{/if}">
+			{$r->create_time()|date:"d.m.Y H:i"}, {$r->owner()->titled_link()}: {$r->score_html(lcml_bb($r->comment()))}
+			</div>
+		{/foreach}
+	</div>
+	{/if}
+
+		</div>
+	</div>
+
+	{if $post->get('actions')}
+	<br/>
+	<div class="alert">
+	<ul>
+	{foreach from=$post->actions() item="a"}
+		<li{$a->type_class()} style="font-size: 8pt">{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}</li>
+	{/foreach}
+	</ul>
+	</div>
+	{/if}
+
+
+</div>{*/post container*}
+</div>
+{/if}
