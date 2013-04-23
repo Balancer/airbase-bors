@@ -7,4 +7,6 @@ class tanzpol_main extends tanzpol_page
 	var $description = 'Политические дискуссии';
 
 	function create_time() { return 1343759827; }
+
+	static function cat_names() { return "tanzpol"; }
 }
