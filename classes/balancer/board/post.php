@@ -206,4 +206,12 @@ class balancer_board_post extends forum_post
 	{
 		bors_objects_preload($posts, 'owner_id', 'balancer_board_user', 'owner');
 	}
+
+	function real_title()
+	{
+		if($this->title_raw())
+			return $this->title_raw();
+
+		return $this->topic()->title();
+	}
 }

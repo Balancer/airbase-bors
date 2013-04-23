@@ -1,0 +1,11 @@
+{extends file="xfile:view.bootstrap.html"}
+
+{block name="title"}
+<h2>
+{$post->real_title()}
+</h2>
+{/block}
+
+{block name="pre_body"}
+<i class="icon-folder-open"></i> Форум: <a href="{$post->topic()->forum()->url()}">{$post->topic()->forum()->title()}</a><br/>
+{/block}
