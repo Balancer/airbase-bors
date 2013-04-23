@@ -3,7 +3,7 @@
 class balancer_board_topics_post extends balancer_board_tool
 {
 	function title() { return 'Новое сообщение в тему ' . $this->topic()->nav_name(); }
-	function page_title() { return 'Новое сообщение в тему «' . $this->topic()->title().'»'; }
+	function page_title() { return 'Новое сообщение в тему «' . trim($this->topic()->title()).'»'; }
 	function nav_name() { return 'новое сообщение'; }
 
 	function auto_objects()
@@ -16,7 +16,9 @@ class balancer_board_topics_post extends balancer_board_tool
 	function pre_show()
 	{
 		$ret = parent::pre_show();
-		jquery_markitup::appear('#editor');
+//		jquery_markitup::appear('#editor');
+		jquery_markitup::load();
+		wysibb::init('#editor');
 		jquery::on_ready('$("#editor").focus()');
 		return $ret;
 	}

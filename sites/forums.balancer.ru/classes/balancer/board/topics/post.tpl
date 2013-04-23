@@ -19,6 +19,16 @@
 				{checkbox name="is_subscribe" checked=true label="Подписаться на тему и получать извещения об ответах" br=" "}
 				{checkbox name="is_blog" checked=false label="Разместить ответ в Вашем блоге" br=" "}
 				{checkbox name="is_moderatorial" checked=false label="Данное сообщение — модераториал" br=" "}
+
+	<div class="well">
+		<b>Выбор редактора сообщений:</b>
+    	<div class="btn-group" data-toggle="buttons-radio">
+	    <button type="button" class="btn btn-primary" id="turn-wysibb-on">WysiBB</button>
+    	<button type="button" class="btn btn-primary" id="turn-markitup-on">markItUp!</button>
+	    <button type="button" class="btn btn-primary" id="turn-textarea-on">textarea</button>
+    	</div>
+	</div>
+
 			</div>
 		</div>
 	</div>
