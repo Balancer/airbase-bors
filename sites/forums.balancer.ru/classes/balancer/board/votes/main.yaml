@@ -1,0 +1,5 @@
+extends: balancer_board_meta_main
+main_class: balancer_board_vote
+auto_map: true
+template: forum/common.html
+
