@@ -149,7 +149,11 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			}
 
 			$uid = $me->id();
-			$x = $this->db()->select('topic_visits', 'UNIX_TIMESTAMP(`modify_ts`) AS last_visit, last_post_id', array('user_id='=>$uid, 'topic_id='=>$this->id()));
+			$x = $this->db()->select('topic_visits', 'last_visit, last_post_id', array(
+				'user_id=' => $uid,
+				'topic_id=' => $this->id()
+			));
+
 			$last_visit = @$x['last_visit'];
 
 			// Если отметки о чтении топика нет, то считаем за дату последнего посещения
@@ -583,6 +587,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		$v->set_last_visit($time);
 		$v->set_last_post_id($this->last_post_id());
 		$v->set_modify_time(time());
+		$v->set_is_disabled(false);
 	}
 
 	function visits_counting() { return true; }

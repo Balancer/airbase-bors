@@ -327,6 +327,11 @@ table.small td.small {
 	padding: 2px;
 }
 
+.xsmall {
+	font-size:0.7em !important;
+	padding: 0px;
+}
+
 .big {
 	font-size: 2em;
 	padding: 2px;
@@ -658,6 +663,7 @@ dt span.colright-100 {
 
 .red { color: red !important; }
 .b { font-weight: bold; }
+.nb { font-weight: lighter; }
 .nobr { white-space: nowrap; }
 
 .code {
@@ -880,4 +886,11 @@ li {
 
 .navbar {
 	font-size: 14px;
+}
+
+img.btn16 {
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
+	cursor:pointer;
 }
