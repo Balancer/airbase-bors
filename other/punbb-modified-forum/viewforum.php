@@ -278,7 +278,7 @@ if ($db->num_rows($result))
 						<div class="intd">
 							<div class="<?php echo $icon_type;/*"*/?>"><div class="nosize"><?php echo trim($icon_text) ?></div></div>
 							<div class="tclcon">
-								<?php echo airbase_fun::replace_2013($subject)."\n" ?>
+								<?php echo $subject."\n" ?>
 							</div>
 						</div>
 					</td>

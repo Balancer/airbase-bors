@@ -764,11 +764,11 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 						<div class="intd">
 							<div class="<?php echo $icon_type;/*"*/?>"><div class="nosize"><?php echo trim($icon_text) ?></div></div>
 							<div class="tclcon">
-								<?php echo airbase_fun::replace_2013($subject)."\n" ?>
+								<?php echo $subject."\n" ?>
 							</div>
 						</div>
 					</td>
-					<td class="tc2"><?php echo airbase_fun::replace_2013($forum) ?></td>
+					<td class="tc2"><?php echo $forum ?></td>
 					<td class="tc3"><?php echo $search_set[$i]['num_replies'] ?></td>
 					<td class="tcr"><?php echo "<a href=\"{$pun_config['root_uri']}/viewtopic.php?pid={$search_set[$i]['last_post_id']}#p{$search_set[$i]['last_post_id']}\">".format_time($search_set[$i]['last_post']).'</a> '.$lang_common['by'].'&nbsp;'.pun_htmlspecialchars($search_set[$i]['last_poster']) ?></td>
 				</tr>

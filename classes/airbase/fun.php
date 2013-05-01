@@ -4,7 +4,7 @@ class airbase_fun
 {
 	static function replace_2013($text)
 	{
-		if(date('d') > 1)
+//		if(date('d') > 1)
 			return $text;
 
 		static $replace = array(
