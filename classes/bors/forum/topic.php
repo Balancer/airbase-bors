@@ -617,7 +617,7 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if(!$kws)
 			$kws = $this->forum()->keywords_string();
 
-		return airbase_fun::replace_2013($kws);
+		return $kws;
 	}
 
 	function set_keywords_string($words, $db_update)

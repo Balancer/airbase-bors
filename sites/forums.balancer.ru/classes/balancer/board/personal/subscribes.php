@@ -1,27 +1,29 @@
 <?php
 
-class balancer_board_personal_updated extends balancer_board_page
+class balancer_board_personal_subscribes extends balancer_board_page
 {
-	function title() { return ec('Обновившиеся темы, в которые Вы заходили в последнее время'); }
-	function nav_name() { return ec('обновлённые темы'); }
+	function title() { return ec('Темы, на обновления которых Вы подписаны'); }
+	function nav_name() { return ec('подписки'); }
 	function auto_map() { return true; }
 
 	function items_per_page() { return 50; }
 
+	function pre_show()
+	{
+		if(!bors()->user())
+			return bors_message(ec('Страница только для зарегистрированных пользователей'));
+
+		return parent::pre_show();
+	}
+
 	function body_data()
 	{
 		$me_id = bors()->user_id();
-
-		$first_visit = bors_find_first('balancer_board_topics_visit', array(
-			'order' => 'last_visit',
-		))->last_visit();
-
 		$topics = bors_find_all('balancer_board_topic', array(
-			'*set' => 'topic_visits.last_visit AS joined_last_visit',
-			'inner_join' => 'topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.is_disabled = 0)',
-			'topic_visits.user_id=' => $me_id,
-			'topic_visits.last_visit < topics.last_post',
-//			'topic_visits.last_visit>' => time()-86400*31,
+			'*set' => 'IF(topic_visits.last_visit < topics.last_post, 1, 0) AS was_updated',
+			'inner_join' => 'balancer_board_users_subscription ON (balancer_board_users_subscription.topic_id = balancer_board_topic.id)',
+			'balancer_board_users_subscription.user_id=' => $me_id,
+			'left_join' => "topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.is_disabled = 0 AND topic_visits.user_id=$me_id)",
 			'order' => '-last_post',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
@@ -55,12 +57,8 @@ class balancer_board_personal_updated extends balancer_board_page
 
 	function total_items()
 	{
-		return bors_count('balancer_board_topic', array(
-			'inner_join' => 'topic_visits ON (topic_visits.topic_id = balancer_board_topic.id)',
-			'topic_visits.user_id=' => bors()->user_id(),
-			'topic_visits.last_visit < topics.last_post',
-			'topic_visits.is_disabled=' => false,
-//				'topic_visits.last_visit>' => time()-86400*31,
+		return bors_count('balancer_board_users_subscription', array(
+			'balancer_board_users_subscription.user_id=' => bors()->user_id(),
 		));
 	}
 }
