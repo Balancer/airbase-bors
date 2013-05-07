@@ -321,8 +321,6 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 			bors_objects_preload($data['last_actions'], 'owner_id', 'balancer_board_user', 'owner');
 		}
 
-		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");
-
 		bors_objects_preload($data['posts'], 'owner_id', 'balancer_board_user', 'owner');
 
 		$data['this'] = $this;
@@ -554,8 +552,23 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 	function url_engine() { return 'url_titled'; }
 	function url_for_igo() { return 'http://www.balancer.ru/g/t'.$this->id(); }
 
+	function touch_info()
+	{
+		return array(
+			'modify_time' => $this->modify_time(),
+			'pages' => $this->total_pages(),
+		);
+	}
+
 	function touch($user_id, $time = NULL)
 	{
+		// Инкрементируем число просмотров этой темы.
+		$this->visits_inc();
+
+		// Дальше — только для зарегистрированных пользователей. Учёт визитов.
+		if(!$user_id)
+			return;
+
 		$v = bors_find_first('balancer_board_topics_visit', array('user_id' => $user_id, 'target_object_id' => $this->id()));
 
 		if(!$time)
@@ -663,6 +676,14 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		if($this->moved_to())
 			return go(object_load('balancer_board_topic', $this->moved_to())->url($this->page()));
 
+		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");
+
+		if($this->page() > 1)
+			bors_page::link_rel('prev', $this->url($this->page() - 1));
+
+		if($this->page() < $this->total_pages() && $this->total_pages() > 1)
+			bors_page::link_rel('next', $this->url($this->page() + 1));
+
 		template_jquery();
 //		template_jquery_plugin_autocomplete();
 /*
@@ -681,7 +702,7 @@ $(function() {
 '		);
 */
 		$this->tools()->use_ajax();
-		$this->visits_inc();
+
 		return parent::pre_show();
 	}
 
