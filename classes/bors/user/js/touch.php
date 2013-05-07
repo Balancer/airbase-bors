@@ -21,10 +21,19 @@ class user_js_touch extends bors_js
 		if(!$time)
 			$time = time();
 
-		if(!$obj || !bors()->user())
-			return 'true;';
+		if($obj)
+		{
+			$obj->touch(bors()->user_id(), $time);
+			if($x = $obj->get('touch_info'))
+			{
+				$res = array();
+				foreach($x as $k=>$v)
+					$res[] = "top.touch_info.$k = ".(is_numeric($v) ? $v : "'".addslashes($v)."'");
 
-		$obj->touch(bors()->user()->id(), $time);
+				return join("\n", $res);
+			}
+		}
+
 		return 'true;';
 	}
 }
