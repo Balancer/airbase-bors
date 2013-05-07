@@ -64,8 +64,8 @@ function parse_message($text, $hide_smilies, $nocache=false)
 	$post_hour  = strftime("%H", $post_time);
 	$post_min   = strftime("%M", $post_time);
 
-	$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = 
-		"http://{$_SERVER['HTTP_HOST']}/$post_year/$post_month/$post_day/$post_hour/post-$post_id.html";
+	$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = preg_replace('!:\d+/!', '/', 
+		"http://{$_SERVER['HTTP_HOST']}/$post_year/$post_month/$post_day/$post_hour/post-$post_id.html");
 
 	if($nocache)
 		config_set('lcml_cache_disable', true);

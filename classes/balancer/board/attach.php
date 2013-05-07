@@ -131,7 +131,7 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 			}
 			else
 			{
-				$thumb = ec('Ошибка изображения');
+				$thumb = ec('Ошибка изображения ').$thumb_url;
 				$width = 300;
 			}
 		}
