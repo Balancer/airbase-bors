@@ -10,9 +10,7 @@ require_once('engines/lcml/main.php');
 			return $ch->last();
 
 		global $cur_post;
-//		$GLOBALS['main_uri'] = $GLOBALS['cms']['page_path'] = '/forum/post'.@$cur_post['id'];
 
-//		if(config('is_developer')) var_dump($cur_post);
 		return $ch->set(lcml($text, 
 			array(
 				'cr_type' => 'save_cr',
