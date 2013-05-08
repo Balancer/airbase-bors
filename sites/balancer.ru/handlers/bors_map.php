@@ -9,7 +9,7 @@ $forums = '(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/|/fo
 if(USE_BOOTSTRAP)
 	$topic_view_class = 'balancer_board_topics_view';
 else
-	$topic_view_class = 'balancer_board_topic';
+	$topic_view_class = config('topics.view_class');
 
 $map = array(
 	'/\w{32}/cache(/.*/\d*x\d*/[^/]+\.(jpe?g|png|gif)) => bors_image_autothumb(1)',
