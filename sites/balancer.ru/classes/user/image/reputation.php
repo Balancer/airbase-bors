@@ -7,8 +7,9 @@ class user_image_reputation extends base_image_gif
 		$func1 = "imagecreatefromgif";
 		$func2 = "imagegif";
 
-		$db = new DataBase('AB_FORUMS');
-		$reputation_value = $db->get("SELECT reputation FROM users WHERE id = ".intval($this->id()));
+		$user = bors_load('balancer_board_user', $this->id());
+
+		$reputation_value = $user->reputation();
 
 		if($reputation_value >= 0)
 		{

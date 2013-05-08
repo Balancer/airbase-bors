@@ -828,7 +828,7 @@ $(function() {
 
 		return array_merge(parent::page_data(), array(
 //			'skip_top_ad' => true,
-			'page_last_time' => $last_post->create_time()+1,
+			'page_last_time' => $last_post ? $last_post->create_time()+1 : NULL,
 		), compact('search_keywords'));
 	}
 
