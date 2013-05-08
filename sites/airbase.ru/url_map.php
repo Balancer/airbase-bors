@@ -1,5 +1,7 @@
 <?php
 
+$topics_view_class = config('topics.view_class');
+
 bors_url_map(array(
 	'/login/ => wrk_mauth_login',
 	'/alpha/rus/n/nk/144/ => airbase_db_page(url)',
@@ -14,8 +16,8 @@ $map = array(
 	'(/top/)\?img=(\d+) => airbase_top_logo(2)',
 	'(/top/)(\d+)\.png => airbase_top_logo(2)',
 	'(/top/)(\d+)/logo\.png => airbase_top_logo(2)',
-	'(/forums/)index\.php\?showtopic=(\d+) => redirect:balancer_board_topic(2)',
-	'(/forums/)index\.php\?act=ST&f=\d+&t=(\d+) => redirect:balancer_board_topic(2)',
+	"(/forums/)index\.php\?showtopic=(\d+) => redirect:{$topics_view_class}(2)",
+	"(/forums/)index\.php\?act=ST&f=\d+&t=(\d+) => redirect:{$topics_view_class}(2)",
 	'(/)cgi\-bin/forum/ultimatebb\.cgi\?ubb=get_topic&(f=\d+&t=\d+) => forum_topic_ubb(2)',
 	'/forum/Forum(\d+/HTML/\d+)\.html => forum_topic_ubb(1)',
 

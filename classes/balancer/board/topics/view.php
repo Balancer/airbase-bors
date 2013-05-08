@@ -7,9 +7,6 @@ if(bors()->user_id() == 10000)
 	//config_set('debug_mysql_queries_log', true); // — только строки запросов, без стека
 	config_set('debug_mysql_queries_log', 20);
 }
-else
-	debug_hidden_log('Unknown-user', 'unknown user in topic');
-
 
 class balancer_board_topics_view extends bors_view_container
 {
@@ -23,9 +20,12 @@ class balancer_board_topics_view extends bors_view_container
 	function uri_name() { return 't'; }
 	function nav_name() { return truncate($this->title(), 60); }
 
-	function where() { return array_merge(parent::where(), array(
-		'is_deleted' => false,
-	)); }
+	function where()
+	{
+		return array_merge(parent::where(), array(
+			'is_deleted' => false,
+		));
+	}
 
 	function order() { return 'sort_order,create_time'; }
 
