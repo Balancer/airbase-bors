@@ -61,7 +61,7 @@ ob_start();
 	echo '<meta name="ROBOTS" content="NOINDEX, FOLLOW" />'."\n";
 if(!empty($_GET['id']) && preg_match('/viewforum\.php/', $_SERVER['REQUEST_URI']))
 	echo "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"http://www.balancer.ru/forum/{$_GET['id']}/posts-rss.xml\" title=\"Новые сообщения в этом форуме\" />";
-	
+
 ?>
 <title><?php echo $page_title ?></title>
 <meta name="Description" content="Форумы Balancer'а и Авиабазы. Свободное общение на всевозможные интересные темы. Военная и гражданская техника, авиация, космонавтика, компютеры и информационные технологии, Linux, люди, страны, политика, просто радости и горести жизни. У нас есть всё!">
@@ -70,6 +70,11 @@ if(!empty($_GET['id']) && preg_match('/viewforum\.php/', $_SERVER['REQUEST_URI']
 <link rel="stylesheet" type="text/css" href="<?php echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css';/*"*/?>" />
 <meta property="fb:admins" content="100000278666723" />
+<?php
+if(!empty($GLOBALS['use_jquery']))
+	echo "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\" type=\"text/javascript\"></script>\n";
+?>
+
 <link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
 <link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
 <link rel="stylesheet" type="text/css" href="/_bors/css/main6.css" />
