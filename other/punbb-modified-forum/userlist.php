@@ -167,7 +167,7 @@ if ($db->num_rows($result))
 					<td class="tc2"><?php echo $user_title_field ?></td>
 <?php if ($show_post_count): ?>					<td class="tc3"><?php echo $user_data['num_posts'] ?></td>
 <?php endif; ?>
-					<td class="tcr"><?php echo format_time($user_data['registered'], true) ?></td>
+					<td class="tcr"><?php echo format_time($user_data['registered'], false) ?></td>
 				</tr>
 <?php
 

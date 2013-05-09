@@ -26,6 +26,7 @@
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 
+$GLOBALS['use_jquery'] = true;
 
 // If we are logged in, we shouldn't be here
 if (!$pun_user['is_guest'])
@@ -79,13 +80,15 @@ else if ($pun_config['o_rules'] == '1' && !isset($_GET['agree']) && !isset($_POS
 
 else if (isset($_POST['form_sent']))
 {
-	$crc = md5(intval($_POST['captcha_result']).'salt');
+	$crc = md5(intval($_POST['test_result']).config('board_register_captcha_salt'));
 
-	if($crc != @$_POST['captcha_hash'])
+	if($crc != @$_POST['test_hash'])
 	{
-//		debug_hidden_log('users-register-captcha-fail', 'Пользователь ошибся при вводе captcha');
+		debug_hidden_log('users-register-captcha-fail', 'Пользователь ошибся при вводе captcha');
 		return message('Вы ввели неверный результат выражения. Попробуйте ещё раз.');
 	}
+
+	debug_hidden_log('users-register-captcha-success', 'result='.$_POST['test_result'].', crc='.$crc.', hash='.$_POST['test_hash']);
 
 	// Check that someone from this IP didn't register a user within the last hour (DoS prevention)
 	$result = $db->query('SELECT 1 FROM '.$db->prefix.'users WHERE registration_ip=\''.get_remote_address().'\' AND registered>'.(time() - 3600)) or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());
@@ -262,22 +265,35 @@ else if (isset($_POST['form_sent']))
 $page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_register['Register'];
 $required_fields = array('req_username' => $lang_common['Username'], 'req_password1' => $lang_common['Password'], 'req_password2' => $lang_prof_reg['Confirm pass'], 'req_email1' => $lang_common['E-mail'], 'req_email2' => $lang_common['E-mail'].' 2');
 $focus_element = array('register', 'req_username');
+
+$x1 = rand(2, 4);
+
+$plus = array('прибaвить', 'дoбaвить');	$plus = $plus[rand(0, count($plus)-1)];
+$div  = array('раздeлить', 'пoделить');	$div  = $div[rand(0, count($div)-1)];
+
+$operators = array(
+	array("к %d $plus %d = ", '+', rand(1,49), rand(1,49)),
+	array('от %d отнять %d = ',   '-', rand(20, 40), rand(1,19)),
+	array('умножить %d на %d = ', '*', rand(1,10), rand(1,10)),
+	array("$div %d на %d = ",'/', rand(1,4)*$x1, $x1),
+	array('%d + %d = ', '+', rand(1,10), rand(1,10)),
+);
+
+list($format, $operator, $a, $b) = $operators[rand(0,count($operators)-1)];
+eval("\$expect_result = md5((\$a $operator \$b).'".config('board_register_captcha_salt')."');");
+
+global $header;
+$header[] = "
+<script>
+$(function() {\$('.cptc').html('".sprintf($format, $a, $b)."') } )
+</script>
+";
+
 require PUN_ROOT.'header.php';
 
 //require_once(config('recaptcha.include'));
 //$publickey = config('recaptcha.pubkey');
 
-$x1 = rand(2, 4);
-
-$operators = array(
-	array('к %d прибавить %d = ', '+', rand(0,49), rand(0,49)),
-	array('от %d отнять %d = ',   '-', rand(20, 40), rand(1,19)),
-	array('умножить %d на %d = ', '*', rand(1,10), rand(1,10)),
-	array('разделить %d на %d = ','/', rand(1,4)*$x1, $x1),
-);
-
-list($format, $operator, $a, $b) = $operators[rand(0,count($operators)-1)];
-eval("\$expect_result = md5((\$a $operator \$b).'salt');");
 ?>
 <div class="blockform">
 	<h2><span><?php echo $lang_register['Register'] ?></span></h2>
@@ -291,15 +307,15 @@ eval("\$expect_result = md5((\$a $operator \$b).'salt');");
 				</div>
 				<div class="forminfo">
 В виду засилья спам-ботов на нашем форуме, Вы должны подтвердить, что являетесь человеком. Сосчитайте результат выражения и введите его в форму ввода:<br/>
-<b><?php echo sprintf($format, $a, $b);?>
-					<input name="captcha_result" value="" />
+<b><span class="cptc"><span style="color: red">Опаньки. Без JS не работает</span></span>
+					<input name="test_result" value="" />
 </b>
 				</div>
 				<fieldset>
 					<legend><?php echo $lang_register['Username legend'] ?></legend>
 					<div class="infldset">
 						<input type="hidden" name="form_sent" value="1" />
-						<input type="hidden" name="captcha_hash" value="<?php echo $expect_result /*"*/ ?>" />
+						<input type="hidden" name="test_hash" value="<?php echo $expect_result /*"*/ ?>" />
 						<label><strong><?php echo $lang_common['Username'] ?></strong><br /><input type="text" name="req_username" size="25" maxlength="25" /><br /></label>
 					</div>
 				</fieldset>
