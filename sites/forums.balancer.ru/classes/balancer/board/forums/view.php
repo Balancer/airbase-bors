@@ -30,6 +30,7 @@ class balancer_board_forums_view extends balancer_board_meta_main
 	function item_fields()
 	{
 		return array(
+			'image_thumbnail_64' => '&nbsp;',
 			'titled_link' => 'Тема',
 			'num_replies' => 'Число ответов',
 			'visits' => 'Число просмотров',
