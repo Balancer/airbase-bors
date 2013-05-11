@@ -32,7 +32,7 @@ class balancer_board_keywords_tags extends base_page
 		return $this->_keywords;
 	}
 
-	function title() { return ec('Тэги форумов: ').str_replace(',', ', ', $this->keywords_string()); }
+	function title() { return ec('Теги форумов: ').str_replace(',', ', ', $this->keywords_string()); }
 	function nav_name() { return bors_lower(str_replace(',', ', ', $this->keywords_string())); }
 
 	function description()
@@ -62,7 +62,7 @@ class balancer_board_keywords_tags extends base_page
 				array_slice(array_keys($sub_keywords), 0, 7)
 			), $this->keywords_string());
 
-		$kw = ec("Тэги		: ").
+		$kw = ec("Теги		: ").
 			airbase_keywords_linkify(join(',', array_slice(array_keys($base_keywords), 0, 7)));
 
 		return join('<br />', array($filters, $kw));

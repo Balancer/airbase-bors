@@ -178,4 +178,12 @@ class balancer_board_topic extends forum_topic
 	function title_with_forum() { return $this->title().' ['.$this->forum()->title().']'; }
 
 	function list_fields_format() { return '%title% [%forum_title%]'; }
+
+	function last_post_snip()
+	{
+		$lp = $this->last_post();
+		return object_property($lp, 'author_name');
+	}
+
+	function last_post_ctime() { return bors_time::factory($this->last_post_create_time()); }
 }

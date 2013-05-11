@@ -2,8 +2,8 @@
 
 class balancer_board_help_tags extends balancer_board_page
 {
-	var $title = 'Описание тэгов';
-	var $nav_name = 'тэги';
+	var $title = 'Описание тегов';
+	var $nav_name = 'теги';
 	var $is_auto_url_mapped_class = true;
 	function template() { return 'forum/page.html'; }
 
@@ -29,7 +29,7 @@ class balancer_board_help_tags extends balancer_board_page
 				if(!preg_match('!^.*?/\*\*(.*?)\*/!s', $content, $md))
 					continue;
 
-				$type = "Тип тэга: ".($mt[2] == 'pair' ? 'парный' : 'одиночый');
+				$type = "Тип тега: ".($mt[2] == 'pair' ? 'парный' : 'одиночый');
 				$desc = $md[1];
 				$sample = "";
 				if(preg_match("/\n\s+Ссылка с примером: (.+?)\n/", $desc, $msampl))

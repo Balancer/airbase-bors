@@ -48,9 +48,10 @@ $map = array(
 	'/stat/forums-activity\.png => balancer_board_stat_forumsActivity',
 	'/stat/forums-activity-year\.png => balancer_board_stat_forumsActivityYear',
 
-	'(/)tags/ => balancer_board_keywords_main',
-	'(/tags/)(.*)/(\d+)\.html => balancer_board_keywords_tags(2,3)',
-	'(/tags/)(.*)/? => balancer_board_keywords_tags(2)',
+	'(/)tags/? => balancer_board_keywords_main',
+	'(/tags.*/)\*/? => balancer_board_keywords_list',
+	'(/tags/)(.+)/(\d+)\.html => balancer_board_keywords_tags(2,3)',
+	'(/tags/)(.+)/? => balancer_board_keywords_tags(2)',
 
 	'/new\-topics/10years-ago/ => balancer_board_topics_10years',
 

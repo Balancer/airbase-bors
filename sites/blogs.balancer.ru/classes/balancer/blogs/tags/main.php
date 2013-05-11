@@ -2,8 +2,8 @@
 
 class balancer_blogs_tags_main extends base_page
 {
-	function title() { return ec('Тэги блогов Балансера'); }
-	function nav_name() { return ec('тэги'); }
+	function title() { return ec('Теги блогов Балансера'); }
+	function nav_name() { return ec('теги'); }
 	function template() { return 'forum/common.html'; }
 
 	function page_data()

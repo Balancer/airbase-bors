@@ -1,9 +1,9 @@
 <?php
 
-class balancer_board_keywords_main extends base_page
+class balancer_board_keywords_list extends base_page
 {
-	function title() { return ec('Тэги'); }
-	function nav_name() { return ec('тэги'); }
+	function title() { return ec('Теги'); }
+	function nav_name() { return ec('теги'); }
 //	function template() { return 'forum/common.html'; }
 	function template() { return 'forum/_header.html'; }
 

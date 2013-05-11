@@ -63,7 +63,7 @@ class balancer_board_forum extends forum_forum
 			ec('Родительский форум') => array('property' => 'parent_forum_id', 'class' => 'balancer_board_forum', 'have_null' => true),
 			ec('Категория') => array('property' => 'category_id', 'class' => 'balancer_board_category'),
 			ec('Порядок сортировки') => 'sort_order',
-			ec("Тэги\nчерез запятую") => 'keywords_string',
+			ec("Теги\nчерез запятую") => 'keywords_string',
 			ec('Адрес перенаправления') => 'redirect_url',
 			ec('Открытый доступ') => 'is_public',
 			'Изображение' => 'image_id',
