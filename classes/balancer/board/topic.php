@@ -186,4 +186,36 @@ class balancer_board_topic extends forum_topic
 	}
 
 	function last_post_ctime() { return bors_time::factory($this->last_post_create_time()); }
+
+	function image()
+	{
+		if($this->__havefc())
+			return $this->__lastc();
+
+		$obj = bors_find_first('balancer_board_posts_object', array(
+			'inner_join' => array(
+				'balancer_board_post ON balancer_board_post.id = balancer_board_posts_object.post_id',
+				'`BORS`.`bors_images` i ON balancer_board_posts_object.target_object_id = i.id',
+			),
+			'topic_id' => $this->id(),
+			'`i`.extension<>"gif"',
+			'target_class_id' => 202, // airbase_image
+			'order' => 'post_id',
+		));
+
+		if($obj)
+			$obj = $obj->target();
+		else
+			$obj = false;
+
+		return $obj;
+	}
+
+	function image_thumbnail_64()
+	{
+		if(!($i = $this->image()))
+			return NULL;
+
+		return "<a href=\"{$this->url()}\">{$i->thumbnail('100x64(up,crop)')->html_code()}</a>";
+	}
 }
