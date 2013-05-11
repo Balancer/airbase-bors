@@ -70,7 +70,7 @@ class balancer_blogs_tags_show extends balancer_board_page
 				array_slice(array_keys($sub_keywords), 0, 7)
 			), $this->keywords_string());
 
-		$kw = ec("Тэги		: ").
+		$kw = ec("Теги		: ").
 			airbase_keywords_linkify(join(',', array_slice(array_keys($base_keywords), 0, 7)));
 
 		return join('<br />', array($filters, $kw));

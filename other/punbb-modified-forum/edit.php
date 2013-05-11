@@ -526,7 +526,7 @@ if ($is_admmod)
 $checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\"     value=\"1\" tabindex=\"".($cur_index++).'"'
 	.($blog ? ' checked="checked"' : '')
 	." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '"
-		.addslashes("<label><strong>Тэги:</strong>&nbsp;<input class='longinput' type='text' name='blog_keywords_string' value='"
+		.addslashes("<label><strong>Теги:</strong>&nbsp;<input class='longinput' type='text' name='blog_keywords_string' value='"
 			.htmlspecialchars(defval($_POST, 'blog_keywords_string', $topic->keywords_string()))
 			."' size='40' maxlength='255' /><br /></label>")
 		."' : ''\"/>Разместить ответ в <a href=\"http://www.balancer.ru/user/{$pun_user['id']}/blog/\">Вашем блоге</a>";
@@ -534,7 +534,7 @@ $checkboxes[] = "<label><input type=\"checkbox\" name=\"as_blog\"     value=\"1\
 $checkboxes[] = "<label><input type=\"checkbox\" name=\"export_blog\" value=\"1\" tabindex=\""
 	.($cur_index++).'"'.(isset($_POST['as_blog']) ? ' checked="checked"' : '')
 	." onClick=\"getElementById('here_keywords').innerHTML= this.checked ? '"
-		.addslashes("<label><strong>Тэги:</strong>&nbsp;<input class='longinput' type='text' name='keywords' size='40' maxlength='255' value='"
+		.addslashes("<label><strong>Теги:</strong>&nbsp;<input class='longinput' type='text' name='keywords' size='40' maxlength='255' value='"
 			.htmlspecialchars(defval($_POST, 'blog_keywords_string', $topic->keywords_string()))
 			."' size='40' maxlength='255' /><br /></label>")
 	."' : ''\"/>Транслировать ответ в ЖЖ";

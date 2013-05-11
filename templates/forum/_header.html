@@ -134,15 +134,15 @@ createCookie('readedTopics', readed.join(' '), 3)
                 separator: ',',
                 completeOnSeparator: true,
                 completeOnBlur: true,
-                confirmRemovalText: "Вы хотите удалить этот тэг?",
+                confirmRemovalText: "Вы хотите удалить этот тег?",
 				imageTagUrl: 'http://www.balancer.ru/_bors3rdp/jquery/plugins/tageditor/minus_small.png',
 				object: '{/literal}{$this->internal_uri_ascii()}{literal}',
             });
 		});
 {/literal}</script>
-Тэги:<input id="tags" name="tags" type="text" value="" /><span id="tags_def">{$this->keywords_linked()}</span>
+Теги:<input id="tags" name="tags" type="text" value="" /><span id="tags_def">{$this->keywords_linked()}</span>
 {else}
-Тэги: {$this->keywords_linked()}
+Теги: {$this->keywords_linked()}
 {/if}
 </div>
 {/if}
