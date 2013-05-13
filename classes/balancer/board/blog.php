@@ -42,13 +42,57 @@ class balancer_board_blog extends forum_blog
 
 	function feed_entry()
 	{
-		if($f = $this->blog_source())
-			return $f;
+		if($fe = $this->blog_source())
+			return $fe;
 
-		return bors_find_first('bors_external_feeds_entry', array(
+		$fe = bors_find_first('bors_external_feeds_entry', array(
 			'target_class_name IN' => array('balancer_board_post', 'forum_post'),
 			'target_object_id' => $this->id(),
+			'order' => 'id',
 		));
+
+		if($fe)
+		{
+			$this->set_blog_source_class($fe->class_name());
+			$this->set_blog_source_id($fe->id());
+			return $fe;
+		}
+
+		$fe = bors_find_first('bors_external_feeds_entry', array(
+			'target_object_id' => 0,
+			'create_time' => $this->blogged_time(),
+		));
+
+		if(!$fe)
+		{
+			$fe = bors_find_first('bors_external_feeds_entry', array(
+				'create_time' => $this->blogged_time(),
+			));
+		}
+
+		if($fe)
+		{
+			$post = $this->post();
+
+			if($fe->text() == $post->source())
+			{
+				$this->set_blog_source_class($fe->class_name());
+				$this->set_blog_source_id($fe->id());
+				$this->store();
+
+				$fe_post = $fe->target();
+
+				if(!$fe_post)
+				{
+					$fe->set_target_class_name($post->class_name());
+					$fe->set_target_object_id($post->id());
+				}
+			}
+
+			return $fe;
+		}
+
+		return NULL;
 	}
 
 	function recalculate($post = NULL, $topic = NULL)
@@ -64,6 +108,7 @@ class balancer_board_blog extends forum_blog
 		$this->set_forum_id($topic->forum_id(), true);
 		$this->set_is_public($topic->is_public(), true);
 
+//		if(config('is_developer')) { var_dump($this->feed_entry()); exit(); }
 		if($feed_entry = $this->feed_entry())
 		{
 			$feed_entry->recalculate();
