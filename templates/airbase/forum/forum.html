@@ -8,6 +8,9 @@
 {if topics}
 <table class="btab w100p" cellSpacing="0">
 <tr>
+{if $with_images}
+	<th>&nbsp;</th>
+{/if}
 	<th>Тема</th>
 {if not $skip_forums}
 	<th>Форум</th>
@@ -27,13 +30,15 @@
 	{/if}
 {/if}
 <tr class="tr_forum_{$f->id()}">
-	<td id="vtt_{$t->id()}">
 {if $with_images}
+	<td style="width: 100px; height: 64px; padding: 4px;">
 	{$img=$t->image()}
 	{if $img}
-		<div style="float: right; width: 100px; height: 64px;"><a href="{$t->url()}\">{$img->thumbnail('100x64(up,crop)')->html_code()}</a></div>
+		<a href="{$t->url()}\">{$img->thumbnail('100x64(up,crop)')->html_code()}</a>
 	{/if}
+	</td>
 {/if}
+	<td id="vtt_{$t->id()}">
 
 		<a href="{$t->url('new')}"{if $updated} class="b"{/if}>{$t->title()}</a>
 		{if $t->get('updated_count')}<small class="title_actions transgray small">&nbsp;(+{$t->updated_count()})</small>{/if}
