@@ -155,6 +155,14 @@ class balancer_board_topic extends forum_topic
 	function pre_show()
 	{
 		balancer_board_posts_view::container_init();
+
+		if($this->page() == $this->total_pages())
+			header("X-Accel-Expires: 30");
+		elseif($this->page() >= $this->total_pages() - 2)
+			header("X-Accel-Expires: 600");
+		else
+			header("X-Accel-Expires: 86400");
+
 //		jquery_cloudZoom::load();
 		jquery_fancybox::appear_all();
 		return parent::pre_show();

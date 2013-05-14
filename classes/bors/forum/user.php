@@ -542,7 +542,7 @@ function avatar_thumb($geo)
 			$check_user->store();
 		}
 
-		livestreet_native_user::bb_copy($check_user, $password, true);
+//		livestreet_native_user::bb_copy($check_user, $password, true);
 //		if($check_user->id()==10000) { var_dump($user); exit('debug: введите ещё раз'); }
 
 		if($check_user->user_cookie_hash())

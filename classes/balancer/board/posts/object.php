@@ -42,6 +42,12 @@ class balancer_board_posts_object extends balancer_board_object_db
 
 	static function register($object, $params = array())
 	{
+		if(!$object)
+		{
+			debug_hidden_log('post-objects-error', "Try to register empty object with ".print_r($params, true));
+			return;
+		}
+
 		if(!($post = defval($params, 'self')))
 			return;
 

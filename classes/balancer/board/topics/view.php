@@ -68,14 +68,22 @@ class balancer_board_topics_view extends bors_view_container
 
 	function pre_show()
 	{
+		$topic = $this->topic();
+		if($topic->page() == $topic->total_pages())
+			header("X-Accel-Expires: 30");
+		elseif($this->page() >= $topic->total_pages() - 2)
+			header("X-Accel-Expires: 600");
+		else
+			header("X-Accel-Expires: 86400");
+
 		if(USE_BOOTSTRAP)
 		{
 			twitter_bootstrap::load();
 			bors_use('/_bal/css/bootstrap-bb-append.css');
 		}
 
-		if(!$this->topic()->is_repaged() && rand(0,5) == 0)
-			$this->topic()->repaging_posts();
+		if(!$topic->is_repaged() && rand(0,5) == 0)
+			$topic->repaging_posts();
 
 		if($this->page() == 'new')
 		{
@@ -120,17 +128,17 @@ class balancer_board_topics_view extends bors_view_container
 		if($this->page() == 'last')
 			return go($this->url($this->total_pages()));
 
-		if(!$this->topic()->forum() || !$this->forum()->can_read())
+		if(!$topic->forum() || !$this->forum()->can_read())
 		{
 			template_noindex();
 			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
 		}
 
-		if($this->page() > $this->topic()->total_pages())
-			return go($this->url($this->topic()->total_pages()));
+		if($this->page() > $topic->total_pages())
+			return go($this->url($topic->total_pages()));
 
-		if($this->topic()->moved_to())
-			return go(bors_load('balancer_board_topic', $this->topic()->moved_to())->url($this->topic()->page()));
+		if($topic->moved_to())
+			return go(bors_load('balancer_board_topic', $topic->moved_to())->url($topic->page()));
 
 		template_jquery();
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");

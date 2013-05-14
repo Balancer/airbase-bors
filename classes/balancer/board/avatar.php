@@ -1,9 +1,9 @@
 <?php
 
-class balancer_board_avatar extends base_object_db
+class balancer_board_avatar extends balancer_board_object_db
 {
-	function storage_engine() { return 'bors_storage_mysql'; }
-	function db_name() { return 'AB_FORUMS'; }
+//	function storage_engine() { return 'bors_storage_mysql'; }
+//	function db_name() { return 'AB_FORUMS'; }
 	function table_name() { return 'avatars'; }
 	function table_fields()
 	{

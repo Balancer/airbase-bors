@@ -497,8 +497,11 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		{
 			$this->set_last_post_id($last_pid, true);
 			$last_post = object_load('balancer_board_post', $last_pid);
-			if($this->get('last_post_create_time') < $last_post->create_time(true))
+
+//			Но зачем? Пока не сносить, подумать.
+//			if($this->get('last_post_create_time') < $last_post->create_time(true))
 				$this->set_last_post_create_time($last_post->create_time(true), true);
+
 			$this->set_last_poster_name($last_post->author_name(), true);
 
 		}
