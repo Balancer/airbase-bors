@@ -21,7 +21,6 @@ class balancer_board_personal_updated extends balancer_board_page
 			'inner_join' => 'topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.is_disabled = 0)',
 			'topic_visits.user_id=' => $me_id,
 			'topic_visits.last_visit < topics.last_post',
-//			'topic_visits.last_visit>' => time()-86400*31,
 			'order' => '-last_post',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),

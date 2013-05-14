@@ -22,13 +22,11 @@
 
 ************************************************************************/
 
-
 if (isset($_GET['action']))
 	define('PUN_QUIET_VISIT', 1);
 
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
-
 
 // Load the login.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/login.php';
@@ -47,6 +45,7 @@ if (isset($_POST['form_sent']) && $action == 'in')
 
 	config_set('redirect_to', $_POST['redirect_url']);
 	$me = bors_user::do_login($form_username, $form_password, false);
+
 	if($me === true)
 		bors_exit();
 
@@ -56,6 +55,7 @@ if (isset($_POST['form_sent']) && $action == 'in')
 		message($lang_login['Wrong user/pass']." <a href=\"{$pun_config['root_uri']}/login.php?action=forget\">".$lang_login['Forgotten pass'].'</a>');
 
 	$user_id = $me->id();
+
 
 	// Update the status if this is the first time the user logged in
 

@@ -17,6 +17,9 @@ class lcml_tag_single_attach extends bors_lcml_tag_single
 	{
 		$attach = bors_load('balancer_board_attach', $params['attach']);
 
+		if(!$attach)
+			return "[{$params['orig']}]";
+
 		if(($post = @$params['self']) && balancer_board_post::is_post($post))
 			balancer_board_posts_object::register_object($post, $attach);
 
