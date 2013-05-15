@@ -29,23 +29,41 @@ class airbase_images_show extends base_page
 	function nav_name() { return ec('изображение'); }
 	function title() { return object_property($this->_parent(), 'title'); }
 
-	function init()
+	function data_load()
 	{
 		$data = url_parse($this->id());
 
 		$url_wo_ext = preg_replace('!\.htm$!', '', $data['uri']);
+
 		$url_wo_ext = preg_replace('!^\w+://[^/]+!', '', $url_wo_ext);
 		$file_wo_ext = preg_replace('!\.htm$!', '', $data['local_path']); // /*unislash*/($_SERVER['DOCUMENT_ROOT'] . $url_wo_ext);
 
+		if(preg_match('/\.(jpe?g|png|gif)$/', $file_wo_ext))
+		{
+			if(file_exists($file_wo_ext))
+			{
+				$this->image_f = $file_wo_ext;
+				$this->image_url = $url_wo_ext;
+				return;
+			}
+
+			if(file_exists($f = urldecode($file_wo_ext)))
+			{
+				$this->image_f = $f;
+				$this->image_url = urldecode($url_wo_ext);
+				return;
+			}
+		}
 //		echo "uwo=$url_wo_ext<br/>fwo=$file_wo_ext<Br/>";
 
-		foreach(explode(' ', '.jpg .jpeg .JPG .JPEG .png .PNG .gif .GIF ') as $ext)
+		foreach(explode(' ', 'jpg jpeg JPG JPEG png PNG gif GIF') as $ext)
 		{
-			$test_file = $file_wo_ext.$ext;
+			$test_file = "{$file_wo_ext}.{$ext}";
+//			echo "$test_file<br/>";
 			if(file_exists($test_file))
 			{
 				$this->image_f = $test_file;
-				$this->image_url = $url_wo_ext.$ext;
+				$this->image_url = "{$url_wo_ext}.{$ext}";
 				return false;
 			}
 		}
