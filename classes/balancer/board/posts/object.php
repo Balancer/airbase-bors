@@ -51,6 +51,8 @@ class balancer_board_posts_object extends balancer_board_object_db
 		if(!($post = defval($params, 'self')))
 			return;
 
+//		if(config('is_developer')) { var_dump($object, $post); exit('register'); }
+
 		if(is_array($object))
 			list($object_class_name, $object_id) = $object;
 		else

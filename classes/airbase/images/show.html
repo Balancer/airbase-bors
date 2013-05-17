@@ -1,2 +1,13 @@
-<a href="{$this->image_url()}"><img src="{$this->image_thumb_url('800x600')}" /></a>
+<a href="{$this->image_url()}"><img src="{$this->image_thumb_url('800x600')}" /></a><br/>
+{if $image}
+{$image->id()}
+{/if}
 
+{if $posts}
+<h2>Изображение используется в сообщениях:</h2>
+<ul>
+{foreach $posts as $p}
+<li>{$p->titled_link()}</li>
+{/foreach}
+</ul>
+{/if}
