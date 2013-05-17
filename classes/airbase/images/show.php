@@ -80,4 +80,20 @@ class airbase_images_show extends base_page
 
 	function image_url() { return $this->image_url; }
 	function image_thumb_url($geo) { return preg_replace('!^(.*?)(/[^/]+)$!', "/cache$1/$geo$2", $this->image_url()); }
+
+	function body_data()
+	{
+		$data = parent::body_data();
+		if(!($image = airbase_image::register_file($this->image_f)))
+			return $data;
+
+		$data['image'] = $image;
+
+		$data['posts'] = bors_find_all('balancer_board_posts_object', array(
+//			'target_class_name IN' => array('bors_image', 'airbase_image'),
+			'target_object_id' => $image->id(),
+		));
+
+		return $data;
+	}
 }

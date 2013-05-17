@@ -62,4 +62,11 @@ class balancer_board_personal_updated extends balancer_board_page
 //				'topic_visits.last_visit>' => time()-86400*31,
 		));
 	}
+
+	function pre_show()
+	{
+		if(!bors()->user())
+			return bors_message('Извините, страница доступна только для авторизованных пользователей');
+		return parent::pre_show();
+	}
 }
