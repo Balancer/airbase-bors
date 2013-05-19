@@ -53,7 +53,7 @@ class balancer_tools_external_sites_preview extends bors_image_png
 
 		$thumb_file = $_SERVER['DOCUMENT_ROOT'].$thumb_url;
 
-		debug_hidden_log('sites_preview', "Thumbnail $url ($geo); ".escapeshellcmd($url));
+//		debug_hidden_log('sites_preview', "Thumbnail $url ($geo); ".escapeshellcmd($url));
 
 //		$bin = config('bin.wkhtmltoimage', "/opt/bin/wkhtmltoimage-amd64");
 		$bin = config('bin.wkhtmltoimage', "/usr/bin/env");

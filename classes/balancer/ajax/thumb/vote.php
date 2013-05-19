@@ -77,10 +77,10 @@ class balancer_ajax_thumb_vote extends base_object
 				));
 
 
-				debug_hidden_log('_test_limits', "User votes limits test. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
+//				debug_hidden_log('_test_limits', "User votes limits test. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
 				if($tomonth_user_negatives > $tomonth_user_positives + 10)
 				{
-					debug_hidden_log('_vote_limits', "User votes limits stop. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
+//					debug_hidden_log('_vote_limits', "User votes limits stop. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
 					return "<small>Вы слишком озлоблены. Расслабьтесь и будьте добрее.</small>";
 				}
 

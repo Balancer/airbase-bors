@@ -132,7 +132,7 @@ class balancer_board_user extends forum_user
 		$client->addServer();
 		if($this->jabber())
 		{
-			debug_hidden_log('balabot_talks', "Notify to {$this->jabber()} <= $text", false);
+//			debug_hidden_log('balabot_talks', "Notify to {$this->jabber()} <= $text", false);
 			$client->doBackground('balabot.jabber.send', serialize(array('to' => $this->jabber(), 'message' => htmlspecialchars($text))));
 		}
 	}

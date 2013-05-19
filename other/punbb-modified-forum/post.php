@@ -679,6 +679,8 @@ if (isset($_POST['form_sent']))
 	}
 }
 
+
+
 // If a topic id was specified in the url (it's a reply).
 if ($tid)
 {
@@ -686,7 +688,7 @@ if ($tid)
 //	$form = '<form id="post" method="post" action="post.php?action=post&amp;tid='.$tid.'" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">';
 
 	$topic = object_load('balancer_board_topic', $tid);
-	
+
 	$form = "";
 //	if($topic->num_replies() >= 500)
 //		$form = "<p style=\"color: red; font-size: 10pt; font-weight: 900; padding: 10px;\">Внимание! Слишком большой топик! Рекомендуется использовать ответ в новый топик путём установки отметки «<i>Разместить ответ как новую тему (требуется ввести заголовок)</i>» под формой ответа</p>";
