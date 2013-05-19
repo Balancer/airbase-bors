@@ -466,7 +466,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		if(!($attach = bors_load('balancer_board_attach', $this->have_attach())))
 		{
-			debug_hidden_log('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
+//			debug_hidden_log('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
 			return array();
 		}
 

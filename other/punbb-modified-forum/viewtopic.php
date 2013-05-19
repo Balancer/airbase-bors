@@ -45,7 +45,7 @@ if(preg_match('!^id=(\d+)&action=(new|last)$!', $qs, $m))
 	return go_topic($m[1], $m[2]);
 if(preg_match('!^pid=(\d+)$!', $qs, $m))
 {
-	$post = object_load('forum_post', $m[1]);
+	$post = bors_load('balancer_board_post', $m[1]);
 	if(!$post)
 	{
 		debug_hidden_log('__trap', "Пустой постинг {$m[1]}");
@@ -76,7 +76,7 @@ if($pid)
 		require PUN_ROOT.'include/common.php';
 		message($lang_common['Bad request']);
 	}
-	
+
 	// Determine on what page the post is located (depending on $pun_user['disp_posts'])
 	$posts = $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$id ORDER BY posted");
 
