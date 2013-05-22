@@ -13,4 +13,11 @@ class airbase_admin_feeds_unposted extends bors_admin_meta_main
 			'target_object_id' => 0,
 		));
 	}
+
+	function on_action_recalculate($data)
+	{
+		$entry = bors_load_uri($data['target']);
+		$entry->recalculate();
+		return go(url_remove_params($this->url()));
+	}
 }
