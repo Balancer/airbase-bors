@@ -1,0 +1,29 @@
+{$this->pages_links_nul()}
+
+<ul>
+<li><a href="new/">Добавить ленту</a></li>
+</ul>
+
+<table class="btab w100p">
+<tr>
+	<th>ID</th>
+	<th>Название</th>
+	<th>Ключевые слова</th>
+	<th>Топик</th>
+	<th>Регвыр пропуска</th>
+</tr>
+{foreach from=$items item="x"}
+<tr{if $x->is_suspended()} class="s gray"{/if}>
+	<td>{$x->id()}</td>
+	<td class="{if not $x->is_suspended()}b{/if}{if $x->is_microblog()} blue{else} green{/if}">{$x->admin()->imaged_titled_link()}<br/><small>{$x->feed_url()}</small></td>
+	<td><small>{$x->append_keywords()}</small></td>
+	<td>{if $x->post_as_topics()}<span class="red">новый</span>{else}
+		{if $x->topics_auto_search()}<span class="green">поиск</span><br/>{/if}
+		{object_property($x->default_topic(), 'titled_link')}{/if}
+	</td>
+	<td><small>{$x->skip_entry_content_regexp()}</small></td>
+</tr>
+{/foreach}
+</table>
+
+{$this->pages_links_nul()}
