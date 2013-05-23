@@ -1,4 +1,4 @@
-<?
+<?php
 
 	function punbb_forum_updates_make($forum_id)
 	{

@@ -1,4 +1,4 @@
-<?
+<?php
     register_handler('!^(http://[^/]+.*/)index(\-t)?\.htm$!', 'handler_old_index_htm');
 
     function handler_old_index_htm($uri, $m=array())

@@ -1,4 +1,4 @@
-<?
+<?php
 	function cms_funcs_action_subscribe($page, $user=NULL)
 	{
 		if(!$user)

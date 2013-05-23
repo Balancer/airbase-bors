@@ -1,4 +1,4 @@
-<?
+<?php
 	$regex = "!^(http://.*/news/)(\d{4})/?$!";
 	hts_data_prehandler_add($regex, 'body', 	"common_archives_post_year_get_body");
 	hts_data_prehandler_add($regex, 'source',	create_function('$uri, $m', 'return ec("Это виртуальная страница! Не сохраняйте значение.");'));

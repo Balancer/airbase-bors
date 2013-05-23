@@ -1,4 +1,4 @@
-<?
+<?php
 	function scandir($dir, $listDirectories=false, $skipDots=true) 
 	{
 		$dirArray = array();

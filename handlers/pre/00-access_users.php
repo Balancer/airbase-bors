@@ -1,4 +1,4 @@
-<?
+<?php
     register_handler('!/users/((makeorder)/)?$!', 'handler_check_users_access');
 
     function handler_check_users_access($uri, $m=array())

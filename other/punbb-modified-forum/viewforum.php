@@ -119,7 +119,7 @@ echo get_subforums_html($id);
 		<p class="pagelink conl"><?php echo $paging_links ?></p>
 <?php echo $post_link ?>
 <ul><li><b>
-<?
+<?php
 	$nav = object_load('module_nav_top', $forum);
 	echo $nav->body();
 ?>

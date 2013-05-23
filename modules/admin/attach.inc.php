@@ -1,4 +1,4 @@
-<?
+<?php
 	function module_admin_attach($uri)
 	{
 		$hts = new DataBaseHTS();

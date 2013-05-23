@@ -1,4 +1,4 @@
-<?
+<?php
     require_once('obsolete/DataBase.php');
     require_once('inc/global-data.php');
 

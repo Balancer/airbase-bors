@@ -123,7 +123,7 @@ while ($cur_forum = $db->fetch_assoc($result))
 ?>
 
 <ul><li><b>
-<?
+<?php
 	echo $cat_nav_bodies[$cur_forum['cid']];
 ?>
 </li></b></ul>

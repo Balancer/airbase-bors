@@ -1,4 +1,4 @@
-<?
+<?php
 
 //require_once("/home/airbase/html/inc/funcs/funcs.phtml");
 

@@ -1,4 +1,4 @@
-<?
+<?php
 	function index_body($page_id, $text)
 	{
 		$text = trim($text);

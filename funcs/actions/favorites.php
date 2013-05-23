@@ -1,4 +1,4 @@
-<?
+<?php
 	function cms_funcs_action_favorites_user_page($user=NULL)
 	{
 		if(!$user)

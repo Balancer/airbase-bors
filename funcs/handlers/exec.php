@@ -1,4 +1,4 @@
-<?
+<?php
 	function handlers_exec()
 	{
 		$uri = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";

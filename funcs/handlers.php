@@ -1,4 +1,4 @@
-<?
+<?php
 	require_once("handlers/load.php");
 	require_once("handlers/exec.php");
 

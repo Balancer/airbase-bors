@@ -119,7 +119,7 @@ a.external {
 		echo "<b><font size=+1>".join(" ", $pages)."</font></b><br><br>";
 ?>
 <div id="loader_here"></div>
-<div id="inline_here"><?echo show_topic(31754,1);?></div>
+<div id="inline_here"><?php echo show_topic(31754,1);?></div>
 <script>
 function script_load(file)
 {

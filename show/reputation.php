@@ -1,4 +1,4 @@
-<?
+<?php
     @header('Content-Type: text/html; charset=utf-8');
     @header('Content-Language: ru');
 
@@ -14,7 +14,7 @@
 <th>To</th>
 <th>Reputation</th>
 <th>Topic</th>
-<?
+<?php
     $dbh = mysql_connect("localhost", "forum", "localforum") or die ("Could not connect");
     mysql_select_db("forums_airbase_ru") or die ("Could not select database");
     mysql_query ("SET CHARACTER SET utf8") or  die ("Query '$q' failed, error ".mysql_errno().": ".mysql_error()."<BR>");

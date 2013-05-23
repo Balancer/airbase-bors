@@ -316,7 +316,7 @@ if($GLOBALS['global_cache']->get("punbb-viewtopics-{$_SERVER['HTTP_HOST']}-{$pun
 <table border="0" cellSpacing="0" cellPadding="0" class="noborder">
 	<tr>
 		<td class="topic_left_column" valign="top" style="border-style: none;">
-<?
+<?php
 	if(!$pun_user['is_guest'])
 		include("design/left.php");
 ?>
@@ -595,10 +595,10 @@ while ($cur_post = $db->fetch_assoc($result))
 		<span onClick="setImageId('post_<?php echo $cur_post['id'];?>_moreimg', toggleVisId('post_<?php echo $cur_post['id'];?>_more') == 1, 'http://www.balancer.ru/cms/templates/forum/icons/16x16/actions/down.gif', 'http://www.balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif')">
 			<img id="post_<?php echo $cur_post['id'];?>_moreimg" src="http://www.balancer.ru/cms/templates/forum/icons/16x16/actions/next.gif" alt="*" />
 			<?php echo $username;?></span></b>,
-	<?
+	<?php
 		echo $cur_post['flag'];
 	?> <a href="<?php echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']); /*"*/ ?>
-	<span class="conr">#<?php echo ($start_from + $post_count) ?>&nbsp;</span></a><?
+	<span class="conr">#<?php echo ($start_from + $post_count) ?>&nbsp;</span></a><?php
 	if($cur_post['answer_to_post_id'])
 		echo "; Ответ на <a href=\"{$pun_config['root_uri']}/viewtopic.php?pid={$cur_post['answer_to_post_id']}#p{$cur_post['answer_to_post_id']}\">{$cur_post['up_poster']} (". format_time($cur_post['up_posted']) . ")</a>";
 ?>

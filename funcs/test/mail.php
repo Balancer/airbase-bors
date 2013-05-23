@@ -1,4 +1,4 @@
-<?
+<?php
 #	$_SERVER['DOCUMENT_ROOT'] = '/usr/local/src/WWW/www/';
 
 #	include_once("../../config.php");

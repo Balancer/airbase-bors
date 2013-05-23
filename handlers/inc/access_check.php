@@ -1,4 +1,4 @@
-<?
+<?php
 	function i_access_check($uri, $us = NULL)
 	{
 		if(!$us)

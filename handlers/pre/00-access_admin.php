@@ -1,4 +1,4 @@
-<?
+<?php
     register_handler('!/admin/!', 'handler_check_admin_access');
 	if(empty($GLOBALS['cms']['cms_path_enable']))
 	    register_handler('!/cms/!', 'handler_check_admin_access');

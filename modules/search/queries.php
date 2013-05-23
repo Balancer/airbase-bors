@@ -1,4 +1,4 @@
-<?
+<?php
     include_once('funcs/DataBase.php');
 
     function lcml_module_search_queries()

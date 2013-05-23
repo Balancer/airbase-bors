@@ -1,4 +1,4 @@
-<?
+<?php
 	function make_func($func)
 	{
 		if(function_exists($func))

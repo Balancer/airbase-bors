@@ -1,4 +1,4 @@
-<?
+<?php
     register_action('delete-do', 'handler_action_delete_do');
 
     function handler_action_delete_do($uri, $action)

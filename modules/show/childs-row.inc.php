@@ -1,4 +1,4 @@
-<?
+<?php
     function module_show_childs_row($parent_uri)
     {
 		$hts = new DataBaseHTS();

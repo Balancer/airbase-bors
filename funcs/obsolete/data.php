@@ -1,4 +1,4 @@
-<?
+<?php
     require_once("funcs/obsolete/hts.php");
     require_once("funcs/DataBase.php");
     require_once("funcs/DataBaseHTS.php");

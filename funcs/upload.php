@@ -1,4 +1,4 @@
-<?
+<?php
 	// Модуль загрузки указанных файлов и/или картинок на сервер
 
 //	require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");

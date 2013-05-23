@@ -1,4 +1,4 @@
-<?
+<?php 
 @header('Content-Type: text/html; charset=utf-8');
 @header('Content-Language: ru');
 
@@ -6,7 +6,7 @@ ini_set('default_charset','utf-8');
 
 setlocale(LC_ALL, "ru_RU.utf8");
 ?>
-top.data = <?
+top.data = <?php 
     $uri=preg_replace("!^.+/js\.php/!","",$REQUEST_URI);
     ob_start();
 

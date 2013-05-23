@@ -1,4 +1,4 @@
-<?
+<?php
     ini_set('include_path', ini_get('include_path') . ":/www/docs/www1001kran/www/cms");
 
     ini_set('display_errors', 'On');
@@ -60,7 +60,7 @@
 <tr><td><input type="submit" name="logout" value="Logout"></td></tr>
 </table>
 </form>
-<?
+<?php
 			return;
 		}
 ?>
@@ -71,7 +71,7 @@
 <tr><td colSpan=2><input type="submit" value="Enter"></td></tr>
 </table>
 </form>
-<?
+<?php
 	}
 
 	do_login();

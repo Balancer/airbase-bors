@@ -1,4 +1,4 @@
-<?
+<?php
     function module_show_news($uri, $limit)
     {
 //		echo "msn=$uri. limit=$limit<br/>";
