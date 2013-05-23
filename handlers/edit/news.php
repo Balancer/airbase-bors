@@ -1,4 +1,4 @@
-<?
+<?php
     register_action('news-add', 'handler_edit_news_add');
     register_action('news-add-do', 'handler_edit_news_add_do');
 

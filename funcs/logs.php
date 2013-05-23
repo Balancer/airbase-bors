@@ -1,4 +1,4 @@
-<?
+<?php
 	function log_action($type, $uri, $text = NULL)
 	{
 		$owner = bors()->user()->id();

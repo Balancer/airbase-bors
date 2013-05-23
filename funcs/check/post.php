@@ -1,4 +1,4 @@
-<?
+<?php
 	function check_post($uri, $text)
 	{
 		if(!check_post_stop_words($uri, $text))

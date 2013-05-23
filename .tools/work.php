@@ -1,5 +1,5 @@
 #!/usr/bin/php
-<?
+<?php
     $_SERVER['DOCUMENT_ROOT'] = '/var/www/bal.aviaport.ru/htdocs';
 
     require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");

@@ -1,5 +1,5 @@
 #!/usr/local/bin/php
-<?
+<?php
 	$_SERVER['DOCUMENT_ROOT'] = '/home/kra61882/public_html';
 	
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/cms/config.php");

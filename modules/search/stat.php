@@ -1,4 +1,4 @@
-<?
+<?php
     include_once('funcs/lcml.php');
     
     function lcml_module_search_stat()

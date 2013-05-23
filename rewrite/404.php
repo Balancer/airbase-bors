@@ -1,4 +1,4 @@
-<?
+<?php
     if(!empty($_COOKIE['member_id']) && $_COOKIE['member_id'] == 1)
          xdebug_start_profiling();
     
@@ -373,7 +373,7 @@
 <font face=Verdana size=-1>
 <blockquote>
 <hr>
-<?
+<?php
 $dir=preg_replace("!^(.+/).*?!","$1",$QUERY_ENCODED);
 $dh=@opendir("$DOCUMENT_ROOT$dir");
 if($dh)
@@ -412,7 +412,7 @@ if($dh)
 
 <!--<hr>
 <h2>Служебная информация</h2>
-<?
+<?php
     echo "HTTP_REFERER=$HTTP_REFERER<br>\n";
     echo "SERVER_NAME=$SERVER_NAME<br>\n";
     echo "REQUEST_URI=$REQUEST_URI<br>\n";
@@ -425,7 +425,7 @@ if($dh)
 ?>
 <hr>-->
 <ul>
-<?
+<?php
 
 //    echo "(ref='$ref' title='$title' && page='$page')";
 

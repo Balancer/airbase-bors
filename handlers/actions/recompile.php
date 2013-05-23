@@ -1,4 +1,4 @@
-<?
+<?php
 	register_action('recompile', 'handler_recompile');
 	
 	function handler_recompile($uri, $action)

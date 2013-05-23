@@ -1,4 +1,4 @@
-<?
+<?php
     require_once("funcs/DataBaseHTS.php");
 
     function include_data($uri, $key)

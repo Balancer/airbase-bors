@@ -1,4 +1,4 @@
-<?
+<?php
 	$GLOBALS['cms']['lang'] = array(
 
 'Error' 				=> 'Ошибка',

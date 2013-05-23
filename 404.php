@@ -351,7 +351,7 @@
 <font face="Verdana" size="-1">
 
 <ul>
-<?
+<?php
     $query=substr($QUERY_ENCODED,1);
     if(strpos($query,"/")===false)
     {

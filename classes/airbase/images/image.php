@@ -22,17 +22,17 @@
 ?>
 <html>
 <head>
-<title><?echo $title?> /Авиабаза =KRoN=/</title>
+<title><?php echo $title?> /Авиабаза =KRoN=/</title>
 <link rel="stylesheet" type="text/css" href="http://www.airbase.ru/inc/css/style.phtml">
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<?/*include("commerce-banner.phtml");*/?>
+<?php /*include("commerce-banner.phtml");*/?>
 <br><table width="500" cellPadding="0" cellSpacing="0">
 <tr><td><div id="head">
-<h1><?echo $title;?></h1>
-<h3><?echo $desc;?></h3>
-<h4><?echo $hts->get_data($img, 'copyright');?></h4>
+<h1><?php echo $title;?></h1>
+<h3><?php echo $desc;?></h3>
+<h4><?php echo $hts->get_data($img, 'copyright');?></h4>
 </div></tr></td></table>
 <?
         $w = $hts->get_data($img, 'width');
@@ -87,8 +87,8 @@
 //      echo "<br><img src=$img width=$w height=$h border=0><br>";
 ?>
 <table width="500" cellSpacing="0" class="btab">
-<tr><th align="right">Размер:</th><td><?echo "{$ow}x{$oh}, ".intval($hts->get_data($img, 'size')/1024+0.5)."Kb"?></td></tr>
-<tr><th align="right">Выложено на сайт:</th><td><?echo user_data("nick",$hts->get_data($img, 'author'))." ".strftime("%d.%m.%Y %H:%M:%S",$hts->get_data($img, 'create_time'));?></td></tr>
+<tr><th align="right">Размер:</th><td><?php echo "{$ow}x{$oh}, ".intval($hts->get_data($img, 'size')/1024+0.5)."Kb"?></td></tr>
+<tr><th align="right">Выложено на сайт:</th><td><?php echo user_data("nick",$hts->get_data($img, 'author'))." ".strftime("%d.%m.%Y %H:%M:%S",$hts->get_data($img, 'create_time'));?></td></tr>
 <?
     if($hts->get_data($img, 'origin_uri'))
         echo "<tr><th align=\"right\">Оригинальная ссылка:</th><td><a href=\"".$hts->get_data($img, 'origin_uri')."\">".$hts->get_data($img, 'origin_uri')."</a></td></tr>\n";
@@ -100,7 +100,7 @@
             echo "<li><nobr><a href=\"$parent\">$title</a></nobr>\n";
         }
 ?></ul></small></td></tr>
-<!--<tr><td colSpan="2"><a href="/admin/img.phtml?img=<?echo$img?>">Редактировать параметры картинки</a></td></tr>-->
+<!--<tr><td colSpan="2"><a href="/admin/img.phtml?img=<?php echo$img?>">Редактировать параметры картинки</a></td></tr>-->
 </table>
 </body></html>
 <?

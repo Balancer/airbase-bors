@@ -1,4 +1,4 @@
-<?
+<?php
 	function register_handler($uri_pattern, $func = NULL)
 	{
 		if ($func == NULL)

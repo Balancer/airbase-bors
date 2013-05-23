@@ -1,4 +1,4 @@
-<?
+<?php
 	include_once("news.inc.php");
 
 //	echo $GLOBALS['main_uri'];

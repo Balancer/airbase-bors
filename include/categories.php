@@ -1,4 +1,4 @@
-<?
+<?php
 	function get_categories($host, $cat)
 	{
 		$hts = new DataBaseHTS('WWW');

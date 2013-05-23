@@ -29,13 +29,13 @@ if(top.me_is_coordinator) {
 
 --></script>
 
-<?if($type == 'topic' && $id):?>
+<?php if($type == 'topic' && $id):?>
 <script type="text/javascript"><!--
 var readed = readCookie('readedTopics', "").split(' ')
 if(!inArray(readed, <?=$id?>) && readed.length < 40) readed.push(<?=$id?>)
 createCookie('readedTopics', readed.join(' '), 3)
 --></script>
-<?endif;?>
+<?php endif;?>
 <!--[if IE]><style>
 .outer, .wide, h2, .wrapper, .minwidth {
 	height: 0;
@@ -86,7 +86,7 @@ if($head_append)
 		<dd>
 			<h1><?=$title?></h1>
 			<?=$description?>
-<?if($self->keywords_string()):?><br /><i>Ключевые слова: <?=$self->keywords_string()?></i><?endif;?>
+<?php if($self->keywords_string()):?><br /><i>Ключевые слова: <?=$self->keywords_string()?></i><?endif;?>
 		</dd>
 		</dl>
 
@@ -107,7 +107,7 @@ if($head_append)
 
 	  <div class="copyright">
         Copyright &copy; Balancer 1997..<?=date('Y')?><br/>
-<?
+<?php
 if($ct = $self->create_time(true))
 	echo "Создано ".date('d.m.Y', $ct)."<br />\n";
 if($views)

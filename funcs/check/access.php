@@ -1,4 +1,4 @@
-<?
+<?php
 	function access_check($uri, $us = NULL)
 	{
 		exit(__FILE__.':'.__LINE__.' Access denied');

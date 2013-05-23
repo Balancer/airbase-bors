@@ -1,4 +1,4 @@
-<?
+<?php
 	function encode_mimeheader($string, $charset=null, $linefeed="\n") 
 	{
 		if (!$charset)

@@ -1,4 +1,4 @@
-<?
+<?php
 	function agava_ip_check()
 	{
 		if(!preg_match("!^(\d+)\.(\d+)\.(\d+)\.(\d+)$!", $_SERVER["REMOTE_ADDR"], $m))

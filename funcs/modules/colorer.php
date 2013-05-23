@@ -1,4 +1,4 @@
-<?
+<?php
     function colorer($txt, $type)
     {
         $type = trim($type);

@@ -1,4 +1,4 @@
-<?
+<?php
 	require_once("funcs/uris.php");
 	require_once("funcs/handlers/register.php");
 

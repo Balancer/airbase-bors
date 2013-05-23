@@ -31,7 +31,7 @@ ob_start();
 <noindex>
 <table class="bta"b cellSpacing="0" cellPadding="2">
 <tr><th>Страницы</th></tr>
-<?
+<?php
     foreach($hts->dbh->get_array("
         SELECT time.id id, d.value as description, time.value as time, title.value as title, h1.value as h1, h2.value as h2, h3.value as h3 
             FROM hts_data_modify_times time 
@@ -50,7 +50,7 @@ ob_start();
 ?>
 
 <tr><th>Форумы</th></tr>
-<?
+<?php
 
 $dbh = @mysql_connect("localhost", "forum", "localforum") or die (__FILE__.':'.__LINE__." Could not connect");
 @mysql_query ("SET CHARACTER SET utf8");
@@ -101,7 +101,7 @@ echo $to_echo;
 ?>
 
 <tr><th>Чаты</th></tr>
-<?
+<?php
     $out_array=array();
     $chatlist=file("{$_SERVER['DOCUMENT_ROOT']}/chat/chatlist.txt");
     foreach($chatlist as $chat)
@@ -136,7 +136,7 @@ echo $to_echo;
 </table>
 </noidex>
 
-<?
+<?php
     $out = ob_get_clean();
     echo $out;
     $ch->set('last_all','all',$out);
