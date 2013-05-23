@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_personal_main extends base_page
+class balancer_board_personal_main extends balancer_board_page
 {
 	var $nav_name_ec = 'личный кабинет';
 
@@ -17,13 +17,13 @@ class balancer_board_personal_main extends base_page
 		return parent::pre_show();
 	}
 
-	function local_data()
+	function body_data()
 	{
 		$me = bors()->user();
 		if(($uid = bors()->request()->data('uid')) && $me->is_admin())
 			$me = bors_load('balancer_board_user', $uid);
 
-		return array_merge(parent::local_data(), array(
+		return array_merge(parent::body_data(), array(
 			'me_id' => bors()->user_id(),
 			'events' => bors_find_all('bal_event', array(
 				'user_class_id' => $me->class_id(),
