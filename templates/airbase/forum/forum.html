@@ -51,7 +51,7 @@
 {/if}
 	<td class="small aligncenter">{$t->num_replies()}</td>
 	<td class="small">{$t->create_time()|airbase_time}<br /><small>{$t->author_name()}</small></td>
-	<td class="small">{$t->modify_time()|airbase_time}<br /><small>{$t->last_poster_name()}</small></td>
+	<td class="small">{$t->last_post_create_time()|airbase_time}<br /><small>{$t->last_poster_name()}</small></td>
 </tr>
 {/foreach}
 </table>

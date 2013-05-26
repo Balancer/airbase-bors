@@ -149,10 +149,11 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 			return $ch->last();
 
 		$access = airbase_forum_access::load_fg($this->id(), '3');
-		if($access)
-			return $this->set($access->can_read(), 600);
 
-		return $this->set(object_load('forum_group', 3)->can_read(), 600);
+		if($access)
+			return $ch->set($access->can_read(), 600);
+
+		return $ch->set(object_load('forum_group', 3)->can_read(), 600);
 	}
 
 	function can_read()
