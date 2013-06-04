@@ -1,0 +1,4 @@
+#- http://www.airbase.ru/
+
+extends: bors_page
+config_class: airbase_config

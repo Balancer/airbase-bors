@@ -324,7 +324,7 @@ function avatar_thumb($geo)
 		if(array_key_exists('is_banned', $this->attr))
 			return $this->attr['is_banned'];
 
-		$ch = new bors_cache_redis;
+		$ch = new bors_cache_fast;
 		if($ch->check('user[3].is_banned', $this->id()))
 			return $this->attr['is_banned'] = $ch->last();
 

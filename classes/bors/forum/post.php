@@ -359,7 +359,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		return $this->create_time($exact);
 	}
 
-	function url()
+	function url($page=NULL)
 	{
 		$topic = $this->topic();
 		if($topic)
