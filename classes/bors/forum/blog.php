@@ -74,9 +74,9 @@ class forum_blog extends bors_page_db
 
 	function owner() { return object_load('balancer_board_user', $this->owner_id()); }
 	function title() { return $this->get('title_raw') ? $this->title_raw() : object_property($this->topic(), 'title'); }
-	function set_title($title, $up) { return $this->set_title_raw($title, $up); }
+	function set_title($title, $up=true) { return $this->set_title_raw($title, $up); }
 
-	function url() { return object_property($this->post(), 'url'); }
+	function url($page=NULL) { return object_property($this->post(), 'url'); }
 
 	function container() { return $this->topic(); }
 

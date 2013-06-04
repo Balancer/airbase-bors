@@ -1,6 +1,6 @@
 <?php
 
-class forum_topic extends base_page_db
+class forum_topic extends balancer_board_object_db
 {
 	function config_class() { return 'balancer_board_config'; }
 

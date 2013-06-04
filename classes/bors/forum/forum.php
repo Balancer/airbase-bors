@@ -312,7 +312,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		require_once('/var/www/balancer.ru/htdocs/cms/other/punbb-modified-forum/include/functions.php');
 	}
 
-	function url() { return $this->category()->category_base_full().'viewforum.php?id='.$this->id(); }
+	function url($page=NULL) { return $this->category()->category_base_full().'viewforum.php?id='.$this->id(); }
 //	function url() { return 'http://www.balancer.ru/forum/punbb/viewforum.php?id='.$this->id(); }
 	function cache_static_can_be_dropped() { return false; }
 

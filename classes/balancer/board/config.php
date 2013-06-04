@@ -59,12 +59,12 @@ class balancer_board_config extends bors_config
 			'copyright_line' => '© Balancer 1998—'.date('Y'),
 			'user_bar' => $user_bar,
 			'nav_bar' => $nav_bar,
+			'access_engine' => 'balancer_board_access_public',
 		));
 	}
 
 	function page_data()
 	{
-
 		return array_merge(parent::page_data(), array(
 		));
 	}
