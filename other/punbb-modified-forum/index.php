@@ -184,7 +184,7 @@ if(!empty($_SERVER['REQUEST_URI']) && preg_match("!topic,(\d+).(\d+)\.html$!", $
 if(!empty($_GET['showforum']))
 {
 	//http://forums.airbase.ru/index.php?showforum=40
-	go("http://forums.airbase.ru/viewforum.php?id={$_GET['showforum']}");
+	go("http://forums.airbase.ru/viewforum.php?id=".($_GET['showforum']+$fdiff));
 }
 
 if(!empty($_GET['view']))
@@ -192,8 +192,11 @@ if(!empty($_GET['view']))
 	//http://forums.airbase.ru/?showtopic=3938&view=findpost&p=362293
 	if($_GET['view'] == 'findpost' && !empty($_GET['p']))
 	{
-		$obj = object_load('forum_post', intval($_GET['p']));
-		return go($obj ? $obj->url() : '/');
+		$obj = bors_load('balancer_board_post', intval($_GET['p']+$pdiff));
+		if(!$obj)
+			debug_hidden_log('forums-old-link-error', "Can't find post {$_GET['p']}+{$pdiff}");
+var_dump($obj->topic()->title());
+		return go($obj ? $obj->url_in_container() : '/');
 	}
 }
 

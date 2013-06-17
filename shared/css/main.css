@@ -552,7 +552,7 @@ blockquote .box {
 	text-align: right;
 }
 
-.red-box {
+.red-box, .alert-error {
 	clear: both;
 	border: 1px solid red !important;
 	padding: 4px;

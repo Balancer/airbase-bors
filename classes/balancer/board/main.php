@@ -99,7 +99,7 @@ class balancer_board_main extends balancer_board_page
 
 			'best_voted_users' => bors_find_all('balancer_board_user2', array(
 				'*set' => '((pos + 1.9208) / (pos + neg) - 1.96 * SQRT((pos * neg) / (pos + neg) + 0.9604) / (pos + neg)) / (1 + 3.8416 / (pos + neg))   AS ci_lower_bound',
-				'inner_join' => 'BORS.v_thumb_votes_sum_7 ON target_user_id = id',
+				'inner_join' => 'AB_BORS.v_thumb_votes_sum_7 ON target_user_id = id',
 				'pos + neg > 0',
 				'order' => 'ci_lower_bound DESC',
 				'limit' => 20,

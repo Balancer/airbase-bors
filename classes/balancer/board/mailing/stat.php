@@ -3,7 +3,7 @@
 class balancer_board_mailing_stat extends base_object_db
 {
 	function storage_engine() { return 'bors_storage_mysql'; }
-	function db_name() { return 'BORS'; }
+	function db_name() { return 'AB_BORS'; }
 	function table_name() { return 'bors_mailing_users_stat'; }
 
 	function table_fields()

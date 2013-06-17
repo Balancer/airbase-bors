@@ -1,6 +1,7 @@
 <?php
 
-class forum_topic extends balancer_board_object_db
+//class forum_topic extends balancer_board_object_db
+class forum_topic extends base_page_db
 {
 	function config_class() { return 'balancer_board_config'; }
 
@@ -324,7 +325,8 @@ function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_
 		bors_objects_preload($data['posts'], 'owner_id', 'balancer_board_user', 'owner');
 
 		$data['this'] = $this;
-		$html = template_assign_data("xfile:forum/topic.html", $data);
+//		$html = template_assign_data("xfile:forum/topic.html", $data);
+		$html = bors_templates_smarty::fetch("xfile:forum/topic.html", $data);
 
 		return bors_lcml::output_parse($body_cache->set($html, 86400));
 	}
@@ -834,5 +836,4 @@ $(function() {
 			'page_last_time' => $last_post ? $last_post->create_time()+1 : NULL,
 		), compact('search_keywords'));
 	}
-
 }
