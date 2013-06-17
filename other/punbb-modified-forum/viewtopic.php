@@ -26,6 +26,20 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $pid = isset($_GET['pid']) ? intval($_GET['pid']) : 0;
 require_once('include/bors_config.php');
 
+$fdiff = 0;
+$tdiff = 0;
+$pdiff = 0;
+
+if($_SERVER['HTTP_HOST']=='la2.wrk.ru' || $_SERVER['HTTP_HOST']=='la2.balancer.ru')
+{
+	$fdiff = 105;
+	$tdiff = 41000;
+	$pdiff = 794000;
+}
+
+$id += $tdiff;
+$pid += $pdiff;
+
 function go_topic($tid, $page = 1)
 {
 	if($topic = bors_load('balancer_board_topic', $tid))
@@ -38,14 +52,14 @@ function go_topic($tid, $page = 1)
 $qs = @$_SERVER['QUERY_STRING'];
 unset($_SERVER['QUERY_STRING']);
 if(preg_match('!^id=(\d+)&p=(\d+)$!', $qs, $m))
-	return go_topic($m[1], $m[2]);
+	return go_topic($m[1]+$tdiff, $m[2]);
 if(preg_match('!^id=(\d+)$!', $qs, $m))
-	return go_topic($m[1]);
+	return go_topic($m[1]+$tdiff);
 if(preg_match('!^id=(\d+)&action=(new|last)$!', $qs, $m))
-	return go_topic($m[1], $m[2]);
+	return go_topic($m[1]+$tdiff, $m[2]);
 if(preg_match('!^pid=(\d+)$!', $qs, $m))
 {
-	$post = bors_load('balancer_board_post', $m[1]);
+	$post = bors_load('balancer_board_post', $m[1]+$pdiff);
 	if(!$post)
 	{
 		debug_hidden_log('__trap', "Пустой постинг {$m[1]}");
@@ -56,7 +70,7 @@ if(preg_match('!^pid=(\d+)$!', $qs, $m))
 }
 
 if(preg_match('!/topic/\d+/(\d+),(\d+)$!', $_SERVER['REQUEST_URI'], $m))
-	return go_topic($m[1], $m[2]);
+	return go_topic($m[1]+$tdiff, $m[2]);
 
 debug_hidden_log('old-topic-link-format',  $_SERVER['REQUEST_URI']);
 

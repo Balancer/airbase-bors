@@ -48,3 +48,22 @@ function balancer_anniversary_html()
 }
 
 // JS-плагины для топиков теперь в balancer_board_topic::pre_show()
+
+function check_blacklisted_email()
+{
+	if(!($me = bors()->user()))
+		return;
+
+	$bl = config('mail.to.blacklist.domains');
+	list($user, $domain) = explode('@', $me->email());
+	if(in_array($domain, explode(' ', $bl)))
+	{
+		add_session_message(ec('Ваша почтовая система
+			<a href="http://www.balancer.ru/support/2013/06/t88159--chyornye-spiski-pochtovykh-servisov.233.html">не принимает почту с Авиабазы</a>.
+			Поменяйте почтового провайдера, если хотите продолжать общаться на форумах. С некорректным почтовым
+			сервисом Вы не сможете изменить пароль, запросить его, если забудете, получать персональные
+			сообщения и так далее. Подробности — <a href="http://www.balancer.ru/support/2013/06/t88159--chyornye-spiski-pochtovykh-servisov.233.html">на форуме</a>.'));
+	}
+}
+
+check_blacklisted_email();

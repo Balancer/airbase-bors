@@ -1,6 +1,17 @@
 {form act="post" form_template_class="bors_forms_templates_bootstrap"}
 {textarea id="editor" name="text" value="" css="span12" cols="60" rows="20"}<br/>
 
+<div class="alert">
+	<small><span class="text-error"><strong>Важно!</strong></span> Размещая на
+	форуме информацию, авторами которой Вы <b>не</b> являетесь, Вы
+	обязуетесь нести всю ответственность за соблюдение прав авторов этой
+	информации. В случае претензий правообладателей эта информация может
+	быть удалена. Все материалы, автором которых являетесь Вы, при
+	опубликовании на форумах приобретают лицензию
+	<a href="http://www.balancer.ru/support/2009/02/t66269--Prava-publikatsii-avtorskikh-materialov-.html"><b>Creative Commons</b> (by-nc-sa)</a>.
+	</small>
+</div>
+
 {submit value="Отправить сообщение" type="button" css="btn btn-primary"}
 {submit value="Предварительный просмотр" type="button" css="btn"}
 
@@ -185,17 +196,5 @@
 			</div>
 		</div>
 	</div>
-</div>
-
-
-<div class="alert">
-	<small><span class="text-error"><strong>Важно!</strong></span> Размещая на
-	форуме информацию, авторами которой Вы <b>не</b> являетесь, Вы
-	обязуетесь нести всю ответственность за соблюдение прав авторов этой
-	информации. В случае претензий правообладателей эта информация может
-	быть удалена. Все материалы, автором которых являетесь Вы, при
-	опубликовании на форумах приобретают лицензию
-	<a href="http://www.balancer.ru/support/2009/02/t66269--Prava-publikatsii-avtorskikh-materialov-.html"><b>Creative Commons</b> (by-nc-sa)</a>.
-	</small>
 </div>
 

@@ -257,7 +257,7 @@ else if (isset($_GET['subscribe']))
 	if ($db->num_rows($result))
 		message($lang_misc['Already subscribed']);
 
-	if (preg_match('/(rambler.ru|pozitifff.com|sbcglobal.net|terbuny.net)/i', $email1, $m))
+	if (preg_match('/(rambler.ru|hotmail.com|pozitifff.com|sbcglobal.net|terbuny.net)/i', $email1, $m))
 		message("<b>{$m[1]}</b> не принимает почту с Авиабазы и форумов Balancer'а. Поэтому почтовые ящики этой системы больше не поддерживаются. Выберите более адекватную почтовую службу!");
 
 	$db->query('INSERT INTO '.$db->prefix.'subscriptions (user_id, topic_id) VALUES('.$pun_user['id'].' ,'.$topic_id.')') or error('Unable to add subscription', __FILE__, __LINE__, $db->error());

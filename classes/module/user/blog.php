@@ -21,9 +21,16 @@ class module_user_blog extends base_page
 			'by_id' => true,
 		));
 
+
 		foreach($blog_records as $blog_id => $blog)
 		{
-			$posts[$blog_id]->set_blog($blog, false);
+			if(empty($posts[$blog_id]))
+			{
+				unset($blog_records[$blog_id]);
+				continue;
+			}
+
+			$posts[$blog_id]->set_attr('blog', $blog);
 			if($kws = $blog->keywords())
 				$posts[$blog_id]->set_keyword_links(balancer_blogs_tag::linkify($kws, '', ' ', true), false);
 		}

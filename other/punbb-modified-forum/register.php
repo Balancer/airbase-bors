@@ -83,10 +83,7 @@ else if (isset($_POST['form_sent']))
 	$crc = md5(intval($_POST['test_result']).config('board_register_captcha_salt'));
 
 	if($crc != @$_POST['test_hash'])
-	{
-		debug_hidden_log('users-register-captcha-fail', 'Пользователь ошибся при вводе captcha');
 		return message('Вы ввели неверный результат выражения. Попробуйте ещё раз.');
-	}
 
 	debug_hidden_log('users-register-captcha-success', 'result='.$_POST['test_result'].', crc='.$crc.', hash='.$_POST['test_hash']);
 
@@ -95,7 +92,6 @@ else if (isset($_POST['form_sent']))
 
 	if ($db->num_rows($result))
 		message('A new user was registered with the same IP address as you within the last hour. To prevent registration flooding, at least an hour has to pass between registrations from the same IP. Sorry for the inconvenience.');
-
 
 	$username = pun_trim($_POST['req_username']);
 	$email1 = strtolower(trim($_POST['req_email1']));
@@ -155,8 +151,13 @@ else if (isset($_POST['form_sent']))
 	// Validate e-mail
 	require PUN_ROOT.'include/email.php';
 
-	if (preg_match('/(rambler.ru|pozitifff.com|sbcglobal.net|terbuny.net)/i', $email1, $m))
-		message("<b>{$m[1]}</b> не принимает почту с Авиабазы и форумов Balancer'а. Поэтому почтовые ящики этой системы больше не поддерживаются. Выберите более адекватную почтовую службу!");
+	$bl = config('mail.to.blacklist.domains');
+	list($mail_user, $mail_domain) = explode('@', $email1);
+	if(in_array($mail_domain, explode(' ', $bl)))
+		message("<b>@{$mail_domain}</b> не принимает почту с Авиабазы и форумов Balancer'а.
+			Поэтому почтовые ящики этой системы больше не поддерживаются.
+			Выберите более адекватную почтовую службу!
+			Подробности <a href=\"http://www.balancer.ru/support/2013/06/t88159--chyornye-spiski-pochtovykh-servisov.233.html\">на форуме</a>.");
 	else if (!is_valid_email($email1))
 		message($lang_common['Invalid e-mail']);
 	else if ($pun_config['o_regs_verify'] == '1' && $email1 != $email2)

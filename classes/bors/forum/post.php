@@ -334,7 +334,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 			if(!$tid)
 				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
 
-			$topic = object_load('balancer_board_topic', $tid);
+			$topic = bors_load('balancer_board_topic', $tid);
 
 			if(!$topic)
 				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));

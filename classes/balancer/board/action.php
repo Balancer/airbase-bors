@@ -18,6 +18,13 @@ class balancer_board_action extends bors_page_db
 		);
 	}
 
+	function auto_objects()
+	{
+		return array_merge(parent::auto_objects(), array(
+			'owner' => 'airbase_user(owner_id)',
+		));
+	}
+
 	function replace_on_new_instance() { return true; }
 
 	function is_new() { return $this->create_time() > time() - 3600*12; }

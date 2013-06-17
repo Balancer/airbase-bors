@@ -130,12 +130,24 @@ class airbase_user_reputation extends base_page_db
 		return array( ($this->score() > 0 ? 'pos' : 'neg' ) . '_reputation');
 	}
 
+	function voter_titled_link()
+	{
+		$voter = $this->owner();
+		if(!$voter)
+		{
+			debug_hidden_log('fix-needed', "Unknown voter in ".$this->id());
+			return ec('Guest');
+		}
+
+		return $voter->titled_link();
+	}
+
 	function item_list_fields()
 	{
 		return array(
 			'ctime' => 'Дата',
 			'target_user()->reputation_titled_url()' => 'Кому',
-			'owner()->titled_link()' => 'От кого',
+			'voter_titled_link' => 'От кого',
 			'comment_short' => 'Комментарий',
 		);
 	}
