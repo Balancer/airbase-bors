@@ -2,10 +2,10 @@
 
 class balancer_board_help_tags extends balancer_board_page
 {
-	var $title = 'Описание тегов';
+	var $title = 'Описание некоторых тегов';
 	var $nav_name = 'теги';
 	var $is_auto_url_mapped_class = true;
-	function template() { return 'forum/page.html'; }
+	function template() { return 'forum/_header.html'; }
 
 	function body_data()
 	{

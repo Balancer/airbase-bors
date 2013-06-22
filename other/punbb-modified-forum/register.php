@@ -113,11 +113,11 @@ else if (isset($_POST['form_sent']))
 	$username = preg_replace('#\s+#s', ' ', $username);
 
 	// Validate username and passwords
-	if (strlen($username) < 2)
+	if (bors_strlen($username) < 2)
 		message($lang_prof_reg['Username too short']);
-	else if (pun_strlen($username) > 25)	// This usually doesn't happen since the form element only accepts 25 characters
-	    message($lang_common['Bad request']);
-	else if (strlen($password1) < 4)
+	else if (bors_strlen($username) > 25)	// This usually doesn't happen since the form element only accepts 25 characters
+		message($lang_prof_reg['Username too long']." (".bors_strlen($username).")");
+	else if (bors_strlen($password1) < 4)
 		message($lang_prof_reg['Pass too short']);
 	else if ($password1 != $password2)
 		message($lang_prof_reg['Pass not match']);

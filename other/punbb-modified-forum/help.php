@@ -42,6 +42,16 @@ $page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_hel
 require PUN_ROOT.'header.php';
 
 ?>
+
+<h2>Новый раздел Помощи</h2>
+<div class="box">
+	<div class="inbox">
+		Новый раздел Помощи будет открыт по адресу
+		<a href="http://forums.balancer.ru/help/">forums.balancer.ru/help</a>.
+		Уже сейчас там можно посмотреть описания многих новых тэгов.
+	</div>
+</div>
+
 <h2><?php echo $lang_common['BBCode'] ?></h2>
 <div class="box">
 	<div class="inbox">

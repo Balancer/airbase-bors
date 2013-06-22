@@ -40,14 +40,6 @@ if(time()-filemtime("/var/log/started.log") < 3600)
 	bors_exit();
 }
 */
-//!debug_is_balancer())
-//{
-//	header("Status: 302 Moved Temporarily");
-//	header("Location: http://balancer.endofinternet.net/mybb/thread-436-post-37122.html#pid37122");
-//	echo config('error_message_header');
-//	bors_exit();
-//}
-
 
 if(bors_stop_bots('__nobots_testing', 'post'))
 	return;
@@ -63,9 +55,9 @@ if ($tid < 1 && $fid < 1 || $tid > 0 && $fid > 0)
 if($is_banned)
 	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire));
 
-$topic = object_load('balancer_board_topic', $tid);
+$topic = bors_load('balancer_board_topic', $tid);
 $forum_id = $fid ? $fid : $topic->forum_id();
-$forum = object_load('forum_forum', $forum_id);
+$forum = bors_load('balancer_board_forum', $forum_id);
 
 $me = bors()->user();
 if(!$me)
@@ -77,7 +69,6 @@ if($fid && !$tid && ($me->num_posts() < 3 || $me->create_time() > time() - 86400
 	debug_hidden_log('new-user-try-post', "Новичок пытается создать сообщение: [owner={$me}, num_posts={$me->num_posts()}, registered={$me->create_time()}]");
 	message('Извините, но с целью борьбы со спамерами только что зарегистрированным пользователям запрещено создавать новые темы. Поучаствуйте сперва в обсуждениях уже имеющихся тем (<a href="http://www.balancer.ru/tools/search/">Поиск в Вашем распоряжении</a>) или подождите сутки с момента регистрации. Можете также начать новое обсуждение в продолжение уже имеющейся темы с просьбой к координаторам о выносе сообщения с ответами в новую тему.');
 }
-
 
 $messages_limit = $me->messages_daily_limit();
 if($messages_limit >= 0)
@@ -143,11 +134,19 @@ if(isset($_GET['qid']))
 	if ($qid < 1)
 		message($lang_common['Bad request']);
 }
+
 if(isset($_POST['qid']))
 {
 	$qid = intval($_POST['qid']);
 	if ($qid < 1)
 		message($lang_common['Bad request']);
+}
+
+if($qid)
+{
+	$quoted_post = bors_load('balancer_board_post', $qid);
+	$topic = $quoted_post->topic();
+	$tid = $topic->id();
 }
 
 $GLOBALS['cms']['cache_disabled'] = true;
@@ -166,7 +165,7 @@ if (isset($_POST['form_sent']))
 
 	if(!empty($_POST['as_new_post']) && $tid)
 	{
-		$fid = $cms_db->get("SELECT forum_id FROM topics WHERE id = $tid");
+		$fid = $topic->forum_id();
 		$tid = 0;
 	}
 
@@ -184,19 +183,12 @@ if (isset($_POST['form_sent']))
 			$subject = ucwords(strtolower($subject));
 
 		require_once('inc/strings.php');
-/*		if ($description == '')
-		{
-			$description = strip_tags($_POST['req_message']);
-			$description = preg_replace('!\[[^]]+\]!', '', $description);
-			$description = truncate($description, 64);
-		}
-*/
 	}
 
 	// If the user is logged in we get the username and e-mail from $pun_user
 	if (!$pun_user['is_guest'])
 	{
-		$username = $me->title(); // $pun_user['username'];
+		$username = $me->title();
 		$email = $pun_user['email'];
 	}
 	// Otherwise it should be in $_POST
@@ -309,24 +301,18 @@ if (isset($_POST['form_sent']))
 		{
 			if (!$pun_user['is_guest'])
 			{
-				// Insert the new post
-				$tdb = new DataBase('AB_FORUMS');
-				$data = array(
-					'poster' => $username,
-					'poster_id' => $pun_user['id'], 
+				$post = bors_new('balancer_board_post', array(
+					'author_name' => $username,
+					'owner_id' => $pun_user['id'], 
 					'poster_ip' => get_remote_address(), 
 					'poster_ua' => @$_SERVER['HTTP_USER_AGENT'],
 					'hide_smilies' => $hide_smilies, 
-					'posted' => $now, 
+					'create_time' => $now, 
 					'topic_id' => $tid,
-					'answer_to_post_id' => $qid,
+					'answer_to_id' => $qid,
 					'answer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
-					'source' => $message,
-				);
-
-				$tdb->insert('posts', $data);
-				$data['id'] = $new_pid = $tdb->last_id();
-				$tdb->close();
+					'post_source' => $message,
+				));
 
 				// To subscribe or not to subscribe, that ...
 				if ($pun_config['o_subscriptions'] == '1' && $subscribe)
@@ -339,32 +325,27 @@ if (isset($_POST['form_sent']))
 			else
 			{
 				// It's a guest. Insert the new post
-				$tdb = new DataBase('AB_FORUMS');
-				$data = array(
-					'poster' => $username, 
+				$post = bors_new('balancer_board_post', array(
+					'author_name' => $username, 
 					'poster_ip' => get_remote_address(), 
 					'poster_ua' => @$_SERVER['HTTP_USER_AGENT'],
 					'poster_email' => ($pun_config['p_force_guest_email'] == '1' || $email != '') ? $email : '', 
 					'hide_smilies' => $hide_smilies, 
-					'posted' => $now, 
+					'create_time' => $now, 
 					'topic_id' => $tid,
-					'answer_to_post_id' => $qid,
+					'answer_to_id' => $qid,
 					'answer_to_user_id' => $answer_to_post ? $answer_to_post->owner_id() : 0,
-					'source' => $message,
-				);
-				$tdb->insert('posts', $data);
-				$data['id'] = $new_pid = $tdb->last_id();
-				$tdb->close();
-			}
+					'post_source' => $message,
+				));
 
-			$post = bors_load('balancer_board_post', $new_pid);
+			}
 
 			$user = $post->owner();
 
 			if($qid)
 			{
 				// Пометим сообщение, на котрое отвечали, что на него есть ответы.
-				if($answer_to_post = object_load('balancer_board_post', $qid))
+				if($answer_to_post = bors_load('balancer_board_post', $qid))
 				{
 					if($answer_to_post->have_answers())
 					{
@@ -409,13 +390,16 @@ if (isset($_POST['form_sent']))
 			}
 
 			// Count number of replies in the topic
-			$result = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'posts WHERE topic_id='.$tid.' AND is_deleted=0') 
-				or error('Unable to fetch post count for topic', __FILE__, __LINE__, $db->error());
 
-			$num_replies = $db->result($result, 0) - 1;
+			$num_replies = bors_count('balancer_board_post', array(
+				'topic_id' => $tid,
+				'is_deleted' => 0,
+			)) - 1;
 
-			$db->query('UPDATE '.$db->prefix.'topics SET num_replies='.$num_replies.', last_post_id='.$new_pid.', last_poster=\''.$db->escape($username).'\' WHERE id='.$tid) 
-				or error('Unable to update topic', __FILE__, __LINE__, $db->error());
+			$topic->set_num_replies($num_replies);
+			$topic->set_last_post_id($post->id());
+			$topic->set_last_poster_name($username);
+			$topic->store();
 
 			update_forum($cur_posting['id']);
 
@@ -512,8 +496,6 @@ if (isset($_POST['form_sent']))
 				}
 			}
 
-			include_once("engines/bors.php");
-			$topic = object_load('balancer_board_topic', $tid, array('no_load_cache' => true));
 			$is_new_topic = false;
 		}
 		// If it's a new topic
@@ -588,15 +570,14 @@ if (isset($_POST['form_sent']))
 			$topic = object_load('balancer_board_topic', $new_tid, array('no_load_cache' => true));
 			$topic->recalculate(false);
 			$is_new_topic = true;
+			$post  = bors_load('balancer_board_post',  $new_pid, array('no_load_cache' => true));
 		}
 
 		if(!empty($_POST['keywords_string']))
 			$topic->set_keywords_string($_POST['keywords_string'], true);
 
-		$post  = object_load('balancer_board_post',  $new_pid, array('no_load_cache' => true));
-
-		$topic->set_modify_time(time(), true);
-		$topic->set_last_post_create_time($post->create_time(), true);
+		$topic->set_modify_time(time());
+		$topic->set_last_post_create_time($post->create_time());
 		$topic->topic_updated($post, $was_notified);
 
 		$post->set_modify_time(time(), true);
@@ -630,9 +611,6 @@ if (isset($_POST['form_sent']))
 		$topic->cache_clean();
 		$post->cache_clean();
 
-//		if(!empty($_POST['overquote_confirmed']))
-//			debug_hidden_log('overquoting', bors()->user_title().":\ntopic={$topic->url()}\npost={$post->url()}\n=== cut ===\n{$message}\n=== cut ===\n");
-
 		// If the posting user is logged in, increment his/her post count
 		if (!$pun_user['is_guest'])
 		{
@@ -656,7 +634,6 @@ if (isset($_POST['form_sent']))
 			}
 		}
 */
-
 		if(!empty($_POST['as_blog']) && !$post->is_spam())
 			$blog = balancer_board_blog::create($post, @$_POST['keywords']);
 
@@ -674,7 +651,8 @@ if (isset($_POST['form_sent']))
 
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);
-		go($post->url_in_container($topic));
+
+		go("http://forums.balancer.ru/posts/{$post->id()}/process");
 		pun_exit();
 	}
 }
