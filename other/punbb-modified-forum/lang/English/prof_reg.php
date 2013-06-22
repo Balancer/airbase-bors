@@ -20,6 +20,7 @@ $lang_prof_reg = array(
 'Confirm pass'				=>	'Confirm password',
 
 'Username too short'		=>	'Usernames must be at least 2 characters long. Please choose another (longer) username.',
+'Username too long'			=>	'Usernames must be no more then 24 characters long. Please choose another (longer) username.',
 'Username guest'			=>	'The username guest is reserved. Please choose another username.',
 'Username IP'				=>	'Usernames may not be in the form of an IP address. Please choose another username.',
 'Username reserved chars'	=>	'Usernames may not contain all the characters \', " and [ or ] at once. Please choose another username.',

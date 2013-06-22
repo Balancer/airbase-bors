@@ -717,7 +717,7 @@ function pun_htmlspecialchars($str)
 //
 function pun_strlen($str)
 {
-	return strlen(preg_replace('/&#([0-9]+);/', '!', $str));
+	return bors_strlen(preg_replace('/&#([0-9]+);/', '!', $str));
 }
 
 
