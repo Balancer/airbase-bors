@@ -400,8 +400,11 @@ if (isset($_POST['form_sent']))
 			$topic->set_last_post_id($post->id());
 			$topic->set_last_poster_name($username);
 			$topic->store();
+			$topic->recalculate();
 
 			update_forum($cur_posting['id']);
+
+			$new_pid = $post->id();
 
 			// Should we send out notifications?
 			if ($pun_config['o_subscriptions'] == '1')

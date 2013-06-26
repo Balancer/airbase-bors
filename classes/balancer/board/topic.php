@@ -15,6 +15,8 @@ class balancer_board_topic extends forum_topic
 			'forum_id_raw' => 'forum_id',
 			'title'	=> 'subject',
 			'description',
+			'image_id',
+			'image_time' => 'UNIX_TIMESTAMP(`image_ts`)',
 			'create_time'	=> 'posted',
 			'last_post_create_time'=> 'last_post',
 			'modify_time',
@@ -154,6 +156,7 @@ class balancer_board_topic extends forum_topic
 
 	function pre_show()
 	{
+		bors_lib_html::set_og_meta($this);
 		balancer_board_posts_view::container_init();
 
 		if($this->page() == $this->total_pages())
@@ -195,15 +198,24 @@ class balancer_board_topic extends forum_topic
 
 	function last_post_ctime() { return bors_time::factory($this->last_post_create_time()); }
 
-	function image()
+	function _image_def()
 	{
-		if($this->__havefc())
-			return $this->__lastc();
+		if(!is_null($this->data['image_id']))
+		{
+			// Если указан image_id явно, то возвращаем его.
+			if($this->data['image_id'])
+				return bors_load('airbase_image', $this->data['image_id']);
+
+			// Иначе у нас там 0 — значит, что image берём с форума. Раз в час проверяем,
+			// не появилась ли картинка в теме
+			if($this->data['image_time'] > time() - 3600)
+				return $this->forum()->image();
+		}
 
 		$obj = bors_find_first('balancer_board_posts_object', array(
 			'inner_join' => array(
 				'balancer_board_post ON balancer_board_post.id = balancer_board_posts_object.post_id',
-				'`BORS`.`bors_images` i ON balancer_board_posts_object.target_object_id = i.id',
+				'`AB_BORS`.`bors_images` i ON balancer_board_posts_object.target_object_id = i.id',
 			),
 			'topic_id' => $this->id(),
 			'`i`.extension<>"gif"',
@@ -211,12 +223,21 @@ class balancer_board_topic extends forum_topic
 			'order' => 'post_id',
 		));
 
-		if($obj)
-			$obj = $obj->target();
-		else
-			$obj = false;
+		$this->set_image_time(time());
 
-		return $obj;
+		if($obj)
+		{
+			$image = $obj->target();
+			$this->set('image_id', $image->id());
+			return $image;
+		}
+
+		$this->set('image_id', 0);
+
+		if($image = $this->forum()->image())
+			return $image;
+
+		return NULL;
 	}
 
 	function image_thumbnail_64()

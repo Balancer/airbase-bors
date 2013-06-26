@@ -23,6 +23,8 @@ class forum_topic extends base_page_db
 			'forum_id_raw' => 'forum_id',
 			'title'	=> 'subject',
 			'description',
+			'image_id',
+			'image_time' => 'UNIX_TIMESTAMP(`image_ts`)',
 			'create_time'	=> 'posted',
 			'last_post_create_time'=> 'last_post',
 			'sort_time',
@@ -59,33 +61,33 @@ function set_forum_id($v, $dbup = true)
 function forum_id() { return @$this->data['forum_id_raw']; }
 
 function owner_id() { return @$this->data['owner_id']; }
-function set_owner_id($v, $dbup) { return $this->set('owner_id', $v, $dbup); }
+function set_owner_id($v, $dbup = true) { return $this->set('owner_id', $v, $dbup); }
 function last_poster_name() { return @$this->data['last_poster_name']; }
-function set_last_poster_name($v, $dbup) { return $this->set('last_poster_name', $v, $dbup); }
+function set_last_poster_name($v, $dbup = true) { return $this->set('last_poster_name', $v, $dbup); }
 function author_name() { return @$this->data['author_name']; }
-function set_author_name($v, $dbup) { return $this->set('author_name', $v, $dbup); }
+function set_author_name($v, $dbup = true) { return $this->set('author_name', $v, $dbup); }
 function num_replies() { return @$this->data['num_replies']; }
-function set_num_replies($v, $dbup) { return $this->set('num_replies', $v, $dbup); }
+function set_num_replies($v, $dbup = true) { return $this->set('num_replies', $v, $dbup); }
 function is_repaged() { return @$this->data['is_repaged']; }
-function set_is_repaged($v, $dbup) { return $this->set('is_repaged', $v, $dbup); }
+function set_is_repaged($v, $dbup = true) { return $this->set('is_repaged', $v, $dbup); }
 function visits() { return @$this->data['visits']; }
 function set_visits($v, $dbup = true) { return $this->set('visits', $v, $dbup); }
 function first_post_id() { return @$this->data['first_post_id']; }
-function set_first_post_id($v, $dbup) { return $this->set('first_post_id', $v, $dbup); }
+function set_first_post_id($v, $dbup = true) { return $this->set('first_post_id', $v, $dbup); }
 function last_post_id() { return @$this->data['last_post_id']; }
-function set_last_post_id($v, $dbup) { return $this->set('last_post_id', $v, $dbup); }
+function set_last_post_id($v, $dbup = true) { return $this->set('last_post_id', $v, $dbup); }
 function first_visit_time() { return @$this->data['first_visit_time']; }
-function set_first_visit_time($v, $dbup) { return $this->set('first_visit_time', $v, $dbup); }
+function set_first_visit_time($v, $dbup = true) { return $this->set('first_visit_time', $v, $dbup); }
 function last_visit_time() { return @$this->data['last_visit_time']; }
-function set_last_visit_time($v, $dbup) { return $this->set('last_visit_time', $v, $dbup); }
+function set_last_visit_time($v, $dbup = true) { return $this->set('last_visit_time', $v, $dbup); }
 function last_edit_time() { return @$this->data['last_edit_time']; }
-function set_last_edit_time($v, $dbup) { return $this->set('last_edit_time', $v, $dbup); }
+function set_last_edit_time($v, $dbup = true) { return $this->set('last_edit_time', $v, $dbup); }
 function sticky() { return @$this->data['sticky']; }
-function set_sticky($v, $dbup) { return $this->set('sticky', $v, $dbup); }
+function set_sticky($v, $dbup = true) { return $this->set('sticky', $v, $dbup); }
 function closed() { return @$this->data['closed']; }
-function set_closed($v, $dbup) { return $this->set('closed', $v, $dbup); }
+function set_closed($v, $dbup = true) { return $this->set('closed', $v, $dbup); }
 function keywords_string_db() { return @$this->data['keywords_string_db']; }
-function set_keywords_string_db($v, $dbup) { return $this->set('keywords_string_db', $v, $dbup); }
+function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_string_db', $v, $dbup); }
 
 	function keywords_linked()
 	{

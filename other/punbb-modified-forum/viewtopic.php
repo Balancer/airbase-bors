@@ -30,12 +30,15 @@ $fdiff = 0;
 $tdiff = 0;
 $pdiff = 0;
 
+/*
+А то не работают топики на la2.balancer.ru
 if($_SERVER['HTTP_HOST']=='la2.wrk.ru' || $_SERVER['HTTP_HOST']=='la2.balancer.ru')
 {
 	$fdiff = 105;
 	$tdiff = 41000;
 	$pdiff = 794000;
 }
+*/
 
 $id += $tdiff;
 $pid += $pdiff;

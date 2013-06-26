@@ -90,7 +90,7 @@ class forum_post extends balancer_board_object_db
 //	function __orm_setters() { return array('';); }
 
 function topic_id() { return @$this->data['topic_id']; }
-function set_topic_id($v, $dbup) { return $this->set('topic_id', $v, $dbup); }
+function set_topic_id($v, $dbup = true) { return $this->set('topic_id', $v, $dbup); }
 function topic_page()
 {
 	$page = @$this->data['topic_page'];
@@ -105,9 +105,9 @@ function topic_page()
 }
 
 function edited() { return @$this->data['edited']; }
-function set_edited($v, $dbup) { return $this->set('edited', $v, $dbup); }
+function set_edited($v, $dbup = true) { return $this->set('edited', $v, $dbup); }
 function edited_by() { return @$this->data['edited_by']; }
-function set_edited_by($v, $dbup) { return $this->set('edited_by', $v, $dbup); }
+function set_edited_by($v, $dbup = true) { return $this->set('edited_by', $v, $dbup); }
 function owner_id() { return @$this->data['owner_id']; }
 function set_owner_id($v, $dbup = true)
 {
@@ -116,11 +116,11 @@ function set_owner_id($v, $dbup = true)
 }
 
 function poster_ip() { return @$this->data['poster_ip']; }
-function set_poster_ip($v, $dbup) { return $this->set('poster_ip', $v, $dbup); }
+function set_poster_ip($v, $dbup = true) { return $this->set('poster_ip', $v, $dbup); }
 function poster_email() { return @$this->data['poster_email']; }
-function set_poster_email($v, $dbup) { return $this->set('poster_email', $v, $dbup); }
+function set_poster_email($v, $dbup = true) { return $this->set('poster_email', $v, $dbup); }
 function poster_ua() { return @$this->data['poster_ua']; }
-function set_poster_ua($v, $dbup) { return $this->set('poster_ua', $v, $dbup); }
+function set_poster_ua($v, $dbup = true) { return $this->set('poster_ua', $v, $dbup); }
 function author_name()
 {
 	if(empty($this->data['author_name']))
@@ -141,20 +141,20 @@ function set_author_name($v, $dbup = true)
 	return $this->set('author_name', $v, $dbup);
 }
 function answer_to_id() { return @$this->data['answer_to_id']; }
-function set_answer_to_id($v, $dbup) { return $this->set('answer_to_id', $v, $dbup); }
+function set_answer_to_id($v, $dbup = true) { return $this->set('answer_to_id', $v, $dbup); }
 function post_source() { return @$this->data['post_source']; }
-function set_post_source($v, $dbup) { return $this->set('post_source', $v, $dbup); }
+function set_post_source($v, $dbup = true) { return $this->set('post_source', $v, $dbup); }
 function post_body() { return @$this->data['post_body']; }
 function hide_smilies() { return @$this->data['hide_smilies']; }
-function set_hide_smilies($v, $dbup) { return $this->set('hide_smilies', $v, $dbup); }
+function set_hide_smilies($v, $dbup = true) { return $this->set('hide_smilies', $v, $dbup); }
 function have_attach() { return @$this->data['have_attach']; }
-function set_have_attach($v, $dbup) { return $this->set('have_attach', $v, $dbup); }
+function set_have_attach($v, $dbup = true) { return $this->set('have_attach', $v, $dbup); }
 function have_cross() { return @$this->data['have_cross']; }
-function set_have_cross($v, $dbup) { return $this->set('have_cross', $v, $dbup); }
+function set_have_cross($v, $dbup = true) { return $this->set('have_cross', $v, $dbup); }
 function have_answers() { return @$this->data['have_answers']; }
-function set_have_answers($v, $dbup) { return $this->set('have_answers', $v, $dbup); }
+function set_have_answers($v, $dbup = true) { return $this->set('have_answers', $v, $dbup); }
 function score() { return @$this->data['score']; }
-function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
+function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	function set_post_body($value, $dbupd = true)
 	{
