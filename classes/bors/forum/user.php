@@ -110,73 +110,73 @@ class forum_user extends balancer_board_object_db
 	}
 
 function group_id() { return @$this->data['group_id']; }
-function set_group_id($v, $dbup) { return $this->set('group_id', $v, $dbup); }
+function set_group_id($v, $dbup=true) { return $this->set('group_id', $v, $dbup); }
 function user_title() { return @$this->data['user_title']; }
-function set_user_title($v, $dbup) { return $this->set('user_title', $v, $dbup); }
-function set_use_avatar($v, $dbup) { return $this->set('use_avatar', $v, $dbup); }
+function set_user_title($v, $dbup=true) { return $this->set('user_title', $v, $dbup); }
+function set_use_avatar($v, $dbup=true) { return $this->set('use_avatar', $v, $dbup); }
 function avatar_width($size = false) { return $size ? intval($size*@$this->data['avatar_width']/100) : @$this->data['avatar_width']; }
-function set_avatar_width($v, $dbup) { return $this->set('avatar_width', $v, $dbup); }
+function set_avatar_width($v, $dbup=true) { return $this->set('avatar_width', $v, $dbup); }
 function avatar_height($size = false) { return $size ? intval($size*@$this->data['avatar_height']/100) : @$this->data['avatar_height']; }
-function set_avatar_height($v, $dbup) { return $this->set('avatar_height', $v, $dbup); }
+function set_avatar_height($v, $dbup=true) { return $this->set('avatar_height', $v, $dbup); }
 function num_posts() { return @$this->data['num_posts']; }
-function set_num_posts($v, $dbup) { return $this->set('num_posts', $v, $dbup); }
+function set_num_posts($v, $dbup=true) { return $this->set('num_posts', $v, $dbup); }
 function signature() { return @$this->data['signature']; }
-function set_signature($v, $dbup) { return $this->set('signature', $v, $dbup); }
+function set_signature($v, $dbup=true) { return $this->set('signature', $v, $dbup); }
 function set_signature_html($v, $dbup = true) { return $this->set('signature_html', $v, $dbup); }
 function warnings() { return @$this->data['warnings']; }
-function set_warnings($v, $dbup) { return $this->set('warnings', $v, $dbup); }
+function set_warnings($v, $dbup=true) { return $this->set('warnings', $v, $dbup); }
 function warnings_total() { return @$this->data['warnings_total']; }
-function set_warnings_total($v, $dbup) { return $this->set('warnings_total', $v, $dbup); }
+function set_warnings_total($v, $dbup=true) { return $this->set('warnings_total', $v, $dbup); }
 function reputation() { return @$this->data['reputation']; }
-function set_reputation($v, $dbup) { return $this->set('reputation', $v, $dbup); }
+function set_reputation($v, $dbup=true) { return $this->set('reputation', $v, $dbup); }
 function pure_reputation() { return @$this->data['pure_reputation']; }
-function set_pure_reputation($v, $dbup) { return $this->set('pure_reputation', $v, $dbup); }
+function set_pure_reputation($v, $dbup=true) { return $this->set('pure_reputation', $v, $dbup); }
 function karma() { return @$this->data['karma']; }
-function set_karma($v, $dbup) { return $this->set('karma', $v, $dbup); }
+function set_karma($v, $dbup=true) { return $this->set('karma', $v, $dbup); }
 function cookie_salt() { return @$this->data['cookie_salt']; }
-function set_cookie_salt($v, $dbup) { return $this->set('cookie_salt', $v, $dbup); }
+function set_cookie_salt($v, $dbup=true) { return $this->set('cookie_salt', $v, $dbup); }
 function password_hash_old() { return @$this->data['password_hash_old']; }
-function set_password_hash_old($v, $dbup) { return $this->set('password_hash_old', $v, $dbup); }
+function set_password_hash_old($v, $dbup=true) { return $this->set('password_hash_old', $v, $dbup); }
 function user_cookie_hash() { return @$this->data['user_cookie_hash']; }
-function set_user_cookie_hash($v, $dbup) { return $this->set('user_cookie_hash', $v, $dbup); }
+function set_user_cookie_hash($v, $dbup=true) { return $this->set('user_cookie_hash', $v, $dbup); }
 function last_post_time() { return @$this->data['last_post_time']; }
-function set_last_post_time($v, $dbup) { return $this->set('last_post_time', $v, $dbup); }
+function set_last_post_time($v, $dbup=true) { return $this->set('last_post_time', $v, $dbup); }
 function www() { return @$this->data['www']; }
-function set_www($v, $dbup) { return $this->set('www', $v, $dbup); }
+function set_www($v, $dbup=true) { return $this->set('www', $v, $dbup); }
 function realname() { return @$this->data['realname']; }
-function set_realname($v, $dbup) { return $this->set('realname', $v, $dbup); }
+function set_realname($v, $dbup=true) { return $this->set('realname', $v, $dbup); }
 function location() { return @$this->data['location']; }
-function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
+function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup); }
 function jabber() { return @$this->data['jabber']; }
-function set_jabber($v, $dbup) { return $this->set('jabber', $v, $dbup); }
+function set_jabber($v, $dbup=true) { return $this->set('jabber', $v, $dbup); }
 function icq() { return @$this->data['icq']; }
-function set_icq($v, $dbup) { return $this->set('icq', $v, $dbup); }
+function set_icq($v, $dbup=true) { return $this->set('icq', $v, $dbup); }
 function msn() { return @$this->data['msn']; }
-function set_msn($v, $dbup) { return $this->set('msn', $v, $dbup); }
+function set_msn($v, $dbup=true) { return $this->set('msn', $v, $dbup); }
 function aim() { return @$this->data['aim']; }
-function set_aim($v, $dbup) { return $this->set('aim', $v, $dbup); }
+function set_aim($v, $dbup=true) { return $this->set('aim', $v, $dbup); }
 function yahoo() { return @$this->data['yahoo']; }
-function set_yahoo($v, $dbup) { return $this->set('yahoo', $v, $dbup); }
+function set_yahoo($v, $dbup=true) { return $this->set('yahoo', $v, $dbup); }
 function timezone() { return @$this->data['timezone']; }
-function set_timezone($v, $dbup) { return $this->set('timezone', $v, $dbup); }
+function set_timezone($v, $dbup=true) { return $this->set('timezone', $v, $dbup); }
 function language() { return @$this->data['language']; }
-function set_language($v, $dbup) { return $this->set('language', $v, $dbup); }
+function set_language($v, $dbup=true) { return $this->set('language', $v, $dbup); }
 function admin_note() { return @$this->data['admin_note']; }
-function set_admin_note($v, $dbup) { return $this->set('admin_note', $v, $dbup); }
+function set_admin_note($v, $dbup=true) { return $this->set('admin_note', $v, $dbup); }
 function email() { return @$this->data['email']; }
-function set_email($v, $dbup) { return $this->set('email', $v, $dbup); }
+function set_email($v, $dbup=true) { return $this->set('email', $v, $dbup); }
 function rep_r() { return @$this->data['rep_r']; }
-function set_rep_r($v, $dbup) { return $this->set('rep_r', $v, $dbup); }
+function set_rep_r($v, $dbup=true) { return $this->set('rep_r', $v, $dbup); }
 function rep_g() { return @$this->data['rep_g']; }
-function set_rep_g($v, $dbup) { return $this->set('rep_g', $v, $dbup); }
+function set_rep_g($v, $dbup=true) { return $this->set('rep_g', $v, $dbup); }
 function rep_b() { return @$this->data['rep_b']; }
-function set_rep_b($v, $dbup) { return $this->set('rep_b', $v, $dbup); }
+function set_rep_b($v, $dbup=true) { return $this->set('rep_b', $v, $dbup); }
 function rep_x() { return @$this->data['rep_x']; }
-function set_rep_x($v, $dbup) { return $this->set('rep_x', $v, $dbup); }
+function set_rep_x($v, $dbup=true) { return $this->set('rep_x', $v, $dbup); }
 function rep_y() { return @$this->data['rep_y']; }
-function set_rep_y($v, $dbup) { return $this->set('rep_y', $v, $dbup); }
+function set_rep_y($v, $dbup=true) { return $this->set('rep_y', $v, $dbup); }
 function last_message_md() { return @$this->data['last_message_md']; }
-function set_last_message_md($v, $dbup) { return $this->set('last_message_md', $v, $dbup); }
+function set_last_message_md($v, $dbup=true) { return $this->set('last_message_md', $v, $dbup); }
 
 function use_avatar()
 {

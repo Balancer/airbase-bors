@@ -163,8 +163,9 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 		<div class="inbox">
 		<div class="imgbox"><div class="scrollbox"><img src="<?php echo $pun_config['root_uri'];?>/attachment.php?item=<?php echo $_GET['item']; ?>&amp;download=1" alt="<?php echo $attach_filename;/*"*/?>" /></div></div><p>
 		<?php echo $lang_attach['Download:']; ?> <a href="<?php echo $pun_config['root_uri'];?>/attachment.php?item=<?php echo $_GET['item']; ?>&amp;download=1"><?php echo $attach_filename; ?></a></p>
+<?php if($post) { ?>
 	<p>Сообщение с этим аттачем: <?php echo $post->titled_url(); ?></p>
-
+<?php } ?>
 		<p><a href="javascript: history.go(-1)">Go back</a></p>
 		</div>
 	</div>

@@ -3,6 +3,7 @@
 class balancer_board_project extends bors_project
 {
 	function nav_name() { return "Форумы Balancer'а"; }
+	function title() { return "Форумы Balancer'а"; }
 	function url() { return 'http://balancer.ru/forum/'; }
 
 	function register_url() { return 'http://www.balancer.ru/forum/punbb/register.php'; }

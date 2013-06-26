@@ -60,8 +60,16 @@ class balancer_board_forum extends forum_forum
 		return array(
 			ec('Название') => 'title',
 			ec('Описание') => 'description',
-			ec('Родительский форум') => array('property' => 'parent_forum_id', 'class' => 'balancer_board_forum', 'have_null' => true),
-			ec('Категория') => array('property' => 'category_id', 'class' => 'balancer_board_category'),
+			ec('Родительский форум') => array(
+				'property' => 'parent_forum_id',
+				'class' => 'balancer_board_forum',
+				'have_null' => true,
+			),
+			ec('Категория') => array(
+				'property' => 'category_id',
+				'class' => 'balancer_board_category',
+				'have_null' => true,
+			),
 			ec('Порядок сортировки') => 'sort_order',
 			ec("Теги\nчерез запятую") => 'keywords_string',
 			ec('Адрес перенаправления') => 'redirect_url',
