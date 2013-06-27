@@ -1,11 +1,9 @@
 <?php
 
-// define('USE_BOOTSTRAP', config('is_developer'));
-
 if(bors()->user_id() == 10000)
 {
 	//config_set('debug_mysql_queries_log', true); // — только строки запросов, без стека
-	config_set('debug_mysql_queries_log', 20);
+//	config_set('debug_mysql_queries_log', 20);
 }
 
 class balancer_board_topics_view extends bors_view_container
@@ -19,6 +17,8 @@ class balancer_board_topics_view extends bors_view_container
 
 	function uri_name() { return 't'; }
 	function nav_name() { return truncate($this->title(), 60); }
+
+	function use_bootstrap() { return config('is_developer'); }
 
 	function where()
 	{
@@ -60,8 +60,8 @@ class balancer_board_topics_view extends bors_view_container
 	{
 		$body_cache = new Cache();
 		$state = $body_cache->get('bors_page_body-v3.alt', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time());
-		if($state)
-			return $this->attr['body'] = bors_lcml::output_parse($body_cache->last().'<!-- cached -->');
+//		if($state)
+//			return $this->attr['body'] = bors_lcml::output_parse($body_cache->last().'<!-- cached -->');
 
 		return bors_lcml::output_parse($body_cache->set(parent::body(), 86400));
 	}
@@ -76,7 +76,7 @@ class balancer_board_topics_view extends bors_view_container
 		else
 			header("X-Accel-Expires: 86400");
 
-		if(USE_BOOTSTRAP)
+		if($this->use_bootstrap())
 		{
 			twitter_bootstrap::load();
 			bors_use('/_bal/css/bootstrap-bb-append.css');
@@ -188,7 +188,7 @@ $(function() {
 		$data['topic'] = $this->topic();
 		$data['forum'] = $this->topic()->forum();
 
-		if(USE_BOOTSTRAP)
+		if($this->use_bootstrap())
 		{
 			$data['tcfg'] = bors_load('balancer_board_themes_bootstrap', NULL);
 			$data['pagination'] = $this->pages_links_list(array(
@@ -204,7 +204,7 @@ $(function() {
 			$data['pagination'] = $this->pages_links_nul();
 		}
 
-		$data['use_bootstrap'] = USE_BOOTSTRAP;
+		$data['use_bootstrap'] = $this->use_bootstrap();
 
 		return array_merge(parent::body_data(), $data);
 	}
@@ -352,8 +352,8 @@ $(function() {
 
 	function template()
 	{
-		if(USE_BOOTSTRAP)
-			return 'xfile:bootstrap/index.html';
+		if($this->use_bootstrap())
+			return 'xfile:balancer/board/topic.tpl';
 
 		if($this->forum()->category()->category_template())
 		{

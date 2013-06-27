@@ -3,7 +3,7 @@
 	{assign var="owner" value=$post->owner()}
 	{assign var=a value=$post->answer_to()}
 <div class="well">
-<div class="container post pby{$post->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $post->is_moderatorial()} moderatorial_post text-error{/if}">
+<div class="post pby{$post->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $post->is_moderatorial()} moderatorial_post text-error{/if}">
 	<div class="row head">
 		<div class="span10">
 {block name="title"}
@@ -36,9 +36,10 @@
 				<img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$post->id()},'up')"  width="16" height="16" />
 				<span id="ptr{$post->id()}" style="font-size: 130%">{if $post->score() != NULL}{$post->score_colorized()}{/if}</span>
 				<img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$post->id()},'down')" width="16" height="16" />
-			</span>
-			<span class="half-transparent badge">{$post->imaged_edit_url()}</span>
+			
+				<span class="half-transparent">{$post->imaged_edit_url()}</span>
 			{if $is_first_post}<g:plusone size="small"></g:plusone>{/if}
+			</span>
 		</div>
 
 	</div>{*/head*}
@@ -87,7 +88,7 @@
 			<div class="alert alert-info">Это сообщение редактировалось {$post->edited()|strftime:"%d.%m.%Y в %H:%M"}</div>
 	{/if}
 			<div class="row">
-			<p class="postsignature muted small" style="margin-top: 20px">
+			<p class="muted small postsignature">
 				<span class="img_middle pull-right">
 					&nbsp;{$post->owner_user_agent()}
 				</span>
@@ -96,12 +97,12 @@
 			</div>
 
 			<div id="pfo{$post->id()}"></div>
-
-			<div class="container">
+			<hr/>
+			<div class="row postfooter">
 				<i class="icon-comment"></i> <a href="/_bors/ajax/post/info?post={$post->id()}" class="bb-ajax-popover">Ответов: {$post->answers_count()}</a>
 				<a href="#" onclick="pdsh('{$post->id()}'); return false;"><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;инструменты</a>
 				 <a href="{$post->topic()->forum()->category()->category_base_full()}post.php?tid={$post->topic_id()}&amp;qid={$post->id()}" 
-				  class="btn pull-right">Ответить на сообщение</a>
+				  class="btn pull-right btn-mini">Ответить на сообщение</a>
 			</div>
 
 
@@ -142,6 +143,6 @@
 	{/if}
 
 
-</div>{*/post container*}
+</div>{*/post*}
 </div>
 {/if}

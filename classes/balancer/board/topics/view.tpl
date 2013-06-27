@@ -1,3 +1,7 @@
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span9">
+
 <div class="pages_select {$tcfg->right()}">
 {if $topic->is_closed()}
 	<a href="#" class="btn disabled">Тема закрыта</a>
@@ -35,14 +39,21 @@
 </dl>
 {/if *}
 
-{if $last_actions}
-<div class="alert"><small>
-<b>Последние действия над темой</b><br/>
-{foreach from=$last_actions item="a"}
-{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}<br/>
-{/foreach}
-</small></div>
-{/if}
 
 {$pagination}
 
+		</div>
+		<div class="span3">
+
+{if $last_actions}
+<b>Последние действия над темой</b><br/>
+{foreach from=$last_actions item="a"}
+<div class="alert"><small>
+{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}<br/>
+</small></div>
+{/foreach}
+{/if}
+
+		</div>
+	</div>
+</div>

@@ -1,3 +1,18 @@
+* {
+	line-height: normal;
+}
+
+body {
+	font-size:14pt;
+	font-family: Georgia;
+	color:#358;
+	background: #D8F0FF url(http://www.airbase.ru/images/web/sky-back.jpg);
+}
+
+.row {
+	margin-left: 0px;
+}
+
 .transgray, .transgray a {
 	color: #ccc;
 	font-size: 10pt;
@@ -102,4 +117,22 @@ table.btab td { background: white; }
 blockquote {
 	background-color: #f4f4f4;
 	padding: 4px;
+}
+
+.postsignature {
+	text-align:right;
+		color:#bbc;
+		font-size:.8em;
+		margin-top:10px;
+		clear:both;
+		border-top:1px dotted #ccc;
+}
+
+.postfooter {
+	text-align:right;
+	margin: 4px 0 0 0;
+	padding: 0;
+	width: auto;
+	font-size:.7em;
+	color: #9bd;
 }

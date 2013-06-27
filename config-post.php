@@ -1,7 +1,6 @@
 <?php
 
-template_jquery();
-template_jquery_plugin('tageditor/jquery.tag.editor.js');
+jquery::plugin('tageditor/jquery.tag.editor.js');
 //template_jquery_plugin('jquery.lazyload-ad-1.4.min.js'); // Это загрузка с задержкой рекламных блоков!
 //template_jquery_plugin('jquery.lazyload.js'); — тормозит скроллинг
 
