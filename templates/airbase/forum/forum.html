@@ -31,10 +31,10 @@
 {/if}
 <tr class="tr_forum_{$f->id()}">
 {if $with_images}
-	<td style="width: 100px; height: 64px; padding: 4px;">
+	<td style="padding: 4px;">
 	{$img=$t->image()}
 	{if $img}
-		<a href="{$t->url()}\">{$img->thumbnail('100x64(up,crop)')->html_code()}</a>
+		<a href="{$t->url()}\">{$img->thumbnail('96x96(up,crop)')->html_code()}</a>
 	{/if}
 	</td>
 {/if}

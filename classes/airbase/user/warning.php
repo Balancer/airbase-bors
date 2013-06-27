@@ -44,6 +44,7 @@ class airbase_user_warning extends base_object_db
 	function auto_objects()
 	{
 		return array_merge(parent::auto_objects(), array(
+			'owner' => 'balancer_board_user(moderator_id)',
 			'type' => 'airbase_user_warning_type(type_id)',
 			'type_scored' => 'airbase_user_warning_typesco(type_id)',
 		));

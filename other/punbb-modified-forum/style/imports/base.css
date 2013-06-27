@@ -57,7 +57,7 @@ DIV>DIV>DIV.postfootleft, DIV>DIV>DIV.postfootright {PADDING-TOP: 1px; MARGIN-TO
 /* These are hidden in normal display. Add comments to make them visible */
 
 #brdfooter H2, #brdstats H2, #brdstats .conl DT, #brdstats .conr DT,
-#modcontrols DT, #searchlinks DT, DIV.postright H3 {
+#modcontrols DT, #searchlinks DT /* , DIV.postright H3 */ {
 	POSITION: absolute;
 	DISPLAY: block;
 	OVERFLOW: hidden;
