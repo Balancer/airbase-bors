@@ -12,9 +12,9 @@ class balancer_board_posts_best extends bors_page
 	{
 		template_css('/_bors/css/bors/style.css');
 		$cached = bors_find_all('balancer_board_posts_cached', array(
-			'mark_best_date IS NOT NULL',
-			'page' => $this->page(),
-			'per_page' => $this->items_per_page(),
+//			'mark_best_date IS NOT NULL',
+			'best_page_num' => $this->page(),
+//			'per_page' => $this->items_per_page(),
 			'order' => 'mark_best_date',
 		));
 
@@ -33,9 +33,11 @@ class balancer_board_posts_best extends bors_page
 		if($this->__havefc())
 			return $this->__lastc();
 
-		return $this->__setc(objects_count('balancer_board_posts_cached', array(
-			'mark_best_date IS NOT NULL',
-		)));
+		$foo = bors_find_first('balancer_board_posts_cached', array(
+			'order' => '-best_page_num',
+		));
+
+		return $this->__setc($foo->best_page_num()*$this->items_per_page());
 	}
 
 	function is_reversed() { return true; }

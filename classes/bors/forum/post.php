@@ -67,7 +67,7 @@ class forum_post extends balancer_board_object_db
 					'flag_db' => 'flag',
 					'warning_id',
 //					'answers_count_raw' => 'answers_count',
-					'mark_best_date',
+					'mark_best_date' => array('type' => 'int'),
 					'score_positive_raw' => 'score_positive',
 					'score_negative_raw' => 'score_negative',
 					'post_body' => 'html',

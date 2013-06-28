@@ -14,6 +14,7 @@ class balancer_board_posts_cached extends base_object_db
 			'warning_id',
 			'answers_count',
 			'mark_best_date',
+			'best_page_num',
 		);
 	}
 
