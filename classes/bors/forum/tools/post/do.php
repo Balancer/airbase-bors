@@ -19,6 +19,17 @@ class forum_tools_post_do extends base_page
 		switch($this->page())
 		{
 			case 'drop-cache':
+				// Стираем превьюшки картинок
+				// Ищем все картинки темы:
+				if($objects = bors_find_all('balancer_board_posts_object', array(
+					'post_id' => $this->id(),
+					'target_class_name IN' => array('bors_image', 'airbase_image'),
+				)))
+				{
+					foreach($objects as $obj)
+						$obj->target()->clear_thumbnails();
+				}
+
 				config_set('lcml_cache_disable_full', true);
 				$post->set_post_body(NULL, true);
 				$post->set_warning_id(NULL, true);

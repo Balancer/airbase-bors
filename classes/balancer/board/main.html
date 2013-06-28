@@ -124,12 +124,15 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 <caption>Новые темы форумов</caption>
 <tr>
 	<th>Время</th>
-	<th>тема</th>
+	<th colspan="2">тема</th>
 	<th>форум</th>
 	<th>авторы</th>
 </tr>
 {foreach from=$new_topics item="t"}
-<tr><td>{$t->create_time()|smart_time}</td>
+<tr><td>{$t->create_time()|short_time}</td>
+	<td style="padding: 2px; width: 32px; line-height: 0; border-right: none">
+	{if $img=$t->image()}<a href="{$t->url()}\">{$img->thumbnail('48x48(up,crop)')->html_code()}</a>{/if}
+	</td>
 	<td>{$t->titled_url('new')}<br/>
 {if $t->description()}<i>{$t->description()}</i><br/>{/if}
 	</td>

@@ -2,30 +2,13 @@
 {* Внимание: отсюда убраны подфорумы и списки страниц. Это дело вызывающего модуля! *}
 
 {if topics}
-<table class="btab w100p" cellSpacing="0">
-<tr>
-	<th>Тема</th>
-	<th>Форум</th>
-	<th>Ответов</th>
-	<th>Создано</th>
-	<th>Обновлено</th>
-</tr>
-{foreach from=$topics item=t}
-{assign var=f value=$t->forum()}
-{assign var=o value=$t->owner()}
-{assign var="updated" value=$t->was_updated_for_user($me,true,$real_topic_visits)}
-<tr class="tr_forum_{$f->id()}{if $updated} b{/if}">
-	<td id="vtt_{$t->id()}">
-		<a href="{$t->url('new')}">{$t->title()}</a>{if $t->description()}<br /><small><i>{$t->description}</i></small>{/if}
-		{if $t->total_pages() > 1}<small><span class="topic_pages_links">{$t->title_pages_links()}</span></small>{/if}
-	</td>
-	<td class="small">{$f->titled_link()}</td>
-	<td class="small aligncenter">{$t->num_replies()}</td>
-	<td class="small">{$t->create_time()|airbase_time}<br /><small>{$t->author_name()}</small></td>
-	<td class="small">{$t->modify_time()|airbase_time}<br /><small>{$t->last_poster_name()}</small></td>
-</tr>
-{/foreach}
-</table>
+
+{include file="xfile:airbase/forum/forum.html"
+	with_images=true
+}
+
 {else}
-<dl class="box"><dd>Нет ни одной темы.</dd></dl>
+
+<div class="alert yellow_box">Тем не обнаружено</div>
+
 {/if}

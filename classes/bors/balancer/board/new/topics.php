@@ -7,5 +7,9 @@ class balancer_board_new_topics extends balancer_board_paginated
 //	function template() { return 'forum/_header.html'; }
 	function title() { return 'Новые темы за месяц'; }
 	function nav_name() { return 'новые темы'; }
-	function where() { return array('posted>' => time()-86400*31, 'is_public' => 1); }
+	function where() { return array(
+		'posted>' => time()-86400*31,
+		'is_public' => 1,
+		'forum_id NOT IN' => array(37),
+	); }
 }
