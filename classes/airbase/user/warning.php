@@ -11,6 +11,8 @@ class airbase_user_warning extends base_object_db
 	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'warnings'; }
 
+	function replace_on_new_instance() { return true; }
+
 //	function can_delete() { return bors()->user()->is_admin(); }
 //	Осторожно! У координаторов должен быть action-доступ
 //	function access_engine() { return 'balancer_board_access_balancer'; }
@@ -51,7 +53,15 @@ class airbase_user_warning extends base_object_db
 	}
 
 	function title() { return $this->type_scored(); }
-	function description() { return ec('Штраф <b>').$this->type_scored().($this->source() ? " [{$this->source()}]" : '').'</b>'.ec(' пользователю <i>').$this->user()->title().'</i> '.ec(' от <i>').$this->moderator()->title().'</i>'; }
+	function description()
+	{
+		return ec('Штраф <b>').$this->type_scored()
+			.($this->source() ? " [{$this->source()}]" : '')
+			.'</b>'.ec(' пользователю <i>').$this->user()->title()
+			.'</i> '.ec(' от <i>')
+			.($this->moderator_id() ? $this->moderator()->title() : 'БалаБОТа')
+			.'</i>';
+		}
 
 	function moderator() { return object_load('balancer_board_user', $this->moderator_id()); }
 	function user() { return object_load('balancer_board_user', $this->user_id()); }
@@ -92,7 +102,7 @@ class airbase_user_warning extends base_object_db
 		return $score;
 	}
 
-	function set_score($value, $dbup) { return $this->set_score_db($value, $dbup); }
+	function set_score($value, $dbup=true) { return $this->set_score_db($value, $dbup); }
 
 	function editor_fields_list()
 	{
@@ -110,4 +120,10 @@ class airbase_user_warning extends base_object_db
 	}
 
 	function url() { return NULL; }
+
+	function __dev()
+	{
+		$w = bors_load(__CLASS__, 17924);
+		echo $w->source();
+	}
 }

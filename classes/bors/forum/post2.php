@@ -74,6 +74,7 @@ class forum_post2 extends base_page_db
 					'score_negative_raw' => 'score_negative',
 					'post_body' => 'html',
 					'full_html_content' => 'html_full_post',
+					'best_page_num',
 //					),
 				),
 			),
