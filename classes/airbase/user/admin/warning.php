@@ -21,6 +21,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 			return bors_message("Попытка выставить штраф пользователю [{$data['user_id']}], не являющемуся автором сообщения [{$object->owner_id()}]");
 
 		$previous_warning = bors_find_first('airbase_user_warning', array(
+			'moderator_id>' => 0,
 			'user_id' => $data['user_id'],
 			'warn_class_id' => $object->class_id(),
 			'warn_object_id' => $object->id(),

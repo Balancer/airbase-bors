@@ -198,4 +198,53 @@ class balancer_board_user extends forum_user
 
 		return bors_load('balancer_board_group', PUN_GUEST);
 	}
+
+	function set_object_warning($object, $score, $message, $moderator = NULL, $type = 0, $referer = NULL)
+	{
+		$warn = bors_find_first('airbase_user_warning', array(
+			'user_id' => $this->id(),
+			'warn_class_id' => $object->class_id(),
+			'warn_object_id' => $object->id(),
+		));
+
+		if($warn)
+		{
+			if($warn->moderator_id() < 1 && $warn->score() < $score)
+			{
+				$warn->set_score($score);
+				$warn->set_source($message);
+			}
+
+			return;
+		}
+
+		$data = array(
+			'user_id' => $this->id(),
+			'expire_time' => time() + WARNING_DAYS*86400,
+			'score_db' => $score,
+			'type_id' => $type,
+			'referer' => $referer,
+			'source' => $message,
+		);
+
+		if($object)
+		{
+			$data['warn_class_id'] = $object->class_id();
+			$data['warn_object_id'] = $object->id();
+			$data['expire_time'] = $object->create_time() + WARNING_DAYS*86400;
+		}
+
+		if($moderator)
+		{
+			$data['moderator_id'] = $moderator->id();
+			$data['moderator_name'] = $moderator->title();
+		}
+		else
+		{
+			$data['moderator_id'] = 0;
+			$data['moderator_name'] = 'БалаБОТ';
+		}
+
+		bors_new('airbase_user_warning', $data);
+	}
 }

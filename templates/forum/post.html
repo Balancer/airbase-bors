@@ -98,11 +98,11 @@
 Это сообщение редактировалось {$p->edited()|strftime:"%d.%m.%Y в %H:%M"}
 </div>{/if}
 
-{if $p->warning()}<div class="warning_note">
-<b>{$p->warning()|get:moderator_name}:</b> предупреждение ({$p->warning()|get:score})
-{if $p->warning()|get:type_id} по категории «<b>{$p->warning()|get:type_id|bors_list_item_name:"airbase_user_warning_type"}</b>»
-{if $p->warning()|get:source}(<i>{$p->warning()|get:source}</i>){/if}
-{/if}.
+{if $w = $p->warning()}<div class="warning_note">
+<b>{$w->moderator_name()}:</b> предупреждение ({$w->score()})
+{if $w->type_id()} по категории «<b>{$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</b>»{/if}
+{if $w->source()}(<i>{$w->source()}</i>){/if}
+.
 </div>{/if}
 
 <div id="pfo{$p->id()}"></div>

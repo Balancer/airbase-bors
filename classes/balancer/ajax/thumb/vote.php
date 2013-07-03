@@ -122,23 +122,37 @@ class balancer_ajax_thumb_vote extends base_object
 
 				bors()->changed_save();
 
+				$current_page = $target->db()->select('posts_cached_fields', 'MAX(`best_page_num`)', array());//bors_find_first('balancer_board_posts_cached', array('order' => 'MAX(best_page_num)'))->best_page_num();
+				$last_count = bors_count('balancer_board_posts_cached', array('best_page_num' => $current_page));
+				if($count >= 25)
+					$current_page++;
+
+//				if(config('is_developer')) var_dump($current_page, $last_count);
+
+				$target->set_best_page_num($current_page);
+/*
 				$target->db()->query("UPDATE posts_cached_fields AS c
 					SET c.best_page_num = FLOOR((SELECT @rn:= @rn + 1 FROM (SELECT @rn:= -1) s)/25)+1
 					WHERE mark_best_date IS NOT NULL
 					ORDER BY mark_best_date;
 				");
+*/
 			}
 		}
 
-		if($target->score() >= 7)
+		$target_score = $target->score();
+		if($target_score >= 7)
 			balancer_balabot::on_thumb_up($target);
 
 		$user = $target->owner();
 		$text = "Вам выставлена оценка $score за сообщение #{$target->id()} {$target->url_for_igo()} в теме «{$target->topic()->title()}»";
-
 		$user->notify_text($text);
 
 		bal_event::add('balancer_board_actor_vote', $user, $vote);
+
+
+		if($target_score <= -5)
+			$user->set_object_warning($target, intval(-$target_score/5), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
 
 		return $return;
 	}

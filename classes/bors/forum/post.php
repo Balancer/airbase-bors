@@ -72,6 +72,7 @@ class forum_post extends balancer_board_object_db
 					'score_negative_raw' => 'score_negative',
 					'post_body' => 'html',
 					'full_html_content' => 'html_full_post',
+					'best_page_num',
 				),
 
 				'posts_calculated_fields(post_id)' => array(

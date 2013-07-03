@@ -8,6 +8,7 @@ class balancer_board_posts_object extends balancer_board_object_db
 		return array(
 			'id',
 			'post_id',
+			'user_id',
 			'target_class_id',
 			'target_class_name',
 			'target_object_id',
@@ -76,6 +77,7 @@ class balancer_board_posts_object extends balancer_board_object_db
 
 		bors_new('balancer_board_posts_object', array(
 			'post_id' => $post->id(),
+			'user_id' => $post->owner_id(),
 			'target_class_id' => $object_class_id,
 			'target_class_name' => $object_class_name,
 			'target_object_id' => $object_id,

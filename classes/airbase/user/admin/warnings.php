@@ -11,6 +11,7 @@ class airbase_user_admin_warnings extends airbase_user_warnings
 		{
 			$previous_warning = bors_find_first('airbase_user_warning', array(
 				'user_id' => $this->id(),
+				'moderator_id>' => 0,
 				'warn_class_id' => $object->class_id(),
 				'warn_object_id' => $object->id(),
 			));
