@@ -33,7 +33,7 @@ class airbase_user_warnings extends base_page
 		if(!$skip_passive)
 			$data['passive_warnings'] = array_reverse(objects_array('airbase_user_warning', array(
 				'user_id=' => $this->id(),
-				'time<=' => time()-86400*WARNING_DAYS,
+				'`expired_timestamp` <= NOW()',
 				'order' => 'time',
 				'page' => $this->page(),
 				'per_page' => $this->items_per_page(),
@@ -42,7 +42,7 @@ class airbase_user_warnings extends base_page
 		if(!$this->page() || $this->page() == $this->total_pages())
 			$data['active_warnings']  = array_reverse(objects_array('airbase_user_warning', array(
 				'user_id' => $this->id(),
-				'time>' => time()-86400*WARNING_DAYS,
+				'`expired_timestamp` > NOW()',
 				'order' => 'time',
 //				'limit' => 10,
 			)));
@@ -56,7 +56,7 @@ class airbase_user_warnings extends base_page
 
 	function parents() { return array($this->user()); }
 
-	function total_items() { return objects_count('airbase_user_warning', array('user_id=' => $this->id(), 'time<=' => time()-86400*WARNING_DAYS)); }
+	function total_items() { return bors_count('airbase_user_warning', array('user_id=' => $this->id(), '`expired_timestamp`<=NOW()')); }
 	function default_page() { return $this->total_pages(); }
 
 	function url($page = NULL)

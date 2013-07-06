@@ -150,8 +150,9 @@ class balancer_ajax_thumb_vote extends base_object
 
 		bal_event::add('balancer_board_actor_vote', $user, $vote);
 
+//		if(config('is_developer')) var_dump($score, $target_score);
 
-		if($target_score <= -5)
+		if($score < 0 && $target_score <= -5)
 			$user->set_object_warning($target, intval(-$target_score/5), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
 
 		return $return;
