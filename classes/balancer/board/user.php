@@ -245,6 +245,9 @@ class balancer_board_user extends forum_user
 			$data['moderator_name'] = 'БалаБОТ';
 		}
 
+//		if(config('is_developer'))
+//			var_dump($data);
+
 		bors_new('airbase_user_warning', $data);
 	}
 }

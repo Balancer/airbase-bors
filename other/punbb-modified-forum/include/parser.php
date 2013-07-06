@@ -54,7 +54,7 @@ function parse_message($text, $hide_smilies, $nocache=false)
 
 	$ch = new Cache();
 	if($ch->get("lcml-compiled", $text, "post://{$cur_post['id']}/") && !config('cache_disabled') && $nocacne==false)
-		return $ch->last();
+		return bors_lcml::output_parse($ch->last());
 
 	$post_id    = intval(@$cur_post['id']);
 	$post_time  = intval(@$cur_post['posted']);
@@ -81,6 +81,6 @@ function parse_message($text, $hide_smilies, $nocache=false)
 		)
 	);
 */
-	$body = pun_lcml($text, false);
+	$body = bors_lcml::output_parse(pun_lcml($text, false));
 	return $ch->set($body, 60*86400);
 }
