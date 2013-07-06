@@ -28,7 +28,7 @@ class user_js_touch extends bors_js
 			{
 				$res = array();
 				foreach($x as $k=>$v)
-					$res[] = "top.touch_info.$k = ".(is_numeric($v) ? $v : "'".addslashes($v)."'");
+					$res[] = "top.touch_info_{$k} = ".(is_numeric($v) ? $v : "'".addslashes($v)."'");
 
 				return join("\n", $res);
 			}
