@@ -36,7 +36,7 @@ class users_topwarnings extends base_page
 			$top_warn_reltive_users[$uid] = array('u' => object_load('balancer_board_user', $uid), 'w' => $w);
 */
 		return array(
-			'warnings_last' => objects_array('airbase_user_warning', array('order' => '-time', 'limit' => 25)),
+			'warnings_last' => objects_array('airbase_user_warning', array('order' => '-create_time', 'limit' => 25)),
 			'top_warn_users' => objects_array('balancer_board_user', array('last_post - registered >' => 86400*7, 'order' => '86400.0*warnings_total/(last_post - registered) DESC', 'limit' => 50)),
 			'top_warn_relative_users' => @$top_warn_reltive_users,
 		);

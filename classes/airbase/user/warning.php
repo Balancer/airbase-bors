@@ -24,7 +24,7 @@ class airbase_user_warning extends base_object_db
 			'user_id',
 //			'create_time' => array('name' => 'time', 'comment' => 'Дата выставления'),
 			'create_time' => 'time',
-			'expire_time' => array('name' => 'FROM_UNIXTIME(`expired_timestamp`)'),
+			'expire_time' => 'UNIX_TIMESTAMP(`expired_timestamp`)',
 			'score_db' => 'score',
 			'type_id',
 			'moderator_id',

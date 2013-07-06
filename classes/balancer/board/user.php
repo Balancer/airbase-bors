@@ -178,7 +178,7 @@ class balancer_board_user extends forum_user
 		$warnings_active = bors_find_first('airbase_user_warning', array(
 			'*set' => 'SUM(score) as total',
 			'user_id' => $this->id(),
-			'time>' => time()-WARNING_DAYS*86400,
+			'`expired_timestamp` > NOW()',
 		));
 
 		$warnings_total = bors_find_first('airbase_user_warning', array(
@@ -244,10 +244,13 @@ class balancer_board_user extends forum_user
 			$data['moderator_id'] = 0;
 			$data['moderator_name'] = 'БалаБОТ';
 		}
-
-//		if(config('is_developer'))
-//			var_dump($data);
-
-		bors_new('airbase_user_warning', $data);
+/*
+		if(config('is_developer'))
+		{
+			var_dump($data);
+			exit();
+		}
+*/
+		$warn = bors_new('airbase_user_warning', $data);
 	}
 }

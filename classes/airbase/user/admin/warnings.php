@@ -22,7 +22,7 @@ class airbase_user_admin_warnings extends airbase_user_warnings
 		$warns_from_me = intval($this->db('AB_FORUMS')->select('warnings', 'SUM(score)', array(
 			'user_id' => $this->id(),
 			'moderator_id' => bors()->user_id(),
-			'time>' => time()-86400*WARNING_DAYS, 
+			'`expired_timestamp` > NOW()',
 //			'posts.posted>' => time()-86400*14,
 //			'inner_join' => array('forum_post ON forum_post.id = airbase_user_warning.warn_object_id', 'topics ON topics.id = posts.topic_id'),
 		)));

@@ -30,14 +30,13 @@ class airbase_user_admin_warning extends airbase_user_warning
 		if($previous_warning)
 			return bors_message(ec('Пользователь уже получил предупреждение за это сообщение'));
 
-		$data['create_time'] = time();
-		$data['expire_time'] = time() + WARNING_DAYS*86400;
 		$data['score'] = airbase_user_warning_type::score($data['type_id']);
 		$data['moderator_id'] = bors()->user()->id();
 		$data['moderator_name'] = bors()->user()->title();
 		$data['warn_class_id'] = $object->class_id();
 		$data['warn_object_id'] = $object->id();
-		$data['create_time'] = $object->create_time();
+		$data['create_time'] = time();
+		$data['expire_time'] = $object->create_time() + WARNING_DAYS*86400;
 
 		return parent::check_data($data);
 	}
@@ -83,7 +82,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 			balancer_board_action::add($topic, "Отмена предупреждения пользователю {$user->title()}: {$object->nav_named_link()}", true);
 		}
 
-		$warnings = $this->db()->select('warnings', 'SUM(score)', array('user_id=' => $uid, 'time>' => time()-WARNING_DAYS*86400));
+		$warnings = $this->db()->select('warnings', 'SUM(score)', array('user_id=' => $uid, '`expire_timestamp` > NOW()'));
 		$warnings_total = $this->db()->select('warnings', 'SUM(score)', array('user_id=' => $uid));
 		$user->set_warnings($warnings - $data['score'], true);
 		$user->set_warnings_total($warnings_total - $data['score'], true);

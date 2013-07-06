@@ -1,7 +1,7 @@
 <table class="btab" width="100%">
 <tr><th colSpan="6">Последние 25 штрафов:</th></tr>
 <tr>
-	<th>Дата</th>
+	<th>Дата истечения</th>
 	<th>Пользователь</th>
 	<th>Сообщение</th>
 	<th>Штраф, причина</th>
@@ -10,7 +10,7 @@
 </tr>
 {foreach from=$warnings_last item="w"}
 <tr class="small">
-	<td style="color: {if $w->score()>0}red{else}green{/if};">{$w->create_time()|full_time}</td>
+	<td style="color: {if $w->score()>0}red{else}green{/if};">{$w->expire_time()|full_time}</td>
 	<td>{$w->user()|get:"titled_url"}</td>
 	<td>{$w->target()|get:"titled_link"}</td>
 	<td style="color: {if $w->score()>0}red{else}green{/if};">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</td>
