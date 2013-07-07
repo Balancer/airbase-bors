@@ -2,7 +2,7 @@
 
 class users_topwarnings extends base_page
 {
-	function main_db(){ return 'AB_FORUMS'; }
+	function db_name(){ return 'AB_FORUMS'; }
 
 	function template()
 	{

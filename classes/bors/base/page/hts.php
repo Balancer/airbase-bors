@@ -30,11 +30,11 @@ class base_page_hts extends base_page_db
 
 	function is_loaded() { return $this->create_time(true) || $this->source(); } //TODO: придумать что-то более адекватно. title() сейчас может не понимать true
 
-//	function main_db() { return config('hts.database', 'HTS'); }
+//	function db_name() { return config('hts.database', 'HTS'); }
 //	function main_table_storage() { return NULL; }
 	function fields_first() { return 'stb_title stb_source stb_description'; }
-	function main_db() { return config('mysql_database'); }
-	function main_table() { return NULL; }
+	function db_name() { return config('mysql_database'); }
+	function table_name() { return NULL; }
 
 	function fields()
 	{

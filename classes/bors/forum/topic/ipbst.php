@@ -16,6 +16,6 @@ class forum_topic_ipbst extends base_page
 			return 'http://www.balancer.ru/forums/';
 		}
 
-		return $topic->url(intval($this->page()/25) + 1);
+		return $topic->url_ex(intval($this->page()/25) + 1);
 	}
 }

@@ -28,7 +28,7 @@ class forum_topic_ubb extends base_object
 			return false;
 
 		$topic = object_load('balancer_board_topic', $this->topic_id());
-		return go($topic->url($this->args('page')));
+		return go($topic->url_ex($this->args('page')));
 	}
 
 	function topic() { return bors_load('balancer_board_topic', $this->topic_id()); }
@@ -39,5 +39,5 @@ class forum_topic_ubb extends base_object
 	function is_loaded() { return $this->topic_id() > 0; }
 
 	function title() { return $this->topic()->title(); }
-	function url($page = NULL) { return $this->topic()->url($page>0 ? $page : $this->args('page')); }
+	function url($page = NULL) { return $this->topic()->url_ex($page>0 ? $page : $this->args('page')); }
 }

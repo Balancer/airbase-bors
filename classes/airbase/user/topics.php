@@ -60,5 +60,8 @@ class airbase_user_topics extends base_page
 
 	function cache_static() { return config('static_forum') ? rand(86400*7, 14*86400) : 0; }
 
-	function pages_links_nul() { return ""; }
+	function pages_links_nul($css='pages_select', $text = NULL, $delim = '', $show_current = true, $use_items_numeration = false, $around_page = NULL)
+	{
+		return "";
+	}
 }

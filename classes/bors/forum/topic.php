@@ -143,7 +143,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 			if(!$me || $me->id() < 2)
 			{
-				$ref = $this->url($this->page());
+				$ref = $this->url_ex($this->page());
 				return bors_message(ec('Вы не авторизованы на этом домене. Авторизуйтесь, пожалуйста. Если не поможет - попробуйте стереть cookies вашего браузера.'), array(
 					'login_form' => true,
 					'login_referer' => $ref,
@@ -183,7 +183,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		}
 
 		if($this->page() == 'last')
-			return go($this->url($this->total_pages()));
+			return go($this->url_ex($this->total_pages()));
 
 		if(!$this->forum() || !$this->forum()->can_read())
 		{
@@ -390,7 +390,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 	function total_pages() { return intval($this->num_replies() / $this->items_per_page()) + 1; }
 
-	function pages_links()
+	function pages_links($css='pages_select', $text = NULL, $delim = '', $show_current = true, $use_items_numeration = false, $around_page = NULL)
 	{
 		if($this->total_pages() < 2)
 			return "";
@@ -678,18 +678,18 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			$me->utmx_update();
 
 		if($this->page() > $this->total_pages())
-			return go($this->url($this->total_pages()));
+			return go($this->url_ex($this->total_pages()));
 
 		if($this->moved_to())
-			return go(object_load('balancer_board_topic', $this->moved_to())->url($this->page()));
+			return go(object_load('balancer_board_topic', $this->moved_to())->url_ex($this->page()));
 
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");
 
 		if($this->page() > 1)
-			bors_page::link_rel('prev', $this->url($this->page() - 1));
+			bors_page::link_rel('prev', $this->url_ex($this->page() - 1));
 
 		if($this->page() < $this->total_pages() && $this->total_pages() > 1)
-			bors_page::link_rel('next', $this->url($this->page() + 1));
+			bors_page::link_rel('next', $this->url_ex($this->page() + 1));
 
 		template_jquery();
 //		template_jquery_plugin_autocomplete();

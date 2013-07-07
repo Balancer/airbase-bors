@@ -9,7 +9,7 @@ class forum_tools_post_moveTree extends balancer_board_admin_page
 
 	function parents() { return array('balancer_board_post://'.$this->post()->id()); }
 
-	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
+	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 
 	var $post, $topic;
 	function post() { return $this->post; }
@@ -17,7 +17,7 @@ class forum_tools_post_moveTree extends balancer_board_admin_page
 
 	function __construct($id)
 	{
-		$this->db = new driver_mysql($this->main_db());
+		$this->db = new driver_mysql($this->db_name());
 		if($id)
 		{
 			$this->post = bors_load('balancer_board_post', intval($id));

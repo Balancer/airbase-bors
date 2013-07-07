@@ -4,7 +4,7 @@ class module_user_blog extends base_page
 {
 	private $user;
 
-	function main_db() { return 'AB_FORUMS'; }
+	function db_name() { return 'AB_FORUMS'; }
 
 	function body_data()
 	{

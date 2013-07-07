@@ -26,7 +26,7 @@ class balancer_blog extends user_blog
 		parent::__construct($id);
 
 		$this->add_template_data('user_id', $id);
-		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url(1)."rss.xml\" title=\"RSS блога пользователя ".addslashes($this->user->title())."\" />");
+		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->url()."rss.xml\" title=\"RSS блога пользователя ".addslashes($this->user->title())."\" />");
 	}
 
 	function url($page = NULL)
