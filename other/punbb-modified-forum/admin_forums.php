@@ -34,7 +34,7 @@ if(!empty($_POST))
 {
 	$ich = new Cache();
 	$ich->get("subforums-text-1", "all");
-	$ich->set(NULL);
+	$ich->set(NULL, NULL);
 }
 
 if ($pun_user['g_id'] > PUN_ADMIN)

@@ -135,6 +135,14 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 				$width = 300;
 			}
 		}
+		elseif(preg_match("!(mp3)!i", $this->extension()))
+		{
+			$full_url = 'http://www.balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2&type=.'.$this->extension();
+
+			$thumb = restore_format(jquery_jplayer::html(array('mp3' => $full_url, 'title' => basename($this->title()))));
+			$width = 422;
+			set_def($args, 'container_style', "padding: 8px!important; width: {$width}px;");
+		}
 		else
 		{
 			$thumb = '';
