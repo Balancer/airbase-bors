@@ -11,7 +11,7 @@
 </tr>
 {foreach from=$items item="x"}
 <tr>
-	<td><a href="{$x->url('new')}"{if $x->was_updated_for_user($me)} class="b"{/if}>{$x->title()}</a>
+	<td><a href="{$x->url_ex('new')}"{if $x->was_updated_for_user($me)} class="b"{/if}>{$x->title()}</a>
 		{if $x->description()}<br/><small><i>{$x->description()}</i></small>{/if}</td>
 	<td>{$x->forum()->nav_named_url()}</td>
 	<td class="small"><a href="{$x->first_post()->url()}">{$x->first_post()->create_time()|short_time}</a><br/>{$x->first_post()->author_name()}</td>

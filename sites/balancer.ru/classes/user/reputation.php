@@ -205,7 +205,7 @@ class user_reputation extends base_page
 //		class_load('cache_group', "user-{$uid}-reputation")->clean();
 
 		include_once("inc/navigation.php");
-		return go($this->url($this->total_pages(), false));
+		return go($this->url_ex($this->total_pages(), false));
 	}
 
 	function access() { return $this; }

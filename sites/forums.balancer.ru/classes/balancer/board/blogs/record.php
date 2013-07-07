@@ -2,10 +2,10 @@
 
 class balancer_board_blogs_record extends base_page_db
 {
-	function main_db() { return 'AB_FORUMS'; }
-	function main_table() { return 'blog'; }
+	function db_name() { return 'AB_FORUMS'; }
+	function table_name() { return 'blog'; }
 
-	function main_table_fields()
+	function table_fields()
 	{
 		return array(
 			'id' => 'post_id',

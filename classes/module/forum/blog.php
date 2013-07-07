@@ -2,7 +2,7 @@
 
 class module_forum_blog extends base_page
 {
-	function main_db() { return 'AB_FORUMS'; }
+	function db_name() { return 'AB_FORUMS'; }
 
 	private $_data = array();
 	function local_data()

@@ -2,8 +2,8 @@
 
 class airbase_keywords_vote extends base_object_db
 {
-	function main_db() { return 'AB_BORS'; }
-	function main_table() { return 'keywords_votes'; }
+	function db_name() { return 'AB_BORS'; }
+	function table_name() { return 'keywords_votes'; }
 
-	function main_table_fields() { return array('id', 'keyword_id', 'object_class_id', 'object_id', 'user_id', 'vote', 'create_time'); }
+	function table_fields() { return array('id', 'keyword_id', 'object_class_id', 'object_id', 'user_id', 'vote', 'create_time'); }
 }

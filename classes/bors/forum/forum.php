@@ -318,7 +318,8 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 		require_once('/var/www/balancer.ru/htdocs/cms/other/punbb-modified-forum/include/functions.php');
 	}
 
-	function url($page=NULL) { return ($cat = $this->category()) ? $cat->category_base_full().'viewforum.php?id='.$this->id() : NULL; }
+	function url() { return $this->url_ex($this->page()); }
+	function url_ex($page) { return ($cat = $this->category()) ? $cat->category_base_full().'viewforum.php?id='.$this->id() : NULL; }
 //	function url() { return 'http://www.balancer.ru/forum/punbb/viewforum.php?id='.$this->id(); }
 	function cache_static_can_be_dropped() { return false; }
 

@@ -62,7 +62,7 @@ class forum_post extends balancer_board_object_db
 	function left_join_fields()
 	{
 		return array(
-			$this->main_db() => array(
+			$this->db_name() => array(
 				'posts_cached_fields(post_id)' => array(
 					'flag_db' => 'flag',
 					'warning_id',
@@ -349,7 +349,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		else
 			$post = $this;
 
-		return $topic->url($post->topic_page())."#p".$post->id();
+		return $topic->url_ex($post->topic_page())."#p".$post->id();
 	}
 
 	function modify_time($exact = false)

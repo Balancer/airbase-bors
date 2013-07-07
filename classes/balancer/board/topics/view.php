@@ -91,7 +91,7 @@ class balancer_board_topics_view extends bors_view_container
 
 			if(!$me || $me->id() < 2)
 			{
-				$ref = $this->url($this->page());
+				$ref = $this->url_ex($this->page());
 				return bors_message(ec('Вы не авторизованы на этом домене. Авторизуйтесь, пожалуйста. Если не поможет - попробуйте стереть cookies вашего браузера.'), array('login_form' => true, 'login_referer' => $ref));
 			}
 
@@ -126,7 +126,7 @@ class balancer_board_topics_view extends bors_view_container
 		}
 
 		if($this->page() == 'last')
-			return go($this->url($this->total_pages()));
+			return go($this->url_ex($this->total_pages()));
 
 		if(!$topic->forum() || !$this->forum()->can_read())
 		{
@@ -135,10 +135,10 @@ class balancer_board_topics_view extends bors_view_container
 		}
 
 		if($this->page() > $topic->total_pages())
-			return go($this->url($topic->total_pages()));
+			return go($this->url_ex($topic->total_pages()));
 
 		if($topic->moved_to())
-			return go(bors_load('balancer_board_topic', $topic->moved_to())->url($topic->page()));
+			return go(bors_load('balancer_board_topic', $topic->moved_to())->url_ex($topic->page()));
 
 		template_jquery();
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");

@@ -39,7 +39,7 @@
 {/if}
 	<td id="vtt_{$t->id()}">
 
-		<a href="{$t->url('new')}"{if $updated} class="b"{/if}>{$t->title()}</a>
+		<a href="{$t->url_ex('new')}"{if $updated} class="b"{/if}>{$t->title()}</a>
 		{if $t->get('updated_count')}<small class="title_actions transgray small">&nbsp;(+{$t->updated_count()})</small>{/if}
 		{if $t->total_pages() > 1}<small><span class="topic_pages_links">{$t->title_pages_links()}</span></small>{/if}
 		{if $t->description()}<br /><small><i>{$t->description()}</i></small>{/if}

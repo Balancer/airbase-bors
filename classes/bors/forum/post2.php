@@ -62,8 +62,8 @@ class forum_post2 extends base_page_db
 	function left_join_fields()
 	{
 		return array(
-			$this->main_db() => array(
-//				$this->main_table() => $this->main_table_fields(),
+			$this->db_name() => array(
+//				$this->table_name() => $this->table_fields(),
 				'posts_cached_fields(post_id)' => array(
 //				'posts_cached_fields' => array(	'id' => 'post_id',
 					'flag_db' => 'flag',
@@ -315,7 +315,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		else
 			$post = $this;
 
-		return $topic->url($post->topic_page())."#p".$post->id();
+		return $topic->url_ex($post->topic_page())."#p".$post->id();
 	}
 
 	function modify_time($exact = false)

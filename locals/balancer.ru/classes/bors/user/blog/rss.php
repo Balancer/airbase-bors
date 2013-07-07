@@ -39,7 +39,7 @@ class user_blog_rss extends user_blog
 			{
 				include_once("funcs/texts.php");
 				$html = strip_text($html, 1024);
-				$html .= "<br /><br /><a href=\"".$topic->url(1).ec("\">Дальше »»»");
+				$html .= "<br /><br /><a href=\"".$topic->url().ec("\">Дальше »»»");
 			}
 			
 			$item->description = $html;

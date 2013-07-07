@@ -734,7 +734,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 					$item_status .= ' inew';
 					$icon_type = 'icon inew';
 					$subject = '<strong>'.$subject.'</strong>';
-					$subject_new_posts = "<span class=\"newtext\">[&nbsp;<a href=\"{$topic->url('new')}\" title=\"{$lang_common['New posts info']}\">".$lang_common['New posts'].'</a>&nbsp;]</span>';
+					$subject_new_posts = "<span class=\"newtext\">[&nbsp;<a href=\"{$topic->url_ex('new')}\" title=\"{$lang_common['New posts info']}\">".$lang_common['New posts'].'</a>&nbsp;]</span>';
 				}
 				else
 					$subject_new_posts = null;

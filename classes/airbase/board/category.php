@@ -41,7 +41,7 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 		$cat = $this;
 		while(!$cat->category_base() && $this->parent_category_id())
 			$cat = object_load('airbase_board_category', $this->parent_category_id());
-			
+
 		return $cat->category_base();
 	}
 
@@ -80,14 +80,14 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 			$subforum = $cats[] = object_load('airbase_board_category', $forum_id);
 			$cats = array_merge($cats, $subforum->all_subforums($processed));
 		}
-			
+
 		return $cats;
 	}
 
 	function direct_subforums_ids()
 	{
 		// Получаем одни forum_id для дочерних форумов первого уровня
-		$db = new DataBase(self::main_db());
+		$db = new DataBase(self::db_name());
 		$result = $this->db()->select_array('forums', 'id', array('cat_id' => $this->id()));
 		$db->close();
 		return $result;

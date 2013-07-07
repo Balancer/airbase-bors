@@ -61,7 +61,7 @@ if($_SERVER['HTTP_HOST']=='la2.wrk.ru' || $_SERVER['HTTP_HOST']=='la2.balancer.r
 		$topic_id = $m[1] + $fdiff;
 
 		if($topic = bors_load('balancer_board_topic', $topic_id))
-			return go($topic->url($m[2]+1));
+			return go($topic->url_ex($m[2]+1));
 		else
 			debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
 
@@ -73,7 +73,7 @@ if($_SERVER['HTTP_HOST']=='la2.wrk.ru' || $_SERVER['HTTP_HOST']=='la2.balancer.r
 		$topic_id = $m[1] + $fdiff;
 
 		if($topic = bors_load('balancer_board_topic', $topic_id))
-			return go($topic->url('last'));
+			return go($topic->url_ex('last'));
 		else
 			debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
 
@@ -116,7 +116,7 @@ if($_SERVER['HTTP_HOST']=='forums.airbase.ru')
 		$topic_id = $m[1];
 
 		if($topic = bors_load('balancer_board_topic', $topic_id))
-			return go($topic->url($m[2]+1));
+			return go($topic->url_ex($m[2]+1));
 		else
 			debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
 
@@ -128,7 +128,7 @@ if($_SERVER['HTTP_HOST']=='forums.airbase.ru')
 		$topic_id = $m[1];
 
 		if($topic = bors_load('balancer_board_topic', $topic_id))
-			return go($topic->url('last'));
+			return go($topic->url_ex('last'));
 		else
 			debug_hidden_log('forum-old-404', bors_lib_debug::request_info_string(), false);
 

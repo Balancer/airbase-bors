@@ -30,7 +30,7 @@ class forum_blog extends bors_page_db
 
 	function new_instance()
 	{
-		$tab = $this->main_table();
+		$tab = $this->table_name();
 
 		$this->db()->replace($tab, array('post_id' => $this->id(), 'blogged_time' => time()));
 	}

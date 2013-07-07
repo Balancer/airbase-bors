@@ -22,15 +22,15 @@ class forum_category extends bors_page_db
 	}
 
 function parent_category_id() { return @$this->data['parent_category_id']; }
-function set_parent_category_id($v, $dbup) { return $this->set('parent_category_id', $v, $dbup); }
+function set_parent_category_id($v, $dbup=true) { return $this->set('parent_category_id', $v, $dbup); }
 function order() { return @$this->data['order']; }
-function set_order($v, $dbup) { return $this->set('order', $v, $dbup); }
+function set_order($v, $dbup=true) { return $this->set('order', $v, $dbup); }
 function category_base() { return @$this->data['category_base']; }
-function set_category_base($v, $dbup) { return $this->set('category_base', $v, $dbup); }
+function set_category_base($v, $dbup=true) { return $this->set('category_base', $v, $dbup); }
 function bors_append() { return @$this->data['bors_append']; }
-function set_bors_append($v, $dbup) { return $this->set('bors_append', $v, $dbup); }
+function set_bors_append($v, $dbup=true) { return $this->set('bors_append', $v, $dbup); }
 function template() { return @$this->data['template']; }
-function set_template($v, $dbup) { return $this->set('template', $v, $dbup); }
+function set_template($v, $dbup=true) { return $this->set('template', $v, $dbup); }
 
 	function url()
 	{

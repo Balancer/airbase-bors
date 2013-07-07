@@ -7,7 +7,7 @@ class airbase_forum_admin_posts_movetree extends balancer_board_admin_page
 
 	function dont_move_tree() { return false; }
 
-	function main_db() { return config('punbb.database', 'AB_FORUMS'); }
+	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 
 	function parents()
 	{

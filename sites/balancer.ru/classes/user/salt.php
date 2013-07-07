@@ -2,9 +2,9 @@
 
 class user_salt extends base_object_db
 {
-	function main_db() { return 'AB_BORS'; }
-	function main_table()   { return 'user_salt'; }
-	function main_table_fields()
+	function db_name() { return 'AB_BORS'; }
+	function table_name()   { return 'user_salt'; }
+	function table_fields()
 	{
 		return array(
 			'id',
