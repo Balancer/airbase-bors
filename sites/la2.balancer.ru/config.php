@@ -23,3 +23,6 @@ register_vhost('mail.balancer.ru');
 register_vhost('navy.balancer.ru', NULL, '/var/www/navy.balancer.ru/bors-host');
 register_vhost('top.airbase.ru');
 register_vhost('www.wrk.ru');
+
+//if(config('is_developer'))
+//	config_set('debug_redirect_trace', true);

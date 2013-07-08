@@ -56,9 +56,9 @@ class balancer_board_main extends balancer_board_page
 		bors_objects_preload(array_merge($new_topics, $top_visit_topics), 'forum_id', 'balancer_board_forum', 'forum');
 
 		return array(
-			'updated_topics' => objects_array('balancer_board_topic', array(
-				'order' => '-modify_time',
-				'limit' => 15,
+			'updated_topics' => bors_find_all('balancer_board_topic', array(
+				'order' => '-last_post_create_time',
+				'limit' => 20,
 				'is_public' => 1,
 			)),
 

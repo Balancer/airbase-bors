@@ -64,11 +64,11 @@ $map = array(
 
 	'/test/ => airbase_main',
 
-	'/user/(\d+)/personal\.js => forum_js_personal(1)',
+	'/users?/(\d+)/personal\.js => forum_js_personal(1)',
 	'/_bors/j/users/(\d+)/personal\.js => forum_js_personal(1)',
 //	'/_bors/j/local/forum/topvisits\.js => forum_js_topvisits',
 
-	'/user/(\d+)/setvars.js => forum_user_js_setvars(1)',
+	'/users?/(\d+)/setvars.js => forum_user_js_setvars(1)',
 //	'/js/users/touch.js\?(.+) => user_js_touch(1)',
 	'/js/board/comments/(\d+)\.js => balancer_board_js_comments(1)',
 
@@ -127,50 +127,50 @@ $map = array(
 		'(/tools/search/)result/ => bors_tools_search_result',
 		'(/tools/)search/ => bors_tools_search',
 
-		'(/user/(\d+)/)use\-topics\.html => airbase_user_topics(2)',
-		'(/user/(\d+)/)use\-topics,(\d+)\.html => airbase_user_topics(2,3)',
+		'(/users?/(\d+)/)use\-topics\.html => airbase_user_topics(2)',
+		'(/users?/(\d+)/)use\-topics,(\d+)\.html => airbase_user_topics(2,3)',
 
-		'/user/(\d+)/setvars.js => forum_user_js_setvars(1)',
+		'/users?/(\d+)/setvars.js => forum_user_js_setvars(1)',
 
-		'/user/(\d+)/blog/ => user_blog(1)',
-		'/user/(\d+)/blog/index.html => redirect:user_blog(1)',
-		'/user/(\d+)/blog/(\d+).html => user_blog(1,2)',
-		'/user/(\d+)/blog\.html => redirect:user_blog(1)',
-		'/user/(\d+)/blog(\-(\d+))\.html => redirect:user_blog(1,3)',
-		'/user/(\d+)/blog/index\-(\d+)\.html => redirect:user_blog(1,2)',
+		'/users?/(\d+)/blog/ => user_blog(1)',
+		'/users?/(\d+)/blog/index.html => redirect:user_blog(1)',
+		'/users?/(\d+)/blog/(\d+).html => user_blog(1,2)',
+		'/users?/(\d+)/blog\.html => redirect:user_blog(1)',
+		'/users?/(\d+)/blog(\-(\d+))\.html => redirect:user_blog(1,3)',
+		'/users?/(\d+)/blog/index\-(\d+)\.html => redirect:user_blog(1,2)',
 
-		'/user/(\d+)/blog/rss.xml => user_blog_rss(1)',
+		'/users?/(\d+)/blog/rss.xml => user_blog_rss(1)',
 
-		'(/user/(\d+)/)posts/ => user_posts(2)',
-		'(/user/(\d+)/posts/)(\d+)/ => user_posts_year(2,3)',
-		'/user/(\d+)/posts/(\d+/\d+)/ => user_posts_month(1,2)',
-		'/user/(\d+)/posts/(\d+/\d+/\d+|last|first)/ => user_posts_day(1,2)',
+		'(/users?/(\d+)/)posts/ => user_posts(2)',
+		'(/users?/(\d+)/posts/)(\d+)/ => user_posts_year(2,3)',
+		'/users?/(\d+)/posts/(\d+/\d+)/ => user_posts_month(1,2)',
+		'/users?/(\d+)/posts/(\d+/\d+/\d+|last|first)/ => user_posts_day(1,2)',
 
-		'/user/(\d+)/rep\.gif => user_image_reputation(1)',
+		'/users?/(\d+)/rep\.gif => user_image_reputation(1)',
 
-		'/user/(\d+)/reputation/ => user_reputation(1)',
-		'/user/(\d+)/reputation\.html => user_reputation(1)',
-		'/user/(\d+)/reputation,(\d+)\.html => user_reputation(1,2)',
-		'/user/(\d+)/reputation,(\d+)\.html\?(.*) => user_reputation(1,page=2,ref=3)',
-		'/user/(\d+)/reputation\.html\?(.*) => user_reputation(1,ref=2)',
-		'/user/(\d+)/reputation/\?(.+) => user_reputation(1,ref=2)',
+		'/users?/(\d+)/reputation/ => user_reputation(1)',
+		'/users?/(\d+)/reputation\.html => user_reputation(1)',
+		'/users?/(\d+)/reputation,(\d+)\.html => user_reputation(1,2)',
+		'/users?/(\d+)/reputation,(\d+)\.html\?(.*) => user_reputation(1,page=2,ref=3)',
+		'/users?/(\d+)/reputation\.html\?(.*) => user_reputation(1,ref=2)',
+		'/users?/(\d+)/reputation/\?(.+) => user_reputation(1,ref=2)',
 
-		'(/user/(\d+)/)aliases\.html => airbase_user_aliases(2)',
+		'(/users?/(\d+)/)aliases\.html => airbase_user_aliases(2)',
 		'(/users/(\d+)/)aliases/ => airbase_user_aliases(2)',
 
-#		'/user/(\d+)/reputation.* => forum_main',
+#		'/users?/(\d+)/reputation.* => forum_main',
 
 		'(/)users/? => users_main',
 		'(/users/)toprep/? => users_toprep',
 		'(/users/)warnings/ => users_topwarnings',
 
-//		'/user/(\d+)/warnings\.js => user_js_warnings(1)',
-		'/user/(\d+)/warnings\.gif => forum_images_warnings(1)',
-		'(/user/(\d+)/)warnings/ => airbase_user_warnings(2)',
+//		'/users?/(\d+)/warnings\.js => user_js_warnings(1)',
+		'/users?/(\d+)/warnings\.gif => forum_images_warnings(1)',
+		'(/users?/(\d+)/)warnings/ => airbase_user_warnings(2)',
 		'(/users/(\d+)/)warnings/ => airbase_user_warnings(2)',
-		'(/user/(\d+)/)warnings\.html/?object=.* => airbase_user_warnings(2)',
-		'(/user/(\d+)/)warnings\.html => airbase_user_warnings(2)',
-		'(/user/(\d+)/)warnings,(\d+)\.html => airbase_user_warnings(2,3)',
+		'(/users?/(\d+)/)warnings\.html/?object=.* => airbase_user_warnings(2)',
+		'(/users?/(\d+)/)warnings\.html => airbase_user_warnings(2)',
+		'(/users?/(\d+)/)warnings,(\d+)\.html => airbase_user_warnings(2,3)',
 
 		'/users/images/rep\-map\.svg => balancer_users_images_repMap',
 

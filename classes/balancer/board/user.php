@@ -253,4 +253,26 @@ class balancer_board_user extends forum_user
 */
 		$warn = bors_new('airbase_user_warning', $data);
 	}
+
+	function twinks_count()
+	{
+		return bors_count('balancer_board_user', array('utmx' => $this->utmx()));
+	}
+
+	function active_twinks_count()
+	{
+		return bors_count('balancer_board_user', array(
+			'utmx' => $this->utmx(),
+			'last_post_time>' => time()-86400*30
+		));
+	}
+
+	static function __dev()
+	{
+		$u = bors_load('balancer_board_user', 95807);
+		var_dump($u->active_twinks_count());
+	}
+
+	function url() { return "http://www.balancer.ru/users/{$this->id()}/"; }
+	function url_ex($page) { return "http://www.balancer.ru/users/{$this->id()}/"; }
 }

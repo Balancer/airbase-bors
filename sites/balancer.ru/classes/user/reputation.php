@@ -1,6 +1,6 @@
 <?php
 
-class user_reputation extends base_page
+class user_reputation extends balancer_board_page
 {
 	var $user;
 
@@ -31,6 +31,8 @@ class user_reputation extends base_page
 
 		return false;
 	}
+
+	function url_ex($page) { return '/user/'.$this->id().'/reputation'.((!$page || $page == $this->default_page()) ? '/' : ','.$page.'.html'); }
 
 	function local_data()
 	{

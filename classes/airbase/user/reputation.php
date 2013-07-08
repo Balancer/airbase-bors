@@ -151,4 +151,7 @@ class airbase_user_reputation extends base_page_db
 			'comment_short' => 'Комментарий',
 		);
 	}
+
+	function url() { return "http://www.balancer.ru/user/{$this->target_user()->id()}/reputation/"; }
+	function url_ex($page) { return "http://www.balancer.ru/user/{$this->target_user()->id()}/reputation,{$page}.html"; }
 }

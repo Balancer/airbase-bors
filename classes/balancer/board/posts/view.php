@@ -24,7 +24,7 @@ class balancer_board_posts_view extends balancer_board_view
 		return NULL;
 	}
 
-	function template($body_template_name)
+	function set_body_template($body_template_name)
 	{
 		if(preg_match('/^[\w\-]+$/', $body_template_name))
 			$body_template_name = preg_replace('/^(.+)\.([^\.]+)$/', "$1.$body_template_name.$2", parent::body_template());

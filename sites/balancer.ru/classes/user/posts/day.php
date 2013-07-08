@@ -39,7 +39,7 @@ class user_posts_day extends balancer_board_page
 	{
 		template_noindex();
 		return 'forum/_header.html';
-	}	
+	}
 
 	private $_user = false;
 	function user()
