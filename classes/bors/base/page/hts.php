@@ -136,6 +136,8 @@ class base_page_hts extends base_page_db
 		return $url;
 	}
 
+	function url_ex($page) { return $this->url(); }
+
 	function post_set($data)
 	{
 		config_set('cache_disabled', true);

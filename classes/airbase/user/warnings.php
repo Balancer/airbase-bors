@@ -59,12 +59,17 @@ class airbase_user_warnings extends base_page
 	function total_items() { return bors_count('airbase_user_warning', array('user_id=' => $this->id(), '`expired_timestamp`<=NOW()')); }
 	function default_page() { return $this->total_pages(); }
 
-	function url($page = NULL)
+	function url_ex($page)
 	{
 		if(!$page || $this->total_pages() == 1)
-			return "http://www.balancer.ru/user/".$this->id()."/warnings.html"; 
+			$url = "http://www.balancer.ru/user/".$this->id()."/warnings.html"; 
 		else
-			return "http://www.balancer.ru/user/".$this->id()."/warnings,{$page}.html"; 
+			$url = "http://www.balancer.ru/user/".$this->id()."/warnings,{$page}.html"; 
+
+		if($qs = @$_SERVER['QUERY_STRING'])
+			$url .= '?'.$qs;
+
+		return $url;
 	}
 
 	function cache_static() { return config('static_forum') ? rand(80000, 90000) : 0; }

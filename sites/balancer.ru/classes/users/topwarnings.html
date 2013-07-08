@@ -1,19 +1,24 @@
 <table class="btab" width="100%">
 <tr><th colSpan="6">Последние 25 штрафов:</th></tr>
 <tr>
-	<th>Дата истечения</th>
-	<th>Пользователь</th>
-	<th>Сообщение</th>
-	<th>Штраф, причина</th>
-	<th>Комментарий</th>
-	<th>Модератор</th>
+	<th colspan="2">Дата</th>
+	<th rowspan="2">Пользователь</th>
+	<th rowspan="2">Сообщение</th>
+	<th rowspan="2">Штраф, причина</th>
+	<th rowspan="2">Комментарий</th>
+	<th rowspan="2">Модератор</th>
+</tr>
+<tr>
+	<th>выставления</th>
+	<th>истечения</th>
 </tr>
 {foreach from=$warnings_last item="w"}
-<tr class="small">
-	<td style="color: {if $w->score()>0}red{else}green{/if};">{$w->expire_time()|full_time}</td>
+<tr class="small" style="color: {if $w->score()>0}red{else}green{/if};">
+	<td>{$w->create_time()|date:'d.m.y H:i'}</td>
+	<td>{$w->expire_time()|date:'d.m.y'}</td>
 	<td>{$w->user()|get:"titled_url"}</td>
 	<td>{$w->target()|get:"titled_link"}</td>
-	<td style="color: {if $w->score()>0}red{else}green{/if};">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</td>
+	<td>{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</td>
 	<td>{$w->source()|lcmlbb}</td>
 	<td>{$w->moderator()|get:"titled_url"}</td>
 </tr>

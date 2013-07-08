@@ -37,8 +37,12 @@ class balancer_ajax_thumb_vote extends base_object
 
 		if(intval($score) < 0)
 		{
-			if($me->tomonth_posted() < 15)
+			$twinks = max(1, $me->active_twinks_count());
+			if($me->tomonth_posted() < 15*$twinks)
 				return "<small>У Вас слишком низкая активность на форумах</small>";
+
+			if($me->create_time() > time() - 86400)
+				return "<small>Нельзя ставить отрицательные оценки в первые сутки после регистрации</small>";
 
 			if($target->modify_time() < time() - 86400*14)
 				return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";
@@ -58,7 +62,7 @@ class balancer_ajax_thumb_vote extends base_object
 				));
 
 
-				if($user_limit < $today_user_negatives)
+				if($user_limit < $today_user_negatives * $twinks)
 				{
 					debug_hidden_log('_vote_limits', "User votes limits stop. user_limit=$user_limit, today_user_negatives=$today_user_negatives", 1);
 					return "<small>Вы исчерпали сегодняшний лимит отрицательных оценок [$user_limit]</small>";
@@ -78,7 +82,7 @@ class balancer_ajax_thumb_vote extends base_object
 
 
 //				debug_hidden_log('_test_limits', "User votes limits test. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
-				if($tomonth_user_negatives > $tomonth_user_positives + 10)
+				if($tomonth_user_negatives > $tomonth_user_positives + 10/$twinks)
 				{
 //					debug_hidden_log('_vote_limits', "User votes limits stop. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
 					return "<small>Вы слишком озлоблены. Расслабьтесь и будьте добрее.</small>";

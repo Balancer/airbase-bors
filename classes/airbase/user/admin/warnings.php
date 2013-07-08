@@ -38,7 +38,10 @@ class airbase_user_admin_warnings extends airbase_user_warnings
 
 	function cache_static() { return 0; }
 
-	function url() { return '/admin/users/'.$this->id().'/warnings.html'.(($obj=$this->args('object'))?"?object=$obj":''); }
+	function url_ex($page)
+	{
+		return '/admin/users/'.$this->id().'/warnings.html'.(($obj=$this->args('object'))?"?object=$obj":'');
+	}
 
 	function total_items() { return 0; }
 
