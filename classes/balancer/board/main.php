@@ -65,7 +65,7 @@ class balancer_board_main extends balancer_board_page
 			'new_topics' => $new_topics,
 			'top_visit_topics' => $top_visit_topics,
 
-			'top_tags' => objects_array('common_keyword', array(
+			'top_tags' => bors_find_all('common_keyword', array(
 				'targets_count>' => 50,
 				'order' => '-targets_count',
 				'limit' => 50,
