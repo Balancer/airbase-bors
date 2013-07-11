@@ -79,14 +79,18 @@ class balancer_board_user extends forum_user
 		}
 
 //		☠😸🐱❤
-		$skulls = str_repeat('☠', $full_skulls = intval($warnings/2));
+		$char = $warnings > 0 ? '☠' : '☤';
+		$color = $warnings > 0 ? 'black' : '#080';
+		$half_color = $warnings > 0 ? '#999' : '#cfc';
+		$skulls = str_repeat($char, $full_skulls = intval(abs($warnings)/2));
+
 		if($full_skulls*2 != $warnings)
-			$skulls .= '<span style="color:#999">☠</span>';
+			$skulls .= '<span style="color:'.$half_color.'">'.$char.'</span>';
 
 		if(!$skulls)
 			return '';
 
-		return "<span class=\"warn\" style=\"margin:0; padding:0; color: black\">{$skulls}</span>";
+		return "<span class=\"warn\" style=\"margin:0; padding:0; color: {$color}\">{$skulls}</span>";
 	}
 
 	function avatar() { return balancer_board_avatar::make($this->id()); }
@@ -209,7 +213,7 @@ class balancer_board_user extends forum_user
 
 		if($warn)
 		{
-			if($warn->moderator_id() < 1 && $warn->score() < $score)
+			if($warn->moderator_id() < 1)
 			{
 				$warn->set_score($score);
 				$warn->set_source($message);
