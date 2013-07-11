@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_keywords_tags extends base_page
+class balancer_board_keywords_tags extends balancer_board_page
 {
 //	function can_be_empty() { return !bors()->client()->is_bot(); }
 //	function is_loaded() { return count($this->items()); }
@@ -69,7 +69,7 @@ class balancer_board_keywords_tags extends base_page
 
 	}
 
-	function url($page = 1)
+	function url_ex($page)
 	{
 		$keywords = array_map('urlencode', $this->keywords());
 

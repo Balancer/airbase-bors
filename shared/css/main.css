@@ -573,6 +573,22 @@ blockquote .box {
 	color: #884;
 }
 
+.alert {
+	clear: both;
+	border: 1px solid #cc9;
+	padding: 2px;
+	margin: 2px 0;
+	background-color: #ffc;
+	font-size: x-small;
+	color: #884;
+}
+
+.alert-success {
+	border: 1px solid #9c9;
+	background-color: #cfc;
+	color: #484;
+}
+
 .edited_note {
 	text-align: right;
 	padding: 1px;

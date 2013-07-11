@@ -7,7 +7,7 @@ class module_forum_lenta_public extends bors_module
 	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 
 	private $bdata = array();
-	function local_template_data_set()
+	function body_data()
 	{
 		$limit = $this->args('limit', 25);
 		$page_id = $this->page().','.$limit;

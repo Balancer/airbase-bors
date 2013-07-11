@@ -8,6 +8,11 @@ function lt_ab($args)
 		require_once('inc/images.php');
 		$user = bors_find_first('balancer_board_user', array('title' => $user_name));
 		if(!$user)
+			$user = bors_find_first('balancer_board_user', array('username' => $user_name));
+		if(!$user)
+			$user = bors_find_first('balancer_board_user', array('user_nick' => $user_name));
+
+		if(!$user)
 			return "$user_name";
 
 		$text = defval($args, 'text', $user_name);

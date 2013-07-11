@@ -19,6 +19,39 @@
 {/if}
 </ul>
 
+{if config('is_developer')}
+<h2>Отношения с пользователями</h2>
+<table class="nul w100p"><tr><td>
+	<table class="btab w100p">
+	<caption>Лучше всех к нему относятся</caption>
+	<tr>
+		<th>Пользователь</th>
+		<th>Отношение</th>
+	</tr>
+	{foreach $friends_from as $u}
+	<tr>
+		<td>{$u->from_user()->titled_link()}</td>
+		<td>{$u->score()}</td>
+	</tr>
+	{/foreach}
+	</table>
+</td><td>
+	<table class="btab w100p">
+	<caption>Лучше он относится к</caption>
+	<tr>
+		<th>Пользователь</th>
+		<th>Отношение</th>
+	</tr>
+	{foreach $friends_to as $u}
+	<tr>
+		<td>{$u->to_user()->titled_link()}</td>
+		<td>{$u->score()}</td>
+	</tr>
+	{/foreach}
+	</table>
+</td></table>
+{/if}
+
 <h2>Ссылки</h2>
 <ul>
 <li><a href="blog/">Блог</a></li>

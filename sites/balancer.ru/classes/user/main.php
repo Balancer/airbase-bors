@@ -35,6 +35,22 @@ class user_main extends base_page
 
 	function cache_static() { return false; } // Не кешировать. Нет обработки админ-инфо
 
+	function body_data()
+	{
+		return array_merge(parent::body_data(), array(
+			'friends_from' => bors_find_all('balancer_board_users_relation', array(
+				'to_user_id' => $this->id(),
+				'order' => '-score',
+				'limit' => 10,
+			)),
+			'friends_to' => bors_find_all('balancer_board_users_relation', array(
+				'from_user_id' => $this->id(),
+				'order' => '-score',
+				'limit' => 10,
+			)),
+		));
+	}
+
 	function page_data()
 	{
 		$db = new driver_mysql('AB_FORUMS');

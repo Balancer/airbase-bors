@@ -159,6 +159,9 @@ class balancer_ajax_thumb_vote extends base_object
 		if($score < 0 && $target_score <= -5)
 			$user->set_object_warning($target, intval(-$target_score/5), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
 
+		if($score > 0 && $target_score >= 10 && $target->create_time() > time() - 86400*14)
+			$user->set_object_warning($target, intval(-$target_score/10), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
+
 		return $return;
 	}
 }
