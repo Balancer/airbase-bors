@@ -98,8 +98,9 @@
 Это сообщение редактировалось {$p->edited()|strftime:"%d.%m.%Y в %H:%M"}
 </div>{/if}
 
-{if $w = $p->warning()}<div class="warning_note">
-<b>{$w->moderator_name()}:</b> предупреждение ({$w->score()})
+{if $w = $p->warning()}<div class="{if $w->score() > 0}warning_note{else}alert alert-success{/if}">
+<b>{$w->moderator_name()}:</b>
+{if $w->score() > 0}предупреждение ({$w->score()}) {else}поощрение ({-$w->score()}) {/if}
 {if $w->type_id()} по категории «<b>{$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</b>»{/if}
 {if $w->source()}(<i>{$w->source()}</i>){/if}
 .

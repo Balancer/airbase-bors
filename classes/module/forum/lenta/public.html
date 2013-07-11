@@ -1,6 +1,6 @@
 {foreach from=$topics item=t}
 <div class="lenta_record">
-<h3><a href="{$t->post()|get:url}">{$t->title()}</a></h3>
+<h3><a href="{$t->post()->url_in_container()}">{$t->title()}</a></h3>
 <div class="lenta_record_content">
 <small><strong>{$t->owner()|get:title}, {$t->topic()|get:create_time|strftime:"%Y-%m-%d %H:%M"}</strong>, <i>{$t->forum()|get:titled_url}</i>.</small>
 {assign var="owner" value=$t->owner()}

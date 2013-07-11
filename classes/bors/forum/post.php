@@ -360,7 +360,8 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		return $this->create_time($exact);
 	}
 
-	function url($page=NULL)
+	function url_ex($page) { return $this->url(); }
+	function url()
 	{
 		$topic = $this->topic();
 		if($topic)

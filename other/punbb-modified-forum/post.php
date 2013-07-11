@@ -637,7 +637,7 @@ if (isset($_POST['form_sent']))
 			}
 		}
 */
-		if(!empty($_POST['as_blog']) && !$post->is_spam())
+		if(!empty($_POST['as_blog']) && !$post->get('is_spam'))
 			$blog = balancer_board_blog::create($post, @$_POST['keywords']);
 
 		if(!empty($_POST['is_translate']) && !$post->is_spam())
