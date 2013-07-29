@@ -51,6 +51,10 @@ class balancer_ajax_thumb_vote extends base_object
 				return bors_message(ec('У Вас более трёх активных штрафов. Вы можете ставить только положительные оценки'));
 
 			$user_limit = $me->messages_daily_limit();
+
+			if(!$user_limit && $me->warnings())
+				$user_limit = 10;
+
 			if($user_limit > 0)
 			{
 				$user_limit = intval($user_limit / ($me->warnings()+1))+1;
@@ -61,11 +65,10 @@ class balancer_ajax_thumb_vote extends base_object
 					'create_time>' => time() - 86400,
 				));
 
-
 				if($user_limit < $today_user_negatives * $twinks)
 				{
 					debug_hidden_log('_vote_limits', "User votes limits stop. user_limit=$user_limit, today_user_negatives=$today_user_negatives", 1);
-					return "<small>Вы исчерпали сегодняшний лимит отрицательных оценок [$user_limit]</small>";
+					return "<small>Вы исчерпали сегодняшний лимит отрицательных оценок ($user_limit)</small>";
 				}
 
 				$tomonth_user_negatives = bors_count('bors_votes_thumb', array(
@@ -80,14 +83,12 @@ class balancer_ajax_thumb_vote extends base_object
 					'create_time>' => time() - 86400*30,
 				));
 
-
-//				debug_hidden_log('_test_limits', "User votes limits test. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
+				debug_hidden_log('_test_limits', "User votes month limits test. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
 				if($tomonth_user_negatives > $tomonth_user_positives + 10/$twinks)
 				{
-//					debug_hidden_log('_vote_limits', "User votes limits stop. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
+					debug_hidden_log('_vote_limits', "User votes angry limits stop. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
 					return "<small>Вы слишком озлоблены. Расслабьтесь и будьте добрее.</small>";
 				}
-
 			}
 		}
 
@@ -159,8 +160,8 @@ class balancer_ajax_thumb_vote extends base_object
 		if($score < 0 && $target_score <= -5)
 			$user->set_object_warning($target, intval(-$target_score/5), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
 
-		if($score > 0 && $target_score >= 10 && $target->create_time() > time() - 86400*14)
-			$user->set_object_warning($target, intval(-$target_score/10), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
+		if($score > 0 && $target_score >= 15 && $target->create_time() > time() - 86400*14)
+			$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
 
 		return $return;
 	}
