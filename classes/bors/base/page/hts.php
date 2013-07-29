@@ -22,7 +22,10 @@ class base_page_hts extends base_page_db
 		return $url;
 	}
 
-	function can_cached() { return false; }
+//	function can_cached() { return false; }
+	function cache_static() { return $this->modify_time() > time() - 86400*7 ? rand(3600, 7200) : rand(86400*7, 86400*30); }
+//	function cache_static() { return config('static_forum') ? rand(86400, 7*86400) : 0; }
+
 	function storage_engine() { return 'storage_db_mysql_smart'; }
 	function config_class() { return config('admin_config_class'); }
 	function html_disable() { return false; }
@@ -35,6 +38,8 @@ class base_page_hts extends base_page_db
 	function fields_first() { return 'stb_title stb_source stb_description'; }
 	function db_name() { return config('mysql_database'); }
 	function table_name() { return NULL; }
+
+	function owner() { return bors_load('balancer_board_user', 10000); }
 
 	function fields()
 	{
@@ -127,8 +132,6 @@ class base_page_hts extends base_page_db
 		return parent::init();
 	}
 
-	function cache_static() { return config('static_forum') ? rand(86400, 7*86400) : 0; }
-
 	function url()
 	{
 		$url = preg_replace('!http://airbase\.ru!', 'http://www.airbase.ru', $this->id());
@@ -138,7 +141,7 @@ class base_page_hts extends base_page_db
 
 	function url_ex($page) { return $this->url(); }
 
-	function post_set($data)
+	function post_set(&$data)
 	{
 		config_set('cache_disabled', true);
 		$text = lcml($data['source'],
