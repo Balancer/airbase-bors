@@ -27,7 +27,8 @@ class forum_tools_post_do extends base_page
 				)))
 				{
 					foreach($objects as $obj)
-						$obj->target()->clear_thumbnails();
+						if($t = $obj->target())
+							$t->clear_thumbnails();
 				}
 
 				config_set('lcml_cache_disable_full', true);

@@ -646,6 +646,14 @@ function avatar_thumb($geo)
 		)));
 	}
 
+	function toweek_posted()
+	{
+		return $this->__havefc() ? $this->__lastc() : $this->__setc(bors_count('balancer_board_post', array(
+			'owner_id' => $this->id(), 
+			'create_time>' => time()-86400*7,
+		)));
+	}
+
 	function tomonth_posted()
 	{
 		return $this->__havec('tomonth_posted') ? $this->__lastc() : $this->__setc(bors_count('balancer_board_post', array(
