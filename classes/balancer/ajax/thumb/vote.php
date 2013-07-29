@@ -47,8 +47,8 @@ class balancer_ajax_thumb_vote extends base_object
 			if($target->modify_time() < time() - 86400*14)
 				return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";
 
-			if($me->warnings() > 3)
-				return bors_message(ec('У Вас более трёх активных штрафов. Вы можете ставить только положительные оценки'));
+			if($me->warnings() >= 3)
+				return bors_message(ec('У Вас три или более активных штрафа. Вы можете ставить только положительные оценки'));
 
 			$user_limit = $me->messages_daily_limit();
 
