@@ -4,6 +4,23 @@ class balancer_board_topic extends forum_topic
 {
 	function extends_class_name() { return 'forum_topic'; }
 
+	function cache_static()
+	{
+		if(!$this->is_public_access())
+			return 0;
+
+		if($this->modify_time() < time() - 86400*365)
+			return 86400*rand(300, 900);
+
+		if($this->modify_time() < time() - 86400*30)
+			return 86400*rand(7, 30);
+
+		if($this->modify_time() < time() - 86400*7)
+			return rand(3600, 86400);
+
+		return 0;
+	}
+
 	function storage_engine() { return 'bors_storage_mysql'; }
 	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'topics'; }

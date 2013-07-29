@@ -88,6 +88,7 @@ class forum_user extends balancer_board_object_db
 			'email',
 			'has_invalid_email',
 			'email_setting',
+			'is_dead',
 			'is_destructive',
 			'invalid_mail_message',
 			'rep_r', 'rep_g', 'rep_b',
@@ -316,7 +317,7 @@ function avatar_thumb($geo)
 	}
 
 
-	function url($page=NULL) { return "http://www.balancer.ru/user/{$this->id()}/"; }
+	function url() { return "http://www.balancer.ru/user/{$this->id()}/"; }
 	function parents() { return array("http://www.balancer.ru/users/"); }
 
 	function is_banned()

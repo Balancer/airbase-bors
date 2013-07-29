@@ -411,8 +411,6 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 	function is_public_access() { return $this->forum_id() && $this->forum()->is_public_access(); }
 
-	function cache_static() { return $this->is_public_access() && config('static_forum') ? rand(86400, 86400*3) : 0; }
-
 	function base_url() { return $this->forum_id() && $this->forum() ? $this->forum()->category()->category_base_full() : '/'; }
 
 	function title_url()

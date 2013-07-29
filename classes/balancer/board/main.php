@@ -9,6 +9,8 @@ class balancer_board_main extends balancer_board_page
 	function parents() { return array('http://www.balancer.ru/'); }
 	function template() { return 'forum/wide.html'; }
 
+	function cache_static() { return 60; }
+
 	function pre_show()
 	{
 		base_object::add_template_data_array('head_append', '<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>');

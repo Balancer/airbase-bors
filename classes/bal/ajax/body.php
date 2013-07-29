@@ -4,6 +4,12 @@ class bal_ajax_body extends bors_page
 {
 	function pre_show()
 	{
+		if(!bors()->user())
+		{
+			bors_hidden_log('bots', "Unregistered user try to load AJAX body");
+			return NULL;
+		}
+
 		if(parent::pre_show() === true)
 			return true;
 
