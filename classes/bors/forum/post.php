@@ -240,7 +240,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	function _make_html($fast = false)
 	{
-		if(($mcn = $this->markup_class_name()) && ($mce = bors_load($mcn, NULL)))
+		if(($mcn = $this->get('markup_class_name')) && ($mce = bors_load($mcn, NULL)))
 		{
 			$html = $mce->parse($this->post_source(), $this);
 		}

@@ -129,7 +129,7 @@ class balancer_ajax_thumb_vote extends base_object
 
 				$current_page = $target->db()->select('posts_cached_fields', 'MAX(`best_page_num`)', array());//bors_find_first('balancer_board_posts_cached', array('order' => 'MAX(best_page_num)'))->best_page_num();
 				$last_count = bors_count('balancer_board_posts_cached', array('best_page_num' => $current_page));
-				if($count >= 25)
+				if($last_count >= 25)
 					$current_page++;
 
 //				if(config('is_developer')) var_dump($current_page, $last_count);
@@ -157,8 +157,8 @@ class balancer_ajax_thumb_vote extends base_object
 
 //		if(config('is_developer')) var_dump($score, $target_score);
 
-		if($score < 0 && $target_score <= -5)
-			$user->set_object_warning($target, intval(-$target_score/5), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
+		if($score < 0 && $target_score <= -7)
+			$user->set_object_warning($target, intval(-$target_score/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
 
 		if($score > 0 && $target_score >= 15 && $target->create_time() > time() - 86400*14)
 			$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');

@@ -5,7 +5,11 @@ class balancer_board_posts_best extends bors_page
 	function title() { return ec('Лучшие сообщения форумов Balancer.ru'); }
 	function nav_name() { return ec('лучшие сообщения'); }
 
-	function cache_static() { return $this->page() == $this->default_page() ? rand(300, 600) : rand(600, 3600); }
+	function cache_static()
+	{
+		$diff_p = abs($this->default_page() - $this->page());
+		return rand(600, 3600) + $diff_p*rand(36000,72000);
+	}
 
 	function config_class() { return 'balancer_board_config'; }
 	function template() { return 'xfile:/var/www/wrk.ru/bors-site/templates/wrk/light.html'; }
