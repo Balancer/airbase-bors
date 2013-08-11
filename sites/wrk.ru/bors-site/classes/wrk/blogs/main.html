@@ -1,0 +1,12 @@
+{foreach from=$blogs item="b"}
+{assign var="p" value=$b->post()}
+{if $p}
+   {include file="xfile:forum/post-wrk.html" 
+   		strip="2000"
+   		skip_message_footer=1
+   		show_title=$p->topic()->title()
+   		skip_tools=1
+   		forum=$p->topic()->forum()
+   	}
+{/if}
+{/foreach}
