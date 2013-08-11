@@ -153,8 +153,10 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 {if not $skip_ad && not $skip_top_ad}
 {* include file="xfile:forum/ads/top-ad-podarini.html" *}
-	{if $smarty.server.HTTP_HOST == 'forums.airbase.ru'}
-		{include file="xfile:forum/ads/top-ad-balancer.html"}
+	{if 0 && $smarty.server.HTTP_HOST == 'forums.airbase.ru'}
+		{* include file="xfile:forum/ads/top-ad-balancer.html" *}
+		{*  include file="xfile:forum/ads/begun-forums.airbase.ru.html" *}
+		{include file="xfile:forum/ads/begun-top-auto.html"}
 	{else}
 		{include file="xfile:forum/ads/top-ad-google.html"}
 	{/if}
@@ -242,7 +244,11 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 {if not $skip_ad}
 <div class="center"><div class="top-ad">
-{include file="xfile:forum/ads/google-ads-bottom.html"}
+{if 0 && $smarty.server.HTTP_HOST == 'forums.airbase.ru'}
+	{include file="xfile:forum/ads/begun-bottom-auto-forums-airbase.html"}
+{else}
+	{include file="xfile:forum/ads/google-ads-bottom.html"}
+{/if}
 </div></div>
 {/if}
 		<dl class="box">
@@ -308,7 +314,11 @@ createCookie('readedTopics', readed.join(' '), 3)
 		</dd>
 		</dl>
 
-{include file="xfile:forum/ads/google-ads-left-200x200-lazy.html"}
+{if 0 && $smarty.server.HTTP_HOST == 'forums.airbase.ru'}
+	{include file="xfile:forum/ads/begun-topleft-200x300.html"}
+{else}
+	{include file="xfile:forum/ads/google-ads-left-200x200-lazy.html"}
+{/if}
 
 <dl class="box w200">
 <dt>Персональное</dt>

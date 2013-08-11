@@ -103,6 +103,12 @@ class balancer_board_blog extends forum_blog
 		if(empty($topic))
 			$topic = $this->topic();
 
+		if(empty($topic))
+		{
+			debug_hidden_log('lost_topic', "Lost topic {$this->topic_id()} for post {$this}");
+			return;
+		}
+
 		$this->set_owner_id($post->owner_id(), true);
 		$this->set_topic_id($topic->id(), true);
 		$this->set_forum_id($topic->forum_id(), true);
