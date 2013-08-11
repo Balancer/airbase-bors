@@ -1,0 +1,128 @@
+div.avatar_block {
+	width: 100px;
+	float: left;
+	margin: 0px 0px 8px -110px;
+	padding: 10px 10px 0 0;
+	display: block;
+	background-color: white;
+	text-align: center;
+	overflow: hidden;
+}
+
+h3 a { text-decoration: none; }
+.nosub a { text-decoration: none; }
+
+div.avatar_block h4 {
+	font-size: 9pt;
+	font-weight: 900;
+	padding: 0;
+	margin: 0;
+}
+
+div.avatar_block h5 {
+	font-size: 8pt;
+	padding: 0;
+	margin: 0;
+	font-weight: normal;
+}
+
+div.avatar_block div {
+	width: 100px;
+	height: 100px;
+	margin: 0;
+	text-align: center;
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+div.post {
+	margin: 10px 0 20px 105px;
+	padding: 0px;
+	clear: both;
+	background-color: #ffffff;
+}
+
+div.post div.head {
+	background-color: #999;
+	border-bottom: 1px solid #999;
+}
+
+div.post div.head, div.post div.head a {
+	margin: 0px;
+	padding: 1px;
+	font-weight: 900;
+	font-size: 1.0em;
+	text-align: left;
+	color: #ffe;
+}
+
+div.post div.head div.to-right div {
+	margin: 0 4px;
+}
+
+div.post div.head div.to-right img {
+	cursor: pointer;
+}
+
+div.post-body {
+	text-align: justify;
+	padding: 4px;
+	margin: 0px;
+	background-color: white;
+}
+
+div.post div.head {
+	margin: 0 0 0 -110px;
+}
+
+.code {
+	background: white;
+	border: 1px solid #ccc;
+	margin-top: 0;
+	padding-left: 4px;
+	font-size: 12pt;
+}
+
+.code-head {
+	background: #ccc;
+	color: white;
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	margin-bottom: 0;
+	font-weight: bold;
+}
+
+BLOCKQUOTE {
+	border-color: #ddd #e8e8e8 #eee #ddd;
+	BORDER-STYLE: solid;
+	BORDER-WIDTH: 1px;
+	font-size: 90%;
+	background-color: #eee;
+	margin: 2px 5px;
+	padding: 4px;
+}
+
+div.body {
+	margin: 0 auto !important;
+	max-width: 20cm;
+}
+
+div.header ul.top-tabs {
+	text-align: center;
+}
+
+a.rep, a.warn { font-size: 16pt; text-decoration: none; }
+
+.to-right {
+	float: right;
+}
+
+.to-left {
+	float: left;
+}
+
+.q {
+	font-size: 85%;
+	color: #999;
+}
