@@ -22,6 +22,8 @@
 
 ************************************************************************/
 
+// $forum_temporary_redirect = 'http://balancer.endofinternet.net/mybb/thread-4.html';
+
 if (isset($_GET['action']))
 	define('PUN_QUIET_VISIT', 1);
 

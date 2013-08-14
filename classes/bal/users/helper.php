@@ -45,7 +45,7 @@ class bal_users_helper extends bors_object
 				'redirect' => $redirect,
 			)));
 
-			return $haction->url($next_domain);
+			return $haction->url_ex($next_domain);
 		}
 
 		return $redirect ? $redirect : 'http://forums.balancer.ru/';
@@ -84,7 +84,7 @@ class bal_users_helper extends bors_object
 				'expired' => $expired,
 			)));
 
-			return $haction->url($next_domain);
+			return $haction->url_ex($next_domain);
 		}
 
 		return $redirect ? $redirect : 'http://forums.balancer.ru/';
@@ -120,7 +120,7 @@ class bal_users_helper extends bors_object
 				'profile_id' => $profile_id,
 			)));
 
-			return $haction->url($next_domain);
+			return $haction->url_ex($next_domain);
 		}
 
 		return $redirect ? $redirect : 'http://forums.balancer.ru/personal/clients/';

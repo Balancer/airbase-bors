@@ -490,7 +490,7 @@ function avatar_thumb($geo)
 		));
 
 		config_set('__login_redir', true);
-		return go($haction->url($next_domain), false, 0, true);
+		return go($haction->url_ex($next_domain), false, 0, true);
 	}
 
 	function cookies_set($ttl=3600, $fake_login = false)
@@ -573,7 +573,7 @@ function avatar_thumb($geo)
 		));
 //		exit('go '.$haction->url($next_domain));
 //		config_set('redirect_by_html', true);
-		return go($haction->url($next_domain));
+		return go($haction->url_ex($next_domain));
 	}
 
 	function reputation_titled_url() { return "<a href=\"http://www.balancer.ru/user/{$this->id()}/reputation/\">{$this->title()}</a>"; }

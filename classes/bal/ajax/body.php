@@ -6,7 +6,7 @@ class bal_ajax_body extends bors_page
 	{
 		if(!bors()->user())
 		{
-			bors_hidden_log('bots', "Unregistered user try to load AJAX body");
+			debug_hidden_log('bots', "Unregistered user try to load AJAX body");
 			return NULL;
 		}
 

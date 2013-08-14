@@ -7,5 +7,5 @@ class balancer_main extends balancer_page
 	function template() { return 'blue_spring'; }
 	function can_public_load() { return true; }
 
-	function cache_static() { return config('static_forum') ? 600 : 0; }
+	function cache_static() { return rand(300, 600); }
 }

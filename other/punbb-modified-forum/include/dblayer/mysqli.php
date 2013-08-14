@@ -53,6 +53,8 @@ class DBLayer
 
 		if (!$this->link_id)
 			error('Unable to connect to MySQL and select database. MySQL reported: '.mysqli_connect_error(), __FILE__, __LINE__);
+
+		echo 'connect mysqli';
 	}
 
 

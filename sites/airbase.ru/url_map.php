@@ -41,6 +41,8 @@ $map = array(
 //	'(.*) => base_page_hts(1,host=0)',
 //	'(.*) => airbase_page(1,host=0)',
 
+//	'(.*) => airbase_pages_db(1)',
+
 	'/([^/]+)/ => airbase_keywords_old(1)',
 	'/([^/]+) => airbase_keywords_old(1)',
 );

@@ -612,7 +612,8 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		bors()->changed_save();
 
 		$this->db()->query("
-			UPDATE posts AS t 
+			UPDATE posts AS t
+				USE INDEX (`by_tid_ordered`)
 				SET t.page = FLOOR((SELECT @rn:= @rn + 1 FROM (SELECT @rn:= -1) s)/{$this->items_per_page()})+1
 				WHERE t.topic_id = {$this->id()} AND is_deleted = 0
 				ORDER BY t.`order`, t.`posted`;

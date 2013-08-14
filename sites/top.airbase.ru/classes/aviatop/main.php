@@ -21,6 +21,6 @@ class aviatop_main extends base_page_paged
 		if(!is_null($this->_total))
 			return $this->_total;
 
-		return $this->_total = $this->db('top')->get('SELECT COUNT(DISTINCT(top_id)) FROM `aviatop_week`');
+		return $this->_total = $this->db('AVIATOP')->get('SELECT COUNT(DISTINCT(top_id)) FROM `aviatop_week`');
 	}
 }

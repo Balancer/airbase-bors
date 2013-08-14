@@ -48,7 +48,7 @@ if(!$id)
 	{
 //		echo "Check: {$r['base_uri']}<br />\n";
 		if($r['base_uri'] && (
-			preg_match("!^{$r['base_uri']}!", $GLOBALS['main_uri'])
+			preg_match("!^{$r['base_uri']}!", str_replace('.home.balancer.ru', '.ru', $GLOBALS['main_uri']))
 			|| preg_match("!^".str_replace('www.', '', $r['base_uri'])."!", $GLOBALS['main_uri'])
 		))
 		{

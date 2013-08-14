@@ -5,7 +5,7 @@ class airbase_top_logo extends base_image_png
 	function make_image()
 	{
 		$id = $this->id();
-		$db = new driver_mysql('top');
+		$db = new driver_mysql('AVIATOP');
 
 		$x = $db->get("SELECT place, visits FROM aviatop_members WHERE id = $id");
 		$place  = $x['place'];
@@ -52,7 +52,7 @@ class airbase_top_logo extends base_image_png
 		if($cache->get('aviatop_logo', $id))
 			return $cache->last();
 
-		$db = new driver_mysql('top');
+		$db = new driver_mysql('AVIATOP');
 
 		$x = $db->get("SELECT place, visits FROM aviatop_members WHERE id = $id");
 		$place  = $x['place'];

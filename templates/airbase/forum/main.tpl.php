@@ -149,7 +149,7 @@ if($views_average)
 <dd>
 <script type="text/javascript"><!--
 if(me_id < 2 || !me_hash)
-	document.writeln("<"+"script  type=\"text/javascript\" src=\"/templates/login.js\"></"+"script>")
+	document.writeln("<"+"script  type=\"text/javascript\" src=\"/_bal/js/login.js\"></"+"script>")
 else {
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?<?=$self->class_name()?>://<?=$self->id()?>\"></"+"script>")

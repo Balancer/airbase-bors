@@ -21,8 +21,8 @@ function bors_punbb_end($content)
 		'object_id' => @$_SERVER['QUERY_STRING'],
 	);
 
-	$x = object_new_instance('bors_access_log', $data);
-	$x->store();
+//	$x = object_new_instance('bors_access_log', $data);
+//	$x->store();
 
 	if(!config('is_developer'))
 		return $content;

@@ -135,6 +135,8 @@ class balancer_board_user extends forum_user
 
 	function notify_text($text)
 	{
+		return;
+
 		$client= new GearmanClient();
 		$client->addServer();
 		if($this->jabber())
@@ -155,17 +157,18 @@ class balancer_board_user extends forum_user
 		if($this->has_invalid_email())
 			return;
 
-		$client= new GearmanClient();
-		$client->addServer();
+//		$client= new GearmanClient();
+//		$client->addServer();
 
-		$this->set_last_mailing(time(), true);
-
+//		$this->set_last_mailing(time(), true);
+/*
 		$client->doBackground('balabot.work', serialize(array(
 			'to' => $this->email(),
 			'text' => $text,
 			'worker_class_name' => 'balancer_board_tasks',
 			'worker_method'     => 'send_email',
 		)));
+*/
 	}
 
 	function friend_action_notify($user_id, $text, $html = NULL)
