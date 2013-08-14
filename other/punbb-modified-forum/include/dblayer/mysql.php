@@ -49,6 +49,8 @@ class DBLayer
 
 		if ($this->link_id)
 		{
+			mysql_query('SET NAMES utf8', $this->link_id);
+
 			if (@mysql_select_db($db_name, $this->link_id))
 				return $this->link_id;
 			else
@@ -60,6 +62,7 @@ class DBLayer
 		}
 		else
 			error('<b>Что-то не работает. Попробуйте заглянуть на <a href="http://balancer.endofinternet.net/mybb/">ЗАПАСНЫЕ ФОРУМЫ</a>.</b> <br/><br/>Unable to connect to MySQL server. MySQL reported: '.mysql_error(), __FILE__, __LINE__);
+
 	}
 
 

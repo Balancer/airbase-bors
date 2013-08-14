@@ -77,7 +77,7 @@ if(!empty($GLOBALS['use_jquery']))
 
 <link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
 <link rel="stylesheet" type="text/css" href="/_bors/css/bors/code-geshi.css" />
-<link rel="stylesheet" type="text/css" href="/_bors/css/main6.css" />
+<link rel="stylesheet" type="text/css" href="/_bal/css/main6.css" />
 <?php
 	global $header;
 	if(!empty($header))

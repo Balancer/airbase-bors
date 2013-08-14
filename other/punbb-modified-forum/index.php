@@ -143,6 +143,7 @@ if(preg_match("!^(/forum/|/)index\.php/(\w+)!", $_SERVER['REQUEST_URI'], $m))
 	return go($m[1]);
 }
 
+
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 

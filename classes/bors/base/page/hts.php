@@ -14,6 +14,9 @@ class base_page_hts extends base_page_db
 		$url = preg_replace('!^(http://[^/]+):\d+!', '$1', $url);
 		$url = preg_replace('!^http://www\.!', 'http://', $url);
 
+		// Для тестового сервера
+		$url = str_replace('!airbase.home.balancer.ru!', 'airbase.ru', $url);
+
 		if(preg_match('!^(.+/)index\.phtml$!', $url, $m))
 			$url = $m[1];
 		elseif(preg_match('!^(.+)\.phtml$!', $url, $m))

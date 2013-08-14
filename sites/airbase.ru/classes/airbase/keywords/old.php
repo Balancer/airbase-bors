@@ -11,7 +11,7 @@ class airbase_keywords_old extends base_object
 	{
 		$found = false;
 		$kw = $this->id();
-		foreach(file($_SERVER['DOCUMENT_ROOT'].'/links.txt') as $s)
+		foreach(file(BORS_SITE.'/webroot/system/keyword-links.map') as $s)
 		{
 			if(preg_match('/^\s+/', $s))
 			{

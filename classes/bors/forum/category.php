@@ -47,7 +47,19 @@ function set_template($v, $dbup=true) { return $this->set('template', $v, $dbup)
 		while(!$cat->category_base() && $this->parent_category_id())
 			$cat = bors_load('balancer_board_category', $this->parent_category_id());
 
-		return $cat->category_base();
+		$base = $cat->category_base();
+
+		if($bs = config('airbase_mirror_map'))
+		{
+			if(empty($bs[$base]))
+			{
+				echo "Can't find $base";
+				exit();
+			}
+			$base = $bs[$base];
+		}
+
+		return $base;
 	}
 
 	function parents()

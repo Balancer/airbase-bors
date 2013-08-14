@@ -7,7 +7,7 @@ class aviatop_member extends bors_page_db
 
 	function parents() { return array('http://top.airbase.ru/'); }
 
-	function db_name() { return 'top'; }
+	function db_name() { return 'AVIATOP'; }
 	function table_name() { return 'aviatop_members'; }
 	function table_fields()
 	{

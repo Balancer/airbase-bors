@@ -25,6 +25,12 @@
 $GLOBALS['stat']['start_microtime'] = microtime(true);
 $GLOBALS['stat']['start_time'] = time();
 
+if(0 && !empty($forum_temporary_redirect))
+{
+	header('Location: '.$forum_temporary_redirect);
+	exit('Go to '.$forum_temporary_redirect);
+}
+
 // Enable DEBUG mode by removing // from the following line
 define('PUN_DEBUG', 1);
 

@@ -182,7 +182,7 @@ $map = array(
 
 		'(/bors/examples/)top-reputation/ => examples_topReputation',
 
-		'(/)(test|crazy)/ => base_page_hts',
+//		'(/)(test|crazy)/ => base_page_hts',
 		'(/test/bors/)xml/ => bors_test_xml',
 
 	'/users/reputation/last-ograph\.svg => balancer_board_users_reputationGraphSVG',
