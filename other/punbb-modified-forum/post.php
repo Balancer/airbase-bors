@@ -656,7 +656,8 @@ if (isset($_POST['form_sent']))
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);
 
-		go("http://forums.balancer.ru/posts/{$post->id()}/process");
+//		go("http://forums.balancer.ru/posts/{$post->id()}/process");
+		go($post->url_in_container());
 		pun_exit();
 	}
 }
