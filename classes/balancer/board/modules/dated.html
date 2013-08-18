@@ -1,0 +1,10 @@
+{foreach from=$items item="x"}
+{assign var="obj" value=$x->target()}
+{if $obj}
+<div class="dated_list">
+<div class="timestamp">{$x->create_time()|airbase_time}</div>
+<div class="title thumb_{if $x->score() > 0}up{else}down{/if}">{$obj->titled_url_in_container()}&nbsp;{$obj->score_colorized()}</div>
+<div class="snip">{$obj->snip(300)}</div>
+</div>
+{/if}
+{/foreach}
