@@ -11,7 +11,9 @@ class balancer_board_topics_blog extends balancer_board_paged
 
 	function is_reversed() { return true; }
 
-	function url($page = NULL)
+	function url() { return $this->url_ex($this->default_page()); }
+
+	function url_ex($page = NULL)
 	{
 		$cat_url = $this->topic()->category()->url();
 		if(preg_match('/viewcat.php/', $cat_url))
