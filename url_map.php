@@ -1,8 +1,15 @@
 <?php
 
+// Общий для всех сайтов роутинг
+
 $forums = '(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/|/forum/)';
 
 $topic_view_class = config('topics.view_class');
+
+bors_url_map(array(
+	'/do/logout/ => bal_do_logout',
+	'/do/login/ => bal_do_login',
+));
 
 $map = array(
 	'/g/(.+) => bors_system_go_redirect(1)',

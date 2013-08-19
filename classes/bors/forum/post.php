@@ -159,8 +159,8 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	function set_post_body($value, $dbupd = true)
 	{
-		if($value == '' && $value !== NULL && $dbupd)
-			debug_hidden_log('body', 'Set empty body');
+		if($value == '' && $value !== NULL && $dbupd && !trim($this->source()))
+			debug_hidden_log('body', 'Set empty body in post '.$this->url_in_container());
 
 		$this->set('post_body', $value, $dbupd); 
 	}

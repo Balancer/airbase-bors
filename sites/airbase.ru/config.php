@@ -13,6 +13,6 @@ config_set('cache_static.root', '/var/www/www.airbase.ru/htdocs/cache-static');
 
 if(config('is_developer'))
 {
-	config_set('debug_redirect_trace', true);
+//	config_set('debug_redirect_trace', true);
 //	config_set('lcml_cache_disable', true);
 }
