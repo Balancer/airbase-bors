@@ -9,6 +9,44 @@
 
 class bal_users_helper extends bors_object
 {
+	static function domain_logout($domain)
+	{
+		foreach(array('user_id', 'cookie_hash', 'isa') as $k)
+		{
+			SetCookie($k, '', time() - 86400);
+			SetCookie($k, '', time() - 86400, "/");
+			SetCookie($k, '', time() - 86400, "/", $domain);
+			SetCookie($k, '', time() - 86400, "/", '.'.$domain);
+
+			unset($_COOKIE[$k]);
+		}
+	}
+
+	static function haction_domain_ajax_logout($attrs, $haction)
+	{
+		extract($attrs);
+		self::domain_logout($domain);
+		echo @$_GET['callback']."(".json_encode(array('msg' => 'success')).");";
+		return true;
+	}
+
+	static function domain_login($domain, $expired, $attrs)
+	{
+		foreach($attrs as $k => $v)
+		{
+			$_COOKIE[$k] = $v;
+			SetCookie($k, $v, $expired, "/", '.'.$domain);
+		}
+	}
+
+	static function haction_domain_ajax_login($attrs, $haction)
+	{
+		extract($attrs);
+		self::domain_login($domain, $expired, $cookies);
+		echo @$_GET['callback']."(".json_encode(array('msg' => 'success')).");";
+		return true;
+	}
+
 	function haction_domain_logout($attrs, $haction)
 	{
 		extract($attrs);
@@ -17,12 +55,8 @@ class bal_users_helper extends bors_object
 		$domains[] = 'forums.airbase.ru';
 		$domains[] = 'forums.balancer.ru';
 
-		foreach(array('user_id', 'cookie_hash', 'isa') as $k)
-		{
-			SetCookie($k, NULL, 0, "/");
-			SetCookie($k, NULL, 0, "/", $domain);
-			SetCookie($k, NULL, 0, "/", '.'.$domain);
-		}
+
+		self::domain_logout($domain);
 
 		// Переходим к следующему домену или аллес.
 		$next_domain = false;
@@ -48,7 +82,8 @@ class bal_users_helper extends bors_object
 			return $haction->url_ex($next_domain);
 		}
 
-		return $redirect ? $redirect : 'http://forums.balancer.ru/';
+//		return $redirect ? $redirect : 'http://forums.balancer.ru/';
+		return $redirect ? $redirect : 'http://www.balancer.ru/forum/';
 	}
 
 	function haction_domain_login($attrs, $haction)
@@ -87,7 +122,8 @@ class bal_users_helper extends bors_object
 			return $haction->url_ex($next_domain);
 		}
 
-		return $redirect ? $redirect : 'http://forums.balancer.ru/';
+//		return $redirect ? $redirect : 'http://forums.balancer.ru/';
+		return $redirect ? $redirect : 'http://www.balancer.ru/forum/';
 	}
 
 	function haction_set_client_profile($attrs, $haction)

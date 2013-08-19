@@ -1,6 +1,6 @@
 <?php
 
-config_set('debug_redirect_trace', true);
+// config_set('debug_redirect_trace', true);
 
 class balancer_board_posts_process extends balancer_board_pages_simple
 {
