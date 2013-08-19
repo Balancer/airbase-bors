@@ -95,7 +95,7 @@
 <dt>Лучшие {$best_of_month|@count} сообщени{$best_of_month|@count|sklon:'е,я,й'} за последний месяц</dt>
 <dd>
 {foreach from=$best_of_month item="x"}
-&nbsp;&nbsp;&nbsp;<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_url()} {$x->target()->score_colorized()}<br/>
+&nbsp;&nbsp;&nbsp;<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_link()} {$x->target()->score_colorized()}<br/>
 {/foreach}
 </dd>
 </dl>
@@ -107,7 +107,7 @@
 <dd>
 {foreach from=$best item="x"}
 {if $x->target()}
-&nbsp;&nbsp;&nbsp;<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_url()} {$x->target()->score_colorized()}<br/>
+&nbsp;&nbsp;&nbsp;<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_link()} {$x->target()->score_colorized()}<br/>
 {/if}
 {/foreach}
 </dd>
@@ -169,7 +169,7 @@
 <tr><th>Форум</th><th>Число сообщений</th></tr>
 {foreach from=$messages_today_by_forums item="x"}
 {bors_object_load var="f" class="forum_forum" id=$x.forum_id}
-<tr><td>{$f->titled_url()}</td>
+<tr><td>{$f->titled_link()}</td>
 	<td>{$x.count}</td>
 </tr>
 {/foreach}
@@ -185,7 +185,7 @@
 <tr><th>Форум</th><th>Число сообщений</th></tr>
 {foreach from=$messages_month_by_forums item="x"}
 {bors_object_load var="f" class="forum_forum" id=$x.forum_id}
-<tr><td>{$f->titled_url()}</td>
+<tr><td>{$f->titled_link()}</td>
 	<td>{$x.count}</td>
 </tr>
 {/foreach}

@@ -2,7 +2,7 @@
 <div class="lenta_record">
 <h3><a href="{$t->post()->url_in_container()}">{$t->title()}</a></h3>
 <div class="lenta_record_content">
-<small><strong>{$t->owner()|get:title}, {$t->topic()|get:create_time|strftime:"%Y-%m-%d %H:%M"}</strong>, <i>{$t->forum()|get:titled_url}</i>.</small>
+<small><strong>{$t->owner()|get:title}, {$t->topic()|get:create_time|strftime:"%Y-%m-%d %H:%M"}</strong>, <i>{$t->forum()|get:titled_link}</i>.</small>
 {assign var="owner" value=$t->owner()}
 {* if $owner}<div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>{/if *}
 <br/>

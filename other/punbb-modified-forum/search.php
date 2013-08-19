@@ -716,7 +716,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 				$item_status = '';
 				$icon_type = 'icon';
 
-				$subject = $topic->titled_url() /* "<a href=\"{$pun_config['root_uri']}/viewtopic.php?id={$search_set[$i]['tid']}\">".pun_htmlspecialchars($search_set[$i]['subject']).'</a>*/ . ' <span class="byuser">'.$lang_common['by'].'&nbsp;'.pun_htmlspecialchars($search_set[$i]['poster']).'</span>';
+				$subject = $topic->titled_link() /* "<a href=\"{$pun_config['root_uri']}/viewtopic.php?id={$search_set[$i]['tid']}\">".pun_htmlspecialchars($search_set[$i]['subject']).'</a>*/ . ' <span class="byuser">'.$lang_common['by'].'&nbsp;'.pun_htmlspecialchars($search_set[$i]['poster']).'</span>';
 
 				if ($search_set[$i]['closed'] != '0')
 				{

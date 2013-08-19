@@ -26,7 +26,7 @@
    {if not $skip_author_name}{$p->author_name()}{/if}
    {if not $skip_date} <a href="{$p->url_for_igo()}">#{$p->create_time()|full_time}</a>{/if}
    {if not $no_show_answers and $p->answer_to_id() and $a}&nbsp;<span class="answer">@{$a->author_name()}<a href="{$a->url_in_topic()}">#{$a->create_time()|full_time}</a></span>{/if}
-   {if $forum and not $skip_forums} <small>// {$forum->titled_url()}</small>{/if}
+   {if $forum and not $skip_forums} <small>// {$forum->titled_link()}</small>{/if}
   </div>
   {if not $skip_votes}
   <div class="to-right">

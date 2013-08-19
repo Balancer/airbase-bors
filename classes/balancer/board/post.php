@@ -185,7 +185,7 @@ class balancer_board_post extends forum_post
 
 	function blog_entry() { return bors_load('balancer_board_blog', $this->id()); }
 
-	function titled_url_in_container($base_container = NULL)
+	function titled_link_in_container($base_container = NULL)
 	{
 		if($base_container && $base_container->title() == $this->container()->title())
 			$title = $this->nav_name();

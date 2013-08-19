@@ -81,8 +81,8 @@ class forum_tools_post_moveTree extends balancer_board_admin_page
 
 		if($old_topic->id() != $new_topic->id())
 		{
-			balancer_board_action::add($new_topic, "Перенос сообщений из {$old_topic->titled_url()}");
-			balancer_board_action::add($old_topic, "Перенос сообщений в {$new_topic->titled_url()}");
+			balancer_board_action::add($new_topic, "Перенос сообщений из {$old_topic->titled_link()}");
+			balancer_board_action::add($old_topic, "Перенос сообщений в {$new_topic->titled_link()}");
 		}
 
 		$new_post = bors_load_ex('balancer_board_post', $this->post()->id(), array('no_load_cache' => true));

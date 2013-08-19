@@ -51,8 +51,8 @@ class airbase_forum_admin_post_asnewtopic extends bors_page
 
 		if($old_topic && $old_topic->id() != $new_topic->id())
 		{
-			balancer_board_action::add($new_topic, "Тема создана из {$old_topic->titled_url()}");
-			balancer_board_action::add($old_topic, "Перенос в новую тему {$new_topic->titled_url()}");
+			balancer_board_action::add($new_topic, "Тема создана из {$old_topic->titled_link()}");
+			balancer_board_action::add($old_topic, "Перенос в новую тему {$new_topic->titled_link()}");
 		}
 
 		if(empty($data['dont_move_with_tree']))

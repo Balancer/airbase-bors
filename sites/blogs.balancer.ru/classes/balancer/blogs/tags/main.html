@@ -1,13 +1,13 @@
 <h2>
 {foreach from=$keywords_top item="x"}
-{$x->titled_url()}&nbsp;({$x->targets_count()})
+{$x->titled_link()}&nbsp;({$x->targets_count()})
 {/foreach}
 </h2>
 
 {foreach from=$keywords item="x"}
 {if $x->style()}
-<span style="{$x->style()}">{$x->titled_url()}</span>,
+<span style="{$x->style()}">{$x->titled_link()}</span>,
 {else}
-{$x->titled_url()},
+{$x->titled_link()},
 {/if}
 {/foreach}

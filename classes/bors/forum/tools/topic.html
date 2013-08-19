@@ -27,6 +27,6 @@ ul.operations li {
 <h2>Участники темы</h2>
 <ul>
 {foreach from=$authors item="x"}
-<li>{$x->titled_url()} [<a href="http://www.balancer.ru/forum/user-{$x->id()}-posts-in-topic-{$this->id()}/">сообщения в этой теме</a> ]</li>
+<li>{$x->titled_link()} [<a href="http://www.balancer.ru/forum/user-{$x->id()}-posts-in-topic-{$this->id()}/">сообщения в этой теме</a> ]</li>
 {/foreach}
 </ul>
