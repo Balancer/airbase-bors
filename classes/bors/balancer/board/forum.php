@@ -193,7 +193,7 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 	function all_subforums_titled()
 	{
 		if($this->_all_subforums_titled === false)
-			$this->_all_subforums_titled = bors_field_array_extract($this->all_subforums(), 'titled_url');
+			$this->_all_subforums_titled = bors_field_array_extract($this->all_subforums(), 'titled_link');
 
 		return $this->_all_subforums_titled;
 	}

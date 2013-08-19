@@ -1,6 +1,6 @@
 <h2>Ссылки сообщения</h2>
 <ul>
-<li><a href="http://www.balancer.ru/forum/user-{$this->post()|get:owner_id}-posts-in-topic-{$this->post()|get:topic_id}/">Показать все сообщения</a> пользователя {$this->post()|get:owner|get:titled_url} в топике {$this->post()|get:topic|get:titled_url}</li>
+<li><a href="http://www.balancer.ru/forum/user-{$this->post()|get:owner_id}-posts-in-topic-{$this->post()|get:topic_id}/">Показать все сообщения</a> пользователя {$this->post()|get:owner|get:titled_link} в топике {$this->post()|get:topic|get:titled_link}</li>
 </ul>
 
 {if $this->can_action()}

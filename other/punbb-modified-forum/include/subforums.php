@@ -140,7 +140,7 @@ function subforums_text($forum)
 	foreach($forum->all_readable_subforum_ids() as $subfid)
 	{
 		$f = object_load('forum_forum', $subfid);
-		$subs[] = $f->titled_url();
+		$subs[] = $f->titled_link();
 	}
 
 	return "<div class=\"subforums\"><b>Подфорумы:</b> ".join(", ", $subs)."</div>\n";

@@ -9,7 +9,7 @@ if(top.me_is_coordinator)
 --></script>
 {if $show_form}
  <h2>Выставление штрафа</h2>
- <p>За {$object->class_title_vp()|lower} «{$object->titled_url()}»</p>
+ <p>За {$object->class_title_vp()|lower} «{$object->titled_link()}»</p>
  {if not $previous_warning}
   {form class="airbase_user_admin_warning"}
    <table>
@@ -44,7 +44,7 @@ if(top.me_is_coordinator)
 		<script>add_warn('{$w->admin()->url()}')</script>
 	</td>
 	<td>{$w->moderator_name()}</td>
-	<td>{$w->source()|pun_lcml}<br /><small>// За: {$w->referer_titled_url()} [{$w->id()}]</small></td>
+	<td>{$w->source()|pun_lcml}<br /><small>// За: {$w->referer_titled_link()} [{$w->id()}]</small></td>
 </tr>
 {/foreach}
 </table>
@@ -59,7 +59,7 @@ if(top.me_is_coordinator)
 	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
 	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</td>
 	<td>{$w->moderator_name()}</td>
-	<td>{$w->source()|pun_lcml}<br /><small>// За: {$w->referer_titled_url()} [{$w->id()}]</small></td>
+	<td>{$w->source()|pun_lcml}<br /><small>// За: {$w->referer_titled_link()} [{$w->id()}]</small></td>
 </tr>
 {/foreach}
 </table>

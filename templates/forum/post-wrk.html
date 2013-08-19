@@ -62,7 +62,7 @@
 
 <div class="post-body">
 {if $show_title}<h3><a href="{$p->url_in_container()}">{$show_title}</a></h3>{/if}
-{if $forum and not $skip_forums}<small class="nosub">{icon image="forum" link=$forum->url()}&nbsp;{$forum->titled_url()}</small>{/if}
+{if $forum and not $skip_forums}<small class="nosub">{icon image="forum" link=$forum->url()}&nbsp;{$forum->titled_link()}</small>{/if}
 <br/><br/>
 {if $strip}
  {assign var="body" value=$p->body()}

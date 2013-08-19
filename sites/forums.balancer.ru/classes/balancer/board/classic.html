@@ -1,10 +1,10 @@
 {foreach from=$categories item="cat"}
 <table class="btab w100p">
-<caption>{$cat->titled_url()}</caption>
+<caption>{$cat->titled_link()}</caption>
 <tr class="small nobr"><th>Форум</th><th>Тем</th><th>Сообщений</th><th>Последнее обновление</th></tr>
 {foreach from=$cat->direct_subforums() item="f"}
 <tr>
-	<td><b>{$f->titled_url()}</b><br/>
+	<td><b>{$f->titled_link()}</b><br/>
 		<small>{$f->description()}
 {assign var="subforums" value=$f->all_subforums_titled()}
 {if $subforums}<br /><i><b>Подфорумы:</b> {', '|join:$subforums}</i>{/if}

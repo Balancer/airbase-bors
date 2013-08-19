@@ -64,12 +64,12 @@ class airbase_user_warning extends base_object_db
 	function moderator() { return object_load('balancer_board_user', $this->moderator_id()); }
 	function user() { return object_load('balancer_board_user', $this->user_id()); }
 
-	function referer_titled_url()
+	function referer_titled_link()
 	{
 		if($this->warn_class_id() > 0)
 		{
 			$obj = object_load($this->warn_class_id(), $this->warn_object_id());
-			return $obj ? $obj->titled_url() : '?';
+			return $obj ? $obj->titled_link() : '?';
 		}
 
 		if($this->warn_object_id() && ($obj = object_load('balancer_board_post', $this->warn_object_id())))
@@ -77,7 +77,7 @@ class airbase_user_warning extends base_object_db
 			$has = objects_first('airbase_user_warning', array('warn_class_id' => $obj->class_id(), 'warn_object_id' => $obj->id()));
 			$this->set_warn_class_id($obj->class_id(), !$has);
 			$this->set_warn_object_id($obj->id(), !$has);
-			return $obj->titled_url();
+			return $obj->titled_link();
 		}
 
 		if($obj = object_load($this->referer()))
@@ -85,7 +85,7 @@ class airbase_user_warning extends base_object_db
 			$has = objects_first('airbase_user_warning', array('warn_class_id' => $obj->class_id(), 'warn_object_id' => $obj->id()));
 			$this->set_warn_class_id($obj->class_id(), !$has);
 			$this->set_warn_object_id($obj->id(), !$has);
-			return $obj->titled_url();
+			return $obj->titled_link();
 		}
 
 		return "<a href=\"{$this->referer()}\">{$this->referer()}</a>";

@@ -4,7 +4,7 @@
 {foreach from=$favorites item="f"}
 {assign var="t" value=$f->target()}
 <tr><td>{$t->create_time()|smart_time}</td>
-	<td>{$t->titled_url('new')}<br/>
+	<td>{$t->titled_link('new')}<br/>
 {if $t->description()}<i><small>{$t->description()}</small></i><br/>{/if}
 	</td>
 	<td>{$t->forum()->nav_named_url()}</td>

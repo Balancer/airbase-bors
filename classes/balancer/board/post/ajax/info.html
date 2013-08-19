@@ -4,7 +4,7 @@
 <h6>Всего ответов: {$post->answers_count()}</h6>
 <ul>
 {foreach from=$post->direct_answers() item="p"}
-<li>{$p->titled_url_in_container($post->topic())}&nbsp;(+{$p->answers_count()})</li>
+<li>{$p->titled_link_in_container($post->topic())}&nbsp;(+{$p->answers_count()})</li>
 {/foreach}
 </ul>
 {else}

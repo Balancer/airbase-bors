@@ -30,7 +30,7 @@ class airbase_user_reputation extends base_page_db
 
 	function class_title() { return 'Запись в репутации'; }
 	function title() { return ($this->score() > 0 ? '+1' : '-1').' от '.$this->owner()->title().' к '.$this->target_user()->title(); }
-	function titled_url() { return $this->title(); }
+	function titled_link() { return $this->title(); }
 
 	function cache_group_provides() { return array("user-{$this->user_id()}-reputation"); }
 
@@ -57,16 +57,16 @@ class airbase_user_reputation extends base_page_db
 			{
 				case 'balancer_board_post':
 				case 'forum_post':
-					return object_property($object, 'titled_url_in_container') . $snip;
+					return object_property($object, 'titled_link_in_container') . $snip;
 				default:
-					return object_property($object, 'titled_url');
+					return object_property($object, 'titled_link');
 			}
 		}
 
 		if(preg_match('!post://(\d+)/?!', $ref, $m))
 		{
 			$object = object_load('balancer_board_post', $m[1]);
-			return object_property($object, 'titled_url_in_container');
+			return object_property($object, 'titled_link_in_container');
 		}
 
 		if(preg_match('!topic://(\d+)/?!', $ref, $m))
@@ -77,7 +77,7 @@ class airbase_user_reputation extends base_page_db
 			$object = $object->target();
 
 		if($object)
-			return $object->titled_url_in_container();
+			return $object->titled_link_in_container();
 
 		return $ref;
 	}
@@ -146,7 +146,7 @@ class airbase_user_reputation extends base_page_db
 	{
 		return array(
 			'ctime' => 'Дата',
-			'target_user()->reputation_titled_url()' => 'Кому',
+			'target_user()->reputation_titled_link()' => 'Кому',
 			'voter_titled_link' => 'От кого',
 			'comment_short' => 'Комментарий',
 		);

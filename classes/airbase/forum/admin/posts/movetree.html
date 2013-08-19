@@ -39,7 +39,7 @@
 <h2>Сообщения</h2>
 {foreach from=$posts item="p"}
 <div class="well">
-<h3>{$p->titled_url()}</h3>
+<h3>{$p->titled_link()}</h3>
 {$p->source()|truncate:256}
 </div>
 {/foreach}

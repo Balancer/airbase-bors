@@ -16,11 +16,11 @@
 <tr class="small" style="color: {if $w->score()>0}red{else}green{/if};">
 	<td>{$w->create_time()|date:'d.m.y H:i'}</td>
 	<td>{$w->expire_time()|date:'d.m.y'}</td>
-	<td>{$w->user()|get:"titled_url"}</td>
+	<td>{$w->user()|get:"titled_link"}</td>
 	<td>{$w->target()|get:"titled_link"}</td>
 	<td>{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</td>
 	<td>{$w->source()|lcmlbb}</td>
-	<td>{$w->moderator()|get:"titled_url"}</td>
+	<td>{$w->moderator()|get:"titled_link"}</td>
 </tr>
 {/foreach}
 </table>
@@ -37,7 +37,7 @@
 {foreach from=$top_warn_users item="u" name="loop"}
 <tr>
 	<td>{$smarty.foreach.loop.iteration}</td>
-	<td>{$u->titled_url()}</td>
+	<td>{$u->titled_link()}</td>
 	<td>{$u->warnings_rate(31)|sprintf:"%.1f"}</td>
 	<td>{$u->warnings_total()}</td>
 	<td>{$u->num_posts()}</td>
@@ -61,7 +61,7 @@
 {assign var="u" value=$x.u}
 <tr>
 	<td>{$smarty.foreach.loop.iteration}</td>
-	<td>{$u->titled_url()}</td>
+	<td>{$u->titled_link()}</td>
 	<td>{$x.w}</td>
 	<td>{$u->warnings_total()}</td>
 	<td>{$u->num_posts()}</td>

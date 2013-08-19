@@ -579,7 +579,7 @@ function avatar_thumb($geo)
 		return go($haction->url_ex($next_domain));
 	}
 
-	function reputation_titled_url() { return "<a href=\"http://www.balancer.ru/user/{$this->id()}/reputation/\">{$this->title()}</a>"; }
+	function reputation_titled_link() { return "<a href=\"http://www.balancer.ru/user/{$this->id()}/reputation/\">{$this->title()}</a>"; }
 
 	function weight()
 	{
