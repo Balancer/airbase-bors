@@ -21,15 +21,15 @@ class user_reputation extends balancer_board_page
 
 	function default_page() { return $this->total_pages(); }
 
-	function pre_parse($get)
+	function pre_parse()
 	{
 		if(!$this->id())
 			return bors_message(ec("Не задан ID пользователя."));
 
-		if(!bors()->user() && !empty($get))
-			return go($this->url());
+//		if(!bors()->user())
+//			return go($this->url());
 
-		return false;
+		return parent::pre_parse();
 	}
 
 	function url_ex($page) { return '/user/'.$this->id().'/reputation'.((!$page || $page == $this->default_page()) ? '/' : ','.$page.'.html'); }
