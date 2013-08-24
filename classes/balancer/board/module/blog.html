@@ -1,6 +1,6 @@
 {foreach $blog_records as $r}
 {assign var="p" value=$posts[$r->id()]}
 {if $p}
-{$p->view()->set_body_template('blog')->html()}
+{$p->view()->set_body_template($blog_body_template)->html()}
 {/if}
 {/foreach}

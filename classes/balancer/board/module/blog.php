@@ -54,6 +54,8 @@ class balancer_board_module_blog extends balancer_board_module
 			),
 		);
 
+		$data['blog_body_template'] = $this->args('blog_body_template', 'blog');
+
 		return $data;
 	}
 }

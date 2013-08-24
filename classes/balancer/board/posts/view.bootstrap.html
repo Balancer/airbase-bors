@@ -4,7 +4,7 @@
 	{assign var=a value=$post->answer_to()}
 <div class="well">
 <div class="post pby{$post->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $post->is_moderatorial()} moderatorial_post text-error{/if}">
-	<div class="row head">
+	<div class="row-fluid head">
 		<div class="span10">
 {block name="title"}
 			<h3>
@@ -36,7 +36,7 @@
 				<img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$post->id()},'up')"  width="16" height="16" />
 				<span id="ptr{$post->id()}" style="font-size: 130%">{if $post->score() != NULL}{$post->score_colorized()}{/if}</span>
 				<img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$post->id()},'down')" width="16" height="16" />
-			
+
 				<span class="half-transparent">{$post->imaged_edit_url()}</span>
 			{if $is_first_post}<g:plusone size="small"></g:plusone>{/if}
 			</span>
@@ -44,7 +44,7 @@
 
 	</div>{*/head*}
 
-	<div class="row">
+	<div class="row-fluid">
 		<div class="avatar_block span2 text-center">
 		{if $owner}
 			{if not $avatar_size}{assign var="avatar_size" value=100}{/if}
