@@ -43,7 +43,9 @@ ob_start();
 
 ?>
 
+<?php /*
 <div class="box" style="padding: 4px; font-size: 10pt; font-weight: bold;">Сайт работает на сервере <a href="http://www.etegro.com/">ETegro Technologies</a></div><br/>
+*/ ?>
 
 <div id="brdfooter" class="block">
 	<h2><span><?php echo $lang_common['Board footer'] ?></span></h2>
