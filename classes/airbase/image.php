@@ -9,4 +9,9 @@ class airbase_image extends bors_image
 //		return array(
 //		);
 //	}
+
+	function xfull_url()
+	{
+//		if(empty)
+	}
 }
