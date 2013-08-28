@@ -12,6 +12,8 @@ class airbase_external_url extends bors_object_db
 			'url_index',
 			'local_file',
 			'url_real',
+			'target_class',
+			'target_id',
 		);
 	}
 
