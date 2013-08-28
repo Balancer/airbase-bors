@@ -85,8 +85,11 @@ class airbase_images_site extends airbase_image
 		// Если не зарегистрирован, то регистрируем (файл-то уже у нас на диске)
 		$cls = self::url_register_class();
 		$x = $cls::find_or_register($url);
+		$image = self::register_file($file);
 		$x->set_local_file($file);
-		return self::register_file($file);
+		$x->set_target_class($image->class_name());
+		$x->set_target_id($image->id());
+		return $image;
 	}
 
 	// Собственно, импорт с удалённого URL. Возвращаем объект image (себя)
@@ -133,6 +136,8 @@ class airbase_images_site extends airbase_image
 		$ucls = self::url_register_class();
 		$urlx = $ucls::find_or_register($url);
 		$urlx->set_local_file($file);
+		$urlx->set_target_class($image->class_name());
+		$urlx->set_target_id($image->id());
 		$image->set_original_url($url);
 		return $image;
 	}
