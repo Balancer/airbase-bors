@@ -4,7 +4,7 @@ require_once('inc/strings.php');
 
 class airbase_board_category extends bors_object_db
 {
-	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
+	function db_name() { return config('punbb.database'); }
 	function table_name() { return 'categories'; }
 
 	function table_fields()

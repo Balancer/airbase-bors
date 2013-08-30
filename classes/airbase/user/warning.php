@@ -4,7 +4,7 @@ class airbase_user_warning extends base_object_db
 {
 	function class_title() { return ec('Штраф'); }
 
-	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
+	function db_name() { return config('punbb.database'); }
 	function table_name() { return 'warnings'; }
 
 	function storage_engine() { return 'bors_storage_mysql'; }

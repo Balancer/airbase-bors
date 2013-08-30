@@ -39,19 +39,26 @@ function check_cookie(&$pun_user)
 	$cookie = array('user_id' => 1, 'password_hash' => 'Guest');
 
 	require_once('obsolete/users.php');
-	$me = new User();
+	try
+	{
+		$me = new User();
+	}
+	catch(Exception $e)
+	{
+		$me = NULL;
+	}
 //	echo "Check cookie: me=".($me->data('id'));
 
-	if($me->data('id') > 1)
+	if($me && $me->data('id') > 1)
 	{
 		// Check if there's a user with the user ID and password hash from the cookie
-		
+
 		$q = "SELECT u.*, g.*, o.logged, o.idle 
 			FROM {$db->prefix}users AS u 
 				INNER JOIN {$db->prefix}groups AS g ON u.group_id=g.g_id 
 				LEFT JOIN {$db->prefix}online AS o ON o.user_id=u.id 
 			WHERE u.id=".intval($me->data('id'));
-		
+
 		$result = $db->query($q) 
 			or error('Unable to fetch user information', __FILE__, __LINE__, $db->error());
 
@@ -271,7 +278,7 @@ function generate_navlinks()
 	$ret .= "<ul><li><b>Группы форумов:</b></li>";
 	$ret .= "<li><a href=\"http://www.balancer.ru/forum/\">Все вместе</a></li>";
 
-	$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
+	$db = new driver_mysql(config('punbb.database'));
 
 	foreach($db->get_array("SELECT * FROM categories WHERE base_uri != '' ORDER BY disp_position") as $c)
 		$ret .= "<li><a href=\"{$c['base_uri']}\">{$c['cat_name']}</a></li>";
@@ -357,7 +364,7 @@ function delete_topic($topic_id)
 		strip_search_index($post_ids);
 
 		// Delete posts in topic
-		$cms_db = new driver_mysql('AB_FORUMS');
+		$cms_db = new driver_mysql(config('punbb.database'));
 		$posts = join(",", $cms_db->get_array("SELECT id FROM posts WHERE topic_id=$topic_id"));
 		$db->query('DELETE FROM '.$db->prefix.'posts WHERE topic_id='.$topic_id) or error('Unable to delete posts', __FILE__, __LINE__, $db->error());
 //		$db->query("DELETE FROM {$db->prefix}messages WHERE id IN ($posts)") 
@@ -473,7 +480,7 @@ function get_title($user)
 
 	if(empty($GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']]))
 	{
-		$cdb = new DataBase('AB_FORUMS');
+		$cdb = new DataBase(config('punbb.database'));
 		$group  = $cdb->get("SELECT * FROM groups WHERE g_id = ".intval($user['group_id']));
 		$GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']] = serialize($group);
 //		$cdb->close();
@@ -969,9 +976,10 @@ H2 {MARGIN: 0; COLOR: #FFFFFF; BACKGROUND-COLOR: #B84623; FONT-SIZE: 1.1em; PADD
 
 			if ($db_error['error_sql'] != '')
 				echo "\t\t".'<br /><br /><strong>Failed query:</strong> '.pun_htmlspecialchars($db_error['error_sql'])."\n";
-			echo "Если проблема постоянна и к форуму нет доступа, попробуйте заглянуть
-			за подробностями на <a href=\"http://balancer.endofinternet.net/mybb/forum-2.html\">Запасной форум</a>
-			или на <a href=\"http://bal.livejournal.com/\">bal.livejournal.com</a>";
+			echo "<br/><br/><b style=\"color: red; font-size: 14pt;\">Если проблема постоянна и к форуму нет доступа, попробуйте заглянуть
+			за подробностями на
+			<a href=\"http://ls.balancer.ru/\">LSBR</a> (там работает форумная авторизация) или
+			<a href=\"http://balancer.endofinternet.net/mybb/forum-2.html\">Запасной форум</a> (на нём авторизация отдельная)</b>";
 		}
 	}
 	else

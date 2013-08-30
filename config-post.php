@@ -65,4 +65,4 @@ function check_blacklisted_email()
 	}
 }
 
-check_blacklisted_email();
+// check_blacklisted_email();

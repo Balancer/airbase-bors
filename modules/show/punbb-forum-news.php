@@ -11,7 +11,7 @@
     {
 		include_once("/var/www/balancer.ru/htdocs/forums/include/pun_bal.php");
 
-		$db = new DataBase('AB_FORUMS');
+		$db = new DataBase(config('punbb.database'));
 
 		$topics = $db->get_array("SELECT t.*, count(p.id) as posts FROM `topics` t LEFT JOIN `posts` p ON (t.id = p.topic_id) WHERE t.forum_id = 8 AND moved_to IS  NULL GROUP BY t.id ORDER BY t.posted DESC LIMIT 7");
 		foreach($topics as $t)

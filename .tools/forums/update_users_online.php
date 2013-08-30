@@ -13,7 +13,7 @@ update_users_online();
 
 function update_users_online()
 {
-	$db = new DataBase('AB_FORUMS');
+	$db = new DataBase(config('punbb.database'));
 
 	$timeout = time() - 900;
 	$idle    = time() - 300;

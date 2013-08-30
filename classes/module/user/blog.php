@@ -4,7 +4,7 @@ class module_user_blog extends base_page
 {
 	private $user;
 
-	function db_name() { return 'AB_FORUMS'; }
+	function db_name() { return config('punbb.database'); }
 
 	function body_data()
 	{

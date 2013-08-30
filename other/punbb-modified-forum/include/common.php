@@ -149,7 +149,7 @@ check_bans();
 
 @define('WARNING_DAYS', 14);
 
-$cms_db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
+$cms_db = new driver_mysql(config('punbb.database'));
 $warn_count	= intval($pun_user['warnings']);
 $ban_expire = 0;
 

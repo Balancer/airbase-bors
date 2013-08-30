@@ -22,7 +22,7 @@
 				26 => 0, // пария
 			);
 
-		$dbf = new driver_mysql('AB_FORUMS');
+		$dbf = new driver_mysql(config('punbb.database'));
 		$dbu1 = new driver_mysql('USERS');
 
 		$all_reputated_user_ids = array_unique($dbu1->get_array("SELECT DISTINCT user_id FROM `reputation_votes`"));

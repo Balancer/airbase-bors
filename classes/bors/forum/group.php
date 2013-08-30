@@ -2,7 +2,7 @@
 
 class forum_group extends bors_object_db
 {
-	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
+	function db_name() { return config('punbb.database'); }
 	function table_name() { return 'groups'; }
 	function storage_engine() { return 'bors_storage_mysql'; }
 

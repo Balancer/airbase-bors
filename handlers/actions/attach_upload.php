@@ -31,12 +31,12 @@
 		// move the uploaded file from temp to the attachment folder and rename the file to the unique name
 		if(!move_uploaded_file($tmp_name, "$subfolder/$unique_name"))
 			return error_message("Unable to move file from: $tmp_name to $subfolder/$unique_name == ".__FILE__.":".__LINE__);
-			
+
 		if(strlen($mime)==0)
 			$mime = attach_create_mime(attach_find_extension($name));
 
-		$db = new DataBase('AB_FORUMS');
-		
+		$db = new DataBase(config('punbb.database'));
+
 		// update the database with this info
 		$db->replace('attach_2_files', array(
 			'owner' => $me->get('id'),

@@ -6,7 +6,7 @@ class user_blog extends balancer_board_page
 
 	function is_loaded() { return (bool) $this->user(); }
 
-	function db_name(){ return 'AB_FORUMS'; }
+	function db_name(){ return config('punbb.database'); }
 
 	function auto_objects()
 	{
