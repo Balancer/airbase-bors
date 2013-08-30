@@ -77,7 +77,7 @@ if(preg_match('!/topic/\d+/(\d+),(\d+)$!', $_SERVER['REQUEST_URI'], $m))
 
 debug_hidden_log('old-topic-link-format',  $_SERVER['REQUEST_URI']);
 
-$cms_db = new driver_mysql('AB_FORUMS');
+$cms_db = new driver_mysql(config('punbb.database'));
 
 $archive_loaded = false;
 

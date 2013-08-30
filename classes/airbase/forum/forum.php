@@ -3,7 +3,7 @@
 class airbase_forum_forum extends base_page_db
 {
 	function table_name() { return 'forums'; }
-	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
+	function db_name() { return config('punbb.database'); }
 
 	function table_fields()
 	{

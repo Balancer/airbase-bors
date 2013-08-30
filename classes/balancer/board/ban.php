@@ -3,7 +3,7 @@
 class balancer_board_ban extends base_object_db
 {
 	function storage_engine() { return 'bors_storage_mysql'; }
-	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
+	function db_name() { return config('punbb.database'); }
 	function table_name() { return 'bans'; }
 	function table_fields()
 	{

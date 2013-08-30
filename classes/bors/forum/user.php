@@ -257,7 +257,7 @@ function avatar_thumb($geo)
 		global $bors_forum_user_ranks;
 		if($bors_forum_user_ranks === NULL)
 		{
-			$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
+			$db = new driver_mysql(config('punbb.database'));
 			$bors_forum_user_ranks = $db->select_array('ranks', 'rank, min_posts', array('order' => '-min_posts'));
 			$db->close();
 		}
@@ -362,7 +362,7 @@ function avatar_thumb($geo)
 
 	function warnings_in($forum_id)
 	{
-		return intval($this->db(config('punbb.database', 'AB_FORUMS'))->select('warnings', 'SUM(warnings.score)', array(
+		return intval($this->db(config('punbb.database'))->select('warnings', 'SUM(warnings.score)', array(
 			'user_id' => $this->id(),
 			'posts.posted>' => time()-86400*14,
 			'inner_join' => array('forum_post ON forum_post.id = airbase_user_warning.warn_object_id', 'topics ON topics.id = posts.topic_id'),
@@ -378,7 +378,7 @@ function avatar_thumb($geo)
 		if(!$user_hash_password)
 			return 0;
 
-		$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
+		$db = new driver_mysql(config('punbb.database'));
 		$result = intval($db->select('users', 'id', array('user_cookie_hash=' => $user_hash_password)));
 		$db->close();
 		return $result;
@@ -389,11 +389,11 @@ function avatar_thumb($geo)
 		switch($type)
 		{
 			case 'per_posts_and_time':
-				$total_posts = $this->db(config('punbb.database', 'AB_FORUMS'))->select('posts', 'COUNT(*)', array(
+				$total_posts = $this->db(config('punbb.database'))->select('posts', 'COUNT(*)', array(
 					'poster_id' => $this->id(),
 					'posted>' => time() - 86400*$period,
 				));
-				$total_warns = $this->db(config('punbb.database', 'AB_FORUMS'))->select('warnings', 'SUM(score)', array(
+				$total_warns = $this->db(config('punbb.database'))->select('warnings', 'SUM(score)', array(
 					'user_id' => $this->id(),
 					'time>' => time() - 86400*$period,
 				));

@@ -38,7 +38,7 @@ class user_reputation extends balancer_board_page
 	{
 		template_noindex();
 
-		$dbf = new DataBase('AB_FORUMS');
+		$dbf = new DataBase(config('punbb.database'));
 
 		$list = array_reverse(objects_array('airbase_user_reputation', array(
 			'user_id' => $this->id(),
@@ -120,7 +120,7 @@ class user_reputation extends balancer_board_page
 			return bors_message(ec("Не задан ID пользователя."));
 
 		$me = bors()->user();
-		$dbf = new DataBase('AB_FORUMS');
+		$dbf = new DataBase(config('punbb.database'));
 		$dbu = new DataBase('USERS');
 		$me_id = $me->id();
 

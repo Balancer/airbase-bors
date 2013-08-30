@@ -16,12 +16,12 @@
 {if !$p->is_deleted()}
 <a name="p{$p->id()}"></a>
 {assign var="owner" value=$p->owner()}
-{assign var=a value=$p->answer_to()}
-<div class="post pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $p->is_moderatorial()} moderatorial_post{/if}">
+{assign var=a value=$p->get('answer_to')}
+<div class="post pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $p->get('is_moderatorial')} moderatorial_post{/if}">
 	<div class="head">
 		<div class="to-left">
-{if $p->is_moderatorial()}<div class="red small">Данное сообщение является официальным предупреждением</div>{/if}
-{$p->flag()}
+{if $p->get('is_moderatorial')}<div class="red small">Данное сообщение является официальным предупреждением</div>{/if}
+{$p->get('flag')}
 {if $show_title}{$show_title} {/if}
 {if not $skip_author_name}
 	{* {if $p->joke_owner()}{$p->joke_owner()->title()}{else}{$p->author_name()}{/if *}
@@ -42,7 +42,7 @@
  </div>
  {/if}
  <div class="to-left"><img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$p->id()},'up')"  width="16" height="16" title="+" /></div>
- <div id="ptr{$p->id()}" class="to-left">{if $p->score() != NULL}{$p->score_colorized()}{/if}</div>
+ <div id="ptr{$p->id()}" class="to-left">{if $p->get('score') != NULL}{$p->score_colorized()}{/if}</div>
  <div class="to-left"><img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$p->id()},'down')" width="16" height="16" title="-" /></div>
  <div class="half-transparent to-left">{$p->imaged_edit_url()}</div>
  {if $is_first_post}<g:plusone size="small"></g:plusone>{/if}
@@ -65,10 +65,10 @@
 		<br /><br /><a href="{$p->url_in_container()}">Дальше »»»</a>
 	{/if}
 {else}
-	{if $p->is_spam() && $p->topic()->forum_id() != 191 && not $show_spam}
+	{if $p->get('is_spam') && $p->topic()->forum_id() != 191 && not $show_spam}
 		<div class="box">** Это сообщение от непроверенного пользователя и похоже на спам. После проверки его координаторами оно будет или уничтожено, или разрешено к показу **</div>
 	{else}
-		{if $p->is_hidden()}
+		{if $p->get('is_hidden')}
 			<div class="box">** Это сообщение было скрыто координатором **</div>
 		{else}
 			<div id="pb_{$p->id()}" class="post_body">
@@ -78,7 +78,7 @@
 	{/if}
 {/if}
 
-{if $p->attaches() && !$p->is_hidden()}
+{if $p->get('attaches') && !$p->is_hidden()}
 <div style="margin-top: 10px; clear: both; border-top: 1px dotted #ccc;">
 <i style="margin-left: 8px">Прикреплённые файлы:</i><br/>
 {$p|post_attaches}
@@ -88,17 +88,17 @@
 {if not $skip_message_footer}
 
 <div class="postsignature">
-{if $p->joke_owner() and $p->joke_owner()->signature()}{$p->joke_owner()->signature_html()}{/if}
+{if $p->owner() and $p->owner()->signature()}{$p->owner()->signature_html()}{/if}
 <span class="img_middle">
-&nbsp;{$p->owner_user_agent()}
+&nbsp;{$p->get('owner_user_agent')}
 </span>
 </div>
 
-{if $p->edited() && $p->edited() > $p->create_time() + 300}<div class="edited_note">
+{if $p->get('edited') && $p->edited() > $p->create_time() + 300}<div class="edited_note">
 Это сообщение редактировалось {$p->edited()|strftime:"%d.%m.%Y в %H:%M"}
 </div>{/if}
 
-{if $w = $p->warning()}<div class="{if $w->score() > 0}warning_note{else}alert alert-success{/if}">
+{if $w = $p->get('warning')}<div class="{if $w->score() > 0}warning_note{else}alert alert-success{/if}">
 <b>{$w->moderator_name()}:</b>
 {if $w->score() > 0}предупреждение ({$w->score()}) {else}поощрение ({-$w->score()}) {/if}
 {if $w->type_id()} по категории «<b>{$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</b>»{/if}
@@ -108,6 +108,7 @@
 
 <div id="pfo{$p->id()}"></div>
 
+{if $p->topic() && $p->topic()->forum()}
 <ul class="postfooter">
 <li><a href="/_bors/ajax/post/info?post={$p->id()}" class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;инфо</a></li>
 <li><a href="#" onclick="pdsh('{$p->id()}'); return false;"
@@ -119,6 +120,7 @@
   >Ответить на сообщение</a>
 </li>
 </ul>
+{/if}
 
 {else}
 <div class="clear">&nbsp;</div>

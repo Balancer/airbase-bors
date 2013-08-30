@@ -1,4 +1,13 @@
 <div class="pages_select right">
+
+<a href="http://ls.balancer.ru/question/add/"
+		class="{if config('css_bootstrap_is_loaded')}btn btn-small{else}select_page{/if}"
+	>Новый опрос</a>
+
+<a href="{$this->forum()->category()->category_base_full()}post.php?fid={$this->forum()|get:id}"
+		class="{if config('css_bootstrap_is_loaded')}btn btn-small btn-warning{else}select_page{/if}"
+	>Новая тема</a>
+
 {if $this->is_closed()}
 	<a href="#" class="btn btn-small disabled">Тема закрыта</a>
 {else}
@@ -7,9 +16,7 @@
 		onclick="return confirm('Внимание! Вы выбираете ответ не на конкретное сообщение (кнопкой «Ответить на сообщение»), а непосредственно в тему. В этом случае будет отсутствовать привязка ответа к отвечаемому сообщению. И, если Вы своим ответом отклоняетесь от основной темы обсуждения, то при возможном разделении темы создадите лишнюю работу модераторам. За что можете получить штрафной балл. Вы уверены, что хотите ответить именно в тему, без привязки к конкретному сообщению?');"
 	>Ответ в эту тему</a>
 {/if}
-<a href="{$this->forum()->category()->category_base_full()}post.php?fid={$this->forum()|get:id}"
-		class="{if config('css_bootstrap_is_loaded')}btn btn-small btn-warning{else}select_page{/if}"
-	>Создать новую тему</a>
+
 </div>
 
 {if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}

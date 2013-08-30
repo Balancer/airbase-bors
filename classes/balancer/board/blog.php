@@ -127,4 +127,6 @@ class balancer_board_blog extends forum_blog
 
 	function html() { return $this->post()->html(); }
 	function source() { return $this->post()->source(); }
+
+	function body() { return $this->post()->body(); }
 }

@@ -4,7 +4,7 @@ require_once('inc/strings.php');
 
 class airbase_forum_category extends bors_object_db
 {
-	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
+	function db_name() { return config('punbb.database'); }
 	function table_name() { return 'categories'; }
 	function table_fields()
 	{
@@ -72,7 +72,7 @@ class airbase_forum_category extends bors_object_db
 	function direct_subforums_ids()
 	{
 		// Получаем одни forum_id для дочерних форумов первого уровня
-		$db = new DataBase('AB_FORUMS');
+		$db = new DataBase(config('punbb.database'));
 		$result = $this->db()->select_array('forums', 'id', array('cat_id' => $this->id()));
 		$db->close();
 		return $result;

@@ -513,7 +513,7 @@ if (isset($_POST['form_sent']))
 			{
 				// Create the post ("topic post")
 //				$db->query('INSERT INTO '.$db->prefix.'posts (poster, poster_id, poster_ip, hide_smilies, posted, topic_id) VALUES(\''.$db->escape($username).'\', '.$pun_user['id'].', \''.get_remote_address().'\', \''.$hide_smilies.'\', '.$now.', '.$new_tid.')') or error('Unable to create post', __FILE__, __LINE__, $db->error());
-				$tdb = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
+				$tdb = new driver_mysql(config('punbb.database'));
 				$data = array(
 					'poster' => $username, 
 					'poster_id' => $pun_user['id'], 
@@ -538,7 +538,7 @@ if (isset($_POST['form_sent']))
 			else
 			{
 				// Create the post ("topic post")
-				$tdb = new DataBase('AB_FORUMS');
+				$tdb = new DataBase(config('punbb.database'));
 				$data = array(
 					'poster' => $username, 
 					'poster_ip' => get_remote_address(), 
