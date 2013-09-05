@@ -1,0 +1,27 @@
+{form th='Параметры профиля' object=$this->client()}
+{input th='Название профиля' name='title'}
+<tr><th>Тип поля редактирования текста</th>
+	<td>{bors_radio name='textarea_type' is_int=false
+		list="array('markitup' => 'markItUp! <small>(кнопки с тегами, в поле редактора — видна разметка)</small>', 'textarea' => 'textarea <small>(никаких кнопок, голый текст)</small>', 'wysibb' => 'WysiBB <small>(Полностью визуальное редактирование)</small>');"}</td>
+</tr>
+<tr><th>Метки</th>
+	<td>{checkbox name='need_trafic_save' label='Необходимо экономить трафик<br/><small>Отключаются особенно затратные по трафику функции</small>'}
+</tr>
+{submit value='Сохранить'}
+{go value='http://forums.balancer.ru/personal/clients/'}
+{/form}
+
+<h2>Примечания и подсказки:</h2>
+<h3>Тип поля редактирования текста</h3>
+<p>Стандартное поле редактирования браузера — это тип <i>textarea</i>. Никаких удобств, зато функция «Назад» (в случае ошибок отсылки и т.п.)
+работает (если браузер нормальный — Firefox, Opera или Chrome) без потери введённого текста.</p>
+<p>Вариант <i>markItUp!</i> — это JavaScript надстройка
+с кнопочками редактирования. Удобно для тех, кто не помнит bbcode или привык работать мышкой, но зато возврат по «Назад» гарантированно
+приводит к потере введённого текста.</p>
+<p>Вариант <i>WysiBB</i> — это полноценное визуальное редактирование. Возможно, более глючное. И тоже не работает возврат назад в браузере.</p>
+
+<h2>Ссылки</h2>
+<ul>
+<li><a href="http://www.balancer.ru/support/2012/02/t85283--trafik-voprosy-ekonomii-nastrojki-klientov.html">Обсуждение настроек профилей на форуме</a></li>
+<li><a href="http://www.balancer.ru/support/2003/05/t20735--redaktor-soobschenij.html">Обсуждение редактора сообщений и его режимов на форуме</a></li>
+</ul>

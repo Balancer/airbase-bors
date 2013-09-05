@@ -1,0 +1,34 @@
+<table class="btab w100p shadow8">
+<tr>
+	<th>Статус</th>
+	<th>Название профиля</th>
+	<th>Действия</th>
+</tr>
+{foreach from=$this->clients() item="c"}
+<tr>
+	<td class="right">{if $c->is_active()}{icon image="actions/apply" title="Этот профиль активен сейчас"}{else}&nbsp;{/if}</td>
+	<td>{$c->admin()->titled_link()}</td>
+	<td>
+		{icon image="actions/apply" link=$c->admin()->urls('apply') title="Задействовать в текущем браузере данный профиль"}
+		{icon image="delete" link=$c->urls('action/public/delete') title="Удалить профиль"}
+	</td>
+</tr>
+{/foreach}
+</table>
+
+<br/><br/>
+
+{form th='Добавить новый профиль (отдельные настройки под текущий браузер)' act='append' css_class="shadow8"}
+{input th='Название профиля' name='new_title' value=$this->new_title()}
+{submit value='Добавить'}
+{/form}
+
+<dl class="box shadow8">
+<dt>Ссылки</dt>
+<dd>
+<ul>
+<li><a href="http://www.balancer.ru/support/2012/02/t85283--trafik-voprosy-ekonomii-nastrojki-klientov.html">Обсуждение этой страницы</a></li>
+</ul>
+</dd>
+</dl>
+

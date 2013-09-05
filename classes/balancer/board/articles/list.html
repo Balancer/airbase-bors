@@ -1,0 +1,5 @@
+{foreach from=$items item="x"}
+<small><i><b>{$x->create_time()|date:'d.m.Y'}</b></i></small><br/>
+{$x->titled_url()}<br/>
+<small>{$x->description()}</small><br/>
+{/foreach}
