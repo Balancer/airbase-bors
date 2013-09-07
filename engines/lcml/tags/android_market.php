@@ -7,7 +7,10 @@ function lp_android_market($market_id, $params)
 //	https://play.google.com/store/apps/details?id=com.tencent.research.drop
 	$url = "https://play.google.com/store/apps/details?id={$market_id}";
 
-	$data = bors_external_common::content_extract($url);
+	$data = bors_external_common::content_extract($url, array(
+		// <div class="cover-container"> <img class="cover-image" src="https://lh6.ggpht.com/al1px-oC7qvC37yUdPuD533b-MHphe0fwEQ1hyCqnehyiLOEpXdUuCytRoNTzE4vKgw=w300-rw" alt="Cover art" itemprop="image"> </div>
+		'default_image_regexp' => '!<img class="cover-image" src="([^"]+)"[^>]+>!',
+	));
 //	if(config('is_developer'))
 //		var_dump($data);
 	$title = preg_replace('! - [^\-]+$!', '', defval($data, 'title', $market_id));
