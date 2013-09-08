@@ -11,6 +11,11 @@ function lt_ab($args)
 			$user = bors_find_first('balancer_board_user', array('username' => $user_name));
 		if(!$user)
 			$user = bors_find_first('balancer_board_user', array('user_nick' => $user_name));
+		if(!$user && is_numeric($user_name))
+		{
+			$user = bors_load('balancer_board_user', $user_name);
+			$user_name = $user->title();
+		}
 
 		if(!$user)
 			return "$user_name";
