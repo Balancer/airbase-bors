@@ -283,7 +283,7 @@ forum_forum::all_forums_preload(true);
 
 include_once("include/subforums.php");
 $ich = new bors_cache();
-if($ich->get("subforums-text-v4", $pun_config['root_uri']))// && !debug_is_balancer()
+if($ich->get("subforums-text-v7", $pun_config['root_uri']))// && !debug_is_balancer()
 {
 	$subforums = $ich->last();
 }
