@@ -11,10 +11,10 @@
 		$db = new driver_mysql(config('punbb.database'));
 
 		forum_forum::all_forums_preload(true);
-		$forum = object_load('forum_forum', $forum_id);
+		$forum = bors_load('balancer_board_forum', $forum_id);
 
 		$subforum_ids = $db->select_array('forums', 'id', array("tree_map LIKE '{$forum->tree_map()}{$forum_id}.%'"));
-//		if(debug_is_balancer())			print_d($subforum_ids);
+//		if(config('is_developer')) var_dump("tree_map LIKE '{$forum->tree_map()}{$forum_id}.%'", $subforum_ids);
 		return $subforum_ids;
 	}
 
