@@ -612,6 +612,16 @@ if (isset($_POST['form_sent']))
 
 		$topic->set_page($page);
 
+		$ldtext = to_translit($topic->title());
+		$ldtext = preg_replace('/\W/', ' ', $ldtext);
+		$ldtext = str_replace(' ', '-', trim(substr(trim(preg_replace('/\s+/', ' ', $ldtext)), 0, 16))).'>';
+//		$ldtext .= substr(to_translit($post->author_name()), 0, 8)."> ";
+		$ldtext2 = substr(str_replace("\n", " ", to_translit($post->snip())) , 0, 100);
+		$ldtext2 = preg_replace("/[^\w']/", ' ', $ldtext2);
+		$ldtext2 = trim(preg_replace('/\s+/', ' ', $ldtext2));
+		@file_get_contents('http://home.balancer.ru/lorduino/arduino.php?text='.urlencode($ldtext.$ldtext2));
+		@file_put_contents('/tmp/ldtext.txt', $ldtext);
+
 		$topic->cache_clean();
 		$post->cache_clean();
 
