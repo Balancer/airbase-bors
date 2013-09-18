@@ -2,7 +2,7 @@
 
 class balancer_board_topics_10years extends base_page_paged
 {
-	function main_class() { return 'forum_topic'; }
+	function main_class() { return 'balancer_board_topic'; }
 	function order() { return 'create_time'; }
 	function template() { return 'forum/_header.html'; }
 	function title() { return 'В этот день 10 лет назад...'; }
