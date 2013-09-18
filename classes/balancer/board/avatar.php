@@ -90,4 +90,13 @@ class balancer_board_avatar extends balancer_board_object_db
 //			'create_time',
 		));
 	}
+
+	static function __dev()
+	{
+		$avatar = bors_load('balancer_board_user', 84461)->avatar();
+		config_set('is_developer', true);
+		$th = $avatar->image()->thumbnail('50x50');
+		var_dump($th->data);
+		var_dump($th->url());
+	}
 }
