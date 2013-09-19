@@ -13,7 +13,7 @@
 
 class lcml_tag_single_attach extends bors_lcml_tag_single
 {
-	function html($params)
+	function html($text, &$params)
 	{
 		$attach = bors_load('balancer_board_attach', $params['attach']);
 

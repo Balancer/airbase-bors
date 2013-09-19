@@ -12,7 +12,7 @@ function main()
 	$deleted = 0;
 
 	$thumbs = bors_each('bors_image_thumb', array(
-		'limit' => 100000,
+//		'limit' => 100000,
 	));
 
 	foreach($thumbs as $t)
@@ -23,7 +23,7 @@ function main()
 			$deleted++;
 			echo '-';
 		}
-		echo '.';
+//		echo '.';
 	}
 
 	if($deleted)
