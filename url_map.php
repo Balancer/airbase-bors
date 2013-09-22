@@ -17,6 +17,7 @@ $map = array(
 	'(/admin/forum/posts/)move-tree => airbase_forum_admin_posts_movetree',
 	'.*/ => airbase_page_hts_plain',
 	'.*/ => airbase_page_hts_plainu',
+	'.* => airbase_pages_zim',
 	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
 	'/_bors/ajax/post/info\?post=(.+) => balancer_board_post_ajax_info(1)',
 	'/_bors/ajax/thumb\-(up|down)\?object=(.+) => balancer_ajax_thumb_vote(2,vote=1)',
