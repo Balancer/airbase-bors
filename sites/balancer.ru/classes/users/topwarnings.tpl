@@ -1,5 +1,5 @@
 <table class="btab" width="100%">
-<tr><th colSpan="6">Последние 25 штрафов:</th></tr>
+<tr><th colSpan="7">Последние 25 штрафов:</th></tr>
 <tr>
 	<th colspan="2">Дата</th>
 	<th rowspan="2">Пользователь</th>

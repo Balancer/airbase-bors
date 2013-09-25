@@ -49,6 +49,7 @@ class forum_user extends balancer_board_object_db
 			'user_nick',
 			'group_id',
 			'user_title' => 'title',
+			'level',
 			'use_avatar',
 			'avatar_width',
 			'avatar_height',
