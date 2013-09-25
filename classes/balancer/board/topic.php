@@ -18,6 +18,9 @@ class balancer_board_topic extends forum_topic
 		if($this->modify_time() < time() - 86400*7)
 			return rand(3600, 86400);
 
+		if($this->modify_time() < time() - 86400)
+			return rand(600, 1200);
+
 		return 0;
 	}
 

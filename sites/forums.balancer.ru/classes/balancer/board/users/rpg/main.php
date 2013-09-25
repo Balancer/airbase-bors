@@ -1,5 +1,7 @@
 <?php
 
+// http://forums.balancer.ru/users/rpg/
+
 /*
 	Рыба правил:
 
