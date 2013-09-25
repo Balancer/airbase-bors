@@ -433,7 +433,6 @@ BORS_CORE={$smarty.const.BORS_CORE}
 {foreach from=$js_include_post item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
-{if $javascript_post || $jquery_document_ready}
 <script type="text/javascript"><!--
 {foreach from=$javascript_post item="s"}
 {$s}
@@ -444,6 +443,8 @@ $(document).ready(function(){literal}{{/literal}
 {$s}
 {/foreach}
 })
+{if $me}
+jQuery.getScript('http://forums.balancer.ru/ajax/pagemod.js?user_id='+0+'&target={$this->internal_uri_ascii()}&mtime={$this->modify_time()}&static={$this->cache_static()}')
 {/if}
 --></script>
 {/if}
