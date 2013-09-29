@@ -118,4 +118,10 @@ class balancer_board_forum extends forum_forum
 //        var_dump($img->id()); exit();
     }
 
+
+	function do_work_update_counts()
+	{
+		$this->update_num_topics();
+		echo "{$this}: Counts updated = {$this->num_topics()}\n";
+	}
 }
