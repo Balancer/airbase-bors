@@ -530,8 +530,16 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		$this->__move_tree_to_topic($new_tid, $this->topic_id());
 
+		$forums = [];
 		foreach(array_keys($GLOBALS['move_tree_to_topic_changed_topics']) as $tid)
-			object_load('balancer_board_topic', $tid, array('no_load_cache' => true))->recalculate();
+		{
+			$topic = bors_load('balancer_board_topic', $tid, array('no_load_cache' => true));
+			$topic->recalculate();
+			$forums[$topic->forum_id()] = $topic->forum();
+		}
+
+		foreach($forums as $fid => $forum)
+			$forum->recalculate();
 
 		$this->recalculate();
 	}
