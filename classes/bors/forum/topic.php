@@ -525,7 +525,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		);
 
 		if($this->forum_id())
-			$res[] = object_load('forum_forum', $this->forum_id());
+			$res[] = bors_load('balancer_board_forum', $this->forum_id());
 
 //		TODO: убедиться, что модифицируется только автор сообщения при постинге: блоги, все сообщения и т.п.
 //		foreach($this->all_users() as $user_id)
@@ -543,10 +543,9 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 	function cache_clean_self($page = NULL)
 	{
 		parent::cache_clean_self($page);
-
 		//TODO: подумать на тему неполной чистки.
 		foreach(glob($this->cache_dir().'/t'.$this->id().'*.html') as $f)
-			@unlink($f);
+			unlink($f);
 	}
 
 	function url_engine() { return 'url_titled'; }

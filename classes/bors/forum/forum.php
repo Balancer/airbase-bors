@@ -48,31 +48,31 @@ function set_parent_forum_id($v, $dbup)
 }
 
 function category_id() { return @$this->data['category_id']; }
-function set_category_id($v, $dbup) { return $this->set('category_id', $v, $dbup); }
+function set_category_id($v, $dbup=true) { return $this->set('category_id', $v, $dbup); }
 function sort_order() { return @$this->data['sort_order']; }
-function set_sort_order($v, $dbup) { return $this->set('sort_order', $v, $dbup); }
+function set_sort_order($v, $dbup=true) { return $this->set('sort_order', $v, $dbup); }
 function keywords_string() { return @$this->data['keywords_string']; }
-function set_keywords_string($v, $dbup) { return $this->set('keywords_string', $v, $dbup); }
+function set_keywords_string($v, $dbup=true) { return $this->set('keywords_string', $v, $dbup); }
 function redirect_url() { return @$this->data['redirect_url']; }
-function set_redirect_url($v, $dbup) { return $this->set('redirect_url', $v, $dbup); }
+function set_redirect_url($v, $dbup=true) { return $this->set('redirect_url', $v, $dbup); }
 function moderators() { return @$this->data['moderators']; }
-function set_moderators($v, $dbup) { return $this->set('moderators', $v, $dbup); }
+function set_moderators($v, $dbup=true) { return $this->set('moderators', $v, $dbup); }
 function num_topics() { return @$this->data['num_topics']; }
-function set_num_topics($v, $dbup) { return $this->set('num_topics', $v, $dbup); }
+function set_num_topics($v, $dbup=true) { return $this->set('num_topics', $v, $dbup); }
 function num_posts() { return @$this->data['num_posts']; }
-function set_num_posts($v, $dbup) { return $this->set('num_posts', $v, $dbup); }
+function set_num_posts($v, $dbup=true) { return $this->set('num_posts', $v, $dbup); }
 function last_post_time() { return @$this->data['last_post_time']; }
-function set_last_post_time($v, $dbup) { return $this->set('last_post_time', $v, $dbup); }
+function set_last_post_time($v, $dbup=true) { return $this->set('last_post_time', $v, $dbup); }
 function last_post_id() { return @$this->data['last_post_id']; }
-function set_last_post_id($v, $dbup) { return $this->set('last_post_id', $v, $dbup); }
+function set_last_post_id($v, $dbup=true) { return $this->set('last_post_id', $v, $dbup); }
 function last_poster() { return @$this->data['last_poster']; }
-function set_last_poster($v, $dbup) { return $this->set('last_poster', $v, $dbup); }
+function set_last_poster($v, $dbup=true) { return $this->set('last_poster', $v, $dbup); }
 function sort_by() { return @$this->data['sort_by']; }
-function set_sort_by($v, $dbup) { return $this->set('sort_by', $v, $dbup); }
+function set_sort_by($v, $dbup=true) { return $this->set('sort_by', $v, $dbup); }
 function original_id() { return @$this->data['original_id']; }
-function set_original_id($v, $dbup) { return $this->set('original_id', $v, $dbup); }
+function set_original_id($v, $dbup=true) { return $this->set('original_id', $v, $dbup); }
 function skip_common() { return @$this->data['skip_common']; }
-function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup); }
+function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, $dbup); }
 
 	function init()
 	{
@@ -337,10 +337,24 @@ function set_skip_common($v, $dbup) { return $this->set('skip_common', $v, $dbup
 
 	function update_num_topics()
 	{
-		$this->set_num_topics(objects_count('balancer_board_topic', array('forum_id' => $this->id())), true);
-		$this->set_num_posts(objects_count('balancer_board_posts_pure', array(
-			'inner_join' => 'balancer_board_topic ON (balancer_board_topic.id = balancer_board_post.topic_id AND balancer_board_topic.forum_id='.$this->id().')'
-		)), true);
+		$counts = bors_find_first('balancer_board_topic', array(
+			'*set' => 'COUNT(*) AS topics_count, SUM(num_replies) AS replies_count',
+			'forum_id' => $this->id(),
+			'moved_to IS NULL',
+		));
+
+		$last_topic = bors_find_first('balancer_board_topic', array(
+			'forum_id' => $this->id(),
+			'moved_to IS NULL',
+			'order' => '`last_post` DESC',
+		));
+
+		$this->set_num_topics($counts->topics_count());
+		$this->set_num_posts($counts->replies_count() + $counts->topics_count());
+
+		$this->set_last_post_time($last_topic->last_post_create_time());
+		$this->set_last_post_id($last_topic->last_post_id());
+		$this->set_last_poster($last_topic->last_poster_name());
 	}
 
 	function recalculate()
