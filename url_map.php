@@ -17,6 +17,7 @@ $map = array(
 	'(/admin/forum/posts/)move-tree => airbase_forum_admin_posts_movetree',
 	'.*/ => airbase_page_hts_plain',
 	'.*/ => airbase_page_hts_plainu',
+	'.*/ => bal_pages_hts',
 	'.* => airbase_pages_zim',
 	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
 	'/_bors/ajax/post/info\?post=(.+) => balancer_board_post_ajax_info(1)',
@@ -103,5 +104,7 @@ $map = array(
 	'.* => bors_page_fs_htsu(url)', //TODO: снести нафиг после конвертации старых hts Авиабазы
 
 	'.* => airbase_page_hts(url)',
+	'.* => bal_pages_hts(url)',
+	'.* => airbase_pages_zim',
 );
 

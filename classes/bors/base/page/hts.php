@@ -39,7 +39,8 @@ class base_page_hts extends base_page_db
 //	function db_name() { return config('hts.database', 'HTS'); }
 //	function main_table_storage() { return NULL; }
 	function fields_first() { return 'stb_title stb_source stb_description'; }
-	function db_name() { return config('mysql_database'); }
+//	function db_name() { return config('mysql_database'); }
+	function db_name() { return config('hts.database', 'HTS'); }
 	function table_name() { return NULL; }
 
 	function owner() { return bors_load('balancer_board_user', 10000); }
@@ -47,7 +48,7 @@ class base_page_hts extends base_page_db
 	function fields()
 	{
 		return array(
-			config('hts.database', 'HTS') => array(
+			$this->db_name() => array(
 				'hts_data_source' => array('source' => 'value'),
 				'hts_data_title'  => array('title'  => 'value'),
 				'hts_data_description'  => array('description'  => 'value'),
