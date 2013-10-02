@@ -31,6 +31,8 @@ function can_move() { return @$this->data['can_move']; }
 function set_can_move($v, $dbup) { return $this->set('can_move', $v, $dbup); }
 
 	function body() { return ec("Группа '{$this->title()}' (№{$this->id()})"); }
-	function is_coordinator() { return intval($this->can_move()) != 0; }
-	function is_moderator() { return in_array($this->id(), array(1, 2)); }
+//	function is_coordinator() { return intval($this->can_move()) != 0; }
+	function is_coordinator() { return $this->is_moderator() || in_array($this->id(), array(5, 21)); }
+	function is_moderator() { return $this->is_administrator() || in_array($this->id(), array(2)); }
+	function is_administrator() { return in_array($this->id(), array(1)); }
 }
