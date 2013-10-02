@@ -25,7 +25,7 @@
 $GLOBALS['cms']['cache_disabled'] = true;
 $GLOBALS['cms']['cant_lock'] = true;
 
-$forum_temporary_redirect = 'http://balancer.endofinternet.net/mybb/search.php?action=getdaily';
+# $forum_temporary_redirect = 'http://balancer.endofinternet.net/mybb/search.php?action=getdaily';
 
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';

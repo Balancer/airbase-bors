@@ -1,5 +1,19 @@
 <div class="footer-info">
 
+{if $me->can_move()}
+<h6>Инструменты сообщения</h6>
+<ul>
+<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/as-new-topic">Вынести сообщение со всеми ответами в <b>новую</b> тему</a></li>
+<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/move-tree">Перенести сообщение со всеми ответами в <b>другую</b>, уже имеющуюся тему</a></li>
+<li><a href="/admin/forum/posts/move-tree">Перенести все <b>отмеченные</b> сообщения в другую тему</a></li>
+{if not $p->sort_order()}
+<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/do-pinned.bas">Закрепить сообщение в начале темы</a></li>
+{else}
+<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/do-unpinned.bas">Открепить сообщение от начала темы</a></li>
+{/if}
+</ul>
+{/if}
+
 {if $me->is_coordinator()}
 {* <script type="text/javascript" src="/_bors/js/funcs3.js"></script> *}
 {* <script type="text/javascript" src="/_bors/js/coordinators.js"></script> *}
@@ -7,17 +21,8 @@
 <h6>Инструменты координатора</h6>
 <ul>
 <li><a href="http://www.balancer.ru/admin/users/{$owner_id}/warnings.html?object={$p->internal_uri()}"><img src="http://www.balancer.ru/img/web/skull.gif" />&nbsp;Выставить штраф пользователю за это сообщение</a></li>
-<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/as-new-topic">Вынести сообщение со всеми ответами в <b>новую</b> тему</a></li>
-<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/move-tree">Перенести сообщение со всеми ответами в <b>другую</b>, уже имеющуюся тему</a></li>
 <li><a href="http://www.balancer.ru/forum/tools/post/{$id}/">Старая страница инструментов</a></li>
-<li><a href="/admin/forum/posts/move-tree">Перенести все <b>отмеченные</b> сообщения в другую тему</a></li>
 {if $me->is_admin()}<li><a href="http://www.balancer.ru/forum/punbb/delete.php?id={$id}">Удалить это сообщение</a></li>{/if}
-
-{if not $p->sort_order()}
-<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/do-pinned.bas">Закрепить сообщение в начале темы</a></li>
-{else}
-<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/do-unpinned.bas">Открепить сообщение от начала темы</a></li>
-{/if}
 
 {if $p->is_hidden()}
 <li><a href="http://www.balancer.ru/admin/forum/post/{$id}/do-show.bas">Показать сообщение</a></li>
