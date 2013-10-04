@@ -960,9 +960,14 @@ H2 {MARGIN: 0; COLOR: #FFFFFF; BACKGROUND-COLOR: #B84623; FONT-SIZE: 1.1em; PADD
 			if ($db_error['error_sql'] != '')
 				echo "\t\t".'<br /><br /><strong>Failed query:</strong> '.pun_htmlspecialchars($db_error['error_sql'])."\n";
 			echo "<br/><br/><b style=\"color: red; font-size: 14pt;\">Если проблема постоянна и к форуму нет доступа, попробуйте заглянуть
-			за подробностями на
-			<a href=\"http://ls.balancer.ru/\">LSBR</a> (там работает форумная авторизация) или
-			<a href=\"http://balancer.endofinternet.net/mybb/forum-2.html\">Запасной форум</a> (на нём авторизация отдельная)</b>";
+			за подробностями на:
+<ul>
+<li><a href=\"http://home.balancer.ru/lorduino/\" style=\"color: red; font-weight: bold\">Чат Авиабазы</a> (не требуется никакой регистрации)</li>
+<li><a href=\"http://ls.balancer.ru/\">LSBR</a> (там работает форумная авторизация, те же логин с паролем, что и на форумах)</li>
+<li>Если не работает и LSBR, попробуйте <a href=\"http://balancer.endofinternet.net/mybb/\">ЗАПАСНОЙ ФОРУМ</a></li>
+</ul>
+
+			";
 		}
 	}
 	else
