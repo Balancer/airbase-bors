@@ -78,7 +78,7 @@ class forum_post extends balancer_board_object_db
 				'posts_calculated_fields(post_id)' => array(
 					'answers_count_raw' => 'answers_total',
 					'answers_in_other_topics_count_raw' => 'answers_other_topics',
-					'best10_ts' => array('name' => 'UNIX_TIMESTAMP(`best10_ts`)'),
+					'best10_ts' => 'UNIX_TIMESTAMP(`best10_ts`)',
 				),
 
 				'posts_dropable_fields(post_id)' => array(
