@@ -581,6 +581,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 				'user_id' => $user_id,
 				'count' => 0,
 				'last_visit' => $time,
+				'first_visit' => $time,
 				'last_post_id' => $this->last_post_id(),
 				'create_time' => time(),
 				'modify_time' => time(),

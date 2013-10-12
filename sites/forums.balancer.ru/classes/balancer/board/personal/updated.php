@@ -37,10 +37,13 @@ class balancer_board_personal_updated extends balancer_board_page
 		$counts = bors_find_all('balancer_board_topic', array(
 			'*set' => 'COUNT(*) AS updated_count, MIN(`posts`.id) as first_post_id',
 			'inner_join' => array(
-				"balancer_board_topics_visit ON (balancer_board_topic.id = balancer_board_topics_visit.target_object_id AND target_class_id = 2 AND user_id = $me_id)",
-				"balancer_board_post ON (balancer_board_post.topic_id = balancer_board_topic.id AND balancer_board_post.create_time > `topic_visits`.last_visit)",
+				"balancer_board_topics_visit ON (balancer_board_topic.id = balancer_board_topics_visit.target_object_id)",
+				"balancer_board_post ON (balancer_board_post.topic_id = balancer_board_topic.id)",
 			),
 			'balancer_board_topic.id IN' => array_keys($topics),
+			'target_class_id' => 2,
+			'user_id' => $me_id,
+			'balancer_board_post.create_time > `topic_visits`.last_visit',
 			'group' => 'balancer_board_topic.id'
 		));
 
