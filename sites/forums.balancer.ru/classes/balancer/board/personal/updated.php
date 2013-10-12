@@ -33,6 +33,9 @@ class balancer_board_personal_updated extends balancer_board_page
 		bors_objects_preload($topics, 'owner_id', 'balancer_board_user',  'owner');
 		bors_objects_preload($topics, 'image_id', 'airbase_image');
 
+		$images = bors_field_array_extract($topics, 'image');
+		bors_objects_preload($images, 'id_96x96', 'bors_image_thumb', 'thumbnail_96x96', true);
+
 		// Если включить эту выборку прямо в загрузку topics, то работает медленнее.
 		$counts = bors_find_all('balancer_board_topic', array(
 			'*set' => 'COUNT(*) AS updated_count, MIN(`posts`.id) as first_post_id',
