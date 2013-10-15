@@ -77,18 +77,34 @@ function pun_mail($to, $subject, $message, $from = '')
 		$from = '"'.str_replace('"', '', $pun_config['o_board_title'].' '.$lang_common['Mailer']).'" <'.$pun_config['o_webmaster_email'].'>';
 
 	// Do a little spring cleaning
-	$to = trim(preg_replace('#[\n\r]+#s', '', $to));
-	$subject = trim(preg_replace('#[\n\r]+#s', '', $subject));
-	$from = trim(preg_replace('#[\n\r:]+#s', '', $from));
+	$to = trim(preg_replace('#[\n\r]+#s', ' ', $to));
+	$subject = trim(preg_replace('#[\n\r]+#s', ' ', $subject));
+	$from = trim(preg_replace('#[\n\r:]+#s', ' ', $from));
 
 //	$headers = 'From: '.$from."\r\n".'Date: '.date('r')."\r\n".'MIME-Version: 1.0'."\r\n".'Content-transfer-encoding: 8bit'."\r\n".'Content-type: text/plain; charset='.$lang_common['lang_encoding']."\r\n".'X-Mailer: PunBB Mailer';
 
 	// Make sure all linebreaks are CRLF in message
 	$message = str_replace("\n", "\r\n", pun_linebreaks($message));
 
-	send_mail($to, $subject, $message, NULL, $from, array(
-		'X-Mailer' => 'PunBB forum mailer over BORS(c)',
-	));
+	$mail = bors_mail::factory()
+		->to($to)
+		->reply_to($from)
+		->subject($subject)
+		->text($message)
+		->mailer('PunBB forum mailer over BORS(c)')
+	;
+
+	if(preg_match('/^"(\S+)" <(.+)>$/', $from, $m))
+		$mail->from2($m[2], "BalaBOT от {$m[1]}");
+	else
+		$mail->from($from);
+
+	$mail->send();
+
+//	send_mail($to, $subject, $message, NULL, $from, array(
+//		'Reply-To' => $from,
+//		'X-Mailer' => 'PunBB forum mailer over BORS(c)',
+//	));
 }
 
 

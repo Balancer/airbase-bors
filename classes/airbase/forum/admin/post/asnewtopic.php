@@ -41,13 +41,13 @@ class airbase_forum_admin_post_asnewtopic extends bors_page
 			return true;
 
 		$old_topic = $this->post()->topic();
-		$new_topic = object_new('balancer_board_topic');
-		$new_topic->set_forum_id($data['target_forum_id'], true);
-		$new_topic->set_title($data['new_topic_title'], true);
-		$new_topic->set_description($data['new_topic_description'], true);
+		$new_topic = bors_new('balancer_board_topic', array(
+			'forum_id' => $data['target_forum_id'],
+			'title' => $data['new_topic_title'],
+			'description' => $data['new_topic_description'],
+		));
+
 		$new_topic->set_keywords_string($data['new_topic_keywords_string'], true);
-		$new_topic->new_instance();
-		$new_topic->store();
 
 		if($old_topic && $old_topic->id() != $new_topic->id())
 		{
