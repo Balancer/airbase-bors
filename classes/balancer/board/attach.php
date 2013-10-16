@@ -164,4 +164,14 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 			."[".smart_size($this->size()).",&nbsp;{$this->downloads()}&nbsp;".sklon($this->downloads(), 'загрузка', 'загрузки', 'загрузок')."]"
 			." [attach={$this->id()}]</div>";
 	}
+
+	function image_url()
+	{
+		if(!preg_match("!(jpe?g|png|gif)!i", $this->extension()))
+			return NULL;
+
+		return "http://files.balancer.ru/forums/attaches/{$this->location()}";
+//		var_dump($path); exit();
+//		return balancer_board_image::register_file($path);
+	}
 }

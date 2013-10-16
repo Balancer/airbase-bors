@@ -216,4 +216,68 @@ class balancer_board_post extends forum_post
 
 		return $this->topic()->title();
 	}
+
+	function _image_def()
+	{
+		foreach($this->attaches() as $a)
+			if(preg_match("!(jpe?g|png|gif)!i", $a->extension()))
+				return $a->image();
+
+		$obj = bors_find_first('balancer_board_posts_object', array(
+			'inner_join' => array(
+				'`AB_BORS`.`bors_images` i ON balancer_board_posts_object.target_object_id = i.id',
+			),
+			'target_class_id IN' => array(
+				bors_foo('balancer_board_attach')->class_id(),
+				202, // airbase_image
+				bors_foo('balancer_board_image')->class_id(),
+				bors_foo('airbase_image')->class_id(),
+			),
+			'post_id' => $this->id(),
+			'`i`.extension<>"gif"',
+			'order' => 'post_id',
+		));
+
+		if($obj)
+		{
+			$image = $obj->target();
+			return $image;
+		}
+
+		return $this->topic()->image();
+	}
+
+	function _image_url_def()
+	{
+		foreach($this->attaches() as $a)
+			if(preg_match("!(jpe?g|png|gif)!i", $a->extension()))
+				return $a->image_url();
+
+		$obj = bors_find_first('balancer_board_posts_object', array(
+//			'inner_join' => array(
+//				'`AB_BORS`.`bors_images` i ON balancer_board_posts_object.target_object_id = i.id',
+//			),
+			'target_class_id IN' => array(
+				bors_foo('balancer_board_attach')->class_id(),
+				202, // airbase_image
+				bors_foo('balancer_board_image')->class_id(),
+				bors_foo('airbase_image')->class_id(),
+				106, // bors_external_youtube
+			),
+			'post_id' => $this->id(),
+//			'`i`.extension<>"gif"',
+			'order' => 'post_id',
+		));
+
+		if($obj)
+			if($image = $obj->target())
+			{
+				if($image_url = $image->get('image_url'))
+					return $image_url;
+				if($image_url = $image->get('url'))
+					return $image_url;
+			}
+
+		return $this->topic()->image()->url();
+	}
 }

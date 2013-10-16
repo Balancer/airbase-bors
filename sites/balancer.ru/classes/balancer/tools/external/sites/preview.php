@@ -58,7 +58,7 @@ class balancer_tools_external_sites_preview extends bors_image_png
 //		$bin = config('bin.wkhtmltoimage', "/opt/bin/wkhtmltoimage-amd64");
 		$bin = config('bin.wkhtmltoimage', "/usr/bin/env");
 
-		if($args = config('bin.wkhtmltoimage.args', 'DISPLAY=:1 /opt/bin/wkhtmltoimage-amd64 --use-xserver'))
+		if($args = config('bin.wkhtmltoimage.args', 'DISPLAY=:0 /opt/bin/wkhtmltoimage-amd64 --use-xserver'))
 			$bin .= " $args ";
 
 		if(preg_match('/wikipedia/', $url))
