@@ -465,47 +465,50 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 //		$this->recalculate();
 	}
 
-	function recalculate($full_repaging = true)
+	function recalculate($full_repaging = true, $skip_any_repaging = false)
 	{
 		bors()->changed_save(); // Сохраняем всё. А то в памяти могут быть модифицированные объекты, с которыми сейчас будем работать.
 
-		$this->set_is_public($this->forum()->is_public(), true);
-
-		$num_replies = $this->db()->select('posts', 'COUNT(*)', array(
-			'topic_id' => $this->id(),
-			'is_deleted' => false,
-		)) - 1;
-
-		$this->set_num_replies($num_replies, true);
-
-		$first_pid = $this->db()->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));
-
-		$this->set_first_post_id($first_pid, true);
-		if($first_post = object_load('balancer_board_post', $first_pid))
+		if(!$skip_any_repaging)
 		{
-			$this->set_create_time($first_post->create_time(true), true);
-			$this->set_author_name($first_post->author_name(), true);
-			$this->set_owner_id($first_post->owner() ? $first_post->owner()->id() : NULL, true);
-		}
-		else
-			debug_hidden_log('post_error', "Unknown first post $first_pid in {$this}->recalculate()");
+			$this->set_is_public($this->forum()->is_public(), true);
 
-		if($last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id())))
-		{
-			$this->set_last_post_id($last_pid, true);
-			$last_post = object_load('balancer_board_post', $last_pid);
+			$num_replies = $this->db()->select('posts', 'COUNT(*)', array(
+				'topic_id' => $this->id(),
+				'is_deleted' => false,
+			)) - 1;
+
+			$this->set_num_replies($num_replies, true);
+
+			$first_pid = $this->db()->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));
+
+			$this->set_first_post_id($first_pid, true);
+			if($first_post = object_load('balancer_board_post', $first_pid))
+			{
+				$this->set_create_time($first_post->create_time(true), true);
+				$this->set_author_name($first_post->author_name(), true);
+				$this->set_owner_id($first_post->owner() ? $first_post->owner()->id() : NULL, true);
+			}
+			else
+				debug_hidden_log('post_error', "Unknown first post $first_pid in {$this}->recalculate()");
+
+			if($last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id())))
+			{
+				$this->set_last_post_id($last_pid, true);
+				$last_post = object_load('balancer_board_post', $last_pid);
 
 //			Но зачем? Пока не сносить, подумать.
 //			if($this->get('last_post_create_time') < $last_post->create_time(true))
-				$this->set_last_post_create_time($last_post->create_time(true), true);
+					$this->set_last_post_create_time($last_post->create_time(true), true);
 
-			$this->set_last_poster_name($last_post->author_name(), true);
+				$this->set_last_poster_name($last_post->author_name(), true);
 
+			}
+			else
+				debug_hidden_log('post_error', "Unknown last post $first_pid in {$this}->recalculate()");
+
+			$this->repaging_posts($full_repaging ? 1 : -1);
 		}
-		else
-			debug_hidden_log('post_error', "Unknown last post $first_pid in {$this}->recalculate()");
-
-		$this->repaging_posts($full_repaging ? 1 : -1);
 
 		foreach($this->posts() as $pid => $p)
 			$p->set_body(NULL, true);
