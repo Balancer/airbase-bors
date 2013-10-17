@@ -19,7 +19,6 @@
 {/if}
 </ul>
 
-{if config('is_developer')}
 <h2>Отношения с пользователями</h2>
 <table class="nul w100p small"><tr><td>
 	<table class="btab w100p">
@@ -80,7 +79,6 @@
 	{/foreach}
 	</table>
 </td></table>
-{/if}
 
 <h2>Ссылки</h2>
 <ul>
