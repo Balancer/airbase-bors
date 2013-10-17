@@ -2,7 +2,7 @@
 
 require_once('inc/clients/geoip-place.php');
 
-class user_main extends base_page
+class user_main extends balancer_board_page
 {
 	function can_be_empty() { return false; }
 	function is_loaded() { return $this->user() != NULL; }
@@ -46,6 +46,16 @@ class user_main extends base_page
 			'friends_to' => bors_find_all('balancer_board_users_relation', array(
 				'from_user_id' => $this->id(),
 				'order' => '-score',
+				'limit' => 10,
+			)),
+			'enemies_from' => bors_find_all('balancer_board_users_relation', array(
+				'to_user_id' => $this->id(),
+				'order' => 'score',
+				'limit' => 10,
+			)),
+			'enemies_to' => bors_find_all('balancer_board_users_relation', array(
+				'from_user_id' => $this->id(),
+				'order' => 'score',
 				'limit' => 10,
 			)),
 		));
