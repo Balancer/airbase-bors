@@ -392,7 +392,7 @@ if (isset($_POST['form_sent']))
 
 			// Count number of replies in the topic
 
-			$num_replies = bors_count('balancer_board_post', array(
+			$num_replies = bors_count('balancer_board_posts_pure', array(
 				'topic_id' => $tid,
 				'is_deleted' => 0,
 			)) - 1;
@@ -619,7 +619,7 @@ if (isset($_POST['form_sent']))
 		$ldtext2 = substr(str_replace("\n", " ", to_translit($post->snip())) , 0, 100);
 		$ldtext2 = preg_replace("/[^\w']/", ' ', $ldtext2);
 		$ldtext2 = trim(preg_replace('/\s+/', ' ', $ldtext2));
-		@file_get_contents('http://home.balancer.ru/lorduino/arduino.php?text='.urlencode($ldtext.$ldtext2));
+//		@file_get_contents('http://home.balancer.ru/lorduino/arduino.php?text='.urlencode($ldtext.$ldtext2));
 		@file_put_contents('/tmp/ldtext.txt', $ldtext);
 
 		$topic->cache_clean();

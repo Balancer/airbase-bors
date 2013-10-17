@@ -14,7 +14,10 @@ class forum_forum extends bors_object_db
 			'id',
 			'title' => 'forum_name',
 			'description' => 'forum_desc',
-			'image_id',
+			'image_id' => array(
+				'upload_dir' => 'images/forums/logos',
+				'class_name' => 'balancer_board_image',
+			),
 			'parent_forum_id' => 'parent',
 			'parent_id' => 'parent',
 			'tree_map',

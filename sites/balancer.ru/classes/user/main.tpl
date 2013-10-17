@@ -21,7 +21,7 @@
 
 {if config('is_developer')}
 <h2>Отношения с пользователями</h2>
-<table class="nul w100p"><tr><td>
+<table class="nul w100p small"><tr><td>
 	<table class="btab w100p">
 	<caption>Лучше всех к нему относятся</caption>
 	<tr>
@@ -31,7 +31,7 @@
 	{foreach $friends_from as $u}
 	<tr>
 		<td>{$u->from_user()->titled_link()}</td>
-		<td>{$u->score()}</td>
+		<td class="{if $u->score()>0}green{/if}">{$u->score()}</td>
 	</tr>
 	{/foreach}
 	</table>
@@ -45,7 +45,37 @@
 	{foreach $friends_to as $u}
 	<tr>
 		<td>{$u->to_user()->titled_link()}</td>
-		<td>{$u->score()}</td>
+		<td class="{if $u->score()>0}green{/if}">{$u->score()}</td>
+	</tr>
+	{/foreach}
+	</table>
+</td></table>
+
+<table class="nul w100p small"><tr><td>
+	<table class="btab w100p">
+	<caption>Хуже всех к нему относятся</caption>
+	<tr>
+		<th>Пользователь</th>
+		<th>Отношение</th>
+	</tr>
+	{foreach $enemies_from as $u}
+	<tr>
+		<td>{$u->from_user()->titled_link()}</td>
+		<td class="{if $u->score()<0}red{/if}">{$u->score()}</td>
+	</tr>
+	{/foreach}
+	</table>
+</td><td>
+	<table class="btab w100p">
+	<caption>Хуже он относится к</caption>
+	<tr>
+		<th>Пользователь</th>
+		<th>Отношение</th>
+	</tr>
+	{foreach $enemies_to as $u}
+	<tr>
+		<td>{$u->to_user()->titled_link()}</td>
+		<td class="{if $u->score()<0}red{/if}">{$u->score()}</td>
 	</tr>
 	{/foreach}
 	</table>
