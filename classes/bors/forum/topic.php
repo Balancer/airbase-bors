@@ -233,6 +233,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		$reps = bors_find_all('airbase_user_reputation', array(
 			'target_class_name IN' => array('forum_post', 'balancer_board_post'),
 			'target_object_id IN' => $post_ids,
+			'is_deleted' => false,
 			'order' => 'target_object_id, id',
 		));
 

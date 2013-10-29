@@ -733,6 +733,7 @@ function avatar_thumb($geo)
 		foreach(bors_find_all('airbase_user_reputation', array(
 			'*set' => 'SUM(score) AS summ',
 			'user_id' => $this->id(),
+			'is_deleted' => false,
 			'group' => 'voter_id,category_id',
 		)) as $r)
 		{

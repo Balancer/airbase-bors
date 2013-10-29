@@ -53,7 +53,7 @@ class balancer_users_images_repMap extends base_image_svg
 			$score = $rel['score'];
 			$user_id = $rel['to_user_id'];
 			$voter_id = $rel['from_user_id'];
-			if($user_id != $voter_id && count($relations[$user_id]) < 2)
+			if($user_id != $voter_id && count(@$relations[$user_id]) < 2)
 				$relations[$user_id][$voter_id] = $score;
 
 			if(empty($users[$user_id]))

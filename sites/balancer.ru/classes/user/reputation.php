@@ -178,7 +178,11 @@ class user_reputation extends balancer_board_page
 			);
 
 		$total = 0;
-		foreach($dbu->get_array("SELECT voter_id as id, SUM(score) as sum FROM `reputation_votes` WHERE user_id = $uid GROUP BY voter_id") as $v)
+		foreach($dbu->get_array("SELECT voter_id as id, SUM(score) as sum
+			FROM `reputation_votes`
+			WHERE user_id = $uid
+				AND is_deleted=0
+			GROUP BY voter_id") as $v)
 		{
 			$reput = bors_user_reputation_weight($dbf->get("SELECT reputation FROM users WHERE id={$v['id']}"));
 			$group = $dbf->get("SELECT group_id FROM users WHERE id={$v['id']}");
