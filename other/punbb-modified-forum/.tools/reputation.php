@@ -43,7 +43,12 @@
 
 			// Считаем изменение координат текущего юзера.
 			// Цикл по всем, кто по нему высказывался:
-			$voters = $dbu1->get_array("SELECT voter_id as id, SUM(score) as sum FROM `reputation_votes` WHERE user_id = $user_id AND time GROUP BY voter_id");
+			$voters = $dbu1->get_array("SELECT voter_id as id, SUM(score) as sum
+				FROM `reputation_votes`
+				WHERE user_id = $user_id
+					AND time
+					AND is_deleted=0
+				GROUP BY voter_id");
 			$voters_count = count($voters);
 			foreach($voters as $v)
 			{

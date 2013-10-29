@@ -12,6 +12,8 @@ CREATE TEMPORARY TABLE tmp_vote_relations
 		SUM(IF(score < 0, 1, 0)) AS neg
 	FROM
 		AB_BORS.bors_thumb_votes
+	WHERE
+		create_time > UNIX_TIMESTAMP() - 86400*365
 	GROUP BY user_id, target_user_id;
 
 ALTER TABLE tmp_vote_relations
@@ -40,6 +42,7 @@ CREATE TEMPORARY TABLE tmp_reputation_relations
 	FROM
 		USERS.reputation_votes
 	WHERE is_deleted = 0
+		AND `time` > UNIX_TIMESTAMP() - 86400*365
 	GROUP BY voter_id, user_id;
 
 ALTER TABLE tmp_reputation_relations

@@ -22,21 +22,21 @@
 <h2>Отношения с пользователями</h2>
 <table class="nul w100p small"><tr><td>
 	<table class="btab w100p">
-	<caption>Лучше всех к нему относятся</caption>
+	<caption>Лучше всех к его сообщениям относятся</caption>
 	<tr>
 		<th>Пользователь</th>
 		<th>Отношение</th>
 	</tr>
 	{foreach $friends_from as $u}
 	<tr>
-		<td>{$u->from_user()->titled_link()}</td>
+		<td>{object_property($u->from_user(), 'titled_link')}</td>
 		<td class="{if $u->score()>0}green{/if}">{$u->score()}</td>
 	</tr>
 	{/foreach}
 	</table>
 </td><td>
 	<table class="btab w100p">
-	<caption>Лучше он относится к</caption>
+	<caption>Лучше он относится к сообщениям</caption>
 	<tr>
 		<th>Пользователь</th>
 		<th>Отношение</th>
@@ -52,21 +52,21 @@
 
 <table class="nul w100p small"><tr><td>
 	<table class="btab w100p">
-	<caption>Хуже всех к нему относятся</caption>
+	<caption>Хуже всех к его сообщениям относятся</caption>
 	<tr>
 		<th>Пользователь</th>
 		<th>Отношение</th>
 	</tr>
 	{foreach $enemies_from as $u}
 	<tr>
-		<td>{$u->from_user()->titled_link()}</td>
+		<td>{object_property($u->from_user(), 'titled_link', $u->from_user_id())}</td>
 		<td class="{if $u->score()<0}red{/if}">{$u->score()}</td>
 	</tr>
 	{/foreach}
 	</table>
 </td><td>
 	<table class="btab w100p">
-	<caption>Хуже он относится к</caption>
+	<caption>Хуже он относится к сообщениям</caption>
 	<tr>
 		<th>Пользователь</th>
 		<th>Отношение</th>

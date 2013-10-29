@@ -1,4 +1,4 @@
-if(top.me_is_coordinator)
+if(top.me_can_move)
 {
 	$('ul.postfooter').each(
 		function() {
