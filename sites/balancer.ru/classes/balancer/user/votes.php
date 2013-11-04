@@ -79,4 +79,6 @@ class balancer_user_votes extends base_page
 
 		return $p;
 	}
+
+	function is_public_access() { return true; }
 }

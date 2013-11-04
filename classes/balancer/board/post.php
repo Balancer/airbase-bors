@@ -278,6 +278,6 @@ class balancer_board_post extends forum_post
 					return $image_url;
 			}
 
-		return $this->topic()->image()->url();
+		return object_property($this->topic()->image(), 'url');
 	}
 }

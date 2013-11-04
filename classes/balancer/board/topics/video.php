@@ -5,7 +5,7 @@ class balancer_board_topics_video extends balancer_board_topics_blog
 	function title() { return "Сообщения с видео в теме «{$this->topic()->title()}»"; }
 	function nav_name() { return 'видео'; }
 
-	function url($page = NULL)
+	function url_ex($page = NULL)
 	{
 		return $this->topic()->category()->category_base_full()
 			.date("Y/m", $this->topic()->create_time())."/t{$this->id()}/video/"

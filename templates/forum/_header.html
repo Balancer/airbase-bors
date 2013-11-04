@@ -153,12 +153,12 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 {if not $skip_ad && not $skip_top_ad}
 {* include file="xfile:forum/ads/top-ad-podarini.html" *}
-	{if 0 && $smarty.server.HTTP_HOST == 'forums.airbase.ru'}
+	{if $this->is_public_access()}
+		{include file="xfile:forum/ads/top-ad-google.html"}
+	{else}
 		{* include file="xfile:forum/ads/top-ad-balancer.html" *}
 		{*  include file="xfile:forum/ads/begun-forums.airbase.ru.html" *}
 		{include file="xfile:forum/ads/begun-top-auto.html"}
-	{else}
-		{include file="xfile:forum/ads/top-ad-google.html"}
 	{/if}
 {/if}
 
@@ -244,10 +244,10 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 {if not $skip_ad}
 <div class="center"><div class="top-ad">
-{if 0 && $smarty.server.HTTP_HOST == 'forums.airbase.ru'}
-	{include file="xfile:forum/ads/begun-bottom-auto-forums-airbase.html"}
-{else}
+{if $this->is_public_access()}
 	{include file="xfile:forum/ads/google-ads-bottom.html"}
+{else}
+	{include file="xfile:forum/ads/begun-bottom-auto-forums-airbase.html"}
 {/if}
 </div></div>
 {/if}
@@ -314,10 +314,10 @@ createCookie('readedTopics', readed.join(' '), 3)
 		</dd>
 		</dl>
 
-{if 0 && $smarty.server.HTTP_HOST == 'forums.airbase.ru'}
-	{include file="xfile:forum/ads/begun-topleft-200x300.html"}
-{else}
+{if $this->is_public_access()}
 	{include file="xfile:forum/ads/google-ads-left-200x200-lazy.html"}
+{else}
+	{include file="xfile:forum/ads/begun-topleft-200x300.html"}
 {/if}
 
 <dl class="box w200">
@@ -429,6 +429,9 @@ static expire = {$this->cache_static_expire()|date:'r'}
 class_template = {$this->template()}
 BORS_CORE={$smarty.const.BORS_CORE}
 -->
+{if date('d')==31 and date('m') == 10 and rand(0,10)==1}
+{include file="xfile:airbase/inc/halloween.html"}
+{/if}
 </body>
 {foreach from=$js_include_post item="s"}
 <script type="text/javascript" src="{$s}"></script>

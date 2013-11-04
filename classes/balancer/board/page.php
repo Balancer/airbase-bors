@@ -17,4 +17,6 @@ class balancer_board_page extends bors_page
 
 		return parent::pre_show();
 	}
+
+	function is_public_access() { return true; }
 }

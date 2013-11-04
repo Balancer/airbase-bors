@@ -630,11 +630,11 @@ img.smile, img.nob {
 }
 
 .rep {
-	font-size: 15pt;
+	font-size: 19px;
 }
 
 .warn {
-	font-size: 24px;
+	font-size: 19px;
 }
 
 a.rep:hover, a.warn:hover {
