@@ -1,0 +1,136 @@
+<!-- via http://rainbow.arch.scriptmania.com/scripts/ghosts_halloween.html -->
+
+<SCRIPT TYPE="text/javascript">
+ /**
+  ** Ghosts - Halloween -  JavaScript 
+  ** This script and many more are free at
+  ** http://rainbow.arch.scriptmania.com/scripts/
+  */
+if(!window.Halloween) Halloween=new Object();
+
+Halloween.ghostImages = new Array( 
+	"<img src='http://www.balancer.ru/img/holidays/halloween/ghost-icon.png'>",
+	"<img src='http://www.balancer.ru/img/holidays/halloween/ghost1.gif'>",
+	"<img src='http://www.balancer.ru/img/holidays/halloween/ghost2.gif'>"
+);
+
+Halloween.makeLayer = function( id ) {
+
+	var el = $('#'+id)
+
+	el.sP=function(x,y) { this.css({ top: y, left: x}) }
+//	el.show=function() { this.visibility = "visible" }
+//	el.hide=function() { this.style.visibility = "hidden" }
+
+	el.sO = function(pc) { this.css({ opacity: pc/100 })}
+
+	return el;
+}
+
+gX=function(){ return innerWidth }
+gY=function(){ return innerHeight }
+
+Halloween.ghostOutput=function()
+{
+	for(var i=0 ; i<Halloween.ghostImages.length ; i++)
+		$("<DIV id='gh"+i+"' style='position:fixed'>"+Halloween.ghostImages[i]+"</DIV>").appendTo('#body')
+}
+
+Halloween.ghostSprites = new Array();
+
+Halloween.ghostStartAni = function()
+{
+	for(var i=0; i<Halloween.ghostImages.length; i++)
+	{
+		var el=Halloween.makeLayer("gh"+i);
+		el.x=Math.random()*gX();
+		el.y=Math.random()*gY();
+		el.tx=Math.random()*gX();
+		el.ty=Math.random()*gY();
+		el.dx=-5+Math.random()*10;
+		el.dy=-5+Math.random()*10;
+		el.state="off";
+		el.op=0;
+		el.sO(el.op);
+		el.hide();
+		Halloween.ghostSprites[i] = el;
+	}
+
+	setInterval("Halloween.ghostAni()", 40);
+}
+
+Halloween.ghostAni = function()
+{
+	for(var i=0 ;i<Halloween.ghostSprites.length;i++)
+	{
+		el=Halloween.ghostSprites[i];
+
+		if(el.state == "off")
+		{
+			if(Math.random() > .99)
+			{
+				el.state="up";
+				el.show();
+			}
+		}
+		else if(el.state == "on")
+		{
+			if(Math.random() > .98)
+				el.state="down";
+		}
+		else if(el.state == "up")
+		{
+			el.op += 2;
+			el.sO(el.op);
+			if(el.op==100)
+				el.state = "on";
+		}
+		else if(el.state == "down")
+		{
+			el.op -= 2;
+			if(el.op==0)
+			{
+				el.hide();
+				el.state = "off";
+			}
+			else
+				el.sO(el.op);
+		}
+
+		var X = (el.tx - el.x);
+		var Y = (el.ty - el.y);
+		var len = Math.sqrt(X*X+Y*Y);
+		if(len < 1) len = 1;
+		var dx = 20 * (X/len);
+		var dy = 20 * (Y/len);
+		var ddx = (dx - el.dx)/10;
+		var ddy = (dy - el.dy)/10;
+		el.dx += ddx;
+		el.dy += ddy;
+		el.sP(el.x+=el.dx, el.y+=el.dy);
+
+		if(Math.random() >.95 )
+		{
+			el.tx = Math.random()*gX();
+			el.ty = Math.random()*gY();
+		}
+
+	}
+}
+Halloween.ghostStart = function()
+{
+	if(Halloween.ghostLoad)
+		Halloween.ghostLoad()
+
+	Halloween.ghostStartAni()
+}
+
+Halloween.ghostOutput()
+
+// Halloween.ghostLoad=window.onload
+// window.onload=Halloween.ghostStart
+
+$(document).ready(function() {
+	Halloween.ghostStartAni()
+})
+</SCRIPT>

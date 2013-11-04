@@ -53,4 +53,6 @@ class balancer_board_posts_show extends bors_view
 
 		return false;
 	}
+
+	function is_public_access() { return $this->post()->topic()->is_public_access(); }
 }
