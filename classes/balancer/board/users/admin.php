@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_users_admin extends base_page
+class balancer_board_users_admin extends balancer_board_page
 {
 	function title() { return ec('Управление пользователями'); }
 	function nav_name() { return ec('пользователи'); }

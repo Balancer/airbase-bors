@@ -33,4 +33,6 @@ class balancer_board_posts_view extends balancer_board_view
 
 		return $this;
 	}
+
+	function is_public_access() { return $this->post()->topic()->is_public_access(); }
 }

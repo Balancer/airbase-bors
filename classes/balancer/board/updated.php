@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_updated extends bors_paginated
+class balancer_board_updated extends balancer_board_paginated
 {
 	function title() { return ec('Системные события'); }
 	function is_auto_url_mapped_class() { return true; }

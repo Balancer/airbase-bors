@@ -3,7 +3,7 @@
 include_once('engines/search.php');
 class_include('base_page');
 
-class common_search extends base_page
+class common_search extends balancer_board_page
 {
 	function _class_file() { return __FILE__; }
 	

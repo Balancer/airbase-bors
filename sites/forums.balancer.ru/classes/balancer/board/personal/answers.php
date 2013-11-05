@@ -2,7 +2,7 @@
 
 bors_function_include('time/smart_time');
 
-class balancer_board_personal_answers extends base_page
+class balancer_board_personal_answers extends balancer_board_page
 {
 	function title() { return ec('Ответы на Ваши сообщения за последние 3 месяца'); }
 	function nav_name() { return ec('ответы'); }

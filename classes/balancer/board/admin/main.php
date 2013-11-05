@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_admin_main extends base_page
+class balancer_board_admin_main extends balancer_board_page
 {
 	function title() { return ec('Управление форумами'); }
 	function nav_name() { return ec('управление'); }

@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_topics_blog extends balancer_board_paged
+class balancer_board_topics_blog extends balancer_board_paginated
 {
 	function title() { return "Блог темы «{$this->topic()->title()}»"; }
 	function nav_name() { return 'блог'; }

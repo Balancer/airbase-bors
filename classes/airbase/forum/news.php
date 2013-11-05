@@ -1,6 +1,6 @@
 <?php
 
-class airbase_forum_news extends base_page
+class airbase_forum_news extends balancer_board_page
 {
 	function title() { return ec('Лента тем форума «').$this->forum()->title().ec('» и его подфорумов за год'); }
 

@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_users_attaches extends balancer_board_paged
+class balancer_board_users_attaches extends balancer_board_paginated
 {
 	function can_be_empty() { return false; }
 	function is_loaded() { return (bool) $this->user(); }

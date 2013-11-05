@@ -1,6 +1,6 @@
 <?php
 
-class user_posts extends base_page
+class user_posts extends balancer_board_page
 {
 	function can_be_empty() { return false; }
 	function is_loaded() { return (bool) $this->user(); }

@@ -2,7 +2,7 @@
 
 require_once('inc/datetime.php');
 
-class aviatop_main extends base_page_paged
+class aviatop_main extends balancer_board_paginated
 {
 	function config_class() { return 'aviatop_config'; }
 	function title() { return 'АвиаТОП'; }
