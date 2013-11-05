@@ -1,6 +1,6 @@
 <?php
 
-class module_user_blog extends base_page
+class module_user_blog extends balancer_board_page
 {
 	private $user;
 

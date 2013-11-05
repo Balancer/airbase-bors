@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_admin_posts_spam extends bors_paginated
+class balancer_board_admin_posts_spam extends balancer_board_paginated
 {
 	var $title_ec = 'Сообщения с возможным спамом';
 	var $nav_name_ec = 'спам';

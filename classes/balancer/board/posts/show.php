@@ -51,6 +51,8 @@ class balancer_board_posts_show extends bors_view
 			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
 		}
 
+		return go($this->post()->url_in_container());
+
 		return false;
 	}
 

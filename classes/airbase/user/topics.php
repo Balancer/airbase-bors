@@ -1,6 +1,6 @@
 <?php
 
-class airbase_user_topics extends base_page
+class airbase_user_topics extends balancer_board_page
 {
 //	function config_class() { return 'airbase_forum_config'; }
 	function db_name() { return config('punbb.database'); }

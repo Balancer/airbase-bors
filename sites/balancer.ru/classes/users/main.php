@@ -1,6 +1,6 @@
 <?php
 
-class users_main extends base_page
+class users_main extends balancer_board_page
 {
 	function template()
 	{

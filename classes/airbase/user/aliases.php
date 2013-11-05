@@ -1,6 +1,6 @@
 <?php
 
-class airbase_user_aliases extends base_page
+class airbase_user_aliases extends balancer_board_page
 {
 	function title() { return ec('Пользователи, писавшие с тех же IP, что и ').$this->user()->title().ec(' c ').date('d.m.Y', $this->last_post_time()-86400*30).ec(' по ').date('d.m.Y', $this->last_post_time()); }
 	function config_class() { return 'airbase_forum_config'; }

@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_stat_coordinators extends bors_page
+class balancer_board_stat_coordinators extends balancer_board_page
 {
 	function title() { return ec('Активность координаторов'); }
 	function nav_name() { return ec('координаторы'); }

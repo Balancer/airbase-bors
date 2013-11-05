@@ -1,6 +1,6 @@
 <?php
 
-class airbase_user_warnings extends base_page
+class airbase_user_warnings extends balancer_board_page
 {
 	function class_file() { return __FILE__; } // Не сносить, так как есть класс-наследник с этим же шаблоном!
 
@@ -73,4 +73,5 @@ class airbase_user_warnings extends base_page
 	}
 
 	function cache_static() { return config('static_forum') ? rand(80000, 90000) : 0; }
+	function is_public_access() { return false; }
 }

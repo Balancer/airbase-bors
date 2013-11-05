@@ -1,6 +1,6 @@
 <?php
 
-class airbase_images_show extends base_page
+class airbase_images_show extends balancer_board_page
 {
 	function can_be_empty() { return false; }
 	function template() { return 'forum/common.html'; }

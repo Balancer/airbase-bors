@@ -1,6 +1,6 @@
 <?php
 
-class forum_main extends base_page
+class forum_main extends balancer_board_page
 {
 	function title() { return ec("Старые форумы Balancer'а"); }
 	function nav_name() { return ec('старые'); }

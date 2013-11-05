@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_users_own extends balancer_board_paged
+class balancer_board_users_own extends balancer_board_paginated
 {
 	function main_class() { return 'balancer_board_topic'; }
 	function where() { return array(

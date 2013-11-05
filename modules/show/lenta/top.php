@@ -1,6 +1,6 @@
 <?php
 
-class module_nav_top extends base_page
+class module_nav_top extends balancer_board_page
 {
 	private $visited_pairs;
 

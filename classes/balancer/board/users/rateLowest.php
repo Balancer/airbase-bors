@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_users_rateLowest extends base_page
+class balancer_board_users_rateLowest extends balancer_board_page
 {
 	function title() { return ec('Худшие сообщения'); }
 	function config_class() { return 'balancer_board_admin_config'; }

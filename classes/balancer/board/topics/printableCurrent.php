@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_topics_printableCurrent extends balancer_board_paged
+class balancer_board_topics_printableCurrent extends balancer_board_paginated
 {
 	function auto_objects()
 	{

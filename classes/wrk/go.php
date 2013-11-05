@@ -1,6 +1,6 @@
 <?php
 
-class wrk_go extends base_page
+class wrk_go extends balancer_board_page
 {
 	static function make_short_url($object)
 	{

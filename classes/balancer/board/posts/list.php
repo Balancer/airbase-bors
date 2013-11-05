@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_posts_list extends bors_paginated
+class balancer_board_posts_list extends balancer_board_paginated
 {
 	function main_class() { return 'balancer_board_post'; }
 	function order() { return 'create_time'; }

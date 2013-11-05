@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_stat_main extends bors_page
+class balancer_board_stat_main extends balancer_board_page
 {
 	function title() { return ec('Статистика'); }
 	function nav_name() { return ec('статистика'); }

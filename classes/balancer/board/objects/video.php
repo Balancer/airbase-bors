@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_objects_video extends bors_paginated
+class balancer_board_objects_video extends balancer_board_paginated
 {
 	var $title_ec = 'Все сообщения с видеороликами';
 	var $nav_name_ec = 'видео';

@@ -1,6 +1,6 @@
 <?php
 
-class users_toprep extends base_page
+class users_toprep extends balancer_board_page
 {
 	function template()
 	{
