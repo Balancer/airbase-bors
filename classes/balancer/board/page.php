@@ -19,4 +19,5 @@ class balancer_board_page extends bors_page
 	}
 
 	function is_public_access() { return true; }
+	function can_adsense() { return true; }
 }

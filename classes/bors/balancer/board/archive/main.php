@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_archive_main extends base_page
+class balancer_board_archive_main extends balancer_board_page
 {
 	function title() { return ec('Архив тем форума'); }
 	function nav_name() { return ec('архив'); }

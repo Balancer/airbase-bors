@@ -1,17 +1,14 @@
 <?php
 
-class balancer_board_posts_pure extends base_object_db
+class balancer_board_posts_pure extends balancer_board_object_db
 {
-	function storage_engine() { return 'bors_storage_mysql'; }
-
-	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 	function table_name() { return 'posts'; }
 
 	function table_fields()
 	{
 		return array(
 			'id',
-			'title_raw' => 'field1',
+			'title_raw' => 'title',
 			'topic_id',
 			'topic_page' => 'page',
 			'create_time'	=> 'posted',
@@ -31,13 +28,15 @@ class balancer_board_posts_pure extends base_object_db
 			'have_attach',
 			'have_cross',
 			'have_answers',
-			'score' => 'field2',
+			'score',
 			'is_moderatorial',
 			'is_deleted',
+			'is_hidden',
 			'is_spam',
 			'is_incorrect',
 			'last_moderator_id',
 			'sort_order' => '`order`',
+			'markup_class_name',
 		);
 	}
 

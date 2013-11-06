@@ -2,17 +2,8 @@
 
 class airbase_web_file extends base_object_db
 {
-	function storage_engine() { return 'bors_storage_mysql'; }
 	function db_name() { return 'AIRBASE'; }
 	function table_name() { return 'web_files_cache'; }
-
-	function class_title() { return ec('Объект web_files_cache'); }
-	function class_title_rp() { return ec('объекта web_files_cache'); }
-	function class_title_vp() { return ec('объект web_files_cache'); }
-	function class_title_m() { return ec('объекты web_files_cache'); }
-	function class_title_tpm() { return ec('объектами web_files_cache'); }
-
-	function access_name() { return 'caches'; }
 
 	function table_fields()
 	{
@@ -31,10 +22,6 @@ class airbase_web_file extends base_object_db
 			'modify_time' => array('field' => 'UNIX_TIMESTAMP(modify_time)'),
 		);
 	}
-
-	function url() { return config('main_site_url').'/caches/'.$this->id().'/'; }
-
-	function admin_url() { return config('admin_site_url').'/caches/'.$this->id().'/'; }
 
 //	function ignore_on_new_instance() { return true; }
 	function replace_on_new_instance() { return true; }

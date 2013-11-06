@@ -103,6 +103,9 @@ $result = $db->query("
 		ORDER BY c.disp_position, c.id, f.disp_position", true) 
 	or error('Unable to fetch category/forum list', __FILE__, __LINE__, $db->error());
 
+echo '<div style="text-align: center; margin: 10px">';
+readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html");
+echo '</div>';
 
 $cur_category = 0;
 $cat_count = 0;
@@ -282,6 +285,11 @@ else
 		</div>
 	</div>
 </div>
+
+<div style="text-align: center; margin: 10px">
+<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-bottom.original.html"); ?>
+</div>
+
 <?php
 
 $footer_style = 'index';

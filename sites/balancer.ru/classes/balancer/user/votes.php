@@ -1,6 +1,6 @@
 <?php
 
-class balancer_user_votes extends base_page
+class balancer_user_votes extends balancer_board_page
 {
 	var $nav_name = 'оценки';
 

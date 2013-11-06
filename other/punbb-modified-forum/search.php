@@ -574,6 +574,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		require PUN_ROOT.'header.php';
 
 ?>
+
 <ul><li><b>
 <?php
 	$self = object_load('http://www.balancer.ru/forum/');
@@ -581,6 +582,11 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 	echo $nav->body();
 ?>
 </li></b></ul>
+
+<div style="text-align: center; margin: 10px">
+<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html"); ?>
+</div>
+
 <?php
 
 
@@ -780,7 +786,14 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		if ($show_as == 'topics')
 			echo "\t\t\t".'</tbody>'."\n\t\t\t".'</table>'."\n\t\t".'</div>'."\n\t".'</div>'."\n".'</div>'."\n\n";
 
+
+
 ?>
+
+<div style="text-align: center; margin: 10px">
+<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-bottom.original.html"); ?>
+</div>
+
 <div class="<?php echo ($show_as == 'topics') ? 'linksb' : 'postlinksb'; ?>">
 	<div class="inbox">
 		<p class="pagelink"><?php echo $paging_links ?></p>
