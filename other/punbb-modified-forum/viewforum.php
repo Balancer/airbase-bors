@@ -114,6 +114,7 @@ include_once("include/subforums.php");
 echo get_subforums_html($id);
 
 ?>
+
 <div class="linkst">
 	<div class="inbox">
 		<p class="pagelink conl"><?php echo $paging_links ?></p>
@@ -126,6 +127,10 @@ echo get_subforums_html($id);
 </li></b></ul>
 		<div class="clearer"></div>
 	</div>
+</div>
+
+<div style="text-align: center; margin: 10px">
+<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html"); ?>
 </div>
 
 <div id="vf" class="blocktable">
@@ -307,6 +312,11 @@ else
 		</div>
 	</div>
 </div>
+
+<div style="text-align: center; margin: 10px">
+<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-bottom.original.html"); ?>
+</div>
+
 
 <div class="linksb">
 	<div class="inbox">

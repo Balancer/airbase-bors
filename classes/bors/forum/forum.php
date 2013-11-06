@@ -173,7 +173,7 @@ function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, 
 		if(!$gid)
 			$gid = 3;
 
-		$ch = new bors_cache;
+		$ch = new bors_cache_fast;
 		if($ch->get('forum_permissions', "{$this->id()}:{$gid}"))
 			return $ch->last();
 
@@ -181,7 +181,7 @@ function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, 
 		if($access)
 			return $ch->set($access->can_read(), 600);
 
-		return $ch->set(object_load('forum_group', $gid)->can_read(), 600);
+		return $ch->set(bors_load('balancer_board_group', $gid)->can_read(), 600);
 	}
 
 	function can_read_by_group($group)

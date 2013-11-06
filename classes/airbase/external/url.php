@@ -62,6 +62,7 @@ class airbase_external_url extends bors_object_db
 	static function __dev()
 	{
 //		echo self::find_or_register('http://www.balancer.ru:8080/test%20test.jpg');
+		echo self::find_or_register('http://www.saabgroup.com/Global/Documents%20and%20Images/Naval/Decision%20Superiority/9LV/CEROS%20200%20product%20sheet.pdf');
 	}
 
 	static function __unit_test($suite)

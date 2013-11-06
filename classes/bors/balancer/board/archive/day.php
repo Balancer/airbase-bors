@@ -67,4 +67,6 @@ class balancer_board_archive_day extends base_page_list
 			'next_day_link' => $this->next_day_link(),
 		));
 	}
+
+	function is_public_access() { return true; }
 }

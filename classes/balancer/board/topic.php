@@ -267,4 +267,53 @@ class balancer_board_topic extends forum_topic
 
 		return "<a href=\"{$this->url()}\">{$i->thumbnail('100x64(up,crop)')->html_code()}</a>";
 	}
+
+	private $first_post_time = NULL;
+	private $last_post_time  = NULL;
+
+	private function _calculate_times()
+	{
+		$posts = $this->posts();
+
+		$first_post_time = time()+1;
+		$last_post_time = -1;
+		foreach($posts as $p)
+		{
+			if($p->create_time() > $last_post_time)
+				$last_post_time = $p->create_time();
+
+			if($p->create_time() < $first_post_time)
+				$first_post_time = $p->create_time();
+		}
+
+		$this->first_post_time = $first_post_time;
+		$this->last_post_time  = $last_post_time;
+	}
+
+	function first_post_time()
+	{
+		if(is_null($this->first_post_time))
+			$this->_calculate_times();
+
+		return $this->first_post_time;
+	}
+
+	function last_post_time()
+	{
+		if(is_null($this->last_post_time))
+			$this->_calculate_times();
+
+		return $this->last_post_time;
+	}
+
+	function can_adsense()
+	{
+		if(!$this->is_public_access())
+			return false;
+
+		if(preg_match('/airbase\.ru/', @$_SERVER['HTTP_HOST']))
+			return true;
+
+		return $this->first_post_time() > time() - 86400*365;
+	}
 }

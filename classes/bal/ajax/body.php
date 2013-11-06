@@ -6,8 +6,8 @@ class bal_ajax_body extends bors_page
 	{
 		if(!bors()->user())
 		{
-			debug_hidden_log('bots', "Unregistered user try to load AJAX body");
-			return NULL;
+//			debug_hidden_log('bots', "Unregistered user try to load AJAX body");
+			return true;
 		}
 
 		if(parent::pre_show() === true)
@@ -20,7 +20,9 @@ class bal_ajax_body extends bors_page
 		if(!$object->topic()->forum()->can_read())
 			return bors_message(ec("Нет доступа к ").$object);
 
-		echo $object->body();
+		$body = $object->body();
+//		$body = preg_replace();
+		echo $body;
 		return true;
 	}
 }

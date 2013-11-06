@@ -208,16 +208,8 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 		$posts = $this->posts();
 
-		$first_post_time = time()+1;
-		$last_post_time = -1;
-		foreach($posts as $p)
-		{
-			if($p->create_time() > $last_post_time)
-				$last_post_time = $p->create_time();
-
-			if($p->create_time() < $first_post_time)
-				$first_post_time = $p->create_time();
-		}
+		$first_post_time = $this->first_post_time();
+		$last_post_time  = $this->last_post_time();
 
 		$post_ids = array_keys($posts);
 		$blogs = bors_find_all('balancer_board_blog', array('id IN' => $post_ids, 'by_id' => true));
@@ -249,7 +241,13 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		}
 
 		$prev_post_time = $this->page() > 1 ? $first_post_time : 0;
-		$next_post = $this->is_last_page() ? NULL : bors_find_first('balancer_board_post', array('topic_id' => $this->id(), 'order' => '`order`, posted', 'create_time>' => $last_post_time));
+		$next_post = $this->is_last_page() ? NULL : bors_find_first('balancer_board_posts_pure', array(
+			'topic_id' => $this->id(),
+			'is_deleted' => 0,
+			'use_index' => 'by_tid_ordered',
+			'order' => '`order`, posted',
+			'create_time>' => $last_post_time,
+		));
 
 		$next_post_time = object_property($next_post, 'create_time', time()+1);
 

@@ -2,7 +2,7 @@
 
 bors_function_include('time/month_name');
 
-class balancer_board_archive_month extends base_page
+class balancer_board_archive_month extends balancer_board_page
 {
 	function nav_name() { return strtolower(month_name(date('n', $this->id()))); }
 	function title() { return ec('Архив тем форума за ').$this->nav_name().' '.date('Y', $this->id()).ec(' года'); }

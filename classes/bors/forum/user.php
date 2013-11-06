@@ -49,6 +49,7 @@ class forum_user extends balancer_board_object_db
 			'user_nick',
 			'group_id',
 			'user_title' => 'title',
+			'group_title_raw' => 'group_title',
 			'level',
 			'use_avatar',
 			'avatar_width',
@@ -241,11 +242,16 @@ function avatar_thumb($geo)
 		if($this->_title = $this->user_title())
 			return $this->_title;
 
-		if($this->_title = $this->group()->user_title())
+		if($this->_title = $this->group_title_raw())
 			return $this->_title;
 
-		$this->_title = $this->rank();
+		if(!$this->_title)
+			$this->_title = $this->group()->user_title();
 
+		if(!$this->_title)
+			$this->_title = $this->rank();
+
+		$this->set('group_title_raw', $this->_title);
 		return $this->_title;
 	}
 

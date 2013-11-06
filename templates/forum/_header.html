@@ -153,7 +153,8 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 {if not $skip_ad && not $skip_top_ad}
 {* include file="xfile:forum/ads/top-ad-podarini.html" *}
-	{if $this->is_public_access() && !preg_match(config('ads.disabled_regexp'), $smarty.server.HTTP_HOST)}
+{*  && !preg_match(config('ads.disabled_regexp'), $smarty.server.HTTP_HOST) *}
+	{if $this->get('can_adsense')}
 		{include file="xfile:forum/ads/top-ad-google.html"}
 	{else}
 		{* include file="xfile:forum/ads/top-ad-balancer.html" *}
@@ -244,7 +245,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 {if not $skip_ad}
 <div class="center"><div class="top-ad">
-{if $this->is_public_access() && !preg_match(config('ads.disabled_regexp'), $smarty.server.HTTP_HOST)}
+{if $this->get('can_adsense')}
 	{include file="xfile:forum/ads/google-ads-bottom.html"}
 {else}
 	{include file="xfile:forum/ads/begun-bottom-auto-forums-airbase.html"}
@@ -314,7 +315,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 		</dd>
 		</dl>
 
-{if $this->is_public_access() && !preg_match(config('ads.disabled_regexp'), $smarty.server.HTTP_HOST)}
+{if $this->get('can_adsense')}
 	{include file="xfile:forum/ads/google-ads-left-200x200-lazy.html"}
 {else}
 	{include file="xfile:forum/ads/begun-topleft-200x300.html"}

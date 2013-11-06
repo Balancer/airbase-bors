@@ -156,6 +156,11 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 			$title = $hts->get($attach_post_id, 'title');
 		}
 	?>
+
+<div style="text-align: center; margin: 10px">
+<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html"); ?>
+</div>
+
 <div id="msg" class="block">
 	<h2><span>Исходная тема: <a href="<?php echo $pun_config['root_uri'];?>/viewtopic.php?pid=<?php echo "$attach_post_id#p$attach_post_id";/*"*/?>"><?php echo $title;?></a></span></h2>
 
@@ -170,6 +175,11 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 		</div>
 	</div>
 </div>
+
+<div style="text-align: center; margin: 10px">
+<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-bottom.original.html"); ?>
+</div>
+
 	<?php
 		require 'footer.php';
 		exit();

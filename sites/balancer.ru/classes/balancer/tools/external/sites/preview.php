@@ -73,11 +73,12 @@ class balancer_tools_external_sites_preview extends bors_image_png
 			." --enable-plugins --encoding \"utf-8\""
 			." ".escapeshellcmd($url)." ".escapeshellcmd($file);
 
-		$cmdn = "$bin -n"
+		$cmd_nojs = "$bin --disable-javascript"
 			." --width 1024 --height 768"
 //			." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
 			." --minimum-font-size 20"
-			." --enable-plugins --encoding \"utf-8\""
+//			." --load-error-handling ignore"
+			." --encoding \"utf-8\""
 			." ".escapeshellcmd($url)." ".escapeshellcmd($file);
 
 		mkpath(dirname($file));
@@ -91,8 +92,12 @@ class balancer_tools_external_sites_preview extends bors_image_png
 		if(!file_exists($file) || !filesize($file))
 		{
 			@unlink($file);
-			system($cmdn);
+			system($cmd_nojs);
 		}
+
+exit();
+
+		debug_hidden_log('sites_preview', "Image $url ($geo) error. Empty file. cmd=$cmd", 1);
 
 		if(!file_exists($file))
 		{
