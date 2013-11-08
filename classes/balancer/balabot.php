@@ -51,6 +51,7 @@ class balancer_balabot extends base_object
 
 		debug_hidden_log('balabot', "Limit=$limit, text lenth=".bors_strlen($text).", full length=".bors_strlen($msg).', text=|'.$msg.'|', false);
 
+/*
 		if($blog_object_id = bors_external_twitter::send($bot, $msg))
 		{
 			object_new_instance('bors_users_blogs_map', array(
@@ -60,6 +61,7 @@ class balancer_balabot extends base_object
 				'blog_object_id' => $blog_object_id,
 			));
 		}
+*/
 
 		// Также продублируем всем подписчикам
 		$subscribed = bors_find_all('balancer_board_user', array(
@@ -75,7 +77,7 @@ class balancer_balabot extends base_object
 			);
 		}
 
-		debug_hidden_log('balabot', "{$target->debug_title()} posted in twitter as $blog_object_id", false);
+		debug_hidden_log('balabot', "{$target->debug_title()} posted in twitter as ".@$blog_object_id, false);
 	}
 
 	static function send_tweet($msg)

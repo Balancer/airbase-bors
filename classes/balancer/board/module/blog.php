@@ -27,6 +27,9 @@ class balancer_board_module_blog extends balancer_board_module
 		else
 			$where['forum_id NOT IN'] = $skip_forums;
 
+		$where['inner_join'] = 'balancer_board_user ON (balancer_board_user.id = balancer_board_blog.owner_id)';
+		$where['is_destructive'] = 0;
+
 		$blogs = bors_find_all('balancer_board_blog', $where);
 
 		$data = array('blog_records' => $blogs);

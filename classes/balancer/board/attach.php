@@ -43,7 +43,7 @@ function set_downloads($v, $dbup) { return $this->set('downloads', $v, $dbup); }
 function location() { return @$this->data['location']; }
 function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 
-	function url() { return "http://www.balancer.ru/forum/punbb/attachment.php?item=".$this->id(); }
+	function url() { return "http://www.wrk.ru/forums/attachment.php?item=".$this->id(); }
 
 	function thumbnail_link($geometry, $css_class = NULL)
 	{
