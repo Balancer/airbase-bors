@@ -250,7 +250,7 @@ if(@$_GET['action'] == 'unreadreplies')
 	exit();
 }
 
-if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru', 'balancer.local'))
+if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru', 'balancer.local', 'wrk.ru', 'www.wrk.ru'))
 	|| !preg_match("!^/forum!", $_SERVER['REQUEST_URI']))
 {
 	include(PUN_ROOT.'viewcat.php');
@@ -271,7 +271,16 @@ require PUN_ROOT.'header.php';
 
 forum_forum::all_forums_preload(true);
 
+// Блокировка AdSense
+if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
+{
+	echo '<div style="text-align: center; margin: 10px">';
+	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html");
+	echo '</div>';
+}
+
 ?>
+
 <ul><li><b>
 <?php
 	$self = object_load('http://www.balancer.ru/forum/');
@@ -349,6 +358,7 @@ while ($cur_forum = $db->fetch($result))
 		++$cat_count;
 
 ?>
+
 <div id="idx<?php echo $cat_count;/*"*/?>" class="blocktable">
 	<h2><span><a href="<?php echo pun_htmlspecialchars($cur_forum['cat_base_uri'])?>"><?php echo pun_htmlspecialchars($cur_forum['cat_name']) ?></a></span></h2>
 	<div class="box">
@@ -467,6 +477,13 @@ else
 	$stats['total_topics'] = $cms_db->select($db->prefix.'topics', 'COUNT(id)', array('1' => 1));
 	$stats['total_posts']  = $cms_db->select($db->prefix.'posts',  'COUNT(id)', array('1' => 1));
 	$stats_cache->set($stats, -600);
+}
+
+if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
+{
+	echo '<div style="text-align: center; margin: 10px">';
+	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-bottom.original.html");
+	echo '</div>';
 }
 
 ?>

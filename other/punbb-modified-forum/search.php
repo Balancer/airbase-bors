@@ -583,12 +583,15 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 ?>
 </li></b></ul>
 
-<div style="text-align: center; margin: 10px">
-<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html"); ?>
-</div>
 
 <?php
 
+if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
+{
+	echo '<div style="text-align: center; margin: 10px">';
+	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html");
+	echo '</div>';
+}
 
 		if($cat_ids)
 			echo "<div class=\"yellow_box\">Вы просматриваете список обновлений только одной категории форумов</div>";
@@ -787,12 +790,14 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 			echo "\t\t\t".'</tbody>'."\n\t\t\t".'</table>'."\n\t\t".'</div>'."\n\t".'</div>'."\n".'</div>'."\n\n";
 
 
+if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
+{
+	echo '<div style="text-align: center; margin: 10px">';
+	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-bottom.original.html");
+	echo '</div>';
+}
 
 ?>
-
-<div style="text-align: center; margin: 10px">
-<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-bottom.original.html"); ?>
-</div>
 
 <div class="<?php echo ($show_as == 'topics') ? 'linksb' : 'postlinksb'; ?>">
 	<div class="inbox">

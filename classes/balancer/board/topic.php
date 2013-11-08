@@ -314,6 +314,6 @@ class balancer_board_topic extends forum_topic
 		if(preg_match('/airbase\.ru/', @$_SERVER['HTTP_HOST']))
 			return true;
 
-		return $this->first_post_time() > time() - 86400*365;
+		return $this->first_post_time() > time() - 86400;
 	}
 }

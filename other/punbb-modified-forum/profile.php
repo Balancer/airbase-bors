@@ -26,10 +26,10 @@
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 
-if($_SERVER['HTTP_HOST'] != 'www.balancer.ru' || !preg_match('!^/forum/punbb/!', $_SERVER['REQUEST_URI']))
+if($_SERVER['HTTP_HOST'] != 'www.wrk.ru' || !preg_match('!^/forums/!', $_SERVER['REQUEST_URI']))
 {
 	include_once('inc/navigation.php');
-	go("http://www.balancer.ru/forum/punbb/profile.php" . (empty($_SERVER['QUERY_STRING']) ? "" : "?".$_SERVER['QUERY_STRING']), true);
+	go("http://www.wrk.ru/forums/profile.php" . (empty($_SERVER['QUERY_STRING']) ? "" : "?".$_SERVER['QUERY_STRING']), true);
 	exit("Redirected");
 }
 

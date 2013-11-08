@@ -129,9 +129,14 @@ echo get_subforums_html($id);
 	</div>
 </div>
 
-<div style="text-align: center; margin: 10px">
-<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html"); ?>
-</div>
+<?php
+if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
+{
+	echo '<div style="text-align: center; margin: 10px">';
+	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html");
+	echo '</div>';
+}
+?>
 
 <div id="vf" class="blocktable">
 	<h2><span><?php echo pun_htmlspecialchars($cur_forum['forum_name']) ?></span></h2>
@@ -313,10 +318,14 @@ else
 	</div>
 </div>
 
-<div style="text-align: center; margin: 10px">
-<?php readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-bottom.original.html"); ?>
-</div>
-
+<?php
+if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
+{
+	echo '<div style="text-align: center; margin: 10px">';
+	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-bottom.original.html");
+	echo '</div>';
+}
+?>
 
 <div class="linksb">
 	<div class="inbox">
