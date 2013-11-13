@@ -52,18 +52,28 @@ class airbase_external_link extends balancer_board_object_db
 
 	static function register($url, $params = array())
 	{
-		$max_length = defval($params, 'max_length')
+		$max_length = defval($params, 'max_length');
 
-		$req = self::get_ex($url, array('is_raw' => false));
+		$req = blib_http::get_ex($url, array('is_raw' => false));
 		$content = $req['content'];
 
 		// Запоминаем не более одного мегабайта, а то по max_allowed_packet можно влететь.
 		if(strlen($content) > $max_length)
 			$content = substr($content, 0, $max_length);
 
-		$data = bors_external_common::content_extract($url, array('html' => $source));
+		if($content)
+			$data = bors_external_common::content_extract($url, array('html' => $content));
+		else
+		{
+			$data['title'] = self::normalize(blib_urls::host($url));
+			$data['bbshort'] = "[round_box][h][a href=\"{$url}\"]{$data['title']}[/a][/h]
+{$req['error']}
 
-//			$html = lcml($data['bbshort']);
+[span class=\"transgray\"][reference]".bors_external_feeds_entry::url_host_link($url)."[/reference][/span][/round_box]";
+
+		}
+
+//		$html = lcml($data['bbshort']);
 
 		var_dump($req, $data);
 
