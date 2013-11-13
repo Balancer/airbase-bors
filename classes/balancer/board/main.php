@@ -25,7 +25,7 @@ class balancer_board_main extends balancer_board_page
 		));
 	}
 */
-	function local_data()
+	function body_data()
 	{
 		$new_topics = objects_array('balancer_board_topic', array(
 			'order' => '-create_time',
@@ -106,7 +106,6 @@ class balancer_board_main extends balancer_board_page
 				'order' => 'ci_lower_bound DESC',
 				'limit' => 20,
 			)),
-
 		);
 	}
 }
