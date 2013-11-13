@@ -314,6 +314,19 @@ class balancer_board_topic extends forum_topic
 		if(preg_match('/airbase\.ru/', @$_SERVER['HTTP_HOST']))
 			return true;
 
-		return $this->first_post_time() > time() - 86400;
+		return $this->first_post_time() > time() - 86400*5;
+	}
+
+	function tpl_ad_top()
+	{
+		//	{* include file="xfile:forum/ads/top-ad-podarini.html" *}
+		//	{*  && !preg_match(config('ads.disabled_regexp'), $smarty.server.HTTP_HOST) *}
+		if($this->get('can_adsense'))
+			return "xfile:forum/ads/top-ad-google.html";
+
+		// {* include file="xfile:forum/ads/top-ad-balancer.html" *}
+		// {*  include file="xfile:forum/ads/begun-forums.airbase.ru.html" *}
+		// {include file="xfile:forum/ads/begun-top-auto.html"}
+		return 'xfile:forum/ads/yandex-direct-h4.html';
 	}
 }

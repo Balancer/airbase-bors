@@ -18,6 +18,13 @@ class balancer_board_admin_config extends bors_config
 		));
 	}
 
+	function view_data()
+	{
+		return array_merge(parent::view_data(), array(
+			'project' => bors_load('balancer_board_project', NULL),
+		));
+	}
+
 	function pre_show()
 	{
 		twitter_bootstrap::load();

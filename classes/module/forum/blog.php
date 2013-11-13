@@ -40,8 +40,7 @@ class module_forum_blog extends base_page
 
 //		$where['inner_join'] = 'balancer_board_user ON (balancer_board_user.id = balancer_board_blog.owner_id AND balancer_board_user.is_destructive = 0)';
 		$where['inner_join'] = 'balancer_board_user ON (balancer_board_user.id = balancer_board_blog.owner_id)';
-		$where['balancer_board_user.is_destructive'] = 0;
-//		$where['balancer_board_user.is_destructive'] = 0;
+		$where['balancer_board_user.is_destructive='] = 0;
 
 		$blogs = bors_find_all('balancer_board_blog', $where);
 
