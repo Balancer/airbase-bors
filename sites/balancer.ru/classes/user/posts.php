@@ -26,7 +26,7 @@ class user_posts extends balancer_board_page
 	function title() { return $this->user()->title().ec(': Все сообщения'); }
 	function nav_name() { return ec('все сообщения'); }
 
-	function local_data()
+	function body_data()
 	{
 		$years = array();
 /*		$first = $this->db('AB_FORUMS')->select('posts', 'MIN(posted)', array('poster_id' => $this->id()));
@@ -37,11 +37,15 @@ class user_posts extends balancer_board_page
 			$years[] = $y0;
 */
 		$ynow = strftime('%Y');
-		for($y=2000; $y<=$ynow; $y++)
+		for($y=1999; $y<=$ynow; $y++)
 		{
 			$d0 = strtotime("$y-01-01 00:00:00");
 			$d9 = strtotime("$y-12-31 23:59:59")+1;
-			if($cnt = $this->db('AB_FORUMS')->select('posts', 'count(*)', array('poster_id' => $this->id(), "posted BETWEEN $d0 AND $d9")))
+			if($cnt = $this->db('AB_FORUMS')->select('posts', 'count(*)', array(
+				'poster_id' => $this->id(),
+				'is_deleted' => false,
+				"posted BETWEEN $d0 AND $d9",
+			)))
 				$years[$y] = $cnt;
 		}
 

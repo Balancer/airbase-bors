@@ -752,6 +752,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			return ec('<i>Сообщение с ограниченным доступом</i>');
 
 		$text = $this->body();
+		$text = restore_format($text);
 		$text = preg_replace('!<span class="q">.+?</span>!', ' … ', $text);
 		$text = strip_tags($text);
 		$text = str_replace("\n", " ", $text);

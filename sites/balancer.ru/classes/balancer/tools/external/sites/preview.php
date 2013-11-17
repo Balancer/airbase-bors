@@ -61,10 +61,11 @@ class balancer_tools_external_sites_preview extends bors_image_png
 		if($args = config('bin.wkhtmltoimage.args', 'DISPLAY=:0 /opt/bin/wkhtmltoimage-amd64 --use-xserver'))
 			$bin .= " $args ";
 
-		if(preg_match('/wikipedia/', $url))
-			$bin = "$bin -p 127.0.0.1:8118";
+		if(($proxy=config('proxy.force_regexp')) && preg_match($proxy, $url))
+			$bin = "$bin -p ".config('proxy.force');
 
 //		var_dump($bin); exit('x');
+		$url = blib_urls::parts_encode($url);
 
 		$cmd = $bin
 			." --width 1024 --height 768"
@@ -95,13 +96,12 @@ class balancer_tools_external_sites_preview extends bors_image_png
 			system($cmd_nojs);
 		}
 
-exit();
-
-		debug_hidden_log('sites_preview', "Image $url ($geo) error. Empty file. cmd=$cmd", 1);
+//		exit();
+//		debug_hidden_log('sites_preview', "Image $url ($geo) error. Empty file. cmd=$cmd", 1);
 
 		if(!file_exists($file))
 		{
-			debug_hidden_log('sites_preview', "Image $url ($geo) error. Empty file. cmd=$cmd", 1);
+			debug_hidden_log('sites_preview', "Image $url ($geo) error. File not exists. cmd=$cmd; cmd_nojs=$cmd_nojs;", 1);
 			return NULL;
 		}
 

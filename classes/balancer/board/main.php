@@ -47,6 +47,7 @@ class balancer_board_main extends balancer_board_page
 				'last_visit - first_visit > 600',
 				'*set' => '(86400*num_views)/(last_visit-first_visit) AS views_per_day',
 				'order' => '(86400*num_views)/(last_visit-first_visit) DESC',
+				'is_public' => true,
 				'forum_id NOT IN' => array(37),
 				'limit' => 20,
 		));
@@ -61,7 +62,7 @@ class balancer_board_main extends balancer_board_page
 			'updated_topics' => bors_find_all('balancer_board_topic', array(
 				'order' => '-last_post_create_time',
 				'limit' => 20,
-				'is_public' => 1,
+				'is_public' => true,
 			)),
 
 			'new_topics' => $new_topics,

@@ -13,102 +13,104 @@
 	$strip - сколько резать символов.
 *}
 {if $p}
-{if !$p->is_deleted()}
+	{if !$p->is_deleted()}
 <a name="p{$p->id()}"></a>
-{assign var="owner" value=$p->owner()}
-{assign var=a value=$p->get('answer_to')}
+		{assign var="owner" value=$p->owner()}
+		{assign var=a value=$p->get('answer_to')}
 <div class="post pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $p->get('is_moderatorial')} moderatorial_post{/if}">
 	<div class="head">
 		<div class="to-left">
-{if $p->get('is_moderatorial')}<div class="red small">Данное сообщение является официальным предупреждением</div>{/if}
-{$p->get('flag')}
-{if $show_title}{$show_title} {/if}
-{if not $skip_author_name}
-	{* {if $p->joke_owner()}{$p->joke_owner()->title()}{else}{$p->author_name()}{/if *}
-	{$p->author_name()}
-{/if}
-{if not $skip_date} <a href="{$p->url_for_igo()}">#{$p->create_time()|full_time}</a>{/if}
-{if not $no_show_answers and $p->answer_to_id() and $a}&nbsp;<span class="answer">@{if $a->joke_owner()}{$a->joke_owner()->title()}{else}{$a->author_name()}{/if}<a href="{$a->url_in_container()}">#{$a->create_time()|full_time}</a></span>{/if}
-{if $forum and not $skip_forums} <small>// {$forum->titled_link()}</small>{/if}
+		{if $p->get('is_moderatorial')}<div class="red small">Данное сообщение является официальным предупреждением</div>{/if}
+		{$p->get('flag')}
+		{if $show_title}{$show_title} {/if}
+		{if not $skip_author_name}
+			{* {if $p->joke_owner()}{$p->joke_owner()->title()}{else}{$p->author_name()}{/if *}
+			{$p->author_name()}
+		{/if}
+		{if not $skip_date} <a href="{$p->url_for_igo()}">#{$p->create_time()|full_time}</a>{/if}
+		{if not $no_show_answers and $p->answer_to_id() and $a}&nbsp;<span class="answer">@{if $a->joke_owner()}{$a->joke_owner()->title()}{else}{$a->author_name()}{/if}<a href="{$a->url_in_container()}">#{$a->create_time()|full_time}</a></span>{/if}
+		{if $forum and not $skip_forums} <small>// {$forum->titled_link()}</small>{/if}
 		</div>{* /div.to-left *}
 
-{if not $skip_votes}
+		{if not $skip_votes}
 <div class="to-right">
-	{if config('is_developer')}<div id="ab_rec_{$p->new_class_name()}__{$p->id()}" class="to-left ab_rec"><img src="/_bors/i16/recommendation.gif" alt="[!]" width="16" height="16" title="Рекомендовать это сообщение" /></div>{/if}
- {if 0 && $me}
+			{* if config('is_developer')}<div id="ab_rec_{$p->new_class_name()}__{$p->id()}" class="to-left ab_rec"><img src="/_bors/i16/recommendation.gif" alt="[!]" width="16" height="16" title="Рекомендовать это сообщение" /></div>{/if *}
+			{if 0 && $me}
  <div class="to-left">
-  {* $p->tools()->favorite_link_ajax() *}
-  {if $me->is_coordinator()}<div id="pttools_{$p->id()}" class="to-left"></div><img src="/_bors/i/tools.gif" alt="*" onclick="sh('pttools', {$p->id()})"  width="16" height="16" title="Инструменты координатора" />{/if}
+				{* $p->tools()->favorite_link_ajax() *}
+				{if $me->is_coordinator()}<div id="pttools_{$p->id()}" class="to-left"></div><img src="/_bors/i/tools.gif" alt="*" onclick="sh('pttools', {$p->id()})"  width="16" height="16" title="Инструменты координатора" />{/if}
  </div>
- {/if}
+			{/if}
  <div class="to-left"><img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$p->id()},'up')"  width="16" height="16" title="+" /></div>
  <div id="ptr{$p->id()}" class="to-left">{if $p->get('score') != NULL}{$p->score_colorized()}{/if}</div>
  <div class="to-left"><img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$p->id()},'down')" width="16" height="16" title="-" /></div>
  <div class="half-transparent to-left">{$p->imaged_edit_url()}</div>
- {if $is_first_post}<g:plusone size="small"></g:plusone>{/if}
+			{if $is_first_post}<g:plusone size="small"></g:plusone>{/if}
 </div>
-{/if}
+		{/if}
 
 <div class="clear">&nbsp;</div>
 	</div>{*/head*}
 
 <div class="body">
-{if $owner and not $skip_avatar_block}
-{if not $avatar_size}{assign var="avatar_size" value=100}{/if}
-<div class="avatar_block">{include file="xfile:forum/post-avatar.html" object=$p avatar_size=$avatar_size owner=$p->owner()}</div>{/if}
-{assign var="keyword_links" value=$p|get:'keyword_links'}
-{if $keyword_links}<div class="post_kws">{$keyword_links}</div>{/if}
-{if $strip}
-	{assign var="body" value=$p->body()}
-	{$body|strip_text:$strip}
-	{if bors_strlen($body) >= $strip}
-		<br /><br /><a href="{$p->url_in_container()}">Дальше »»»</a>
-	{/if}
-{else}
-	{if $p->get('is_spam') && $p->topic()->forum_id() != 191 && not $show_spam}
-		<div class="box">** Это сообщение от непроверенного пользователя и похоже на спам. После проверки его координаторами оно будет или уничтожено, или разрешено к показу **</div>
-	{else}
-		{if $p->get('is_hidden')}
-			<div class="box">** Это сообщение было скрыто координатором **</div>
-		{else}
-			<div id="pb_{$p->id()}" class="post_body">
-			{$p->body()}
-			</div>
+		{if $owner and not $skip_avatar_block}
+			{if not $avatar_size}{assign var="avatar_size" value=100}{/if}
+<div class="avatar_block">{include file="xfile:forum/post-avatar.html" object=$p avatar_size=$avatar_size owner=$p->owner()}</div>
 		{/if}
-	{/if}
-{/if}
+		{assign var="keyword_links" value=$p|get:'keyword_links'}
+		{if $keyword_links}<div class="post_kws">{$keyword_links}</div>{/if}
+		{if $strip}
+			{assign var="body" value=$p->body()}
+			{$body|strip_text:$strip}
+			{if bors_strlen($body) >= $strip}
+				<br /><br /><a href="{$p->url_in_container()}">Дальше »»»</a>
+			{/if}
+		{else}
+			{if $p->get('is_spam') && $p->topic()->forum_id() != 191 && not $show_spam}
+				<div class="box">** Это сообщение от непроверенного пользователя и похоже на спам. После проверки его координаторами оно будет или уничтожено, или разрешено к показу **</div>
+			{else}
+				{if $p->get('is_hidden')}
+					<div class="box">** Это сообщение было скрыто координатором **</div>
+				{else}
+					<div id="pb_{$p->id()}" class="post_body">
+					{$p->body()}
+			</div>
+				{/if}
+			{/if}
+		{/if}
 
-{if $p->get('attaches') && !$p->is_hidden()}
+		{if $p->get('attaches') && !$p->is_hidden()}
 <div style="margin-top: 10px; clear: both; border-top: 1px dotted #ccc;">
 <i style="margin-left: 8px">Прикреплённые файлы:</i><br/>
-{$p|post_attaches}
+			{$p|post_attaches}
 </div>
-{/if}
+		{/if}
 
-{if not $skip_message_footer}
+		{if not $skip_message_footer}
 
 <div class="postsignature">
-{if $p->owner() and $p->owner()->signature()}{$p->owner()->signature_html()}{/if}
+		{if $p->owner() and $p->owner()->signature()}{$p->owner()->signature_html()}{/if}
 <span class="img_middle">
 &nbsp;{$p->get('owner_user_agent')}
 </span>
 </div>
 
-{if $p->get('edited') && $p->edited() > $p->create_time() + 300}<div class="edited_note">
-Это сообщение редактировалось {$p->edited()|strftime:"%d.%m.%Y в %H:%M"}
-</div>{/if}
+		{if $p->get('edited') && $p->edited() > $p->create_time() + 300}
+		<div class="edited_note">Это сообщение редактировалось {$p->edited()|strftime:"%d.%m.%Y в %H:%M"}</div>
+		{/if}
 
-{if $w = $p->get('warning')}<div class="{if $w->score() > 0}warning_note{else}{if $w->score()<0}alert alert-success{else}alert{/if}{/if}">
-<b>{$w->moderator_name()}:</b>
-{if $w->score() > 0}предупреждение ({$w->score()}) {else}поощрение ({-$w->score()}) {/if}
-{if $w->type_id()} по категории «<b>{$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</b>»{/if}
-{if $w->source()}(<i>{$w->source()}</i>){/if}
-.
-</div>{/if}
+		{if $w = $p->get('warning')}
+		<div class="{if $w->score() > 0}warning_note{else}{if $w->score()<0}alert alert-success{else}alert{/if}{/if}">
+			<b>{$w->moderator_name()}:</b>
+			{if $w->score() > 0}предупреждение ({$w->score()}) {else}поощрение ({-$w->score()}) {/if}
+			{if $w->type_id()} по категории «<b>{$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</b>»{/if}
+			{if $w->source()}(<i>{$w->source()}</i>){/if}
+		</div>
+		{/if}
 
 <div id="pfo{$p->id()}"></div>
 
-{if $p->topic() && $p->topic()->forum()}
+		{if $p->topic() && $p->topic()->forum()}
 <ul class="postfooter">
 <li><a href="/_bors/ajax/post/info?post={$p->id()}" class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;инфо</a></li>
 <li><a href="#" onclick="pdsh('{$p->id()}'); return false;"
@@ -120,11 +122,10 @@
   >Ответить на сообщение</a>
 </li>
 </ul>
-{/if}
-
-{else}
+		{/if}
+	{else}{* is_deleted *}
 <div class="clear">&nbsp;</div>
-{/if}{*/signature show*}
+	{/if}{*/signature show*}
 </div>{*/body*}
 </div>{*/post*}
 

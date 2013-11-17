@@ -39,7 +39,7 @@ class user_posts_month extends balancer_board_page
 
 	function url() { return "http://www.balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/"; }
 
-    function local_data()
+    function body_data()
 	{
 		$year	= $this->year;
 		$month	= $this->month;
@@ -49,7 +49,11 @@ class user_posts_month extends balancer_board_page
 		for($day=1; $day<=$days; $day++)
 		{
 			$time9	= $time0 + 86400;
-			$total = objects_count('forum_post', array('poster_id' => $this->id(), "posted BETWEEN $time0 AND $time9"));
+			$total = bors_count('balancer_board_post', array(
+				'poster_id' => $this->id(),
+				'is_deleted' => false,
+				"posted BETWEEN $time0 AND $time9",
+			));
 			$time0 = $time9;
 
 			if($total)

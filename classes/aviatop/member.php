@@ -1,9 +1,9 @@
 <?php
 
-class aviatop_member extends bors_page_db
+class aviatop_member extends balancer_board_object_db
 {
 	function config_class() { return 'aviatop_config'; }
-	function template() { return 'forum/page.html'; }
+//	function template() { return 'forum/page.html'; }
 
 	function parents() { return array('http://top.airbase.ru/'); }
 
@@ -54,4 +54,5 @@ class aviatop_member extends bors_page_db
 	}
 
 	function url() { return 'http://www.airbase.ru/top/'.$this->id().'/'; }
+	function url_ex($page) { return 'http://www.airbase.ru/top/'.$this->id().'/'; }
 }

@@ -3,6 +3,9 @@
 <div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>
 <h2>Информация</h2>
 <ul>
+{if $ban}
+<li class="red">Пользователь забанен перманентно по причине: {$ban->message()}</li>
+{/if}
 <li>Зарегистрирован: {$user->create_time()|full_time}</li>
 {if $user->username()}<li>Имя пользователя: {$user->username()}</li>{/if}
 {if $user->user_nick()}<li>Ник: {$user->user_nick()}</li>{/if}

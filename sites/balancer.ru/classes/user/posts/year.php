@@ -39,7 +39,11 @@ class user_posts_year extends balancer_board_page
 			$days = date('t', $d0);
 			$d9 = $d0 + 86400*$days;
 
-			if($cnt = $this->db('AB_FORUMS')->select('posts', 'count(*)', array('poster_id' => $this->id(), "posted BETWEEN $d0 AND $d9")))
+			if($cnt = $this->db('AB_FORUMS')->select('posts', 'count(*)', array(
+				'poster_id' => $this->id(),
+				'is_deleted' => false,
+				"posted BETWEEN $d0 AND $d9",
+			)))
 				$month[$m] = $cnt;
 		}
 

@@ -1,11 +1,11 @@
 <?php
 
-class aviatop_config extends bors_config
+class aviatop_config extends balancer_board_config
 {
-	function config_data()
+	function object_data()
 	{
 		return array(
-			'template' => 'forum/_header.html',
+			'template' => 'forum/page.html',
 		);
 	}
 }

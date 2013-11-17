@@ -702,7 +702,10 @@ if ($tid)
 		include_once('inc/design/make_quote.php');
 
 		$joke = object_property($post, 'joke_owner');
-		$quote = make_quote($joke ? $joke->title() : $q_poster, $q_message)."\n";
+		if($quoted_post && !$quoted_post->is_hidden() && !$quoted_post->is_deleted())
+			$quote = make_quote($joke ? $joke->title() : $q_poster, $q_message)."\n";
+		else
+			$quote = '';
 	}
 
 	$forum_name = "<a href=\"{$pun_config['root_uri']}/viewforum.php?id={$cur_posting['id']}\">".pun_htmlspecialchars($cur_posting['forum_name']).'</a>';
@@ -888,6 +891,7 @@ if(!$profile || $profile->textarea_type() == 'markitup')
 	<a href="#" title=";)"><img src="http://www.airbase.ru/forum/smilies/wink.gif" /></a>
 	<a href="#" title=":D"><img src="http://www.airbase.ru/forum/smilies/biggrin.gif" /></a>
 </div>
+<div class="yellow_box" style="margin: 10px 0">Обратите внимание на изменения в соглашении под формой ответа</div>
 <?php } ?>
 						<textarea name="req_message" id="bbcode" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo isset($_POST['req_message']) ? pun_htmlspecialchars($message) : (isset($quote) ? $quote : ''); ?></textarea><br /></label>
 						<ul class="bblinks">
@@ -976,6 +980,9 @@ if($qid) echo "<input type=\"hidden\" name=\"qid\" value=\"$qid\">\n";
 этой информации. В случае претензий правообладателей эта информация
 может быть удалена. Все материалы, автором которых являетесь Вы,
 при опубликовании на форумах приобретают лицензию <a href="http://www.balancer.ru/support/2009/02/t66269--Prava-publikatsii-avtorskikh-materialov-.html"><b>Creative Commons</b> (by-nc-sa)</a>.
+<br/><b>Новое (13.11.2013):</b> Также Вы обязуетесь в своих сообщениях соблюдать законы Российской Федерации и нести ответственность
+за их нарушение. В случае подобных нарушений вся Ваша переписка может быть удалена,
+а информация о Вас предоставлена органам защиты правопорядка.
 </div>
 			<p><input type="submit" name="submit" value="<?php echo $lang_common['Submit'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="s" /><input type="submit" name="preview" value="<?php echo $lang_post['Preview'] ?>" tabindex="<?php echo $cur_index++ /*"*/?>" accesskey="p" /><a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
 		</form>

@@ -333,7 +333,11 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		if(isset($this->__all_posts_ids))
 			return $this->__all_posts_ids;
 
-		return $this->__all_posts_ids = $this->db()->select_array('posts', 'id', array('topic_id' => $this->id(), 'order' => '`order`,posted'));
+		return $this->__all_posts_ids = $this->db()->select_array('posts', 'id', array(
+			'topic_id' => $this->id(),
+			'is_deleted' => false,
+			'order' => '`order`,posted',
+		));
 	}
 
 	protected function posts_ids($page = NULL)
@@ -344,6 +348,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		$data = array(
 			'topic_id' => $this->id(),
 			'order' => '`order`,posted',
+			'is_deleted' => false,
 		);
 
 		if($this->is_repaged())
@@ -366,6 +371,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			'topic_id' => $this->id(),
 			'order' => '`order`,posted',
 			'by_id' => true,
+			'is_deleted' => false,
 		);
 
 		if($paging && $this->is_repaged())
@@ -376,7 +382,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			$data['per_page'] = $this->items_per_page();
 		}
 
-		return objects_array('balancer_board_post', $data);
+		return bors_find_all('balancer_board_post', $data);
 	}
 
 	function items_per_page() { return 25; }
@@ -416,8 +422,8 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		if($this->forum_id() && $this->forum())
 			$base = $this->forum()->category()->category_base_full();
 
-//		if($this->get('first_post_time') > time() - 86400*5)
-//			$base = str_replace('www.balancer.ru', 'www.wrk.ru', $base);
+		if($this->get('first_post_time') > time() - 86400*5)
+			$base = str_replace('www.balancer.ru', 'www.wrk.ru', $base);
 
 		return $base;
 	}
