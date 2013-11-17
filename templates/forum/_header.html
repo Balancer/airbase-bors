@@ -431,9 +431,9 @@ static expire = {$this->cache_static_expire()|date:'r'}
 class_template = {$this->template()}
 BORS_CORE={$smarty.const.BORS_CORE}
 -->
-{if date('d')==31 and date('m') == 10 and rand(0,10)==1}
+{* if date('d')==31 and date('m') == 10 and rand(0,10)==1}
 {include file="xfile:airbase/inc/halloween.html"}
-{/if}
+{/if *}
 </body>
 {foreach from=$js_include_post item="s"}
 <script type="text/javascript" src="{$s}"></script>
@@ -443,10 +443,11 @@ BORS_CORE={$smarty.const.BORS_CORE}
 {$s}
 {/foreach}
 {if $jquery_document_ready}
-$(document).ready(function(){literal}{{/literal}
+$(document).ready(function() {
 {foreach from=$jquery_document_ready item="s"}
 {$s}
 {/foreach}
+
 })
 {if $me}
 jQuery.getScript('http://forums.balancer.ru/ajax/pagemod.js?user_id='+0+'&target={$this->internal_uri_ascii()}&mtime={$this->modify_time()}&static={$this->cache_static()}')

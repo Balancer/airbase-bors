@@ -71,6 +71,7 @@ class user_posts_day extends balancer_board_page
 	{
 		$prev = $this->db('AB_FORUMS')->select('posts', 'MAX(posted)', array(
 			'poster_id' => $this->id(), 
+			'is_deleted' => false,
 			'posted<' => strtotime("{$this->year}-{$this->month}-{$this->day}"),
 		));
 
@@ -84,6 +85,7 @@ class user_posts_day extends balancer_board_page
 	{
 		$next = $this->db('AB_FORUMS')->select('posts', 'MIN(posted)', array(
 			'poster_id' => $this->id(), 
+			'is_deleted' => false,
 			'posted>=' => strtotime("{$this->year}-{$this->month}-{$this->day}")+86400,
 		));
 
@@ -101,8 +103,9 @@ class user_posts_day extends balancer_board_page
 		$time0d	= intval(strtotime("$year-$month-{$this->day} 00:00:00"));
 		$days	= date('t', $time0);
 
-		$posts = objects_array('forum_post', array(
+		$posts = bors_find_all('balancer_board_post', array(
 			'poster_id' => $this->id(),
+			'is_deleted' => false,
 			'posted BETWEEN '.$time0d.' AND '.($time0d+86400),
 			'order' => 'posted',
 		));
@@ -111,7 +114,11 @@ class user_posts_day extends balancer_board_page
 		for($day=1; $day<=$days; $day++)
 		{
 			$time9	= $time0 + 86400;
-			$total = objects_count('forum_post', array('poster_id' => $this->id(), "posted BETWEEN $time0 AND $time9"));
+			$total = bors_count('balancer_board_post', array(
+				'poster_id' => $this->id(),
+				'is_deleted' => false,
+				"posted BETWEEN $time0 AND $time9",
+			));
 			$time0 = $time9;
 
 			if($total)

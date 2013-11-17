@@ -10,7 +10,7 @@ bors_url_map(array(
 $map = array(
 	'/ => airbase_main',
 
-	'(/top/)(\d+)/ => aviatop_member(2)',
+	'(/top/)(\d+)/ => aviatop_members_view(2)',
 
 	'(/top/)logos/(\d+)\.png => airbase_top_logo(2)',
 	'(/top/)\?img=(\d+) => airbase_top_logo(2)',
@@ -32,6 +32,7 @@ $map = array(
 	'(/)forum/(\d+/\d+)/? => forum_topic_ubb(2)',
 	'(/)forum/(\d+/\d+)/index\.htm => forum_topic_ubb(2)',
 	'(/)forum/(\d+/\d+)/(\d+)\.htm => forum_topic_ubb(2,3)',
+	'(/)forum/(\d+/\d+)/(\d+)/?$ => forum_topic_ubb(2,3)',
 
 	'(.*/)index\.htm => common_redirect(1)',
 	'(.*/)index\-t\.htm => common_redirect(1)',

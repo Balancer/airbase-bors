@@ -50,9 +50,9 @@ class airbase_external_link extends balancer_board_object_db
 
 	}
 
-	static function register($url, $params = array())
+	static function register($url, $params = array(), $test=false)
 	{
-		$max_length = defval($params, 'max_length');
+		$max_length = defval($params, 'max_length', 1000000);
 
 		$req = blib_http::get_ex($url, array('is_raw' => false));
 		$content = $req['content'];
@@ -74,8 +74,9 @@ class airbase_external_link extends balancer_board_object_db
 		}
 
 //		$html = lcml($data['bbshort']);
-
-		var_dump($req, $data);
+//		var_dump($url, $data);
+		if($test)
+			return;
 
 		return bors_new(__CLASS__, array(
 			'url_index' => self::normalize($url),
@@ -104,7 +105,8 @@ class airbase_external_link extends balancer_board_object_db
 
 	static function __dev()
 	{
-		echo self::find_or_register('http://www.freeupload.cn');
+//		echo self::find_or_register('http://www.freeupload.cn');
+		self::register('http://www.cliparthost.com', array(), true);
 	}
 
 	static function __unit_test($suite)

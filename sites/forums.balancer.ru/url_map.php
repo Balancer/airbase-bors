@@ -8,6 +8,7 @@ bors_url_map(array(
 	'(/)worst/(\d+)\.html => balancer_board_posts_worst(NULL,2)',
 	'(/)best/(\d+)\.html => balancer_board_posts_best(NULL,2)',
 	'(/personal)(/?.*) => include(balancer_board_personal)',
+	'/posts/popups/tools/?\?post=(\d+) => balancer_board_posts_popups_tools(1)',
 	'.* => balancer_board_pages_zim',
 ));
 

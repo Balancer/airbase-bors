@@ -67,7 +67,8 @@ class user_main extends balancer_board_page
 		$db_bors = new driver_mysql('AB_BORS');
 
 		$by_forums = $db->select_array('posts', 'forum_id, count(*) AS `count`', array(
-			'posts.poster_id=' => $this->id(), 
+			'posts.poster_id=' => $this->id(),
+			'is_deleted' => false,
 			'posts.posted>' => time()-86400,
 			'inner_join' => 'topics ON topics.id = posts.topic_id',
 			'group' => 'forum_id',
@@ -76,6 +77,7 @@ class user_main extends balancer_board_page
 
 		$by_forums_for_month = $db->select_array('posts', 'forum_id, count(*) AS `count`', array(
 			'posts.poster_id=' => $this->id(), 
+			'is_deleted' => false,
 			'posts.posted>' => time()-86400*30,
 			'inner_join' => 'topics ON topics.id = posts.topic_id',
 			'group' => 'forum_id',
@@ -105,6 +107,7 @@ class user_main extends balancer_board_page
 		if(bors()->user() && ($is_watcher = bors()->user()->is_watcher() || bors()->user()->is_admin()))
 		{
 			$interlocutors = $db->select_array('posts', 'poster_id, COUNT(*) as answers_count', array(
+				'is_deleted' => false,
 				'posted>' => time() - 365*86400,
 				'answer_to_user_id' => $this->id(),
 				'group' => 'poster_id',
@@ -191,6 +194,9 @@ class user_main extends balancer_board_page
 			$minuses_to = bors_count('bors_votes_thumb', array('user_id' => $me_id, 'target_user_id' => $this->id(), 'score<' => 0));
 		}
 
+		$best_of_month	= array_filter($best_of_month,	function($p) { return !$p->target()->is_deleted();});
+		$best			= array_filter($best,			function($p) { return !$p->target()->is_deleted();});
+
 		$data = array(
 			'best' => $best,
 			'best_of_month' => $best_of_month,
@@ -201,15 +207,18 @@ class user_main extends balancer_board_page
 			'messages_month_by_forums' => $by_forums_for_month,
 			'today_total' => objects_count('balancer_board_post', array(
 				'owner_id' => $this->id(),
+				'is_deleted' => false,
 				'create_time>' => time()-86400,
 			)),
 
 			'tomonth_total' => objects_count('balancer_board_post', array(
+				'is_deleted' => false,
 				'owner_id' => $this->id(),
 				'create_time>' => time()-86400*30,
 			)),
 			'votes_from' => bors_votes_thumb::colorize_pm(@$pluses_from, @$minuses_from),
 			'votes_to'   => bors_votes_thumb::colorize_pm(@$pluses_to  , @$minuses_to  ),
+			'ban' => $user->is_banned(),
 		);
 
 		return array_merge(parent::page_data(), $data, compact(

@@ -90,25 +90,24 @@
 
         if(!file_exists(preg_replace("!http://{$data['host']}!",$data['root'], $image2)))
             $image2 = abs_path_from_relative($image, $page);
-		
+
         if(file_exists(preg_replace("!http://{$data['host']}!",$data['root'],$image2)))
             $image = $image2;
 
         if(!file_exists(preg_replace("!http://{$data['host']}!",$data['root'],$image)))
             return false;
-            
+
         if(!$hts->get_data($image, 'create_time'))
             $hts->set_data($image, 'create_time', time());
 
         if(!$hts->get_data($image, 'width') || !$hts->get_data($image, 'height') || !$hts->get_data($image, 'size'))
         {
-            $parse = $hts->parse_uri($image);
-            list($width, $height, $type, $attr) = @getimagesize($parse['local'] ? $parse['local_path'] : $image);
-            $hts->set_data($image, 'width' , $width );
-            $hts->set_data($image, 'height', $height);
-            $hts->set_data($image, 'type'  , $type  );
-            if($path = $hts->get_data($image, 'local_path'))
-                $hts->set_data($image, 'size'  , filesize($path));
+			$img = airbase_image::register_file($image);
+
+            $hts->set_data($image, 'width' , $img->width());
+            $hts->set_data($image, 'height', $img->height());
+            $hts->set_data($image, 'type'  , $img->extension());
+			$hts->set_data($image, 'size'  , $img->size());
         }
 
         if(!$hts->get_data($image, 'author'))

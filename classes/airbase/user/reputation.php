@@ -1,6 +1,6 @@
 <?php
 
-class airbase_user_reputation extends base_page_db
+class airbase_user_reputation extends balancer_board_object_db
 {
 	function class_title_vp() { return ec('запись репутации'); }
 	function storage_engine() { return 'bors_storage_mysql'; }

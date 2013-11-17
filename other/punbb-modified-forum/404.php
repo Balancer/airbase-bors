@@ -15,7 +15,7 @@ require_once(BORS_CORE.'/init.php');
 		include("viewtopic.php");
 		exit();
 	}
-	
+
 	if(preg_match("!/forum/topic/\d+/(\d+),(\d+)/?$!", $_SERVER['REQUEST_URI'], $m))
 	{
 		$_GET['id'] = $m[1];
@@ -77,7 +77,7 @@ require_once(BORS_CORE.'/init.php');
 		go("{$pun_config['root_uri']}/style/imports/base.css");
 		exit();
 	}
-	
+
 	$fh = fopen("{$_SERVER['DOCUMENT_ROOT']}/forum/404.log", "at");
 	fwrite($fh, $_SERVER['REQUEST_URI']."|".@$_SERVER['HTTP_REFERER']."\n");
 	fclose($fh);
