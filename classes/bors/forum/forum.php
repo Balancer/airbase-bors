@@ -36,6 +36,7 @@ class forum_forum extends bors_object_db
 			'sort_by',
 			'original_id',
 			'skip_common',
+//			'sticky',
 		);
 	}
 

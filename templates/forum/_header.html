@@ -159,7 +159,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 	{else}
 		{* include file="xfile:forum/ads/top-ad-balancer.html" *}
 		{*  include file="xfile:forum/ads/begun-forums.airbase.ru.html" *}
-		{include file="xfile:forum/ads/begun-top-auto.html"}
+		{* include file="xfile:forum/ads/begun-top-auto.html" *}
 		{* include file="xfile:forum/ads/yandex-direct-h4.html" *}
 	{/if}
 {/if}
@@ -245,13 +245,13 @@ createCookie('readedTopics', readed.join(' '), 3)
 </dl>
 
 {if not $skip_ad}
-<div class="center"><div class="top-ad">
 {if $this->get('can_adsense')}
+	<div class="center"><div class="top-ad">
 	{include file="xfile:forum/ads/google-ads-bottom.html"}
+	</div></div>
 {else}
-	{include file="xfile:forum/ads/begun-bottom-auto-forums-airbase.html"}
+	{* include file="xfile:forum/ads/begun-bottom-auto-forums-airbase.html" *}
 {/if}
-</div></div>
 {/if}
 		<dl class="box">
 		<dt class="nav">{module class="module_nav_top"}</dt>
@@ -319,7 +319,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 {if $this->get('can_adsense')}
 	{include file="xfile:forum/ads/google-ads-left-200x200-lazy.html"}
 {else}
-	{include file="xfile:forum/ads/begun-topleft-200x300.html"}
+	{* include file="xfile:forum/ads/begun-topleft-200x300.html" *}
 {/if}
 
 <dl class="box w200">
