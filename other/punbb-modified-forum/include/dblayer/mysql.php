@@ -63,7 +63,7 @@ class DBLayer
 		else
 			error("<b>Что-то не работает. Попробуйте заглянуть на</b>:
 <ul>
-<!--<li><a href=\"http://home.balancer.ru/lorduino/\" style=\"color: red; font-weight: bold\">Чат Авиабазы</a> (не требуется никакой регистрации)</li>-->
+<li><a href=\"http://home.balancer.ru/lorduino/\" style=\"color: red; font-weight: bold\">Чат Авиабазы</a> (не требуется никакой регистрации)</li>
 <li><a href=\"http://ls.balancer.ru/\">LSBR</a> (там работает форумная авторизация, те же логин с паролем, что и на форумах)</li>
 <li>Если не работает и LSBR, попробуйте <a href=\"http://balancer.endofinternet.net/mybb/\">ЗАПАСНОЙ ФОРУМ</a></li>
 </ul>

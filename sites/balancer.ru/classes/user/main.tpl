@@ -3,7 +3,7 @@
 <div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>
 <h2>Информация</h2>
 <ul>
-{if $ban}
+{if $ban && is_object($ban)}
 <li class="red">Пользователь забанен перманентно по причине: {$ban->message()}</li>
 {/if}
 <li>Зарегистрирован: {$user->create_time()|full_time}</li>
