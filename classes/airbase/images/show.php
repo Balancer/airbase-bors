@@ -89,7 +89,7 @@ class airbase_images_show extends balancer_board_page
 
 		$data['image'] = $image;
 
-		$data['posts'] = bors_find_all('balancer_board_posts_object', array(
+		$data['objects'] = bors_find_all('balancer_board_posts_object', array(
 //			'target_class_name IN' => array('bors_image', 'airbase_image'),
 			'target_object_id' => $image->id(),
 		));

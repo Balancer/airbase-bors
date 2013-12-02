@@ -891,7 +891,6 @@ if(!$profile || $profile->textarea_type() == 'markitup')
 	<a href="#" title=";)"><img src="http://www.airbase.ru/forum/smilies/wink.gif" /></a>
 	<a href="#" title=":D"><img src="http://www.airbase.ru/forum/smilies/biggrin.gif" /></a>
 </div>
-<div class="yellow_box" style="margin: 10px 0">Обратите внимание на изменения в соглашении под формой ответа</div>
 <?php } ?>
 						<textarea name="req_message" id="bbcode" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo isset($_POST['req_message']) ? pun_htmlspecialchars($message) : (isset($quote) ? $quote : ''); ?></textarea><br /></label>
 						<ul class="bblinks">
