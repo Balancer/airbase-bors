@@ -29,7 +29,14 @@ class airbase_user_reputation extends balancer_board_object_db
 	}
 
 	function class_title() { return 'Запись в репутации'; }
-	function title() { return ($this->score() > 0 ? '+1' : '-1').' от '.$this->owner()->title().' к '.$this->target_user()->title(); }
+	function title()
+	{
+		$text = ($this->score() > 0 ? '+1' : '-1').' от '.$this->owner()->title().' к '.$this->target_user()->title();
+		if($this->comment())
+			$text .= " ({$this->comment()})";
+
+		return $text;
+	}
 	function titled_link() { return $this->title(); }
 
 	function cache_group_provides() { return array("user-{$this->user_id()}-reputation"); }

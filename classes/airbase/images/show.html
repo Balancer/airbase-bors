@@ -3,11 +3,11 @@
 {$image->id()}
 {/if}
 
-{if $posts}
+{if $objects}
 <h2>Изображение используется в сообщениях:</h2>
 <ul>
-{foreach $posts as $p}
-<li>{$p->titled_link()}</li>
+{foreach $objects as $x}
+<li>{$x->post()->titled_link()}</li>
 {/foreach}
 </ul>
 {/if}
