@@ -86,7 +86,6 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/post.php';
 // Start with a clean slate
 $errors = array();
 
-
 if (isset($_POST['form_sent']))
 {
 	if($msg = $post->is_edit_disable())
@@ -259,9 +258,11 @@ if (isset($_POST['form_sent']))
 					}
 				}
 			}
-		}		
+		}
+
 		//Then recieve any potential new files
 		if((isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))){
+
 			//ok, we have a new file, much similar to post, except we need to check if the user uploads too many files...
 			$attach_allowed=false;
 			if($pun_user['g_id']==PUN_ADMIN){
