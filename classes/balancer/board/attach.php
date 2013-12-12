@@ -143,6 +143,14 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 			$width = 422;
 			set_def($args, 'container_style', "padding: 8px!important; width: {$width}px;");
 		}
+		elseif(preg_match("!(flv)!i", $this->extension()))
+		{
+			$full_url = 'http://files.balancer.ru/forums/attaches/'.$this->location();
+
+			$thumb = restore_format(jquery_jplayer::html(array('flv' => $full_url, 'title' => basename($this->title()))));
+			$width = 640;
+			set_def($args, 'container_style', "padding: 8px!important; width: {$width}px;");
+		}
 		else
 		{
 			$thumb = '';
