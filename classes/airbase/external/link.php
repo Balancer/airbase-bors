@@ -95,12 +95,29 @@ class airbase_external_link extends balancer_board_object_db
 		));
 	}
 
+	static function default_bbshort($url, &$data=array())
+	{
+		$data['title'] = self::normalize(blib_urls::host($url));
+		$data['bbshort'] = "[round_box][h][a href=\"{$url}\"]{$data['title']}[/a][/h]
+{$req['error']}
+
+[span class=\"transgray\"][reference]".bors_external_feeds_entry::url_host_link($url)."[/reference][/span][/round_box]";
+
+		return $data;
+	}
+
 	static function find_or_register($url)
 	{
-		if($x = self::find($url))
-			return $x;
+		if(!($x = self::find($url)))
+			$x = self::register($url);
 
-		return self::register($url);
+		if(!$x->bbshort())
+		{
+			$data = self::default_bbshort($url);
+			$x->set_attr('bbshort', $data['bbshort']);
+		}
+
+		return $x;
 	}
 
 	static function __dev()
