@@ -27,21 +27,21 @@ class balancer_board_attach extends balancer_board_object_db
 	}
 
 function post_id() { return @$this->data['post_id']; }
-function set_post_id($v, $dbup) { return $this->set('post_id', $v, $dbup); }
+function set_post_id($v, $dbup=true) { return $this->set('post_id', $v, $dbup); }
 function owner_id() { return @$this->data['owner_id']; }
-function set_owner_id($v, $dbup) { return $this->set('owner_id', $v, $dbup); }
+function set_owner_id($v, $dbup=true) { return $this->set('owner_id', $v, $dbup); }
 function filename() { return @$this->data['filename']; }
-function set_filename($v, $dbup) { return $this->set('filename', $v, $dbup); }
+function set_filename($v, $dbup=true) { return $this->set('filename', $v, $dbup); }
 function extension() { return @$this->data['extension']; }
-function set_extension($v, $dbup) { return $this->set('extension', $v, $dbup); }
+function set_extension($v, $dbup=true) { return $this->set('extension', $v, $dbup); }
 function mime() { return @$this->data['mime']; }
-function set_mime($v, $dbup) { return $this->set('mime', $v, $dbup); }
+function set_mime($v, $dbup=true) { return $this->set('mime', $v, $dbup); }
 function size() { return @$this->data['size']; }
-function set_size($v, $dbup) { return $this->set('size', $v, $dbup); }
+function set_size($v, $dbup=true) { return $this->set('size', $v, $dbup); }
 function downloads() { return @$this->data['downloads']; }
-function set_downloads($v, $dbup) { return $this->set('downloads', $v, $dbup); }
+function set_downloads($v, $dbup=true) { return $this->set('downloads', $v, $dbup); }
 function location() { return @$this->data['location']; }
-function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
+function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup); }
 
 	function url() { return "http://www.wrk.ru/forums/attachment.php?item=".$this->id(); }
 
@@ -105,6 +105,8 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 		else
 			$geo = "{$size}x{$size}";
 
+//		if(config('is_developer')) { var_dump($this->data); exit(); }
+
 		if(preg_match("!(jpe?g|png|gif)!i", $this->extension()))
 		{
 			$full_url = 'http://www.balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2&type=.'.$this->extension();
@@ -135,7 +137,7 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 				$width = 300;
 			}
 		}
-		elseif(preg_match("!(mp3)!i", $this->extension()))
+		elseif(preg_match("!^(mp3)$!i", $this->extension()))
 		{
 			$full_url = 'http://www.balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2&type=.'.$this->extension();
 
@@ -143,11 +145,17 @@ function set_location($v, $dbup) { return $this->set('location', $v, $dbup); }
 			$width = 422;
 			set_def($args, 'container_style', "padding: 8px!important; width: {$width}px;");
 		}
-		elseif(preg_match("!(flv)!i", $this->extension()))
+		elseif(preg_match("!^(flv)$!i", $this->extension()))
 		{
+			// http://www.balancer.ru/g/p477030
+			$ext = $this->extension();
 			$full_url = 'http://files.balancer.ru/forums/attaches/'.$this->location();
 
-			$thumb = restore_format(jquery_jplayer::html(array('flv' => $full_url, 'title' => basename($this->title()))));
+			$thumb = restore_format(jquery_jplayer::html(array(
+				'url' => $full_url,
+				'video' => $ext,
+				'title' => basename($this->title()),
+			)));
 			$width = 640;
 			set_def($args, 'container_style', "padding: 8px!important; width: {$width}px;");
 		}

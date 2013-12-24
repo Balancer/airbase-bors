@@ -209,6 +209,9 @@ $result = $db->query($sql) or error('Unable to fetch topic list', __FILE__, __LI
 // If there are topics in this forum.
 if ($db->num_rows($result))
 {
+	// *****************************************************
+	//         Цикл по топикам, собственно, вывод
+	// *****************************************************
 	while ($cur_topic = $db->fetch_assoc($result))
 	{
 		$icon_text = $lang_common['Normal icon'];
@@ -282,8 +285,18 @@ if ($db->num_rows($result))
 		if($description)
 			$subject .= "<br/><small><i>{$description}</i></small>";
 
+		$classes = array();
+		if($item_status != '')
+			$classes[] = trim($item_status);
+
+		if($classes)
+			$classes = ' class="'.join(' ', $classes).'"';
+		else
+			$classes = '';
+
+		// Вывод строки топика
+		echo "<tr$classes>\n";
 ?>
-				<tr<?php if ($item_status != '') echo ' class="'.trim($item_status).'"'; ?>>
 					<td class="tcl">
 						<div class="intd">
 							<div class="<?php echo $icon_type;/*"*/?>"><div class="nosize"><?php echo trim($icon_text) ?></div></div>
