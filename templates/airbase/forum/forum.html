@@ -29,7 +29,7 @@
 		{assign var="updated" value=$t->was_updated_for_user($me,true)}
 	{/if}
 {/if}
-<tr class="tr_forum_{$f->id()}">
+<tr class="tr_forum_{$f->id()}{if !$f->is_public()} bb-background-private{/if}">
 {if $with_images}
 	<td style="padding: 4px; line-height: 0;">
 	{if $img=$t->image()}

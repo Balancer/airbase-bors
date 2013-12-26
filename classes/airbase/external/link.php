@@ -99,7 +99,7 @@ class airbase_external_link extends balancer_board_object_db
 	{
 		$data['title'] = self::normalize(blib_urls::host($url));
 		$data['bbshort'] = "[round_box][h][a href=\"{$url}\"]{$data['title']}[/a][/h]
-{$req['error']}
+{$data['title']}
 
 [span class=\"transgray\"][reference]".bors_external_feeds_entry::url_host_link($url)."[/reference][/span][/round_box]";
 

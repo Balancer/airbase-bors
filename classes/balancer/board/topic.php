@@ -224,7 +224,11 @@ class balancer_board_topic extends forum_topic
 		{
 			// Если указан image_id явно, то возвращаем его.
 			if($this->data['image_id'])
-				return bors_load('airbase_image', $this->data['image_id']);
+			{
+				$image = bors_load('airbase_image', $this->data['image_id']);
+				if($image && ($th = $image->thumbnail('96x96(up,crop)')) && $th->width())
+					return $image;
+			}
 
 			// Иначе у нас там 0 — значит, что image берём с форума. Раз в час проверяем,
 			// не появилась ли картинка в теме
@@ -240,7 +244,7 @@ class balancer_board_topic extends forum_topic
 			'topic_id' => $this->id(),
 			'`i`.extension<>"gif"',
 			'target_class_id' => 202, // airbase_image
-			'order' => 'post_id',
+			'order' => '-post_id',
 		));
 
 		$this->set_image_time(time());
@@ -248,8 +252,11 @@ class balancer_board_topic extends forum_topic
 		if($obj)
 		{
 			$image = $obj->target();
-			$this->set('image_id', $image->id());
-			return $image;
+			if($image && ($th = $image->thumbnail('96x96(up,crop)')) && $th->width())
+			{
+				$this->set('image_id', $image->id());
+				return $image;
+			}
 		}
 
 		$this->set('image_id', 0);
