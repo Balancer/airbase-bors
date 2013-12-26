@@ -940,3 +940,7 @@ span.mourning-ribbon {
 	border-top: 2px solid white;
 	border-bottom: 2px solid white;
 }
+
+tr.bb-background-private td {
+	background-color: #ffc;
+}
