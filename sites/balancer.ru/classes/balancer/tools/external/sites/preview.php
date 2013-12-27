@@ -64,7 +64,6 @@ class balancer_tools_external_sites_preview extends bors_image_png
 		if(($proxy=config('proxy.force_regexp')) && preg_match($proxy, $url))
 			$bin = "$bin -p ".config('proxy.force');
 
-//		var_dump($bin); exit('x');
 		$url = blib_urls::parts_encode($url);
 
 		$cmd = $bin
@@ -80,7 +79,7 @@ class balancer_tools_external_sites_preview extends bors_image_png
 			." --minimum-font-size 20"
 //			." --load-error-handling ignore"
 			." --encoding \"utf-8\""
-			." ".escapeshellcmd($url)." ".escapeshellcmd($file);
+			." ".escapeshellarg($url)." ".escapeshellarg($file);
 
 		mkpath(dirname($file));
 
@@ -95,9 +94,6 @@ class balancer_tools_external_sites_preview extends bors_image_png
 			@unlink($file);
 			system($cmd_nojs);
 		}
-
-//		exit();
-//		debug_hidden_log('sites_preview', "Image $url ($geo) error. Empty file. cmd=$cmd", 1);
 
 		if(!file_exists($file))
 		{
