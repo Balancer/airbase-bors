@@ -366,7 +366,8 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	{
 		$topic = $this->topic();
 		if($topic)
-			return dirname($topic->url()).'/p'.$this->id().'.html';
+			return $this->url_in_topic($topic);
+//			return dirname($topic->url()).'/p'.$this->id().'.html';
 
 		debug_hidden_log('empty topic', $this, false);
 		return 'http://forums.balancer.ru/0000/00/p'.$this->id().'.html';
