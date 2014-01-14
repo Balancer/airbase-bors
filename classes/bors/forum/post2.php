@@ -328,7 +328,8 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 	function url()
 	{
-		return dirname($this->topic()->url()).'/p'.$this->id().'.html';
+		return $this->url_in_container();
+//		return dirname($this->topic()->url()).'/p'.$this->id().'.html';
 //		require_once("inc/urls.php");
 //		return 'http://www.balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
 //		return 'http://www.balancer.ru/_bors/igo?o='.$this->internal_uri_ascii();

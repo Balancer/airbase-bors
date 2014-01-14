@@ -106,5 +106,5 @@ $map = array(
 	'.* => airbase_page_hts(url)',
 	'.* => bal_pages_hts(url)',
 	'.* => airbase_pages_zim',
+	'.* => airbase_files_webroot',
 );
-

@@ -382,6 +382,8 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			$data['per_page'] = $this->items_per_page();
 		}
 
+//		$data['use_index'] = 'by_tid_ordered';
+
 		return bors_find_all('balancer_board_post', $data);
 	}
 

@@ -1,5 +1,7 @@
 <?php
 
+//exit(500);
+
 include_once('inc/strings.php');
 
 class user_posts_day extends balancer_board_page
@@ -14,12 +16,24 @@ class user_posts_day extends balancer_board_page
 
 		if($page == 'last')
 		{
-			$max = $this->db('AB_FORUMS')->select('posts', 'MAX(posted)', array('poster_id' => $this->id()));
+// Очень тормозной запрос:
+// SELECT MAX(posted) FROM posts WHERE poster_id='853' AND is_deleted='' AND posted<'1388865600' LIMIT 1
+
+//  USE KEY(poster_id)
+			$max = $this->db('AB_FORUMS')->select('posts', 'posted', array(
+				'poster_id' => $this->id(),
+				'order' => 'posted DESC',
+				'limit' => 1,
+			));
 			$page = date('Y/m/d', $max);
 		}
 		elseif($page == 'first')
 		{
-			$min = $this->db('AB_FORUMS')->select('posts', 'MIN(posted)', array('poster_id' => $this->id()));
+			$min = $this->db('AB_FORUMS')->select('posts', 'posted', array(
+				'poster_id' => $this->id(),
+				'order' => 'posted',
+				'limit' => 1,
+			));
 			$page = date('Y/m/d', $min);
 		}
 
@@ -69,10 +83,12 @@ class user_posts_day extends balancer_board_page
 
 	function previous_day_link()
 	{
-		$prev = $this->db('AB_FORUMS')->select('posts', 'MAX(posted)', array(
+		$prev = $this->db('AB_FORUMS')->select('posts', 'posted', array(
 			'poster_id' => $this->id(), 
 			'is_deleted' => false,
 			'posted<' => strtotime("{$this->year}-{$this->month}-{$this->day}"),
+			'order' => 'posted DESC',
+			'limit' => 1,
 		));
 
 		if($prev)
@@ -83,10 +99,12 @@ class user_posts_day extends balancer_board_page
 
 	function next_day_link()
 	{
-		$next = $this->db('AB_FORUMS')->select('posts', 'MIN(posted)', array(
+		$next = $this->db('AB_FORUMS')->select('posts', 'posted', array(
 			'poster_id' => $this->id(), 
 			'is_deleted' => false,
 			'posted>=' => strtotime("{$this->year}-{$this->month}-{$this->day}")+86400,
+			'order' => 'posted',
+			'limit' => 1,
 		));
 
 		if($next)
