@@ -8,6 +8,8 @@ bors_url_map(array(
 	'/(_cg/_st)/\w+/\w/[^/]+/(\S+-\d+x\d+)\.png => balancer_tools_external_sites_preview(2,1)',
 	'/(_cg/_st)/\w/\w/(\S+)\.png => balancer_tools_external_sites_preview(2,1)',
 
+	'/wc/\?(.+) => balancer_wc(1)',
+
 	'/users?/(\d+)/? => user_main(1)',
 
 	'/users/reputations/? => balancer_users_reputations',

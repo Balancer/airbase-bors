@@ -847,9 +847,13 @@ $(function() {
 
 		$search_keywords = bors_find_all('bors_referer_search', $where);
 
+		if($this->args('page') == $this->total_pages())
+			$page_last_time = time();
+		else
+			$page_last_time = $last_post ? $last_post->create_time()+1 : NULL;
+
 		return array_merge(parent::page_data(), array(
 //			'skip_top_ad' => true,
-			'page_last_time' => $last_post ? $last_post->create_time()+1 : NULL,
-		), compact('search_keywords'));
+		), compact('page_last_time', 'search_keywords'));
 	}
 }
