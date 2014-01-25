@@ -108,3 +108,11 @@ $map = array(
 	'.* => airbase_pages_zim',
 	'.* => airbase_files_webroot',
 );
+
+
+// Leagcy, ссылки старого формата
+bors_url_map(array(
+	// http://forums.airbase.ru/index.php/topic,37641.msg701468/topicseen.html#msg701468
+	// 	via http://www.balancer.ru/g/p701470
+	'/index\.php/topic,(\d+)\.msg(\d+)/topicseen\.html => balancer_board_post(2)',
+));
