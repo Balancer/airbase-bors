@@ -34,7 +34,6 @@ class forum_post extends balancer_board_object_db
 			'answer_to_id' => 'answer_to_post_id',
 			'answer_to_user_id',
 			'post_source' => 'source',
-//			'post_body' => 'source_html',
 			'hide_smilies',
 			'have_attach',
 			'have_cross',
@@ -79,11 +78,6 @@ class forum_post extends balancer_board_object_db
 					'answers_count_raw' => 'answers_total',
 					'answers_in_other_topics_count_raw' => 'answers_other_topics',
 					'best10_ts' => 'UNIX_TIMESTAMP(`best10_ts`)',
-				),
-
-				'posts_dropable_fields(post_id)' => array(
-					'cached_html' => 'droppable_html',
-					'cached_html_ts' => 'UNIX_TIMESTAMP(`html_ts`)',
 				),
 			)
 		);
@@ -146,7 +140,6 @@ function answer_to_id() { return @$this->data['answer_to_id']; }
 function set_answer_to_id($v, $dbup = true) { return $this->set('answer_to_id', $v, $dbup); }
 function post_source() { return @$this->data['post_source']; }
 function set_post_source($v, $dbup = true) { return $this->set('post_source', $v, $dbup); }
-function post_body() { return @$this->data['post_body']; }
 function hide_smilies() { return @$this->data['hide_smilies']; }
 function set_hide_smilies($v, $dbup = true) { return $this->set('hide_smilies', $v, $dbup); }
 function have_attach() { return @$this->data['have_attach']; }
@@ -158,12 +151,35 @@ function set_have_answers($v, $dbup = true) { return $this->set('have_answers', 
 function score() { return @$this->data['score']; }
 function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
+	function post_body()
+	{
+		$cache = $this->cache();
+		if($cache && ($body = $cache->body()))
+			return $body;
+
+		$body = @$this->data['post_body'];
+		$this->cache_make([
+			'body' => $body,
+			'body_ts' => time(),
+		]);
+
+		$this->set('post_body', NULL, true);
+
+		return $body;
+	}
+
 	function set_post_body($value, $dbupd = true)
 	{
 		if($value == '' && $value !== NULL && $dbupd && !trim($this->source()))
 			debug_hidden_log('body', 'Set empty body in post '.$this->url_in_container());
 
-		$this->set('post_body', $value, $dbupd); 
+		$this->cache_make([
+			'body' => $value,
+			'body_ts' => time(),
+		]);
+
+		$this->set('post_body', NULL, true);
+		return $value;
 	}
 
 	//TODO: странно, при прямом вызове пропадают флаги.
@@ -232,7 +248,13 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$this->_source_changed |= $db_update;
 
 		if($db_update)
+		{
 			$this->set_post_body(NULL, $db_update);
+			$this->cache_make([
+				'body' => NULL,
+				'body_ts' => NULL,
+			]);
+		}
 
 		return $this->_post_source = $message;
 	}
@@ -270,16 +292,47 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$this->set_html($this->_make_html(true));
 	}
 
+	function cache_make($attrs = [])
+	{
+		$cache = bors_load('balancer_board_posts_cache', $this->id());
+
+		if($cache)
+		{
+			foreach($attrs as $k => $v)
+				$cache->set($k, $v);
+
+			return $cache;
+		}
+
+		static $first = true;
+		if(!$first && config('is_debug'))
+			bors_debug::syslog('posts-optimize', "Second call for cache");
+
+		$first = false;
+
+		$attrs['id'] = $this->id();
+		$cache = bors_new('balancer_board_posts_cache', $attrs);
+
+		return $cache;
+	}
+
 	function set_html($html, $db_up = true)
 	{
-		$this->set_post_body($html);
-		$this->set_cached_html($html);
-		$this->set_cached_html_ts(time());
+		$this->set_post_body(NULL);
+
+		$this->cache_make([
+			'body' => $html,
+			'body_ts' => time(),
+		]);
 	}
 
 	function body()
 	{
 		$this->source();
+
+		$cache = $this->cache();
+		if($cache && ($body = $cache->body()))
+			return $body;
 
 		if(!$this->post_body() || config('lcml_cache_disable'))
 		{
@@ -720,6 +773,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	{
 		return array_merge(parent::auto_objects(), array(
 			'blog' => 'balancer_board_blog(id)',
+			'cache' => 'balancer_board_posts_cache(id)',
 			'owner' => 'balancer_board_user(owner_id)'
 		));
 	}
