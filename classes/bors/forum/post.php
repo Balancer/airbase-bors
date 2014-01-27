@@ -69,7 +69,6 @@ class forum_post extends balancer_board_object_db
 					'mark_best_date' => array('type' => 'int'),
 					'score_positive_raw' => 'score_positive',
 					'score_negative_raw' => 'score_negative',
-					'post_body' => 'html',
 					'full_html_content' => 'html_full_post',
 					'best_page_num',
 				),
@@ -157,15 +156,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		if($cache && ($body = $cache->body()))
 			return $body;
 
-		$body = @$this->data['post_body'];
-		$this->cache_make([
-			'body' => $body,
-			'body_ts' => time(),
-		]);
-
-		$this->set('post_body', NULL, true);
-
-		return $body;
+		return NULL;
 	}
 
 	function set_post_body($value, $dbupd = true)
@@ -173,12 +164,16 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		if($value == '' && $value !== NULL && $dbupd && !trim($this->source()))
 			debug_hidden_log('body', 'Set empty body in post '.$this->url_in_container());
 
-		$this->cache_make([
-			'body' => $value,
-			'body_ts' => time(),
-		]);
+		if($dbupd)
+		{
+			$this->cache_make([
+				'body' => $value,
+				'body_ts' => time(),
+			]);
+		}
+		else
+			$this->set_attr('body', $value);
 
-		$this->set('post_body', NULL, true);
 		return $value;
 	}
 
@@ -249,7 +244,6 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($db_update)
 		{
-			$this->set_post_body(NULL, $db_update);
 			$this->cache_make([
 				'body' => NULL,
 				'body_ts' => NULL,
@@ -318,8 +312,6 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	function set_html($html, $db_up = true)
 	{
-		$this->set_post_body(NULL);
-
 		$this->cache_make([
 			'body' => $html,
 			'body_ts' => time(),
