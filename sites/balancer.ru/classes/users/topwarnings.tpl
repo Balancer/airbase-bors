@@ -25,6 +25,10 @@
 {/foreach}
 </table>
 
+<div class="box">
+<a href="http://forums.balancer.ru/users/warnings/">Полный список штрафов</a>
+</div>
+
 <table class="btab" width="100%">
 <tr><th colSpan="5">50 главных нарушителей месяца:</th></tr>
 <tr>
