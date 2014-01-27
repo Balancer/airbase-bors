@@ -44,13 +44,15 @@ class airbase_user_warning extends base_object_db
 	function auto_objects()
 	{
 		return array_merge(parent::auto_objects(), array(
+			'moderator' => 'balancer_board_user(moderator_id)',
 			'owner' => 'balancer_board_user(moderator_id)',
 			'type' => 'airbase_user_warning_type(type_id)',
 			'type_scored' => 'airbase_user_warning_typesco(type_id)',
+			'user' => 'balancer_board_user(user_id)',
 		));
 	}
 
-	function title() { return $this->type_scored(); }
+	function title() { return $this->type_id() ? $this->type_scored() : ''; }
 	function description()
 	{
 		return ec('Штраф <b>').$this->type_scored()
@@ -60,9 +62,6 @@ class airbase_user_warning extends base_object_db
 			.($this->moderator_id() ? $this->moderator()->title() : 'БалаБОТа')
 			.'</i>';
 		}
-
-	function moderator() { return object_load('balancer_board_user', $this->moderator_id()); }
-	function user() { return object_load('balancer_board_user', $this->user_id()); }
 
 	function referer_titled_link()
 	{
@@ -118,6 +117,46 @@ class airbase_user_warning extends base_object_db
 	}
 
 	function url() { return NULL; }
+
+	function moderator_titled_link()
+	{
+		if($moderator = $this->moderator())
+			return $moderator->titled_link();
+
+		return 'БалаБОТ';
+	}
+
+	function user_titled_link()
+	{
+		if($user = $this->user())
+			return $user->titled_link();
+
+		return '???';
+	}
+
+	function item_list_fields()
+	{
+		return array(
+			'ctime' => 'Дата выставления',
+			'moderator_titled_link' => 'Модератор',
+			'user_titled_link' => 'Пользователь',
+			'title' => 'Штраф',
+			'referer_titled_link' => 'Сообщение',
+			'source' => 'Комментарий',
+		);
+	}
+
+	function items_list_table_row_class()
+	{
+		$css = array();
+
+		if($this->score() > 0)
+			$css[] = 'neg_reputation';
+		elseif($this->score() < 0)
+			$css[] = 'pos_reputation';
+
+		return $css;
+	}
 
 	function __dev()
 	{
