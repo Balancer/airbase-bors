@@ -56,8 +56,18 @@ class forum_blog extends bors_page_db
 		parent::cache_clean_self();
 		bors()->changed_save();
 //		bors_exit('tid='.$this->post()->topic_id());
-		$this->set_topic_id(object_load('balancer_board_post', $this->id())->topic_id(), true);
-		$this->set_forum_id(object_load('balancer_board_topic', $this->topic_id())->forum_id(), true);
+		$post = bors_load('balancer_board_post', $this->id());
+		//TODO: добавить поиск потерянных блоговых записей без топиков
+		if($topic = $post->topic())
+		{
+			$this->set_topic_id($topic->id(), true);
+			$this->set_forum_id($topic->forum_id(), true);
+		}
+		else
+		{
+			$this->set_topic_id(NULL, true);
+		}
+
 //TODO: непонятно, откуда огромный трафик
 //		if(!bors()->client()->is_bot())
 //			common_keyword_bind::add($this);

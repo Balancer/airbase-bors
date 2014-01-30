@@ -78,7 +78,7 @@ class airbase_external_link extends balancer_board_object_db
 		if($test)
 			return;
 
-		return bors_new(__CLASS__, array(
+		$data = array(
 			'url_index' => self::normalize($url),
 			'url_real' => $url,
 
@@ -92,7 +92,9 @@ class airbase_external_link extends balancer_board_object_db
 			'content_type' => $req['content_type'],
 			'last_error' => $req['error'],
 			'last_check_time' => time(),
-		));
+		);
+
+		return bors_new(__CLASS__, $data);
 	}
 
 	static function default_bbshort($url, &$data=array())
