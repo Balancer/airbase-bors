@@ -22,6 +22,9 @@ class base_page_hts extends base_page_db
 		elseif(preg_match('!^(.+)\.phtml$!', $url, $m))
 			$url = $m[1].'/';
 
+		if(!preg_match('!/$!', $url))
+			$url .= '/';
+
 		return $url;
 	}
 
