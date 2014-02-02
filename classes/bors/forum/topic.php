@@ -500,7 +500,9 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 			$first_pid = $this->db()->select('posts', 'MIN(id)', array('topic_id='=>$this->id()));
 
-			$this->set_first_post_id($first_pid, true);
+			if($first_pid)
+				$this->set_first_post_id($first_pid, true);
+
 			if($first_post = object_load('balancer_board_post', $first_pid))
 			{
 				$this->set_create_time($first_post->create_time(true), true);

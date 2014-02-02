@@ -304,10 +304,8 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		$first = false;
 
-		$attrs['id'] = $this->id();
-		$cache = bors_new('balancer_board_posts_cache', $attrs);
-
-		return $cache;
+		if($attrs['id'] = $this->id())
+			$cache = bors_new('balancer_board_posts_cache', $attrs);
 	}
 
 	function set_html($html, $db_up = true)
