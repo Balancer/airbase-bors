@@ -4,7 +4,7 @@ $(function() {
 		t.append('&nbsp;<img src="/_bors-ext/i16/actions/cancel.png" class="btn16 unwatch half-transparent" title="Перестать следить за темой" />')
 	})
 
-	$('.unwatch').live('click', function(){
+	$('.unwatch').on('click', function(){
 		t=$(this)
 		td = t.parent().parent()
 		topic_id = td.attr('id').replace('vtt_', '')
