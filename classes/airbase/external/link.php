@@ -83,7 +83,7 @@ class airbase_external_link extends balancer_board_object_db
 			'url_real' => $url,
 
 			'title' => @$data['title'],
-			'tags' => @$data['tags'],
+			'tags' => join(',', defval($data, 'tags', array())),
 			'bbshort' => @$data['bbshort'],
 //			'description' => array('type' => 'bbcode'),
 //			'image_id',
@@ -93,6 +93,8 @@ class airbase_external_link extends balancer_board_object_db
 			'last_error' => $req['error'],
 			'last_check_time' => time(),
 		);
+
+//		bors_debug::syslog('__test-check-no-arrays-in-data', print_r($data, true));
 
 		return bors_new(__CLASS__, $data);
 	}

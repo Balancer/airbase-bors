@@ -156,6 +156,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		if($cache && ($body = $cache->body()))
 			return $body;
 
+		bors_debug::syslog('__debug-posts', "Post body for ".($this->debug_title())." is NULL");
 		return NULL;
 	}
 
@@ -308,12 +309,14 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			$cache = bors_new('balancer_board_posts_cache', $attrs);
 	}
 
-	function set_html($html, $db_up = true)
+	function set_html($html)
 	{
 		$this->cache_make([
 			'body' => $html,
 			'body_ts' => time(),
 		]);
+
+		$this->store();
 	}
 
 	function body()
@@ -321,14 +324,11 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$this->source();
 
 		$cache = $this->cache();
-		if($cache && ($body = $cache->body()))
+		if($cache && ($body = trim($cache->body())))
 			return $body;
 
 		if(!$this->post_body() || config('lcml_cache_disable'))
-		{
 			$this->set_html($this->_make_html());
-			$this->store();
-		}
 
 		return $this->post_body();
 	}
