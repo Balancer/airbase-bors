@@ -23,7 +23,6 @@ class balancer_board_posts_pure extends balancer_board_object_db
 			'answer_to_id' => 'answer_to_post_id',
 			'answer_to_user_id',
 			'post_source' => 'source',
-//			'post_body' => 'source_html',
 			'hide_smilies',
 			'have_attach',
 			'have_cross',
