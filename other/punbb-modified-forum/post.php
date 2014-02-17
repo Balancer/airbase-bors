@@ -25,7 +25,7 @@
 $GLOBALS['cms']['cache_disabled'] = true;
 $GLOBALS['cms']['cant_lock'] = true;
 
-# $forum_temporary_redirect = 'http://balancer.endofinternet.net/mybb/search.php?action=getdaily';
+# $forum_temporary_redirect = 'http://home.balancer.ru/mybb/search.php?action=getdaily';
 
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
@@ -37,7 +37,7 @@ require 'inc/design/make_quote.php';
 if(time()-filemtime("/var/log/started.log") < 3600)
 {
 	header("Status: 302 Moved Temporarily");
-	header("Location: http://balancer.endofinternet.net/mybb/thread-2672.html");
+	header("Location: http://home.balancer.ru/mybb/thread-2672.html");
 	bors_exit();
 }
 */

@@ -32,7 +32,7 @@ class forum_tools_post_do extends base_page
 				}
 
 				config_set('lcml_cache_disable_full', true);
-				$post->set_post_body(NULL, true);
+				$post->set_body(NULL, true);
 				$post->set_warning_id(NULL, true);
 				$post->set_flag_db(NULL, true);
 				if($owner = $post->owner())

@@ -233,28 +233,6 @@ if ($pun_config['o_announcement'] == '1')
 
 </div>
 
-<div class="center">
-<?php /*
-$restart = filemtime('/var/log/started.log');
-if(($diff = time() - $restart) < 3600)
-{
-?>
-<div style="background-color:#fdd; border: 1px solid #f00; margin: 10px 0; padding: 5px; font: 14pt Verdana">
-Сервер Авиабазы автоматически аварийно перезагрузился <?php $m=intval($diff/60+0.5); echo $m; echo sklon($m, ' минуту, минуты, минут'); ?> назад. Отвечать в темы можно будет через
- <?php $m=60-intval($diff/60+0.5); echo $m; echo sklon($m, ' минуту, минуты, минут'); ?>. Если сервер снова не уйдёт в перезагрузку за это время... Пока общаться можно на
- <a href="http://balancer.endofinternet.net/mybb/index.php">Запасном форуме</a>.
-</div>
-<?php } */ ?>
-<div class="top-ad">
-
-<?php
-//include("/usr/local/share/bors/sites/bors-airbase/templates/forum/ads/podarini.html");
-// bors_include("templates/forum/ads/google-ads.html");
-?>
-
-</div>
-</div>
-
 <?php
 
 	$tpl_temp = trim(ob_get_contents());

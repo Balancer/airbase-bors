@@ -1,6 +1,6 @@
 <?php
 
-// bors_exit('Форум в стадии модификации базы данных. Минут 30 (до ~03:50) будет недоступен. Можете пока сходить на <a href="http://balancer.endofinternet.net/mybb/index.php">Запасные форумы</a>.');
+// bors_exit('Форум в стадии модификации базы данных. Минут 30 (до ~03:50) будет недоступен. Можете пока сходить на <a href="http://home.balancer.ru/mybb/index.php">Запасные форумы</a>.');
 
 include_once('engines/lcml.php');
 include_once('inc/browsers.php');
@@ -69,7 +69,6 @@ class forum_post extends balancer_board_object_db
 					'mark_best_date' => array('type' => 'int'),
 					'score_positive_raw' => 'score_positive',
 					'score_negative_raw' => 'score_negative',
-					'full_html_content' => 'html_full_post',
 					'best_page_num',
 				),
 
@@ -150,19 +149,24 @@ function set_have_answers($v, $dbup = true) { return $this->set('have_answers', 
 function score() { return @$this->data['score']; }
 function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
-	function post_body()
+	function body()
 	{
+		if($body = @$this->attr['body'])
+			return $body;
+
 		$cache = $this->cache();
 		if($cache && ($body = $cache->body()))
 			return $body;
 
-		bors_debug::syslog('__debug-posts', "Post body for ".($this->debug_title())." is NULL");
-		return NULL;
+		$body = $this->_make_html();
+		$this->set_body($body);
+
+		return $body;
 	}
 
-	function set_post_body($value, $dbupd = true)
+	function set_body($value, $dbupd = true)
 	{
-		if($value == '' && $value !== NULL && $dbupd && !trim($this->source()))
+		if($value == '' && !is_null($value) && $dbupd && !trim($this->source()))
 			debug_hidden_log('body', 'Set empty body in post '.$this->url_in_container());
 
 		if($dbupd)
@@ -171,6 +175,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 				'body' => $value,
 				'body_ts' => time(),
 			]);
+			$this->store();
 		}
 		else
 			$this->set_attr('body', $value);
@@ -254,8 +259,6 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		return $this->_post_source = $message;
 	}
 
-	function set_body($html, $dbup=true) { return $this->set_post_body($html, $dbup); }
-
 	function _make_html($fast = false)
 	{
 		if(($mcn = $this->get('markup_class_name')) && ($mce = bors_load($mcn, NULL)))
@@ -284,7 +287,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	function do_lcml_full_compile()
 	{
-		$this->set_html($this->_make_html(true));
+		$this->set_body($this->_make_html(false));
 	}
 
 	function cache_make($attrs = [])
@@ -307,30 +310,6 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($attrs['id'] = $this->id())
 			$cache = bors_new('balancer_board_posts_cache', $attrs);
-	}
-
-	function set_html($html)
-	{
-		$this->cache_make([
-			'body' => $html,
-			'body_ts' => time(),
-		]);
-
-		$this->store();
-	}
-
-	function body()
-	{
-		$this->source();
-
-		$cache = $this->cache();
-		if($cache && ($body = trim($cache->body())))
-			return $body;
-
-		if(!$this->post_body() || config('lcml_cache_disable'))
-			$this->set_html($this->_make_html());
-
-		return $this->post_body();
 	}
 
 	function flag()

@@ -232,7 +232,7 @@ class balancer_board_topic extends forum_topic
 
 			// Иначе у нас там 0 — значит, что image берём с форума. Раз в час проверяем,
 			// не появилась ли картинка в теме
-			if($this->data['image_time'] > time() - 3600)
+			if($this->data['image_time'] > time() - 600)
 				return $this->forum()->image();
 		}
 
