@@ -80,6 +80,7 @@ class user_posts_day extends balancer_board_page
 	function parents() { return array("http://www.balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/"); }
 
 	function url() { return "http://www.balancer.ru/user/{$this->id()}/posts/{$this->year}/{$this->month}/{$this->day}/"; }
+	function url_ex($page) { return $this->url(); }
 
 	function previous_day_link()
 	{
