@@ -28,7 +28,7 @@ exit();
 //bors()->changed_save();
 
 //$feed = bors_load('bors_external_feed', 14);
-foreach(objects_array('bors_external_feed', array('is_suspended!=' => 1)) as $feed)
+foreach(bors_find_all('bors_external_feed', array('is_suspended!=' => 1)) as $feed)
 {
 	//$feed = object_load('bors_external_feed', 4);
 	echo "[".date('d.m.Y H:i')."] Feed {$feed->feed_url()}\n";
