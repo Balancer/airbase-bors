@@ -164,7 +164,7 @@ class bal_users_helper extends bors_object
 
 	static function all_flags($user, $where = array())
 	{
-		$posts = bors_find_all('forum_post2', array_merge($where, array(
+		$posts = bors_find_all('balancer_board_post', array_merge($where, array(
 			'*set' => 'COUNT(*) AS `total`',
 			'poster_id' => $user->id(),
 			'group' => '`poster_ip`',
