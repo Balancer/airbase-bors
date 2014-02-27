@@ -21,7 +21,7 @@ class balancer_board_topic extends forum_topic
 		if($this->modify_time() < time() - 86400)
 			return rand(600, 1200);
 
-		return 0;
+		return rand(60, 300);
 	}
 
 	function storage_engine() { return 'bors_storage_mysql'; }
