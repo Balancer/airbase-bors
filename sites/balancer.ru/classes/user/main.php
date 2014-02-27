@@ -218,7 +218,7 @@ class user_main extends balancer_board_page
 			)),
 			'votes_from' => bors_votes_thumb::colorize_pm(@$pluses_from, @$minuses_from),
 			'votes_to'   => bors_votes_thumb::colorize_pm(@$pluses_to  , @$minuses_to  ),
-			'ban' => $user->is_banned(),
+			'ban' => $user->is_admin_banned(),
 		);
 
 		return array_merge(parent::page_data(), $data, compact(
