@@ -95,7 +95,7 @@ class balancer_ajax_thumb_vote extends base_object
 		if($topic = $target->get('topic'))
 		{
 //			if($topic->modify_time() < time() - 86400*90)
-			$topic->set_modify_time(time(), true);
+//			$topic->set_modify_time(time(), true);
 //			$target->set_modify_time(time(), true);
 		}
 

@@ -76,7 +76,7 @@ class airbase_external_link extends balancer_board_object_db
 //		$html = lcml($data['bbshort']);
 //		var_dump($url, $data);
 		if($test)
-			return;
+			return $data;
 
 		$data = array(
 			'url_index' => self::normalize($url),
@@ -113,9 +113,18 @@ class airbase_external_link extends balancer_board_object_db
 	static function find_or_register($url)
 	{
 		if(!($x = self::find($url)))
+		{
 			$x = self::register($url);
+			$bbshort = $x->bbshort();
+		}
+		elseif(config('lcml_cache_disable_full'))
+		{
+			$data = self::register($url, array(), true); // При сбросе кеша выполняем все расчёты, но не регистрируем
+			$bbshort = $data['bbshort'];
+			$x->set_bbshort($bbshort);
+		}
 
-		if(!$x->bbshort())
+		if(!$x->bbshort() || preg_match('/timedxout/', $x->bbshort()))
 		{
 			$data = self::default_bbshort($url);
 			$x->set_attr('bbshort', $data['bbshort']);

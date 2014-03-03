@@ -62,7 +62,7 @@ class balancer_tools_external_sites_preview extends bors_image_png
 			$bin .= " $args ";
 
 		if(($proxy=config('proxy.force_regexp')) && preg_match($proxy, $url))
-			$bin = "$bin -p ".config('proxy.force');
+			$bin = "$bin -p ".config('proxy.forced');
 
 		$url = blib_urls::parts_encode($url);
 
