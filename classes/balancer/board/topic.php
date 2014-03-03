@@ -4,6 +4,12 @@ class balancer_board_topic extends forum_topic
 {
 	function extends_class_name() { return 'forum_topic'; }
 
+	function cache_static_can_be_dropped()
+	{
+		bors_debug::syslog('__pages_clean', "Clean {$this->static_file()}[{$this->page()}/{$this->total_pages()}]: ".($this->page() > $this->total_pages() - 3));
+		return 1 || $this->page() > $this->total_pages() - 3;
+	}
+
 	function cache_static()
 	{
 		if(!$this->is_public_access())

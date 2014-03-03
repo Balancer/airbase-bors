@@ -85,46 +85,6 @@ class balancer_board_topics_view extends bors_view_container
 		if(!$topic->is_repaged() && rand(0,5) == 0)
 			$topic->repaging_posts();
 
-		if($this->page() == 'new')
-		{
-			$me = bors()->user();
-
-			if(!$me || $me->id() < 2)
-			{
-				$ref = $this->url_ex($this->page());
-				return bors_message(ec('Вы не авторизованы на этом домене. Авторизуйтесь, пожалуйста. Если не поможет - попробуйте стереть cookies вашего браузера.'), array('login_form' => true, 'login_referer' => $ref));
-			}
-
-			$uid = $me->id();
-			$v = bors_find_first('balancer_board_topics_visit', array('user_id' => $uid, 'topic_id' => $this->id()));
-			$last_visit = object_property($v, 'last_visit');
-
-			if(empty($last_visit))
-			{
-				$x = bors_find_first('balancer_board_topics_visit', array('last_visit>' => 0, 'order' => 'last_visit'));
-				if($x)
-					$last_visit = $x->last_visit();
-				else
-					$last_visit = 0;
-			}
-
-			$first_new_post_id = intval(object_property(bors_find_first('balancer_board_post', array(
-				'topic_id' => $this->id(),
-				'posted>' => $last_visit,
-				'order' => 'id',
-			)), 'id'));
-
-			if($first_new_post_id)
-			{
-				$post = bors_load('balancer_board_post', $first_new_post_id);
-
-				if($post = bors_load('balancer_board_post', $first_new_post_id))
-					return go($post->url_in_container());
-			}
-
-			$this->set_page('last');
-		}
-
 		if($this->page() == 'last')
 			return go($this->url_ex($this->total_pages()));
 

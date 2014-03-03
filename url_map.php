@@ -6,10 +6,14 @@ $forums = '(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/|/fo
 
 $topic_view_class = config('topics.view_class');
 
-bors_url_map(array(
+bors_url_map([
 	'/do/logout/ => bal_do_logout',
 	'/do/login/ => bal_do_login',
-));
+
+	"{$forums}\d{4}/\d{1,2}/t(\d+),new.* => balancer_board_topics_go_new(2)",
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),new.* => balancer_board_topics_go_new(2)",
+	"{$forums}\d{4}/\d{1,2}/topic\-(\d+),new.* => balancer_board_topics_go_new(2)",
+]);
 
 $map = array(
 	'/g/(.+) => bors_system_go_redirect(1)',
@@ -47,7 +51,10 @@ $map = array(
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(\d+).* => redirect:{$topic_view_class}(2,3)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+ => redirect:{$topic_view_class}(2,4)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+).* => {$topic_view_class}(2)",
-	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(last|new).* => {$topic_view_class}(2,3)",
+
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(last).* => {$topic_view_class}(2,3)",
+	"{$forums}\d{4}/\d{1,2}/topic\-(\d+),(last).* => {$topic_view_class}(2,3)",
+	"{$forums}\d{4}/\d{1,2}/t(\d+),(last).* => {$topic_view_class}(2,3)",
 
 	"{$forums}\d{4}/\d{1,2}/p(\d+)\.html\?? => balancer_board_posts_show(2)",
 
@@ -59,7 +66,6 @@ $map = array(
 	"{$forums}\d{4}/\d{1,2}/tpdfcover\-(\d+)\-\-.*\.html => balancer_board_topics_pdfCover(2)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-\-.+\.html\?? => {$topic_view_class}(2,4)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-.+\.html\?? => redirect:{$topic_view_class}(2,4)",
-	"{$forums}\d{4}/\d{1,2}/t(\d+),(last|new).* => {$topic_view_class}(2,3)",
 
 	"{$forums}\d{4}/\d{1,2}/t(\d+)/blog/? => balancer_board_topics_blog(2)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)/blog/(\d+)\.html => balancer_board_topics_blog(2,3)",
@@ -70,7 +76,6 @@ $map = array(
 
 	"{$forums}\d{4}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+\.html\?? => {$topic_view_class}(2,4)",
 	"{$forums}\d{4}/\d{1,2}/topic\-(\d+).* => {$topic_view_class}(2)",
-	"{$forums}\d{4}/\d{1,2}/topic\-(\d+),(last|new).* => {$topic_view_class}(2,3)",
 	"{$forums}forum/punbb/viewtopic\.php\?pid=(\d+) => forum_post(2)",
 	"{$forums}viewtopic\.php\?id=(\d+) => {$topic_view_class}(2)",
 	"/forum/topic/\d+/(\d+),(\d+)/ => redirect:{$topic_view_class}(1,2)",

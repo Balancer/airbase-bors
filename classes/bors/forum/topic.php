@@ -139,47 +139,6 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 	{
 		$me = bors()->user();
 
-		if($this->page() == 'new')
-		{
-			if($me && $me->id() >= 2)
-			{
-				$uid = $me->id();
-				$x = $this->db()->select('topic_visits', 'last_visit, last_post_id', array(
-					'user_id=' => $uid,
-					'topic_id=' => $this->id()
-				));
-
-				$last_visit = @$x['last_visit'];
-
-				// Если отметки о чтении топика нет, то считаем за дату последнего посещения
-				// самую старую запись в таблице посещений.
-				if(empty($last_visit))
-					$last_visit = $this->db()->select('topic_visits', 'UNIX_TIMESTAMP(MIN(`modify_ts`))', array('last_visit>' => 0));
-
-				$first_new_post_id = intval($this->db()->select('posts', 'MIN(id)', array(
-					'topic_id' => $this->id(),
-					'posted>' => $last_visit,
-				)));
-
-				// Если мы нашли первое нечитанное сообщение, то переходим к нему
-				if($first_new_post_id)
-				{
-					$post = object_load('balancer_board_post', $first_new_post_id);
-
-					if($post = object_load('balancer_board_post', $first_new_post_id))
-						return go($post->url_in_container());
-				}
-
-				// Если не нашли, то тупо переходим на последнюю страницу.
-				$this->set_page('last');
-			}
-			else
-				$this->set_page(1);
-		}
-
-		if($this->page() == 'last')
-			return go($this->url_ex($this->total_pages()));
-
 		if(!$this->forum() || !$this->forum()->can_read())
 		{
 			template_noindex();
@@ -565,10 +524,15 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 	function cache_clean_self($page = NULL)
 	{
-		parent::cache_clean_self($page);
+		if(!$page)
+			parent::cache_clean_self($page);
+
 		//TODO: подумать на тему неполной чистки.
 		foreach(glob($this->cache_dir().'/t'.$this->id().'*.html') as $f)
-			unlink($f);
+		{
+			if(!preg_match("!/t\d+,(\d+)--[^/+]\.html$!", $f, $m) || ($m[1] > $this->total_pages()-3))
+				unlink($f);
+		}
 	}
 
 	function url_engine() { return 'url_titled'; }
@@ -693,6 +657,9 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		$me = bors()->user();
 		if($me)
 			$me->utmx_update();
+
+		if($this->page() == 'last')
+			return go($this->url_ex($this->total_pages()));
 
 		if($this->page() > $this->total_pages())
 			return go($this->url_ex($this->total_pages()));
