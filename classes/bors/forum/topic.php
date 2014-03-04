@@ -658,8 +658,18 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		if($me)
 			$me->utmx_update();
 
+		if($this->page() == 'new')
+		{
+//			bors_debug::syslog('__go_new_page', "Topic = ".$this->debug_title());
+			$go = bors_load('balancer_board_topics_go_new', $this->id());
+			return $go->pre_show();
+		}
+
 		if($this->page() == 'last')
+		{
+			bors_debug::syslog('__go_last_page', "Topic = ".$this->debug_title());
 			return go($this->url_ex($this->total_pages()));
+		}
 
 		if($this->page() > $this->total_pages())
 			return go($this->url_ex($this->total_pages()));
