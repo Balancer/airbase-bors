@@ -203,7 +203,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		$next_post = $this->is_last_page() ? NULL : bors_find_first('balancer_board_posts_pure', array(
 			'topic_id' => $this->id(),
 			'is_deleted' => 0,
-			'use_index' => 'by_tid_ordered',
+//			'use_index' => 'by_tid_ordered',
 			'order' => '`order`, posted',
 			'create_time>' => $last_post_time,
 		));

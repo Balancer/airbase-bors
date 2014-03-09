@@ -10,6 +10,8 @@ bors_url_map(array(
 
 	'/wc/\?(.+) => balancer_wc(1)',
 
+	'/pages/ro/? => airbase_pages_ro',
+
 	'/users?/(\d+)/? => user_main(1)',
 
 	'/users/reputations/? => balancer_users_reputations',
