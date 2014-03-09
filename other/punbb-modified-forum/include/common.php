@@ -32,7 +32,8 @@ if(0 && !empty($forum_temporary_redirect))
 }
 
 // Enable DEBUG mode by removing // from the following line
-define('PUN_DEBUG', 1);
+define('PUN_DEBUG', 0);
+define('PUN_QUIET_VISIT', true);
 
 // This displays all executed queries in the page footer.
 // DO NOT enable this in a production environment!
@@ -47,6 +48,16 @@ if (!defined('PUN_ROOT'))
 ini_set('include_path', ini_get('include_path') . ':' . dirname(dirname(__FILE__)));
 
 require_once('bors_config.php');
+
+/*
+if(!empty($GLOBALS['cms']['cant_lock']))
+{
+	$ro_page = bors_load('airbase_pages_ro', NULL);
+	$ro_page->pre_show();
+	echo $ro_page->content();
+	exit();
+}
+*/
 
 if(defined('PUN_ADMIN_CONSOLE'))
 	if(bors_stop_bots('__nobots_testing', 'PUN_ADMIN_CONSOLE'))

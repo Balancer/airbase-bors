@@ -141,12 +141,15 @@ function set_default_user()
 
 	list($os, $browser) = get_browser_info($_SERVER['HTTP_USER_AGENT'], false);
 
-	// Update online list
-	if (!$pun_user['logged'])
-		$db->query('INSERT INTO '.$db->prefix.'online (user_id, ident, logged, os, browser, useragent) VALUES(1, \''.$db->escape($remote_addr).'\', '.time().", '$os', '$browser', '".addslashes($_SERVER['HTTP_USER_AGENT'])."')")
-			or error('Unable to insert into online list [117]', __FILE__, __LINE__, $db->error());
-	else
-		$db->query('UPDATE '.$db->prefix.'online SET logged='.time().' WHERE ident=\''.$db->escape($remote_addr).'\'') or error('Unable to update online list', __FILE__, __LINE__, $db->error());
+	if (!defined('PUN_QUIET_VISIT'))
+	{
+		// Update online list
+		if (!$pun_user['logged'])
+			$db->query('INSERT INTO '.$db->prefix.'online (user_id, ident, logged, os, browser, useragent) VALUES(1, \''.$db->escape($remote_addr).'\', '.time().", '$os', '$browser', '".addslashes($_SERVER['HTTP_USER_AGENT'])."')")
+				or error('Unable to insert into online list [117]', __FILE__, __LINE__, $db->error());
+		else
+			$db->query('UPDATE '.$db->prefix.'online SET logged='.time().' WHERE ident=\''.$db->escape($remote_addr).'\'') or error('Unable to update online list', __FILE__, __LINE__, $db->error());
+	}
 
 	$pun_user['disp_topics'] = $pun_config['o_disp_topics_default'];
 	$pun_user['disp_posts'] = $pun_config['o_disp_posts_default'];
@@ -962,9 +965,9 @@ H2 {MARGIN: 0; COLOR: #FFFFFF; BACKGROUND-COLOR: #B84623; FONT-SIZE: 1.1em; PADD
 			echo "<br/><br/><b style=\"color: red; font-size: 14pt;\">Если проблема постоянна и к форуму нет доступа, попробуйте заглянуть
 			за подробностями на:
 <ul>
-<li><a href=\"http://home.balancer.ru/lorduino/\" style=\"color: red; font-weight: bold\">Чат Авиабазы</a> (не требуется никакой регистрации)</li>
-<li><a href=\"http://ls.balancer.ru/\">LSBR</a> (там работает форумная авторизация, те же логин с паролем, что и на форумах)</li>
-<li>Если не работает и LSBR, попробуйте <a href=\"http://home.balancer.ru/mybb/\">ЗАПАСНОЙ ФОРУМ</a></li>
+<li><a href=\"http://valut.balancer.ru/chat/\" style=\"color: red; font-weight: bold\">Чат Убежища</a> (не требуется никакой регистрации)</li>
+<!--<li><a href=\"http://ls.balancer.ru/\">LSBR</a> (там работает форумная авторизация, те же логин с паролем, что и на форумах)</li>-->
+<li><a href=\"http://vault.balancer.ru/forum/\">ЗАПАСНОЙ ФОРУМ</a></li>
 </ul>
 
 			";

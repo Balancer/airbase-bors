@@ -161,7 +161,20 @@ class balancer_ajax_thumb_vote extends base_object
 //		if(config('is_developer')) var_dump($score, $target_score);
 
 		if($score < 0 && $target_score <= -7)
-			$user->set_object_warning($target, intval(-$target_score/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
+		{
+			// Если были положительные отзывы о сообщении, то штраф не ставим.
+			$positive_votes = bors_count('bors_votes_thumb', array(
+				'score>' => 0,
+				'target_class_name' => $target->class_name(),
+				'target_object_id' => $target->id(),
+				'score' => $score,
+			));
+
+			debug_hidden_log('__test_balabot_votes', "Check for warning. score=$score, target_score=$target_score, positive_votes=$positive_votes");
+
+			if($positive_votes<7)
+				$user->set_object_warning($target, intval(-$target_score/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
+		}
 
 		if($score > 0 && $target_score >= 15 && $target->create_time() > time() - 86400*14)
 			$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');

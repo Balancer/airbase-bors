@@ -1,5 +1,16 @@
 <?php
 
+/*
+config_set('user_class', NULL);
+config_set('user_class_skip', true);
+$ro_page = bors_load('airbase_pages_ro', NULL);
+$ro_page->pre_show();
+header('Status: 503 Service Temporarily Unavailable');
+header('Retry-After: 600');
+echo $ro_page->content();
+exit();
+*/
+
 jquery::plugin('tageditor/jquery.tag.editor.js');
 //template_jquery_plugin('jquery.lazyload-ad-1.4.min.js'); // Это загрузка с задержкой рекламных блоков!
 //template_jquery_plugin('jquery.lazyload.js'); — тормозит скроллинг

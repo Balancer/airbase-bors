@@ -62,10 +62,12 @@ class forum_tools_post_do extends base_page
 
 			case 'hide':
 				$post->set_is_hidden(true);
+				balancer_board_action::add($post, bors()->user()->title().": скрытие сообщения ".$post->titled_link_in_container(), true);
 				break;
 
 			case 'show':
 				$post->set_is_hidden(NULL);
+				balancer_board_action::add($post, bors()->user()->title().": показ сообщения ".$post->titled_link_in_container(), true);
 				break;
 
 			default:

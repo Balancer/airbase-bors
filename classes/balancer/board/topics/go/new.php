@@ -45,10 +45,11 @@ class balancer_board_topics_go_new extends bors_object
 				'order' => '-sort_order,-id',
 			]);
 
-			return go($last_post->url_in_container());
+			if($last_post)
+				return go($last_post->url_in_container());
 		}
 
-		// Если гость
+		// Если гость или не нашли, куда перейти
 		$topic = bors_load('balancer_board_topic', $this->id());
 
 		return go($topic->url_ex(1));

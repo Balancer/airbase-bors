@@ -205,6 +205,25 @@ $tpl_main = str_replace('<pun_status>', $tpl_temp, $tpl_main);
 // END SUBST - <pun_status>
 
 
+$tpl_announce = '';
+if(false)
+{
+	ob_start();
+?>
+<div id="announce" class="block">
+	<div class="box">
+		<div class="inbox">
+			<div style="font-size: 16px; color: red">Форумы на техобслуживании и поэтому временно в режиме «только для чтения».
+			Подробности <a href="http://www.balancer.ru/pages/ro/">тут</a>.
+			</div>
+		</div>
+	</div>
+</div>
+<?php
+	$tpl_announce = trim(ob_get_contents());
+	ob_end_clean();
+}
+
 // START SUBST - <pun_announcement>
 if ($pun_config['o_announcement'] == '1')
 {
@@ -240,8 +259,14 @@ if ($pun_config['o_announcement'] == '1')
 	ob_end_clean();
 }
 else
+{
+	if($tpl_announce)
+		$tpl_main = str_replace('<pun_announcement>', $tpl_announce, $tpl_main);
+
 	$tpl_main = str_replace('<pun_announcement>', '', $tpl_main);
+}
 // END SUBST - <pun_announcement>
+
 
 // START SUBST - <pun_main>
 ob_start();

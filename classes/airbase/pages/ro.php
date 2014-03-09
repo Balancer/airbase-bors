@@ -4,7 +4,8 @@ require_once('inc/texts.php');
 
 class airbase_pages_ro extends bors_page
 {
-	var $title = 'Форумы временно недоступны';
+//	var $title = 'Форумы временно недоступны';
+	var $title = 'Форумы временно в режиме «только чтение»';
 	var $template = 'xfile:bootstrap/index.tpl';
 
 	function pre_show()
