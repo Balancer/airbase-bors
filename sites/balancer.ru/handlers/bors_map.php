@@ -138,7 +138,7 @@ $map = array(
 		'/users?/(\d+)/blog/rss.xml => user_blog_rss(1)',
 
 		'(/users?/(\d+)/)posts/ => user_posts(2)',
-		'(/users?/(\d+)/posts/)(\d+)/ => user_posts_year(2,3)',
+		'(/users?/(\d+)/posts/)(\d+)/? => user_posts_year(2,3)',
 		'/users?/(\d+)/posts/(\d+/\d+)/ => user_posts_month(1,2)',
 		'/users?/(\d+)/posts/(\d+/\d+/\d+|last|first)/ => user_posts_day(1,2)',
 

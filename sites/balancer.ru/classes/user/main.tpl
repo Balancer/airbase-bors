@@ -223,5 +223,18 @@
 </table>
 {/if}
 
+{if $messages_year_by_forums}
+<table class="btab w100p">
+<caption>Количество сообщений по форумам за год, первая 20-ка:</caption>
+<tr><th>Форум</th><th>Число сообщений</th></tr>
+{foreach from=$messages_year_by_forums item="x"}
+{bors_object_load var="f" class="forum_forum" id=$x.forum_id}
+<tr><td>{$f->titled_link()}</td>
+	<td>{$x.count}</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
 </dd>
 </dl>

@@ -33,7 +33,7 @@ if(0 && !empty($forum_temporary_redirect))
 
 // Enable DEBUG mode by removing // from the following line
 define('PUN_DEBUG', 0);
-define('PUN_QUIET_VISIT', true);
+// define('PUN_QUIET_VISIT', true);
 
 // This displays all executed queries in the page footer.
 // DO NOT enable this in a production environment!
