@@ -22,8 +22,8 @@ class user_posts_year extends balancer_board_page
 		return $this->_user;
 	}
 
-	function url() { return "http://www.balancer.ru/user/{$this->id()}/posts/{$this->page()}/"; }
-	function url_ex($page) { return "http://www.balancer.ru/user/{$this->id()}/posts/{$this->page()}/"; }
+	function url() { return "http://www.balancer.ru/user/{$this->id()}/posts/{$this->args('page')}/"; }
+	function url_ex($page) { return $this->url(); }
 
 	function title() { return $this->user()->title().ec(': Все сообщения за ').$this->args('page').ec(' год'); }
 	function nav_name() { return $this->args('page'); }

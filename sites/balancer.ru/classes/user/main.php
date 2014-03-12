@@ -84,6 +84,16 @@ class user_main extends balancer_board_page
 			'order' => 'COUNT(*) DESC',
 		));
 
+		$by_forums_for_year = $db->select_array('posts', 'forum_id, count(*) AS `count`', array(
+			'posts.poster_id=' => $this->id(), 
+			'is_deleted' => false,
+			'posts.posted>' => time()-86400*365,
+			'inner_join' => 'topics ON topics.id = posts.topic_id',
+			'group' => 'forum_id',
+			'order' => 'COUNT(*) DESC',
+			'limit' => 20,
+		));
+
 		$best = objects_array('bors_votes_thumb', array(
 				'target_user_id' => $this->id(),
 				'group' => 'target_class_name,target_object_id',
@@ -205,6 +215,7 @@ class user_main extends balancer_board_page
 			'messages_today' => objects_count('forum_post', array('owner_id' => $this->id(), 'create_time>' => time()-86400)),
 			'messages_today_by_forums' => $by_forums,
 			'messages_month_by_forums' => $by_forums_for_month,
+			'messages_year_by_forums' => $by_forums_for_year,
 			'today_total' => objects_count('balancer_board_post', array(
 				'owner_id' => $this->id(),
 				'is_deleted' => false,
