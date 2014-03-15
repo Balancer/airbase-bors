@@ -12,6 +12,10 @@ class lcml_parser_airbase extends bors_lcml_parser
 		$text = preg_replace('!(^|\s)(http://(.*balancer\.ru|forums\.airbase\.ru|.*wrk\.ru)\S*/\d{4}/\d{2}/t(\d+)\S+\.html)!mi', '$1[topic original="$2"]$4[/topic]', $text);
 
 		$text = preg_replace('!^\s*http://pleer\.com/tracks/(\S+)\s*$!mi', '[pleercom]$1[/pleercom]', $text);
+
+
+		// Добавляем источник к новостям АвиаПорт'а
+		$text = preg_replace('@(http://www\.aviaport\.ru/(digest|news)/\d{4}/\d{1,2}/\d{1,2}/\d+\.html(?!\?))@', '$1?airbase', $text);
 		return $text;
 	}
 
