@@ -1055,7 +1055,7 @@ function unregister_globals()
 	// Prevent script.php?GLOBALS[foo]=bar
 	if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS']))
 		exit('I\'ll have a steak sandwich and... a steak sandwich.');
-	
+
 	// Variables that shouldn't be unset
 	$no_unset = array('GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES');
 
@@ -1068,12 +1068,8 @@ function unregister_globals()
 	}
 }
 
-	include_once("pun_bal.php");
-	function parse_signature($s)
-	{	
-		return pun_lcml($s);
-	}
-
+include_once("pun_bal.php");
+function parse_signature($s) { return pun_lcml($s); }
 
 function pun_exit($message = 0, $redirect = false)
 {
@@ -1085,5 +1081,5 @@ function pun_exit($message = 0, $redirect = false)
 
 	$message = bors_punbb_end($message);
 
-	exit($message);
+	bors_exit($message);
 }

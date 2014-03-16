@@ -1,12 +1,12 @@
 <?php
 
-class forum_topic_rss extends forum_topic
+class forum_topic_rss extends balancer_board_topic
 {
 	function render_engine() { return 'self'; }
-	
+
 	function url() { return $this->rss_url(); }
 //	function use_temporary_static_file() { return false; }
-	
+
 	function render($object)
 	{
 		$topic = object_load('balancer_board_topic', $object->id());
