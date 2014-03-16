@@ -384,7 +384,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		if($this->forum_id() && $this->forum())
 			$base = $this->forum()->category()->category_base_full();
 
-		if($this->get('first_post_time') > time() - 86400*5)
+		if($this->first_post_time() > time() - 86400*5)
 			$base = str_replace('www.balancer.ru', 'www.wrk.ru', $base);
 
 		return $base;

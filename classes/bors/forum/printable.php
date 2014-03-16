@@ -1,6 +1,6 @@
 <?php
 
-class forum_printable extends forum_topic
+class forum_printable extends balancer_board_topic
 {
 	function uri_name() { return 'printable'; }
 
