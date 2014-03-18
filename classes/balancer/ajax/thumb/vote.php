@@ -187,7 +187,7 @@ class balancer_ajax_thumb_vote extends base_object
 			elseif($old_warning)
 			{
 				if($target_score <= -7)
-					$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
+					$user->set_object_warning($target, intval(-$target_score/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
 				elseif($target_score > -7)
 					$user->set_object_warning($target, 0, 'Удалённая пометка');
 			}

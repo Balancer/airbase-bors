@@ -356,12 +356,12 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			$tid = $this->topic_id();
 
 			if(!$tid)
-				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
+				return "топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден";
 
 			$topic = bors_load('balancer_board_topic', $tid);
 
 			if(!$topic)
-				bors_exit(ec("Указанный Вами топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден"));
+				return "топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден";
 		}
 
 		if(!$topic->is_repaged())
