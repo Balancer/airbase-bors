@@ -39,8 +39,15 @@ class forum_tools_post_do extends base_page
 						'warn_object_id' => $post->id(),
 					));
 
-					if($old_warning && $votes > -7 && $votes < 15)
-						$post->owner()->set_object_warning($post, 0);
+					if($old_warning)
+					{
+						if($votes >= 15)
+							$post->owner()->set_object_warning($post, intval(-$votes/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
+						elseif($votes <= -7)
+							$post->owner()->set_object_warning($post, intval(-$votes/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
+						else
+							$post->owner()->set_object_warning($post, 0);
+					}
 				}
 
 				config_set('lcml_cache_disable_full', true);
