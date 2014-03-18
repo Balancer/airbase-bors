@@ -109,7 +109,12 @@ class balancer_ajax_thumb_vote extends base_object
 		));
 
 		$vote->store();
+
+		$target->set_warning_id(NULL, true);
+
 		$topic->cache_clean_self($target->topic_page());
+		$topic->set_modify_time(time(), true);
+		$topic->store();
 
 		$return = $target->score_colorized(true);
 
@@ -131,8 +136,6 @@ class balancer_ajax_thumb_vote extends base_object
 				$last_count = bors_count('balancer_board_posts_cached', array('best_page_num' => $current_page));
 				if($last_count >= 25)
 					$current_page++;
-
-//				if(config('is_developer')) var_dump($current_page, $last_count);
 
 				$target->set_best_page_num($current_page);
 /*
@@ -158,26 +161,37 @@ class balancer_ajax_thumb_vote extends base_object
 
 		bal_event::add('balancer_board_actor_vote', $user, $vote);
 
-//		if(config('is_developer')) var_dump($score, $target_score);
+		$old_warning = bors_find_first('airbase_user_warning', array(
+			'warn_class_id' => $target->class_id(),
+			'warn_object_id' => $target->id(),
+		));
 
-		if($score < 0 && $target_score <= -7)
+		// Проверку на время не делаем, так как минусы итак только за две недели ставятся.
+		if($score < 0)
 		{
-			// Если были положительные отзывы о сообщении, то штраф не ставим.
-			$positive_votes = bors_count('bors_votes_thumb', array(
-				'score>' => 0,
-				'target_class_name' => $target->class_name(),
-				'target_object_id' => $target->id(),
-				'score' => $score,
-			));
-
-			debug_hidden_log('__test_balabot_votes', "Check for warning. score=$score, target_score=$target_score, positive_votes=$positive_votes");
-
-			if($positive_votes<7)
+			if($target_score <= -7)
 				$user->set_object_warning($target, intval(-$target_score/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
+			elseif($old_warning)
+			{
+				if($target_score >= 15)
+					$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
+				else
+					$user->set_object_warning($target, 0, 'Удалённая пометка');
+			}
 		}
 
-		if($score > 0 && $target_score >= 15 && $target->create_time() > time() - 86400*14)
-			$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
+		if($score > 0 && $target->create_time() > time() - 86400*14)
+		{
+			if($target_score >= 15 )
+				$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
+			elseif($old_warning)
+			{
+				if($target_score <= -7)
+					$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
+				elseif($target_score > -7)
+					$user->set_object_warning($target, 0, 'Удалённая пометка');
+			}
+		}
 
 		return $return;
 	}
