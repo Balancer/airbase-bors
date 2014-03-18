@@ -34,13 +34,13 @@ if(top.me_is_coordinator)
 {$this->pages_links_nul()}
 
 {if $active_warnings}
-<h2>Активные штрафы</h2>
+<h2>Активные штрафы и поощрения</h2>
 <table class="btab w100p">
 <tr><th>Дата</th><th>Вес, причина</th><th>От кого</th><th>Комментарий</th></tr>
 {foreach from=$active_warnings item="w"}
 <tr>
-	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
-	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}
+	<td style="color: {if $w->score()>0}red{elseif $w->score()<0}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
+	<td style="color: {if $w->score()>0}red{elseif $w->score()<0}green{/if}; font-size: 8pt;">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}
 		<script>add_warn('{$w->admin()->url()}')</script>
 	</td>
 	<td>{$w->moderator_name()}</td>
@@ -51,13 +51,13 @@ if(top.me_is_coordinator)
 {/if}
 
 {if $passive_warnings}
-<h2>Истёкшие штрафы</h2>
+<h2>Истёкшие штрафы и поощрения</h2>
 <table class="btab w100p">
 <tr><th>Дата</th><th>Вес, причина</th><th>От кого</th><th>Комментарий</th></tr>
 {foreach from=$passive_warnings item="w"}
 <tr>
-	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
-	<td style="color: {if $w->score()>=0}red{else}green{/if}; font-size: 8pt;">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</td>
+	<td style="color: {if $w->score()>0}red{elseif $w->score()<0}green{/if}; font-size: 8pt;">{$w->create_time()|full_time}</td>
+	<td style="color: {if $w->score()>0}red{elseif $w->score()<0}green{/if}; font-size: 8pt;">{$w->score()}, {$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</td>
 	<td>{$w->moderator_name()}</td>
 	<td>{$w->source()|pun_lcml}<br /><small>// За: {$w->referer_titled_link()} [{$w->id()}]</small></td>
 </tr>

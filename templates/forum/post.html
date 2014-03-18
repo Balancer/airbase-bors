@@ -102,7 +102,7 @@
 		{if $w = $p->get('warning')}
 		<div class="{if $w->score() > 0}warning_note{else}{if $w->score()<0}alert alert-success{else}alert{/if}{/if}">
 			<b>{$w->moderator_name()}:</b>
-			{if $w->score() > 0}предупреждение ({$w->score()}) {else}поощрение ({-$w->score()}) {/if}
+			{if $w->score() > 0}предупреждение ({$w->score()}) {elseif $w->score()<0}поощрение ({-$w->score()}) {/if}
 			{if $w->type_id()} по категории «<b>{$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</b>»{/if}
 			{if $w->source()}(<i>{$w->source()}</i>){/if}
 		</div>

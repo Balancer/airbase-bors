@@ -209,7 +209,7 @@ class balancer_board_user extends forum_user
 		return bors_load('balancer_board_group', PUN_GUEST);
 	}
 
-	function set_object_warning($object, $score, $message, $moderator = NULL, $type = 0, $referer = NULL)
+	function set_object_warning($object, $score, $message = NULL, $moderator = NULL, $type = 0, $referer = NULL)
 	{
 		$warn = bors_find_first('airbase_user_warning', array(
 			'user_id' => $this->id(),
@@ -222,7 +222,8 @@ class balancer_board_user extends forum_user
 			if($warn->moderator_id() < 1)
 			{
 				$warn->set_score($score);
-				$warn->set_source($message);
+				if($message)
+					$warn->set_source($message);
 			}
 
 			return;

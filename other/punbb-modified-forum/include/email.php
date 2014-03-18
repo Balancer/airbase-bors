@@ -95,7 +95,8 @@ function pun_mail($to, $subject, $message, $from = '')
 	;
 
 	if(preg_match('/^"(\S+)" <(.+)>$/', $from, $m))
-		$mail->from2($m[2], "BalaBOT от {$m[1]}");
+//		$mail->from2($m[2], "BalaBOT от {$m[1]}");
+		$mail->from2($m[2], $m[1]);
 	else
 		$mail->from($from);
 

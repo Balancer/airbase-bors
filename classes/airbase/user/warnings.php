@@ -50,11 +50,11 @@ class airbase_user_warnings extends balancer_board_page
 		return $data;
 	}
 
-	function title() { return ec("Штрафы пользователя ") . $this->user()->title(); }
+	function title() { return ec("Штрафы и поощрения пользователя ") . $this->user()->title(); }
 
 	function nav_name() { return ec('Штрафы'); }
 
-	function parents() { return array($this->user()); }
+	function parents() { return array($this->user()->url()); }
 
 	function total_items() { return bors_count('airbase_user_warning', array('user_id=' => $this->id(), '`expired_timestamp`<=NOW()')); }
 	function default_page() { return $this->total_pages(); }

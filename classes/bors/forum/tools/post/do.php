@@ -31,6 +31,18 @@ class forum_tools_post_do extends base_page
 							$t->clear_thumbnails();
 				}
 
+				$votes = $post->score();
+				if($votes)
+				{
+					$old_warning = bors_find_first('airbase_user_warning', array(
+						'warn_class_id' => $post->class_id(),
+						'warn_object_id' => $post->id(),
+					));
+
+					if($old_warning && $votes > -7 && $votes < 15)
+						$post->owner()->set_object_warning($post, 0);
+				}
+
 				config_set('lcml_cache_disable_full', true);
 				$post->do_lcml_full_compile();
 				$post->set_warning_id(NULL, true);
