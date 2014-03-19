@@ -52,11 +52,15 @@ class balancer_board_personal_updated extends balancer_board_page
 
 		bors_objects_preload($counts, 'first_post_id', 'balancer_board_post',  'first_post');
 
+		$posts = array();
 		foreach($counts as $x)
 		{
+			$posts[] = $x->first_post();
 			$topics[$x->id()]->set_attr('first_post', $x->first_post());
 			$topics[$x->id()]->set_attr('updated_count', $x->updated_count());
 		}
+
+		bors_objects_preload($posts, 'id', 'balancer_board_posts_cache', 'cache');
 
 		return compact('topics');
 	}

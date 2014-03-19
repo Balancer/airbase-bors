@@ -232,8 +232,14 @@ class balancer_board_topic extends forum_topic
 			if($this->data['image_id'])
 			{
 				$image = bors_load('airbase_image', $this->data['image_id']);
-				if($image && ($th = $image->thumbnail('96x96(up,crop)')) && $th->width())
-					return $image;
+				if($image)
+				{
+//					Теряем весь кеш.
+//					$th = $image->thumbnail_96x96();
+//					if($th->width())
+					if($image->width())
+						return $image;
+				}
 			}
 
 			// Иначе у нас там 0 — значит, что image берём с форума. Раз в час проверяем,
@@ -306,7 +312,16 @@ class balancer_board_topic extends forum_topic
 	function first_post_time()
 	{
 		if(is_null($this->first_post_time))
-			$this->_calculate_times();
+		{
+			$ch = new bors_cache_fast();
+			if($ch->get('topic-page-first-post-time', $this->id().':'.$this->page()))
+				return $this->first_post_time = $ch->last();
+			else
+			{
+				$this->_calculate_times();
+				$ch->set($this->first_post_time, 3600);
+			}
+		}
 
 		return $this->first_post_time;
 	}

@@ -322,7 +322,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		return $this->db()->select_array('posts', 'id', array($data));
 	}
 
-	protected function posts($page = NULL, $paging = true)
+	protected function _posts_def($page = NULL, $paging = true)
 	{
 		if(!$page)
 			$page = $this->page();
