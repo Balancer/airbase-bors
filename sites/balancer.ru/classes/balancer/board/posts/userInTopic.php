@@ -27,8 +27,8 @@ class balancer_board_posts_userInTopic extends balancer_board_posts_list
 	function auto_objects()
 	{
 		return array(
-			'user' => 'forum_user(user_id)',
-			'topic' => 'forum_topic(topic_id)',
+			'user' => 'balancer_board_user(user_id)',
+			'topic' => 'balancer_board_topic(topic_id)',
 		);
 	}
 

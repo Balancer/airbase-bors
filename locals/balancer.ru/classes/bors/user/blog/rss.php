@@ -30,7 +30,7 @@ class user_blog_rss extends user_blog
 		foreach($this->db()->get_array('SELECT id FROM topics WHERE poster_id='.$this->id().' AND posted > '.(time()-30*86400).' ORDER BY posted DESC LIMIT 25') as $topic_id)
 		{		
 		    $item = new FeedItem();
-			$topic = class_load('forum_topic', $topic_id);
+			$topic = class_load('balancer_board_topic', $topic_id);
 	    	$item->title = $topic->title();
 		    $item->link = $topic->url(); 
 			

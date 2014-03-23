@@ -10,6 +10,22 @@ class balancer_board_personal_updated extends balancer_board_page
 
 	function items_per_page() { return 50; }
 
+	function topics()
+	{
+		$topics = bors_find_all('balancer_board_topic', array(
+			'*set' => 'topic_visits.last_visit AS joined_last_visit',
+			'inner_join' => "topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.user_id=".bors()->user_id().")",
+			'topic_visits.is_disabled=' => false,
+			'topic_visits.last_visit < topics.last_post',
+			'order' => '-last_post',
+			'page' => $this->page(),
+			'per_page' => $this->items_per_page(),
+			'by_id' => true,
+		));
+
+		return $topics;
+	}
+
 	function body_data()
 	{
 		$me_id = bors()->user_id();
@@ -18,16 +34,7 @@ class balancer_board_personal_updated extends balancer_board_page
 			'order' => 'last_visit',
 		))->last_visit();
 
-		$topics = bors_find_all('balancer_board_topic', array(
-			'*set' => 'topic_visits.last_visit AS joined_last_visit',
-			'inner_join' => 'topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.is_disabled = 0)',
-			'topic_visits.user_id=' => $me_id,
-			'topic_visits.last_visit < topics.last_post',
-			'order' => '-last_post',
-			'page' => $this->page(),
-			'per_page' => $this->items_per_page(),
-			'by_id' => true,
-		));
+		$topics = $this->topics();
 
 		bors_objects_preload($topics, 'forum_id', 'balancer_board_forum', 'forum');
 		bors_objects_preload($topics, 'owner_id', 'balancer_board_user',  'owner');
@@ -53,7 +60,25 @@ class balancer_board_personal_updated extends balancer_board_page
 		bors_objects_preload($counts, 'first_post_id', 'balancer_board_post',  'first_post');
 
 		$posts = array();
+		$visited_ids = array();
 		foreach($counts as $x)
+		{
+			$posts[] = $x->first_post();
+			$topics[$x->id()]->set_attr('first_post', $x->first_post());
+			$topics[$x->id()]->set_attr('updated_count', $x->updated_count());
+			$visited_ids[] = $x->id();
+		}
+
+		$unread_counts = bors_find_all('balancer_board_topic', array(
+			'*set' => 'COUNT(*) AS updated_count, MIN(`posts`.id) as first_post_id',
+			'inner_join' => 'balancer_board_post ON (balancer_board_post.topic_id = balancer_board_topic.id)',
+			'balancer_board_topic.id IN' => array_keys($topics),
+			'topics.id NOT IN' => $visited_ids,
+			'balancer_board_post.create_time > ' => time() - 86400*31,
+			'group' => 'balancer_board_topic.id'
+		));
+
+		foreach($unread_counts as $x)
 		{
 			$posts[] = $x->first_post();
 			$topics[$x->id()]->set_attr('first_post', $x->first_post());
@@ -68,8 +93,7 @@ class balancer_board_personal_updated extends balancer_board_page
 	function total_items()
 	{
 		return bors_count('balancer_board_topic', array(
-			'inner_join' => 'topic_visits ON (topic_visits.topic_id = balancer_board_topic.id)',
-			'topic_visits.user_id=' => bors()->user_id(),
+			'inner_join' => "topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.user_id=".bors()->user_id().")",
 			'topic_visits.last_visit < topics.last_post',
 			'topic_visits.is_disabled=' => false,
 //				'topic_visits.last_visit>' => time()-86400*31,

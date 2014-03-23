@@ -114,7 +114,7 @@ class balancer_blogs_tags_show extends balancer_board_page
 		$blogs  = array();
 		foreach($items as $item)
 		{
-			if($item->extends_class_name() == 'forum_topic')
+			if($item->new_class_name() == 'balancer_board_topic')
 			{
 				$post_ids[] = $item->first_post_id();
 				$topics[$item->id()] = $item;
