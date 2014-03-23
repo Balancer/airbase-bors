@@ -4,7 +4,7 @@ class forum_js_topvisits extends base_js
 {
 	function local_template_data_set()
 	{
-		$top = objects_array('forum_topic', array(
+		$top = objects_array('balancer_board_topic', array(
 				'num_views>=' => 10,
 				'last_visit - first_visit > 600',
 				'order' => '(86400*num_views)/(last_visit-first_visit) DESC',

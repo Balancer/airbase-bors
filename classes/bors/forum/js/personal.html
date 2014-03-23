@@ -2,10 +2,12 @@
 <p><b>Здравствуйте, {$owner->titled_link()}!</b> [&nbsp;<a href="/actions/do-logout/">Выход</a>&nbsp;]
 </p>
 
-<b>Ваши:</b>
+<b>Ваше:</b>
 <ul>
+<li><a href="http://forums.balancer.ru/personal/updated" class="red">Обновившиеся темы</a></li>
+<li><a href="http://forums.balancer.ru/personal/unvisited" class="red">Непосещённые темы</a></li>
 <li><a href="http://www.balancer.ru/forum/punbb/search.php?action=show_new">Новое</a></li>
-<li><a href="http://forums.balancer.ru/personal/clients/" class="red">Профили браузера</a></li>
+<li><a href="http://forums.balancer.ru/personal/clients/">Профили браузера</a></li>
 <li><a href="http://www.balancer.ru/user/{$owner->id()}/blog/">Блог</a></li>
 <li><a href="http://www.balancer.ru/users/favorites/">Избранное</a></li>
 <li><a href="http://www.balancer.ru/user/{$owner->id()}/use-topics.html">Темы с участием</a></li>
@@ -21,23 +23,6 @@
 <a href="http://www.balancer.ru/forum/punbb/register.php">зарегистрируйтесь</a>,
 пожалуйста.
 {/if}
-
-<b>Форум:</b>
-<ul>
-<li><a href="http://forums.airbase.ru/guidelines/">Правила</a></li>
-<li><a href="http://forums.balancer.ru/help/" class="red">Помощь</a></li>
-<li><a href="http://www.balancer.ru/forum/punbb/search.php?action=show_24h">За сутки</a></li>
-<li><a href="http://www.balancer.ru/chat/">Чат</a> <small><a href="http://www.balancer.ru/support/2011/03/t19123--na-aviabaze-zapuschen-novyj-chat.5520.html">[?]</a></small></li>
-<li><a href="http://forums.balancer.ru/tags/">Теги</a></li>
-<li><a href="http://www.balancer.ru/tools/search/">Поиск</a></li>
-<li><a href="http://www.balancer.ru/users/toprep/">Репутации</a></li>
-<li><a href="http://www.balancer.ru/tools/votes/">Оценки</a></li>
-<li><a href="http://www.balancer.ru/users/warnings/">Штрафы</a></li>
-<li><a href="http://forums.balancer.ru/tools/">Инструменты</a></li>
-{if $owner && $owner->is_coordinator()}
-<li><a href="http://forums.balancer.ru/admin/">Админка</a></li>
-{/if}
-</ul>
 
 {literal}
 <script>
@@ -55,7 +40,7 @@ else
 
 if(tid > 0)
 {
-	document.write('<b>Инструменты:</b>')
+	document.write('<b>Тема:</b>')
 	document.write('<ul>')
 	document.write('<li><a href="http://www.balancer.ru/2000/01/t'+tid+'--.pdf">PDF-версия темы</a></li>')
 	document.write('<li><a href="http://www.balancer.ru/2000/01/01/printable-'+tid+'--.html">Версия для печати</a></li>')
@@ -71,3 +56,20 @@ if(tid > 0)
 }
 </script>
 {/literal}
+
+<b>Форумы:</b>
+<ul>
+<li><a href="http://forums.airbase.ru/guidelines/">Правила</a></li>
+<li><a href="http://forums.balancer.ru/help/" class="red">Помощь</a></li>
+<li><a href="http://www.balancer.ru/forum/punbb/search.php?action=show_24h">За сутки</a></li>
+<li><a href="http://www.balancer.ru/chat/">Чат</a> <small><a href="http://www.balancer.ru/support/2011/03/t19123--na-aviabaze-zapuschen-novyj-chat.5520.html">[?]</a></small></li>
+<li><a href="http://forums.balancer.ru/tags/">Теги</a></li>
+<li><a href="http://www.balancer.ru/tools/search/">Поиск</a></li>
+<li><a href="http://www.balancer.ru/users/toprep/">Репутации</a></li>
+<li><a href="http://www.balancer.ru/tools/votes/">Оценки</a></li>
+<li><a href="http://www.balancer.ru/users/warnings/">Штрафы</a></li>
+<li><a href="http://forums.balancer.ru/tools/">Инструменты</a></li>
+{if $owner && $owner->is_coordinator()}
+<li><a href="http://forums.balancer.ru/admin/">Админка</a></li>
+{/if}
+</ul>

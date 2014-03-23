@@ -11,5 +11,11 @@ class balancer_board_ajax_actions_unwatch extends bors_js
 
 		if($v)
 			$v->set_is_disabled(true);
+		else
+			bors_new('balancer_board_topics_visit', array(
+				'user_id' => bors()->user_id(),
+				'target_object_id' => $this->arg('topic_id'),
+				'is_disabled' => true,
+			));
 	}
 }
