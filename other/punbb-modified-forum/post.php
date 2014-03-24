@@ -157,6 +157,9 @@ $true_text = 100;
 // Did someone just hit "Submit" or "Preview"?
 if (isset($_POST['form_sent']))
 {
+	config_set('lcml_cache_disable', true);
+	config_set('lcml_cache_disable_full', true);
+
 //	if (($pun_user['is_guest'] && $_POST['form_user'] != 'Guest') || (!$pun_user['is_guest'] && $_POST['form_user'] != $pun_user['username']))
 //		message($lang_common['Bad request']);
 
