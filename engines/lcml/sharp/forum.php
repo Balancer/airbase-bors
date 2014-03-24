@@ -11,7 +11,7 @@ function lst_forum($txt)
 		$tid = $txt;
 
 	if($tid)
-		$topic = object_load('forum_topic', $tid);
+		$topic = object_load('balancer_board_topic', $tid);
 	else
 		return "";
 	
