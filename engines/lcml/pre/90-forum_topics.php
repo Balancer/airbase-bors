@@ -38,7 +38,7 @@
 
     function lcml_forum_topics_title($topic_id)
     {
-		$topic = class_load('forum_topic', intval($topic_id));
+		$topic = class_load('balancer_board_topic', intval($topic_id));
 
         return $topic ? $topic->titled_link() : 'Unknown topic '.$topic_id;
     }
