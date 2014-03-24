@@ -18,6 +18,8 @@
 			{* if $f->is_public_access() *}
 			{assign var="show_title" value=$t->titled_link()}
 			{include file="xfile:forum/post.html" show_title=$t->title_url() strip="8192"}
+		{else}
+			<div class="box">** Сообщение с ограниченным доступом **</div>
 		{/if}
 	{/if}
 {/if}
