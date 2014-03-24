@@ -49,8 +49,8 @@
 	<td class="small">{$f->titled_link()}</td>
 {/if}
 	<td class="small aligncenter">{$t->num_replies()}</td>
-	<td class="small">{$t->create_time()|airbase_time}<br /><small>{$t->author_name()}</small></td>
-	<td class="small">{$t->last_post_create_time()|airbase_time}<br /><small>{$t->last_poster_name()}</small></td>
+	<td class="small"><a href="http://www.balancer.ru/g/p{$t->first_post_id()}">{$t->create_time()|airbase_time}</a><br /><small>{$t->author_name()}</small></td>
+	<td class="small"><a href="http://www.balancer.ru/g/p{$t->last_post_id()}">{$t->last_post_create_time()|airbase_time}</a><br /><small>{$t->last_poster_name()}</small></td>
 </tr>
 {/foreach}
 </table>
