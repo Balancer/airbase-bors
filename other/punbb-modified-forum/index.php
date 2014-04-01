@@ -393,7 +393,7 @@ while ($cur_forum = $db->fetch($result))
 	// Is this a redirect forum?
 	if ($cur_forum['redirect_url'] != '')
 	{
-		$forum_field = '<h3><a href="'.pun_htmlspecialchars($cur_forum['redirect_url']).'" title="'.$lang_index['Link to'].' '.pun_htmlspecialchars($cur_forum['redirect_url']).'">'.pun_htmlspecialchars($cur_forum['forum_name']).'</a></h3>';
+		$forum_field = '<h3><a href="'.pun_htmlspecialchars($cur_forum['redirect_url']).'" title="'.$lang_index['Link to'].' '.pun_htmlspecialchars($cur_forum['redirect_url']).'">'.pun_htmlspecialchars(blib_lang::translate($cur_forum['forum_name'])).'</a></h3>';
 		$num_topics = $num_posts = '&nbsp;';
 		$item_status = 'iredirect';
 		$icon_text = $lang_common['Redirect icon'];
@@ -401,7 +401,7 @@ while ($cur_forum = $db->fetch($result))
 	}
 	else
 	{
-		$forum_field = "<h3><a href=\"{$pun_config['root_uri']}/viewforum.php?id={$cur_forum['fid']}\">".pun_htmlspecialchars($cur_forum['forum_name']).'</a></h3>';
+		$forum_field = "<h3><a href=\"{$pun_config['root_uri']}/viewforum.php?id={$cur_forum['fid']}\">".pun_htmlspecialchars(blib_lang::translate($cur_forum['forum_name'])).'</a></h3>';
 		$num_topics = $cur_forum['num_topics'];
 		$num_posts = $cur_forum['num_posts'];
 	}

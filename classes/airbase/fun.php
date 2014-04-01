@@ -2,6 +2,30 @@
 
 class airbase_fun
 {
+	static function replace_2014($text)
+	{
+		$r = 'а-яА-ЯёЁ';
+
+		$text = preg_replace_callback('/(, )/', function($m) { return rand(0,30)==0 ? ', иншалла, ' : ', ';}, $text);
+		$text = preg_replace_callback('/(, )/', function($m) { return rand(0,30)==0 ? ', добра всем, ' : ', ';}, $text);
+		$text = preg_replace_callback('/(, )/', function($m) { return rand(0,30)==0 ? ', ёлы палы, ' : ', ';}, $text);
+		$text = preg_replace_callback('/(, )/', function($m) { return rand(0,30)==0 ? ', однако, ' : ', ';}, $text);
+		$text = preg_replace_callback('/(, )/', function($m) { return rand(0,30)==0 ? ', брр, ' : ', ';}, $text);
+		$text = preg_replace_callback('/(, )/', function($m) { return rand(0,30)==0 ? ', матка боска, ' : ', ';}, $text);
+
+		$text = preg_replace_callback('/! /', function($m) { return rand(0,10)==0 ? ', слава КПСС! ' : '! ';}, $text);
+		$text = preg_replace_callback('/! /', function($m) { return rand(0,10)==0 ? ', слава труду! ' : '! ';}, $text);
+		$text = preg_replace_callback('/! /', function($m) { return rand(0,10)==0 ? ', дык! ' : '! ';}, $text);
+
+		$text = preg_replace_callback('/\? /', function($m) { return rand(0,10)==0 ? ', да? ' : '? ';}, $text);
+
+		$text = preg_replace_callback("/([^$r])([$r]{4,6}ыми)/u", function($m) { return rand(0,2)==0 ? $m[1].'<span title="'.$m[2].'">****ыми</span>' : $m[1].$m[2];}, $text);
+		$text = preg_replace_callback("/([^$r])([$r]{4,6}нных)/u", function($m) { return rand(0,2)==0 ? $m[1].'<span title="'.$m[2].'">****нных</span>' : $m[1].$m[2];}, $text);
+		$text = preg_replace_callback("/([^$r])([$r]{4,6}тое)/u", function($m) { return rand(0,2)==0 ? $m[1].'<span title="'.$m[2].'">*****тое</span>' : $m[1].$m[2];}, $text);
+
+		return $text;
+	}
+
 	static function replace_2013($text)
 	{
 //		if(date('d') > 1)

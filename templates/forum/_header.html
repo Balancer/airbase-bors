@@ -16,7 +16,7 @@
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
-	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-511-min.css" />
+	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-515-min.css" />
 
 {literal}
 <!--[if IE]><style>
@@ -140,9 +140,9 @@ createCookie('readedTopics', readed.join(' '), 3)
             });
 		});
 {/literal}</script>
-Теги:<input id="tags" name="tags" type="text" value="" /><span id="tags_def">{$this->keywords_linked()}</span>
+{ec('Теги')}:<input id="tags" name="tags" type="text" value="" /><span id="tags_def">{$this->keywords_linked()}</span>
 {else}
-Теги: {$this->keywords_linked()}
+{ec('Теги')}: {$this->keywords_linked()}
 {/if}
 </div>
 {/if}
@@ -182,43 +182,19 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 <br/>
 
-{*
-<!-- AddThis Button BEGIN -->
-<div class="box addthis_toolbox addthis_32x32_style addthis_default_style">
-<a class="addthis_button_livejournal"></a>
-<a class="addthis_button_vk"></a>
-<a class="addthis_button_blogger"></a>
-<a class="addthis_button_facebook"></a>
-
-<a class="addthis_button_tweet"></a>
-<a class="addthis_button_bobrdobr"></a>
-<a class="addthis_button_myspace"></a>
-<a class="addthis_button_email"></a>
-<a class="addthis_button_favorites"></a>
-<a class="addthis_button_delicious"></a>
-<a class="addthis_button_evernote"></a>
-<a class="addthis_button_googlebuzz"></a>
-<a class="addthis_counter addthis_pill_style"></a>
-</div>
-<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=balancer73"></script>
-<!-- AddThis Button END -->
-*}
-
-
 <dl class="post_kws box">
 <dd>
- <a href="#top">в начало страницы</a>
-| <a href="http://www.balancer.ru/forum/punbb/search.php?action=show_new">новое</a>
-{if $me_id}
-| <a href="http://forums.balancer.ru/personal/updated/">нечитанное обновлённое</a>
-| <a href="http://www.balancer.ru/users/{$me_id}/votes/">оценки</a>
-{if $this->class_name() == 'balancer_board_topic' || $this->class_name() == 'balancer_board_topics_view' }
-| <a href="http://www.balancer.ru/forum/user-{$me_id}-posts-in-topic-{$this->id()}/">Ваше в теме</a>
-{/if}
-{/if}
-
-{include file="xfile:balancer/inc/yandex-share.html"}
-<div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="link" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir,lj,friendfeed,moikrug"></div>
+ <a href="#top">{ec('в начало страницы')}</a>
+| <a href="http://www.balancer.ru/forum/punbb/search.php?action=show_new">{ec('новое')}</a>
+<script><!--
+if(me_id > 1 && me_hash) {
+	document.writeln("| <a href=\"http://forums.balancer.ru/personal/updated/\">{ec('нечитанное обновлённое')}</a>")
+	document.writeln("| <a href=\"http://www.balancer.ru/users/"+me_id+"/votes/\">{ec('оценки')}</a>")
+		{if $this->class_name() == 'balancer_board_topic' || $this->class_name() == 'balancer_board_topics_view' }
+	document.writeln("| <a href=\"http://www.balancer.ru/forum/user-"+me_id+"-posts-in-topic-{$this->id()}/\">{ec('Ваше в теме')}</a>")
+		{/if}
+}
+--></script>
 
 </dd>
 </dl>
@@ -263,11 +239,11 @@ createCookie('readedTopics', readed.join(' '), 3)
 
 {if not config('css_bootstrap_is_loaded')}
 		<dl class="box w200">
-		<dt>Поиск</dt>
+		<dt>{ec('Поиск')}</dt>
 		<dd>
 			<form method="get" action="http://www.balancer.ru/tools/search/result/"><div>
-			<input type="text" class="text" name="q" value="" placeholder="Введите запрос" />
-			<input type="submit" class="submit" value="искать" />
+			<input type="text" class="text" name="q" value="" placeholder="{ec('Введите запрос')}" />
+			<input type="submit" class="submit" value="{ec('искать')}" />
 			</div></form>
 		</dd>
 		</dl>
@@ -284,12 +260,12 @@ createCookie('readedTopics', readed.join(' '), 3)
 {/if}
 
 		<dl class="box w200">
-		<dt>Настройки</dt>
+		<dt>{ec('Настройки')}</dt>
 		<dd>
 			<script type="text/javascript">
-				createSelect("Шрифт", "fontFamily", "default(Georgia):Georgia;Verdana;Ubuntu;Play;Scada;PT Sans;sans-serif;serif;monospace", "Georgia")
-				createSelect("Размер", "fontSize", "8pt;10pt;12pt;default(14pt):14pt;16pt;20pt;24pt", "14pt")
-				createSelect("Расстояние до монитора", "incenter.width", "auto;30cm:14cm;45cm:21cm;70cm:30cm", "auto")
+				createSelect("{ec('Шрифт')}", "fontFamily", "default(Georgia):Georgia;Verdana;Ubuntu;Play;Scada;PT Sans;sans-serif;serif;monospace", "Georgia")
+				createSelect("{ec('Размер')}", "fontSize", "8pt;10pt;12pt;default(14pt):14pt;16pt;20pt;24pt", "14pt")
+				createSelect("{ec('Расстояние до монитора')}", "incenter.width", "auto;30cm:14cm;45cm:21cm;70cm:30cm", "auto")
 			</script>
 			<noscript><p>Не работает без JavaScript</p></noscript>
 		</dd>
@@ -302,7 +278,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 {/if}
 
 <dl class="box w200">
-<dt>Персональное</dt>
+<dt>{ec('Персональное')}</dt>
 <dd>
 <script type="text/javascript"><!--
 if(me_id < 2 || !me_hash)
@@ -317,12 +293,12 @@ else {ldelim}
 <noscript><p>Не работает без JavaScript</p></noscript>
 </dd></dl>
 
-{if ($this->new_class_name() == 'balancer_board_topic' || $this->new_class_name() == 'balancer_board_topics_view') && $me}
+{if ($this->new_class_name() == 'balancer_board_topic' || $this->new_class_name() == 'balancer_board_topics_view')}
 <script type="text/javascript" src="http://www.balancer.ru/js/board/topics/t{$this->id()}-similar.js"></script>
 {/if}
 
-<dl class="box w200"><dt>Твиттер сайта</dt>
-<a class="twitter-timeline" href="https://twitter.com/AirbaseRu" data-widget-id="429908527918755840">Твиты пользователя @AirbaseRu</a>
+<dl class="box w200"><dt>{ec('Твиттер сайта')}</dt>
+<a class="twitter-timeline" href="https://twitter.com/AirbaseRu" data-widget-id="429908527918755840">{ec('Твиты пользователя')} @AirbaseRu</a>
 <script>!function(d,s,id){ var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){ js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </dl>
 
@@ -335,7 +311,7 @@ var pageTracker = _gat._getTracker("UA-3907196-1");
 pageTracker._trackPageview();
 --></script>
 
-<dl class="box w200"><dt>Статистика</dt>
+<dl class="box w200"><dt>{ec('Статистика')}</dt>
 <dd>
 <div>
 
@@ -396,10 +372,6 @@ $('#mapyourvisitors').html('<a href="http://www.mapyourvisitors.com/map2537.php"
 </div>{* end outer div *}
 
 <div class="wide bottom">&nbsp;</div>
-
-{*
-	<div class="box" style="padding: 4px; font-size: 10pt; font-weight: bold;">Сайт работает на сервере <a href="http://www.etegro.com/">ETegro Technologies</a></div><br/>
-*}
 
 </div></div>
 <!--

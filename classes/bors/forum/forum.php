@@ -40,7 +40,7 @@ class forum_forum extends bors_object_db
 		);
 	}
 
-function title() { return $this->data['title']; }
+function title() { return blib_lang::translate($this->data['title']); }
 
 function parent_forum_id() { return @$this->data['parent_forum_id']; }
 function set_parent_forum_id($v, $dbup)

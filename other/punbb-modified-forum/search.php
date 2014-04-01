@@ -649,7 +649,7 @@ if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
 			while (list(, $temp) = @each($forum_list))
 			{
 				if ($temp[0] == $search_set[$i]['forum_id'])
-					$forum = "<a href=\"{$pun_config['root_uri']}/viewforum.php?id={$temp[0]}\">".pun_htmlspecialchars($temp[1]).'</a>';
+					$forum = "<a href=\"{$pun_config['root_uri']}/viewforum.php?id={$temp[0]}\">".pun_htmlspecialchars(blib_lang::translate($temp[1])).'</a>';
 			}
 
 			if ($pun_config['o_censoring'] == '1')

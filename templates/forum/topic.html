@@ -2,26 +2,39 @@
 
 <a href="http://ls.balancer.ru/question/add/"
 		class="{if config('css_bootstrap_is_loaded')}btn btn-small{else}select_page{/if}"
-	>Новый опрос</a>
+	>{"Новый опрос"|ec}</a>
 
 <a href="{$this->forum()->category()->category_base_full()}post.php?fid={$this->forum()|get:id}"
 		class="{if config('css_bootstrap_is_loaded')}btn btn-small btn-warning{else}select_page{/if}"
-	>Новая тема</a>
+	>{"Новая тема"|ec}</a>
 
 {if $this->is_closed()}
-	<a href="#" class="btn btn-small disabled">Тема закрыта</a>
+	<a href="#" class="btn btn-small disabled">{"Тема закрыта"|ec}</a>
 {else}
 	<a href="{$this->forum()->category()->category_base_full()}post.php?tid={$this->id()}" 
 		class="{if config('css_bootstrap_is_loaded')}btn btn-small btn-primary{else}select_page{/if}"
-		onclick="return confirm('Внимание! Вы выбираете ответ не на конкретное сообщение (кнопкой «Ответить на сообщение»), а непосредственно в тему. В этом случае будет отсутствовать привязка ответа к отвечаемому сообщению. И, если Вы своим ответом отклоняетесь от основной темы обсуждения, то при возможном разделении темы создадите лишнюю работу модераторам. За что можете получить штрафной балл. Вы уверены, что хотите ответить именно в тему, без привязки к конкретному сообщению?');"
-	>Ответ в эту тему</a>
+	>{"Ответ в эту тему"|ec}</a>
 {/if}
 
 </div>
 
-{if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
+{if $this->pages_links()}<div class="pages_select">{"Страницы:"|ec} {$this->pages_links()}</div>{/if}
 
-{if not $this->is_public_access()}<div class="yellow_box">Тема с ограниченным доступом</div>{/if}
+{if not $this->is_public_access()}<div class="yellow_box">{"Тема с ограниченным доступом"|ec}</div>{/if}
+
+{if $this->page() == $this->total_pages()-1}
+<div class="post">
+	<div class="head">
+		Pingu
+	</div>
+	<div class="body">
+<object width="640" height="480">
+	<param name="movie" value="http://s.wrk.ru/swf/pingu.swf">
+	<embed src="http://s.wrk.ru/swf/pingu.swf" width="640" height="480"></embed>
+</object>
+	</div>
+</div>
+{/if}
 
 {if $prev_actions}
 <br/><div class="box small"><ul>
@@ -39,7 +52,7 @@
 
 {if $last_actions}
 <dl class="box small">
-<dt>Последние действия над темой</dt>
+<dt>{"Последние действия над темой"|ec}</dt>
 <dd><ul>
 {foreach from=$last_actions item="a"}
 <li{$a->type_class()} style="font-size: 8pt">{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}</li>
@@ -48,4 +61,4 @@
 </dl>
 {/if}
 
-{if $this->pages_links()}<div class="pages_select">Страницы: {$this->pages_links()}</div>{/if}
+{if $this->pages_links()}<div class="pages_select">{"Страницы:"|ec} {$this->pages_links()}</div>{/if}
