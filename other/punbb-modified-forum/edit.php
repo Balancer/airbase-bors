@@ -33,6 +33,7 @@ if(bors_stop_bots('__nobots_testing', 'edit'))
 
 $GLOBALS['cms']['cache_disabled'] = true;
 config_set('cache_disabled' , true);
+config_set('lcml_cache_disable_full', true);
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);

@@ -82,9 +82,12 @@ class balancer_board_user extends forum_user
 		$warnings = min(10,  $warnings);
 
 //		☠😸🐱❤
-		$char = $warnings > 0 ? '☠' : '☤';
-		$color = $warnings > 0 ? 'black' : '#080';
-		$half_color = $warnings > 0 ? '#999' : '#cfc';
+//		$char = $warnings > 0 ? '☠' : '☤';
+		$char = $warnings > 0 ? '☠' : '☭';
+//		$color = $warnings > 0 ? 'black' : '#080';
+		$color = $warnings > 0 ? 'black' : '#c00';
+//		$half_color = $warnings > 0 ? '#999' : '#cfc';
+		$half_color = $warnings > 0 ? '#999' : '#fcc';
 		$skulls = str_repeat($char, $full_skulls = intval(abs($warnings)/2));
 
 		if($full_skulls*2 != abs($warnings))

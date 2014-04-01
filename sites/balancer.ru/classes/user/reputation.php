@@ -6,7 +6,7 @@ class user_reputation extends balancer_board_page
 
 	function is_loaded() { return (bool) $this->user; }
 
-	function title() { return $this->user ? $this->user->title().ec(": Репутация") : ''; }
+	function title() { return $this->user ? $this->user->title().': '.ec("Репутация") : ''; }
 	function nav_name() { return ec("репутация"); }
 
 	function parents() { return array("balancer_board_user://".$this->id()); }

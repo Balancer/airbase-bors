@@ -139,7 +139,7 @@ if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
 ?>
 
 <div id="vf" class="blocktable">
-	<h2><span><?php echo pun_htmlspecialchars($cur_forum['forum_name']) ?></span></h2>
+	<h2><span><?php echo pun_htmlspecialchars(blib_lang::translate($cur_forum['forum_name'])) ?></span></h2>
 	<div class="box">
 		<div class="inbox">
 			<table cellspacing="0">

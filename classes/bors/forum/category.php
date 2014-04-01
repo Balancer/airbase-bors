@@ -21,6 +21,8 @@ class forum_category extends bors_page_db
 		);
 	}
 
+function title() { return blib_lang::translate($this->data['title']); }
+
 function parent_category_id() { return @$this->data['parent_category_id']; }
 function set_parent_category_id($v, $dbup=true) { return $this->set('parent_category_id', $v, $dbup); }
 function order() { return @$this->data['order']; }
