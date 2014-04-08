@@ -50,35 +50,6 @@ class forum_topic extends base_page_db
 		);
 	}
 
-
-function title()
-{
-	$title = $this->data['title'];
-	$ch = new bors_cache_fast();
-	if($ch->get('translate-ua', $title))
-		return $ch->last();
-
-	if(rand(0,50) != 0)
-		return $title;
-
-	$title = blib_translate::translate($title, 'UK');
-	return $ch->set($title, 86400);
-}
-
-function description()
-{
-	$description = $this->data['description'];
-	$ch = new bors_cache_fast();
-	if($ch->get('translate-ua', $description))
-		return $ch->last();
-
-	if(rand(0,50) != 0)
-		return $description;
-
-	$description = blib_translate::translate($description, 'UK');
-	return $ch->set($description, 86400);
-}
-
 function set_forum_id($v, $dbup = true)
 {
 	if(($new_forum = object_load('balancer_board_forum', $v)))

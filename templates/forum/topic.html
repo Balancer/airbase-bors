@@ -22,20 +22,6 @@
 
 {if not $this->is_public_access()}<div class="yellow_box">{"Тема с ограниченным доступом"|ec}</div>{/if}
 
-{if $this->page() == $this->total_pages()-1}
-<div class="post">
-	<div class="head">
-		Pingu
-	</div>
-	<div class="body">
-<object width="640" height="480">
-	<param name="movie" value="http://s.wrk.ru/swf/pingu.swf">
-	<embed src="http://s.wrk.ru/swf/pingu.swf" width="640" height="480"></embed>
-</object>
-	</div>
-</div>
-{/if}
-
 {if $prev_actions}
 <br/><div class="box small"><ul>
 {foreach from=$prev_actions item="a"}
