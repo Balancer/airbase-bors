@@ -4,6 +4,8 @@ class airbase_fun
 {
 	static function replace_2014($text)
 	{
+		return $text;
+
 		$r = 'а-яА-ЯёЁ';
 
 		$text = preg_replace_callback('/(, )/', function($m) { return rand(0,30)==0 ? ', иншалла, ' : ', ';}, $text);
