@@ -320,7 +320,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			require_once('inc/clients/geoip-place.php');
 //			$db = new driver_mysql(config('punbb.database'));
 //			$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
-			$this->set_flag_db(geoip_flag($this->poster_ip(), $this->owner_id() == 10000), true);
+			$this->set_flag_db(geoip_flag($this->poster_ip(), $this->owner_id() == 10000, true, $this->create_time()), true);
 //			$db->close();
 		}
 
@@ -782,6 +782,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$text = str_replace("\n", " ", $text);
 		$text = preg_replace("/\s{2,}/", ' ', $text);
 		$text = str_replace('… …', '…', $text);
+		$text = blib_string::wordwrap($text, 16, ' ', true);
 		return bors_truncate($text, $size);
 	}
 }
