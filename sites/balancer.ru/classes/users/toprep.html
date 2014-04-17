@@ -6,29 +6,34 @@
 </dd>
 </dl>
 
-<table width="100%" cellPadding="0" cellSpacing="0"><tr><td>
-
 <table cellSpacing="0" class="btab" width="100%">
-<tr><th colSpan="3">Высшие оценки:</th>
-<tr><th>№</th><th>Пользователь</th><th>Репутация</th></tr>
-{foreach from=$high item=u name=top1}
-{* <tr><td>{$smarty.foreach.top1.iteration}</td><td>{$u->titled_link()}</td><td><a href="/user/{$u->id()}/reputation/"><img src="/user/{$u->id()}/rep.gif" border="0" /></a>&nbsp;({$u->reputation()|sprintf:"%.1f"})</td></tr> *}
-<tr><td>{$smarty.foreach.top1.iteration}</td><td>{$u->titled_link()}</td><td><a href="/user/{$u->id()}/reputation/">{$u->reputation_html()}</a>&nbsp;({$u->reputation()|sprintf:"%.1f"})</td></tr>
+<tr>
+<tr>
+	<th colSpan="3">Высшие оценки:</th>
+	<th colSpan="2">Низшие оценки:</th>
+</tr>
+<tr>
+	<th>№</th>
+	<th>Пользователь</th>
+	<th>Репутация</th>
+	<th>Пользователь</th>
+	<th>Репутация</th>
+</tr>
+{foreach $high as $idx => $u}
+<tr>
+	<td>{$u@iteration}</td>
+	<td>{$u->titled_link()}</td>
+	<td>
+		<a href="/user/{$u->id()}/reputation/">{$u->reputation_html()}</a>&nbsp;({$u->reputation()|sprintf:"%.1f"})
+	</td>
+{$u=$low[$idx]}
+	<td>{$u->titled_link()}</td>
+	<td>
+		<a href="/user/{$u->id()}/reputation/">{$u->reputation_html()}</a>&nbsp;({$u->reputation()|sprintf:"%.1f"})
+	</td>
+</tr>
 {/foreach}
 </table>
-
-</td><td>&nbsp;</td><td>
-
-<table cellSpacing="0" class="btab" width="100%">
-<tr><th colSpan="2">Низшие оценки:</th>
-<tr><th>Пользователь</th><th>Репутация</th></tr>
-{foreach from=$low item=u}
-{* <tr><td>{$u->titled_link()}</td><td><a href="/user/{$u->id()}/reputation/"><img src="/user/{$u->id()}/rep.gif" border="0" /></a>&nbsp;({$u->reputation()|sprintf:"%.1f"})</td></tr> *}
-<tr><td>{$u->titled_link()}</td><td><a href="/user/{$u->id()}/reputation/">{$u->reputation_html()}</a>&nbsp;({$u->reputation()|sprintf:"%.1f"})</td></tr>
-{/foreach}
-</table>
-
-</td></table>
 
 <h3>Последние изменения репутации</h3>
 <table class="btab w100p">
