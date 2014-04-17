@@ -10,30 +10,39 @@ class balancer_board_user extends forum_user
 
 	function reputation_percents()
 	{
-		$reputation_value = $this->reputation(); // абсолютное значение репутации, от -∞ до +∞
+		$rep = $this->reputation(); // абсолютное значение репутации, от -∞ до +∞
+
+		if(!$rep)
+			return 0;
 
 		// Репутация в диапазоне -100..100
-		$rep = abs(200*atan($reputation_value*$reputation_value/($reputation_value >= 0 ? 300 : 100))/pi());
-		if($reputation_value < 0)
-			$rep = -$rep;
-		return $rep;
+//		$percent = abs(200*atan($rep*$rep/($rep >= 0 ? 1820.7 : 37.1))/pi());
+//		if($rep < 0)
+//			$percent = -$percent;
+
+		if($rep >= 0)
+//			$percent = 60 + 40*($rep - 50.0609) / 78.5811;
+			$percent = 100*($rep / 128.642);
+		else
+//			$percent = min(0, -10 -90*($rep + 7.15419) / -18.67101);
+			$percent = -100*($rep / -25.8252);
+
+		return $percent;
 	}
 
 	function reputation_html()
 	{
-//		return "<img src=\"http://www.balancer.ru/user/{$this->id()}/rep.gif\" class=\"rep\" alt=\"\" />";
-
 		$reputation = $this->reputation_percents();
-
-		// Нормируем в диапазоне [0,5] с шагом 0,5
-		$stars_count = 0.5+round(abs($reputation)*9.5/100)/2;
-
-		if(!$stars_count)
+		if(!$reputation)
 			return '';
 
+		$stars_count = round(abs($reputation)/10)/2;
+
 //		☆★
+
 		$stars = str_repeat('★', $full_stars = intval($stars_count));
-		if($full_stars != $stars_count)
+
+		if($stars_count > $full_stars)
 		{
 			if($reputation >= 0)
 				$stars .= '☆';
