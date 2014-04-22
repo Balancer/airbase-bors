@@ -9,6 +9,15 @@ class balancer_board_personal_answers extends balancer_board_page
 	function is_auto_url_mapped_class() { return true; }
 	function template() { return 'forum/_header.html'; }
 
+	function pre_show()
+	{
+		$me = bors()->user();
+		if(!$me || $me->is_banned())
+			return bors_message('У Вас нет доступа к этому ресурсу');
+
+		return parent::pre_show();
+	}
+
 	function items_per_page() { return 50; }
 
 	function local_data()

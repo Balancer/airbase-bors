@@ -22,10 +22,10 @@ class balancer_board_user extends forum_user
 
 		if($rep >= 0)
 //			$percent = 60 + 40*($rep - 50.0609) / 78.5811;
-			$percent = 100*($rep / 128.642);
+			$percent = 100*($rep / 130.1);
 		else
 //			$percent = min(0, -10 -90*($rep + 7.15419) / -18.67101);
-			$percent = -100*($rep / -25.8252);
+			$percent = -100*($rep / -26.3);
 
 		return $percent;
 	}

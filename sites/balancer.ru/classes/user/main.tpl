@@ -2,6 +2,16 @@
 <dd>
 <div class="avatar_block">{include file="xfile:forum/post-avatar.html"}</div>
 <h2>Информация</h2>
+{if $user->is_deleted() && (!$me || !$me->is_admin())}
+{$user->delete_notice()}
+<ul>
+{if $me && $me->is_coordinator()}
+<li><a href="http://www.balancer.ru/users/{$this->id()}/use-topics.html">Все темы с участием пользователя</a></li>
+<li><a href="http://www.balancer.ru/forum/punbb/profile.php?id={$this->id()}">Профиль на старом форуме</a></li>
+{/if}
+</ul>
+<div class="clear">&nbsp;</div>
+{else}
 <ul>
 {if $ban && is_object($ban)}
 <li class="red">Пользователь забанен перманентно по причине: {$ban->message()}</li>
@@ -236,5 +246,6 @@
 </table>
 {/if}
 
+{/if}
 </dd>
 </dl>

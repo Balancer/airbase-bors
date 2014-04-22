@@ -944,3 +944,7 @@ span.mourning-ribbon {
 tr.bb-background-private td {
 	background-color: #ffc;
 }
+
+.post_body img {
+	max-width: 100%;
+}
