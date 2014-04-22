@@ -16,11 +16,8 @@ function main()
 	echo date("r\n", $stop);
 	echo bors_count('balancer_board_post', array('posted BETWEEN' => array($start, $stop))), PHP_EOL;
 	echo "Begin...\n";
-	$topics = array();
-	$forums = array();
-	$categories = array();
-	$loop = 0;
 
+	$loop = 0;
 
 	$last_id = 0;
 
@@ -37,14 +34,7 @@ function main()
 				'limit' => 1000)
 		) as $p)
 		{
-			if(!($t = @$topics[$p->topic_id()]))
-			{
-				$topics[$p->topic_id()] = $t = $p->topic();
-				echo "{$t->id()} [{$p->id()}, {$p->ctime()}]: {$t->title()}\n";
-				$forum = $t->forum();
-				make_category($forum);
-			}
-
+			make_topic($p);
 		}
 
 		if($p)
@@ -71,26 +61,51 @@ function winfsname($name)
 function make_category($forum)
 {
 	static $categories = array();
-	if(($cat = $categories[$forum->category_id()]))
+	if(($cat = @$categories[$forum->category_id()]))
 		return $cat;
 
 	$categories[$forum->category_id()] = $cat = $forum->category();
-	mkpath($path = REPO_DIR."/".sprintf("%04d", $cat->id())." ".winfsname($cat->title()));
-
+	mkpath($path = REPO_DIR.'/'.winfsname($cat->title()));
 	$cat->set_attr('repo_path', $path);
+
+	file_put_contents($path."/info.json", json_encode($cat->data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
 	return $cat;
 }
 
 function make_forum($topic)
 {
 	static $forums = array();
-	if(($forum = $forums[$topic->forum_id()]))
+	if(($forum = @$forums[$topic->forum_id()]))
 		return $forum;
 
 	$forums[$topic->forum_id()] = $forum = $topic->forum();
-	$cat_path = make_category($forum);
+	$cat = make_category($forum);
 
-	mkpath($path = $cat_path."/".sprintf("%04d", $forum->id())." ".winfsname($forum->title()));
+	mkpath($path = $cat->repo_path()."/".winfsname($forum->title()));
 	$forum->set_attr('repo_path', $path);
+	$forum->set_attr('category', $cat);
+
+	file_put_contents($path."/info.json", json_encode($forum->data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
 	return $forum;
+}
+
+function make_topic($post)
+{
+	static $topics = array();
+	if(($topic = @$topics[$post->topic_id()]))
+		return $topic;
+
+	$topics[$post->topic_id()] = $topic = $post->topic();
+	$forum = make_forum($topic);
+
+	mkpath($path = $forum->repo_path()."/".date('mdHis', $topic->last_post_create_time()).' '.winfsname($topic->title()));
+	$topic->set_attr('repo_path', $path);
+	$topic->set_attr('forum', $forum);
+
+	file_put_contents($path."/info.json", json_encode($topic->data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+	echo ".";
+
+	return $topic;
 }
