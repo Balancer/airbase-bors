@@ -178,12 +178,17 @@ class user_reputation extends balancer_board_page
 			);
 
 		$total = 0;
+		// Цикл по группам голосов от каждого юзера к данному
 		foreach($dbu->get_array("SELECT voter_id as id, SUM(score) as sum
 			FROM `reputation_votes`
 			WHERE user_id = $uid
 				AND is_deleted=0
 			GROUP BY voter_id") as $v)
 		{
+			// Собственная репутация голосующего.
+			// 0 -> 0.25
+			// 100 -> 0.97
+			// -100 -> 0.00025
 			$reput = bors_user_reputation_weight($dbf->get("SELECT reputation FROM users WHERE id={$v['id']}"));
 			$group = $dbf->get("SELECT group_id FROM users WHERE id={$v['id']}");
 

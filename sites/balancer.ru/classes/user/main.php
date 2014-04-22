@@ -189,8 +189,6 @@ class user_main extends balancer_board_page
 			'limit' => 10,
 		));
 
-
-
 		bors_objects_preload($scores_positive, 'user_id', 'balancer_board_user');
 		bors_objects_preload($scores_negative, 'user_id', 'balancer_board_user');
 		bors_objects_preload($votes_positive, 'target_user_id', 'balancer_board_user');
