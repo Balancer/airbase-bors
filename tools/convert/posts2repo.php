@@ -4,7 +4,7 @@ define('REPO_DIR', "/var/www/forums.balancer.ru/data2");
 
 require_once('../config.php');
 
-$exp = new exporter(2013, 12);
+$exp = new exporter(2014, 1);
 $exp->main();
 bors_exit();
 
@@ -40,7 +40,7 @@ class exporter
 	{
 		$this->year = $year;
 		$this->month = $month;
-		$this->repo = REPO_DIR."/{$year}-{$month}/";
+		$this->repo = REPO_DIR.sprintf("/%04d-%02d/", $year, $month);
 	}
 
 	function main()
@@ -85,11 +85,6 @@ class exporter
 				$t = self::make_topic($p);
 				if($p->is_public())
 				{
-					$f = $t->repo_path()
-						.'/posts/'.date('d.His', $p->create_time())
-						.'.'.$p->author_name()
-						.'.'.$p->id();
-
 					$data = $p->data;
 					$data['create_time'] = date('r', $data['create_time']);
 
@@ -105,12 +100,28 @@ class exporter
 
 					openssl_public_encrypt(json_encode($pd), $encrypted_pd, file_get_contents('ssl/pub.key'));
 
-					var_dump($data['project_private_data'] = base64_encode($encrypted_pd));
+					$data['project_private_data'] = base64_encode($encrypted_pd);
 
 					$data = array_filter($data);
 
-					file_put_contents($ff = $f.'.json', json_encode($data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-					touch($ff, $p->modify_time());
+					$fn_base = $t->repo_path()
+						.'/posts/'.date('d.His', $p->create_time())
+						.'.'.$p->id();
+
+					file_put_contents($post_file = $fn_base.'.json', json_encode($data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+					touch($post_file, $p->modify_time());
+
+					foreach($p->attaches() as $attach)
+					{
+						$attach_file = $fn_base.'.'.winfsname($attach->filename());
+						$src = '/var/www/files.balancer.ru/files/forums/attaches/'.$attach->location();
+						echo 'a';
+						if(!file_exists($attach_file) || filesize($attach_file) != filesize($src))
+						{
+							copy($src, $attach_file);
+							touch($attach_file, $p->modify_time());
+						}
+					}
 				}
 
 				$total++;
@@ -183,10 +194,19 @@ class exporter
 		$topic->set_attr('repo_path', $path);
 		$topic->set_attr('forum', $forum);
 
+		$data = $topic->data;
+		$data['create_time'] = date('r', $data['create_time']);
+		$data['modify_time'] = date('r', $data['modify_time']);
+		$data['last_post_create_time'] = date('r', $data['last_post_create_time']);
+
+		var_mv($data['forum_id'], $data['forum_id_raw']);
+
+		$data = array_filter($data);
+
 		mkpath($f = $path.'/posts');
 		touch($f, $mt);
 
-		file_put_contents($f = $path."/info.json", json_encode($topic->data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+		file_put_contents($f = $path."/info.json", json_encode($data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 		touch($f, $mt);
 		echo ".";
 
