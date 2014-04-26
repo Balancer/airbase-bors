@@ -337,10 +337,10 @@ class balancer_board_topic extends forum_topic
 		if(!$this->is_public_access())
 			return false;
 
-		if(preg_match('/airbase\.ru/', @$_SERVER['HTTP_HOST']))
+		if(preg_match('/(airbase\.ru|forums\.balancer\.ru)/', @$_SERVER['HTTP_HOST']))
 			return true;
 
-		return $this->first_post_time() > time() - 86400*5;
+		return $this->last_post_create_time() > time() - 86400*7;
 	}
 
 	function tpl_ad_top()

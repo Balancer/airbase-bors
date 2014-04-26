@@ -156,6 +156,8 @@ createCookie('readedTopics', readed.join(' '), 3)
 {*  && !preg_match(config('ads.disabled_regexp'), $smarty.server.HTTP_HOST) *}
 	{if $this->get('can_adsense')}
 		{include file="xfile:forum/ads/top-ad-google.html"}
+	{elseif $this->get('can_yandex_direct')}
+		{include file="xfile:forum/ads/yandex-direct-h4.html"}
 	{else}
 		{* include file="xfile:forum/ads/top-ad-balancer.html" *}
 		{*  include file="xfile:forum/ads/begun-forums.airbase.ru.html" *}
@@ -204,6 +206,10 @@ if(me_id > 1 && me_hash) {
 	<div class="center"><div class="top-ad">
 	{include file="xfile:forum/ads/google-ads-bottom.html"}
 	</div></div>
+{elseif $this->get('can_yandex_direct')}
+	<div class="center">
+	{include file="xfile:forum/ads/yandex-direct-h4-bottom.html"}
+	</div>
 {else}
 	{* include file="xfile:forum/ads/begun-bottom-auto-forums-airbase.html" *}
 {/if}
@@ -273,6 +279,8 @@ if(me_id > 1 && me_hash) {
 
 {if $this->get('can_adsense')}
 	{include file="xfile:forum/ads/google-ads-left-200x200-lazy.html"}
+{elseif $this->get('can_yandex_direct')}
+	{include file="xfile:forum/ads/yandex-direct-menu-block.html"}
 {else}
 	{* include file="xfile:forum/ads/begun-topleft-200x300.html" *}
 {/if}
