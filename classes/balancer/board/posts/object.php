@@ -85,4 +85,22 @@ class balancer_board_posts_object extends balancer_board_object_db
 			'target_score' => $post->score(),
 		));
 	}
+
+	static function find_containers($object)
+	{
+//		echo "Find containers for {$object->debug_title()}<br/>";
+		$xrefs = bors_find_all('balancer_board_posts_object', array(
+			'target_class_id' => $object->class_id(),
+//			'target_class_name' => $object_class_name,
+			'target_object_id' => $object->id(),
+		));
+
+		$containers = array();
+		foreach($xrefs as $xref)
+			$containers[] = $xref->post();
+
+		usort($containers, function($x, $y) { return $x->create_time() - $y->create_time();});
+
+		return $containers;
+	}
 }
