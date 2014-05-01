@@ -2,8 +2,8 @@
 
 function lcml_site_links($txt)
 {
-	$txt = preg_replace("!^(http://pda\.rbc\.ru/newsline/(\d+)\.shtml)$!ie", "lcml_site_links_get('rbc', $2, '$1');", $txt);
-	$txt = preg_replace("!^(http://pda\.nr2\.ru/(\d+)\.html)$!ie", "lcml_site_links_get('nr2', $2, '$1');", $txt);
+	$txt = preg_replace_callback("!^(http://pda\.rbc\.ru/newsline/(\d+)\.shtml)$!i", function($m) { return lcml_site_links_get('rbc', $m[2], $m[1]);}, $txt);
+	$txt = preg_replace_callback("!^(http://pda\.nr2\.ru/(\d+)\.html)$!i", function($m) { return lcml_site_links_get('nr2', $m[2], $m[1]);}, $txt);
 	return $txt;
 }
 
