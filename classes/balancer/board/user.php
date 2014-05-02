@@ -300,4 +300,16 @@ class balancer_board_user extends forum_user
 	function url_ex($page) { return "http://www.balancer.ru/users/{$this->id()}/"; }
 
 	function can_move() { return $this->group()->can_move(); }
+
+	function unreaded_answers()
+	{
+		return bors_count('balancer_board_post', array(
+			'answer_to_user_id' => $this->id(),
+			'order' => '-create_time',
+			'inner_join' => array("topics t ON t.id = posts.topic_id"),
+			'left_join' => array("topic_visits v ON (v.topic_id = t.id AND v.user_id=$me)"),
+			'(v.last_visit IS NULL OR (v.last_visit < posts.posted))',
+			'posts.posted>' => time() - 86400*30,
+		));
+	}
 }
