@@ -2,10 +2,10 @@
 
 bors_function_include('time/smart_time');
 
-class balancer_board_personal_answers extends balancer_board_page
+class balancer_board_personal_answers_all extends balancer_board_page
 {
-	function title() { return ec('Ответы на Ваши сообщения за последние 3 месяца'); }
-	function nav_name() { return ec('ответы'); }
+	function title() { return ec('Все ответы на Ваши сообщения за последний год'); }
+	function nav_name() { return ec('все ответы за год'); }
 	function is_auto_url_mapped_class() { return true; }
 	function template() { return 'forum/_header.html'; }
 
@@ -20,29 +20,30 @@ class balancer_board_personal_answers extends balancer_board_page
 
 	function items_per_page() { return 50; }
 
-	function local_data()
+	function body_data()
 	{
-		$answers = objects_array('balancer_board_post', array(
+		$answers = bors_find_all('balancer_board_posts_pure', array(
 			'answer_to_user_id' => bors()->user_id(),
-			'answer_to_user_id>' => 0,
+//			'answer_to_user_id>' => 0,
 			'order' => '-create_time',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
-			'create_time>' => time()-90*86400,
-			'use_index' => 'posted',
+			'create_time>' => time()-366*86400,
+//			'use_index' => 'posted',
+			'by_id' => true,
 		));
 
 		return array(
-			'posts' => $answers,
+			'posts' => bors_find_all('balancer_board_post', array('id IN' => array_keys($answers), 'order' => '-create_time')),
 		);
 	}
 
 	function total_items()
 	{
-		return objects_count('balancer_board_post', array(
+		return bors_count('balancer_board_posts_pure', array(
 			'answer_to_user_id' => bors()->user_id(),
-			'answer_to_user_id>' => 0,
-			'create_time>' => time()-90*86400,
+//			'answer_to_user_id>' => 0,
+			'create_time>' => time()-366*86400,
 		));
 	}
 
