@@ -79,3 +79,5 @@ function check_blacklisted_email()
 }
 
 // check_blacklisted_email();
+
+config_set('client_profile', balancer_board_user_client_profile::by_cookies());

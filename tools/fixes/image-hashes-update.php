@@ -17,6 +17,7 @@ do
 	)) as $img)
 	{
 		$img->hash_recalculate();
+		usleep(10000);
 		echo '.';
 	}
 
@@ -25,6 +26,6 @@ do
 
 	bors()->changed_save();
 	bors_object_caches_drop();
-	sleep(1);
+	sleep(3);
 
 } while($img);

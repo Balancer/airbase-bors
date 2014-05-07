@@ -1,10 +1,9 @@
 <?php
 
-class balancer_board_user_client_profile extends base_object_db
+class balancer_board_user_client_profile extends balancer_board_object_db
 {
 	var $access_engine = 'balancer_board_access_owned';
 
-	function storage_engine() { return 'bors_storage_mysql'; }
 	function db_name() { return 'AB_FORUMS'; }
 	function table_name() { return 'user_client_profiles'; }
 
@@ -40,5 +39,13 @@ class balancer_board_user_client_profile extends base_object_db
 	function can_delete()
 	{
 		return $this->user_id() == bors()->user_id();
+	}
+
+	static function by_cookies()
+	{
+		if($profile_hash = @$_COOKIE['client_profile_hash'])
+			return bors_find_first('balancer_board_user_client_profile', array('cookie_hash' => $profile_hash));
+
+		return false;
 	}
 }

@@ -466,8 +466,10 @@ if($msg = $post->is_edit_disable())
 
 <?php
 $profile = config('client_profile');
+
 if(!$profile || $profile->textarea_type() == 'markitup')
-{?>
+{
+	?>
 <div id="emoticons">
 	<a href="#" title=":)"><img src="http://www.airbase.ru/forum/smilies/smile.gif" /></a>
 	<a href="#" title=":("><img src="http://www.airbase.ru/forum/smilies/frown.gif" /></a>
@@ -476,7 +478,9 @@ if(!$profile || $profile->textarea_type() == 'markitup')
 	<a href="#" title=";)"><img src="http://www.airbase.ru/forum/smilies/wink.gif" /></a>
 	<a href="#" title=":D"><img src="http://www.airbase.ru/forum/smilies/biggrin.gif" /></a>
 </div>
-<?php } ?>
+	<?php
+}
+	?>
 
 						<textarea name="req_message" id="bbcode" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo pun_htmlspecialchars(isset($_POST['req_message']) ? $message : $cur_post['message']) ?></textarea><br /></label>
 						<ul class="bblinks">

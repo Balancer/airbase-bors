@@ -17,12 +17,12 @@ class balancer_board_topics_video extends balancer_board_topics_blog
 
 	function where()
 	{
-		return array_merge(parent::where(), array(
+		return array(
 			'topic_id' => $this->id(),
 			'(source LIKE "%flv%"
-				OR source LIKE "%youtube%"
+				OR source LIKE "%youtu%"
 				OR source LIKE "%rutube%"
 				OR source LIKE "%vimeo%")',
-		));
+		);
 	}
 }
