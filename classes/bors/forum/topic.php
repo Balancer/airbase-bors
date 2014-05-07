@@ -204,7 +204,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			'topic_id' => $this->id(),
 			'is_deleted' => 0,
 //			'use_index' => 'by_tid_ordered',
-			'order' => '`order`, posted',
+			'order' => '`order`, posted, id',
 			'create_time>' => $last_post_time,
 		));
 
@@ -296,7 +296,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		return $this->__all_posts_ids = $this->db()->select_array('posts', 'id', array(
 			'topic_id' => $this->id(),
 			'is_deleted' => false,
-			'order' => '`order`,posted',
+			'order' => '`order`,posted,id',
 		));
 	}
 
@@ -307,7 +307,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 		$data = array(
 			'topic_id' => $this->id(),
-			'order' => '`order`,posted',
+			'order' => '`order`,posted,id',
 			'is_deleted' => false,
 		);
 
@@ -329,7 +329,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 		$data = array(
 			'topic_id' => $this->id(),
-			'order' => '`order`,posted',
+			'order' => '`order`,posted,id',
 			'by_id' => true,
 			'is_deleted' => false,
 		);
@@ -424,7 +424,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 	{
 		$post_id = intval($post_id);
 
-		$posts = $this->db()->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY `order`,posted");
+		$posts = $this->db()->get_array("SELECT id FROM posts WHERE topic_id={$this->id()} ORDER BY `order`,posted, id");
 
 		for($i = 0, $stop=sizeof($posts); $i < $stop; $i++)
 			if($posts[$i] == $post_id)
@@ -604,7 +604,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 				USE INDEX (`by_tid_ordered`)
 				SET t.page = FLOOR((SELECT @rn:= @rn + 1 FROM (SELECT @rn:= -1) s)/{$this->items_per_page()})+1
 				WHERE t.topic_id = {$this->id()} AND is_deleted = 0
-				ORDER BY t.`order`, t.`posted`;
+				ORDER BY t.`order`, t.`posted`, t.id;
 		");
 		$this->set_is_repaged(1, true);
 	}
@@ -764,7 +764,7 @@ $(function() {
 			'topic_id' => $this->id(),
 			'create_time>' => $time,
 			'is_deleted' => false,
-			'order' => '`order` DESC, `posted` DESC',
+			'order' => '`order` DESC, `posted` DESC, `id` DESC',
 			'limit' => 25,
 		));
 
@@ -813,7 +813,7 @@ $(function() {
 			'topic_id' => $this->id(),
 			'`page`=' => max(1,$this->page()),
 			'is_deleted' => false,
-			'order' => '-sort_order,-create_time',
+			'order' => '-sort_order,-create_time,-id',
 		));
 
 		$where = array(
