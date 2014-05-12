@@ -1,0 +1,12 @@
+<div class="center"><div class="top-ad">
+{if $smarty.server.HTTP_HOST == 'balancer.ru' or $smarty.server.HTTP_HOST == 'forums.airbase.ru'}
+ {if rand(0,20) == 1}
+ {if $smarty.server.HTTP_HOST == 'balancer.ru'}{include file="xfile:forum/ads/begun-balancer.ru.html"}{/if}
+ {if $smarty.server.HTTP_HOST == 'forums.airbase.ru'}{include file="xfile:forum/ads/begun-forums.airbase.ru.html"}{/if}
+ {else}
+ {include file="xfile:forum/ads/google-ads-2.html"}
+ {/if}
+{else}
+{include file="xfile:forum/ads/google-ads-2.html"}
+{/if}
+</div></div>
