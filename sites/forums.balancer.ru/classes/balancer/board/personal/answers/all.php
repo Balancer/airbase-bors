@@ -22,9 +22,11 @@ class balancer_board_personal_answers_all extends balancer_board_page
 
 	function body_data()
 	{
+		$me_id = bors()->user_id();
+
 		$answers = bors_find_all('balancer_board_posts_pure', array(
-			'answer_to_user_id' => bors()->user_id(),
-//			'answer_to_user_id>' => 0,
+			'answer_to_user_id' => $me_id,
+			'posts.poster_id<>' => $me_id,
 			'order' => '-create_time',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
@@ -40,9 +42,11 @@ class balancer_board_personal_answers_all extends balancer_board_page
 
 	function total_items()
 	{
+		$me_id = bors()->user_id();
+
 		return bors_count('balancer_board_posts_pure', array(
-			'answer_to_user_id' => bors()->user_id(),
-//			'answer_to_user_id>' => 0,
+			'answer_to_user_id' => $me_id,
+			'posts.poster_id<>' => $me_id,
 			'create_time>' => time()-366*86400,
 		));
 	}
