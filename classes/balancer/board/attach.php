@@ -112,10 +112,8 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			$full_url = 'http://www.balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2&type=.'.$this->extension();
 			$thumb_url = "http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/{$geo}/$1", $this->location());
 
-//			if(config('is_developer'))
-//			{
+//			if(config('is_debug'))
 //				var_dump($thumb_url);
-//			}
 
 			if($ss = @getimagesize($thumb_url))
 			{
