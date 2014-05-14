@@ -21,19 +21,37 @@ class user_js_touch extends bors_js
 		if(!$time)
 			$time = time();
 
+		$js = array();
+
 		if($obj)
 		{
 			$obj->touch(bors()->user_id(), $time);
 			if($x = $obj->get('touch_info'))
 			{
-				$res = array();
 				foreach($x as $k=>$v)
-					$res[] = "top.touch_info_{$k} = ".(is_numeric($v) ? $v : "'".addslashes($v)."'");
-
-				return join("\n", $res);
+					$js[] = "top.touch_info_{$k} = ".(is_numeric($v) ? $v : "'".addslashes($v)."'");
 			}
 		}
 
-		return 'true;';
+		$me_id = bors()->user_id();
+
+		$answers_count = bors_count('balancer_board_post', array(
+			'answer_to_user_id' => $me_id,
+			'posts.poster_id<>' => $me_id,
+			'order' => '-create_time',
+			'inner_join' => array("topics t ON t.id = posts.topic_id"),
+			'left_join' => array("topic_visits v ON (v.topic_id = t.id AND v.user_id=$me_id)"),
+			'((v.last_visit IS NULL AND posts.posted > '.(time()-30*86400).') OR (v.last_visit < posts.posted))',
+			'posts.posted>' =>  time()-600*86400,
+		));
+
+		if($answers_count > 0)
+			$js[] = '$("#pers_answ_cnt").html(" ('.$answers_count.')")';
+
+		$js = join("\n", $js);
+		if(!$js)
+			$hs = 'true;';
+
+		return $js;
 	}
 }
