@@ -71,20 +71,30 @@
 			{else}
 				{if $p->get('is_hidden')}
 					<div class="box">{ec("** Это сообщение было скрыто координатором **")}</div>
-				{else}
-					<div id="pb_{$p->id()}" class="post_body">
-					{$p->body()}
-			</div>
 				{/if}
+
+				<div id="pb_{$p->id()}" class="post_body">
+				{if $p->get('is_hidden')}
+					{lcml_tag_pair_spoiler::make($p->body())}
+				{else}
+					{$p->body()}
+				{/if}
+				</div>
+
+				{if $p->get('attaches')}
+					<div style="margin-top: 10px; clear: both; border-top: 1px dotted #ccc;">
+						<i style="margin-left: 8px">{ec("Прикреплённые файлы:")}</i><br/>
+						{if $p->get('is_hidden')}
+							{lcml_tag_pair_spoiler::make(balancer_board_attach::show_attaches($p))}
+						{else}
+							{$p|post_attaches}
+						{/if}
+					</div>
+				{/if}
+
 			{/if}
 		{/if}
 
-		{if $p->get('attaches') && !$p->is_hidden()}
-<div style="margin-top: 10px; clear: both; border-top: 1px dotted #ccc;">
-<i style="margin-left: 8px">{ec("Прикреплённые файлы:")}</i><br/>
-			{$p|post_attaches}
-</div>
-		{/if}
 
 		{if not $skip_message_footer}
 

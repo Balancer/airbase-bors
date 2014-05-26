@@ -35,14 +35,18 @@ class balancer_ajax_thumb_vote extends base_object
 		if($me_id == $target->owner_id())
 			return "<small>Нельзя ставить оценку себе!</small>";
 
+		$twinks = max(1, $me->active_twinks_count());
+
+		if($me->create_time() > time() - 86400)
+			return "<small>Нельзя ставить оценки в первые сутки после регистрации</small>";
+
+		if($me->tomonth_posted() < 5*$twinks)
+			return "<small>У Вас слишком низкая активность на форумах</small>";
+
 		if(intval($score) < 0)
 		{
-			$twinks = max(1, $me->active_twinks_count());
 			if($me->tomonth_posted() < 15*$twinks)
 				return "<small>У Вас слишком низкая активность на форумах</small>";
-
-			if($me->create_time() > time() - 86400)
-				return "<small>Нельзя ставить отрицательные оценки в первые сутки после регистрации</small>";
 
 			if($target->modify_time() < time() - 86400*14)
 				return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";

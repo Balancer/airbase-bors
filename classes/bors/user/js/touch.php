@@ -34,6 +34,8 @@ class user_js_touch extends bors_js
 		}
 
 		$me_id = bors()->user_id();
+		if(!$me_id)
+			return $js;
 
 		$answers_count = bors_count('balancer_board_post', array(
 			'answer_to_user_id' => $me_id,
