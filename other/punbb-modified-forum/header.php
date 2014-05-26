@@ -84,6 +84,12 @@ if(!empty($GLOBALS['use_jquery']))
 		foreach($header as $h)	
 			echo $h;
 
+	if($css_list = @$GLOBALS['cms']['templates']['data']['css_list'])
+	{
+		foreach($css_list as $css)
+			echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$css}\" />\n";
+	}
+
 if (defined('PUN_ADMIN_CONSOLE'))
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$pun_config['root_uri']}/style/imports/base_admin.css\" />\n";
 

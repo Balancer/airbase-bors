@@ -61,7 +61,7 @@
 	{
 		$post = object_load('balancer_board_post', $post);
 
-		return "<a href=\"{$post->url_in_container()}\">{$post->title()}</a>";
+		return "<a href=\"{$post->url_for_igo()}\">{$post->title()}</a>";
 	}
 
 	function lcml_forum_topics_page($forum,$topic,$start)
