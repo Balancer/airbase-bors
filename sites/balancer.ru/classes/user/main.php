@@ -210,17 +210,17 @@ class user_main extends balancer_board_page
 			'best_of_month' => $best_of_month,
 			'user' => $user,
 			'owner' => $user,
-			'messages_today' => objects_count('forum_post', array('owner_id' => $this->id(), 'create_time>' => time()-86400)),
+			'messages_today' => bors_count('balancer_board_post', array('owner_id' => $this->id(), 'create_time>' => time()-86400)),
 			'messages_today_by_forums' => $by_forums,
 			'messages_month_by_forums' => $by_forums_for_month,
 			'messages_year_by_forums' => $by_forums_for_year,
-			'today_total' => objects_count('balancer_board_post', array(
+			'today_total' => bors_count('balancer_board_post', array(
 				'owner_id' => $this->id(),
 				'is_deleted' => false,
 				'create_time>' => time()-86400,
 			)),
 
-			'tomonth_total' => objects_count('balancer_board_post', array(
+			'tomonth_total' => bors_count('balancer_board_post', array(
 				'is_deleted' => false,
 				'owner_id' => $this->id(),
 				'create_time>' => time()-86400*30,

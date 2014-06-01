@@ -62,6 +62,13 @@
 		{if $strip}
 			{assign var="body" value=$p->body()}
 			{$body|strip_text:$strip}
+
+			{if $p->get('attaches')}
+				<div style="margin-top: 10px; clear: both; border-top: 1px dotted #ccc;">
+					{$p|post_attaches}
+				</div>
+			{/if}
+
 			{if bors_strlen($body) >= $strip}
 				<br /><br /><a href="{$p->url_in_container()}">Дальше »»»</a>
 			{/if}

@@ -181,14 +181,6 @@ $map = array(
 //		'(/)(test|crazy)/ => base_page_hts',
 		'(/test/bors/)xml/ => bors_test_xml',
 
-	'/users/reputation/last-ograph\.svg => balancer_board_users_reputationGraphSVG',
-
-	'/forum/topics/(\d+)/reports/users-graph\.png => balancer_board_topic_usersGraphPng(1)',
-	'/forum/topics/(\d+)/reports/users-graph\.svg => balancer_board_topic_usersGraphSVG(1)',
-	'/forum/topics/(\d+)/reports/users-ograph\.svg => balancer_board_topic_usersGraphSVG(1,ordered=1)',
-
-	'/lor/topics/(\d+)/reports/users-graph\.svg => lor_board_topic_usersGraphSVG(1)',
-	'/lor/topics/(\d+)/reports/users-ograph\.svg => lor_board_topic_usersGraphSVG(1,ordered=1)',
 
 	'/external/picasaweb/js/album/(\w+/\w+)/? => balancer_external_picasaweb_jsAlbum(1)',
 	'/external/picasaweb/bb/album/(\w+/\w+)/? => balancer_external_picasaweb_bbAlbum(1)',

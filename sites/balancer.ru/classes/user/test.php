@@ -22,9 +22,9 @@ class user_test extends user_main
 		loglevel(4);
 		// 54897 -> 1163134
 
-		$post = object_load('forum_post', 1339072);
+		$post = bors_load('balancer_board_post', 1339072);
 		$post->move_tree_to_topic(54897);
-//		object_load('balancer_board_topic', 54897)->recalculate();
+//		bors_load('balancer_board_topic', 54897)->recalculate();
 		// 31143
 		// 54897
 		return "Moved";
@@ -37,6 +37,6 @@ class user_test extends user_main
 	
 	function post()
 	{
-		return object_load('forum_post', 1338600);
+		return bors_load('balancer_board_post', 1338600);
 	}
 }

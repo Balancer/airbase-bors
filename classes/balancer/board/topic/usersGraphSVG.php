@@ -19,8 +19,14 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 	{
 		debug_hidden_log('000', 'check for balancer_board_topic_usersGraphSVG');
 
-		$posts = objects_array('forum_post', array('topic_id' => $this->id()));
-		$topic = object_load('balancer_board_topic', $this->id());
+		$posts = bors_find_all('balancer_board_posts_pure', array(
+			'topic_id' => $this->id(),
+			'order' => '-id',
+			'limit' => 300,
+		));
+
+		$topic = bors_load('balancer_board_topic', $this->id());
+		bors_objects_preload($posts, 'owner_id', 'balancer_board_user',  'owner');
 
 		$users = array();
 		$edges = array();
@@ -44,15 +50,14 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 					$maxu = $cnt;
 			}
 
-			if($answer_to = $p->answer_to())
+			if($to_id = $p->answer_to_user_id())
 			{
 				$from_id = $user_id;
-				$to_id = $p->answer_to()->owner_id();
-				
+
 				if(!$this->args('ordered'))
 					if($from_id < $to_id)
 						list($to_id, $from_id) = array($from_id, $to_id);
-				
+
 				if(empty($edges[$from_id][$to_id]))
 					$edges[$from_id][$to_id] = array(
 						'count' => 1,
@@ -79,7 +84,7 @@ class balancer_board_topic_usersGraphSVG extends base_image_svg
 //			'spline' => true,
 			'URL' => $topic->url(),
 		));
-		
+
 		foreach($users as $uid => $ud)
 			$graph->addNode(
 				$uid,
