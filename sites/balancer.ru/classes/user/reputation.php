@@ -57,8 +57,8 @@ class user_reputation extends balancer_board_page
 			'list' => $list,
 			'reputation_abs_value' => sprintf("%.2f", $dbf->get("SELECT reputation FROM users WHERE id = {$this->id()}")),
 			'pure_reputation' => sprintf("%.2f", $dbf->get("SELECT pure_reputation FROM users WHERE id = {$this->id()}")),
-			'plus' => objects_count('airbase_user_reputation', array('is_deleted' => false, 'user_id' => $this->id(), 'score>=' => 0)),
-			'minus' => objects_count('airbase_user_reputation', array('is_deleted' => false, 'user_id' => $this->id(), 'score<' => 0)),
+			'plus' => bors_count('airbase_user_reputation', array('is_deleted' => false, 'user_id' => $this->id(), 'score>=' => 0)),
+			'minus' => bors_count('airbase_user_reputation', array('is_deleted' => false, 'user_id' => $this->id(), 'score<' => 0)),
 			'user_id' => $this->id(),
 		);
 	}
@@ -67,7 +67,7 @@ class user_reputation extends balancer_board_page
 	function total_items()
 	{
 		if($this->total == NULL)
-			$this->total = intval(objects_count('airbase_user_reputation', array(
+			$this->total = intval(bors_count('airbase_user_reputation', array(
 				'is_deleted' => false,
 				'user_id=' => $this->id(),
 				'is_deleted' => 0,

@@ -2,7 +2,7 @@
 
 {assign var="skip_author_name" value=1}
 {foreach from=$blog_records item=r}
-{bors_class_load class="forum_post"  id=$r->id() var="p"}
+{bors_class_load class="balancer_board_post"  id=$r->id() var="p"}
 {if $p}
 {bors_class_load class="balancer_board_topic" id=$p->topic_id() var="t"}
 {if $t}

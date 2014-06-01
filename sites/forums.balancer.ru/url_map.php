@@ -57,6 +57,8 @@ $map = array(
 	'(/tags/)(.+)/(\d+)\.html => balancer_board_keywords_tags(2,3)',
 	'(/tags/)(.+)/? => balancer_board_keywords_tags(2)',
 
+	'/topics/(\d+)/votes-map\.svg => balancer_board_topics_votesGraphSVG(1)',
+
 	'/new\-topics/10years-ago/ => balancer_board_topics_10years',
 
 	'/users?/(\d+)/personal\.js => forum_js_personal(1)',

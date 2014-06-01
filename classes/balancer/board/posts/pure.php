@@ -44,4 +44,12 @@ class balancer_board_posts_pure extends balancer_board_object_db
 
 // Свободны:field3 string
 //			field4 => is_spam int(11)
+
+	function auto_objects()
+	{
+		return array_merge(parent::auto_objects(), array(
+			'owner' => 'airbase_user(owner_id)',
+//			'answer_to' => 'airbase_user(answer_to_id)',
+		));
+	}
 }

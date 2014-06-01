@@ -55,7 +55,7 @@ class user_blog extends balancer_board_page
 	function total_items()
 	{
 		if($this->total === false)
-			$this->total = intval(objects_count('balancer_board_blog', array(
+			$this->total = intval(bors_count('balancer_board_blog', array(
 				'owner_id' => $this->id(),
 				'is_microblog' => 0,
 				'is_public' => 1,
@@ -72,7 +72,7 @@ class user_blog extends balancer_board_page
 		{
 			$data = $this->local_data();
 			if(count(@$data['blog_records']))
-				$this->last_post = object_load('forum_post', $data['blog_records'][0]->id());
+				$this->last_post = bors_load('balancer_board_post', $data['blog_records'][0]->id());
 			else
 				$this->last_post = NULL;
 		}
@@ -88,7 +88,7 @@ class user_blog extends balancer_board_page
 			$data = $this->data_providers();
 			$records = @$data['blog_records'];
 			if(count($records))
-				$this->first_post = object_load('forum_post', $records[count($records)-1]->id());
+				$this->first_post = bors_load('balancer_board_post', $records[count($records)-1]->id());
 			else
 				$this->first_post = NULL;
 		}
@@ -132,7 +132,7 @@ class user_blog extends balancer_board_page
 
 	function page_by_pid($pid)
 	{
-		$before = intval(objects_count('balancer_board_blog', array('where' => array(
+		$before = intval(bors_count('balancer_board_blog', array('where' => array(
 			'owner_id=' => $this->id(),
 			'post_id<' => intval($pid),
 			'is_deleted' => false,
