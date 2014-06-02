@@ -11,3 +11,9 @@
 </ul>
 </dd>
 </dl>
+
+{if $answers_count}
+{js_ready}
+$("#pers_answ_cnt").html(" ({$answers_count})")
+{/js_ready}
+{/if}
