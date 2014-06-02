@@ -87,7 +87,17 @@ class balancer_board_personal_updated extends balancer_board_page
 
 		bors_objects_preload($posts, 'id', 'balancer_board_posts_cache', 'cache');
 
-		return compact('topics');
+		$answers_count = bors_count('balancer_board_post', array(
+			'answer_to_user_id' => $me_id,
+			'posts.poster_id<>' => $me_id,
+			'order' => '-create_time',
+			'inner_join' => array("topics t ON t.id = posts.topic_id"),
+			'left_join' => array("topic_visits v ON (v.topic_id = t.id AND v.user_id=$me_id)"),
+			'((v.last_visit IS NULL AND posts.posted > '.(time()-30*86400).') OR (v.last_visit < posts.posted))',
+			'posts.posted>' =>  time()-600*86400,
+		));
+
+		return compact('topics', 'answers_count');
 	}
 
 	function total_items()
