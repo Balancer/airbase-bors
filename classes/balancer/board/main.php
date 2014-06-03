@@ -37,23 +37,27 @@ class balancer_board_main extends balancer_board_page
 
 		$youtube_objects = bors_find_all('balancer_board_posts_object', array(
 			'target_class_name' => 'bors_external_youtube',
-			'target_score>' => 2,
+			'target_score>=' => 5,
 			'order' => '-target_create_time',
 			'limit' => 20,
 		));
 
-		$top_visit_topics = objects_array('balancer_board_topic', array(
-				'num_views>=' => 10,
-				'last_visit - first_visit > 600',
-				'*set' => '(86400*num_views)/(last_visit-first_visit) AS views_per_day',
-				'order' => '(86400*num_views)/(last_visit-first_visit) DESC',
-				'is_public' => true,
-				'forum_id NOT IN' => array(37),
-				'limit' => 20,
+		$top_visit_topics = bors_find_all('balancer_board_topic', array(
+			'num_views>=' => 10,
+			'last_visit - first_visit > 600',
+			'create_time>' => time() - 86400*365,
+			'*set' => '(86400*num_views)/(last_visit-first_visit) AS views_per_day',
+			'order' => '(86400*num_views)/(last_visit-first_visit) DESC',
+			'is_public' => true,
+			'forum_id NOT IN' => array(37),
+			'limit' => 20,
 		));
 
 		srand();
-		usort($youtube_objects, create_function('$x, $y', 'return rand(0, $y->target_score()+1) - rand(0, $x->target_score()+1);'));
+		usort($youtube_objects, function($x, $y) {
+			return rand(0, $y->target_score()+1) - rand(0, $x->target_score()+1);
+		});
+
 //		var_dump($youtube_objects[0]->data);
 //		bors_objects_preload($new_topics, 'first_post_id', 'balancer_board_post', 'first_post');
 		bors_objects_preload(array_merge($new_topics, $top_visit_topics), 'forum_id', 'balancer_board_forum', 'forum');
@@ -88,6 +92,7 @@ class balancer_board_main extends balancer_board_page
 				'inner_join' => array('balancer_board_topic ON topic_id = balancer_board_topic.id'),
 				'is_public' => 1,
 				'create_time>' => time()-86400,
+				'create_time<' => time()+86400,
 				'order' => '-create_time',
 				'owner_id>' => 0,
 			)),

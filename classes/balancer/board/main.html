@@ -9,11 +9,12 @@
 <div style="width: 400px; float: right">
 
 <dl class="box">
-<dt>YouTube</dt>
+<dt>YouTube [<a href="http://forums.balancer.ru/objects/video/">Все видео форума</a>]</dt>
 <dd>
 <object width="380" height="285"><param name="movie" value="http://www.youtube.com/v/{$last_youtube}?fs=1&amp;hl=ru_RU"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/{$last_youtube}?fs=1&amp;hl=ru_RU" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="380" height="285"></embed></object>
-Сообщение: <a href="{$last_youtube_post->url_in_container()}">{$last_youtube_post->title()}</a>
-<p><b>[ <a href="http://forums.balancer.ru/objects/video/">Все видео форума</a> ]</b></p>
+<small>
+	<div class="transgray xsmall nb"><b>{$last_youtube_post->author_name()}:</b> {$last_youtube_post->snip()}</div>
+	// <a href="{$last_youtube_post->url_in_container()}">{$last_youtube_post->title()}</a></small>
 </dd>
 </dl>
 
@@ -29,7 +30,7 @@
 {assign var="forum" value=$p->topic()->forum()}
 {include file="xfile:forum/post.html" skip_message_footer=true skip_votes=true no_show_answers=true avatar_size=50 strip=2000}
 <p><small>// Сообщение: <a href="{$p->url_in_container()}">{$p->title()}</a></small</p>
-<p><b>[ <a href="/best/">Все лучшие сообщения</a>
+<p><b>[ <a href="http://forums.balancer.ru/posts/best2/">Все лучшие сообщения</a>
 | <a href="http://www.balancer.ru/tools/votes/">Оценки</a> ]</b></p>
 </dd>
 </dl>
@@ -99,7 +100,11 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 	<td><a href="{$t->url_ex('new')}">{$t->last_poster_name()}</a></td>
 </tr>
 {/foreach}
-<tr><td>&nbsp;</td><td colspan="3" class="big-extra b"><a href="http://www.balancer.ru/forum/punbb/search.php?action=show_24h">Темы, обновившиеся за последние сутки</a></td></tr>
+<tr><td>&nbsp;</td><td colspan="3" class="big-extra b">
+	— <a href="http://www.balancer.ru/forum/punbb/search.php?action=show_24h">Темы, обновившиеся за последние сутки</a><br/>
+	— <a href="http://forums.balancer.ru/personal/updated/">Обновлённые темы, которые Вы посещали ранее</a><br/>
+	— <a href="http://forums.balancer.ru/personal/unvisited/">Обновлённые темы, которые Вы ещё не посещали</a><br/>
+</td></tr>
 </table>
 
 <table class="btab w100p">
@@ -107,19 +112,20 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 <tr>
 	<th>Время</th>
 	<th colspan="2">тема</th>
-	<th>форум</th>
-	<th>авторы</th>
 </tr>
 {foreach from=$new_topics item="t"}
 <tr><td>{$t->create_time()|short_time}</td>
 	<td style="padding: 2px; width: 32px; line-height: 0; border-right: none">
 	{if $img=$t->image()}<a href="{$t->url()}\">{$img->thumbnail('48x48(up,crop)')->html_code()}</a>{/if}
 	</td>
-	<td>{$t->titled_link_ex('new')}<br/>
-{if $t->description()}<i>{$t->description()}</i><br/>{/if}
+	<td>{$t->titled_link_ex('new')} [{$t->forum()->nav_named_url()}]<br/>
+{if $t->description()}
+		<i>{$t->description()}</i>
+		<div class="transgray xsmall nb"><b>{$t->first_post()->author_name()}:</b> {$t->first_post()->snip(128)}</div>
+{else}
+		<div class="transgray xsmall nb"><b>{$t->first_post()->author_name()}:</b> {$t->first_post()->snip()}</div>
+{/if}
 	</td>
-	<td>{$t->forum()->nav_named_url()}</td>
-	<td>{$t->author_name()}</td>
 </tr>
 {/foreach}
 <tr><td>&nbsp;</td><td colspan="4" class="big-extra b"><a href="http://forums.balancer.ru/new-topics/">Все новые темы форумов за месяц</a></td></tr>
@@ -132,25 +138,26 @@ google.friendconnect.container.renderOpenSocialGadget( { id: 'div-56525822797557
 *}
 
 <table class="btab w100p">
-<caption>Популярные темы</caption>
+<caption>Популярные темы года</caption>
 <tr>
 	<th>Время</th>
 	<th colspan="2">тема</th>
 	<th>Просмотров в сутки</th>
-	<th>форум</th>
-	<th>авторы</th>
 </tr>
 {foreach from=$top_visit_topics item="t"}
 <tr><td>{$t->create_time()|short_time}</td>
 	<td style="padding: 2px; width: 32px; line-height: 0; border-right: none">
 	{if $img=$t->image()}<a href="{$t->url()}\">{$img->thumbnail('48x48(up,crop)')->html_code()}</a>{/if}
 	</td>
-	<td>{$t->titled_link_ex('new')}<br/>
-{if $t->description()}<i>{$t->description()}</i><br/>{/if}
+	<td>{$t->titled_link_ex('new')} [{$t->forum()|get:nav_named_url}]<br/>
+{if $t->description()}
+		<i>{$t->description()}</i>
+		<div class="transgray xsmall nb"><b>{$t->first_post()->author_name()}:</b> {$t->first_post()->snip(128)}</div>
+{else}
+		<div class="transgray xsmall nb"><b>{$t->first_post()->author_name()}:</b> {$t->first_post()->snip()}</div>
+{/if}
 	</td>
-	<td>{$t->views_per_day()|round}</td>
-	<td>{$t->forum()|get:nav_named_url}</td>
-	<td>{$t->author_name()}</td>
+	<td>{$t->views_per_day()|round_rkn}</td>
 </tr>
 {/foreach}
 </table>
