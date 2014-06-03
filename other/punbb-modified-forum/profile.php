@@ -1086,6 +1086,8 @@ else
 		else
 			$posts_field = "<p><a href=\"{$pun_config['root_uri']}/search.php?action=show_user&amp;user_id=$id\">{$lang_profile['Show posts']}</a></p>\n";
 
+		$posts_field .= "<p><a href=\"http://www.balancer.ru/users/$id/\">Новый профиль пользователя</a></p>\n";
+
 		$page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_common['Profile'];
 		$required_fields = array('req_username' => $lang_common['Username'], 'req_email' => $lang_common['E-mail']);
 		require PUN_ROOT.'header.php';

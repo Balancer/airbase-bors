@@ -705,7 +705,7 @@ if ($tid)
 		include_once('inc/design/make_quote.php');
 
 		$joke = object_property($post, 'joke_owner');
-		if($quoted_post && !$quoted_post->is_hidden() && !$quoted_post->is_deleted())
+		if($quoted_post /*&& !$quoted_post->is_hidden()*/ && !$quoted_post->is_deleted())
 			$quote = make_quote($joke ? $joke->title() : $q_poster, $q_message)."\n";
 		else
 			$quote = '';

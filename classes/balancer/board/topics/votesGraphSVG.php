@@ -19,15 +19,19 @@ class balancer_board_topics_votesGraphSVG extends base_image_svg
 
 	function image()
 	{
-		debug_hidden_log('003', 'test user');
+//		debug_hidden_log('003', 'test user');
 
 		$topic_id = $this->id();
 		$topic = bors_load('balancer_board_topic', $topic_id);
 
+		$pids = array();
+		foreach(bors_each('balancer_board_posts_pure', array('topic_id' => $topic_id)) as $p)
+			$pids[] = $p->id();
+
 		$votes = bors_find_all('bors_votes_thumb', array(
-			'inner_join' => '`AB_FORUMS`.`posts` p ON p.id = bors_votes_thumb.target_object_id',
-//			'target_class_name IN' => array('forum_post', 'balancer_board_post'),
-			'topic_id' => $topic_id,
+			'target_object_id IN' => $pids,
+			'create_time>=' => $topic->create_time(),
+			'create_time<' => time() - 86400,
 			'order' => '-create_time',
 			'limit' => REPUTATION_GRAPH_LIMIT,
 		));
@@ -47,6 +51,7 @@ class balancer_board_topics_votesGraphSVG extends base_image_svg
 			$target = $r->target_user();
 			if(!$target)
 				continue;
+
 			$target_id = $target->id();
 			if(empty($users[$voter_id]))
 				$users[$voter_id] = array(
@@ -83,16 +88,30 @@ class balancer_board_topics_votesGraphSVG extends base_image_svg
 
 		$this->edges_count = count($edges);
 
-		$title = 'Граф последних '.REPUTATION_GRAPH_LIMIT.' оценок (с '
-			.date('d.m.Y', $votes[count($votes)-1]->create_time()).' по '.date('d.m.Y').') '
+		if(count($votes))
+			$start = $votes[count($votes)-1]->create_time();
+		else
+			$start = $topic->create_time();
+
+		$title = 'Граф последних '.REPUTATION_GRAPH_LIMIT.' оценок<br/>(с '
+			.date('d.m.Y H:i', $start).' по '.date('d.m.Y H:i', time()-86400).')<br/>'
 			.'темы «'.$topic->title().'»';
+
+		if(!count($votes))
+			$title .= "<br/>Оценок за указанный период не найдено";
 
 		require_once 'Image/GraphViz.php';
 		$graph = new Image_GraphViz(true, array(), 'Оценки темы «'.$topic->title().'»', true, true);
 		$graph->setAttributes(array(
 			'label' => $title,
 			'labelloc' => 't',
-//			'splines' => true,
+			'rankdir' => 'LR',
+// http://www.graphviz.org/doc/info/attrs.html#d:mode
+//			'mode' => 'KK',
+//			'splines' => 'spline',
+//			'fontsize' => 12,
+//			'size' => '30,30',
+//			'ratio' => '1.3',
 			'URL' => $topic->url(),
 		));
 
@@ -102,6 +121,8 @@ class balancer_board_topics_votesGraphSVG extends base_image_svg
 					array(
 						'URL'   => $ud['link'],
 						'label' => $ud['name'],
+						'fontname' => 'Tahoma',
+						'fontsize' => 8,
 					)
 			);
 
@@ -111,15 +132,10 @@ class balancer_board_topics_votesGraphSVG extends base_image_svg
 			{
 				$score = @$x['score1'] - @$x['score-1'];
 
-				$tooltip = array();
-				if(!empty($x['score1']))
-					$tooltip[] = '+'.$x['score1'];
-				if(!empty($x['score-1']))
-					$tooltip[] = '-'.$x['score-1'];
-
-				$tooltip = join('/', $tooltip);
-				if($tooltip == '+1' || $tooltip == '-1')
-					$tooltip = ' ';
+				$xc = rand(70,256);
+				$c1 = sprintf('%02X', $xc);
+				$c2 = sprintf('%02X', rand(0, $xc/2));
+				$c3 = sprintf('%02X', rand(0, $xc/2));
 
 				$graph->addEdge(
 					array(
@@ -127,10 +143,15 @@ class balancer_board_topics_votesGraphSVG extends base_image_svg
 					),
 
 					array(
-//						'label' => $tooltip."/$max",
-						'penwidth' => abs($x['count'])/$max*10+0.5,
-						'weight' => @$x['score1'] + @$x['score-1'],
-						'color' => $score > 0 ? '#00ff00' : ($score < 0 ? '#ff0000' : 'black'),
+						'penwidth' => (max(1,abs($x['count']))-1)/$max*12+1,
+//						'label' => pow(@$x['score1'] + @$x['score-1'], 2),
+						'weight' => pow(@$x['score1'] + @$x['score-1'], 2)+1,
+//						'weight' => $x['count']*$x['count']+1,
+						'color' => $score > 0
+							? "#{$c2}{$c1}{$c3}"
+							: ($score < 0
+								? "#{$c1}{$c2}{$c3}"
+								: 'black'),
 					)
 				);
 			}
