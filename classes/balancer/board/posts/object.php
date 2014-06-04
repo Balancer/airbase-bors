@@ -94,7 +94,7 @@ class balancer_board_posts_object extends balancer_board_object_db
 //			'target_class_name' => $object_class_name,
 			'target_object_id' => $object->id(),
 		));
-
+//var_dump($xrefs);
 		$containers = array();
 		foreach($xrefs as $xref)
 			$containers[] = $xref->post();

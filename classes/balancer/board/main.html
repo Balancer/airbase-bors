@@ -25,8 +25,8 @@
 
 <dl class="box">
 <dt>Лучшее сообщение последних дней</dt>
-<dd class="small" style="overflow: hidden">
-{assign var="p" value=$best_of_days->target()}
+<dd class="small small_post" style="overflow: hidden">
+{assign var="p" value=$best_post_of_days}
 {assign var="forum" value=$p->topic()->forum()}
 {include file="xfile:forum/post.html" skip_message_footer=true skip_votes=true no_show_answers=true avatar_size=50 strip=2000}
 <p><small>// Сообщение: <a href="{$p->url_in_container()}">{$p->title()}</a></small</p>

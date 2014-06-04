@@ -948,3 +948,7 @@ tr.bb-background-private td {
 .post_body img {
 	max-width: 100%;
 }
+
+.small_post img {
+	max-width: 100%;
+}
