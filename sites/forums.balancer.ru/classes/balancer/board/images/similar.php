@@ -38,15 +38,17 @@ class balancer_board_images_similar extends balancer_board_page
 		$img = airbase_image::register_file($file, true, true, 'airbase_image');
 
 		$data['image'] = $img;
-
+//echo $img->hash_r();
 		$data['similar_images'] = bors_find_all('airbase_image', array(
-			'id<>' => $img->id(),
+//			'id<>' => $img->id(),
 //			'hash_y' => $img->hash_y(),
 			'hash_r' => $img->hash_r(),
 			'hash_g' => $img->hash_g(),
 			'hash_b' => $img->hash_b(),
 			'order' => '-create_time',
 		));
+
+//var_dump($data['similar_images']);
 
 		return $data;
 	}

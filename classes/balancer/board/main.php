@@ -82,10 +82,11 @@ class balancer_board_main extends balancer_board_page
 			'last_youtube' => $youtube_objects[0]->target_object_id(),// 'SzJA2mF14fA',
 			'last_youtube_post' => object_load('balancer_board_post', $youtube_objects[0]->post_id()),
 
-			'best_of_days' => objects_first('bors_votes_thumb', array(
+			'best_post_of_days' => bors_find_first('balancer_board_post', array(
+//				'(warning_id IS NULL OR warning_id <= 0)',
+				'score_negative' => 0,
 				'create_time>' => time()-86400*3,
-				'group' => 'target_class_name,target_object_id',
-				'order' => 'SUM(score) DESC',
+				'order' => '-score,-create_time',
 			)),
 
 			'last_post' => objects_first('balancer_board_post', array(
