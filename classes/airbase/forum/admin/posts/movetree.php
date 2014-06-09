@@ -85,6 +85,9 @@ class airbase_forum_admin_posts_movetree extends balancer_board_admin_page
 				'template' => 'xfile:bootstrap/index.html',
 			));
 
+		if(in_array(bors()->user_id(), array(64854 /* dmirg78 */)) && !$new_topic->forum()->is_public())
+			return bors_message('Вам запрещено переносить сообщения в закрытые форумы');
+
 		$this->topic = $new_topic;
 
 		$posts = $this->posts();

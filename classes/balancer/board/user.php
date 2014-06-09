@@ -15,17 +15,20 @@ class balancer_board_user extends forum_user
 		if(!$rep)
 			return 0;
 
-		// Репутация в диапазоне -100..100
-//		$percent = abs(200*atan($rep*$rep/($rep >= 0 ? 1820.7 : 37.1))/pi());
-//		if($rep < 0)
-//			$percent = -$percent;
+		$ch = new bors_cache_fast;
+		if($ch->get('common-data', 'reputation-max'))
+			list($rep_max, $rep_min) = $ch->last();
+		else
+		{
+			$rep_max = bors_find_first('airbase_user', array('order' => '-reputation'))->reputation();
+			$rep_min = bors_find_first('airbase_user', array('order' => 'reputation'))->reputation();
+			$ch->set(array($rep_max, $rep_min), rand(3600, 7200));
+		}
 
 		if($rep >= 0)
-//			$percent = 60 + 40*($rep - 50.0609) / 78.5811;
-			$percent = 100*($rep / 130.1);
+			$percent = 100*($rep / $rep_max);
 		else
-//			$percent = min(0, -10 -90*($rep + 7.15419) / -18.67101);
-			$percent = -100*($rep / -26.3);
+			$percent = -100*($rep / $rep_min);
 
 		return $percent;
 	}
@@ -36,7 +39,7 @@ class balancer_board_user extends forum_user
 		if(!$reputation)
 			return '';
 
-		$stars_count = round(abs($reputation)/10)/2;
+		$stars_count = min(5,round(abs($reputation)/10)/2);
 
 //		☆★
 
