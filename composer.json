@@ -1,0 +1,31 @@
+{
+    "name": "balancer/bors-airbase",
+    "description": "airbase.ru/balancer.ru project sources",
+    "license": "GPL-3.0",
+	"homepage": "http://balancer.ru/",
+
+    "authors": [
+        {
+            "name": "Balancer",
+            "email": "balancer@balancer.ru"
+        }
+    ],
+
+	"support": {
+		"issues": "https://bitbucket.org/Balancer/bors-airbase/issues",
+		"forum": "http://www.balancer.ru/support/viewforum.php?id=60",
+		"source": "https://bitbucket.org/Balancer/bors-airbase"
+	},
+
+    "require": {
+		"php": ">=5.3",
+		"balancer/bors-core": "@dev",
+		"balancer/bors-ext": "@dev",
+		"balancer/b2-core": "@dev",
+        "kzykhys/git": "*"
+    },
+
+    "autoload": {
+		"classmap": ["classes/"]
+    }
+}
