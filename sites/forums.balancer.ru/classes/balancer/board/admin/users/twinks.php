@@ -1,5 +1,8 @@
 <?php
 
+// Нужно для модификатора в шаблоне
+require_once('inc/clients/geoip-place.php');
+
 class balancer_board_admin_users_twinks extends balancer_board_admin_page
 {
 	var $title = 'Обнаруженные твинки пользователей';

@@ -20,7 +20,7 @@
 	<td>{$u->create_time()|date:'d.m.Y H:i'}</td>
 	<td>{$u->last_visit_time()|date:'d.m.Y H:i'}</td>
 	<td>{$u->num_posts()}</td>
-	<td>{$u->registration_ip()}</td>
+	<td>{$u->registration_ip()|geoip_flag} {$u->registration_ip()}</td>
 	<td>{$u->warnings()}</td>
 	<td>{if $u->is_admin_banned()}да{else}&nbsp;{/if}</td>
 	<td>{$u->reputation()}</td>

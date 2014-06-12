@@ -230,19 +230,23 @@ class balancer_board_topic extends forum_topic
 			if($this->data['image_id'])
 			{
 				$image = bors_load('airbase_image', $this->data['image_id']);
-				if($image)
+
+				if(airbase_image::is_logo_valid($image) && !preg_match('!/cache/!', $image->url()))
 				{
-//					Теряем весь кеш.
-//					$th = $image->thumbnail_96x96();
-//					if($th->width())
-					if($image->width())
-						return $image;
+					if(config('is_debug') && in_array($this->id(), array(27040, 89357)))
+					{
+						echo '<xmp>';
+						var_dump($image->data, $image->url());
+						exit();
+					}
+
+					return $image;
 				}
 			}
 
 			// Иначе у нас там 0 — значит, что image берём с форума. Раз в час проверяем,
 			// не появилась ли картинка в теме
-			if($this->data['image_time'] > time() - 600)
+			if(($this->data['image_time'] > time() - 600) && !config('is_debug'))
 				return $this->forum()->image();
 		}
 
@@ -252,21 +256,72 @@ class balancer_board_topic extends forum_topic
 				'`AB_BORS`.`bors_images` i ON balancer_board_posts_object.target_object_id = i.id',
 			),
 			'topic_id' => $this->id(),
-			'`i`.extension<>"gif"',
+			'width>=' => 100,
+			'height>=' => 100,
 			'target_class_id' => 202, // airbase_image
+			'`i`.extension IN ("jpg", "jpeg", "png")',
+			'full_file_name NOT LIKE "%/_cg/%"',
 			'order' => '-post_id',
 		));
-
+/*
+		if(config('is_debug'))
+		{
+			echo '<xmp>';
+			var_dump($obj);
+			exit();
+		}
+*/
 		$this->set_image_time(time());
 
 		if($obj)
 		{
 			$image = $obj->target();
-			if($image && ($th = $image->thumbnail('96x96(up,crop)')) && $th->width())
+			if($image
+				&& ($th = $image->thumbnail('96x96(up,crop)'))
+				&& airbase_image::is_logo_valid($image)
+			)
 			{
+				if(config('is_debug') && preg_match('!1358612-thumbnail.jpg!', $image->full_file_name()))
+				{
+					echo '<xmp>';
+					var_dump($obj->data);
+					exit('zz');
+				}
+
 				$this->set('image_id', $image->id());
 				return $image;
 			}
+			elseif(config('is_debug'))
+			{
+//				echo '<xmp>';
+//				var_dump($obj->data, $image->data);
+//				exit('yy');
+			}
+		}
+
+		if(0 && config('is_debug') && in_array($this->id(), array(89274, 89354, 27040, 89357)))
+		{
+			echo '<xmp>';
+//			var_dump($obj);
+
+			foreach(bors_find_all('balancer_board_posts_object', array(
+				'inner_join' => array(
+					'balancer_board_post ON balancer_board_post.id = balancer_board_posts_object.post_id',
+					'`AB_BORS`.`bors_images` i ON balancer_board_posts_object.target_object_id = i.id',
+				),
+				'topic_id' => $this->id(),
+/*
+				'target_class_id' => 202, // airbase_image
+				'width>=' => 100,
+				'height>=' => 100,
+				'`i`.extension IN ("jpg", "jpeg", "png")',
+				'full_file_name NOT LIKE "%/_cg/%"',
+*/
+				'order' => '-post_id',
+			)) as $x)
+				var_dump($x->data, $x->target()->data);
+
+			exit('?'. $this->id());
 		}
 
 		$this->set('image_id', 0);

@@ -188,4 +188,17 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 //		var_dump($path); exit();
 //		return balancer_board_image::register_file($path);
 	}
+
+	function file_name_with_path()
+	{
+		return "/var/www/files.balancer.ru/htdocs/forums/attaches/{$this->location()}";
+	}
+
+	function image()
+	{
+		if(!in_array(strtolower($this->extension()), array('jpg', 'jpeg', 'jpe', 'png', 'gif')))
+			return NULL;
+
+		return airbase_image::register_file($this->file_name_with_path());
+	}
 }
