@@ -9,6 +9,7 @@ class airbase_rpc_zimup extends airbase_page
 	function pre_parse()
 	{
 		debug_hidden_log('00rpc', "Github");
+		debug_hidden_log('00rpc', "payload=".print_r(json_decode(@$_POST['payload'], true), true));
 		// https://github.com/kzykhys/PHPGit
 		$git = new PHPGit\Git();
 		$git->setRepository('/var/www/www.airbase.ru/zim-airbase');

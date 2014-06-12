@@ -46,11 +46,11 @@ class balancer_board_posts_object extends balancer_board_object_db
 		if(!$object)
 		{
 			debug_hidden_log('post-objects-error', "Try to register empty object with ".print_r($params, true));
-			return;
+			return NULL;
 		}
 
 		if(!($post = defval($params, 'self')))
-			return;
+			return NULL;
 
 //		if(config('is_developer')) { var_dump($object, $post); exit('register'); }
 
@@ -62,20 +62,20 @@ class balancer_board_posts_object extends balancer_board_object_db
 		if($post->class_name() != 'balancer_board_post' && $post->class_name() != 'forum_post')
 		{
 			debug_hidden_log('objects_register_not_yet', "Try to register {$post} width $object_class_name($object_id)");
-			return;
+			return NULL;
 		}
 
 		$object_class_id = class_name_to_id($object_class_name);
 
-		if(bors_find_first('balancer_board_posts_object', array(
+		if($x = bors_find_first('balancer_board_posts_object', array(
 			'post_id' => $post->id(),
 //			'target_class_name' => $object_class_name,
 			'target_class_id' => $object_class_id,
 			'target_object_id' => $object_id,
 		)))
-			return;
+			return $x;
 
-		bors_new('balancer_board_posts_object', array(
+		return bors_new('balancer_board_posts_object', array(
 			'post_id' => $post->id(),
 			'user_id' => $post->owner_id(),
 			'target_class_id' => $object_class_id,
