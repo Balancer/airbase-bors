@@ -48,11 +48,14 @@ class user_js_touch extends bors_js
 		));
 
 		if($answers_count > 0)
+		{
 			$js[] = '$("#pers_answ_cnt").html(" ('.$answers_count.')")';
+			$js[] = '$("#pers_answ_cont > a").addClass("red")';
+		}
 
 		$js = join("\n", $js);
 		if(!$js)
-			$hs = 'true;';
+			$js = 'true;';
 
 		return $js;
 	}
