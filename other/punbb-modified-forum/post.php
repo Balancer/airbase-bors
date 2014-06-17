@@ -54,7 +54,9 @@ if ($tid < 1 && $fid < 1 || $tid > 0 && $fid > 0)
 	message($lang_common['Bad request']);
 
 if($is_banned)
-	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire));
+	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire)
+		.'<br/><br/>'.bbf_bans::message_ls()
+	);
 
 $topic = bors_load('balancer_board_topic', $tid);
 $forum_id = $fid ? $fid : $topic->forum_id();
@@ -81,14 +83,18 @@ if($messages_limit >= 0)
 	{
 		require_once('inc/datetime.php');
 		message("Вы не можете больше отправить ни одного сообщения в этот форум до <b>".full_time($me->next_can_post($messages_limit, $forum_id))."</b>. 
-		Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>»");
+		Подробности в теме <a href=\"http://www.balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>"
+		.'<br/><br/>'.bbf_bans::message_ls()
+		);
 	}
 }
 
 if($warnings_total = $me->warnings())
 	if(($warnings_in = $me->warnings_in($forum_id)) >= 5)
 		message("Вы не можете больше отправить ни одного сообщения в этот форум, пока количество активных штрафных баллов равно пяти или более. Сейчас оно равно $warnings_in. 
-		Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>.");
+		Подробности в теме <a href=\"http://www.balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>."
+		.'<br/><br/>'.bbf_bans::message_ls()
+		);
 
 $forum = bors_load('balancer_board_forum', $forum_id);
 
@@ -844,7 +850,8 @@ if(($warn_count = $me->warnings()) > 0)
 	echo "При достижении 10 общих штрафов, Вы будете автоматически переведены в режим \"только чтение\" на срок до истечения самого старого из активных штрафов (срок их активности - две недели с момента выставления) во всех форумах. ";
 	echo "При достижении 5 активных штрафов в данном форуме Вы автоматически будете лишены возможности писать в него, но будете иметь возможность писать в другие. ";
 	echo "Посмотреть список своих штрафов Вы можете на <a href=\"http://www.balancer.ru/users/{$me->id()}/warnings/\">странице Ваших штрафов</a>. ";
-	echo "Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>»";
+	echo "Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>»"
+		.'<br/><br/><b>'.bbf_bans::message_ls().'</b>';
 	echo "</div><br/>";
 }
 

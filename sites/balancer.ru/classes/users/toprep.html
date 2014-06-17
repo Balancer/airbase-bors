@@ -26,10 +26,10 @@
 	<td>
 		<a href="/user/{$u->id()}/reputation/">{$u->reputation_html()}</a>&nbsp;({$u->reputation()|sprintf:"%.1f"})
 	</td>
-{$u=$low[$idx]}
-	<td>{$u->titled_link()}</td>
+{$ub=$low[$idx]}
+	<td>{$ub->titled_link()}</td>
 	<td>
-		<a href="/user/{$u->id()}/reputation/">{$u->reputation_html()}</a>&nbsp;({$u->reputation()|sprintf:"%.1f"})
+		<a href="/user/{$u->id()}/reputation/">{$ub->reputation_html()}</a>&nbsp;({$ub->reputation()|sprintf:"%.1f"})
 	</td>
 </tr>
 {/foreach}

@@ -166,7 +166,15 @@ else if (isset($_POST['update']))	// Change position and name of the categories
 
 		list($cat_id, $position) = $db->fetch_row($result);
 
-		$db->query("UPDATE {$db->prefix}categories SET cat_name='".$db->escape($cat_name[$i])."', disp_position=".intval($cat_order[$i]).", base_uri='".$db->escape($base_uri[$i])."', parent=".intval($parent[$i])." WHERE id=".intval($cat_id)) 
+		if($parent[$i])
+			$parent[$i] = intval($parent[$i]);
+		else
+			$parent[$i] = 'NULL';
+
+		$db->query("UPDATE {$db->prefix}categories SET cat_name='".$db->escape($cat_name[$i])."',
+				disp_position=".intval($cat_order[$i]).",
+				base_uri='".$db->escape($base_uri[$i])."',
+				parent={$parent[$i]} WHERE id=".intval($cat_id)) 
 			or error('Unable to update category', __FILE__, __LINE__, $db->error());
 	}
 

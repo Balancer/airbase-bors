@@ -40,7 +40,9 @@ if ($pun_user['g_read_board'] == '0')
 
 
 if($is_banned)
-	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire));
+	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire)
+		.'<br/><br/>'.bbf_bans::message_ls()
+	);
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id < 1)
