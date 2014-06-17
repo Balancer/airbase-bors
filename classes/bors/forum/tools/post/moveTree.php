@@ -74,8 +74,11 @@ class forum_tools_post_moveTree extends balancer_board_admin_page
 
 		$old_topic = $this->post()->topic();
 
-		if(in_array(bors()->user_id(), array(64854 /* dmirg78 */)) && !$new_topic->forum()->is_public())
-			return bors_message('Вам запрещено переносить сообщения в закрытые форумы');
+		if(in_array($new_topic->forum_id(), array(37 /* отстойник */)))
+		{
+//		if(in_array(bors()->user_id(), array(64854 /* dmirg78 */)) && !$new_topic->forum()->is_public())
+			return bors_message('Запрещён снос сообщений в отстойник');
+		}
 
 		if(empty($data['dont_move_tree']))
 			$this->post()->move_tree_to_topic($new_topic->id());

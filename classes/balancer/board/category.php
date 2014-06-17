@@ -2,7 +2,25 @@
 
 class balancer_board_category extends forum_category
 {
+	function class_title() { return ec('Категория'); }
+
 	function extends_class_name() { return 'forum_category'; }
+
+	function auto_objects()
+	{
+		return array_merge(parent::auto_objects(), array(
+			'parent_category' => 'balancer_board_category(parent_category_id)',
+		));
+	}
+
+	function parent_category_admin_titled_link()
+	{
+		$cat = $this->parent_category();
+		if(!$cat)
+			return NULL;
+
+		return $cat->admin()->titled_link();
+	}
 
 	function full_name($cats = NULL)
 	{
@@ -58,6 +76,17 @@ class balancer_board_category extends forum_category
 		}
 
 		return $forums;
+	}
+
+	function item_list_admin_fields()
+	{
+		return array(
+			'image_html' => '',
+			'admin()->imaged_titled_link()' => ec('Название'),
+			'parent_category_admin_titled_link' => ec('Родительская категория'),
+			'project' => ec('Проект'),
+			'id' => 'ID',
+		);
 	}
 
 	static function __dev()

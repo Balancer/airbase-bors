@@ -573,6 +573,17 @@ function avatar_thumb($geo)
 //		livestreet_native_user::bb_copy($check_user, $password, true);
 //		if($check_user->id()==10000) { var_dump($user); exit('debug: введите ещё раз'); }
 
+		file_get_contents("http://ls.balancer.ru/bors-api/user-new.php?"
+			."login=".urlencode($check_user->login())
+			."&id=".$check_user->id()
+			."&mail=".urlencode($check_user->email())
+			."&password_md=".md5($password)
+			."&date=".$check_user->create_time()
+			."&ip=".$check_user->registration_ip()
+		);
+
+//		exit('debug');
+
 		if(!$handle_cookie_set)
 			return $check_user;
 
