@@ -9,6 +9,7 @@ $topic_view_class = config('topics.view_class');
 bors_url_map([
 	'/do/logout/ => bal_do_logout',
 	'/do/login/ => bal_do_login',
+	'/users/private/hactions/(\w+) => bors_user_hactions_dispatcher(1)',
 
 	"{$forums}\d{4}/\d{1,2}/t(\d+),new.* => balancer_board_topics_go_new(2)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),new.* => balancer_board_topics_go_new(2)",
