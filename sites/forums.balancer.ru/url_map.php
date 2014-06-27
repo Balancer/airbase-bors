@@ -74,6 +74,8 @@ $map = array(
 	'/users?/(\d+)/reputation\.html => user_reputation(1)',
 	'/users?/(\d+)/reputation\.html(.+) => user_reputation(1,2)',
 
+	'/users/(\d+)/votes/lastgraph\.svg => balancer_board_users_votes_lastgraph(1)',
+
 	'(/users/)(\d+)/? => user_main(2)',
 
 	'/\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+)\-\-.+\.html => forum_printable(1)',

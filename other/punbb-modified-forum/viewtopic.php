@@ -78,7 +78,7 @@ if(preg_match('!/topic/\d+/(\d+),(\d+)$!', $_SERVER['REQUEST_URI'], $m))
 if(preg_match('!^act=ST&f=\d+&t=(\d+)$!', $qs, $m))
 	return go_topic($m[1]+$tdiff);
 
-debug_hidden_log('old-topic-link-format',  $_SERVER['REQUEST_URI']);
+bors_debug::syslog('old-topic-link-format', $_SERVER['REQUEST_URI']);
 
 bors_throw("Incorect topic format for qs='".$qs."'");
 

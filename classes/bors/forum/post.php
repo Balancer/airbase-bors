@@ -156,12 +156,12 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		$cache = $this->cache();
 		if($cache && ($body = $cache->body()))
-			return $body;
+			return bors_close_tags($body);
 
 		$body = $this->_make_html();
 		$this->set_body($body);
 
-		return $body;
+		return bors_close_tags($body);
 	}
 
 	function set_body($value, $dbupd = true)

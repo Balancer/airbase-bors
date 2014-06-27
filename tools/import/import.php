@@ -9,7 +9,8 @@
 	ЛОРовский тред http://www.linux.org.ru/forum/talks/5145502 и Juick в итоге сподвигли на начало работы по реализации трансляции в 
 */
 
-define('BORS_CORE', '/var/www/bors/bors-core');
+define('BORS_CORE', '/var/www/bors/composer/vendor/balancer/bors-core');
+define('BORS_3RD_PARTY', '/var/www/repos/bors-third-party');
 define('BORS_LOCAL', '/var/www/bors/bors-airbase');
 include_once(BORS_CORE.'/init.php');
 
