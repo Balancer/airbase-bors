@@ -37,7 +37,13 @@
 {foreach $posts as $p}
 <!-- {$p->id()} -->
 {include file="xfile:forum/post.html"}
-{if $p@first && $this->get('can_adsense')}{include file="xfile:forum/ads/top-ad-google.html"}{/if}
+{if $p@first}
+	{if $this->get('can_adsense')}
+		{include file="xfile:forum/ads/top-ad-google.html"}
+	{elseif $this->get('can_yandex_direct')}
+		{include file="xfile:forum/ads/yandex-direct-h2-middle.html"}
+	{/if}
+{/if}
 {/foreach}
 
 {if $last_actions}

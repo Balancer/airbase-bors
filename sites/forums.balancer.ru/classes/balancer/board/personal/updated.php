@@ -87,7 +87,7 @@ class balancer_board_personal_updated extends balancer_board_page
 
 		bors_objects_preload($posts, 'id', 'balancer_board_posts_cache', 'cache');
 
-		$answers_count = bors_count('balancer_board_post', array(
+		$answers_count = bors_count('balancer_board_posts_pure', array(
 			'answer_to_user_id' => $me_id,
 			'posts.poster_id<>' => $me_id,
 			'order' => '-create_time',

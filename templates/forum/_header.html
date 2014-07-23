@@ -157,7 +157,8 @@ createCookie('readedTopics', readed.join(' '), 3)
 	{if $this->get('can_adsense')}
 		{include file="xfile:forum/ads/top-ad-google.html"}
 	{elseif $this->get('can_yandex_direct')}
-		{include file="xfile:forum/ads/yandex-direct-h4.html"}
+		{* include file="xfile:forum/ads/yandex-direct-h4.html" *}
+		{include file="xfile:forum/ads/yandex-direct-h2.html"}
 	{else}
 		{* include file="xfile:forum/ads/top-ad-balancer.html" *}
 		{*  include file="xfile:forum/ads/begun-forums.airbase.ru.html" *}
@@ -208,7 +209,7 @@ if(me_id > 1 && me_hash) {
 	</div></div>
 {elseif $this->get('can_yandex_direct')}
 	<div class="center">
-	{include file="xfile:forum/ads/yandex-direct-h4-bottom.html"}
+	{include file="xfile:forum/ads/yandex-direct-h2-bottom.html"}
 	</div>
 {else}
 	{* include file="xfile:forum/ads/begun-bottom-auto-forums-airbase.html" *}
