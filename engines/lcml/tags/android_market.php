@@ -19,8 +19,10 @@ function lp_android_market($market_id, $params)
 	{
 //		$img_url = "http://qrcode.kaywa.com/img.php?s=4&d=".urlencode($market_url);
 //		$img = "<img src=\"{$img_url}\" width=\"140\" height=\"140\"/>";
+//		if(config('is_developer')) { r($data); exit(); }
 		$html = lcml($data['bbshort']);
-		return preg_replace("!^//(.+)$!m", "<div class=\"clear\">&nbsp;</div>\n<a href=\"{$url}\">{$img}</a></br>\n// $1", $html);
+		return $html;
+//		return preg_replace("!^//(.+)$!m", "<div class=\"clear\">&nbsp;</div>\n<a href=\"{$url}\">{$img}</a></br>\n// $1", $html);
 	}
 
 	// inline

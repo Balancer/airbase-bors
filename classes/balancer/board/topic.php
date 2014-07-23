@@ -387,12 +387,14 @@ class balancer_board_topic extends forum_topic
 		return $this->last_post_time;
 	}
 
+	function can_yandex_direct() { return preg_match('/balancer\.ru/', $_SERVER['HTTP_HOST']); }
+
 	function can_adsense()
 	{
 		if(!$this->is_public_access())
 			return false;
 
-		if(preg_match('/(airbase\.ru|forums\.balancer\.ru)/', @$_SERVER['HTTP_HOST']))
+		if(preg_match('/(airbase\.ru)/', @$_SERVER['HTTP_HOST']))
 			return true;
 
 		return $this->last_post_create_time() > time() - 86400*7;
