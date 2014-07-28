@@ -356,9 +356,18 @@ function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, 
 		$this->set_num_topics($counts->topics_count());
 		$this->set_num_posts($counts->replies_count() + $counts->topics_count());
 
-		$this->set_last_post_time($last_topic->last_post_create_time());
-		$this->set_last_post_id($last_topic->last_post_id());
-		$this->set_last_poster($last_topic->last_poster_name());
+		if($last_topic)
+		{
+			$this->set_last_post_time($last_topic->last_post_create_time());
+			$this->set_last_post_id($last_topic->last_post_id());
+			$this->set_last_poster($last_topic->last_poster_name());
+		}
+		else
+		{
+			$this->set_last_post_time(NULL);
+			$this->set_last_post_id(NULL);
+			$this->set_last_poster(NULL);
+		}
 	}
 
 	function recalculate()
