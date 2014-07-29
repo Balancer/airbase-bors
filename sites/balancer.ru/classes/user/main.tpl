@@ -16,6 +16,7 @@
 {if $ban && is_object($ban)}
 <li class="red">Пользователь забанен перманентно по причине: {$ban->message()}</li>
 {/if}
+<li>RPG-уровень: <span class="b big red">{$user->rpg_level()}</span></li>
 <li>Зарегистрирован: {$user->create_time()|full_time}</li>
 {if $user->username()}<li>Имя пользователя: {$user->username()}</li>{/if}
 {if $user->user_nick()}<li>Ник: {$user->user_nick()}</li>{/if}
@@ -107,25 +108,10 @@
 <li><a href="warnings/">Предупреждения</a></li>
 <li><a href="http://www.balancer.ru/forum/punbb/misc.php?email={$this->id()}">Отправить сообщение на e-mail пользователя</a></li>
 <li><a href="http://www.balancer.ru/forum/punbb/profile.php?id={$this->id()}">Профиль на старом форуме</a></li>
-</ul>
-
 {if $is_watcher}
-<h2>Дополнительная информация</h2>
-<small>Собеседники (число ответов):
-{foreach from=$interlocutors item='i'}
-{$i->titled_link()}&nbsp;({$i->answers()})
-{/foreach}
-</small>
-<ul>
-<li>IP при регистрации: {$user->registration_ip()} (GeoIP: {$user->reg_geo_ip()})</li>
-<li>Последний визит на форум: {$user->last_visit_time()|full_time}</li>
-<li>IP за месяц (количество сообщений, geoip): <small>
-{foreach from=$last_ips item="x"}
-{$x.poster_ip}&nbsp;({$x.count}, {$x.poster_ip|geoip_place})
-{/foreach}
-</small></li>
-</ul>
+<li><a href="http://forums.balancer.ru/users/{$this->id()}/interlocutors/">Дополнительная административная информация по собеседникам</a></li>
 {/if}
+</ul>
 
 <div class="clear">&nbsp;</div>
 </dd>
