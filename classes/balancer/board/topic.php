@@ -387,7 +387,7 @@ class balancer_board_topic extends forum_topic
 		return $this->last_post_time;
 	}
 
-	function can_yandex_direct() { return preg_match('/balancer\.ru/', $_SERVER['HTTP_HOST']); }
+	function can_yandex_direct() { return config('ad.yandex.enabled') && preg_match('/balancer\.ru/', $_SERVER['HTTP_HOST']); }
 
 	function can_adsense()
 	{
