@@ -103,16 +103,35 @@ class balancer_ajax_thumb_vote extends base_object
 //			$target->set_modify_time(time(), true);
 		}
 
-		$vote = bors_new('bors_votes_thumb', array(
+		$prev = bors_find_first('bors_votes_thumb', array(
 			'user_id' => $me_id,
-			'target_class_name' => $target->class_name(),
 			'target_class_id' => $target->class_id(),
 			'target_object_id' => $target->id(),
 			'target_user_id' => $target->owner_id(),
-			'score' => $score,
 		));
 
-		$vote->store();
+		if($prev)
+		{
+			if($score != $prev->score())
+				$prev->delete();
+			else
+				return "<small>Вы уже выставили эту оценку</small>";
+
+			$vote = $prev;
+		}
+		else
+		{
+			$vote = bors_new('bors_votes_thumb', array(
+				'user_id' => $me_id,
+				'target_class_name' => $target->class_name(),
+				'target_class_id' => $target->class_id(),
+				'target_object_id' => $target->id(),
+				'target_user_id' => $target->owner_id(),
+				'score' => $score,
+			));
+
+			$vote->store();
+		}
 
 		$target->set_warning_id(NULL, true);
 

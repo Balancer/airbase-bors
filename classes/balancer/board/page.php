@@ -20,5 +20,5 @@ class balancer_board_page extends bors_page
 
 	function is_public_access() { return true; }
 	function can_adsense() { return !preg_match('/balancer\.ru/', $_SERVER['HTTP_HOST']); }
-	function can_yandex_direct() { return preg_match('/forums\.balancer\.ru/', $_SERVER['HTTP_HOST']); }
+	function can_yandex_direct() { return config('ad.yandex.enabled') && preg_match('/forums\.balancer\.ru/', $_SERVER['HTTP_HOST']); }
 }
