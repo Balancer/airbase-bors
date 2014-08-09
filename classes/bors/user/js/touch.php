@@ -21,7 +21,8 @@ class user_js_touch extends bors_js
 		if(!$time)
 			$time = time();
 
-		$js = array();
+		$js = [];
+		$js_post = [];
 
 		if($obj)
 		{
@@ -53,10 +54,65 @@ class user_js_touch extends bors_js
 			$js[] = '$("#pers_answ_cont > a").addClass("red")';
 		}
 
+		$user_ids = explode(',', bors()->request()->data('user_ids'));
+		$relations_to = [];
+		foreach(bors_find_all('balancer_board_users_relation', array(
+				'from_user_id' => $me_id,
+				'to_user_id IN' => $user_ids,
+		)) as $rel)
+			$relations_to[$rel->to_user_id()] = touch_rel_color($rel->score());
+
+		$relations_from = [];
+		foreach(bors_find_all('balancer_board_users_relation', array(
+				'to_user_id' => $me_id,
+				'from_user_id IN' => $user_ids,
+		)) as $rel)
+			$relations_from[$rel->from_user_id()] = touch_rel_color($rel->score());
+
+		$js[] = "function avatar_gradient(user_id, start_color, end_color) {
+	\$('.avatar-'+user_id)
+		.css('background-image', '-webkit-linear-gradient('+start_color+', '+end_color+')')
+		.css('background-image', '-moz-linear-gradient('+start_color+', '+end_color+')')
+		.css('background-image', '-o-linear-gradient('+start_color+', '+end_color+')')
+		.css('background-image', '-ms-linear-gradient('+start_color+', '+end_color+')')
+		.css('filter', 'progid:DXImageTransform.Microsoft.gradient(startColorstr='+start_color+',endColorstr='+end_color+',GradientType=0)')
+		.css('background-image', 'linear-gradient('+start_color+', '+end_color+')')
+}";
+
+		foreach($user_ids as $user_id)
+		{
+			if(!empty($relations_to[$user_id]) || !empty($relations_from[$user_id]))
+			{
+				$to		= empty($relations_to[$user_id])   ? '#fff' : $relations_to[$user_id];
+				$from	= empty($relations_from[$user_id]) ? '#fff' : $relations_from[$user_id];
+				$js[] = "avatar_gradient({$user_id}, '{$to}', '{$from}')";
+			}
+		}
+
 		$js = join("\n", $js);
+
+		$js_post = join("\n", $js_post);
+		if($js_post)
+			$js .= "\n\$(function() {
+$js_post
+});";
+
 		if(!$js)
 			$js = 'true;';
 
 		return $js;
 	}
+}
+
+function touch_rel_color($score)
+{
+	if(!$score)
+		return '#fff';
+
+	$col = sprintf("%02x", max(128, 255-3*abs($score)));
+
+	if($score > 0)
+		return "#{$col}ff{$col}";
+
+	return "#ff{$col}{$col}";
 }
