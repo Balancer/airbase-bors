@@ -18,7 +18,6 @@
 {/foreach}
 	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-786-min.css" />
 
-{literal}
 <!--[if IE]><style>
 .outer, .wide, h2, .wrapper, .minwidth { height: 0; height: auto; zoom: 1; }
 dd, dt { height: 1%; }
@@ -28,7 +27,6 @@ dd, dt { height: 1%; }
 .wrapper { margin-left: -404px; position: relative; }
 pre { word-wrap: break-word; }
 </style><![endif]-->
-{/literal}
 {* <script type="text/javascript" src="https://apis.google.com/js/plusone.js">{lang: 'ru'}</script> *}
 
 {foreach from=$js_include item="s"}
@@ -44,20 +42,18 @@ top.page='{$this->page()}'
 
 var me_id = readCookie('user_id', 0)
 var me_hash = readCookie('cookie_hash', 0)
-if(me_id > 1 && me_hash) {ldelim}
+if(me_id > 1 && me_hash) {
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/setvars.js\"></"+"script>")
-{rdelim}
+}
 
-{literal}
 var addthis_config = { data_track_clickback: true }
-{/literal}
 --></script>
 
 <script type="text/javascript"><!--
-if(top.me_is_coordinator) {ldelim}
+if(top.me_is_coordinator) {
 	document.writeln('<link rel="stylesheet" type="text/css" href="/_bors/css/coordinators.css" />')
 	document.writeln('<'+'script  type="text/javascript" src="/_bors/js/coordinators.js"></'+'script>')
-{rdelim}
+}
 --></script>
 
 {if $type == 'topic' and $id}
@@ -295,7 +291,10 @@ if(me_id < 2 || !me_hash)
 else {ldelim}
 	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
 {if $this && ($this->class_name() == 'balancer_board_topic' || $this->class_name() == 'balancer_board_topics_view')}
-	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?obj={$this->internal_uri_ascii()}&time={$page_last_time}&rnd="+Math.random()+"\"></"+"script>")
+{*
+	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?obj={$this->internal_uri_ascii()}&time={$page_last_time}&user_ids={$user_ids}&rnd="+Math.random()+"\"></"+"script>")
+*}
+	$.getScript("/js/users/touch.js?obj={$this->internal_uri_ascii()}&time={$page_last_time}&user_ids={$user_ids}&rnd="+Math.random())
 {/if}
 {rdelim}
 --></script>

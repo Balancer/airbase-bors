@@ -118,6 +118,9 @@ class base_page_hts extends base_page_db
 			if($tpl == 'balancer')
 				$tpl = 'blue_spring';
 
+			if($tpl == 'wide')
+				$tpl = 'xfile:airbase/default/index2.html';
+
 			return $tpl;
 		}
 

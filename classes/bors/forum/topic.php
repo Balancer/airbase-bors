@@ -173,6 +173,16 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		$post_ids = array_keys($posts);
 		$blogs = bors_find_all('balancer_board_blog', array('id IN' => $post_ids, 'by_id' => true));
 
+		$user_ids = [];
+		foreach($posts as $p)
+		{
+			$user_ids[] = $p->owner_id();
+		}
+
+		$user_ids = array_unique($user_ids);
+
+		$this->add_template_data('user_ids', join(',', $user_ids));
+
 		foreach($blogs as $blog_id => $blog)
 		{
 			$posts[$blog_id]->set_blog($blog, false);

@@ -56,7 +56,7 @@ $qs = @$_SERVER['QUERY_STRING'];
 unset($_SERVER['QUERY_STRING']);
 if(preg_match('!^id=(\d+)&p=(\d+)$!', $qs, $m))
 	return go_topic($m[1]+$tdiff, $m[2]);
-if(preg_match('!^id=(\d+)$!', $qs, $m))
+if(preg_match('!^id=(\d+)&?$!', $qs, $m))
 	return go_topic($m[1]+$tdiff);
 if(preg_match('!^id=(\d+)&action=(new|last)$!', $qs, $m))
 	return go_topic($m[1]+$tdiff, $m[2]);

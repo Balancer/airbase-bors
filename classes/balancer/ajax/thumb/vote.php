@@ -189,31 +189,23 @@ class balancer_ajax_thumb_vote extends base_object
 			'warn_object_id' => $target->id(),
 		));
 
-		// Проверку на время не делаем, так как минусы итак только за две недели ставятся.
-		if($score < 0)
+		if(!$old_warning)
 		{
-			if($target_score <= -7)
-				$user->set_object_warning($target, intval(-$target_score/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
-			elseif($old_warning)
-			{
-				if($target_score >= 15)
-					$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
-				else
-					$user->set_object_warning($target, 0, 'Удалённая пометка');
-			}
-		}
+			// Проверку на время не делаем, так как минусы итак только за две недели ставятся.
+			if(!$score < 0 && $target_score <= -7)
+				balancer_board_rpg_request::factory('balancer_board_rpg_requests_warning')
+					->set_user($user)
+					->set_target($target)
+					->set_title('Автоматический штраф за слишком низкий рейтинг сообщения')
+					->add(intval(-$target_score/7));
 
-		if($score > 0 && $target->create_time() > time() - 86400*14)
-		{
-			if($target_score >= 15 )
-				$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
-			elseif($old_warning)
-			{
-				if($target_score <= -7)
-					$user->set_object_warning($target, intval(-$target_score/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
-				elseif($target_score > -7)
-					$user->set_object_warning($target, 0, 'Удалённая пометка');
-			}
+			// Только для свежих сообщений, которым менее двух недель
+			if($score > 0 && $target->create_time() > time() - 86400*14 && $target_score >= 15)
+				balancer_board_rpg_request::factory('balancer_board_rpg_requests_warning')
+					->set_user($user)
+					->set_target($target)
+					->set_title('Автоматический поощрительный балл за высоко оценённое сообщение')
+					->add(intval(-$target_score/15));
 		}
 
 		return $return;
