@@ -115,8 +115,8 @@ class base_page_hts extends base_page_db
 //			if(preg_match('/^\w+$/', $tpl))
 //				$tpl = "xfile:$tpl/index.html";
 
-			if($tpl == 'balancer')
-				$tpl = 'blue_spring';
+			if($tpl == 'balancer' || $tpl == 'doors')
+				$tpl = 'xfile:/var/www/www.balancer.ru/bors-site/templates/blue_spring/index.html';
 
 			if($tpl == 'wide')
 				$tpl = 'xfile:airbase/default/index2.html';

@@ -6,7 +6,8 @@ class balancer_board_personal_updated extends balancer_board_page
 
 	function title() { return ec('Обновившиеся темы, в которые Вы заходили в последнее время'); }
 	function nav_name() { return ec('обновлённые темы'); }
-	function auto_map() { return true; }
+
+	function template() { return 'xfile:forum/_header.html'; }
 
 	function items_per_page() { return 50; }
 
