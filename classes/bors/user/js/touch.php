@@ -22,7 +22,6 @@ class user_js_touch extends bors_js
 			$time = time();
 
 		$js = [];
-		$js_post = [];
 
 		if($obj)
 		{
@@ -53,7 +52,7 @@ class user_js_touch extends bors_js
 			$js[] = '$("#pers_answ_cnt").html(" ('.$answers_count.')")';
 			$js[] = '$("#pers_answ_cont > a").addClass("red")';
 		}
-
+/*
 		$user_ids = explode(',', bors()->request()->data('user_ids'));
 		$relations_to = [];
 		foreach(bors_find_all('balancer_board_users_relation', array(
@@ -75,7 +74,6 @@ class user_js_touch extends bors_js
 		.css('background-image', '-moz-linear-gradient('+start_color+', '+end_color+')')
 		.css('background-image', '-o-linear-gradient('+start_color+', '+end_color+')')
 		.css('background-image', '-ms-linear-gradient('+start_color+', '+end_color+')')
-		.css('filter', 'progid:DXImageTransform.Microsoft.gradient(startColorstr='+start_color+',endColorstr='+end_color+',GradientType=0)')
 		.css('background-image', 'linear-gradient('+start_color+', '+end_color+')')
 }";
 
@@ -88,14 +86,8 @@ class user_js_touch extends bors_js
 				$js[] = "avatar_gradient({$user_id}, '{$to}', '{$from}')";
 			}
 		}
-
+*/
 		$js = join("\n", $js);
-
-		$js_post = join("\n", $js_post);
-		if($js_post)
-			$js .= "\n\$(function() {
-$js_post
-});";
 
 		if(!$js)
 			$js = 'true;';

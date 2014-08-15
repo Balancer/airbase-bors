@@ -952,3 +952,10 @@ tr.bb-background-private td {
 .small_post img {
 	max-width: 100%;
 }
+
+.forum-link-small a {
+	font-size: 8pt;
+	color: #ccc;
+	padding-left: 20px;
+	background: url(/_bors/i16/forum.png) 0 1px no-repeat;
+}

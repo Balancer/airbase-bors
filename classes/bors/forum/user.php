@@ -332,6 +332,9 @@ function avatar_thumb($geo)
 
 	function is_banned()
 	{
+		if($this->is_deleted())
+			return true;
+
 		if(array_key_exists('is_banned', $this->attr))
 			return $this->attr['is_banned'];
 

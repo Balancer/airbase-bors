@@ -1,4 +1,4 @@
-{include file="xfile:airbase/forum/forum.html"
+{include file="xfile:airbase/forum/forum.tpl"
 	all_new=true
 	with_images=true
 }
