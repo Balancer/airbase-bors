@@ -13,7 +13,7 @@ class balancer_board_news extends balancer_board_paginated
 		$xrefs = bors_find_all('common_keyword_bind', [
 			'keyword_id' => common_keyword::loader('новости')->id(),
 			'target_class_name IN' => array('forum_topic', 'balancer_board_topic'),
-			'target_create_time>' => time() - 86400*30,
+			'target_modify_time>' => time() - 86400*30,
 		]);
 
 		return [

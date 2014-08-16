@@ -1,20 +1,20 @@
 {if $owner}
-<p><b>{ec('Здравствуйте')}, {$owner->titled_link()}!</b> [&nbsp;<a href="/actions/do-logout/">{ec('Выход')}</a>&nbsp;]
+<p><b>Здравствуйте, {$owner->titled_link()}!</b> [&nbsp;<a href="/actions/do-logout/">Выход</a>&nbsp;]
 </p>
 
-<b>{ec('Ваше')}:</b>
+<b>Ваше:</b>
 <ul>
-<li><a href="http://forums.balancer.ru/personal/updated">{ec('Обновившиеся темы')}</a></li>
-<li><a href="http://forums.balancer.ru/personal/unvisited" class="red">{ec('Непосещённые темы')}</a></li>
-<li><a href="http://www.balancer.ru/forum/punbb/search.php?action=show_new">{ec('Новое')}</a></li>
-<li><a href="http://forums.balancer.ru/personal/clients/">{ec('Профили браузера')}</a></li>
-<li><a href="http://www.balancer.ru/user/{$owner->id()}/blog/">{ec('Блог')}</a></li>
-<li><a href="http://www.balancer.ru/users/favorites/">{ec('Избранное')}</a></li>
-<li><a href="http://www.balancer.ru/user/{$owner->id()}/use-topics.html">{ec('Темы с участием')}</a></li>
-<li><a href="http://www.balancer.ru/user/{$owner->id()}/posts/">{ec('Сообщения')}</a></li>
-<li id="pers_answ_cont"><a href="http://forums.balancer.ru/personal/answers/">{ec('Ответы Вам')}<span id="pers_answ_cnt"></span></a></li>
-<li><a href="http://www.balancer.ru/user/{$owner->id()}/reputation/">{ec('Репутация')}</a></li>
-<li><a href="http://www.balancer.ru/users/{$owner->id()}/votes/">{ec('Оценки')}</a></li>
+<li><a href="http://forums.balancer.ru/personal/updated/">Обновившиеся темы</a></li>
+<li><a href="http://forums.balancer.ru/personal/unvisited/">Непосещённые темы</a></li>
+<li id="pers_answ_cont"><a href="http://forums.balancer.ru/personal/answers/">Ответы Вам<span id="pers_answ_cnt"></span></a></li>
+<li><a href="http://www.balancer.ru/forum/punbb/search.php?action=show_new">Новое</a></li>
+<li><a href="http://forums.balancer.ru/personal/clients/">Профили браузера</a></li>
+<li><a href="http://www.balancer.ru/user/{$owner->id()}/blog/">Блог</a></li>
+<li><a href="http://www.balancer.ru/users/favorites/">Избранное</a></li>
+<li><a href="http://www.balancer.ru/user/{$owner->id()}/use-topics.html">Темы с участием</a></li>
+<li><a href="http://www.balancer.ru/user/{$owner->id()}/posts/">Сообщения</a></li>
+<li><a href="http://www.balancer.ru/user/{$owner->id()}/reputation/">Репутация</a></li>
+<li><a href="http://www.balancer.ru/users/{$owner->id()}/votes/">Оценки</a></li>
 </ul>
 {else}
 <p><b>Здравствуйте, гость!</b></p>
@@ -58,19 +58,20 @@ if(tid > 0)
 </script>
 {/literal}
 
-<b>{ec('Форумы')}:</b>
+<b>Форумы:</b>
 <ul>
-<li><a href="http://forums.airbase.ru/guidelines/">{ec('Правила')}</a></li>
-<li><a href="http://forums.balancer.ru/help/" class="red">{ec('Помощь')}</a></li>
-<li><a href="http://www.balancer.ru/forum/punbb/search.php?action=show_24h">{ec('За сутки')}</a></li>
+<li><a href="http://forums.airbase.ru/guidelines/">Правила</a></li>
+<li><a href="http://forums.balancer.ru/help/">Помощь</a></li>
+<li><a href="http://www.balancer.ru/forum/punbb/search.php?action=show_24h">За сутки</a></li>
+<li><a href="http://forums.balancer.ru/news/" class="red">Новости</a></li>
 <li><a href="http://www.balancer.ru/chat/">Чат</a> <small><a href="http://www.balancer.ru/support/2011/03/t19123--na-aviabaze-zapuschen-novyj-chat.5520.html">[?]</a></small></li>
-<li><a href="http://forums.balancer.ru/tags/">{ec('Теги')}</a></li>
-<li><a href="http://www.balancer.ru/tools/search/">{ec('Поиск')}</a></li>
-<li><a href="http://www.balancer.ru/users/toprep/">{ec('Репутации')}</a></li>
-<li><a href="http://www.balancer.ru/tools/votes/">{ec('Оценки')}</a></li>
-<li><a href="http://www.balancer.ru/users/warnings/">{ec('Штрафы')}</a></li>
-<li><a href="http://forums.balancer.ru/tools/">{ec('Инструменты')}</a></li>
+<li><a href="http://forums.balancer.ru/tags/">Теги</a></li>
+<li><a href="http://www.balancer.ru/tools/search/">Поиск</a></li>
+<li><a href="http://www.balancer.ru/users/toprep/">Репутации</a></li>
+<li><a href="http://www.balancer.ru/tools/votes/">Оценки</a></li>
+<li><a href="http://www.balancer.ru/users/warnings/">Штрафы</a></li>
+<li><a href="http://forums.balancer.ru/tools/">Инструменты</a></li>
 {if $owner && $owner->is_coordinator()}
-<li><a href="http://forums.balancer.ru/admin/">{ec('Админка')}</a></li>
+<li><a href="http://forums.balancer.ru/admin/">Админка</a></li>
 {/if}
 </ul>
