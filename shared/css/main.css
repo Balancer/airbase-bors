@@ -376,22 +376,26 @@ span.clear {
     background: #D8F0FF url(http://www.airbase.ru/images/web/sky-back.jpg);
 }
 
-.outer {
-	margin-left: 215px;  /* L */
-}
-
 .tpl_column_center {
 	float: right;
 	width: 100%;
 	margin-left: -1px;
 }
-.tpl_column_left {
-	float: left;
-	position: relative;
-	width: 200px;  /* L */
-	margin-left: -210px;  /* -L-1 */
-	margin-right: 2px;
+
+@media only screen and (min-device-width: 640px) and (min-device-width: 10cm) {
+	.outer {
+		margin-left: 215px;  /* L */
+	}
+
+	.tpl_column_left {
+		float: left;
+		position: relative;
+		width: 200px;  /* L */
+		margin-left: -210px;  /* -L-1 */
+		margin-right: 2px;
+	}
 }
+
 .minwidth {
 	min-width: 404px;
 }
