@@ -219,6 +219,11 @@ class balancer_board_post extends forum_post
 
 	function _image_def()
 	{
+		return $this->__image(true);
+	}
+
+	function __image($use_topic_logo_if_not_found)
+	{
 		foreach($this->attaches() as $a)
 			if(preg_match("!(jpe?g|png|gif)!i", $a->extension()))
 				return $a->image();
@@ -244,7 +249,7 @@ class balancer_board_post extends forum_post
 			return $image;
 		}
 
-		return $this->topic()->image();
+		return $use_topic_logo_if_not_found ? $this->topic()->image() : NULL;
 	}
 
 	function _image_url_def()
