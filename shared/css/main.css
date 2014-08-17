@@ -957,9 +957,48 @@ tr.bb-background-private td {
 	max-width: 100%;
 }
 
+.forum-link-small {
+	line-height: 16px;
+}
+
 .forum-link-small a {
 	font-size: 8pt;
 	color: #ccc;
 	padding-left: 20px;
 	background: url(/_bors/i16/forum.png) 0 1px no-repeat;
+	line-height: 16px;
+}
+
+@media only screen and (max-device-width: 10cm) {
+	div.rs_box {
+		width: 100%;
+	}
+	img.main {
+		width: 100%;
+		height: auto;
+	}
+}
+
+.forum-topic-snippet-replies {
+	font-size: 8pt;
+	color: #ccc;
+	padding-left: 20px;
+	background: url(/_bors-ext/i16/actions/comments_reply.png) 0 1px no-repeat;
+	line-height: 16px;
+}
+
+.forum-topic-snippet-post {
+	font-size: 9pt;
+	color: #999;
+	background: url(/_bors-ext/i16/actions/comment_reply.png) 0 1px no-repeat;
+	text-indent: 20px;
+	margin: 0 0 4px 0;
+}
+
+.forum-topic-snippet-post .time {
+	color: #ccc;
+}
+
+.black{
+	color:black;
 }

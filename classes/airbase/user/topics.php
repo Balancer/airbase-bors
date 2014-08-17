@@ -2,7 +2,6 @@
 
 class airbase_user_topics extends balancer_board_page
 {
-//	function config_class() { return 'airbase_forum_config'; }
 	function db_name() { return config('punbb.database'); }
 	function template() { return 'forum/_header.html'; }
 
@@ -29,14 +28,28 @@ class airbase_user_topics extends balancer_board_page
 
 	function url() { return "http://www.balancer.ru/user/".$this->id()."/use-topics.html"; }
 
-	function local_data()
+	function body_data()
 	{
 		if($this->topics_ids())
-			return array('topics' => objects_array('balancer_board_topic', array(
-					'id IN' => $this->topics_ids(), 
-					'last_post_create_time>' => 0,
-					'order' => '-last_post',
-			)));
+		{
+			$topics = bors_find_all('balancer_board_topic', array(
+				'id IN' => $this->topics_ids(), 
+				'last_post_create_time>' => 0,
+				'order' => '-last_post',
+			));
+
+			bors_objects_preload($topics, 'forum_id', 'balancer_board_forum', 'forum');
+			bors_objects_preload($topics, 'owner_id', 'balancer_board_user',  'owner');
+			bors_objects_preload($topics, 'image_id', 'airbase_image');
+
+			$images = bors_field_array_extract($topics, 'image');
+			bors_objects_preload($images, 'id_96x96', 'bors_image_thumb', 'thumbnail_96x96', true);
+
+//			$post_ids = bors_field_array_extract($topics, 'last_post_id');
+			bors_objects_preload($topics, 'last_post_id', 'balancer_board_post', 'last_post');
+
+			return array_merge(parent::body_data(), ['topics' => $topics]);
+		}
 		else
 			return array();
 	}
@@ -55,8 +68,6 @@ class airbase_user_topics extends balancer_board_page
 	function user() { if($this->user === false) $this->user = object_load('bors_user', $this->id()); return $this->user; }
 	function title() { return object_property($this->user(), 'title').': '.ec('темы с участием за месяц'); }
 	function nav_name() { return ec('темы с участием за месяц'); }
-
-	function body_template() { return 'xfile:airbase/forum/forum.html'; }
 
 	function cache_static() { return config('static_forum') ? rand(86400*7, 14*86400) : 0; }
 

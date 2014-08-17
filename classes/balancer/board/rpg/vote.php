@@ -4,6 +4,8 @@ class balancer_board_rpg_vote extends balancer_board_object_db
 {
 	function table_name() { return 'rpg_request_votes'; }
 
+	function ignore_on_new_instance() { return true; }
+
 	function table_fields()
 	{
 		return array(

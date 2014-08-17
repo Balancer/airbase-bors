@@ -27,6 +27,18 @@ class balancer_board_rpg_helper extends bors_object
 		return $this;
 	}
 
+	function set_score($score)
+	{
+		$this->set_attr('need_score', $score);
+		return $this;
+	}
+
+	function set_level($level)
+	{
+		$this->set_attr('need_score', pow(3, $level));
+		return $this;
+	}
+
 	function set_title($title)
 	{
 		$this->set_attr('title', $title);
