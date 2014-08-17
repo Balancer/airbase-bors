@@ -61,9 +61,13 @@ class balancer_board_rpg_request extends balancer_board_object_db
 		$target = $this->target();
 		$target_user = $this->target_user();
 
+		$color = '';
+		if($this->request_class_name() == 'balancer_board_rpg_requests_warning')
+			$color = $this->request_id() > 0 ? ' style="color:red"' : ' style="color:green"';
+
 		$html = $target->titled_link()
 			.'<div style="color: #999">'.$target->snip().'</div>'
-			.'<small>'.$this->title().'</small>';
+			."<small$color>".$this->title().'</small>';
 		return $html;
 	}
 

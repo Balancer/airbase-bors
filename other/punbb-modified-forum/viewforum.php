@@ -43,10 +43,11 @@ if($pun_user['id'] > 1)
 	$count = intval($cms_db->get("SELECT count FROM forum_visits WHERE user_id=".intval($pun_user['id'])." AND forum_id=".intval($id))) + 1;
 
 	$data = array(
-			'forum_id' => $id,
-			'user_id' => $pun_user['id'],
-			'count' => $count,
-			'last_visit' => time(),
+		'forum_id' => $id,
+		'user_id' => $pun_user['id'],
+		'count' => $count,
+		'last_visit' => time(),
+		'is_disabled' => false,
 	);
 
 	if($count == 1)

@@ -75,3 +75,9 @@ if(tid > 0)
 <li><a href="http://forums.balancer.ru/admin/">Админка</a></li>
 {/if}
 </ul>
+
+<b>RPG:</b>
+<ul>
+<li><a href="http://www.balancer.ru/g/p3563189" class="red">Обсуждение</a></li>
+<li><a href="http://forums.balancer.ru/rpg/requests/" class="red">Очередь запросов</a></li>
+</ul>

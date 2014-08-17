@@ -42,7 +42,7 @@
 			<small><i>{$t->description()}</i></small>
 		{/if}
 		{if not $skip_forums}
-			<div class="forum-link-small" title="Форум: {$f->title()|escape}">{$f->titled_link()}</div>
+			<div class="forum-link-small forum_actions" title="Форум: {$f->title()|escape}">{$f->titled_link()}</div>
 		{/if}
 		<div class="forum-topic-snippet-replies" title="Сообщений в теме и число новых ответов">
 			{$t->num_replies()}
