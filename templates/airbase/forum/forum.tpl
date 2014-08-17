@@ -12,13 +12,11 @@
 		<th>&nbsp;</th>
 	{/if}
 		<th>Тема</th>
-		<th>Ответов</th>
-		<th>Создано</th>
-		<th>Обновлено</th>
 	</tr>
 	{foreach from=$topics item=t}
 		{assign var=f value=$t->forum()}
 		{assign var=o value=$t->owner()}
+		{$updated_count=$t->get('updated_count')}
 		{if $all_new}
 			{assign var="updated" value=true}
 		{else}
@@ -28,40 +26,36 @@
 		{/if}
 	<tr class="tr_forum_{$f->id()}{if !$f->is_public()} bb-background-private{/if}">
 		{if $with_images}
-		<td style="padding: 4px; line-height: 0;">
+		<td style="padding: 4px; line-height: 0;" width="96">
 			{if $img=$t->image()}
 			<a href="{$t->url()}">{$img->thumbnail_96x96()->html_code()}</a>
 			{/if}
 		</td>
 		{/if}
 		<td id="vtt_{$t->id()}">
-			<a href="{$t->url_ex('new')}"{if $updated} class="b"{/if}>{$t->title()}</a>
-		{if $t->get('updated_count')}
-			<small class="title_actions {if $t->get('updated_count')<5}transgray {else}b {if $t->get('updated_count')>=10}red {/if}{/if}small">&nbsp;(+{$t->updated_count()})</small>
-		{/if}
+			<div class="title_actions"><a href="{$t->url_ex('new')}"{if $updated} class="b"{/if}{if $updated_count > 0  and $updated_count < 10} style="opacity: {if $updated_count >= 5}0.8{else}0.5{/if}"{/if}>{$t->title()}</a>
 		{if $t->total_pages() > 1}
-			<small><span class="topic_pages_links">{$t->title_pages_links()}</span></small>
+				<small><span class="topic_pages_links">{$t->title_pages_links()}</span></small>
 		{/if}
+			</div>
 		{if $t->description()}
-			<br />
 			<small><i>{$t->description()}</i></small>
 		{/if}
-		{if $updated && $t->get('first_post')}
-			<br />
-			<small class="transgray xsmall nb">&nbsp;—&nbsp;{$t->first_post()->author_name()}: {$t->first_post()->snip()}</i></small>
-		{/if}
 		{if not $skip_forums}
-			<div class="forum-link-small">{$f->titled_link()}</div>
+			<div class="forum-link-small" title="Форум: {$f->title()|escape}">{$f->titled_link()}</div>
 		{/if}
-	</td>
-	<td class="small aligncenter">{$t->num_replies()}</td>
-	<td class="small">
-		<a href="http://www.balancer.ru/g/p{$t->first_post_id()}">{$t->create_time()|airbase_time}</a><br />
-		<small>{$t->author_name()}</small>
-	</td>
-	<td class="small">
-		<a href="http://www.balancer.ru/g/p{$t->last_post_id()}">{$t->last_post_create_time()|airbase_time}</a><br />
-		<small>{$t->last_poster_name()}</small>
+		<div class="forum-topic-snippet-replies" title="Сообщений в теме и число новых ответов">
+			{$t->num_replies()}
+		{if $updated_count}
+			<span class="{if $updated_count >=5}b {if $updated_count >=10}red {else}black {/if}{/if}">&nbsp;(+{$updated_count})</span>
+		{/if}
+		</div>
+		{if $updated_count > 0 && $t->get('first_post')}
+			<div class="forum-topic-snippet-post"><span class="time">{$t->first_post()->create_time()|airbase_time}, {$t->first_post()->author_name()}:</span> {$t->first_post()->snip()}</i></div>
+		{/if}
+		{if $updated_count == 0 or $updated_count > 1}
+			<div class="forum-topic-snippet-post"><span class="time">{$t->last_post_create_time()|airbase_time}, {$t->last_post()->author_name()}:</span> {$t->last_post()->snip()}</i></div>
+		{/if}
 	</td>
 </tr>
 	{/foreach}

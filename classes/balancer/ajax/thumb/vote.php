@@ -192,11 +192,12 @@ class balancer_ajax_thumb_vote extends base_object
 		if(!$old_warning)
 		{
 			// Проверку на время не делаем, так как минусы итак только за две недели ставятся.
-			if(!$score < 0 && $target_score <= -7)
+			if($score < 0 && $target_score <= -7)
 				balancer_board_rpg_request::factory('balancer_board_rpg_requests_warning')
 					->set_user($user)
 					->set_target($target)
 					->set_title('Автоматический штраф за слишком низкий рейтинг сообщения')
+					->set_level($user->rpg_level()+1)
 					->add(intval(-$target_score/7));
 
 			// Только для свежих сообщений, которым менее двух недель
@@ -205,6 +206,7 @@ class balancer_ajax_thumb_vote extends base_object
 					->set_user($user)
 					->set_target($target)
 					->set_title('Автоматический поощрительный балл за высоко оценённое сообщение')
+					->set_level(4) // 3×level3, 81 балл
 					->add(intval(-$target_score/15));
 		}
 
