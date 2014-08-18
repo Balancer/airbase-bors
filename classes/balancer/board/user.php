@@ -306,13 +306,15 @@ class balancer_board_user extends forum_user
 
 	function unreaded_answers()
 	{
-		return bors_count('balancer_board_post', array(
-			'answer_to_user_id' => $this->id(),
+		$id = $this->id();
+		$answers_count = bors_count('balancer_board_posts_pure', array(
+			'answer_to_user_id' => $id,
+			'posts.poster_id<>' => $id,
 			'order' => '-create_time',
-			'inner_join' => array("topics t ON t.id = posts.topic_id"),
-			'left_join' => array("topic_visits v ON (v.topic_id = t.id AND v.user_id=$me)"),
-			'(v.last_visit IS NULL OR (v.last_visit < posts.posted))',
-			'posts.posted>' => time() - 86400*30,
+			'inner_join' => ["topics t ON t.id = posts.topic_id"],
+			'left_join' => ["topic_visits v ON (v.topic_id = t.id AND v.user_id=$id)"],
+			'((v.last_visit IS NULL AND posts.posted > '.(time()-31*86400).') OR (v.last_visit < posts.posted))',
+			'posts.posted>' =>  time()-31*86400,
 		));
 	}
 }

@@ -18,6 +18,7 @@ class balancer_board_personal_updated extends balancer_board_page
 			'inner_join' => "topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.user_id=".bors()->user_id().")",
 			'topic_visits.is_disabled=' => false,
 			'topic_visits.last_visit < topics.last_post',
+			'topics.last_post>=' => time() - 86400*31,
 			'order' => '-last_post',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
@@ -88,26 +89,19 @@ class balancer_board_personal_updated extends balancer_board_page
 
 		bors_objects_preload($posts, 'id', 'balancer_board_posts_cache', 'cache');
 
-		$answers_count = bors_count('balancer_board_posts_pure', array(
-			'answer_to_user_id' => $me_id,
-			'posts.poster_id<>' => $me_id,
-			'order' => '-create_time',
-			'inner_join' => array("topics t ON t.id = posts.topic_id"),
-			'left_join' => array("topic_visits v ON (v.topic_id = t.id AND v.user_id=$me_id)"),
-			'((v.last_visit IS NULL AND posts.posted > '.(time()-30*86400).') OR (v.last_visit < posts.posted))',
-			'posts.posted>' =>  time()-600*86400,
-		));
-
-		return compact('topics', 'answers_count');
+		return [
+			'topics' => $topics,
+			'answers_count' => bors()->user()->unreaded_answers(),
+		];
 	}
 
 	function total_items()
 	{
 		return bors_count('balancer_board_topic', array(
 			'inner_join' => "topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.user_id=".bors()->user_id().")",
-			'topic_visits.last_visit < topics.last_post',
 			'topic_visits.is_disabled=' => false,
-//				'topic_visits.last_visit>' => time()-86400*31,
+			'topic_visits.last_visit < topics.last_post',
+			'topics.last_post>=' => time() - 86400*31,
 		));
 	}
 

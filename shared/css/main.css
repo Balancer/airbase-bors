@@ -76,7 +76,6 @@ dl.box {
 	padding: 0px; 
 	background-color: white;
 	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
 	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
@@ -154,7 +153,6 @@ div.post {
 	clear: both;
 	background-color: #ffffff;
 	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
 	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
@@ -200,7 +198,7 @@ a:hover {
 }
 
 a.current_page, a.select_page {
-	padding: 1px 3px;
+	padding: 0.02cm 0.2cm;
 	margin: 8px 2px;
 	border: 1px solid #9bd;
 }
@@ -235,7 +233,6 @@ a.select_page:hover {
 
 .pages_select a {
 	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
 	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
@@ -837,7 +834,6 @@ table.yandex_money input {
 
 .shadow8 {
 	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
 	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
@@ -849,7 +845,6 @@ table.yandex_money input {
 	padding: 0;
 	border-radius: 8px;
 	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
 	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
@@ -1001,4 +996,8 @@ tr.bb-background-private td {
 
 .black{
 	color:black;
+}
+
+div.answer_to_me div.body, div.answer_to_me div.body div.avatar_block {
+	background-color: #ffffe0;
 }
