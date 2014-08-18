@@ -5,9 +5,11 @@
 	массивов данных.
 */
 
-class base_page_hts extends base_page_db
+class base_page_hts2 extends bors_page_db
 {
 	function access_engine() { return config('hts_access', 'balancer_board_access_public'); }
+
+	function auto_map() { return true; }
 
 	static function id_prepare($url)
 	{
@@ -30,38 +32,51 @@ class base_page_hts extends base_page_db
 
 //	function can_cached() { return false; }
 	function cache_static() { return $this->modify_time() > time() - 86400*7 ? rand(3600, 7200) : rand(86400*7, 86400*30); }
-//	function cache_static() { return config('static_forum') ? rand(86400, 7*86400) : 0; }
 
-	function storage_engine() { return 'storage_db_mysql_smart'; }
+	function storage_engine() { return 'bors_storage_mysql'; }
 	function config_class() { return config('admin_config_class'); }
 	function html_disable() { return false; }
 	function lcml_tags_enabled() { return NULL; }
 
-	function is_loaded() { return $this->create_time(true) || $this->source(); } //TODO: придумать что-то более адекватно. title() сейчас может не понимать true
+	function is_loaded()
+	{
+		if(substr($this->id(), 0, 1) == '/')
+			return false;
 
-//	function db_name() { return config('hts.database', 'HTS'); }
-//	function main_table_storage() { return NULL; }
-	function fields_first() { return 'stb_title stb_source stb_description'; }
-//	function db_name() { return config('mysql_database'); }
-	function db_name() { return config('hts.database', 'HTS'); }
-	function table_name() { return NULL; }
+		return (bool) @$this->data['title'];
+	}
+
+	function db_name()
+	{
+		bors_debug::syslog('000-obsolete', "Call direct base_page_hts");
+		return 'HTS_OTHER';
+	}
+
+	function table_name() { return 'hts_data_title'; }
 
 	function owner() { return bors_load('balancer_board_user', 10000); }
 
-	function fields()
+	function table_fields()
 	{
-		return array(
-			$this->db_name() => array(
-				'hts_data_source' => array('source' => 'value'),
-				'hts_data_title'  => array('title'  => 'value'),
-				'hts_data_description'  => array('description'  => 'value'),
-				'hts_data_create_time'  => array('create_time'  => 'value'),
-				'hts_data_modify_time'  => array('modify_time'  => 'value'),
-				'hts_data_nav_name'  => array('nav_name'  => 'value'),
-				'hts_data_cr_type'  => array('cr_type'  => 'value'),
-				'hts_data_template'  => array('template_db'  => 'value'),
-			),
-		);
+		return [
+			'id',
+			'title' => 'value',
+		];
+	}
+
+	function left_join_fields()
+	{
+		return [
+			$this->db_name() => [
+				'hts_data_source(id)'		=> ['source' => 'value'],
+				'hts_data_description(id)'	=> ['description' => 'value'],
+				'hts_data_create_time(id)'	=> ['create_time'  => 'value'],
+				'hts_data_modify_time(id)'	=> ['modify_time'  => 'value'],
+				'hts_data_nav_name(id)'		=> ['nav_name'  => 'value'],
+				'hts_data_cr_type(id)'		=> ['cr_type'  => 'value'],
+				'hts_data_template(id)'		=> ['template_db'  => 'value'],
+			],
+		];
 	}
 
 	function parents()
@@ -106,16 +121,12 @@ class base_page_hts extends base_page_db
 
 	function template()
 	{
-//		if(config('is_developer'))
-//			var_dump($this->attr);
-//			var_dump(parent::template());
-
-		if($tpl = $this->template_db())
+		if($tpl = $this->get('template_db'))
 		{
 //			if(preg_match('/^\w+$/', $tpl))
 //				$tpl = "xfile:$tpl/index.html";
 
-			if($tpl == 'balancer' || $tpl == 'doors')
+			if($tpl == 'balancer' || $tpl == 'doors' || $tpl == 'kron')
 				$tpl = 'xfile:/var/www/www.balancer.ru/bors-site/templates/blue_spring/index.html';
 
 			if($tpl == 'wide')

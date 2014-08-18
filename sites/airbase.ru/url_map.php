@@ -1,13 +1,12 @@
 <?php
 
+// echo bors_debug::trace();
+
 $topics_view_class = config('topics.view_class');
 
-bors_url_map(array(
+bors_vhost_routes('airbase.ru', [
 	'/login/ => wrk_mauth_login',
 	'/alpha/rus/n/nk/144/ => airbase_db_page(url)',
-));
-
-$map = array(
 	'/ => airbase_main',
 
 	'(/top/)(\d+)/ => aviatop_members_view(2)',
@@ -39,14 +38,16 @@ $map = array(
 
 //	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => balancer_board_topic(1,2)',
 //	'.*viewtopic\.php\?id=(\d+).* => balancer_board_topic(1)',
-//	'(.*) => base_page_hts(1,host=0)',
 //	'(.*) => airbase_page(1,host=0)',
 
 //	'(.*) => airbase_pages_db(1)',
 
 	'/([^/]+)/ => airbase_keywords_old(1)',
 	'/([^/]+) => airbase_keywords_old(1)',
-);
+
+	'.*/\w+\.phtml => airbase_pages_hts(url)',
+	'.* => airbase_pages_hts(url)',
+]);
 
 // set_bors_project('airbase');
 
