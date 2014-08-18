@@ -20,8 +20,6 @@ $map = array(
 	'.*/\w+\.phtml => airbase_page_hts_plain',
 	'.*/\w+\.phtml => airbase_page_hts_plainu',
 
-	'.*/\w+\.phtml => base_page_hts(url)',
-
 	'/_bors/ajax/thumb\-(up|down)\?object=(.+) => balancer_ajax_thumb_vote(2,vote=1)',
 	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
 
@@ -178,12 +176,9 @@ $map = array(
 
 		'(/bors/examples/)top-reputation/ => examples_topReputation',
 
-//		'(/)(test|crazy)/ => base_page_hts',
 		'(/test/bors/)xml/ => bors_test_xml',
 
 
 	'/external/picasaweb/js/album/(\w+/\w+)/? => balancer_external_picasaweb_jsAlbum(1)',
 	'/external/picasaweb/bb/album/(\w+/\w+)/? => balancer_external_picasaweb_bbAlbum(1)',
-
-//	'.* => base_page_hts',
 );
