@@ -16,7 +16,7 @@ class user_js_touch extends bors_js
 		if($obj)
 			$obj = bors_load_uri($obj);
 		else
-			$obj = object_load($this->id());
+			$obj = bors_load($this->id());
 
 		if(!$time)
 			$time = time();
@@ -37,13 +37,15 @@ class user_js_touch extends bors_js
 		if(!$me_id)
 			return $js;
 
+		bors()->changed_save();
+
 		$answers_count = bors_count('balancer_board_post', array(
 			'answer_to_user_id' => $me_id,
 			'posts.poster_id<>' => $me_id,
 			'order' => '-create_time',
 			'inner_join' => array("topics t ON t.id = posts.topic_id"),
 			'left_join' => array("topic_visits v ON (v.topic_id = t.id AND v.user_id=$me_id)"),
-			'((v.last_visit IS NULL AND posts.posted > '.(time()-30*86400).') OR (v.last_visit < posts.posted))',
+			'((v.last_visit IS NULL AND posts.posted > '.(time()-31*86400).') OR (v.last_visit < posts.posted))',
 			'posts.posted>' =>  time()-600*86400,
 		));
 
@@ -87,6 +89,10 @@ class user_js_touch extends bors_js
 			}
 		}
 */
+
+		// Ответы нам (ptoNNNN) выделяем цветом
+		$js[] = '$(".pto'.$me_id.'").addClass("answer_to_me")';
+
 		$js = join("\n", $js);
 
 		if(!$js)

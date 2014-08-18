@@ -43,7 +43,7 @@ class base_page_hts2 extends bors_page_db
 		if(substr($this->id(), 0, 1) == '/')
 			return false;
 
-		return (bool) @$this->data['title'];
+		return @$this->data['title'] && @$this->data['source'];
 	}
 
 	function db_name()

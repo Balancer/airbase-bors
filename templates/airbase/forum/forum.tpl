@@ -50,11 +50,13 @@
 			<span class="{if $updated_count >=5}b {if $updated_count >=10}red {else}black {/if}{/if}">&nbsp;(+{$updated_count})</span>
 		{/if}
 		</div>
-		{if $updated_count > 0 && $t->get('first_post')}
+		{if $t->num_replies() > 0}
+			{if $updated_count > 0 && $t->get('first_post')}
 			<div class="forum-topic-snippet-post"><span class="time">{$t->first_post()->create_time()|airbase_time}, {$t->first_post()->author_name()}:</span> {$t->first_post()->snip()}</i></div>
-		{/if}
-		{if $updated_count == 0 or $updated_count > 1}
+			{/if}
+			{if $updated_count == 0 or $updated_count > 1}
 			<div class="forum-topic-snippet-post"><span class="time">{$t->last_post_create_time()|airbase_time}, {$t->last_post()->author_name()}:</span> {$t->last_post()->snip()}</i></div>
+			{/if}
 		{/if}
 	</td>
 </tr>

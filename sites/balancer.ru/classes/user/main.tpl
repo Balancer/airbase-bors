@@ -16,7 +16,7 @@
 {if $ban && is_object($ban)}
 <li class="red">Пользователь забанен перманентно по причине: {$ban->message()}</li>
 {/if}
-<li>RPG-уровень: <span class="b big red">{$user->rpg_level()}</span></li>
+<li>RPG-уровень: <span class="b big red">{$user->rpg_level()}</span> (вес голоса: <b>{pow(3,$user->rpg_level())})</b></li>
 <li>Зарегистрирован: {$user->create_time()|full_time}</li>
 {if $user->username()}<li>Имя пользователя: {$user->username()}</li>{/if}
 {if $user->user_nick()}<li>Ник: {$user->user_nick()}</li>{/if}
