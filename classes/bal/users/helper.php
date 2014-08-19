@@ -13,7 +13,6 @@ class bal_users_helper extends bors_object
 	{
 		foreach(array('user_id', 'cookie_hash', 'isa') as $k)
 		{
-			SetCookie($k, '', time() - 86400);
 			SetCookie($k, '', time() - 86400, "/");
 			SetCookie($k, '', time() - 86400, "/", $domain);
 			SetCookie($k, '', time() - 86400, "/", '.'.$domain);

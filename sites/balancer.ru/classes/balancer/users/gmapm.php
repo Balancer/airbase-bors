@@ -13,57 +13,74 @@ class balancer_users_gmapm extends bors_page
 		require_once('inc/clients/geoip-place.php');
 //		$this->tools()->use_ajax();
 
-		template_js_include("http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAbwjPhNY_fqcwnQcDQSl8ZxQq3IJD3RlKOpbovsnuLQcrY_4wsBS3LrzTyWHwjY-vQKzKeJLilBFSsQ&sensor=true");
-		template_js_include("/js/tlabel.2.05.js");
+		template_js_include("//maps.googleapis.com/maps/api/js?v=3.exp");
+//		template_js_include("/js/tlabel.2.05.js");
 
 		$ll = array();
-		foreach(objects_array('balancer_board_post', array('create_time>' => time()-86400*30, 'poster_ip<>' => '', 'group' => 'owner_id', 'order' => 'COUNT(*)')) as $x)
+		foreach(objects_array('balancer_board_post', [
+			'*set' => 'COUNT(*) as `count`',
+			'create_time>' => time()-86400*30,
+			'poster_ip<>' => '',
+			'group' => 'owner_id',
+			'order' => 'COUNT(*)']
+		) as $x)
 		{
 			list($country_code, $country_name, $city_name, $city_object) = geoip_info($x->poster_ip());
-//			if(debug_is_balancer() && $x->owner_id() == 10000)
-//				print_d($x->data);
 			if($city_object && ($ava = $x->owner()->use_avatar()))
 			{
 				$lat = $city_object->latitude + rand(-100, 100)/500;
 				$long = $city_object->longitude + rand(-100, 100)/500;
 
-				$code = "var l = new TLabel()
-l.id = 'u{$x->owner_id()}'
-l.anchorLatLng = new GLatLng (".str_replace(',','.',$lat).", ".str_replace(',','.', $long).")
-l.anchorPoint = 'center';
-l.content = '<a href=\"/user/{$x->owner_id()}/\" target=\"_blank\"><img class=\"g\" src=\"/cache/forum/punbb/img/avatars/48x48/$ava\" title=\"{$x->author_name()}, $city_name, $country_name\" /></a>'
-map.addTLabel(l)
-";
-//l.percentOpacity = 80;
+				$code = "{img:'/cache/forum/punbb/img/avatars/48x48/{$ava}',"
+					.'lat:'.str_replace(',','.',$lat).',long:'.str_replace(',','.', $long).','
+					."url:'/user/{$x->owner_id()}/',"
+					."title:'".htmlspecialchars($x->owner()->title().", $city_name, $country_name")."',"
+					."count: ".intval($x->count()).'}';
 
 				$ll[] = $code;
 			}
 		}
 
 		template_js("
+var users = [\n".join(",\n", $ll)."]
+
 function initialize() {
+	var mapOptions = {
+		zoom: 3,
+		center: new google.maps.LatLng(55, 37)
+	}
+	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions)
+	setUsers(map, users)
+}
 
-      if (GBrowserIsCompatible()) {
-        var map = new GMap2(document.getElementById('map_canvas'));
-        map.setUIToDefault();
+function setUsers(map, users) {
+	var shape = {
+		coords: [
+			1, 1,
+			1, 48,
+			48, 48,
+			48 , 1],
+		type: 'poly'
+	};
 
-		map.setCenter(new GLatLng(55, 37), 3);
-		map.setMapType(G_HYBRID_MAP);
+	for (var i = 0; i < users.length; i++) {
+		u = users[i]
+		var image = u['img']
+	    var myLatLng = new google.maps.LatLng(u['lat'], u['long']);
+    	var marker = new google.maps.Marker({
+	        position: myLatLng,
+    	    map: map,
+        	icon: image,
+//    	    shape: shape,
+			title: u['title'],
+			zIndex: u['count']
+    });
+  }
+}
 
-		".join("\n", $ll)."
-
-      }
-    }
-
-	if(window.addEventListener)
-		window.addEventListener('load',initialize,false); //W3C
-	else if(document.addEventListener)
-		document.addEventListener('load',initialize,false); //W3C
-    else
-		document.attachEvent('onload',initialize); //IE
+google.maps.event.addDomListener(window, 'load', initialize);
 
 		");
-
 
 		return parent::pre_show();
 	}

@@ -584,6 +584,7 @@ function avatar_thumb($geo)
 			."&password_md=".md5($password)
 			."&date=".$check_user->create_time()
 			."&ip=".$check_user->registration_ip()
+			."&loc=".urlencode($check_user->location())
 		);
 
 //		exit('debug');

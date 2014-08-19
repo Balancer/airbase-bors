@@ -81,11 +81,16 @@ class balancer_board_rpg_request extends balancer_board_object_db
 
 	function item_list_fields()
 	{
-		return [
+		$fields = [
 			'info' => 'Запрос',
 			'need_score' => 'Необходимо баллов',
 			'have_score' => 'Собрано баллов',
-			'actions' => 'Действия',
 		];
+
+
+		if(!preg_match('/archive/', bors()->request()->url()))
+			$fields['actions'] = 'Действия';
+
+		return $fields;
 	}
 }
