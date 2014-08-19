@@ -307,7 +307,7 @@ class balancer_board_user extends forum_user
 	function unreaded_answers()
 	{
 		$id = $this->id();
-		$answers_count = bors_count('balancer_board_posts_pure', array(
+		return bors_count('balancer_board_posts_pure', array(
 			'answer_to_user_id' => $id,
 			'posts.poster_id<>' => $id,
 			'order' => '-create_time',

@@ -22,7 +22,7 @@ class balancer_board_rpg_requests_approve extends bors_object
 		]);
 
 		if($prev)
-			return bors_message('Вы уже голосовали за этот запрос отдав '.abs($prev->score()).' баллов за '.($prev->score() > 0 ? 'подтверждение.' : 'отколнение'));
+			return bors_message('Вы уже голосовали за этот запрос отдав '.abs($prev->score()).' баллов за '.($prev->score() > 0 ? 'подтверждение.' : 'отклонение'));
 
 		$score = bors()->request()->data_parse('int', 'score');
 
