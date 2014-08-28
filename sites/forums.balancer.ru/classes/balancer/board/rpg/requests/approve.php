@@ -40,7 +40,7 @@ class balancer_board_rpg_requests_approve extends bors_object
 		{
 			$x = bors_load($request->request_class_name(), $request);
 			$x->go();
-			$msg = 'Запрос подтверждён';
+			$msg = 'Запрос набрал необходимое число баллов и был утверждён';
 			$type = 'success';
 		}
 		else

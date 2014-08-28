@@ -196,7 +196,7 @@ class balancer_ajax_thumb_vote extends base_object
 				balancer_board_rpg_request::factory('balancer_board_rpg_requests_warning')
 					->set_user($user)
 					->set_target($target)
-					->set_title('Автоматический штраф за слишком низкий рейтинг сообщения')
+					->set_title('Коллективный штраф за слишком низкий рейтинг сообщения')
 					->set_level($user->rpg_level()+1)
 					->add(intval(-$target_score/7));
 
@@ -205,8 +205,8 @@ class balancer_ajax_thumb_vote extends base_object
 				balancer_board_rpg_request::factory('balancer_board_rpg_requests_warning')
 					->set_user($user)
 					->set_target($target)
-					->set_title('Автоматический поощрительный балл за высоко оценённое сообщение')
-					->set_level(4) // 3×level3, 81 балл
+					->set_title('Коллективный поощрительный балл за высоко оценённое сообщение')
+					->set_level(7) // 3×level6, 2187 баллов
 					->add(intval(-$target_score/15));
 		}
 

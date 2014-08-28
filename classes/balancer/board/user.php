@@ -278,6 +278,11 @@ class balancer_board_user extends forum_user
 		}
 */
 		$warn = bors_new('airbase_user_warning', $data);
+
+		$this->_warnings_update();
+
+		if($object && ($container = $object->get('container')))
+			$container->recalculate();
 	}
 
 	function twinks_count()

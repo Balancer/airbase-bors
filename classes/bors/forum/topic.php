@@ -152,6 +152,11 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 	function body()
 	{
+//		if($_SERVER['REMOTE_ADDR'] == '192.168.1.1')
+//			sleep(5);
+//		var_dump($_SERVER['REMOTE_ADDR']);
+
+
 		if(!$this->is_repaged() && rand(0,5) == 0)
 			$this->repaging_posts();
 
@@ -457,6 +462,9 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 	function recalculate($full_repaging = true, $skip_any_repaging = false)
 	{
+		// Ставим текущее время изменения
+		$this->set_modify_time(time());
+
 		bors()->changed_save(); // Сохраняем всё. А то в памяти могут быть модифицированные объекты, с которыми сейчас будем работать.
 
 		if(!$skip_any_repaging)
@@ -505,7 +513,6 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		foreach($this->posts() as $pid => $p)
 			$p->set_body(NULL, true);
 
-		$this->set_modify_time(time(), true);
 		$this->store(false);
 
 		$this->cache_clean_self();
