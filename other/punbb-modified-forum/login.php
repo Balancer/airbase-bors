@@ -83,6 +83,7 @@ if (isset($_POST['form_sent']) && $action == 'in')
 
 else if ($action == 'out')
 {
+	$_GET['id'] = bors()->user_id();
 	if ($pun_user['is_guest'] || !isset($_GET['id']) || $_GET['id'] != $pun_user['id'])
 	{
 		header('Location: http://forums.balancer.ru/');

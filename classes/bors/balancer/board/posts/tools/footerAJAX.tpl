@@ -6,11 +6,11 @@
 <li><a href="http://www.balancer.ru/admin/forum/post/{$id}/as-new-topic">Вынести сообщение со всеми ответами в <b>новую</b> тему</a></li>
 <li><a href="http://www.balancer.ru/admin/forum/post/{$id}/move-tree">Перенести сообщение со всеми ответами в <b>другую</b>, уже имеющуюся тему</a></li>
 <li><a href="/admin/forum/posts/move-tree">Перенести все <b>отмеченные</b> сообщения в другую тему</a></li>
-{if not $p->sort_order()}
+	{if not $p->sort_order()}
 <li><a href="http://www.balancer.ru/admin/forum/post/{$id}/do-pinned.bas">Закрепить сообщение в начале темы</a></li>
-{else}
+	{else}
 <li><a href="http://www.balancer.ru/admin/forum/post/{$id}/do-unpinned.bas">Открепить сообщение от начала темы</a></li>
-{/if}
+	{/if}
 </ul>
 {/if}
 
@@ -58,6 +58,9 @@
 <li><a href="#" onclick="ptrch({$id},'up')"><img src="/_bors/i/thumb_up.gif" /> Одобрить это сообщение</a></li>
 <li><a href="#" onclick="ptrch({$id},'down')"><img src="/_bors/i/thumb_down.gif" /> Неодобрить это сообщение</a></li>
 <li><a href="http://www.balancer.ru/user/{$owner_id}/reputation/?{$p->internal_uri_ascii()}">Изменить репутацию автора за это сообщение</a></li>
+{if $can_take_warning}
+<li><a href="http://forums.balancer.ru/users/do/?pid={$id}&act=get_warn"><img src="http://www.balancer.ru/img/web/skull.gif" />&nbsp;Забрать у пользователя его штраф (его {$warning->score()} в Ваш {$take_warning_score|sign|sklonn:'балл,балла,баллов'})</a></li>
+{/if}
 <li><a href="http://www.balancer.ru/forum/punbb/misc.php?report={$id}">Сообщить о нарушении модераторам</a></li>
 <li><a href="http://www.balancer.ru/forum/user-{$owner_id}-posts-in-topic-{$p->topic()->id()}/">Показать все сообщения данного пользователя в данной теме</a></li>
 <li><a href="http://www.balancer.ru/admin/forum/post/{$id}/do-drop-cache.bas">Сбросить кеш этого сообщения</a></li>

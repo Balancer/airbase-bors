@@ -778,6 +778,9 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$text = $this->body();
 		$text = restore_format($text);
 		$text = preg_replace('!<span class="q">.+?</span>!', ' … ', $text);
+		// Снос спойлеров
+		$text = preg_replace('!<a [^>]+class="spoiler"[^>]+>.+?</a>!', ' … ', $text);
+		$text = preg_replace('!<div[^>]+display:\s*none[^>]+>.+?</div>!', ' … ', $text);
 		$text = strip_tags($text);
 		$text = str_replace("\n", " ", $text);
 		$text = preg_replace("/\s{2,}/", ' ', $text);

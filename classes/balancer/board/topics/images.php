@@ -5,6 +5,8 @@ class balancer_board_topics_images extends balancer_board_topics_blog
 	function title() { return "Сообщения с картинками в теме «{$this->topic()->title()}»"; }
 	function nav_name() { return 'изображения'; }
 
+	function url() { return $this->url_ex($this->default_page()); }
+
 	function url_ex($page = NULL)
 	{
 		return $this->topic()->category()->url()
