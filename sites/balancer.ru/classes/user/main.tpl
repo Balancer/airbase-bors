@@ -34,10 +34,16 @@
 </ul>
 
 <h2>Отношения с пользователями</h2>
-<table class="nul w100p small"><tr><td>
+<table class="nul w100p small"><tr><td width="50%">
 	<table class="btab w100p">
 	<caption>Лучше всех к его сообщениям относятся</caption>
 	<tr>
+		<th colspan="2">За год</th>
+		<th colspan="2">За квартал</th>
+	</tr>
+	<tr>
+		<th>Пользователь</th>
+		<th>Отношение</th>
 		<th>Пользователь</th>
 		<th>Отношение</th>
 	</tr>
@@ -45,6 +51,9 @@
 	<tr>
 		<td>{object_property($u->from_user(), 'titled_link')}</td>
 		<td class="{if $u->score()>0}green{/if}">{$u->score()}</td>
+{$u2=$friends_from_quartal[$u@index]}
+		<td>{if $u2}{object_property($u2->from_user(), 'titled_link')}{/if}</td>
+		<td class="{if $u2 && $u2->score()>0}green{/if}">{if $u2}{$u2->score()}{/if}</td>
 	</tr>
 	{/foreach}
 	</table>
@@ -52,6 +61,12 @@
 	<table class="btab w100p">
 	<caption>Лучше он относится к сообщениям</caption>
 	<tr>
+		<th colspan="2">За год</th>
+		<th colspan="2">За квартал</th>
+	</tr>
+	<tr>
+		<th>Пользователь</th>
+		<th>Отношение</th>
 		<th>Пользователь</th>
 		<th>Отношение</th>
 	</tr>
@@ -59,15 +74,24 @@
 	<tr>
 		<td>{$u->to_user()->titled_link()}</td>
 		<td class="{if $u->score()>0}green{/if}">{$u->score()}</td>
+{$u2=$friends_to_quartal[$u@index]}
+		<td>{if $u2}{$u2->to_user()->titled_link()}{/if}</td>
+		<td class="{if $u2 && $u2->score()>0}green{/if}">{if $u2}{$u2->score()}{/if}</td>
 	</tr>
 	{/foreach}
 	</table>
 </td></table>
 
-<table class="nul w100p small"><tr><td>
+<table class="nul w100p small"><tr><td width="50%">
 	<table class="btab w100p">
 	<caption>Хуже всех к его сообщениям относятся</caption>
 	<tr>
+		<th colspan="2">За год</th>
+		<th colspan="2">За квартал</th>
+	</tr>
+	<tr>
+		<th>Пользователь</th>
+		<th>Отношение</th>
 		<th>Пользователь</th>
 		<th>Отношение</th>
 	</tr>
@@ -75,6 +99,9 @@
 	<tr>
 		<td>{object_property($u->from_user(), 'titled_link', $u->from_user_id())}</td>
 		<td class="{if $u->score()<0}red{/if}">{$u->score()}</td>
+{$u2=$enemies_from_quartal[$u@index]}
+		<td>{if $u2}{object_property($u2->from_user(), 'titled_link', $u2->from_user_id())}{/if}</td>
+		<td class="{if $u2 && $u2->score()<0}red{/if}">{if $u2}{$u2->score()}{/if}</td>
 	</tr>
 	{/foreach}
 	</table>
@@ -82,13 +109,22 @@
 	<table class="btab w100p">
 	<caption>Хуже он относится к сообщениям</caption>
 	<tr>
+		<th colspan="2">За год</th>
+		<th colspan="2">За квартал</th>
+	</tr>
+	<tr>
+		<th>Пользователь</th>
+		<th>Отношение</th>
 		<th>Пользователь</th>
 		<th>Отношение</th>
 	</tr>
 	{foreach $enemies_to as $u}
 	<tr>
-		<td>{$u->to_user()->titled_link()}</td>
+		<td>{object_property($u->to_user(), 'titled_link')}</td>
 		<td class="{if $u->score()<0}red{/if}">{$u->score()}</td>
+{$u2=$enemies_to_quartal[$u@index]}
+		<td>{if $u2}{object_property($u2->to_user(), 'titled_link')}{/if}</td>
+		<td class="{if $u2 && $u2->score()<0}red{/if}">{if $u2}{$u2->score()}{/if}</td>
 	</tr>
 	{/foreach}
 	</table>

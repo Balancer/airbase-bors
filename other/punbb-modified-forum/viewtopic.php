@@ -52,8 +52,14 @@ function go_topic($tid, $page = 1)
 	return go('http://forums.balancer.ru/', true);
 }
 
+$srv_save = print_r($_SERVER, true);
+
 $qs = @$_SERVER['QUERY_STRING'];
+if(empty($qs) && preg_match('/\?.*=/', $_SERVER['REQUEST_URI']))
+	$qs = $_SERVER['REQUEST_URI'];
+
 unset($_SERVER['QUERY_STRING']);
+
 if(preg_match('!^id=(\d+)&p=(\d+)$!', $qs, $m))
 	return go_topic($m[1]+$tdiff, $m[2]);
 if(preg_match('!^id=(\d+)&?$!', $qs, $m))
@@ -72,15 +78,20 @@ if(preg_match('!^pid=(\d+)$!', $qs, $m))
 	return go($post->url_in_container(), true);
 }
 
+
+
 if(preg_match('!/topic/\d+/(\d+),(\d+)$!', $_SERVER['REQUEST_URI'], $m))
 	return go_topic($m[1]+$tdiff, $m[2]);
+
+if(preg_match('!/topic/\d+/(\d+)/?$!', $_SERVER['REQUEST_URI'], $m))
+	return go_topic($m[1]+$tdiff, 1);
 
 if(preg_match('!^act=ST&f=\d+&t=(\d+)$!', $qs, $m))
 	return go_topic($m[1]+$tdiff);
 
 bors_debug::syslog('old-topic-link-format', $_SERVER['REQUEST_URI']);
 
-bors_throw("Incorect topic format for qs='".$qs."'");
+bors_throw("Incorect topic format for qs='".$qs."'; srv=".$srv_save);
 
 $cms_db = new driver_mysql(config('punbb.database'));
 
