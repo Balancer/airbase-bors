@@ -22,4 +22,16 @@ class balancer_board_topics_best extends balancer_board_paginated
 			'score>0',
 		);
 	}
+
+	function pre_show()
+	{
+		$forum = $this->topic()->forum();
+		if(!$forum || !$forum->can_read())
+		{
+			template_noindex();
+			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
+		}
+
+		return parent::pre_show();
+	}
 }

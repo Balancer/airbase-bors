@@ -156,12 +156,12 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		$cache = $this->cache();
 		if($cache && ($body = $cache->body()))
-			return bors_close_tags($body);
+			return blib_html::close_tags($body);
 
 		$body = $this->_make_html();
 		$this->set_body($body);
 
-		return bors_close_tags($body);
+		return blib_html::close_tags($body);
 	}
 
 	function set_body($value, $dbupd = true)
@@ -194,23 +194,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($topic = bors_load('balancer_board_topic', $this->topic_id()))
 			return $this->__setc($topic);
-/*
-		$topic = balancer_board_topic::create(
-			bors_load('balancer_board_forum', 1), // Флейм и тесты
-			ec('Потерянный топик'),
-			$this,
-			$this->owner(),
-			NULL,
-			false, // as blog
-			array(
-				'id' => $this->topic_id(),
-				'description' => ec('Данный топик был когда-то утерян, сообщения остались. Требуется переименовать и переместить в нужный форум'
-			)
-		));
-*/
-//		debug_hidden_log('topics_lost_recreated', "post={$this}, topic={$topic}", false);
-//		$topic->recalculate();
-//		return $topic;
+
 		return NULL;
 	}
 

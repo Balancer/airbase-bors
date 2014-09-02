@@ -44,7 +44,19 @@ class user_main extends balancer_board_page
 				'order' => '-score',
 				'limit' => 10,
 			)),
+			'friends_from_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
+				'to_user_id' => $this->id(),
+				'score>' => 0,
+				'order' => '-score',
+				'limit' => 10,
+			)),
 			'friends_to' => bors_find_all('balancer_board_users_relation', array(
+				'from_user_id' => $this->id(),
+				'score>' => 0,
+				'order' => '-score',
+				'limit' => 10,
+			)),
+			'friends_to_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
 				'from_user_id' => $this->id(),
 				'score>' => 0,
 				'order' => '-score',
@@ -56,7 +68,19 @@ class user_main extends balancer_board_page
 				'order' => 'score',
 				'limit' => 10,
 			)),
+			'enemies_from_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
+				'to_user_id' => $this->id(),
+				'score<' => 0,
+				'order' => 'score',
+				'limit' => 10,
+			)),
 			'enemies_to' => bors_find_all('balancer_board_users_relation', array(
+				'from_user_id' => $this->id(),
+				'score<' => 0,
+				'order' => 'score',
+				'limit' => 10,
+			)),
+			'enemies_to_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
 				'from_user_id' => $this->id(),
 				'score<' => 0,
 				'order' => 'score',
