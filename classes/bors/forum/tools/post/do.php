@@ -46,6 +46,9 @@ class forum_tools_post_do extends base_page
 				$post->set_flag_db(NULL, true);
 				if($owner = $post->owner())
 					$owner->set_signature_html(NULL);
+
+				echo 'recalc';
+				$post->recalculate();
 				$post->cache_clean();
 				$post->store();
 				$post->body();

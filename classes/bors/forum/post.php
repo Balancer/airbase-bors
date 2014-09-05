@@ -455,14 +455,14 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($this->have_attach() === NULL)
 		{
-			$attaches = bors_find_all('balancer_board_attach', array('post_id' => $this->id()));
+			$this->_attaches = bors_find_all('balancer_board_attach', array('post_id' => $this->id()));
 
-			if($this->_attaches = $attaches)
+			if($this->_attaches)
 			{
-				if(count($attaches) > 1)
+				if(count($this->_attaches) > 1)
 					$this->set_have_attach(-1, true);
 				else
-					$this->set_have_attach($attaches[0]->id(), true);
+					$this->set_have_attach($this->_attaches[0]->id(), true);
 			}
 			else
 				$this->set_have_attach(0, true);
@@ -741,6 +741,9 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($blog = $this->blog())
 			$blog->recalculate($this, $topic);
+
+		$this->set_have_attach(NULL);
+		$this->attaches();
 	}
 
 	function joke_owner()

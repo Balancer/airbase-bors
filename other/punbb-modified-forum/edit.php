@@ -165,6 +165,7 @@ if (isset($_POST['form_sent']))
 		$topic->set_modify_time(time(), true);
 		$topic->set_last_post_create_time(max($topic->last_post_create_time(), $post->create_time()), true);
 
+		$post->recalculate();
 		$post->store();
 		$topic->store();
 
