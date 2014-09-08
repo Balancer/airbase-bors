@@ -245,17 +245,19 @@ function avatar_thumb($geo)
 		if($this->_title = $this->user_title())
 			return $this->_title;
 
-		if($this->_title = $this->group_title_raw())
-			return $this->_title;
+//		if($this->_title = $this->group_title_raw())
+//			return $this->_title;
 
-		if(!$this->_title)
-			$this->_title = $this->group()->user_title();
+//		if(!$this->_title)
+		//TODO: хардкод. 4 == «участники»
+		if($this->group_id() != 4)
+			return $this->_title = $this->group()->user_title();
 
-		if(!$this->_title)
-			$this->_title = $this->rank();
+//		if(!$this->_title)
+		return $this->_title = bors_lower($this->rank());
 
-		$this->set('group_title_raw', $this->_title);
-		return $this->_title;
+//		$this->set('group_title_raw', $this->_title);
+//		return $this->_title;
 	}
 
 	private $__rank = NULL;
