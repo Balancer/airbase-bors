@@ -1,3 +1,4 @@
+{* http://www.balancer.ru/users/10000/blog/ *}
 {$this->pages_links_nul()}
 
 {assign var="skip_author_name" value=1}
@@ -9,7 +10,7 @@
 {assign var="f" value=$t->forum()}
 {* assign var="p" value=$t->first_post() *}
 {if $f->is_public_access()}
-{include file="xfile:forum/post.html" show_title=$t->title_url() strip="8192" skip_message_footer=1 skip_votes=1}
+{include file="xfile:forum/post.html" show_title=$t->titled_link() strip="8192" skip_message_footer=1 skip_votes=1}
 {/if}
 {/if}{/if}
 {foreachelse}

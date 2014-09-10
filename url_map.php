@@ -21,7 +21,7 @@ $map = array(
 
 	'(/admin/forum/posts/)move-tree => airbase_forum_admin_posts_movetree',
 	'.*/ => airbase_page_hts_plain',
-	'.*/ => airbase_page_hts_plainu',
+//	'.*/ => airbase_page_hts_plainu',
 	'.* => airbase_pages_zim',
 	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
 	'/_bors/ajax/post/info\?post=(.+) => balancer_board_post_ajax_info(1)',
@@ -104,7 +104,7 @@ $map = array(
 	'/\w{32}/cache(/.*/\d*x\d*\([^)]+\)/[^/]+\.(jpe?g|png|gif)) => bors_image_autothumb(1)',
 	'/cache(/sites/.*/\d*x\d*/[^/]+) => bors_image_autothumb(1)',
 	'.*/\w+\.phtml => airbase_page_hts_plain',
-	'.*/\w+\.phtml => airbase_page_hts_plainu',
+//	'.*/\w+\.phtml => airbase_page_hts_plainu',
 	'.* => bors_page_fs_htsu(url)', //TODO: снести нафиг после конвертации старых hts Авиабазы
 
 	'.* => airbase_pages_zim',

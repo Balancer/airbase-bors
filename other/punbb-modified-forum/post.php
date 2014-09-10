@@ -586,6 +586,13 @@ if (isset($_POST['form_sent']))
 			$post  = bors_load('balancer_board_post',  $new_pid, array('no_load_cache' => true));
 		}
 
+		// Этот блок держать над пересчётами данных топика, чтобы аттачи в них уже учитывались.
+		// Attachment Mod Block Start
+		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))
+			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
+				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
+		// Attachment Mod Block End
+
 		if(!empty($_POST['keywords_string']))
 			$topic->set_keywords_string($_POST['keywords_string'], true);
 
@@ -621,6 +628,7 @@ if (isset($_POST['form_sent']))
 
 		$topic->set_page($page);
 
+/*
 		$ldtext = to_translit($topic->title());
 		$ldtext = preg_replace('/\W/', ' ', $ldtext);
 		$ldtext = str_replace(' ', '-', trim(substr(trim(preg_replace('/\s+/', ' ', $ldtext)), 0, 16))).'>';
@@ -630,6 +638,7 @@ if (isset($_POST['form_sent']))
 		$ldtext2 = trim(preg_replace('/\s+/', ' ', $ldtext2));
 //		@file_get_contents('http://home.balancer.ru/lorduino/arduino.php?text='.urlencode($ldtext.$ldtext2));
 		@file_put_contents('/tmp/ldtext.txt', $ldtext);
+*/
 
 		$topic->cache_clean();
 		$post->cache_clean();
@@ -641,11 +650,6 @@ if (isset($_POST['form_sent']))
 			$db->query('UPDATE '.$low_prio.$db->prefix.'users SET num_posts=num_posts+1, last_post='.$now.' WHERE id='.$pun_user['id']) or error('Unable to update user', __FILE__, __LINE__, $db->error());
 		}
 
-		// Attachment Mod Block Start
-		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))
-			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
-				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
-		// Attachment Mod Block End
 /*
 		if($post->owner()->num_posts() < 20 && $post->owner()->create_time() > time() - 7*86400)
 		{
@@ -657,6 +661,12 @@ if (isset($_POST['form_sent']))
 			}
 		}
 */
+
+		// Если эту фигню удалять, то надо проверить на аттачи и множественные аттачи, как при постинге, так и при редактировании
+		// Вызывать после добавления аттачей выше.
+		$post->recalculate($topic);
+		$post->full_recalculate_and_clean();
+
 		if(!empty($_POST['as_blog']) && !$post->get('is_spam'))
 			$blog = balancer_board_blog::create($post, @$_POST['keywords']);
 

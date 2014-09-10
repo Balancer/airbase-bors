@@ -4,7 +4,7 @@ class balancer_board_admin_do extends balancer_board_admin_page
 {
 	var $auto_map = true;
 
-	function pre_show($data)
+	function pre_show(&$data)
 	{
 		if(!bors()->user() || !bors()->user()->group()->is_coordinator())
 			return bors_message(ec('У Вас нет прав для выполнения этой операции'));
