@@ -262,7 +262,7 @@ function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, 
 			return;
 
 		$preloaded = true;
-		$all = objects_array(config('punbb.forum_class', 'forum_forum'), array('order' => 'sort_order'));
+		$all = objects_array(config('punbb.forum_class', 'balancer_board_forum'), array('order' => 'sort_order'));
 		if($update_pos)
 			foreach($all as $f)
 				$f->set_tree_map(bors_lib_object::tree_map($f), true);

@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
-	<title>{$browser_title|htmlspecialchars}</title>
+	<title>{$this->browser_title()|htmlspecialchars}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="title" content="{$title|htmlspecialchars}" />
 	<meta property="fb:admins" content="100000278666723" />
-{if $this->description()}
-	<meta name="description" content="{$this->description()|htmlspecialchars}"/>
+{if $this->get('browser_description')}
+	<meta name="description" content="{$this->browser_description()|htmlspecialchars}"/>
 {/if}
 {if $this->get('keywords_string')}
 	<meta name="keywords" content="{$this->keywords_string()|htmlspecialchars}"/>

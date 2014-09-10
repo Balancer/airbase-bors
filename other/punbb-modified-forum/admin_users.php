@@ -77,10 +77,10 @@ if (isset($_GET['ip_stats']))
 
 ?>
 				<tr>
-					<td class="tcl"><a href="moderate.php?get_host=<?php echo $cur_ip['poster_ip'] ?>"><?php echo $cur_ip['poster_ip'] ?></a></td>
+					<td class="tcl"><a href="moderate.php?get_host=<?php echo $cur_ip['poster_ip'] /*"*/ ?>"><?php echo $cur_ip['poster_ip'] ?></a></td>
 					<td class="tc2"><?php echo format_time($cur_ip['last_used']) ?></td>
 					<td class="tc3"><?php echo $cur_ip['used_times'] ?></td>
-					<td class="tcr"><a href="admin_users.php?show_users=<?php echo $cur_ip['poster_ip'] ?>">Find more users for this ip</a></td>
+					<td class="tcr"><a href="admin_users.php?show_users=<?php echo $cur_ip['poster_ip'] /*"*/?>">Find more users for this ip</a></td>
 				</tr>
 <?php
 
@@ -164,7 +164,7 @@ if (isset($_GET['show_users']))
 ?>
 				<tr>
 					<td class="tcl"><?php echo '<a href="profile.php?id='.$user_data['id'].'">'.pun_htmlspecialchars($user_data['username']).'</a>' ?></td>
-					<td class="tc2"><a href="mailto:<?php echo $user_data['email'] ?>"><?php echo $user_data['email'] ?></a></td>
+					<td class="tc2"><a href="mailto:<?php echo $user_data['email'] /*"*/?>"><?php echo $user_data['email'] ?></a></td>
 					<td class="tc3"><?php echo $user_title ?></td>
 					<td class="tc4"><?php echo $user_data['num_posts'] ?></td>
 					<td class="tc5"><?php echo ($user_data['admin_note'] != '') ? $user_data['admin_note'] : '&nbsp;' ?></td>
@@ -317,7 +317,7 @@ else if (isset($_POST['find_user']))
 ?>
 				<tr>
 					<td class="tcl"><?php echo '<a href="profile.php?id='.$user_data['id'].'">'.pun_htmlspecialchars($user_data['username']).'</a>' ?></td>
-					<td class="tc2"><a href="mailto:<?php echo $user_data['email'] ?>"><?php echo $user_data['email'] ?></a></td>
+					<td class="tc2"><a href="mailto:<?php echo $user_data['email'] /*"*/?>"><?php echo $user_data['email'] ?></a></td>
 					<td class="tc3"><?php echo $user_title ?></td>
 					<td class="tc4"><?php echo $user_data['num_posts'] ?></td>
 					<td class="tc5"><?php echo ($user_data['admin_note'] != '') ? $user_data['admin_note'] : '&nbsp;' ?></td>

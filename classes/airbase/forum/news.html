@@ -1,3 +1,4 @@
+{* http://forums.airbase.ru/forum/3/news/ *}
 {$this->pages_links_nul()}
 
 {assign var="skip_message_footer" value=1}
@@ -7,7 +8,7 @@
 {if $t}
 {assign var="f" value=$t->forum()}
 {if $f->is_public_access()}
-{include file="xfile:forum/post.html" show_title=$t->title_url() strip="8192"}
+{include file="xfile:forum/post.html" show_title=$t->titled_link() strip="8192"}
 {/if}
 {/if}{/if}
 {foreachelse}

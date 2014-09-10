@@ -1,3 +1,4 @@
+{* http://www.airbase.ru или http://www.tanzpol.org *}
 {foreach from=$blog_records item=r}
 {assign var="p" value=$posts|@get_array:$r->id()}
 {if $p}
@@ -5,7 +6,7 @@
 {if $t}
 {assign var="forum" value=$t->forum()}
 {if $forum && $forum->is_public_access()}
-{include file="xfile:forum/post.html" show_title=$t->title_url() strip="1500" skip_votes=1}
+{include file="xfile:forum/post.html" show_title=$t->titled_link() strip="1500" skip_votes=1}
 {/if}
 {/if}{/if}
 {/foreach}

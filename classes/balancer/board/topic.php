@@ -2,6 +2,22 @@
 
 class balancer_board_topic extends forum_topic
 {
+	function browser_title()
+	{
+		if($this->total_pages() <= 1)
+			return $this->title();
+
+		return $this->title() . " ({$this->page()}/{$this->total_pages()})";
+	}
+
+	function browser_description()
+	{
+		if($this->total_pages() <= 1)
+			return $this->description();
+
+		return $this->description() . " (страница {$this->page()} из {$this->total_pages()})";
+	}
+
 	function cache_static_can_be_dropped()
 	{
 		bors_debug::syslog('__pages_clean', "Clean {$this->static_file()}[{$this->page()}/{$this->total_pages()}]: ".($this->page() > $this->total_pages() - 3));

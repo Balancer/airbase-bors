@@ -408,11 +408,6 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		return $base;
 	}
 
-	function title_url()
-	{
-		return "<a href=\"".$this->url()."\">".$this->title()."</a>";
-	}
-
 	function rss_url() { return $this->base_url().strftime("%Y/%m/", $this->modify_time())."topic-".$this->id()."-rss.xml"; }
 
 	function search_source()

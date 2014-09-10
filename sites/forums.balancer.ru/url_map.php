@@ -11,7 +11,7 @@ bors_url_map(array(
 	'/community/persons/ => balancer_board_forums_persons',
 	'(/community/)persons/(\d+)\.html => balancer_board_forums_persons(NULL,2)',
 	'/posts/popups/tools/?\?post=(\d+) => balancer_board_posts_popups_tools(1)',
-	'.* => balancer_board_pages_zim',
+//	'.* => balancer_board_pages_zim',
 ));
 
 $map = array(

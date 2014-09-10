@@ -285,4 +285,26 @@ class balancer_board_post extends forum_post
 
 		return object_property($this->topic()->image(), 'url');
 	}
+
+	function full_recalculate_and_clean()
+	{
+		$this->set_modify_time(time(), true);
+
+		config_set('lcml_cache_disable_full', true);
+		$this->do_lcml_full_compile();
+		$this->set_warning_id(NULL, true);
+		$this->set_flag_db(NULL, true);
+		if($owner = $this->owner())
+			$owner->set_signature_html(NULL);
+
+		$this->recalculate();
+		$this->cache_clean();
+		$this->store();
+		$this->body();
+
+		$topic = $this->topic();
+		$topic->cache_clean();
+		$topic->set_modify_time(time(), true);
+		$topic->store();
+	}
 }

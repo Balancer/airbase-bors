@@ -250,7 +250,7 @@ function avatar_thumb($geo)
 
 //		if(!$this->_title)
 		//TODO: хардкод. 4 == «участники»
-		if($this->group_id() != 4)
+		if($this->group_id() != 4 && $this->group()->user_title())
 			return $this->_title = $this->group()->user_title();
 
 //		if(!$this->_title)

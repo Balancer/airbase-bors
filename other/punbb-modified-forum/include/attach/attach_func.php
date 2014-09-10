@@ -164,12 +164,13 @@ function attach_create_attachment($name='', $mime='', $size=0, $tmp_name='', $po
 		return true;
 }
 
-function attach_create_subfolder($newfolder=''){
+function attach_create_subfolder($newfolder='')
+{
 	global $db,$pun_config,$pun_user;
-	
+
 	if(strlen($newfolder)==0 || $pun_user['g_id']!=PUN_ADMIN)
 		return false;
-		
+
 	// check to see if that folder is there already, then just update the config ...
 	if(!is_dir($pun_config['attach_basefolder'].$newfolder)){
 		// if the folder doesn't excist, try to create it
