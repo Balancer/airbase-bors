@@ -1,10 +1,7 @@
 <?php
 
-class bors_tools_search extends base_page
+class bors_tools_search extends balancer_board_page
 {
-	function class_file() { return __FILE__; } // не удалять, шаблон в субклассах.
-	function _template_def() { template_noindex(); return 'forum/_header.html'; }
-
 	function parents()
 	{
 		if(empty($_GET['t']))
