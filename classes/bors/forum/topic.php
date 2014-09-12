@@ -400,7 +400,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			$base = $this->forum()->category()->category_base_full();
 
 		// Если последний пост на странице свежий, то откручиваем на wrk.ru
-		if($this->get('last_post_create_time') > time() - 86400*7)
+		if($this->get('last_post_create_time') > time() - 86400*30)
 			$base = str_replace('www.balancer.ru', 'www.wrk.ru', $base);
 		else
 			$base = str_replace('www.balancer.ru', 'forums.balancer.ru', $base);
