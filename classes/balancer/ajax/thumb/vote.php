@@ -193,6 +193,7 @@ class balancer_ajax_thumb_vote extends base_object
 		{
 			// Проверку на время не делаем, так как минусы итак только за две недели ставятся.
 			if($score < 0 && $target_score <= -7)
+			{
 				balancer_board_rpg_request::factory('balancer_board_rpg_requests_warning')
 					->set_user($user)
 					->set_target($target)
@@ -200,14 +201,35 @@ class balancer_ajax_thumb_vote extends base_object
 					->set_level($user->rpg_level()+1)
 					->add(intval(-$target_score/7));
 
+				bors_debug::syslog('rpg-requests',
+					"target score for warning =".$target_score."; "
+					."target-data=".print_r($target->data, true));
+
+				if(intval($target_score/7) >= 0)
+					bors_debug::syslog('000-rpg-score-error',
+						"target score for warning =".$target_score."; "
+						."target-data=".print_r($target->data, true));
+			}
+
 			// Только для свежих сообщений, которым менее двух недель
 			if($score > 0 && $target->create_time() > time() - 86400*14 && $target_score >= 15)
+			{
 				balancer_board_rpg_request::factory('balancer_board_rpg_requests_warning')
 					->set_user($user)
 					->set_target($target)
 					->set_title('Коллективный поощрительный балл за высоко оценённое сообщение')
 					->set_level(7) // 3×level6, 2187 баллов
 					->add(intval(-$target_score/15));
+
+				bors_debug::syslog('rpg-requests',
+					"target score for award =".$target_score."; "
+					."target-data=".print_r($target->data, true));
+
+				if(intval($target_score/15) <= 0)
+					bors_debug::syslog('000-rpg-score-error',
+						"target score for award =".$target_score."; "
+						."target-data=".print_r($target->data, true));
+			}
 		}
 
 		return $return;
