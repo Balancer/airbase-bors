@@ -226,7 +226,7 @@ class balancer_board_topic extends forum_topic
 	}
 
 	function forum_title() { return $this->forum()->title(); }
-	function title_with_forum() { return $this->title().' ['.$this->forum()->title().']'; }
+	function title_with_forum() { return $this->title().' ['.$this->forum()->title().'] ('.$this->num_replies().')'; }
 
 	function list_fields_format() { return '%title% [%forum_title%]'; }
 
