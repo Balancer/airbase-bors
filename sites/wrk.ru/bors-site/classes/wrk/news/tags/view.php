@@ -2,7 +2,7 @@
 
 class wrk_news_tags_view extends balancer_board_paginated
 {
-	const DAYS=180;
+	const DAYS=93;
 
 	function title() { return 'Новости по теме «'.$this->id().'»'; }
 	var $main_class = 'balancer_board_post';
@@ -50,7 +50,7 @@ class wrk_news_tags_view extends balancer_board_paginated
 //			'is_hidden' => false,
 //			'is_spam' => false,
 //			'is_incorrect' => false,
-			'create_time>' => time() - 86400*30,
+			'create_time>' => time() - 86400*self::DAYS,
 			'answer_to_id' => 0,
 			'(score>=0 OR score IS NULL)',
 //			'(warning_id = 0 OR warning_id IS NULL)',

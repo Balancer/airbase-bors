@@ -174,7 +174,7 @@ class balancer_ajax_thumb_vote extends base_object
 		if(is_null($target->best10_ts()) && $positives >= 10)
 				$target->set_best10_ts(time(), true);
 
-		$target_score = $target->score();
+		$target_score = intval($target->score());
 		if($target_score >= 7)
 			balancer_balabot::on_thumb_up($target);
 
