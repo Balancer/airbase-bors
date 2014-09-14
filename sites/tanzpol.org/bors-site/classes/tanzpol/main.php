@@ -10,8 +10,8 @@ class tanzpol_main extends tanzpol_page
 
 	static function cat_names() { return "tanzpol"; }
 
-	function body_data()
-	{
-		return json_decode(file_get_contents('http://www.wrk.ru/news/tags/политика/last.json'), true);
-	}
+    function body_data()
+    {
+        return json_decode(file_get_contents('http://www.wrk.ru/news/tags/политика/last.json'), true);
+    }
 }

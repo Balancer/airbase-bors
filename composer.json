@@ -17,6 +17,9 @@
 		"source": "https://bitbucket.org/Balancer/bors-airbase"
 	},
 
+	"prefer-stable": true,
+	"minimum-stability": "dev",
+
     "require": {
 		"php": ">=5.3",
 		"balancer/bors-core": "@dev",
