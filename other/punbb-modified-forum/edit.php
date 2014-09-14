@@ -40,7 +40,9 @@ if ($pun_user['g_read_board'] == '0')
 
 
 if($is_banned)
-	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire));
+	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire)
+		.'<br/><br/>'.bbf_bans::message_ls()
+	);
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id < 1)
@@ -57,8 +59,8 @@ if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
 
 $cur_post = $db->fetch_assoc($result);
-$blog = object_load('balancer_board_blog', $id);
-$post = object_load('balancer_board_post', $id);
+$blog = bors_load('balancer_board_blog', $id);
+$post = bors_load('balancer_board_post', $id);
 $topic = $post->topic();
 $forum = $topic->forum();
 $cur_post['message'] = $post->source();
@@ -124,7 +126,6 @@ if (isset($_POST['form_sent']))
 		$message = preparse_bbcode($message, $errors);
 	}
 
-
 	$hide_smilies = isset($_POST['hide_smilies']) ? intval($_POST['hide_smilies']) : 0;
 	if ($hide_smilies != '1') $hide_smilies = '0';
 
@@ -151,6 +152,107 @@ if (isset($_POST['form_sent']))
 		$post->set_hide_smilies(intval($hide_smilies), true);
 		$post->set_have_attach(NULL, true);
 
+		//Attachment Mod 2.0 Block Start
+		//First check if there are any files to delete, the postvariables should be named 'attach_delete_'.$i , if it's set you're going to delete the value of this (the 0 =< $i < attachments, just to get some order in there...)
+		if(isset($_POST['attach_num_attachments'])){
+			// if there is any number of attachments, check if there has been any deletions ... if so, delete the files if allowed...
+			$attach_num_attachments = intval($_POST['attach_num_attachments']);
+			for($i=0;$i<$attach_num_attachments;$i++){
+				if(array_key_exists('attach_delete_'.$i,$_POST)){
+					$attach_id=intval($_POST['attach_delete_'.$i]);
+					//fetch info about it ... owner and such ... (so we know if it's going to be ATTACH_OWNER_DELETE or ATTACH_DELETE that will affect the rulecheck...
+					$result_attach = $db->query('SELECT af.owner,ar.rules FROM '.$db->prefix.'attach_2_files AS af, '.$db->prefix.'attach_2_rules AS ar, '.$db->prefix.'posts AS p, '.$db->prefix.'topics AS t WHERE af.id=\''.intval($attach_id).'\' AND ar.group_id=\''.intval($pun_user['g_id']).'\' AND (ar.forum_id=t.forum_id OR ar.forum_id=0) AND t.id=p.topic_id AND p.id=af.post_id ORDER BY ar.forum_id DESC LIMIT 1')
+						or error('Unable to fetch attachment details and forum rules', __FILE__, __LINE__, $db->error());
+					if($db->num_rows($result_attach)>0||$pun_user['g_id']==PUN_ADMIN){
+						list($attach_cur_owner,$attach_rules)=$db->fetch_row($result_attach);
+
+						$attach_allowed = false;
+
+						if($pun_user['g_id']==PUN_ADMIN)//admin overrides
+							$attach_allowed = true;
+						elseif($attach_cur_owner==$pun_user['id'])//it's the owner of the file that want to delete it
+							$attach_allowed=attach_rules($attach_rules,ATTACH_OWNER_DELETE);
+						else //it's not the owner that wants to delete the attachment...
+							$attach_allowed=attach_rules($attach_rules,ATTACH_DELETE);
+
+						if($attach_allowed){
+							if(!attach_delete_attachment($attach_id)){
+								// uncomment if you want to show error if it fails to delete
+								//error('Unable to delete attachment.');
+							}
+						}else{
+							// the user may not delete it ... uncomment the error if you want to use it ...
+							//error('You\'re not allowed to delete the attachment');
+						}
+					}else{
+						// the user probably hasn't any rules in this forum any longer...
+					}
+				}
+			}
+		}
+
+		//Then recieve any potential new files
+		if((isset($_FILES['attached_file'])
+			&&$_FILES['attached_file']['size']!=0
+			&&is_uploaded_file($_FILES['attached_file']['tmp_name'])))
+		{
+			//ok, we have a new file, much similar to post, except we need to check if the user uploads too many files...
+			$attach_allowed=false;
+			if($pun_user['g_id']==PUN_ADMIN)
+			{
+				$attach_allowed=true;
+			}
+			else
+			{
+				//fetch forum rules and the number of attachments for this post.
+				$result_attach = $db->query('SELECT COUNT(af.id) FROM '.$db->prefix.'attach_2_files AS af WHERE af.post_id = \''.intval($id).'\' GROUP BY af.post_id LIMIT 1')
+					or error('Unable to fetch current number of attachments in post',__FILE__,__LINE__,$db->error());	
+				if($db->num_rows($result_attach)==1)
+				{
+					list($attach_num_attachments)=$db->fetch_row($result_attach);
+				}
+				else
+				{
+					$attach_num_attachments=0;
+				}
+
+				$result_attach = $db->query('SELECT ar.rules,ar.size,ar.file_ext,ar.per_post FROM '.$db->prefix.'attach_2_rules AS ar, '.$db->prefix.'posts AS p, '.$db->prefix.'topics AS t WHERE group_id=\''.intval($pun_user['g_id']).'\' AND p.id = \''.intval($id).'\' AND t.id = p.topic_id AND (ar.forum_id = t.forum_id OR ar.forum_id=0) ORDER BY ar.forum_id DESC LIMIT 1')
+					or error('Unable to fetch attachment rules',__FILE__,__LINE__,$db->error());
+
+				if($db->num_rows($result_attach)==1)
+				{
+					list($attach_rules,$attach_size,$attach_file_ext,$attach_per_post)=$db->fetch_row($result_attach);
+					//first check if the user is allowed to upload
+					$attach_allowed = attach_allow_upload($attach_rules,$attach_size,$attach_file_ext,$_FILES['attached_file']['size'],$_FILES['attached_file']['name']); //checks so that extensions, size etc is ok
+					if($attach_allowed && $attach_num_attachments < $attach_per_post) // if we haven't attached too many...
+						$attach_allowed = true;
+					else
+						$attach_allowed = false;
+				}
+				else
+				{
+					// probably no rules, don't allow upload
+					$attach_allowed = false;
+				}
+			}
+			// ok, by now we should know if it's allowed to upload or not ... 
+			if($attach_allowed)
+			{	//if so upload it ... 
+				if(!attach_create_attachment(
+					$_FILES['attached_file']['name'],
+					$_FILES['attached_file']['type'],
+					$_FILES['attached_file']['size'],
+					$_FILES['attached_file']['tmp_name'],
+					$id,
+					count_chars($message)
+				))
+				{
+					error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
+				}
+			}
+		}
+		//Attachment Mod 2.0 Block End
+
 		if(!isset($_POST['silent']) || !$is_admmod)
 		{
 			$post->set_edited(time(), true);
@@ -163,14 +265,18 @@ if (isset($_POST['form_sent']))
 		$topic->set_modify_time(time(), true);
 		$topic->set_last_post_create_time(max($topic->last_post_create_time(), $post->create_time()), true);
 
+		// Если эту фигню удалять, то надо проверить на аттачи и множественные аттачи, как при постинге, так и при редактировании
+		config_set('lcml_cache_disable', true);
+
+		$post->recalculate($topic);
 		$post->store();
 		$topic->store();
 
-
 		$post->cache_clean_self();
 		$post->set_body(NULL);
-		config_set('lcml_cache_disable', true);
 		$post->body();
+
+		$post->full_recalculate_and_clean();
 
 		$page = $topic->page_by_post_id($post->id());
 		$topic->set_page($page);
@@ -221,86 +327,6 @@ if (isset($_POST['form_sent']))
 
 		$post->cache_clean();
 
-		//Attachment Mod 2.0 Block Start
-		//First check if there are any files to delete, the postvariables should be named 'attach_delete_'.$i , if it's set you're going to delete the value of this (the 0 =< $i < attachments, just to get some order in there...)
-		if(isset($_POST['attach_num_attachments'])){
-			// if there is any number of attachments, check if there has been any deletions ... if so, delete the files if allowed...
-			$attach_num_attachments = intval($_POST['attach_num_attachments']);
-			for($i=0;$i<$attach_num_attachments;$i++){
-				if(array_key_exists('attach_delete_'.$i,$_POST)){
-					$attach_id=intval($_POST['attach_delete_'.$i]);
-					//fetch info about it ... owner and such ... (so we know if it's going to be ATTACH_OWNER_DELETE or ATTACH_DELETE that will affect the rulecheck...
-					$result_attach = $db->query('SELECT af.owner,ar.rules FROM '.$db->prefix.'attach_2_files AS af, '.$db->prefix.'attach_2_rules AS ar, '.$db->prefix.'posts AS p, '.$db->prefix.'topics AS t WHERE af.id=\''.intval($attach_id).'\' AND ar.group_id=\''.intval($pun_user['g_id']).'\' AND (ar.forum_id=t.forum_id OR ar.forum_id=0) AND t.id=p.topic_id AND p.id=af.post_id ORDER BY ar.forum_id DESC LIMIT 1')
-						or error('Unable to fetch attachment details and forum rules', __FILE__, __LINE__, $db->error());
-					if($db->num_rows($result_attach)>0||$pun_user['g_id']==PUN_ADMIN){
-						list($attach_cur_owner,$attach_rules)=$db->fetch_row($result_attach);
-
-						$attach_allowed = false;
-
-						if($pun_user['g_id']==PUN_ADMIN)//admin overrides
-							$attach_allowed = true;
-						elseif($attach_cur_owner==$pun_user['id'])//it's the owner of the file that want to delete it
-							$attach_allowed=attach_rules($attach_rules,ATTACH_OWNER_DELETE);
-						else //it's not the owner that wants to delete the attachment...
-							$attach_allowed=attach_rules($attach_rules,ATTACH_DELETE);
-
-						if($attach_allowed){
-							if(!attach_delete_attachment($attach_id)){
-								// uncomment if you want to show error if it fails to delete
-								//error('Unable to delete attachment.');
-							}
-						}else{
-							// the user may not delete it ... uncomment the error if you want to use it ...
-							//error('You\'re not allowed to delete the attachment');
-						}
-					}else{
-						// the user probably hasn't any rules in this forum any longer...
-					}
-				}
-			}
-		}
-
-		//Then recieve any potential new files
-		if((isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))){
-
-			//ok, we have a new file, much similar to post, except we need to check if the user uploads too many files...
-			$attach_allowed=false;
-			if($pun_user['g_id']==PUN_ADMIN){
-				$attach_allowed=true;
-			}else{
-				//fetch forum rules and the number of attachments for this post.
-				$result_attach = $db->query('SELECT COUNT(af.id) FROM '.$db->prefix.'attach_2_files AS af WHERE af.post_id = \''.intval($id).'\' GROUP BY af.post_id LIMIT 1')
-					or error('Unable to fetch current number of attachments in post',__FILE__,__LINE__,$db->error());	
-				if($db->num_rows($result_attach)==1){
-					list($attach_num_attachments)=$db->fetch_row($result_attach);
-				}else{
-					$attach_num_attachments=0;
-				}
-
-				$result_attach = $db->query('SELECT ar.rules,ar.size,ar.file_ext,ar.per_post FROM '.$db->prefix.'attach_2_rules AS ar, '.$db->prefix.'posts AS p, '.$db->prefix.'topics AS t WHERE group_id=\''.intval($pun_user['g_id']).'\' AND p.id = \''.intval($id).'\' AND t.id = p.topic_id AND (ar.forum_id = t.forum_id OR ar.forum_id=0) ORDER BY ar.forum_id DESC LIMIT 1')
-					or error('Unable to fetch attachment rules',__FILE__,__LINE__,$db->error());	
-				if($db->num_rows($result_attach)==1){
-					list($attach_rules,$attach_size,$attach_file_ext,$attach_per_post)=$db->fetch_row($result_attach);
-					//first check if the user is allowed to upload
-					$attach_allowed=attach_allow_upload($attach_rules,$attach_size,$attach_file_ext,$_FILES['attached_file']['size'],$_FILES['attached_file']['name']); //checks so that extensions, size etc is ok
-					if($attach_allowed && $attach_num_attachments < $attach_per_post) // if we haven't attached too many...
-						$attach_allowed=true;
-					else
-						$attach_allowed=false;
-				}else{
-					// probably no rules, don't allow upload
-					$attach_allowed=false;
-				}
-			}
-			// ok, by now we should know if it's allowed to upload or not ... 
-			if($attach_allowed){ //if so upload it ... 
-				if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$id,count_chars($message))){
-					error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
-				}
-			}
-		}
-		//Attachment Mod 2.0 Block End
-
 		redirect('viewtopic.php?pid='.$id.'#p'.$id, $lang_post['Edit redirect']);
 	}
 }
@@ -313,16 +339,21 @@ $attach_allow_upload=false;
 $attach_allowed=false;
 $attach_allow_size=0;
 $attach_per_post=0;
-if($pun_user['g_id']==PUN_ADMIN){
+if($pun_user['g_id']==PUN_ADMIN)
+{
 	$attach_allow_delete=true;
 	$attach_allow_owner_delete=true;
 	$attach_allow_upload=true;
 	$attach_allow_size=$pun_config['attach_max_size'];
 	$attach_per_post=-1;
-}else{
+}
+else
+{
 	$result_attach=$db->query('SELECT ar.rules,ar.size,ar.per_post,COUNT(f.id) FROM '.$db->prefix.'attach_2_rules AS ar, '.$db->prefix.'attach_2_files AS f, '.$db->prefix.'posts AS p, '.$db->prefix.'topics AS t WHERE group_id=\''.intval($pun_user['g_id']).'\' AND p.id = \''.intval($id).'\' AND t.id = p.topic_id AND (ar.forum_id = t.forum_id OR ar.forum_id=0) GROUP BY f.post_id ORDER BY ar.forum_id DESC LIMIT 1')
 		or error('Unable to fetch attachment rules and current number of attachments in post (#2)',__FILE__,__LINE__,$db->error());	
-	if($db->num_rows($result_attach)==1){
+
+	if($db->num_rows($result_attach)==1)
+	{
 		list($attach_rules,$attach_allow_size,$attach_per_post,$attach_num_attachments)=$db->fetch_row($result_attach);
 		//may the user delete others attachments?
 		$attach_allow_delete = attach_rules($attach_rules,ATTACH_DELETE);
@@ -330,41 +361,61 @@ if($pun_user['g_id']==PUN_ADMIN){
 		$attach_allow_owner_delete = attach_rules($attach_rules,ATTACH_OWNER_DELETE);
 		//may the user upload new files?
 		$attach_allow_upload = attach_rules($attach_rules,ATTACH_UPLOAD);
-	}else{
+	}
+	else
+	{
 		//no rules set, so nothing allowed
 	}
 }
+
 $attach_output = '';
 $attach_output_two = '';
 //check if this post has attachments, if so make the appropiate output
-if($attach_allow_delete||$attach_allow_owner_delete||$attach_allow_upload){
+if($attach_allow_delete||$attach_allow_owner_delete||$attach_allow_upload)
+{
 	$attach_allowed=true;
 	$result_attach=$db->query('SELECT af.id, af.owner, af.filename, af.extension, af.size, af.downloads FROM '.$db->prefix.'attach_2_files AS af WHERE post_id=\''.intval($id).'\'')
 		or error('Unable to fetch current attachments',__FILE__,__LINE__,$db->error());
-	if($db->num_rows($result_attach)>0){
+
+	if($db->num_rows($result_attach)>0)
+	{
 		//time for some output ... create the existing files ... 
 		$i=0;
-		while(list($attach_id,$attach_owner,$attach_filename,$attach_extension,$attach_size,$attach_downloads)=$db->fetch_row($result_attach)){
+		while(list($attach_id,$attach_owner,$attach_filename,$attach_extension,$attach_size,$attach_downloads)=$db->fetch_row($result_attach))
+		{
 			if(($attach_owner==$pun_user['id']&&$attach_allow_owner_delete)||$attach_allow_delete)
 				$attach_output .= '<br />'."\n".'<input type="checkbox" name="attach_delete_'.$i.'" value="'.$attach_id.'" />'.$lang_attach['Delete?'].' '.attach_icon($attach_extension).' <a href="./attachment.php?item='.$attach_id.'">'.$attach_filename.'</a>, '.$lang_attach['Size:'].' '.number_format($attach_size).' '.$lang_attach['bytes'].', '.$lang_attach['Downloads:'].' '.number_format($attach_downloads);
 			else
 				$attach_output_two .= '<br />'."\n".attach_icon($attach_extension).' <a href="./attachment.php?item='.$attach_id.'">'.$attach_filename.'</a>, '.$lang_attach['Size:'].' '.number_format($attach_size).' '.$lang_attach['bytes'].', '.$lang_attach['Downloads:'].' '.number_format($attach_downloads);
 			$i++;
 		}
+
 		if(strlen($attach_output)>0)
 			$attach_output = '<input type="hidden" name="attach_num_attachments" value="'.$db->num_rows($result_attach).'" />'.$lang_attach['Existing'] . $attach_output;
+
 		if(strlen($attach_output_two)>0)
 			$attach_output .= "<br />\n".$lang_attach['Existing2'] . $attach_output_two;
+
 		$attach_output .= "<br />\n";
-	}else{
+	}
+	else
+	{
 		// we have not existing files
 	}
 }
+
 //fix the 'new upload' field...
-if($attach_allow_upload){
-	if(strlen($attach_output)>0)$attach_output .= "<br />\n";
-	if($attach_per_post==-1)$attach_per_post = '<em>unlimited</em>';
-	$attach_output .= str_replace('%%ATTACHMENTS%%',$attach_per_post,$lang_attach['Upload'])."<br />\n".'<input type="hidden" name="MAX_FILE_SIZE" value="'.$attach_allow_size.'" /><input type="file" name="attached_file" size="80" />';
+if($attach_allow_upload)
+{
+	if(strlen($attach_output)>0)
+		$attach_output .= "<br />\n";
+
+	if($attach_per_post==-1)
+		$attach_per_post = '<em>unlimited</em>';
+
+	$attach_output .= str_replace('%%ATTACHMENTS%%', $attach_per_post, $lang_attach['Upload'])."<br />\n"
+		.'<input type="hidden" name="MAX_FILE_SIZE" value="'.$attach_allow_size.'" />'
+		.'<input type="file" name="attached_file" />';
 }
 //Attachment Mod 2.0 Block End
 
@@ -383,7 +434,10 @@ $cur_index = 1;
 ?>
 <div class="linkst">
 	<div class="inbox">
-		<ul><li><a href="<?php echo $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<a href="viewforum.php?id=<?php echo $cur_post['fid'] /*"*/?>"><?php echo pun_htmlspecialchars($cur_post['forum_name']) ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo pun_htmlspecialchars($cur_post['subject']) ?></li></ul>
+		<ul>
+			<li><a href="<?php echo $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li>
+			<li>&nbsp;&raquo;&nbsp;<a href="viewforum.php?id=<?php echo $cur_post['fid'] /*"*/?>"><?php echo pun_htmlspecialchars($cur_post['forum_name']) ?></a></li>
+			<li>&nbsp;&raquo;&nbsp;<a href="<?= $post->url_for_igo();/*"*/?>"><?= pun_htmlspecialchars($cur_post['subject']) ?></a></li></ul>
 	</div>
 </div>
 

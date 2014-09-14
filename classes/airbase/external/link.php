@@ -43,8 +43,15 @@ class airbase_external_link extends balancer_board_object_db
 	static function find($original_url)
 	{
 		$url_index = self::normalize($original_url);
-		if($x = bors_find_first(__CLASS__, array('url_index' => $url_index)))
-			return $x;
+		try
+		{
+			if($x = bors_find_first(__CLASS__, array('url_index' => $url_index)))
+				return $x;
+		}
+		catch(Exception $e)
+		{
+			bors_debug::syslog('link-load-error', blib_exception::factory($e));
+		}
 
 		return NULL;
 
@@ -88,7 +95,7 @@ class airbase_external_link extends balancer_board_object_db
 //			'description' => array('type' => 'bbcode'),
 //			'image_id',
 //			'owner_id',
-			'html_source' => $content,
+			'html_source' => preg_match('!^text/!', $req['content_type']) ? $content : NULL,
 			'content_type' => $req['content_type'],
 			'last_error' => $req['error'],
 			'last_check_time' => time(),

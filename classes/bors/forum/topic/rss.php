@@ -1,67 +1,62 @@
 <?php
 
-class forum_topic_rss extends balancer_board_topic
+class forum_topic_rss extends bors_rss
 {
-	function render_engine() { return 'self'; }
 
-	function url() { return $this->rss_url(); }
-//	function use_temporary_static_file() { return false; }
+	var $items_class_name = 'balancer_board_post';
+	var $limit = 100;
 
-	function render($object)
+	function auto_objects()
 	{
-		$topic = object_load('balancer_board_topic', $object->id());
-		$forum = object_load('forum_forum', $topic->forum_id());
+		return array_merge(parent::auto_objects(), [
+			'topic' => 'balancer_board_topic(id)',
+		]);
+	}
+
+	function title() { return $this->topic()->title(); }
+	function description() { return $this->topic()->description(); }
+	function main_url() { return $this->topic()->url(); }
+
+	function pre_show()
+	{
+		$forum = $this->topic()->forum();
 
 		if(!$forum->can_read())
 			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
 
-		require_once("feedcreator.class.php"); 
+		config_set('rss_skip_images', true);
 
-		$rss = new UniversalFeedCreator(); 
-		$rss->encoding = 'utf-8'; 
-		$rss->title = $object->title();
-		$rss->description = ec("Ответы в топик ").$object->title();
-		$rss->link = parent::url(1);
-		$rss->syndicationURL = $object->url(); 
+		return parent::pre_show();
+	}
 
-/*		$image = new FeedImage(); 
-		$image->title = "dailyphp.net logo"; 
-		$image->url = "http://www.dailyphp.net/images/logo.gif"; 
-		$image->link = "http://www.dailyphp.net"; 
-		$image->description = "Feed provided by dailyphp.net. Click to visit."; 
-		$rss->image = $image; 
-*/
-		// get your news items from somewhere, e.g. your database: 
-		foreach($object->db()->get_array("SELECT id FROM posts WHERE topic_id={$object->id()} ORDER BY posted DESC LIMIT 50") as $post_id)
-		{
-		    $item = new FeedItem();
-			$post = class_load('balancer_board_post', $post_id);
-	    	$item->title = $object->title();
-		    $item->link = $post->url_in_container();
-
-			$html = $post->body();
-			if(strlen($html) > 1024)
-			{
-				include_once("inc/texts.php");
-				$html = strip_text($html, 1024);
-				$html .= "<br /><br /><a href=\"".$post->url_in_container().ec("\">Дальше »»»");
-			}
-
-			$item->description = $html;
-			$item->date = $post->create_time(); 
-			$item->source = "http://www.balancer.ru/forum/";
-			if($post->owner())
-				$item->author = $post->owner()->title();
-			else
-				debug_hidden_log('lost-data', 'Unknown author for '.$post);
-
-			$rss->addItem($item);
-		} 
-
-		$result = $rss->createFeed("RSS1.0");
-		header("Content-Type: ".$rss->contentType."; charset=".$rss->encoding);
-		return $result;
+	function where()
+	{
+		return [
+			'topic_id' => $this->id(),
+		];
 	}
 
 	function cache_group_depends() { return parent::cache_group_depends() + "balancer-board-topic-".$this->id(); }
+
+	function cache_static()
+	{
+		if(!$this->topic()->is_public_access())
+			return 0;
+
+		$mt = $this->modify_time();
+
+		if($mt < time() - 86400*365)
+			return 86400*rand(300, 900);
+
+		if($mt < time() - 86400*30)
+			return 86400*rand(7, 30);
+
+		if($mt < time() - 86400*7)
+			return rand(3600, 86400);
+
+		if($mt < time() - 86400)
+			return rand(600, 1200);
+
+		return rand(60, 300);
+	}
 }

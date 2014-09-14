@@ -21,6 +21,7 @@
 {if not $owner_title}
 	{assign var="owner_title" value=$owner->title()}
 {/if}
+<div class="avatar-text avatar-{$owner->id()}">
 <h4><a href="{$owner->url()}">{$owner_title}</a>{if $owner_title != $owner->login()}<div style="font-size: 8pt; color: #ccc;">{$owner->login()}</div>{/if}</h4>
 {if $avatar_size == 100}
 {if $owner->group_title()}<h5>{blib_lang::translate($owner->group_title())}</h5>{/if}
@@ -29,3 +30,4 @@
 {* {if $owner->warnings() || $owner->is_banned()}<a href="http://www.balancer.ru/user/{$owner->id()}/warnings/"><img src="http://www.balancer.ru/user/{$owner->id()}/warnings.gif" class="warn" alt="" /></a>{/if} *}
 {if $owner->warnings() || $owner->is_banned()}<a href="http://www.balancer.ru/user/{$owner->id()}/warnings/" class="warn">{$owner->warnings_html()}</a><br/>{/if}
 {/if}
+</div>

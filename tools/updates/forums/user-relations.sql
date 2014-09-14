@@ -73,5 +73,3 @@ UPDATE user_relations SET
 
 -- INSERT IGNORE INTO user_relations (from_user_id, from_user_name) SELECT to_user_id, to_user_name FROM user_relations;
 -- INSERT IGNORE INTO user_relations (to_user_id, to_user_name) SELECT from_user_id, from_user_name FROM user_relations;
-
-

@@ -9,6 +9,7 @@ $topic_view_class = config('topics.view_class');
 bors_url_map([
 	'/do/logout/ => bal_do_logout',
 	'/do/login/ => bal_do_login',
+	'/users/private/hactions/(\w+) => bors_user_hactions_dispatcher(1)',
 
 	"{$forums}\d{4}/\d{1,2}/t(\d+),new.* => balancer_board_topics_go_new(2)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),new.* => balancer_board_topics_go_new(2)",
@@ -20,8 +21,7 @@ $map = array(
 
 	'(/admin/forum/posts/)move-tree => airbase_forum_admin_posts_movetree',
 	'.*/ => airbase_page_hts_plain',
-	'.*/ => airbase_page_hts_plainu',
-	'.*/ => bal_pages_hts',
+//	'.*/ => airbase_page_hts_plainu',
 	'.* => airbase_pages_zim',
 	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
 	'/_bors/ajax/post/info\?post=(.+) => balancer_board_post_ajax_info(1)',
@@ -104,12 +104,9 @@ $map = array(
 	'/\w{32}/cache(/.*/\d*x\d*\([^)]+\)/[^/]+\.(jpe?g|png|gif)) => bors_image_autothumb(1)',
 	'/cache(/sites/.*/\d*x\d*/[^/]+) => bors_image_autothumb(1)',
 	'.*/\w+\.phtml => airbase_page_hts_plain',
-	'.*/\w+\.phtml => airbase_page_hts_plainu',
-//	'.*/\w+\.phtml => base_page_hts(url)',
+//	'.*/\w+\.phtml => airbase_page_hts_plainu',
 	'.* => bors_page_fs_htsu(url)', //TODO: снести нафиг после конвертации старых hts Авиабазы
 
-	'.* => airbase_page_hts(url)',
-	'.* => bal_pages_hts(url)',
 	'.* => airbase_pages_zim',
 	'.* => airbase_files_webroot',
 );

@@ -22,8 +22,11 @@
 
 ************************************************************************/
 
-$GLOBALS['stat']['start_microtime'] = microtime(true);
-$GLOBALS['stat']['start_time'] = time();
+if(empty($GLOBALS['stat']['start_microtime']))
+{
+	$GLOBALS['stat']['start_microtime'] = microtime(true);
+	$GLOBALS['stat']['start_time'] = time();
+}
 
 if(0 && !empty($forum_temporary_redirect))
 {
@@ -40,10 +43,7 @@ define('PUN_DEBUG', 0);
 //define('PUN_SHOW_QUERIES', 1);
 
 if (!defined('PUN_ROOT'))
-{
-	debug_trace();
 	exit('The constant PUN_ROOT must be defined and point to a valid PunBB installation root directory.');
-}
 
 ini_set('include_path', ini_get('include_path') . ':' . dirname(dirname(__FILE__)));
 
@@ -138,7 +138,9 @@ $pun_user = array();
 check_cookie($pun_user);
 
 // Attempt to load the common language file
-@include PUN_ROOT.'lang/'.$pun_user['language'].'/common.php';
+if(file_exists($inc = PUN_ROOT.'lang/'.$pun_user['language'].'/common.php'))
+	include($inc);
+
 if (!isset($lang_common))
 	exit('There is no valid language pack \''.pun_htmlspecialchars($pun_user['language']).'\' installed. Please reinstall a language of that name.');
 

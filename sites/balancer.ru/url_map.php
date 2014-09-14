@@ -1,6 +1,6 @@
 <?php
 
-bors_url_map(array(
+bors_vhost_routes('balancer.ru', array(
 	'/cache/avatars/jpgto/(.+)\.jpg => balancer_cache_avatars_jpgto(1)',
 
 	'/_tools/external/sites/preview => balancer_tools_external_sites_preview',
@@ -29,7 +29,8 @@ bors_url_map(array(
 
 	'/memo/theo/mmorpg/ => balancer_page_dropbox',
 
-
 	'(/blog)/(\d{4})/? => balancer_blog_year(2)',
 
+	'.* => balancer_page_hts',
+	'.* => bal_pages_hts(url)',
 ));

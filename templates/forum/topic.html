@@ -4,16 +4,22 @@
 		class="{if config('css_bootstrap_is_loaded')}btn btn-small{else}select_page{/if}"
 	>{"Новый опрос"|ec}</a>
 
+<a href="http://ls.balancer.ru/photoset/add/"
+		class="{if config('css_bootstrap_is_loaded')}btn btn-small{else}select_page{/if}"
+	>{"Новый фотосет"|ec}</a>
+
+{if $this->new_class_name() == 'balancer_board_topic'}
 <a href="{$this->forum()->category()->category_base_full()}post.php?fid={$this->forum()|get:id}"
 		class="{if config('css_bootstrap_is_loaded')}btn btn-small btn-warning{else}select_page{/if}"
 	>{"Новая тема"|ec}</a>
 
-{if $this->is_closed()}
+	{if $this->is_closed()}
 	<a href="#" class="btn btn-small disabled">{"Тема закрыта"|ec}</a>
-{else}
+	{else}
 	<a href="{$this->forum()->category()->category_base_full()}post.php?tid={$this->id()}" 
 		class="{if config('css_bootstrap_is_loaded')}btn btn-small btn-primary{else}select_page{/if}"
 	>{"Ответ в эту тему"|ec}</a>
+	{/if}
 {/if}
 
 </div>
@@ -32,8 +38,21 @@
 
 {foreach $posts as $p}
 <!-- {$p->id()} -->
-{include file="xfile:forum/post.html"}
-{if $p@first && $this->get('can_adsense')}{include file="xfile:forum/ads/top-ad-google.html"}{/if}
+	{if $this->new_class_name() == 'balancer_board_topic'}
+		{include file="xfile:forum/post.html"}
+	{else}
+		{include file="xfile:forum/post.html"
+			forum=$p->topic()->forum()
+			show_title=$p->topic()->titled_link_ex('new')
+		}
+	{/if}
+	{if $p@first}
+		{if $this->get('can_adsense')}
+			{include file="xfile:forum/ads/top-ad-google.html"}
+		{elseif $this->get('can_yandex_direct')}
+			{include file="xfile:forum/ads/yandex-direct-h2-middle.html"}
+		{/if}
+	{/if}
 {/foreach}
 
 {if $last_actions}

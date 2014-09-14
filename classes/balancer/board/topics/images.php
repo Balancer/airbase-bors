@@ -5,6 +5,10 @@ class balancer_board_topics_images extends balancer_board_topics_blog
 	function title() { return "Сообщения с картинками в теме «{$this->topic()->title()}»"; }
 	function nav_name() { return 'изображения'; }
 
+	function parents() { return [$this->topic()->url()]; }
+
+	function url() { return $this->url_ex($this->default_page()); }
+
 	function url_ex($page = NULL)
 	{
 		return $this->topic()->category()->url()
@@ -33,5 +37,17 @@ class balancer_board_topics_images extends balancer_board_topics_blog
 				OR source LIKE "%gif%")',
 */
 		);
+	}
+
+	function pre_show()
+	{
+		$forum = $this->topic()->forum();
+		if(!$forum || !$forum->can_read())
+		{
+			template_noindex();
+			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
+		}
+
+		return parent::pre_show();
 	}
 }

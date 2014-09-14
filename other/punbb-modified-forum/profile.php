@@ -457,7 +457,11 @@ else if (isset($_POST['update_group_membership']))
 
 	$new_group_id = intval($_POST['group_id']);
 
-	$db->query('UPDATE '.$db->prefix.'users SET group_id='.$new_group_id.' WHERE id='.$id) or error('Unable to change user group', __FILE__, __LINE__, $db->error());
+	$db->query('UPDATE '.$db->prefix.'users
+			SET group_id='.$new_group_id.'
+			SET group_title=NULL
+			WHERE id='.$id)
+		or error('Unable to change user group', __FILE__, __LINE__, $db->error());
 
 	// If the user was a moderator or an administrator, we remove him/her from the moderator list in all forums as well
 	if ($new_group_id > PUN_MOD)

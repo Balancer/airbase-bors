@@ -40,21 +40,49 @@ class user_main extends balancer_board_page
 		return array_merge(parent::body_data(), array(
 			'friends_from' => bors_find_all('balancer_board_users_relation', array(
 				'to_user_id' => $this->id(),
+				'score>' => 0,
+				'order' => '-score',
+				'limit' => 10,
+			)),
+			'friends_from_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
+				'to_user_id' => $this->id(),
+				'score>' => 0,
 				'order' => '-score',
 				'limit' => 10,
 			)),
 			'friends_to' => bors_find_all('balancer_board_users_relation', array(
 				'from_user_id' => $this->id(),
+				'score>' => 0,
+				'order' => '-score',
+				'limit' => 10,
+			)),
+			'friends_to_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
+				'from_user_id' => $this->id(),
+				'score>' => 0,
 				'order' => '-score',
 				'limit' => 10,
 			)),
 			'enemies_from' => bors_find_all('balancer_board_users_relation', array(
 				'to_user_id' => $this->id(),
+				'score<' => 0,
+				'order' => 'score',
+				'limit' => 10,
+			)),
+			'enemies_from_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
+				'to_user_id' => $this->id(),
+				'score<' => 0,
 				'order' => 'score',
 				'limit' => 10,
 			)),
 			'enemies_to' => bors_find_all('balancer_board_users_relation', array(
 				'from_user_id' => $this->id(),
+				'score<' => 0,
+				'order' => 'score',
+				'limit' => 10,
+			)),
+			'enemies_to_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
+				'from_user_id' => $this->id(),
+				'score<' => 0,
 				'order' => 'score',
 				'limit' => 10,
 			)),
@@ -114,41 +142,6 @@ class user_main extends balancer_board_page
 		bors_objects_targets_preload($best);
 		bors_objects_targets_preload($best_of_month);
 
-		if(bors()->user() && ($is_watcher = bors()->user()->is_watcher() || bors()->user()->is_admin()))
-		{
-			$interlocutors = $db->select_array('posts', 'poster_id, COUNT(*) as answers_count', array(
-				'is_deleted' => false,
-				'posted>' => time() - 365*86400,
-				'answer_to_user_id' => $this->id(),
-				'group' => 'poster_id',
-//				'order' => 'COUNT(*) DESC',
-			));
-			$interlocutor_stats = array();
-			foreach($interlocutors as $x)
-				$interlocutor_stats[$x['poster_id']] = $x['answers_count'];
-//var_dump($interlocutor_stats);
-			$interlocutors = bors_find_all('balancer_board_user', array('id IN' => array_keys($interlocutor_stats)));
-
-			foreach($interlocutors as $x)
-			{
-				$x->set_answers($interlocutor_stats[$x->id()], false);
-			}
-
-			usort($interlocutors, create_function('$x, $y', 'return $y->answers() - $x->answers();'));
-
-			$last_ips = $db->select_array('posts', 'poster_ip, COUNT(*) AS count', array(
-				'poster_id' => $this->id(),
-				'posted>' => time()-30*86400,
-				'group' => 'poster_ip',
-				'order' => 'MAX(posted) DESC',
-			));
-		}
-		else
-		{
-			$last_ips = false;
-			$interlocutors = false;
-			$interlocutor_stats = false;
-		}
 
 		$user = $this->user();
 		$user->set_reg_geo_ip(geoip_place($user->registration_ip()), false);
@@ -228,13 +221,10 @@ class user_main extends balancer_board_page
 			'votes_from' => bors_votes_thumb::colorize_pm(@$pluses_from, @$minuses_from),
 			'votes_to'   => bors_votes_thumb::colorize_pm(@$pluses_to  , @$minuses_to  ),
 			'ban' => $user->is_admin_banned(),
+			'is_watcher' => (bors()->user() && (bors()->user()->is_watcher() || bors()->user()->is_admin())),
 		);
 
 		return array_merge(parent::page_data(), $data, compact(
-			'is_watcher',
-			'interlocutors',
-			'interlocutor_stats',
-			'last_ips',
 			'scores_positive',
 			'scores_negative',
 			'votes_positive',

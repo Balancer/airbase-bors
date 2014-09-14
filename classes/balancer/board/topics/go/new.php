@@ -40,8 +40,9 @@ class balancer_board_topics_go_new extends bors_object
 				return go($first_new_post->url_in_container());
 
 			// Если не нашли, то тупо переходим на последнее сообщение.
-			$last_post = bors_find_first('balancer_board_post', [
+			$last_post = bors_find_first('balancer_board_posts_pure', [
 				'topic_id' => $this->id(),
+				'use_index' => 'by_tid_ordered',
 				'order' => '-sort_order,-id',
 			]);
 
