@@ -1,4 +1,4 @@
-{extends file="xfile:bootstrap/index.html"}
+{extends file="xfile:bootstrap/index.tpl"}
 
 {block name="copyright"}
 <br/>

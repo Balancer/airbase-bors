@@ -107,10 +107,13 @@ $map = array(
 //	'.*/\w+\.phtml => airbase_page_hts_plainu',
 	'.* => bors_page_fs_htsu(url)', //TODO: снести нафиг после конвертации старых hts Авиабазы
 
+//	'.* => airbase_page_hts(url)',
 	'.* => airbase_pages_zim',
 	'.* => airbase_files_webroot',
 );
 
+if($_SERVER['HTTP_HOST'] != 'www.tanzpol.org')
+	$map[] = '.* => bal_pages_hts(url)';
 
 // Leagcy, ссылки старого формата
 bors_url_map(array(
