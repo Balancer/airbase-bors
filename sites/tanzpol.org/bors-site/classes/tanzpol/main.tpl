@@ -11,4 +11,47 @@
 
 {* module class="forum_blog" cat_names=$this->cat_names() *}
 {* module class="balancer_board_module_blog" forum_ids="10,78,80,101,102,173,180,181,194,195,202,206-208" *}
-{module class="balancer_board_module_blog" cat_names=$this->cat_names() blog_body_template='bootstrap'}
+{* module class="balancer_board_module_blog" cat_names=$this->cat_names() blog_body_template='bootstrap' *}
+
+<style>
+.tanz-news {
+    margin: 0 0 8px 0;
+    padding: 8px;
+}
+
+.tanz-news h2 {
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    border-radius: 4px;
+    background-color: #2489DB;
+    margin: 0 0 8px 0;
+    padding: 4px;
+}
+
+.tanz-news h2 a {
+    color: white;
+}
+
+.tanz-news h3 {
+    margin: 0 0 8px 0;
+    padding: 0;
+}
+
+.round_box {
+    margin: 0 0 8px 0;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.float_left {
+    float: left;
+    margin: 0 8px 0 0;
+}
+</style>
+
+{foreach $news as $x}
+<div class="tanz-news">
+<h2><a href="{$x.url}">{$x.title}</a></h2>
+{$x.content}
+</div>
+{/foreach}

@@ -29,3 +29,20 @@
 {if $previous_day_link}<a href="{$previous_day_link}" class="select_page">Предыдущий день</a>{/if}
 {if $next_day_link}<a href="{$next_day_link}" class="select_page">Следующий день</a>{/if}
 </div>
+
+{js_ready}
+if(top.me_can_move)
+{
+	$('ul.postfooter').each(
+		function() {
+			pid = $(this).parent().parent().prev().attr('name').replace(/p/, '')
+			x = jQuery.cookie('selected_posts')
+			selected = x ? x.split(',') : []
+			checked = jQuery.inArray(pid, selected) < 0 ? '' : ' checked="checked"'
+			$(this).prepend(
+				'<li><label><input type="checkbox"'+checked+'onclick="return apfgp(this, '+pid+')" />&nbsp;отметить</label></li>'
+			)
+		}
+	)
+}
+{/js_ready}
