@@ -59,8 +59,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 
 		$object = bors_load($data['object']);
 		$object->set_warning_id(NULL, true);
-		$object->set_modify_time(time(), true);
-		$object->cache_clean();
+		$object->set_modify_time(time());
 
 		@unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
 		if($object->extends_class_name() == 'forum_post' || $object->new_class_name() == 'balancer_board_post')
@@ -68,6 +67,8 @@ class airbase_user_admin_warning extends airbase_user_warning
 			$topic = $object->topic();
 			balancer_board_action::add($topic, "Предупреждение пользователю: {$object->nav_named_link()}", true);
 		}
+
+		$object->call('recalculate');
 	}
 
 	function delete()
@@ -91,8 +92,9 @@ class airbase_user_admin_warning extends airbase_user_warning
 
 		$object = object_load($this->warn_class_id(), $this->warn_object_id());
 		$object->set_warning_id($this->id(), true);
-		$object->cache_clean();
 
+		$object->set_modify_time(time());
+		$object->call('recalculate');
 		@unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
 		return $ret;
 	}

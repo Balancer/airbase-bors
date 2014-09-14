@@ -52,4 +52,29 @@ class balancer_board_posts_pure extends balancer_board_object_db
 //			'answer_to' => 'airbase_user(answer_to_id)',
 		));
 	}
+
+	function url_in_container()
+	{
+		$pid = $this->id();
+
+		$tid = $this->topic_id();
+
+		if(!$tid)
+			return "топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден";
+
+		$topic = bors_load('balancer_board_topic', $tid);
+
+		if(!$topic)
+			return "топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден";
+
+		if(!$topic->is_repaged())
+		{
+			$topic->repaging_posts();
+			$post = object_load($this->class_name(), $this->id());
+		}
+		else
+			$post = $this;
+
+		return $topic->url_ex($post->topic_page())."#p".$post->id();
+	}
 }

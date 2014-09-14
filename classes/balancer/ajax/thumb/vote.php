@@ -103,16 +103,35 @@ class balancer_ajax_thumb_vote extends base_object
 //			$target->set_modify_time(time(), true);
 		}
 
-		$vote = bors_new('bors_votes_thumb', array(
+		$prev = bors_find_first('bors_votes_thumb', array(
 			'user_id' => $me_id,
-			'target_class_name' => $target->class_name(),
 			'target_class_id' => $target->class_id(),
 			'target_object_id' => $target->id(),
 			'target_user_id' => $target->owner_id(),
-			'score' => $score,
 		));
 
-		$vote->store();
+		if($prev)
+		{
+			if($score != $prev->score())
+				$prev->delete();
+			else
+				return "<small>Вы уже выставили эту оценку</small>";
+
+			$vote = $prev;
+		}
+		else
+		{
+			$vote = bors_new('bors_votes_thumb', array(
+				'user_id' => $me_id,
+				'target_class_name' => $target->class_name(),
+				'target_class_id' => $target->class_id(),
+				'target_object_id' => $target->id(),
+				'target_user_id' => $target->owner_id(),
+				'score' => $score,
+			));
+
+			$vote->store();
+		}
 
 		$target->set_warning_id(NULL, true);
 
@@ -170,30 +189,46 @@ class balancer_ajax_thumb_vote extends base_object
 			'warn_object_id' => $target->id(),
 		));
 
-		// Проверку на время не делаем, так как минусы итак только за две недели ставятся.
-		if($score < 0)
+		if(!$old_warning)
 		{
-			if($target_score <= -7)
-				$user->set_object_warning($target, intval(-$target_score/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
-			elseif($old_warning)
+			// Проверку на время не делаем, так как минусы итак только за две недели ставятся.
+			if($score < 0 && $target_score <= -7)
 			{
-				if($target_score >= 15)
-					$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
-				else
-					$user->set_object_warning($target, 0, 'Удалённая пометка');
-			}
-		}
+				balancer_board_rpg_request::factory('balancer_board_rpg_requests_warning')
+					->set_user($user)
+					->set_target($target)
+					->set_title('Коллективный штраф за слишком низкий рейтинг сообщения')
+					->set_level($user->rpg_level()+1)
+					->add(intval(-$target_score/7));
 
-		if($score > 0 && $target->create_time() > time() - 86400*14)
-		{
-			if($target_score >= 15 )
-				$user->set_object_warning($target, intval(-$target_score/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
-			elseif($old_warning)
+				bors_debug::syslog('rpg-requests',
+					"target score for warning =".$target_score."; "
+					."target-data=".print_r($target->data, true));
+
+				if(intval($target_score/7) >= 0)
+					bors_debug::syslog('000-rpg-score-error',
+						"target score for warning =".$target_score."; "
+						."target-data=".print_r($target->data, true));
+			}
+
+			// Только для свежих сообщений, которым менее двух недель
+			if($score > 0 && $target->create_time() > time() - 86400*14 && $target_score >= 15)
 			{
-				if($target_score <= -7)
-					$user->set_object_warning($target, intval(-$target_score/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
-				elseif($target_score > -7)
-					$user->set_object_warning($target, 0, 'Удалённая пометка');
+				balancer_board_rpg_request::factory('balancer_board_rpg_requests_warning')
+					->set_user($user)
+					->set_target($target)
+					->set_title('Коллективный поощрительный балл за высоко оценённое сообщение')
+					->set_level(7) // 3×level6, 2187 баллов
+					->add(intval(-$target_score/15));
+
+				bors_debug::syslog('rpg-requests',
+					"target score for award =".$target_score."; "
+					."target-data=".print_r($target->data, true));
+
+				if(intval($target_score/15) <= 0)
+					bors_debug::syslog('000-rpg-score-error',
+						"target score for award =".$target_score."; "
+						."target-data=".print_r($target->data, true));
 			}
 		}
 

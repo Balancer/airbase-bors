@@ -16,11 +16,9 @@ $map = array(
 	'.*/\d{4}/\d{1,2}/topic\-(\d+)\-rss\.xml => forum_topic_rss(1)',
 //	'.* => page_fs_separate', - Временно отключено по причине ошибок определения загруженности страницы.
 	'.*/ => airbase_page_hts_plain',
-	'.*/ => airbase_page_hts_plainu',
+//	'.*/ => airbase_page_hts_plainu',
 	'.*/\w+\.phtml => airbase_page_hts_plain',
-	'.*/\w+\.phtml => airbase_page_hts_plainu',
-
-	'.*/\w+\.phtml => base_page_hts(url)',
+//	'.*/\w+\.phtml => airbase_page_hts_plainu',
 
 	'/_bors/ajax/thumb\-(up|down)\?object=(.+) => balancer_ajax_thumb_vote(2,vote=1)',
 	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
@@ -178,12 +176,9 @@ $map = array(
 
 		'(/bors/examples/)top-reputation/ => examples_topReputation',
 
-//		'(/)(test|crazy)/ => base_page_hts',
 		'(/test/bors/)xml/ => bors_test_xml',
 
 
 	'/external/picasaweb/js/album/(\w+/\w+)/? => balancer_external_picasaweb_jsAlbum(1)',
 	'/external/picasaweb/bb/album/(\w+/\w+)/? => balancer_external_picasaweb_bbAlbum(1)',
-
-//	'.* => base_page_hts',
 );

@@ -1,8 +1,9 @@
 <?php
 
-class balancer_board_action extends bors_page_db
+class balancer_board_action extends balancer_board_object_db
 {
-	function db_name() { return config('punbb.database'); }
+	var $class_title = 'действие';
+
 	function table_name() { return 'board_actions'; }
 	function table_fields()
 	{
@@ -22,6 +23,13 @@ class balancer_board_action extends bors_page_db
 	{
 		return array_merge(parent::auto_objects(), array(
 			'owner' => 'airbase_user(owner_id)',
+		));
+	}
+
+	function auto_targets()
+	{
+		return array_merge(parent::auto_targets(), array(
+			'target' => 'target_class_name(target_object_id)',
 		));
 	}
 
@@ -56,5 +64,14 @@ class balancer_board_action extends bors_page_db
 //<li class="red">marata [17.10.2010 11:00]: Предупреждение пользователю KILLO: <a href="http://www.balancer.ru/support/2008/09/p2262128.html">Обсуждение модераториалов [KILLO#17.10.10 05:38]</a></li>
 		return preg_replace('!(Предупреждение пользователю).+?:( <a href=".+?">).+?\[(.+?)\]!', '$1$2$3', $this->message_raw());
 	}
-}
 
+	function item_list_fields()
+	{
+		return [
+			'ctime' => 'Дата',
+			'owner' => 'Владелец',
+			'target()->titled_link()' => 'Объект',
+			'message' => 'Сообщение',
+		];
+	}
+}

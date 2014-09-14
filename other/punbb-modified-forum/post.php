@@ -54,7 +54,9 @@ if ($tid < 1 && $fid < 1 || $tid > 0 && $fid > 0)
 	message($lang_common['Bad request']);
 
 if($is_banned)
-	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire));
+	message("У Вас нет доступа к этой возможности до ".strftime("%Y-%m-%d %H:%M", WARNING_DAYS*86400+$ban_expire)
+		.'<br/><br/>'.bbf_bans::message_ls()
+	);
 
 $topic = bors_load('balancer_board_topic', $tid);
 $forum_id = $fid ? $fid : $topic->forum_id();
@@ -81,14 +83,18 @@ if($messages_limit >= 0)
 	{
 		require_once('inc/datetime.php');
 		message("Вы не можете больше отправить ни одного сообщения в этот форум до <b>".full_time($me->next_can_post($messages_limit, $forum_id))."</b>. 
-		Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>»");
+		Подробности в теме <a href=\"http://www.balancer.ru/support/2009/07/t67998--ogranichenie-sutochnogo-chisla-soobschenij-dlya-polzovatelej.1757.html\">Ограничение суточного числа сообщений</a>"
+		.'<br/><br/>'.bbf_bans::message_ls()
+		);
 	}
 }
 
 if($warnings_total = $me->warnings())
 	if(($warnings_in = $me->warnings_in($forum_id)) >= 5)
 		message("Вы не можете больше отправить ни одного сообщения в этот форум, пока количество активных штрафных баллов равно пяти или более. Сейчас оно равно $warnings_in. 
-		Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>.");
+		Подробности в теме <a href=\"http://www.balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>."
+		.'<br/><br/>'.bbf_bans::message_ls()
+		);
 
 $forum = bors_load('balancer_board_forum', $forum_id);
 
@@ -580,6 +586,13 @@ if (isset($_POST['form_sent']))
 			$post  = bors_load('balancer_board_post',  $new_pid, array('no_load_cache' => true));
 		}
 
+		// Этот блок держать над пересчётами данных топика, чтобы аттачи в них уже учитывались.
+		// Attachment Mod Block Start
+		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))
+			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
+				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
+		// Attachment Mod Block End
+
 		if(!empty($_POST['keywords_string']))
 			$topic->set_keywords_string($_POST['keywords_string'], true);
 
@@ -615,6 +628,7 @@ if (isset($_POST['form_sent']))
 
 		$topic->set_page($page);
 
+/*
 		$ldtext = to_translit($topic->title());
 		$ldtext = preg_replace('/\W/', ' ', $ldtext);
 		$ldtext = str_replace(' ', '-', trim(substr(trim(preg_replace('/\s+/', ' ', $ldtext)), 0, 16))).'>';
@@ -624,6 +638,7 @@ if (isset($_POST['form_sent']))
 		$ldtext2 = trim(preg_replace('/\s+/', ' ', $ldtext2));
 //		@file_get_contents('http://home.balancer.ru/lorduino/arduino.php?text='.urlencode($ldtext.$ldtext2));
 		@file_put_contents('/tmp/ldtext.txt', $ldtext);
+*/
 
 		$topic->cache_clean();
 		$post->cache_clean();
@@ -635,11 +650,6 @@ if (isset($_POST['form_sent']))
 			$db->query('UPDATE '.$low_prio.$db->prefix.'users SET num_posts=num_posts+1, last_post='.$now.' WHERE id='.$pun_user['id']) or error('Unable to update user', __FILE__, __LINE__, $db->error());
 		}
 
-		// Attachment Mod Block Start
-		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))
-			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
-				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
-		// Attachment Mod Block End
 /*
 		if($post->owner()->num_posts() < 20 && $post->owner()->create_time() > time() - 7*86400)
 		{
@@ -651,6 +661,12 @@ if (isset($_POST['form_sent']))
 			}
 		}
 */
+
+		// Если эту фигню удалять, то надо проверить на аттачи и множественные аттачи, как при постинге, так и при редактировании
+		// Вызывать после добавления аттачей выше.
+		$post->recalculate($topic);
+		$post->full_recalculate_and_clean();
+
 		if(!empty($_POST['as_blog']) && !$post->get('is_spam'))
 			$blog = balancer_board_blog::create($post, @$_POST['keywords']);
 
@@ -844,7 +860,8 @@ if(($warn_count = $me->warnings()) > 0)
 	echo "При достижении 10 общих штрафов, Вы будете автоматически переведены в режим \"только чтение\" на срок до истечения самого старого из активных штрафов (срок их активности - две недели с момента выставления) во всех форумах. ";
 	echo "При достижении 5 активных штрафов в данном форуме Вы автоматически будете лишены возможности писать в него, но будете иметь возможность писать в другие. ";
 	echo "Посмотреть список своих штрафов Вы можете на <a href=\"http://www.balancer.ru/users/{$me->id()}/warnings/\">странице Ваших штрафов</a>. ";
-	echo "Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>»";
+	echo "Подробности в теме «<a href=\"http://www.balancer.ru/support/2009/07/t68005--poforumnye-ogranicheniya-5-shtrafov.4435.html\">Пофорумные ограничения</a>»"
+		.'<br/><br/><b>'.bbf_bans::message_ls().'</b>';
 	echo "</div><br/>";
 }
 

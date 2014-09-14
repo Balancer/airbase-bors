@@ -76,7 +76,6 @@ dl.box {
 	padding: 0px; 
 	background-color: white;
 	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
 	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
@@ -154,7 +153,6 @@ div.post {
 	clear: both;
 	background-color: #ffffff;
 	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
 	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
@@ -200,7 +198,7 @@ a:hover {
 }
 
 a.current_page, a.select_page {
-	padding: 1px 3px;
+	padding: 0.02cm 0.2cm;
 	margin: 8px 2px;
 	border: 1px solid #9bd;
 }
@@ -235,7 +233,6 @@ a.select_page:hover {
 
 .pages_select a {
 	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
 	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
@@ -376,22 +373,26 @@ span.clear {
     background: #D8F0FF url(http://www.airbase.ru/images/web/sky-back.jpg);
 }
 
-.outer {
-	margin-left: 215px;  /* L */
-}
-
 .tpl_column_center {
 	float: right;
 	width: 100%;
 	margin-left: -1px;
 }
-.tpl_column_left {
-	float: left;
-	position: relative;
-	width: 200px;  /* L */
-	margin-left: -210px;  /* -L-1 */
-	margin-right: 2px;
+
+@media only screen and (min-device-width: 640px) and (min-device-width: 10cm) {
+	.outer {
+		margin-left: 215px;  /* L */
+	}
+
+	.tpl_column_left {
+		float: left;
+		position: relative;
+		width: 200px;  /* L */
+		margin-left: -210px;  /* -L-1 */
+		margin-right: 2px;
+	}
 }
+
 .minwidth {
 	min-width: 404px;
 }
@@ -833,7 +834,6 @@ table.yandex_money input {
 
 .shadow8 {
 	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
 	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
@@ -845,7 +845,6 @@ table.yandex_money input {
 	padding: 0;
 	border-radius: 8px;
 	-moz-box-shadow: 0 0 8px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.3);
 	box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
@@ -951,4 +950,54 @@ tr.bb-background-private td {
 
 .small_post img {
 	max-width: 100%;
+}
+
+.forum-link-small {
+	line-height: 16px;
+}
+
+.forum-link-small a {
+	font-size: 8pt;
+	color: #ccc;
+	padding-left: 20px;
+	background: url(/_bors/i16/forum.png) 0 1px no-repeat;
+	line-height: 16px;
+}
+
+@media only screen and (max-device-width: 10cm) {
+	div.rs_box {
+		width: 100%;
+	}
+	img.main {
+		width: 100%;
+		height: auto;
+	}
+}
+
+.forum-topic-snippet-replies {
+	font-size: 8pt;
+	color: #ccc;
+	padding-left: 20px;
+	background: url(/_bors-ext/i16/actions/comments_reply.png) 0 1px no-repeat;
+	line-height: 16px;
+}
+
+.forum-topic-snippet-post {
+	font-size: 9pt;
+	color: #999;
+	background: url(/_bors-ext/i16/actions/comment_reply.png) 0 1px no-repeat;
+	text-indent: 20px;
+	margin: 0 0 4px 0;
+}
+
+.forum-topic-snippet-post .time {
+	color: #ccc;
+}
+
+.black{
+	color:black;
+}
+
+div.answer_to_me div.body, div.answer_to_me div.body div.avatar_block {
+	background-color: #fffff0;
 }

@@ -1,13 +1,13 @@
 <?php
 
-class forum_js_personal extends base_js
+class forum_js_personal extends bors_jsh
 {
 	var $owner;
 
 	function __construct($id)
 	{
 		parent::__construct($id);
-		$this->owner = class_load('balancer_board_user', $this->id());
+		$this->owner = bors_load('balancer_board_user', $this->id());
 	}
 
 	function cache_static() { return config('static_forum') ? rand(3600, 7200) : 0; }

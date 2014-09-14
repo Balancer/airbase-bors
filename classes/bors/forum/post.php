@@ -156,12 +156,12 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		$cache = $this->cache();
 		if($cache && ($body = $cache->body()))
-			return $body;
+			return blib_html::close_tags($body);
 
 		$body = $this->_make_html();
 		$this->set_body($body);
 
-		return $body;
+		return blib_html::close_tags($body);
 	}
 
 	function set_body($value, $dbupd = true)
@@ -194,23 +194,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($topic = bors_load('balancer_board_topic', $this->topic_id()))
 			return $this->__setc($topic);
-/*
-		$topic = balancer_board_topic::create(
-			bors_load('balancer_board_forum', 1), // Флейм и тесты
-			ec('Потерянный топик'),
-			$this,
-			$this->owner(),
-			NULL,
-			false, // as blog
-			array(
-				'id' => $this->topic_id(),
-				'description' => ec('Данный топик был когда-то утерян, сообщения остались. Требуется переименовать и переместить в нужный форум'
-			)
-		));
-*/
-//		debug_hidden_log('topics_lost_recreated', "post={$this}, topic={$topic}", false);
-//		$topic->recalculate();
-//		return $topic;
+
 		return NULL;
 	}
 
@@ -471,14 +455,14 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($this->have_attach() === NULL)
 		{
-			$attaches = bors_find_all('balancer_board_attach', array('post_id' => $this->id()));
+			$this->_attaches = bors_find_all('balancer_board_attach', array('post_id' => $this->id()));
 
-			if($this->_attaches = $attaches)
+			if($this->_attaches)
 			{
-				if(count($attaches) > 1)
+				if(count($this->_attaches) > 1)
 					$this->set_have_attach(-1, true);
 				else
-					$this->set_have_attach($attaches[0]->id(), true);
+					$this->set_have_attach($this->_attaches[0]->id(), true);
 			}
 			else
 				$this->set_have_attach(0, true);
@@ -757,6 +741,9 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($blog = $this->blog())
 			$blog->recalculate($this, $topic);
+
+		$this->set_have_attach(NULL);
+		$this->attaches();
 	}
 
 	function joke_owner()
@@ -778,6 +765,9 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$text = $this->body();
 		$text = restore_format($text);
 		$text = preg_replace('!<span class="q">.+?</span>!', ' … ', $text);
+		// Снос спойлеров
+		$text = preg_replace('!<a [^>]+class="spoiler"[^>]+>.+?</a>!', ' … ', $text);
+		$text = preg_replace('!<div[^>]+display:\s*none[^>]+>.+?</div>!', ' … ', $text);
 		$text = strip_tags($text);
 		$text = str_replace("\n", " ", $text);
 		$text = preg_replace("/\s{2,}/", ' ', $text);

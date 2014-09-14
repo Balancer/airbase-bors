@@ -1,6 +1,6 @@
 <?php
 
-class user_blog_rss extends base_rss
+class user_blog_rss extends bors_rss
 {
 	function title() { return $this->user()->title().ec(": Блог"); }
 	function description() { return ec("Все темы, начатые пользователем ").$this->user()->title().ec(" за последние 30 дней. Не более 25 штук."); }

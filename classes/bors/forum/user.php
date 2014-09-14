@@ -48,6 +48,7 @@ class forum_user extends balancer_board_object_db
 			'username',
 			'user_nick',
 			'group_id',
+			'rpg_level',
 			'user_title' => 'title',
 			'group_title_raw' => 'group_title',
 			'level',
@@ -244,17 +245,19 @@ function avatar_thumb($geo)
 		if($this->_title = $this->user_title())
 			return $this->_title;
 
-		if($this->_title = $this->group_title_raw())
-			return $this->_title;
+//		if($this->_title = $this->group_title_raw())
+//			return $this->_title;
 
-		if(!$this->_title)
-			$this->_title = $this->group()->user_title();
+//		if(!$this->_title)
+		//TODO: хардкод. 4 == «участники»
+		if($this->group_id() != 4 && $this->group()->user_title())
+			return $this->_title = $this->group()->user_title();
 
-		if(!$this->_title)
-			$this->_title = $this->rank();
+//		if(!$this->_title)
+		return $this->_title = bors_lower($this->rank());
 
-		$this->set('group_title_raw', $this->_title);
-		return $this->_title;
+//		$this->set('group_title_raw', $this->_title);
+//		return $this->_title;
 	}
 
 	private $__rank = NULL;
@@ -331,6 +334,9 @@ function avatar_thumb($geo)
 
 	function is_banned()
 	{
+		if($this->is_deleted())
+			return true;
+
 		if(array_key_exists('is_banned', $this->attr))
 			return $this->attr['is_banned'];
 
@@ -573,6 +579,18 @@ function avatar_thumb($geo)
 //		livestreet_native_user::bb_copy($check_user, $password, true);
 //		if($check_user->id()==10000) { var_dump($user); exit('debug: введите ещё раз'); }
 
+		file_get_contents("http://ls.balancer.ru/bors-api/user-new.php?"
+			."login=".urlencode($check_user->login())
+			."&id=".$check_user->id()
+			."&mail=".urlencode($check_user->email())
+			."&password_md=".md5($password)
+			."&date=".$check_user->create_time()
+			."&ip=".$check_user->registration_ip()
+			."&loc=".urlencode($check_user->location())
+		);
+
+//		exit('debug');
+
 		if(!$handle_cookie_set)
 			return $check_user;
 
@@ -617,7 +635,7 @@ function avatar_thumb($geo)
 				5 => 4, // coordin
 				6 => 2, // старожилы
 				21 => 4, // координатор-литератор
-				26 => 0, // пария
+				26 => 0.001, // пария
 		);
 
 		$weight = @$this->_group_weights[$group];

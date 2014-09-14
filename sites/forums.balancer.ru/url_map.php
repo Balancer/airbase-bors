@@ -11,7 +11,7 @@ bors_url_map(array(
 	'/community/persons/ => balancer_board_forums_persons',
 	'(/community/)persons/(\d+)\.html => balancer_board_forums_persons(NULL,2)',
 	'/posts/popups/tools/?\?post=(\d+) => balancer_board_posts_popups_tools(1)',
-	'.* => balancer_board_pages_zim',
+//	'.* => balancer_board_pages_zim',
 ));
 
 $map = array(
@@ -73,6 +73,8 @@ $map = array(
 	'/users?/(\d+)/reputation/(.+) => user_reputation(1,2)',
 	'/users?/(\d+)/reputation\.html => user_reputation(1)',
 	'/users?/(\d+)/reputation\.html(.+) => user_reputation(1,2)',
+
+	'/users/(\d+)/votes/lastgraph\.svg => balancer_board_users_votes_lastgraph(1)',
 
 	'(/users/)(\d+)/? => user_main(2)',
 

@@ -2,6 +2,22 @@
 
 class balancer_board_topic extends forum_topic
 {
+	function browser_title()
+	{
+		if($this->total_pages() <= 1)
+			return $this->title();
+
+		return $this->title() . " ({$this->page()}/{$this->total_pages()})";
+	}
+
+	function browser_description()
+	{
+		if($this->total_pages() <= 1)
+			return $this->description();
+
+		return $this->description() . " (страница {$this->page()} из {$this->total_pages()})";
+	}
+
 	function cache_static_can_be_dropped()
 	{
 		bors_debug::syslog('__pages_clean', "Clean {$this->static_file()}[{$this->page()}/{$this->total_pages()}]: ".($this->page() > $this->total_pages() - 3));
@@ -210,7 +226,7 @@ class balancer_board_topic extends forum_topic
 	}
 
 	function forum_title() { return $this->forum()->title(); }
-	function title_with_forum() { return $this->title().' ['.$this->forum()->title().']'; }
+	function title_with_forum() { return $this->title().' ['.$this->forum()->title().'] ('.$this->num_replies().')'; }
 
 	function list_fields_format() { return '%title% [%forum_title%]'; }
 
@@ -387,12 +403,14 @@ class balancer_board_topic extends forum_topic
 		return $this->last_post_time;
 	}
 
+	function can_yandex_direct() { return config('ad.yandex.enabled') && preg_match('/balancer\.ru/', $_SERVER['HTTP_HOST']); }
+
 	function can_adsense()
 	{
 		if(!$this->is_public_access())
 			return false;
 
-		if(preg_match('/(airbase\.ru|forums\.balancer\.ru)/', @$_SERVER['HTTP_HOST']))
+		if(preg_match('/(airbase\.ru)/', @$_SERVER['HTTP_HOST']))
 			return true;
 
 		return $this->last_post_create_time() > time() - 86400*7;

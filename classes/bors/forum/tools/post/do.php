@@ -38,16 +38,6 @@ class forum_tools_post_do extends base_page
 						'warn_class_id' => $post->class_id(),
 						'warn_object_id' => $post->id(),
 					));
-
-					if($old_warning)
-					{
-						if($votes >= 15)
-							$post->owner()->set_object_warning($post, intval(-$votes/15), 'Автоматический поощрительный балл за высоко оценённое сообщение.');
-						elseif($votes <= -7)
-							$post->owner()->set_object_warning($post, intval(-$votes/7), 'Автоматический штраф за слишком низкий рейтинг сообщения.');
-						else
-							$post->owner()->set_object_warning($post, 0);
-					}
 				}
 
 				config_set('lcml_cache_disable_full', true);
@@ -56,6 +46,9 @@ class forum_tools_post_do extends base_page
 				$post->set_flag_db(NULL, true);
 				if($owner = $post->owner())
 					$owner->set_signature_html(NULL);
+
+				echo 'recalc';
+				$post->recalculate();
 				$post->cache_clean();
 				$post->store();
 				$post->body();

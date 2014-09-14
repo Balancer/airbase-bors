@@ -17,7 +17,7 @@
 <a name="p{$p->id()}"></a>
 		{assign var="owner" value=$p->owner()}
 		{assign var=a value=$p->get('answer_to')}
-<div class="post pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $p->get('is_moderatorial')} moderatorial_post{/if}">
+<div class="post pby{$p->owner_id()}{if $a} pto{$a->owner_id()}{/if}{if $p->get('is_moderatorial')} moderatorial_post{/if}">
 	<div class="head">
 		<div class="to-left">
 		{if $p->get('is_moderatorial')}<div class="red small">{ec("Данное сообщение является официальным предупреждением")}</div>{/if}

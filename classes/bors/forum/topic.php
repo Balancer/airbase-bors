@@ -152,6 +152,11 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 	function body()
 	{
+//		if($_SERVER['REMOTE_ADDR'] == '192.168.1.1')
+//			sleep(5);
+//		var_dump($_SERVER['REMOTE_ADDR']);
+
+
 		if(!$this->is_repaged() && rand(0,5) == 0)
 			$this->repaging_posts();
 
@@ -172,6 +177,16 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 		$post_ids = array_keys($posts);
 		$blogs = bors_find_all('balancer_board_blog', array('id IN' => $post_ids, 'by_id' => true));
+
+		$user_ids = [];
+		foreach($posts as $p)
+		{
+			$user_ids[] = $p->owner_id();
+		}
+
+		$user_ids = array_unique($user_ids);
+
+		$this->add_template_data('user_ids', join(',', $user_ids));
 
 		foreach($blogs as $blog_id => $blog)
 		{
@@ -348,7 +363,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 	}
 
 	function items_per_page() { return 25; }
-	function items_around_page() { return 12; }
+	function items_around_page() { return 9; }
 
 	function total_pages() { return intval($this->num_replies() / $this->items_per_page()) + 1; }
 
@@ -385,15 +400,12 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			$base = $this->forum()->category()->category_base_full();
 
 		// Если последний пост на странице свежий, то откручиваем на wrk.ru
-		if($this->get('last_post_create_time') > time() - 86400*7)
+		if($this->get('last_post_create_time') > time() - 86400*30)
 			$base = str_replace('www.balancer.ru', 'www.wrk.ru', $base);
+		else
+			$base = str_replace('www.balancer.ru', 'forums.balancer.ru', $base);
 
 		return $base;
-	}
-
-	function title_url()
-	{
-		return "<a href=\"".$this->url()."\">".$this->title()."</a>";
 	}
 
 	function rss_url() { return $this->base_url().strftime("%Y/%m/", $this->modify_time())."topic-".$this->id()."-rss.xml"; }
@@ -445,6 +457,9 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 	function recalculate($full_repaging = true, $skip_any_repaging = false)
 	{
+		// Ставим текущее время изменения
+		$this->set_modify_time(time());
+
 		bors()->changed_save(); // Сохраняем всё. А то в памяти могут быть модифицированные объекты, с которыми сейчас будем работать.
 
 		if(!$skip_any_repaging)
@@ -493,7 +508,6 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		foreach($this->posts() as $pid => $p)
 			$p->set_body(NULL, true);
 
-		$this->set_modify_time(time(), true);
 		$this->store(false);
 
 		$this->cache_clean_self();
