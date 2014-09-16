@@ -112,7 +112,7 @@ $map = array(
 	'.* => airbase_files_webroot',
 );
 
-if($_SERVER['HTTP_HOST'] != 'www.tanzpol.org')
+if(!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] != 'www.tanzpol.org')
 	$map[] = '.* => bal_pages_hts(url)';
 
 // Leagcy, ссылки старого формата
