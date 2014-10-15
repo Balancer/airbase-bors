@@ -8,3 +8,5 @@
 ### is_destructive
 @KVHV за кривой тег
 
+### Утягивание картинок
+https://www.linux.org.ru/forum/web-development/5825642
