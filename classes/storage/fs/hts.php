@@ -115,7 +115,7 @@ class storage_fs_hts extends base_null
 
 	    if($nav_sum)
     	{
-            $navs++;
+            @$navs++;
 	        $nav = "nav$navs";
     	    $$nav = $nav_sum;
         	$old = 1;
@@ -128,12 +128,12 @@ class storage_fs_hts extends base_null
 
 	    if($old)
     	{
-        	$hts = preg_replace("!\n\n#p\s+!","\n#p\n",$hts);
-	        $hts = preg_replace("!\n\n#p(\n|$)!","\n#p$1",$hts);
-    	    $hts = preg_replace("!\n+#p(\n|$)!","\n$1",$hts);
-	        $hts = preg_replace("!\n#t\s+!","\n\n",$hts);
-    	    $hts = preg_replace("!\|(.+?)\|!","$1",$hts);
-	        $copyr =preg_replace("!\|(.+?)\|!","$1",$copyr);
+        	$hts = preg_replace("!\n\n#p\s+!", "\n#p\n", $hts);
+	        $hts = preg_replace("!\n\n#p(\n|$)!", "\n#p$1", $hts);
+    	    $hts = preg_replace("!\n+#p(\n|$)!", "\n$1", $hts);
+	        $hts = preg_replace("!\n#t\s+!", "\n\n", $hts);
+    	    $hts = preg_replace("!\|(.+?)\|!", "$1", $hts);
+	        $copyr = preg_replace("!\|(.+?)\|!", "$1", @$copyr);
     	}
 
 	    $hts = preg_replace("!^\n+!","",$hts);

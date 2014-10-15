@@ -13,7 +13,7 @@ class airbase_board_show_latest extends base_page
 	function title() { return ec('Крайние обновившиеся темы'); }
 	function nav_name() { return ec('крайние темы'); }
 
-	function local_template_data_set()
+	function body_data()
 	{
 		$topics = objects_array('balancer_board_topic', array(
 				'limit' => 50,

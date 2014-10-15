@@ -14,7 +14,7 @@ class balancer_user_votes extends balancer_board_page
 		);
 	}
 
-	function local_data()
+	function body_data()
 	{
 		$last = array();
 

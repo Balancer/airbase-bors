@@ -8,7 +8,7 @@ class balancer_board_mobile_main extends balancer_board_mobile_page
 
 	function can_read() { return true; }
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'categories' => objects_array('balancer_board_mobile_category', array(

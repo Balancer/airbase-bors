@@ -18,7 +18,7 @@ class airbase_user_aliases extends balancer_board_page
 
 	function begin() { return $this->last_post_time()-86400*30; }
 
-	function local_data()
+	function body_data()
 	{
 		template_noindex();
 		$last_post = $this->last_post_time();

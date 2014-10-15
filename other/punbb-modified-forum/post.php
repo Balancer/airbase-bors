@@ -58,9 +58,17 @@ if($is_banned)
 		.'<br/><br/>'.bbf_bans::message_ls()
 	);
 
+
 $topic = bors_load('balancer_board_topic', $tid);
 $forum_id = $fid ? $fid : $topic->forum_id();
 $forum = bors_load('balancer_board_forum', $forum_id);
+
+if(bors_var::get('r/o-by-move-time-'.$forum->category_id()) > time())
+{
+	header("Status: 302 Moved Temporarily");
+	header("Location: http://ls.balancer.ru/blog/airbase/111.html");
+	bors_exit();
+}
 
 $me = bors()->user();
 if(!$me)

@@ -17,7 +17,7 @@ class balancer_board_mobile_posts_view extends balancer_board_mobile_page
 		);
 	}
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 //			'first' => $this->topic()->first_post(),

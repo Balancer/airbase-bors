@@ -19,7 +19,7 @@ class balancer_board_posts_tools_title extends base_page
 		return false;
 	}
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'p' => $this->post(),

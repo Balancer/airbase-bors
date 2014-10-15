@@ -7,7 +7,7 @@ class balancer_board_keywords_list extends base_page
 //	function template() { return 'forum/common.html'; }
 	function template() { return 'forum/_header.html'; }
 
-	function local_data()
+	function body_data()
 	{
 		template_noindex();
 

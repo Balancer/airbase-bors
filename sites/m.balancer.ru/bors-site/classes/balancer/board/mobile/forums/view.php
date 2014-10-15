@@ -40,7 +40,7 @@ class balancer_board_mobile_forums_view extends balancer_board_mobile_page
 		);
 	}
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'topics' => objects_array('balancer_board_mobile_topic', array(

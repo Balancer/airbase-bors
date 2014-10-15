@@ -27,7 +27,7 @@ class balancer_external_picasaweb_jsAlbum extends base_js
 		return $ch->set($data, 600);
 	}
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'data' => $this->album_data(),
