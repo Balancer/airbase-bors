@@ -198,6 +198,7 @@ class balancer_board_topic extends forum_topic
 	{
 		bors_lib_html::set_og_meta($this);
 		balancer_board_posts_view::container_init();
+		template_jquery_ui();
 
 		if($this->page() == $this->total_pages())
 			header("X-Accel-Expires: 30");
