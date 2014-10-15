@@ -2,7 +2,7 @@
 <?php
 	$_SERVER['DOCUMENT_ROOT'] = '/var/www/balancer.ru/htdocs';
 
-	define('BORS_CORE', '/var/www/bors/bors-core');
+	define('BORS_CORE', '/var/www/bors/composer/vendor/balancer/bors-core');
 	define('BORS_LOCAL', '/var/www/bors/bors-airbase');
 	require_once(BORS_CORE.'/init.php');
 	include_once('inc/users.php');

@@ -3,7 +3,7 @@ class module_forum_sitenews extends base_page
 {
 	function body_engine() { return 'body_php'; }
 
-    function local_template_data_set()
+    function body_data()
     {
 		$limit = intval(max(1,min($this->args('limit', 10),100)));
 

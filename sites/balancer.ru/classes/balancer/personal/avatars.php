@@ -5,7 +5,7 @@ class balancer_personal_avatars extends base_page
 	var $title_ec = 'Ваши аватары';
 	var $is_auto_url_mapped_class = true;
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'user' => bors()->user(),

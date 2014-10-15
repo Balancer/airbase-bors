@@ -18,9 +18,9 @@ class balancer_board_main extends balancer_board_page
 		return parent::pre_show();
 	}
 /*
-	function global_data()
+	function page_data()
 	{
-		return array_merge(parent::global_data(), array(
+		return array_merge(parent::page_data(), array(
 			'right_column' => 'xfile:forum/main-right.html',
 		));
 	}
@@ -32,6 +32,8 @@ class balancer_board_main extends balancer_board_page
 			'limit' => 10,
 			'closed' => 0,
 			'num_replies>=' => 0,
+			'first_post_id>' => 0,
+			'last_post_id>' => 0,
 			'is_public' => 1,
 		));
 

@@ -2,7 +2,7 @@
 
 class balancer_board_js_comments extends base_js
 {
-	function local_data()
+	function body_data()
 	{
 		$topic = bors_load('balancer_board_topic', $this->id());
 //		$total_posts = objects_count('forum_post', array('topic_id' => $this->id()));

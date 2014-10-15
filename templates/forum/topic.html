@@ -17,7 +17,7 @@
 	<a href="#" class="btn btn-small disabled">{"Тема закрыта"|ec}</a>
 	{else}
 	<a href="{$this->forum()->category()->category_base_full()}post.php?tid={$this->id()}" 
-		class="{if config('css_bootstrap_is_loaded')}btn btn-small btn-primary{else}select_page{/if}"
+		class="{if config('css_bootstrap_is_loaded')}btn btn-small btn-primary{else}select_page{/if} theme_answer_button"
 	>{"Ответ в эту тему"|ec}</a>
 	{/if}
 {/if}

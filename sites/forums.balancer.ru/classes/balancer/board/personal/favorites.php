@@ -7,7 +7,7 @@ class balancer_board_personal_favorites extends base_page
 	function is_auto_url_mapped_class() { return true; }
 	function template() { return 'forum/_header.html'; }
 
-	function local_data()
+	function body_data()
 	{
 		$favorites = objects_array('balancer_board_favorite', array(
 			'owner_id' => bors()->user_id(),

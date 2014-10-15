@@ -5,7 +5,7 @@ class module_forum_blog extends base_page
 	function db_name() { return config('punbb.database'); }
 
 	private $_data = array();
-	function local_data()
+	function body_data()
 	{
 		$limit = $this->args('limit', 25);
 //		$page  = $this->args('limit', 25);

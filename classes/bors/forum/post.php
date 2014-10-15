@@ -405,7 +405,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		return "<ul><li><a href=\"{$this->url_in_topic()}\">Помотреть это сообщение в теме</a></li></ul>";
 	}
 */
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'p' => $this,
@@ -549,6 +549,24 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			$forum->recalculate();
 
 		$this->recalculate();
+
+		if(bors()->user_id() == 10000
+			&& $this->create_time() < time() - 86400
+			&& $this->owner_id() != 10000
+		)
+		{
+			$key = 'r/o-by-move-time-'.$this->topic()->forum()->category_id();
+			$ro_time = intval(bors_var::get($key));
+			if($ro_time < time())
+				$ro_time = time();
+
+			$ro_time += 300;
+
+			if($ro_time > time() + 1800)
+				$ro_time = time() + 1800;
+
+			bors_var::set($key, $ro_time, 86400);
+		}
 	}
 
 	private function __move_tree_to_topic($new_tid, $old_tid)

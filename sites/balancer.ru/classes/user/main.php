@@ -37,7 +37,12 @@ class user_main extends balancer_board_page
 
 	function body_data()
 	{
+		$user = $this->user();
+
 		return array_merge(parent::body_data(), array(
+			'user' => $user,
+			'owner' => $user,
+
 			'friends_from' => bors_find_all('balancer_board_users_relation', array(
 				'to_user_id' => $this->id(),
 				'score>' => 0,
@@ -201,8 +206,6 @@ class user_main extends balancer_board_page
 		$data = array(
 			'best' => $best,
 			'best_of_month' => $best_of_month,
-			'user' => $user,
-			'owner' => $user,
 			'messages_today' => bors_count('balancer_board_post', array('owner_id' => $this->id(), 'create_time>' => time()-86400)),
 			'messages_today_by_forums' => $by_forums,
 			'messages_month_by_forums' => $by_forums_for_month,

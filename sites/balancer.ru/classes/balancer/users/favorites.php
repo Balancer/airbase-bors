@@ -14,14 +14,14 @@ class balancer_users_favorites extends bors_page
 		return parent::pre_show();
 	}
 
-	function local_data()
+	function body_data()
 	{
 		$favorites = objects_array('bors_user_favorite', array(
 			'user_id' => bors()->user_id(),
 			'order' => '-create_time',
 		));
 
-		return array_merge(parent::local_data(), array(
+		return array_merge(parent::body_data(), array(
 			'items' => bors_field_array_extract($favorites, 'target'),
 		));
 	}
