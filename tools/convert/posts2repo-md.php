@@ -1,8 +1,14 @@
 <?php
 
+use Symfony\Component\Yaml\Yaml;
+
 define('REPO_DIR', "/var/www/forums.balancer.ru/data2");
 
+require_once('/var/www/bors/composer/vendor/autoload.php');
 require_once('../config.php');
+
+//$year = 2014;
+//$month = 10;
 
 for($year = date('Y'); $year >= 2013; $year--)
 {
@@ -52,7 +58,6 @@ class exporter
 	{
 		$this->year = $year;
 		$this->month = $month;
-		$this->repo = REPO_DIR.sprintf("/%04d-%02d/", $year, $month);
 	}
 
 	function main()
@@ -77,89 +82,32 @@ class exporter
 		echo bors_count('balancer_board_post', array('posted BETWEEN' => array($start, $stop))), PHP_EOL;
 		echo "Begin...\n";
 
-		$total = 0;
-
-		$last_id = bors_find_first('balancer_board_posts_pure', [
-			'*set' => 'MIN(id) AS min_id',
+		$xx = bors_find_first('balancer_board_posts_pure', [
+			'*set' => 'MIN(id) AS min_id, MAX(id) AS max_id',
 			'posted BETWEEN' => array($start, $stop),
-		])->min_id() - 1;
+		]);
 
-		do
+		$total = 0;
+		$min_id = $xx->min_id();
+		$max_id = $xx->max_id();
+
+		echo "\noffset: $min_id .. $max_id (, ".(@$p?$p->ctime():'')."): ", bors_debug::memory_usage_ping(), PHP_EOL;
+
+		$p = NULL;
+
+		foreach(bors_each('balancer_board_post', array(
+				'id BETWEEN' => [$min_id, $max_id],
+				'posted BETWEEN' => [$start, $stop])
+		) as $p)
 		{
-			echo "\noffset: $last_id ($total, ".(@$p?$p->ctime():'')."): ", bors_debug::memory_usage_ping(), PHP_EOL;
+			$total += $this->post2md($p);
+		}
 
-			$p = NULL;
+		bors()->changed_save();
+		bors_object_caches_drop();
 
-			foreach(bors_find_all('balancer_board_post', array(
-					'id>' => $last_id,
-					'posted BETWEEN' => array($start, $stop),
-					'order' => 'id',
-					'limit' => 1000)
-			) as $p)
-			{
-				$t = self::make_topic($p);
-				$f = self::make_forum($t);
-				if($p->is_public() && $t->is_public() && $f->is_public())
-				{
-					$fn_base = $t->repo_path()
-						.'/posts/'.date('d.His', $p->create_time())
-						.'.'.$p->id();
-
-					$post_file = $fn_base.'.json';
-
-					// Временно. Иначе при каждом обновлении переписывается другими данными private data
-					if(file_exists($post_file) && filemtime($post_file) >= $p->modify_time())
-						continue;
-
-					$data = $p->data;
-					$data['create_time'] = date('r', $data['create_time']);
-
-					if(!empty($data['edited']))
-						$data['edit_time'] = date('r', $data['edited']);
-
-					var_mv($data['title'], $data['title_raw']);
-					unset($data['topic_page']);
-					unset($data['edited']);
-
-					$pd = array();
-					var_mv($pd['poster_ip'], $data['poster_ip']);
-
-					openssl_public_encrypt(json_encode($pd), $encrypted_pd, file_get_contents('ssl/pub.key'));
-
-//					$data['project_private_data'] = base64_encode($encrypted_pd);
-
-					$data = array_filter($data);
-
-					file_put_contents($post_file, json_encode($data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-					touch($post_file, $p->modify_time());
-
-					foreach($p->attaches() as $attach)
-					{
-						$attach_file = $fn_base.'.'.winfsname($attach->filename());
-						$src = '/var/www/files.balancer.ru/files/forums/attaches/'.$attach->location();
-						echo 'a';
-						if(!file_exists($attach_file) || filesize($attach_file) != filesize($src))
-						{
-							copy($src, $attach_file);
-							touch($attach_file, $p->modify_time());
-						}
-					}
-				}
-
-				$total++;
-			}
-
-			if($p)
-				$last_id = $p->id();
-
-			bors()->changed_save();
-			bors_object_caches_drop();
-
-		} while($p);
-
-		echo "Total=$total\n";
+		echo "\nTotal=$total\n";
 	}
-
 
 	private $categories = array();
 	function make_category($forum)
@@ -168,11 +116,12 @@ class exporter
 			return $cat;
 
 		$this->categories[$forum->category_id()] = $cat = $forum->category();
-		mkpath($path = $this->repo . winfsname($cat->title()));
+		$path = REPO_DIR . '/' . winfsname($cat->title()) . sprintf("/%04d-%02d", $this->year, $this->month);
+		mkpath($path);
 //		echo "Make $path\n";
 		$cat->set_attr('repo_path', $path);
 
-		file_put_contents($f = $path."/info.json", json_encode($cat->data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+		file_put_contents($f = $path."/000-info.json", json_encode($cat->data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 //		touch($f, $cat->modify_time());
 
 		return $cat;
@@ -197,7 +146,7 @@ class exporter
 		$forum->set_attr('repo_path', $path);
 		$forum->set_attr('category', $cat);
 
-		file_put_contents($f = $path."/info.json", json_encode($forum->data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+		file_put_contents($f = $path."/000-info.json", json_encode($forum->data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 		touch($f, $lt);
 
 		return $forum;
@@ -216,8 +165,8 @@ class exporter
 		if(!$topic->is_public())
 			return $topic;
 
-		$topic_name = date('d.His.', $topic->create_time())
-			.$topic->id().' '.winfsname($topic->title());
+		$topic_name = date('ymd.', $topic->create_time())
+			.sprintf('%03d', $topic->id()%1000).' '.winfsname($topic->title());
 
 		mkpath($path = $forum->repo_path()."/".$topic_name);
 		touch($path, $mt = $topic->modify_time());
@@ -234,14 +183,102 @@ class exporter
 
 		$data = array_filter($data);
 
-		mkpath($f = $path.'/posts');
-		touch($f, $mt);
-
-		file_put_contents($f = $path."/info.json", json_encode($data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+		file_put_contents($f = $path."/000-info.json", json_encode($data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 		touch($f, $mt);
 		echo ".";
 
 		return $topic;
+	}
+
+	function post2md($p)
+	{
+		$t = self::make_topic($p);
+		$f = self::make_forum($t);
+		if($p->is_public() && $t->is_public() && $f->is_public())
+		{
+			$fn_base = $t->repo_path()
+				.'/'.date('ymd-His', $p->create_time());
+
+			$post_file = $fn_base.' '.winfsname($p->author_name()).'.md';
+
+			// Временно. Иначе при каждом обновлении переписывается другими данными private data
+//			if(file_exists($post_file) && filemtime($post_file) >= $p->modify_time())
+//				return 0;
+
+			$data = $p->data;
+
+			var_mv($data['Title'], $data['title_raw']);
+			$data['Post_Id'] = 'balancer_board_post__'.popval($data, 'id');
+			$data['Topic_Id'] = 'balancer_board_topic__'.popval($data, 'topic_id');
+
+			if($ans = popval($data, 'answer_to_id'))
+				$data['Answer_To_Post_Id'] = 'balancer_board_post__' . $ans;
+
+			$data['Author'] = array(
+				'Name' => $data['author_name'],
+				'Id' => 'balancer_board_user__' . $data['owner_id'],
+				'User_Agent' => $data['poster_ua'],
+			);
+
+			// <img src="http://s.wrk.ru/f/lt.gif" class="flag" title="Lithuania" alt="LT"/>
+			var_mv($flag, $data['flag_db']);
+
+			if(preg_match('/title="(.+?)".*alt="(.+?)"/', $flag, $m))
+			{
+				$data['Author']['Country'] = $m[2];
+				$data['Author']['Place'] = $m[1];
+			}
+
+			$data['Date'] = date('r', popval($data, 'create_time'));
+
+			if(!empty($data['edited']))
+			{
+				$data['Modify'] = date('r', popval($data, 'edited'));
+				var_mv($data['Editor'], $data['edited_by']);
+			}
+
+			unset($data['topic_page'],
+				$data['warning_id'], $data['author_name'], $data['owner_id'],
+				$data['poster_ua'], $data['answer_to_user_id'],
+				$data['answers_count_raw'], $data['answer_to_user_id'], $data['have_answers']
+			);
+
+			$data['Score'] = [
+				'Sum' => popval($data['score']),
+				'Positives' => popval($data, 'score_positive_raw'),
+				'Negatives' => popval($data, 'score_negative_raw'),
+			];
+
+			var_mv($source, $data['post_source']);
+
+			$pd = array();
+			var_mv($pd['poster_ip'], $data['poster_ip']);
+
+			openssl_public_encrypt(json_encode($pd), $encrypted_pd, file_get_contents('ssl/pub.key'));
+
+//			$data['project_private_data'] = base64_encode($encrypted_pd);
+
+			$data = array_filter($data);
+
+			$yaml = Yaml::dump($data);
+
+			file_put_contents($post_file, "---\n$yaml---\n\n".trim($source)."\n");
+			touch($post_file, $p->modify_time());
+
+			foreach($p->attaches() as $attach)
+			{
+				$attach_file = $fn_base.'.'.winfsname($attach->filename());
+				$src = '/var/www/files.balancer.ru/files/forums/attaches/'.$attach->location();
+				echo 'a';
+				if(!file_exists($attach_file) || filesize($attach_file) != filesize($src))
+				{
+					copy($src, $attach_file);
+					touch($attach_file, $p->modify_time());
+				}
+			}
+
+			return 1;
+		}
 	}
 }
 

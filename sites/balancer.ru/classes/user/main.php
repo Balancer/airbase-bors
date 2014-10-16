@@ -37,65 +37,6 @@ class user_main extends balancer_board_page
 
 	function body_data()
 	{
-		$user = $this->user();
-
-		return array_merge(parent::body_data(), array(
-			'user' => $user,
-			'owner' => $user,
-
-			'friends_from' => bors_find_all('balancer_board_users_relation', array(
-				'to_user_id' => $this->id(),
-				'score>' => 0,
-				'order' => '-score',
-				'limit' => 10,
-			)),
-			'friends_from_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
-				'to_user_id' => $this->id(),
-				'score>' => 0,
-				'order' => '-score',
-				'limit' => 10,
-			)),
-			'friends_to' => bors_find_all('balancer_board_users_relation', array(
-				'from_user_id' => $this->id(),
-				'score>' => 0,
-				'order' => '-score',
-				'limit' => 10,
-			)),
-			'friends_to_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
-				'from_user_id' => $this->id(),
-				'score>' => 0,
-				'order' => '-score',
-				'limit' => 10,
-			)),
-			'enemies_from' => bors_find_all('balancer_board_users_relation', array(
-				'to_user_id' => $this->id(),
-				'score<' => 0,
-				'order' => 'score',
-				'limit' => 10,
-			)),
-			'enemies_from_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
-				'to_user_id' => $this->id(),
-				'score<' => 0,
-				'order' => 'score',
-				'limit' => 10,
-			)),
-			'enemies_to' => bors_find_all('balancer_board_users_relation', array(
-				'from_user_id' => $this->id(),
-				'score<' => 0,
-				'order' => 'score',
-				'limit' => 10,
-			)),
-			'enemies_to_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
-				'from_user_id' => $this->id(),
-				'score<' => 0,
-				'order' => 'score',
-				'limit' => 10,
-			)),
-		));
-	}
-
-	function page_data()
-	{
 		$db = new driver_mysql(config('punbb.database'));
 		$db_bors = new driver_mysql('AB_BORS');
 
@@ -204,6 +145,58 @@ class user_main extends balancer_board_page
 		$best			= array_filter($best,			function($p) { return !$p->target()->is_deleted();});
 
 		$data = array(
+			'user' => $user,
+			'owner' => $user,
+
+			'friends_from' => bors_find_all('balancer_board_users_relation', array(
+				'to_user_id' => $this->id(),
+				'score>' => 0,
+				'order' => '-score',
+				'limit' => 10,
+			)),
+			'friends_from_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
+				'to_user_id' => $this->id(),
+				'score>' => 0,
+				'order' => '-score',
+				'limit' => 10,
+			)),
+			'friends_to' => bors_find_all('balancer_board_users_relation', array(
+				'from_user_id' => $this->id(),
+				'score>' => 0,
+				'order' => '-score',
+				'limit' => 10,
+			)),
+			'friends_to_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
+				'from_user_id' => $this->id(),
+				'score>' => 0,
+				'order' => '-score',
+				'limit' => 10,
+			)),
+			'enemies_from' => bors_find_all('balancer_board_users_relation', array(
+				'to_user_id' => $this->id(),
+				'score<' => 0,
+				'order' => 'score',
+				'limit' => 10,
+			)),
+			'enemies_from_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
+				'to_user_id' => $this->id(),
+				'score<' => 0,
+				'order' => 'score',
+				'limit' => 10,
+			)),
+			'enemies_to' => bors_find_all('balancer_board_users_relation', array(
+				'from_user_id' => $this->id(),
+				'score<' => 0,
+				'order' => 'score',
+				'limit' => 10,
+			)),
+			'enemies_to_quartal' => bors_find_all('balancer_board_users_relations_quartal', array(
+				'from_user_id' => $this->id(),
+				'score<' => 0,
+				'order' => 'score',
+				'limit' => 10,
+			)),
+
 			'best' => $best,
 			'best_of_month' => $best_of_month,
 			'messages_today' => bors_count('balancer_board_post', array('owner_id' => $this->id(), 'create_time>' => time()-86400)),
@@ -227,7 +220,7 @@ class user_main extends balancer_board_page
 			'is_watcher' => (bors()->user() && (bors()->user()->is_watcher() || bors()->user()->is_admin())),
 		);
 
-		return array_merge(parent::page_data(), $data, compact(
+		return array_merge(parent::body_data(), $data, compact(
 			'scores_positive',
 			'scores_negative',
 			'votes_positive',
