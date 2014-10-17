@@ -2,7 +2,8 @@
 
 use Symfony\Component\Yaml\Yaml;
 
-define('REPO_DIR', "/var/www/forums.balancer.ru/data2");
+//define('REPO_DIR', "/var/www/forums.balancer.ru/data2");
+define('REPO_DIR', "/data/files/forums-export");
 
 require_once('/var/www/bors/composer/vendor/autoload.php');
 require_once('../config.php');
@@ -10,9 +11,9 @@ require_once('../config.php');
 //$year = 2014;
 //$month = 10;
 
-for($year = date('Y'); $year >= 2013; $year--)
+for($year = 2011; $year >= 1999; $year--)
 {
-	for($month = ($year == date('Y') ? date('m') : 12); $month > 0; $month--)
+	for($month = 12; $month > 0; $month--)
 	{
 		echo "*********************************\nExport for $year-$month\n*********************************\n";
 		$exp = new exporter($year, $month);
@@ -162,7 +163,7 @@ class exporter
 
 		$forum = $this->make_forum($topic);
 
-		if(!$topic->is_public())
+		if(!$topic->is_public() || !$forum->is_public())
 			return $topic;
 
 		$topic_name = date('ymd.', $topic->create_time())
@@ -244,7 +245,7 @@ class exporter
 			);
 
 			$data['Score'] = [
-				'Sum' => popval($data['score']),
+				'Sum' => popval($data, 'score'),
 				'Positives' => popval($data, 'score_positive_raw'),
 				'Negatives' => popval($data, 'score_negative_raw'),
 			];
@@ -258,7 +259,7 @@ class exporter
 
 //			$data['project_private_data'] = base64_encode($encrypted_pd);
 
-			$data = array_filter($data);
+			$data = array_cleaner($data);
 
 			$yaml = Yaml::dump($data);
 
@@ -306,4 +307,18 @@ function var_mv(&$dst, &$src)
 {
 	$dst = $src;
 	$src = NULL;
+}
+
+function array_cleaner($array)
+{
+	foreach($array as $key => $value)
+	{
+		if(is_array($value))
+			$array[$key] = array_cleaner($array[$key]);
+
+		if(empty($array[$key]))
+			unset($array[$key]);
+	}
+
+	return $array;
 }

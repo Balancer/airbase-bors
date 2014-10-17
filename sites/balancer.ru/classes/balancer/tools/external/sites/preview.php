@@ -55,55 +55,42 @@ class balancer_tools_external_sites_preview extends bors_image_png
 
 //		debug_hidden_log('sites_preview', "Thumbnail $url ($geo); ".escapeshellcmd($url));
 
-//		$bin = config('bin.wkhtmltoimage', "/opt/bin/wkhtmltoimage-amd64");
-		$bin = config('bin.wkhtmltoimage', "/usr/bin/env");
-
-		if($args = config('bin.wkhtmltoimage.args', 'DISPLAY=:0 /opt/bin/wkhtmltoimage-amd64 --use-xserver'))
-			$bin .= " $args ";
-
-		if(($proxy=config('proxy.force_regexp')) && preg_match($proxy, $url))
-			$bin = "$bin -p ".config('proxy.forced');
-
 		$url = blib_urls::parts_encode($url);
 
-		$cmd = $bin
-			." --width 1024 --height 768"
-//			." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
-			." --minimum-font-size 20"
-			." --enable-plugins --encoding \"utf-8\""
-			." ".escapeshellcmd($url)." ".escapeshellcmd($file);
-
-		$cmd_nojs = "$bin --disable-javascript"
-			." --width 1024 --height 768"
-//			." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
-			." --minimum-font-size 20"
-//			." --load-error-handling ignore"
-			." --encoding \"utf-8\""
-			." ".escapeshellarg($url)." ".escapeshellarg($file);
-
 		mkpath(dirname($file));
+
+		// https://github.com/KnpLabs/snappy/blob/master/src/Knp/Snappy/Image.php
+		$snappy = new Knp\Snappy\Image(COMPOSER_ROOT . '/vendor/h4cc/wkhtmltoimage-amd64/bin/wkhtmltoimage-amd64');
+
+		$snappy->setTimeout(10);
+		$snappy->setOption('width', 1024);
+		$snappy->setOption('height', 768);
+		$snappy->setOption('minimum-font-size', 20);
+		$snappy->setOption('encoding', 'utf-8');
+//		." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
 
 		if(!file_exists($file) || !filesize($file))
 		{
 			@unlink($file);
-			system($cmd);
+			file_put_contents($file, $snappy->getOutput($url));
 		}
 
 		if(!file_exists($file) || !filesize($file))
 		{
 			@unlink($file);
-			system($cmd_nojs);
+			$snappy->setOption('disable-javascript', true);
+			file_put_contents($file, $snappy->getOutput($url));
 		}
 
 		if(!file_exists($file))
 		{
-			debug_hidden_log('sites_preview', "Image $url ($geo) error. File not exists. cmd=$cmd; cmd_nojs=$cmd_nojs;", 1);
+			debug_hidden_log('sites_preview', "Image $url ($geo) error. File not exists", 1);
 			return NULL;
 		}
 
 		if(!filesize($file))
 		{
-			debug_hidden_log('sites_preview', "Image $url ($geo) error: zero size. cmd=$cmd", 1);
+			debug_hidden_log('sites_preview', "Image $url ($geo) error: zero size", 1);
 			return NULL;
 		}
 
