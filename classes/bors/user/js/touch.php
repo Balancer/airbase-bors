@@ -84,6 +84,7 @@ class user_js_touch extends bors_js
 
 		// Ответы нам (ptoNNNN) выделяем цветом
 		$js[] = '$(".pto'.$me_id.'").addClass("answer_to_me")';
+		$js[] = '$(".pby'.$me_id.'").removeClass("answer_to_me")';
 
 
 		// Выводим отметку, если форумы в R/O

@@ -72,14 +72,18 @@ class balancer_tools_external_sites_preview extends bors_image_png
 		if(!file_exists($file) || !filesize($file))
 		{
 			@unlink($file);
-			file_put_contents($file, $snappy->getOutput($url));
+			try {
+				file_put_contents($file, $snappy->getOutput($url));
+			} catch(Exception $e) { }
 		}
 
 		if(!file_exists($file) || !filesize($file))
 		{
 			@unlink($file);
 			$snappy->setOption('disable-javascript', true);
-			file_put_contents($file, $snappy->getOutput($url));
+			try {
+				file_put_contents($file, $snappy->getOutput($url));
+			} catch(Exception $e) { }
 		}
 
 		if(!file_exists($file))

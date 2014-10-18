@@ -11,9 +11,9 @@ require_once('../config.php');
 //$year = 2014;
 //$month = 10;
 
-for($year = 2011; $year >= 1999; $year--)
+for($year = 2007; $year <= 2039; $year++)
 {
-	for($month = 12; $month > 0; $month--)
+	for($month = 1; $month <= 12; $month++)
 	{
 		echo "*********************************\nExport for $year-$month\n*********************************\n";
 		$exp = new exporter($year, $month);
@@ -21,7 +21,7 @@ for($year = 2011; $year >= 1999; $year--)
 	}
 }
 
-bors_exit();
+bors_exit("\nEnd\n\n");
 
 // projects (1repo=1project) == categories
 // Параметры проекта защищены ключами. Ключами же защищены данные по исходному положению сообщения, топики, форумы...
@@ -80,7 +80,11 @@ class exporter
 
 		echo date("r\n", $start);
 		echo date("r\n", $stop);
-		echo bors_count('balancer_board_post', array('posted BETWEEN' => array($start, $stop))), PHP_EOL;
+		echo $cnt = bors_count('balancer_board_posts_pure', array('posted BETWEEN' => array($start, $stop))), PHP_EOL;
+
+		if(!$cnt)
+			return;
+
 		echo "Begin...\n";
 
 		$xx = bors_find_first('balancer_board_posts_pure', [
@@ -131,6 +135,9 @@ class exporter
 	private $forums = [];
 	function make_forum($topic)
 	{
+		if(!$topic)
+			return NULL;
+
 		$this->forums = array();
 		if(($forum = @$this->forums[$topic->forum_id()]))
 			return $forum;
@@ -160,6 +167,12 @@ class exporter
 			return $topic;
 
 		$this->topics[$post->topic_id()] = $topic = $post->topic();
+
+		if(!$topic)
+		{
+			echo "\nLost topic for post ".$post->id()."\n";
+			return NULL;
+		}
 
 		$forum = $this->make_forum($topic);
 
@@ -195,16 +208,26 @@ class exporter
 	{
 		$t = self::make_topic($p);
 		$f = self::make_forum($t);
-		if($p->is_public() && $t->is_public() && $f->is_public())
+
+		if(!$t || !$f || ($p->is_public() && $t->is_public() && $f->is_public()))
 		{
-			$fn_base = $t->repo_path()
-				.'/'.date('ymd-His', $p->create_time());
+			if($t)
+			{
+				$fn_base = $t->repo_path()
+					.'/'.date('ymd-His-', $p->create_time()).$p->id();
+			}
+			else
+			{
+				$fn_base = REPO_DIR . '/lost-posts/' . sprintf("/%04d-%02d", $this->year, $this->month)
+					.'/'.date('ymd-His-', $p->create_time()).$p->id();
+				mkpath(dirname($fn_base));
+			}
 
 			$post_file = $fn_base.' '.winfsname($p->author_name()).'.md';
 
 			// Временно. Иначе при каждом обновлении переписывается другими данными private data
-//			if(file_exists($post_file) && filemtime($post_file) >= $p->modify_time())
-//				return 0;
+			if(file_exists($post_file) && filemtime($post_file) >= $p->modify_time())
+				return 0;
 
 			$data = $p->data;
 
@@ -226,8 +249,8 @@ class exporter
 
 			if(preg_match('/title="(.+?)".*alt="(.+?)"/', $flag, $m))
 			{
-				$data['Author']['Country'] = $m[2];
-				$data['Author']['Place'] = $m[1];
+				$data['Author']['Country'] = $m[2] != '??' ? $m[2] : NULL;
+				$data['Author']['Place']   = $m[1] != '??' ? $m[1] : NULL;
 			}
 
 			$data['Date'] = date('r', popval($data, 'create_time'));
