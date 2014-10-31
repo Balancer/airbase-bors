@@ -1,6 +1,6 @@
 <?php
 
-class forum_tools_post_do extends base_page
+class forum_tools_post_do extends bors_page
 {
 	function db_name() { return config('punbb.database', 'AB_FORUMS'); }
 

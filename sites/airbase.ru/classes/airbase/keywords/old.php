@@ -1,6 +1,6 @@
 <?php
 
-class airbase_keywords_old extends base_object
+class airbase_keywords_old extends bors_object
 {
 	private $url = false;
 

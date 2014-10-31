@@ -1,6 +1,6 @@
 <?php
 
-class airbase_user_warning extends base_object_db
+class airbase_user_warning extends bors_object_db
 {
 	function class_title() { return ec('Штраф'); }
 

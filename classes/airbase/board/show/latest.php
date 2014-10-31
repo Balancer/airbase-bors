@@ -3,7 +3,7 @@
 //set_loglevel(10,0);
 // config_set('debug_trace_object_load', true);
 
-class airbase_board_show_latest extends base_page
+class airbase_board_show_latest extends bors_page
 {
 	function is_loaded() { return @$_COOKIE['user_id'] == 10000 && parent::is_loaded(); }
 	function config_class() { return 'airbase_board_config'; }

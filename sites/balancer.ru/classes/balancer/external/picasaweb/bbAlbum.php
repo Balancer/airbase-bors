@@ -1,6 +1,6 @@
 <?php
 
-class balancer_external_picasaweb_bbAlbum extends base_page
+class balancer_external_picasaweb_bbAlbum extends bors_page
 {
 	function album_data()
 	{

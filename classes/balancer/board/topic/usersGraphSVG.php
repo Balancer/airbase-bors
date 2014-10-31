@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_topic_usersGraphSVG extends base_image_svg
+class balancer_board_topic_usersGraphSVG extends bors_image_svg
 {
 	private $edges_count = 0;
 

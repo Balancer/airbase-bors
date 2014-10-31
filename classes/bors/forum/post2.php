@@ -8,7 +8,7 @@ include_once('engines/lcml.php');
 include_once('inc/browsers.php');
 include_once('inc/clients.php');
 
-class forum_post2 extends base_page_db
+class forum_post2 extends bors_page_db
 {
 	function config_class() { return 'balancer_board_config'; }
 	function template() { return 'forum/page.html'; }

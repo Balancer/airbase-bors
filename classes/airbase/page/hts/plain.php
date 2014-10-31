@@ -1,7 +1,7 @@
 <?php
 /* Поддержка старого *.hts формата файлов */
 
-class airbase_page_hts_plain extends base_page
+class airbase_page_hts_plain extends bors_page
 {
 	//TODO: на время отладки
 	function can_cached() { return false; }

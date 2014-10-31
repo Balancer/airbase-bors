@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_keywords_list extends base_page
+class balancer_board_keywords_list extends bors_page
 {
 	function title() { return ec('Теги'); }
 	function nav_name() { return ec('теги'); }

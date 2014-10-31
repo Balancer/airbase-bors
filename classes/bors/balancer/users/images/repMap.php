@@ -2,7 +2,7 @@
 
 require_once 'Image/Canvas.php';
 
-class balancer_users_images_repMap extends base_image_svg
+class balancer_users_images_repMap extends bors_image_svg
 {
 
 	function show_image()

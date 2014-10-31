@@ -1,6 +1,6 @@
 <?php
 
-class balancer_akismet extends base_object
+class balancer_akismet extends bors_object
 {
 	private $akismet;
 

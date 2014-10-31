@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_classic extends base_page
+class balancer_board_classic extends bors_page
 {
 	function title() { return ec('Классический вид новых форумов'); }
 	function nav_name() { return ec('классический вид'); }

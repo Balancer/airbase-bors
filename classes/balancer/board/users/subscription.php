@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_users_subscription extends base_object_db
+class balancer_board_users_subscription extends bors_object_db
 {
 	function storage_engine() { return 'bors_storage_mysql'; }
 	function db_name() { return 'AB_FORUMS'; }

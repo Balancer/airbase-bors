@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_topics_10years extends base_page_paged
+class balancer_board_topics_10years extends bors_paginated
 {
 	function main_class() { return 'balancer_board_topic'; }
 	function order() { return 'create_time'; }

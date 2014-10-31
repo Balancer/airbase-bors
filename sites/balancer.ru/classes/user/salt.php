@@ -1,6 +1,6 @@
 <?php
 
-class user_salt extends base_object_db
+class user_salt extends bors_object_db
 {
 	function db_name() { return 'AB_BORS'; }
 	function table_name()   { return 'user_salt'; }
