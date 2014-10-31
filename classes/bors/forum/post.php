@@ -552,6 +552,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if(bors()->user_id() == 10000
 			&& $this->create_time() < time() - 86400
+			&& $this->create_time() > time() - 86400*30
 			&& $this->owner_id() != 10000
 		)
 		{

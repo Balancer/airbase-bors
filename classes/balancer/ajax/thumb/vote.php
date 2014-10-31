@@ -1,6 +1,6 @@
 <?php
 
-class balancer_ajax_thumb_vote extends base_object
+class balancer_ajax_thumb_vote extends bors_object
 {
 	function object() { return $this->__havec('object') ? $this->__lastc() : $this->__setc(object_load($this->id())); }
 

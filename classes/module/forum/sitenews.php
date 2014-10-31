@@ -1,5 +1,5 @@
 <?php
-class module_forum_sitenews extends base_page
+class module_forum_sitenews extends bors_page
 {
 	function body_engine() { return 'body_php'; }
 

@@ -1,6 +1,6 @@
 <?php
 
-class module_forum_blog extends base_page
+class module_forum_blog extends bors_page
 {
 	function db_name() { return config('punbb.database'); }
 

@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_personal_favorites extends base_page
+class balancer_board_personal_favorites extends bors_page
 {
 	function title() { return ec('Ваше избранное'); }
 	function nav_name() { return ec('избранное'); }

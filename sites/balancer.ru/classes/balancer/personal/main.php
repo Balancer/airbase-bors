@@ -1,6 +1,6 @@
 <?php
 
-class balancer_personal_main extends base_page
+class balancer_personal_main extends bors_page
 {
 	var $title_ec = 'Ваш личный кабинет';
 	var $nav_name_ec = 'личный кабинет';

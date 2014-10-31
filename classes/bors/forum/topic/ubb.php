@@ -1,6 +1,6 @@
 <?php
 
-class forum_topic_ubb extends base_object
+class forum_topic_ubb extends bors_object
 {
 	private $topic_id = false;
 	function topic_id()

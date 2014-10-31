@@ -1,6 +1,6 @@
 <?php
 
-class airbase_user_reputation_form extends base_page
+class airbase_user_reputation_form extends bors_page
 {
 	private $user;
 

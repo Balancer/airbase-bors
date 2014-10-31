@@ -1,6 +1,6 @@
 <?php
 
-class airbase_objects_vote extends base_object_db
+class airbase_objects_vote extends bors_object_db
 {
 	function fields()
 	{

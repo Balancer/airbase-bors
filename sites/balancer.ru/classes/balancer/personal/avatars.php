@@ -1,6 +1,6 @@
 <?php
 
-class balancer_personal_avatars extends base_page
+class balancer_personal_avatars extends bors_page
 {
 	var $title_ec = 'Ваши аватары';
 	var $is_auto_url_mapped_class = true;

@@ -1,6 +1,6 @@
 <?php
 
-class balancer_ogame_calc_ishka extends base_page
+class balancer_ogame_calc_ishka extends bors_page
 {
 	function access() { return $this; }
 	function can_action() { return true; }

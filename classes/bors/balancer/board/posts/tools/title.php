@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_posts_tools_title extends base_page
+class balancer_board_posts_tools_title extends bors_page
 {
 	function template() { return 'null.html'; }
 

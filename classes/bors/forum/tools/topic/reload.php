@@ -1,6 +1,6 @@
 <?php
 
-class forum_tools_topic_reload extends base_object
+class forum_tools_topic_reload extends bors_object
 {
 	function can_be_empty() { return false; }
 	function is_loaded() { return (bool) $this->topic(); }
