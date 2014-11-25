@@ -261,6 +261,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 					'uri' => $this->internal_uri(),
 					'nocache' => true,
 					'self' => $this,
+					'container' => $this->topic(),
 					'fast' => $fast,
 				)
 			);

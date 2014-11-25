@@ -46,7 +46,7 @@ class forum_topic_rss extends bors_rss
 		$mt = $this->modify_time();
 
 		if($mt < time() - 86400*365)
-			return 86400*rand(300, 900);
+			return 86400*rand(180, 360);
 
 		if($mt < time() - 86400*30)
 			return 86400*rand(7, 30);

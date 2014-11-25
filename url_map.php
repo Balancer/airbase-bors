@@ -7,6 +7,9 @@ $forums = '(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/|/fo
 $topic_view_class = config('topics.view_class');
 
 bors_url_map([
+	'/bal/login/?  => bal_login',	// Страница авторизации
+	'/bal/logout/? => bal_logout',
+
 	'/do/logout/ => bal_do_logout',
 	'/do/login/ => bal_do_login',
 	'/users/private/hactions/(\w+) => bors_user_hactions_dispatcher(1)',

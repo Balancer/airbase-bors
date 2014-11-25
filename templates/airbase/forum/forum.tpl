@@ -55,7 +55,8 @@
 			<div class="forum-topic-snippet-post"><span class="time">{$t->first_post()->create_time()|airbase_time}, {$t->first_post()->author_name()}:</span> {$t->first_post()->snip()}</i></div>
 			{/if}
 			{if $updated_count == 0 or $updated_count > 1}
-			<div class="forum-topic-snippet-post"><span class="time">{$t->last_post_create_time()|airbase_time}, {$t->last_post()->author_name()}:</span> {$t->last_post()->snip()}</i></div>
+			<div class="forum-topic-snippet-post"><span class="time">{$t->last_post_create_time()|airbase_time}
+			{if $t->get('last_post')}, {$t->last_post()->author_name()}:</span> {$t->last_post()->snip()}{/if}</i></div>
 			{/if}
 		{/if}
 	</td>

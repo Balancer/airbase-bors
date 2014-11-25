@@ -142,7 +142,8 @@ if (isset($_POST['form_sent']))
 		}
 
 		$topic->set_last_edit_time(time(), true);
-		if ($can_edit_subject)
+
+		if($can_edit_subject)
 		{
 			$topic->set_description($_POST['description'], true);
 			$topic->set_keywords_string($_POST['keywords_string'], true);
@@ -151,6 +152,7 @@ if (isset($_POST['form_sent']))
 		$post->set_source($message, true);
 		$post->set_hide_smilies(intval($hide_smilies), true);
 		$post->set_have_attach(NULL, true);
+
 
 		//Attachment Mod 2.0 Block Start
 		//First check if there are any files to delete, the postvariables should be named 'attach_delete_'.$i , if it's set you're going to delete the value of this (the 0 =< $i < attachments, just to get some order in there...)
@@ -268,15 +270,19 @@ if (isset($_POST['form_sent']))
 		// Если эту фигню удалять, то надо проверить на аттачи и множественные аттачи, как при постинге, так и при редактировании
 		config_set('lcml_cache_disable', true);
 
-		$post->recalculate($topic);
+		$post->set_body(NULL);
+
 		$post->store();
 		$topic->store();
 
+		$post->recalculate($topic);
 		$post->cache_clean_self();
-		$post->set_body(NULL);
+
 		$post->body();
 
-		$post->full_recalculate_and_clean();
+//		Почему-то с этим ссылки нормально не утягиваются при редактировании.
+//		http://www.balancer.ru/g/p3637263 и т.п.
+//		$post->full_recalculate_and_clean();
 
 		$page = $topic->page_by_post_id($post->id());
 		$topic->set_page($page);
