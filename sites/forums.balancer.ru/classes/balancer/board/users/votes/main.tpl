@@ -1,4 +1,4 @@
-{extends file="xfile:classes/bors/page/meta/main.html"}
+{extends file="xfile:classes/bors/page/meta/main.tpl"}
 
 {block name="items_list"}
 <dl class="box">

@@ -589,6 +589,10 @@ function avatar_thumb($geo)
 			."&loc=".urlencode($check_user->location())
 		);
 
+		file_get_contents("http://ls.balancer.ru/bors-api/user-login.php?"
+			."&uid=".$check_user->id()
+		);
+
 //		exit('debug');
 
 		if(!$handle_cookie_set)
@@ -621,6 +625,11 @@ function avatar_thumb($geo)
 		));
 //		exit('go '.$haction->url($next_domain));
 //		config_set('redirect_by_html', true);
+
+		file_get_contents("http://ls.balancer.ru/bors-api/user-login.php?"
+			."&uid=".bors()->user_id()
+		);
+
 		return go($haction->url_ex($next_domain));
 	}
 

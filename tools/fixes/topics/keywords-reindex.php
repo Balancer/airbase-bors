@@ -20,13 +20,13 @@ function main()
 		'order' => '-id',
 	)) as $topic)
 	{
-		if($topic->keywords_string() == $topic->forum()->keywords_string() && !preg_match('/новости/', $topic->keywords_string()))
-			continue;
+//		if($topic->keywords_string() == $topic->forum()->keywords_string() && !preg_match('/новости/', $topic->keywords_string()))
+//			continue;
 
 		common_keyword_bind::add($topic, true);
 		if(($count++%10) == 0)
 		{
-			echo $topic->id() . " [{$topic->keywords_string_db()}] ... ";
+			echo $topic->id() . " [".($topic->keywords_string_db() ? $topic->keywords_string_db() : '*'.$topic->keywords_string()) ."] ... ";
 			bors()->changed_save();
 			echo " cs ";
 			bors()->drop_all_caches();
