@@ -2,3 +2,4 @@
 
 extends: bors_page
 config_class: airbase_config
+auto_map: true

@@ -18,6 +18,16 @@ class balancer_board_stat_coordinators extends balancer_board_page
 			'order' => 'warnings_count DESC',
 		));
 
+		$toyear = strtotime("-1 year");
+
+		$month_warns_toyear = $dbh->select_array('warnings', 'users.username as coordinator_name, count(*) as warnings_count', array(
+			'inner_join' => 'users ON users.id = moderator_id',
+			'time BETWEEN' => [$toyear-30.6*86400, $toyear],
+			'group' => 'moderator_id',
+			'having' => 'warnings_count>0',
+			'order' => 'warnings_count DESC',
+		));
+
 		$year_warns = $dbh->select_array('warnings', 'users.username as coordinator_name, count(*) as warnings_count', array(
 			'inner_join' => 'users ON users.id = moderator_id',
 			'time>' => time()-365.24*86400,
@@ -44,6 +54,6 @@ class balancer_board_stat_coordinators extends balancer_board_page
 			'order' => 'actions_count DESC',
 		));
 
-		return compact('month_actions', 'month_warns', 'year_actions', 'year_warns');
+		return compact('month_actions', 'month_warns', 'month_warns_toyear', 'year_actions', 'year_warns');
 	}
 }
