@@ -792,7 +792,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$text = str_replace("\n", " ", $text);
 		$text = preg_replace("/\s{2,}/", ' ', $text);
 		$text = str_replace('… …', '…', $text);
-		$text = blib_string::wordwrap($text, 16, ' ', true);
+		$text = blib_string::wordwrap($text, 32, ' ', true);
 		return bors_truncate($text, $size);
 	}
 }
