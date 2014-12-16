@@ -4,6 +4,8 @@ class balancer_board_users_do extends balancer_board_page
 {
 	var $auto_map = true;
 
+	function can_action() { return (bool) bors()->user(); }
+
 	function pre_show($data)
 	{
 		if(!bors()->user())

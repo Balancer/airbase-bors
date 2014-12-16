@@ -3,7 +3,7 @@
 
 $_SERVER['DOCUMENT_ROOT'] = '/var/www/balancer.ru/htdocs';
 
-define('BORS_CORE', '/var/www/bors/bors-core');
+define('BORS_CORE', '/var/www/bors/composer/vendor/balancer/bors-core');
 define('BORS_LOCAL', '/var/www/bors/bors-airbase');
 require_once(BORS_CORE.'/init.php');
 
@@ -22,14 +22,17 @@ function show()
 //		$dy = count($col);
 //		foreach($col as $y => $val)
 
-	$dy = 50;
-	$dx = 50;
+	$dx = $dy = count($data);
+
+	echo "{$dx}x{$dy}\n";
+//	exit();
+
 	for($y=0; $y<$dy; $y++)
 	{
 		for($x=0; $x<$dx; $x++)
 
 		{
-			$val = $data[$x][$y];
+			$val = @$data[$x][$y];
 //			echo $val;
 			if($min > $val)
 				$min = $val;
@@ -44,7 +47,7 @@ function show()
 	{
 		for($x=0; $x<$dx; $x++)
 		{
-			$val = $data[$x][$y];
+			$val = @$data[$x][$y];
 			$color = color($val, $min, $max);
 			$char = floor(max(0, 10*($val-$min)/($max-$min)-0.01));
 			blib_cli::out("%$color$char$char");

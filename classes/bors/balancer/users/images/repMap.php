@@ -4,7 +4,6 @@ require_once 'Image/Canvas.php';
 
 class balancer_users_images_repMap extends bors_image_svg
 {
-
 	function show_image()
 	{
 
@@ -24,9 +23,9 @@ class balancer_users_images_repMap extends bors_image_svg
 		FROM __minmaxrep'));
 
 		$this->min_x = $min_x = 0;
-		$this->max_x = $max_x = 50;
+		$this->max_x = $max_x = 100;
 		$this->min_y = $min_y = 0;
-		$this->max_y = $max_y = 50;
+		$this->max_y = $max_y = 100;
 
 		$min_r = 0;
 		$min_g = 0;
@@ -84,10 +83,10 @@ class balancer_users_images_repMap extends bors_image_svg
 
 		$Canvas->setLineColor('black');
 		$Canvas->setLineThickness(.1);
-		$Canvas->line(array('x0' => $this->x(25), 'y0' => $this->y($min_y), 'x1' => $this->x(25), 'y1' => $this->y($max_y)));
+		$Canvas->line(array('x0' => $this->x(50), 'y0' => $this->y($min_y), 'x1' => $this->x(50), 'y1' => $this->y($max_y)));
 		$Canvas->setLineColor('black');
 		$Canvas->setLineThickness(.1);
-		$Canvas->line(array('x0' => $this->x($min_x), 'y0' => $this->y(25), 'x1' => $this->x($max_x), 'y1' => $this->y(25)));
+		$Canvas->line(array('x0' => $this->x($min_x), 'y0' => $this->y(50), 'x1' => $this->x($max_x), 'y1' => $this->y(50)));
 
 //		$Canvas->addText(array('x' => $this->x($min_x), 'y' => $this->y($min_y), 'text' => "x=[{$min_x}..{$max_x}]\ny=[{$min_y}..{$max_y}]"));
 
@@ -117,17 +116,20 @@ class balancer_users_images_repMap extends bors_image_svg
 			{
 				foreach($rel as $voter_id => $score)
 				{
-//					if(abs($score) < 20)
-//						continue;
+					if($score > 0 and $score < 20)
+						continue;
+
+					if($score < 0 and $score > -25)
+						continue;
 
 					$dx = $r['rep_x'] - $users[$voter_id]->rep_x();
 					$dy = $r['rep_y'] - $users[$voter_id]->rep_y();
-					if($dx*$dx + $dy*$dy > abs($score*2))
-						continue;
+//					if($dx*$dx + $dy*$dy > abs($score*2))
+//						continue;
 
-					$weack = 127-min(127, 127*abs($score / ($score>0?100:20)));
-					$green = sprintf("#%02x%02x%02x", $weack, 255-$weack, $weack);
-					$red   = sprintf("#%02x%02x%02x", 255-$weack, $weack, $weack);
+					$strong = min(255, 255*abs($score / ($score>0?150:150)));
+					$green = sprintf("#%02x%02x%02x", 255-$strong, 255, 255-$strong);
+					$red   = sprintf("#%02x%02x%02x", 255, 255-$strong, 255-$strong);
 
 					$Canvas->setLineColor($score > 0 ? $green : $red);
 					$Canvas->setLineThickness(.001);

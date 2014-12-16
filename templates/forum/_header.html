@@ -108,7 +108,11 @@ createCookie('readedTopics', readed.join(' '), 3)
 		<dt class="nav">{module class="module_nav_top"}</dt>
 		<dd>
 			<h1>{$this->page_title()|htmlspecialchars}</h1>
+{if $description}
 			{$description}
+{else}
+			{$this->get('description')}
+{/if}
 <table class="nul"><tr valign="top">
 {*
 <td style="padding-top: 5px"><iframe src="http://www.facebook.com/plugins/like.php?app_id=139039169508594&href={$this->url_for_igo()}&send=false&layout=button_count&width=20&show_faces=false&action=recommend&colorscheme=light&height=21" scrolling="no" frameborder="0" style="border:none;" allowTransparency="true"></iframe></td>

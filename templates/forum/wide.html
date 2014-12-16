@@ -13,6 +13,8 @@
 {/if}
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+	<link rel="stylesheet" href="http://forums.balancer.ru/css/pure-extras.css">
 	<link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
 <!--[if IE]><link href="/_bors/css/bors/ie.css" rel="stylesheet" media="all" /><![endif]-->
 <!--[if IE 6]><link href="/_bors/css/bors/ie6.css" rel="stylesheet" media="all" /><![endif]-->
@@ -79,7 +81,7 @@ if(top.me_is_coordinator) {ldelim}
 <div style="padding: 0 20px">
 <dl class="box">
 <dt class="nav">{module class="module_nav_top"}</dt>
-<dd><h1>{$title}</h1>
+<dd><h1>{$this->page_title()}</h1>
 <div class="small i">{$description}</div></dd>
 </dl>
 
@@ -133,4 +135,23 @@ document.write('<span><!-'+'-<a href="http://www.mapyourvisitors.com/map' + kod 
 </div>
 
 </body>
+
+{foreach from=$js_include_post item="s"}
+<script type="text/javascript" src="{$s}"></script>
+{/foreach}
+{if $javascript_post || $jquery_document_ready}
+<script type="text/javascript"><!--
+{foreach from=$javascript_post item="s"}
+{$s}
+{/foreach}
+{if $jquery_document_ready}
+$(document).ready(function(){literal}{{/literal}
+{foreach from=$jquery_document_ready item="s"}
+{$s}
+{/foreach}
+})
+{/if}
+--></script>
+{/if}
+
 </html>
