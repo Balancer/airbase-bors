@@ -55,6 +55,8 @@ class balancer_board_topic extends forum_topic
 			'forum_id_raw' => 'forum_id',
 			'title'	=> 'subject',
 			'description',
+			'answer_notice',
+			'admin_notice',
 			'image_id',
 			'image_time' => 'UNIX_TIMESTAMP(`image_ts`)',
 			'create_time'	=> 'posted',

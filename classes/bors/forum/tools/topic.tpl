@@ -11,7 +11,7 @@ ul.operations li {
 </style>{/literal}
 
 {if $me && $me->is_coordinator()}
-{include file="xfile:topic-coordinators.html"}
+{include file="xfile:topic-coordinators.tpl"}
 {/if}
 
 <ul>

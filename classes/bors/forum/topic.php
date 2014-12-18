@@ -23,6 +23,8 @@ class forum_topic extends bors_page_db
 			'forum_id_raw' => 'forum_id',
 			'title'	=> 'subject',
 			'description',
+			'answer_notice',
+			'admin_notice',
 			'image_id',
 			'image_time' => 'UNIX_TIMESTAMP(`image_ts`)',
 			'create_time'	=> 'posted',
