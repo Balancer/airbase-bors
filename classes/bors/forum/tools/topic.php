@@ -32,8 +32,11 @@ class forum_tools_topic extends balancer_board_page
 
 	function on_action_topic_edit($data)
 	{
-		foreach(explode(' ', 'description keywords_string title') as $key)
-			$this->topic()->{"set_$key"}($data[$key], true);
+		foreach(explode(' ', 'description keywords_string title answer_notice admin_notice') as $key)
+			$this->topic()->set($key, @$data[$key]);
+
+//		var_dump($data);
+//		exit('ok'.get_class($this->topic()));
 
 		$this->topic()->cache_clean();
 		return go($this->topic()->url());
