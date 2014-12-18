@@ -202,6 +202,14 @@ class balancer_board_topic extends forum_topic
 		balancer_board_posts_view::container_init();
 		template_jquery_ui();
 
+		jquery::on_ready(__DIR__.'/topics/view.inc.ready.js');
+
+		if($this->answer_notice())
+		{
+			bors_use('/_bal/opt/sweet-alert.js');
+			bors_use('/_bal/opt/sweet-alert.css');
+		}
+
 		if($this->page() == $this->total_pages())
 			header("X-Accel-Expires: 30");
 		elseif($this->page() >= $this->total_pages() - 2)

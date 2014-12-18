@@ -25,8 +25,8 @@
 <tr><th width="150">Заголовок:</th><td>{input name="title" value=$this->topic()|get:title class="w100p"}</td></tr>
 <tr><th>Описание:</th><td>{input name="description" value=$this->topic()|get:description class="w100p"}</td></tr>
 <tr><th>Ключевые слова:<br/><small>(разделяются запятой)</small></th><td>{input name="keywords_string" value=$this->topic()|get:keywords_string class="w100p"}</td></tr>
-<tr><th>Предупреждение при ответе в тему:</th><td>{textarea name="answer_notice" rows="10" class="w100p"}</td></tr>
-<tr><th>Примечание для старожилов/координаторов (обычным пользователям не видно):</th><td>{textarea name="admin_notice" rows="10" class="w100p"}</td></tr>
+<tr><th>Предупреждение при ответе в тему:</th><td>{textarea name="answer_notice" value=$this->topic()->get('answer_notice') rows="10" class="w100p"}</td></tr>
+<tr><th>Примечание для старожилов/координаторов (обычным пользователям не видно):</th><td>{textarea name="admin_notice" value=$this->topic()->get('admin_notice') rows="10" class="w100p"}</td></tr>
 <tr><th colSpan="2">{submit value="Сохранить"}</th></tr>
 </table>
 {/form}
