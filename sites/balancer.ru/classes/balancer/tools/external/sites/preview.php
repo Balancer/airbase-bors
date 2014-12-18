@@ -64,14 +64,17 @@ class balancer_tools_external_sites_preview extends bors_image_png
 		mkpath(dirname($file));
 
 		// https://github.com/KnpLabs/snappy/blob/master/src/Knp/Snappy/Image.php
-		$snappy = new Knp\Snappy\Image(COMPOSER_ROOT . '/vendor/h4cc/wkhtmltoimage-amd64/bin/wkhtmltoimage-amd64');
+		$snappy = new my_snappy(COMPOSER_ROOT . '/vendor/h4cc/wkhtmltoimage-amd64/bin/wkhtmltoimage-amd64');
 
-		$snappy->setTimeout(10);
+		$snappy->setTimeout(15);
 		$snappy->setOption('width', 1024);
 		$snappy->setOption('height', 768);
 		$snappy->setOption('minimum-font-size', 20);
 		$snappy->setOption('encoding', 'utf-8');
 //		." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
+
+		if(config('proxy.force_regexp') && preg_match(config('proxy.force_regexp'), $url))
+			$snappy->setOption('proxy',  'http://'.config('proxy.forced'));
 
 		if(!file_exists($file) || !filesize($file))
 		{
@@ -86,7 +89,12 @@ class balancer_tools_external_sites_preview extends bors_image_png
 				$snappy->setOption('disable-javascript', true);
 				try {
 					$image = $snappy->getOutput($url);
-				} catch(Exception $e) { $image = NULL; }
+				} catch(Exception $e)
+				{
+					bors_debug::syslog('sites_preview', "Exception: ".$e->getMessage());
+//					echo '<xmp>'; var_dump($snappy); exit('</xmp>');
+					$image = NULL;
+				}
 			}
 
 			if(!$image)
@@ -127,5 +135,21 @@ class balancer_tools_external_sites_preview extends bors_image_png
 		}
 
 		return file_get_contents($file);
+	}
+}
+
+class my_snappy extends Knp\Snappy\Image
+{
+	protected function checkProcessStatus($status, $stdout, $stderr, $command)
+	{
+        if (0 !== $status and '' !== $stderr) {
+            bors_debug::syslog('sites_preview', 'throw '.sprintf(
+                'The exit status code \'%s\' says something went wrong:'."\n"
+                .'stderr: "%s"'."\n"
+                .'stdout: "%s"'."\n"
+                .'command: %s.',
+                $status, $stderr, $stdout, $command
+            ));
+        }
 	}
 }

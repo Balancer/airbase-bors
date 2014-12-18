@@ -66,7 +66,9 @@ $forum = bors_load('balancer_board_forum', $forum_id);
 $me = bors()->user();
 if(!$me)
 	message("Вы не авторизованы на форуме.
-	Попробуйте <a href=\"{$forum->category()->category_base_full()}login.php\">авторизоваться</a> снова.");
+	Попробуйте <a href=\"{$forum->category()->category_base_full()}login.php\">авторизоваться</a> снова.<br/><br/>
+	<a href=\"http://www.wrk.ru/forums/register.php\" style=\"display: block; width: 24ex; font-size: 10pt; padding: 2px 4px; text-align: center; box-shadow: 2px 2px 4px rgba(0,0,0,0.5); color: white; background: rgb(28, 184, 65)\">Зарегистрироваться</a>
+");
 
 if($fid && !$tid && ($me->num_posts() < 3 || $me->create_time() > time() - 86400))
 {
