@@ -62,14 +62,11 @@
 {foreach from=$last_actions item="a"}
 <li{$a->type_class()} style="font-size: 8pt">{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}</li>
 {/foreach}
+<li><b><a href="http://forums.balancer.ru/topics/{$this->id()}/actions/">Все действия над темой</a></b></li>
 </ul></dd>
 </dl>
 {/if}
 
 {if $this->pages_links()}<div class="pages_select">{"Страницы:"|ec} {$this->pages_links()}</div>{/if}
 
-<div id="answer_notice_content" style="display:none">
-{if $this->answer_notice()}
-{$this->answer_notice()|lcml_bb}
-{/if}
-</div>
+<div id="answer_notice_content" style="display:none">{if $this->get('answer_notice')}{$this->answer_notice()|lcml_bb|trim}{/if}</div>
