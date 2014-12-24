@@ -9,7 +9,7 @@ $('.theme_answer_button').click(function(e){
 
 	swal({
 		title: "Возможная сложность с выбором темы",
-		text: notice + "<br/><br/>Для ответа в другую тему можете перейти прямо по ссылке выше",
+		text: "<div style=\"text-align: left\">" + notice + "<br/>Для ответа в другую тему можете перейти прямо по ссылке выше</div>",
 		type: "warning",
 		showCancelButton: true,
 		allowOutsideClick: true,

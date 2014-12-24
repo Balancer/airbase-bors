@@ -35,6 +35,11 @@ class forum_tools_topic extends balancer_board_page
 		foreach(explode(' ', 'description keywords_string title answer_notice admin_notice') as $key)
 			$this->topic()->set($key, @$data[$key]);
 
+
+		bors_debug::syslog('topic-edit', "{$this->topic()->debug_title()} edited to " . print_r($data, true));
+
+		balancer_board_action::add($this->topic(), "Редактирование параметров темы");
+
 //		var_dump($data);
 //		exit('ok'.get_class($this->topic()));
 

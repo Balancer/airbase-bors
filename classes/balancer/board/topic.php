@@ -90,6 +90,32 @@ class balancer_board_topic extends forum_topic
 		));
 	}
 
+	function find_first_unvisited_post($user)
+	{
+		$uid = $user->id();
+
+		$visit = bors_find_first('balancer_board_topics_visit', [
+			'user_id' => $uid,
+			'target_object_id' => $this->id()
+		]);
+
+		if($visit)
+			$last_visit = $visit->last_visit();
+		else
+			// Если отметки о чтении топика нет, то считаем за дату последнего посещения
+			// дату модификации самой старой записи в таблице посещений.
+			$last_visit = bors_find_first('balancer_board_topics_visit', ['last_visit>' => 0])->modify_time();
+
+		// Первое нечитанное сообщение темы
+		$first_new_post = bors_find_first('balancer_board_post', [
+			'topic_id' => $this->id(),
+			'posted>' => $last_visit,
+			'order' => 'sort_order,id',
+		]);
+
+		return $first_new_post;
+	}
+
 	static function _forum_ids($domain)
 	{
 		static $fcache = array();

@@ -246,16 +246,6 @@ if ($pun_config['o_announcement'] == '1')
 			<div><?php echo $pun_config['o_announcement_message'] ?></div>
 		</div>
 	</div>
-
-	<br/>
-	<div class="box">
-		<div class="inbox">
-			<div style="font-size: 16px; color: red">Форумы на техобслуживании. Можно скоротать время во
-				<b><a href="http://home.balancer.ru/lorduino/">временном чате</a></b>. Регистрации никакой не требуется.
-			</div>
-		</div>
-	</div>
-
 </div>
 
 <?php

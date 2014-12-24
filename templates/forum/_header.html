@@ -112,6 +112,9 @@ createCookie('readedTopics', readed.join(' '), 3)
 		<dl class="box">
 		<dt class="nav">{module class="module_nav_top"}</dt>
 		<dd>
+			{if $this->get('image')}
+				{$this->image()->thumbnail('128x128(up,crop)')->html(['append' => 'style="float: right"'])}
+			{/if}
 			<h1>{$this->page_title()|htmlspecialchars}</h1>
 {if $description}
 			{$description}
@@ -151,6 +154,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 {/if}
 </div>
 {/if}
+			<div class="clear">&nbsp;</div>
 		</dd>
 		</dl>
 
