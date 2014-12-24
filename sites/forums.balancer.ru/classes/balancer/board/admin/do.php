@@ -16,7 +16,11 @@ class balancer_board_admin_do extends balancer_board_admin_page
 		{
 			case 'logo_assign_by_post':
 				$topic = $post->topic();
-				$post_image_id = $post->__image(false)->id();
+				$post_image = $post->__image(false);
+				if(!$post_image)
+					return bors_message("Изображение в сообщении не найдено");
+
+				$post_image_id = $post_image->id();
 				$topic->set('image_id', $post_image_id);
 				$topic->store();
 //				echo '<xmp>'; var_dump($post_image_id, $topic->image_id(), $topic->data['image_id'], $topic->image()->id(), $topic->image()->url()); exit();
@@ -28,12 +32,6 @@ class balancer_board_admin_do extends balancer_board_admin_page
 				$page = $topic->find_first_unvisited_post(bors()->user())
 					? 'new'
 					: $topic->total_pages();
-
-				if(config('is_developer'))
-				{
-					r($page);
-					config_set('debug_redirect_trace', true);
-				}
 
 				return go($topic->url_ex($page));
 		}
