@@ -22,9 +22,13 @@
 
     "require": {
 		"php": ">=5.3",
+
 		"balancer/bors-core": "@dev",
 		"balancer/bors-ext": "@dev",
 		"balancer/b2-core": "@dev",
+
+		"components/font-awesome": "*",
+
         "kzykhys/git": "*"
     },
 
