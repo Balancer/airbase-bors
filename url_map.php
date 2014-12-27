@@ -81,6 +81,9 @@ $map = array(
 	"{$forums}\d{4}/\d{1,2}/topic\-(\d+).* => {$topic_view_class}(2)",
 	"{$forums}forum/punbb/viewtopic\.php\?pid=(\d+) => forum_post(2)",
 	"{$forums}viewtopic\.php\?id=(\d+) => {$topic_view_class}(2)",
+
+	"/posts/ajax/tools/(\d+)/? => balancer_board_posts_ajax_tools(1)",
+
 	"/forum/topic/\d+/(\d+),(\d+)/ => redirect:{$topic_view_class}(1,2)",
 	"(/forum/)topic/\d+/(\d+),new/ => {$topic_view_class}(2)",
 
