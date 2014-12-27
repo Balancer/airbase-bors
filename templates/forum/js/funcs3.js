@@ -160,7 +160,7 @@ function pdsh(p)
 	else
 	{
 		o.html('<img src="/_bors/i/wait-16.gif" width="16" height="16" style="vertical-align: middle;" /> Загружаю...')
-		o.load("/_bors/ajax/post-footer-tools?object=forum_post://"+p);
+		o.load("/_bors/ajax/post-footer-tools?object=balancer_board_post://"+p);
 	}
 }
 
