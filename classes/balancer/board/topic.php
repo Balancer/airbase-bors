@@ -2,6 +2,8 @@
 
 class balancer_board_topic extends forum_topic
 {
+	function type() { return 'topic'; }
+
 	function browser_title()
 	{
 		if($this->total_pages() <= 1)

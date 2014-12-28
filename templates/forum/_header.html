@@ -123,38 +123,11 @@ createCookie('readedTopics', readed.join(' '), 3)
 {else}
 			{$this->get('description')}
 {/if}
-<table class="nul"><tr valign="top">
-{*
-<td style="padding-top: 5px"><iframe src="http://www.facebook.com/plugins/like.php?app_id=139039169508594&href={$this->url_for_igo()}&send=false&layout=button_count&width=20&show_faces=false&action=recommend&colorscheme=light&height=21" scrolling="no" frameborder="0" style="border:none;" allowTransparency="true"></iframe></td>
-*}
-<td><g:plusone size="small" href="{$this->url_for_igo()}"></g:plusone></td>
-</tr></table>
 
-{* if $this->keywords_string()}<br /><i>Ключевые слова: {$this->keywords_string()}</i>{/if *}
-			{if $this->get('keywords_linked')}<div class="keywords">
-
-{if $me_id > 0}
-<script>{literal}
-        $(document).ready(function() {
-            $("#tags_def").hide()
-            $("#tags").tagEditor(
-            {
-                items: [{/literal}{$this->keywords_linked_q()}{literal}],
-                confirmRemoval: true,
-                separator: ',',
-                completeOnSeparator: true,
-                completeOnBlur: true,
-                confirmRemovalText: "Вы хотите удалить этот тег?",
-				imageTagUrl: 'http://www.balancer.ru/_bors3rdp/jquery/plugins/tageditor/minus_small.png',
-				object: '{/literal}{$this->internal_uri_ascii()}{literal}',
-            });
-		});
-{/literal}</script>
+{if $this->get('type') == 'topic'}
+			<div class="keywords">
 {ec('Теги')}:<input id="tags" name="tags" type="text" value="" /><span id="tags_def">{$this->keywords_linked()}</span>
-{else}
-{ec('Теги')}: {$this->keywords_linked()}
-{/if}
-</div>
+			</div>
 {/if}
 			<div class="clear">&nbsp;</div>
 		</dd>
@@ -411,23 +384,45 @@ BORS_CORE={$smarty.const.BORS_CORE}
 {include file="xfile:airbase/inc/halloween.html"}
 {/if *}
 </body>
+
 {foreach from=$js_include_post item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
+
 <script type="text/javascript"><!--
 {foreach from=$javascript_post item="s"}
 {$s}
 {/foreach}
-{if $jquery_document_ready}
-$(document).ready(function() {
-{foreach from=$jquery_document_ready item="s"}
-{$s}
-{/foreach}
 
+$(document).ready(function() {
+	{foreach from=$jquery_document_ready item="s"}
+	{$s}
+	{/foreach}
+
+{if $this->get('type') == 'topic'}
+	if(me_id > 1)
+	{
+		$("#tags_def").hide()
+		$("#tags").tagEditor(
+		{
+			items: [{$this->keywords_linked_q()}],
+			confirmRemoval: true,
+			separator: ',',
+			completeOnSeparator: true,
+			completeOnBlur: true,
+			confirmRemovalText: "Вы хотите удалить этот тег?",
+			imageTagUrl: 'http://www.balancer.ru/_bors3rdp/jquery/plugins/tageditor/minus_small.png',
+			object: '{$this->internal_uri_ascii()}',
+		})
+	}
+	else
+		$("#tags").hide()
+{/if}
 })
+
 {if 0 && $me}
 jQuery.getScript('http://forums.balancer.ru/ajax/pagemod.js?user_id='+0+'&target={$this->internal_uri_ascii()}&mtime={$this->modify_time()}&static={$this->cache_static()}')
 {/if}
 --></script>
-{/if}
+
 </html>
