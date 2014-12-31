@@ -4,7 +4,7 @@ class forum_topic_rss extends bors_rss
 {
 
 	var $items_class_name = 'balancer_board_post';
-	var $limit = 100;
+	var $limit = 50;
 
 	function auto_objects()
 	{

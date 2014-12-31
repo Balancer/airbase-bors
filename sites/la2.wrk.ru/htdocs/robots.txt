@@ -2,4 +2,4 @@ User-Agent: *
 Disallow: /js/
 Disallow: /_bors/igo*
 
-Sitemap: http://www.balancer.ru/sitemap-index.xml
+Sitemap: http://la2.wrk.ru/sitemap-index.xml

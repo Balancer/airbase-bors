@@ -142,36 +142,6 @@ class balancer_board_topic extends forum_topic
 		return $fcache[$domain];
 	}
 
-	static function sitemap_index($domain, $page, $per_page)
-	{
-		return array_reverse(objects_array('balancer_board_topic', array(
-			'forum_id IN' => self::_forum_ids($domain),
-			'page' => $page,
-			'per_page' => $per_page,
-			'order' => 'modify_time',
-		)));
-	}
-
-	static function sitemap_last_modify_time($domain, $page, $per_page)
-	{
-		$dbh = new driver_mysql(config('punbb.database'));
-		$dates = $dbh->select_array('topics', 'last_post', array(
-			'forum_id IN' => self::_forum_ids($domain),
-			'page' => $page,
-			'per_page' => $per_page,
-			'order' => 'last_post',
-		));
-
-		return $dates[count($dates)-1];
-	}
-
-	static function sitemap_total($domain)
-	{
-		return objects_count('balancer_board_topic', array(
-			'forum_id IN' => self::_forum_ids($domain),
-		));
-	}
-
 	static function create($forum, $title, $message, $user = NULL, $keywords_string = NULL, $as_blog = true, $data = array())
 	{
 //		echo "Pass new topic to {$forum->debug_title()}\n";
