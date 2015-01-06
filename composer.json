@@ -29,7 +29,8 @@
 
 		"components/font-awesome": "*",
 
-        "kzykhys/git": "*"
+        "kzykhys/git": "*",
+		"gorkalaucirica/hipchat-v2-api-client": "*"
     },
 
     "autoload": {
