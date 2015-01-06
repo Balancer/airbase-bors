@@ -764,6 +764,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		$this->set_have_attach(NULL);
 		$this->attaches();
+		$this->score_colorized(true); // true = recalc. score
 	}
 
 	function joke_owner()
