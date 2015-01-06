@@ -108,11 +108,26 @@ class airbase_external_link extends balancer_board_object_db
 
 	static function default_bbshort($url, &$data=array())
 	{
-		$data['title'] = self::normalize(blib_urls::host($url));
-		$data['bbshort'] = "[round_box][h][a href=\"{$url}\"]{$data['title']}[/a][/h]
-{$data['title']}
+		// Ставим герерацию превьюшки
+		// Сперва декодируем URL (urldecode + кодировка)
+		$url = blib_urls::decode($url);
 
-[span class=\"transgray\"][reference]".bors_external_feeds_entry::url_host_link($url)."[/reference][/span][/round_box]";
+		$url_data = parse_url($url);
+		$host = preg_replace('/^www\./', '', $url_data['host']);
+		$host_parts = array_reverse(explode('.', $host));
+
+		$id = blib_string::base64_encode2($url);
+
+		$img = "http://www.balancer.ru/_cg/_st/{$host_parts[0]}/{$host_parts[1][0]}/{$host_parts[1]}/{$id}-400x300.png";
+		// Дёрнем, чтобы сгенерировалось
+		$x = blib_http::get_bin($img, array('timeout' => 10));
+
+		$img = "[img={$img} 200x200 left flow nohref resize]";
+
+		$data['title'] = self::normalize(blib_urls::host($url));
+		$data['bbshort'] = "[round_box]{$img}[h][a href=\"{$url}\"]{$data['title']}[/a][/h]
+
+[span class=\"transgray\"][reference]{$url}[/reference][/span][/round_box]";
 
 		return $data;
 	}
