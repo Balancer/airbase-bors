@@ -1001,3 +1001,8 @@ tr.bb-background-private td {
 div.answer_to_me div.body, div.answer_to_me div.body div.avatar_block {
 	background-color: #fffff0;
 }
+
+table.topic-list td > a > img {
+	min-width: 2cm;
+	min-height: 2cm;
+}

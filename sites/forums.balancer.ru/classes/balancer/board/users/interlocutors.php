@@ -7,7 +7,7 @@ class balancer_board_users_interlocutors extends balancer_board_page
 	function can_be_empty() { return false; }
 	function is_loaded() { return $this->user() != NULL && bors()->user() && (bors()->user()->is_watcher() || bors()->user()->is_admin()); }
 
-	function title() { return $this->user()->title().ec(": дополнительная нформация"); }
+	function title() { return $this->user()->title().ec(": дополнительная информация"); }
 	function nav_name() { return 'дополнительно'; }
 
 	function parents()

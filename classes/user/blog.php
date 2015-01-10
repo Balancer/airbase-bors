@@ -39,6 +39,7 @@ class user_blog extends balancer_board_page
 					'owner_id' => $this->id(),
 					'is_microblog' => 0,
 					'order' => 'blogged_time',
+//					'create_time<=' => time(),
 					'page' => $this->page(),
 					'per_page' => $this->items_per_page(),
 					'is_public' => 1,
