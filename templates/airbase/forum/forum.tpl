@@ -6,7 +6,7 @@
 {$this->pages_links_nul()}
 
 {if topics}
-<table class="btab w100p shadow8" cellSpacing="0">
+<table class="btab w100p shadow8 topic-list" cellSpacing="0">
 	<tr>
 	{if $with_images}
 		<th>&nbsp;</th>
