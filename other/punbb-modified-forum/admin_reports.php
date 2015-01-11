@@ -87,7 +87,8 @@ if ($db->num_rows($result))
 									<th scope="row">Forum&nbsp;&raquo;&nbsp;Topic&nbsp;&raquo;&nbsp;Post</th>
 									<td><?php echo $post->topic()->forum()->titled_link() ?>&nbsp;&raquo;&nbsp;<?php
 										echo $post->topic()->titled_link_ex(['page' => 'new']) ?>&nbsp;&raquo;&nbsp;<?php
-										echo $postid ?></td>
+										echo $postid ?>
+									</td>
 								</tr>
 								<tr>
 									<th scope="row">Report by <?php echo $reporter ?><div><input type="submit" name="zap_id[<?php echo $cur_report['id'] ?>]" value=" Zap " /></div></th>
@@ -110,7 +111,7 @@ else
 	</div>
 
 	<div class="blockform block2">
-		<h2><span>10 last zapped reports</span></h2>
+		<h2><span>50 last zapped reports</span></h2>
 		<div class="box">
 			<div class="fakeform">
 <?php
@@ -121,12 +122,16 @@ if ($db->num_rows($result))
 {
 	while ($cur_report = $db->fetch_assoc($result))
 	{
+		$post = bors_load('balancer_board_post', $cur_report['post_id']);
+
 		$reporter = ($cur_report['reporter'] != '') ? '<a href="profile.php?id='.$cur_report['reported_by'].'">'.pun_htmlspecialchars($cur_report['reporter']).'</a>' : 'Deleted user';
 		$forum_link = ($cur_report['forum_name'] != '') ? '<a href="viewforum.php?id='.$cur_report['forum_id'].'">'.pun_htmlspecialchars($cur_report['forum_name']).'</a>' : 'Deleted';
 		$topic_link = ($cur_report['subject'] != '') ? '<a href="viewtopic.php?id='.$cur_report['topic_id'].'">'.pun_htmlspecialchars($cur_report['subject']).'</a>' : 'Deleted';
 		$post_link = ($cur_report['post_id'] != '') ? str_replace("\n", '<br />', pun_htmlspecialchars($cur_report['message'])) : 'Post deleted';
 		$post_id = ($cur_report['post_id'] != '') ? '<a href="viewtopic.php?pid='.$cur_report['post_id'].'#p'.$cur_report['post_id'].'">Post #'.$cur_report['post_id'].'</a>' : 'Deleted';
 		$zapped_by = ($cur_report['zapped_by'] != '') ? '<a href="profile.php?id='.$cur_report['zapped_by_id'].'">'.pun_htmlspecialchars($cur_report['zapped_by']).'</a>' : 'N/A';
+
+		$postid = '<a href="'.$post->url_for_igo().'"'.($post->warning() ? ' style="text-decoration: line-through; color: red;"' : '').'>Post #'.$cur_report['post_id'].'</a>';
 
 ?>
 				<div class="inform">
@@ -136,7 +141,11 @@ if ($db->num_rows($result))
 							<table cellspacing="0">
 								<tr>
 									<th scope="row">Forum&nbsp;&raquo;&nbsp;Topic&nbsp;&raquo;&nbsp;Post</th>
-									<td><?php echo $forum_link ?>&nbsp;&raquo;&nbsp;<?php echo $topic_link ?>&nbsp;&raquo;&nbsp;<?php echo $post_id ?></td>
+									<td><?php echo $post->topic()->forum()->titled_link() ?>&nbsp;&raquo;&nbsp;<?php
+										echo $post->topic()->titled_link_ex(['page' => 'new']) ?>&nbsp;&raquo;&nbsp;<?php
+										echo $postid ?>
+									</td>
+
 								</tr>
 								<tr>
 									<th scope="row">Reported by <?php echo $reporter ?><div class="topspace">Zapped by <?php echo $zapped_by ?></div></th>
