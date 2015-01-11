@@ -28,6 +28,9 @@ class balancer_board_topic extends forum_topic
 
 	function cache_static()
 	{
+		if(config('skip_cache_static'))
+			return 0;
+
 		if(!$this->is_public_access())
 			return 0;
 

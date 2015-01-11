@@ -72,8 +72,9 @@ if(!empty($_GET['id']) && preg_match('/viewforum\.php/', $_SERVER['REQUEST_URI']
 <link rel="stylesheet" type="text/css" href="<?php echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css';/*"*/?>" />
 <meta property="fb:admins" content="100000278666723" />
 <?php
-if(!empty($GLOBALS['use_jquery']))
-	echo "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\" type=\"text/javascript\"></script>\n";
+//if(!empty($GLOBALS['use_jquery']))
+//	echo "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\" type=\"text/javascript\"></script>\n";
+	echo "<script src=\"https://code.jquery.com/jquery-1.11.2.min.js\"></script>\n";
 ?>
 
 <link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
