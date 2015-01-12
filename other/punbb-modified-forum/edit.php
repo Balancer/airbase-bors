@@ -63,6 +63,9 @@ $blog = bors_load('balancer_board_blog', $id);
 $post = bors_load('balancer_board_post', $id);
 $topic = $post->topic();
 $forum = $topic->forum();
+
+$me = bors()->user();
+
 $cur_post['message'] = $post->source();
 
 // Sort out who the moderators are and if we are currently a moderator (or an admin)
@@ -153,6 +156,20 @@ if (isset($_POST['form_sent']))
 		$post->set_hide_smilies(intval($hide_smilies), true);
 		$post->set_have_attach(NULL, true);
 
+		if($me && $me->is_coordinator())
+		{
+			if(empty($_POST['is_moderatorial']))
+			{
+				$post->set_is_moderatorial(0, true);
+			}
+			else
+			{
+				if(!$post->is_moderatorial())
+					balancer_board_action::add($topic, "Административное предупреждение: {$post->nav_named_link()}", true);
+
+				$post->set_is_moderatorial(1, true);
+			}
+		}
 
 		//Attachment Mod 2.0 Block Start
 		//First check if there are any files to delete, the postvariables should be named 'attach_delete_'.$i , if it's set you're going to delete the value of this (the 0 =< $i < attachments, just to get some order in there...)
@@ -604,6 +621,9 @@ $checkboxes[] = "<label><input type=\"checkbox\" name=\"export_blog\" value=\"1\
 			.htmlspecialchars(defval($_POST, 'blog_keywords_string', $topic->keywords_string()))
 			."' size='40' maxlength='255' /><br /></label>")
 	."' : ''\"/>Транслировать ответ в ЖЖ";
+
+if($me && $me->is_coordinator())
+	$checkboxes[] = "<label style=\"color:red\"><input type=\"checkbox\" name=\"is_moderatorial\" value=\"1\" tabindex=\"".($cur_index++)."\" ".($post->is_moderatorial()?' checked':'')."/>Данное сообщение - модераториал</label>";
 
 if (!empty($checkboxes))
 {
