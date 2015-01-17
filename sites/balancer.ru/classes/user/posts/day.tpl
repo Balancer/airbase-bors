@@ -10,17 +10,22 @@
 <!-- post $post_id -->
 {if $p}
 	{assign var="t" value=$p->topic()}
-	{assign var="f" value=$t->forum()}
-	{if $p->is_hidden()}
-		<div class="box">** Это сообщение было скрыто координатором **</div>
-	{else}
-		{if $f->can_read()}
-			{* if $f->is_public_access() *}
-			{assign var="show_title" value=$t->titled_link()}
-			{include file="xfile:forum/post.html" show_title=$t->titled_link() strip="8192"}
+	{if $t}
+		{assign var="f" value=$t->forum()}
+		{if $p->is_hidden()}
+			<div class="box">** Это сообщение было скрыто координатором **</div>
 		{else}
-			<div class="box">** Сообщение с ограниченным доступом **</div>
+			{if $f->can_read()}
+				{* if $f->is_public_access() *}
+				{assign var="show_title" value=$t->titled_link()}
+				{include file="xfile:forum/post.html" show_title=$t->titled_link() strip="8192"}
+			{else}
+				<div class="box">** Сообщение с ограниченным доступом **</div>
+			{/if}
 		{/if}
+	{else}
+		{include file="xfile:forum/post.html" show_title="Потерянный топик" strip="8192"}
+{hidden_log type='topic-lost' message="Lost topic for post "|cat:$p->url_for_igo()}
 	{/if}
 {/if}
 {/foreach}
