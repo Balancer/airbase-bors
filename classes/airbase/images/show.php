@@ -1,5 +1,9 @@
 <?php
 
+/*
+	http://www.balancer.ru/sites/w/w/www.shipspotting.com/photos/big/5/3/7/1668735.jpg.htm
+*/
+
 class airbase_images_show extends balancer_board_page
 {
 	function can_be_empty() { return false; }
