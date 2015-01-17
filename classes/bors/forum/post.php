@@ -671,7 +671,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		return false;
 	}
 
-	function edit_url() { return "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}"; }
+	function edit_url() { return $this->topic() ? "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}" : NULL; }
 
 //	function pre_show() { return go($this->url_in_topic()); }
 	function igo($permanent = true) { return go($this->url_in_container(), $permanent); }
