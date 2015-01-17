@@ -36,6 +36,8 @@ bors_vhost_routes('airbase.ru', [
 	'(.*/)index\.htm => common_redirect(1)',
 	'(.*/)index\-t\.htm => common_redirect(1)',
 
+	'.* => airbase_pages_markdown(url)',
+
 //	'.*viewtopic\.php\?id=(\d+)&p=(\d+).* => balancer_board_topic(1,2)',
 //	'.*viewtopic\.php\?id=(\d+).* => balancer_board_topic(1)',
 //	'(.*) => airbase_page(1,host=0)',
@@ -48,6 +50,16 @@ bors_vhost_routes('airbase.ru', [
 	'.*/\w+\.phtml => airbase_pages_hts(url)',
 	'.* => airbase_pages_hts(url)',
 ]);
+
+/*
+if(config('is_developer'))
+{
+	// Понять, почему не показыватся http://www.airbase.ru/top/logos/1.png
+	bors_vhost_routes('airbase.ru', [
+		'.* => airbase_pages_markdown(url)',
+	]);
+}
+*/
 
 // set_bors_project('airbase');
 
