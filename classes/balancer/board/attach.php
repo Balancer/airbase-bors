@@ -109,29 +109,29 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 
 		if(preg_match("!(jpe?g|png|gif)!i", $this->extension()))
 		{
-			$full_url = 'http://www.balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2&type=.'.$this->extension();
+//			$full_url = 'http://www.balancer.ru/forum/punbb/attachment.php?item='.$this->id().'&download=2&type=.'.$this->extension();
+			$full_url = "http://files.balancer.ru/forums/attaches/" . $this->location();
 			$thumb_url = "http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/{$geo}/$1", $this->location());
 
-//			if(config('is_debug'))
-//				var_dump($thumb_url);
+			$image = $this->image();
 
-			if($ss = @getimagesize($thumb_url))
+			if($image)
+				$thumbnail = $image->thumbnail($geo);
+			else
+				$thumbnail = false;
+
+			if($thumbnail && $thumbnail->width() && $thumbnail->height())
 			{
-				$width = @$ss[0];
-				$height = @$ss[1];
-				$wxh = @$ss[3];
-//				if($width > $size*1.1 || $height > $size*1.1)
-					$thumb = "<a href=\"{$full_url}\" class=\"cloud-zoom thumbnailed-image-link\" id=\"zoom-"
-						.rand()."\" rel=\"position:'inside'\" title=\""
-						.htmlspecialchars($this->title())."\">";
-//				else
-//					$thumb = "<a href=\"{$this->url()}\">";
+				$thumb = "<a href=\"{$full_url}\" class=\"cloud-zoom thumbnailed-image-link\" id=\"zoom-"
+					.rand()."\" rel=\"position:'inside'\" title=\""
+					.htmlspecialchars($this->title())."\">";
 
-				$thumb .= "<img src=\"{$thumb_url}\" {$wxh} alt=\"\" class=\"main\" /></a>";
+				$thumb .= "<img src=\"{$thumb_url}\" {$thumbnail->wxh()} alt=\"\" class=\"main\" /></a>";
+				$width = $thumbnail->width();
 			}
 			else
 			{
-				$thumb = ec('Ошибка изображения ').$thumb_url;
+				$thumb = ec('Ошибка изображения ').$full_url;
 				$width = 300;
 			}
 		}
