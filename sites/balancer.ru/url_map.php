@@ -34,6 +34,8 @@ bors_vhost_routes('balancer.ru', array(
 
 	'(/blog)/(\d{4})/? => balancer_blog_year(2)',
 
+	'/_cg/(\d{4}-\d{1,2})/(\w+)\.(\w+) => b2f_cache_generated(2,ext=3,year=1)',
+
 	'.* => balancer_page_hts',
 //	'.* => bal_pages_hts(url)',
 ));

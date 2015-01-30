@@ -36,6 +36,47 @@ dd, dt { height: 1%; }
 .wrapper { margin-left: -404px; position: relative; }
 pre { word-wrap: break-word; }
 </style><![endif]-->
+
+<script>
+(function(){
+	var fontKey = 'ScadaABv2';
+
+    function addFont() {
+        var style = document.createElement('style');
+        style.rel = 'stylesheet';
+        document.head.appendChild(style);
+        style.textContent = localStorage[fontKey];
+    }
+
+    try {
+        if (localStorage[fontKey]) {
+            // The font is in localStorage, we can load it directly
+            addFont();
+        } else {
+            // We have to first load the font file asynchronously
+            var request = new XMLHttpRequest();
+            request.open('GET', '/_bal/css/scada-embed.woff.css', true);
+
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                    // We save the file in localStorage
+                    localStorage[fontKey] = request.responseText;
+
+                    // ... and load the font
+                    addFont();
+                }
+            }
+
+            request.send();
+        }
+    } catch(ex) {
+        // maybe load the font synchronously for woff-capable browsers
+        // to avoid blinking on every request when localStorage is not available
+    }
+}());
+</script>
+
+
 {* <script type="text/javascript" src="https://apis.google.com/js/plusone.js">{lang: 'ru'}</script> *}
 
 {foreach from=$js_include item="s"}
@@ -256,8 +297,8 @@ if(me_id > 1 && me_hash) {
 		<dt>{ec('Настройки')}</dt>
 		<dd>
 			<script type="text/javascript">
-				createSelect("{ec('Шрифт')}", "fontFamily", "default(Georgia):Georgia;Verdana;Ubuntu;Play;Scada;PT Sans;sans-serif;serif;monospace", "Georgia")
-				createSelect("{ec('Размер')}", "fontSize", "8pt;10pt;12pt;default(14pt):14pt;16pt;20pt;24pt", "14pt")
+				createSelect("{ec('Шрифт')}", "fontFamily", "default(ScadaAB):ScadaAB;Georgia;Verdana;Ubuntu;Play;PT Sans;sans-serif;serif;monospace", "ScadaAB")
+				createSelect("{ec('Размер')}", "fontSize", "8pt;10pt;12pt;14pt;default(16pt):16pt;18pt;20pt;24pt", "16pt")
 				createSelect("{ec('Расстояние до монитора')}", "incenter.width", "auto;30cm:14cm;45cm:21cm;70cm:30cm", "auto")
 			</script>
 			<noscript><p>Не работает без JavaScript</p></noscript>

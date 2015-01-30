@@ -117,7 +117,7 @@
 		{/if}
 
 		{if $w = $p->get('warning')}
-		<div class="{if $w->score() > 0}warning_note{else}{if $w->score()<0}alert alert-success{else}alert{/if}{/if}">
+		<div class="alert alert-{if $w->score() > 0}danger{else}{if $w->score()<0}success{else}info{/if}{/if}">
 			<b>{$w->moderator_name()}:</b>
 			{if $w->score() > 0}{ec("предупреждение")} ({$w->score()}) {elseif $w->score()<0}{ec("поощрение")} ({-$w->score()}) {/if}
 			{if $w->type_id()} {ec("по категории")} «<b>{$w->type_id()|bors_list_item_name:"airbase_user_warning_type"}</b>»{/if}
@@ -148,21 +148,20 @@
 
 {assign var="reputation_records" value=$p->get('reputation_records')}
 {if $reputation_records}
-<div class="post pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}">
-	<div class="head small">{ec("Изменения в репутации автора за это сообщение")}:</div>
-	<div class="body small">
+<div class="pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}">
 	{foreach $reputation_records as $r}
+	<div class="alert alert-{if $r->score()>0}success{else}danger{/if} shadow8 ab-alert-small">
 		{$r->create_time()|date:"d.m.Y H:i"}, {$r->owner()->titled_link()}: {$r->score_html(lcml_bb($r->comment()))}<br/>
-	{/foreach}
 	</div>
+	{/foreach}
 </div>
 {/if}
 
 {if $p->get('actions')}
-<br/><div class="box small">
+<br/><div class="alert alert-info shadow8 post-actions">
 <ul>
 {foreach from=$p->actions() item="a"}
-<li{$a->type_class()} style="font-size: 8pt">{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}</li>
+<li{$a->type_class()}>{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}</li>
 {/foreach}
 </ul>
 </div>

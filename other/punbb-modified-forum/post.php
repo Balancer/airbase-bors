@@ -597,8 +597,11 @@ if (isset($_POST['form_sent']))
 
 		// Этот блок держать над пересчётами данных топика, чтобы аттачи в них уже учитывались.
 		// Attachment Mod Block Start
-		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))
-			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
+		if(isset($_FILES['attached_file'])
+				&& $_FILES['attached_file']['size'] !=0
+				&& is_uploaded_file($_FILES['attached_file']['tmp_name'])
+		)
+			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'], $_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
 				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
 		// Attachment Mod Block End
 
