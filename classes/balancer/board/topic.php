@@ -197,6 +197,8 @@ class balancer_board_topic extends forum_topic
 		return $this->titled_link_ex(array('page' => 'new'));
 	}
 
+	function answer_notice() { return NULL; }
+
 	function pre_show()
 	{
 		bors_lib_html::set_og_meta($this);

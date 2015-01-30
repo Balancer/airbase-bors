@@ -3,7 +3,7 @@ function css_load(elem, value, id, def)
 	if(!id)
 	{
 		if(elem.indexOf('.') == -1)
-			id = "body"
+			id = "html"
 		else
 		{
 			elem = elem.split('.')
@@ -66,7 +66,7 @@ function createSelect(title, element, values, def)
 		element = element[1];
 	}
 	else
-		id = 'body'
+		id = 'html'
 	cookie = readCookie(id+"."+element);
 	if(!cookie)
 		cookie = def
@@ -92,7 +92,7 @@ function createSelect(title, element, values, def)
 
 function onLoad()
 {
-	cookie_vars = "body.fontSize body.fontFamily main_column.width inleft.display".split(" ");
+	cookie_vars = "html.fontSize html.fontFamily main_column.width inleft.display".split(" ");
 	for(var i in cookie_vars)
 	{
 		name = cookie_vars[i]
