@@ -1008,11 +1008,11 @@ table.topic-list td > a > img {
 }
 
 /* Экран высокого разрешения  */
+/*
 @media only screen and (min-resolution: 192dpi) {
 	.forum_actions {
 		background-size: 200%;
 	}
-/*
 	table.topic-list td > a > img {
 		min-width: 2cm;
 		min-height: 2cm;

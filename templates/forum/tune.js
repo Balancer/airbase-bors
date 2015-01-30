@@ -57,7 +57,7 @@ function eraseCookie(name)
 function createSelect(title, element, values, def)
 {
 	id = "\"id_select_"+element+"\""
-	document.write("<label class=\"tune\" for="+id+">"+title+"</label> ")
+	document.write("<label class=\"tune\" for="+id+">"+title+":</label><br/>")
 	var id = null
 	if(element.indexOf('.') >= 0)
 	{
