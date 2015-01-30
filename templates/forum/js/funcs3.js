@@ -1,6 +1,9 @@
 function css_load(elem, value, id, def)
 {
-	document.getElementById(id).style[elem] = value
+	if(id != 'html')
+		document.getElementById(id).style[elem] = value
+	else
+		document.querySelector(":root").style[elem] = value
 
 	if(def != value)
 		createCookie(id+"."+elem, value, 180)
@@ -42,7 +45,7 @@ function eraseCookie(name)
 function createSelect(title, element, values, def)
 {
 	id = "\"id_select_"+element+"\""
-	document.write("<label class=\"tune\" for="+id+">"+title+"</label> ")
+	document.write("<label class=\"tune\" for="+id+">"+title+":</label><br/>")
 	var id = null
 	if(element.indexOf('.') >= 0)
 	{
@@ -51,7 +54,8 @@ function createSelect(title, element, values, def)
 		element = element[1];
 	}
 	else
-		id = 'body'
+		id = 'html'
+
 	cookie = readCookie(id+"."+element);
 	if(!cookie)
 		cookie = def
