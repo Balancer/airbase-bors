@@ -2,7 +2,8 @@
 <li><a href="/stat/forums/">Статистика активности форумов</a></li>
 <li><a href="/stat/coordinators/">Статистика активности координаторов</a></li>
 <li><a href="/stat/registered/">Активность регистраций</a></li>
-<li><a href="/stat/forums/posted/">Активность форумов</a></li>
+<li><a href="/stat/forums/posted/">Активность форумов</a> (число сообщений по годам)</li>
+<li><a href="/stat/topics//">Статистика топиков (тем)</a></li>
 </ul>
 
 <h2>Посетители на карте мира в реальном времени</h2>

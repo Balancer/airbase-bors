@@ -579,7 +579,7 @@ function avatar_thumb($geo)
 //		livestreet_native_user::bb_copy($check_user, $password, true);
 //		if($check_user->id()==10000) { var_dump($user); exit('debug: введите ещё раз'); }
 
-		file_get_contents("http://ls.balancer.ru/bors-api/user-new.php?"
+		@file_get_contents("http://ls.balancer.ru/bors-api/user-new.php?"
 			."login=".urlencode($check_user->login())
 			."&id=".$check_user->id()
 			."&mail=".urlencode($check_user->email())
@@ -589,7 +589,7 @@ function avatar_thumb($geo)
 			."&loc=".urlencode($check_user->location())
 		);
 
-		file_get_contents("http://ls.balancer.ru/bors-api/user-login.php?"
+		@file_get_contents("http://ls.balancer.ru/bors-api/user-login.php?"
 			."&uid=".$check_user->id()
 		);
 
@@ -626,7 +626,7 @@ function avatar_thumb($geo)
 //		exit('go '.$haction->url($next_domain));
 //		config_set('redirect_by_html', true);
 
-		file_get_contents("http://ls.balancer.ru/bors-api/user-login.php?"
+		@file_get_contents("http://ls.balancer.ru/bors-api/user-login.php?"
 			."&uid=".bors()->user_id()
 		);
 
