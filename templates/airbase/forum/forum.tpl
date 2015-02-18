@@ -33,7 +33,7 @@
 		</td>
 		{/if}
 		<td id="vtt_{$t->id()}">
-			<div class="title_actions"><a href="{$t->url_ex('new')}"{if $updated} class="b"{/if}{if $updated_count > 0  and $updated_count < 10} style="opacity: {if $updated_count >= 5}0.8{else}0.5{/if}"{/if}>{$t->title()}</a>
+			<div class="title_actions"><a href="{$t->url_ex('new')}"{if $updated} class="b{if $t->get('too_old')} red{/if}"{/if}{if $updated_count > 0  and $updated_count < 10} style="opacity: {if $updated_count >= 5}0.8{else}0.5{/if}"{/if}>{$t->title()}</a>
 		{if $t->total_pages() > 1}
 				<small><span class="topic_pages_links">{$t->title_pages_links()}</span></small>
 		{/if}

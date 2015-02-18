@@ -68,6 +68,11 @@ class balancer_board_personal_updated extends balancer_board_page
 			$posts[] = $x->first_post();
 			$topics[$x->id()]->set_attr('first_post', $x->first_post());
 			$topics[$x->id()]->set_attr('updated_count', $x->updated_count());
+
+			// Если топик не читался больше недели, то специальное выделение
+			if($x->last_post()->create_time() - $x->first_post()->create_time() > 86400*7)
+				$topics[$x->id()]->set_attr('too_old', true);
+
 			$visited_ids[] = $x->id();
 		}
 
