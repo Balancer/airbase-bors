@@ -787,7 +787,13 @@ require PUN_ROOT.'header.php';
 ?>
 <div class="linkst">
 	<div class="inbox">
-		<ul><li><a href="<?php echo $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo $forum_name ?><?php if (isset($cur_posting['subject'])) echo '</li><li>&nbsp;&raquo;&nbsp;'.pun_htmlspecialchars($cur_posting['subject']) ?></li></ul>
+		<ul><li><a href="<?php echo $pun_config['root_uri'];?>/index.php"><?= $lang_common['Index'] ?></a></li>
+			<li>&nbsp;&raquo;&nbsp;<?= $forum_name ?></li>
+			<?php
+				if(isset($cur_posting['subject']))
+					echo '<li>&nbsp;&raquo;&nbsp;'.$topic->titled_link().'</li>';
+			?>
+		</ul>
 	</div>
 </div>
 

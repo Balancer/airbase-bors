@@ -4,6 +4,8 @@
 	<title>{$this->browser_title()|htmlspecialchars}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="title" content="{$title|htmlspecialchars}" />
+	<meta name="no-viewport" content="width=680" />
+	<meta name="no-viewport" content="width=680,initial-scale=1.0">
 	<meta property="fb:admins" content="100000278666723" />
 {if $this->get('browser_description')}
 	<meta name="description" content="{$this->browser_description()|htmlspecialchars}"/>
@@ -332,9 +334,9 @@ else {ldelim}
 <noscript><p>Не работает без JavaScript</p></noscript>
 </dd></dl>
 
-{if ($this->new_class_name() == 'balancer_board_topic' || $this->new_class_name() == 'balancer_board_topics_view')}
+{* if ($this->new_class_name() == 'balancer_board_topic' || $this->new_class_name() == 'balancer_board_topics_view')}
 <script type="text/javascript" src="http://www.balancer.ru/js/board/topics/t{$this->id()}-similar.js"></script>
-{/if}
+{/if *}
 
 <dl class="box w200"><dt>{ec('Твиттер сайта')}</dt>
 <a class="twitter-timeline" href="https://twitter.com/AirbaseRu" data-widget-id="429908527918755840">{ec('Твиты пользователя')} @AirbaseRu</a>
