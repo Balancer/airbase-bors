@@ -146,6 +146,7 @@
 <li><a href="http://www.balancer.ru/forum/punbb/profile.php?id={$this->id()}">Профиль на старом форуме</a></li>
 {if $is_watcher}
 <li><a href="http://forums.balancer.ru/users/{$this->id()}/interlocutors/">Дополнительная административная информация по собеседникам</a></li>
+<li><a href="http://forums.balancer.ru/users/{$this->id()}/ips/">IP, с которых писал пользователь</a></li>
 {/if}
 </ul>
 

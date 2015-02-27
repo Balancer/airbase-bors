@@ -21,6 +21,7 @@ class forum_post extends balancer_board_object_db
 			'id',
 			'title_raw' => 'title',
 			'topic_id',
+			'original_topic_id', // обычно NULL, выставляется, если был перенос
 			'topic_page' => 'page',
 			'create_time'	=> 'posted',
 			'edited',
@@ -76,6 +77,7 @@ class forum_post extends balancer_board_object_db
 					'answers_count_raw' => 'answers_total',
 					'answers_in_other_topics_count_raw' => 'answers_other_topics',
 					'best10_ts' => 'UNIX_TIMESTAMP(`best10_ts`)',
+					'root_post_id', // ID корневого сообщения ветки.
 				),
 			)
 		);
@@ -84,7 +86,14 @@ class forum_post extends balancer_board_object_db
 //	function __orm_setters() { return array('';); }
 
 function topic_id() { return @$this->data['topic_id']; }
-function set_topic_id($v, $dbup = true) { return $this->set('topic_id', $v, $dbup); }
+function set_topic_id($new_topic_id, $dbup = true)
+{
+	if(!$this->get('original_topic_id') && $this->topic_id() != $new_topic_id)
+		$this->set('original_topic_id', $this->topic_id());
+
+	return $this->set('topic_id', $new_topic_id, $dbup);
+}
+
 function topic_page()
 {
 	$page = @$this->data['topic_page'];
@@ -550,7 +559,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			$forum->recalculate();
 
 		$this->recalculate();
-
+/*
 		if(bors()->user_id() == 10000
 			&& $this->create_time() < time() - 86400
 			&& $this->create_time() > time() - 86400*30
@@ -569,6 +578,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 			bors_var::set($key, $ro_time, 86400);
 		}
+*/
 	}
 
 	private function __move_tree_to_topic($new_tid, $old_tid)
