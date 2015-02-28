@@ -53,14 +53,19 @@
 			{include file="xfile:forum/ads/yandex-direct-h2-middle.html"}
 		{/if}
 	{/if}
+{foreachelse}
+<div class="alert alert-warning shadow8">
+	В этой теме нет ни одного сообщения. Вероятно, они перенесены в другие,
+	более подходящие темы. Смотрите операции над темой в конце страницы.
+</div>
 {/foreach}
 
 {if $last_actions}
-<dl class="box small">
+<dl class="box{if $posts} small{/if}">
 <dt>{"Последние действия над темой"|ec}</dt>
 <dd><ul>
 {foreach from=$last_actions item="a"}
-<li{$a->type_class()} style="font-size: 8pt">{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}</li>
+<li{$a->type_class()}{if $posts} style="font-size: 8pt"{/if}>{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}</li>
 {/foreach}
 <li><b><a href="http://forums.balancer.ru/topics/{$this->id()}/actions/">Все действия над темой</a></b></li>
 </ul></dd>
