@@ -48,7 +48,7 @@ function balancer_anniversary_html()
 	if(!$image)
 		return '';
 
-	bors_debug::syslog('000-image-debug', "Get image size for ".$image);
+//	bors_debug::syslog('000-image-debug', "Get image size for ".$image);
 	$info = getimagesize($image);
 
 	$html = "
