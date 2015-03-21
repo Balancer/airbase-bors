@@ -493,7 +493,7 @@ if (!empty($errors))
 else if (isset($_POST['preview']))
 {
 	require_once PUN_ROOT.'include/parser.php';
-	$preview_message = parse_message($message, $hide_smilies, true);
+	$preview_message = parse_message($message, $hide_smilies, true, $post);
 
 ?>
 <div id="postpreview" class="blockpost">
