@@ -13,12 +13,24 @@ class balancer_board_personal_updated extends balancer_board_page
 
 	function topics()
 	{
+		$fence = time() - 86400*31;
 		$topics = bors_find_all('balancer_board_topic', array(
 			'*set' => 'topic_visits.last_visit AS joined_last_visit',
-			'inner_join' => "topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.user_id=".bors()->user_id().")",
-			'topic_visits.is_disabled=' => false,
-			'topic_visits.last_visit < topics.last_post',
-			'topics.last_post>=' => time() - 86400*31,
+//			'inner_join' => "topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.user_id=".bors()->user_id().")",
+
+			'left_join' => [
+				"topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.user_id=".bors()->user_id().")",
+				"forum_visits ON (forum_visits.forum_id = topics.forum_id AND forum_visits.user_id=".bors()->user_id().")"
+			],
+
+			'(topic_visits.is_disabled=0 OR topic_visits.is_disabled IS NULL)',
+			'topics.last_post>=' => $fence,
+
+			"((topic_visits.last_visit < topics.last_post)
+				OR (topic_visits.last_visit IS NULL
+					AND topics.posted > $fence
+					AND forum_visits.is_disabled=0))",
+
 			'order' => '-last_post',
 			'page' => $this->page(),
 			'per_page' => $this->items_per_page(),
@@ -102,11 +114,21 @@ class balancer_board_personal_updated extends balancer_board_page
 
 	function total_items()
 	{
+		$fence = time() - 86400*31;
+
 		return bors_count('balancer_board_topic', array(
-			'inner_join' => "topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.user_id=".bors()->user_id().")",
-			'topic_visits.is_disabled=' => false,
-			'topic_visits.last_visit < topics.last_post',
-			'topics.last_post>=' => time() - 86400*31,
+			'left_join' => [
+				"topic_visits ON (topic_visits.topic_id = balancer_board_topic.id AND topic_visits.user_id=".bors()->user_id().")",
+				"forum_visits ON (forum_visits.forum_id = topics.forum_id AND forum_visits.user_id=".bors()->user_id().")"
+			],
+
+			'(topic_visits.is_disabled=0 OR topic_visits.is_disabled IS NULL)',
+			'topics.last_post>=' => $fence,
+
+			"((topic_visits.last_visit < topics.last_post)
+				OR (topic_visits.last_visit IS NULL
+					AND topics.posted > $fence
+					AND forum_visits.is_disabled=0))",
 		));
 	}
 
