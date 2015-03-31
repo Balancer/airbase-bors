@@ -232,6 +232,17 @@ class balancer_ajax_thumb_vote extends bors_object
 			}
 		}
 
+		if($score>0)
+		{
+			$user->set_money($user->money()+1);
+			$me->set_money($me->money()-1);
+		}
+		elseif($score<0)
+		{
+			$user->set_money($user->money()-1);
+			$me->set_money($me->money()-1);
+		}
+
 		return $return;
 	}
 }

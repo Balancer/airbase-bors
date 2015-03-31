@@ -19,6 +19,13 @@ bors_url_map([
 	"{$forums}\d{4}/\d{1,2}/topic\-(\d+),new.* => balancer_board_topics_go_new(2)",
 ]);
 
+// Leagcy, ссылки старого формата
+bors_url_map(array(
+	// http://forums.airbase.ru/index.php/topic,37641.msg701468/topicseen.html#msg701468
+	// 	via http://www.balancer.ru/g/p701470
+	'/index\.php/topic,(\d+)\.msg(\d+)/topicseen\.html => balancer_board_post(2)',
+));
+
 $map = array(
 	'/g/(.+) => bors_system_go_redirect(1)',
 
@@ -110,8 +117,7 @@ $map = array(
 	'/\w{32}/cache(/.*/\d*x\d*\([^)]+\)/[^/]+\.(jpe?g|png|gif)) => bors_image_autothumb(1)',
 	'/cache(/sites/.*/\d*x\d*/[^/]+) => bors_image_autothumb(1)',
 	'.*/\w+\.phtml => airbase_page_hts_plain',
-//	'.*/\w+\.phtml => airbase_page_hts_plainu',
-	'.* => bors_page_fs_htsu(url)', //TODO: снести нафиг после конвертации старых hts Авиабазы
+	'.*/\w+\.phtml => airbase_page_hts_plainu',
 
 //	'.* => airbase_page_hts(url)',
 	'.* => airbase_pages_zim',
@@ -121,9 +127,5 @@ $map = array(
 if(!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] != 'www.tanzpol.org')
 	$map[] = '.* => bal_pages_hts(url)';
 
-// Leagcy, ссылки старого формата
-bors_url_map(array(
-	// http://forums.airbase.ru/index.php/topic,37641.msg701468/topicseen.html#msg701468
-	// 	via http://www.balancer.ru/g/p701470
-	'/index\.php/topic,(\d+)\.msg(\d+)/topicseen\.html => balancer_board_post(2)',
-));
+$map[] = '.* => bors_page_fs_htsu(url)'; //TODO: снести нафиг после конвертации старых hts Авиабазы
+

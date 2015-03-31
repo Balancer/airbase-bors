@@ -39,7 +39,7 @@ class lcml_parser_airbase extends bors_lcml_parser
 		$text = preg_replace("!(https?://(www\.)?)torrents\.ru/([^\s\"]+)!", '$1rutracker.org/$3', $text);
 
 		// Если топик не публичный, то ничего не маскируем.
-		if($topic && !$topic->is_public())
+		if($topic && !$topic->get('is_public', true))
 			return $text;
 
 		if($this->lcml->params('airbase-warez-enabled'))

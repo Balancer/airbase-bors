@@ -112,6 +112,7 @@ class forum_user extends balancer_board_object_db
 
 			'activate_string',	// Хэш нового пароля с текущей солью при смене пароля
 			'activate_key',		// Ключ нового пароля при его смене
+			'money',
 		);
 	}
 

@@ -23,6 +23,88 @@ class user_js_touch extends bors_js
 
 		$js = [];
 
+		$me_id = bors()->user_id();
+
+		if(rand(0,50)==0)
+			$js[] = "\$('body').css({
+'-webkit-transform' : 'rotate(1deg)',
+'-moz-transform' : 'rotate(1deg)',
+'-ms-transform' : 'rotate(1deg)',
+'-o-transform' : 'rotate(1deg)',
+'transform' : 'rotate(1deg)',
+});";
+
+		if(rand(0,50)==0)
+			$js[] = "(function(){ var a=document.getElementsByTagName('img'),i=a.length;while(b=a[--i]){ if(b.width>200 || b.height>200){b.setAttribute('src','http://placekitten.com/'+b.width+'/'+b.height);}}})();";
+
+		if(rand(0,20)==0)
+		{
+			$js[] = "
+function romanize (num) {
+    if (!+num)
+        return false;
+    var digits = String(+num).split(''),
+        key = ['','C','CC','CCC','CD','D','DC','DCC','DCCC','CM',
+               '','X','XX','XXX','XL','L','LX','LXX','LXXX','XC',
+               '','I','II','III','IV','V','VI','VII','VIII','IX'],
+        roman = '',
+        i = 3;
+    while (i--)
+        roman = (key[+digits.pop() + (i * 10)] || '') + roman;
+    return Array(+digits.join('') + 1).join('M') + roman;
+}
+
+walk(\$('body').get(0));
+
+function walk(node) {
+  var child, next;
+
+  switch (node.nodeType) {
+    case 1:  // Element
+    case 9:  // Document
+    case 11: // Document fragment
+      child = node.firstChild;
+      while (child) {
+        next = child.nextSibling;
+        walk(child);
+        child = next;
+      }
+      break;
+    case 3: // Text node
+      handleText(node);
+      break;
+  }
+}
+
+function handleText(textNode) {
+	textNode.nodeValue = textNode.nodeValue.replace(/([0-9]{3,4})/gi, function(m, g) { return g>0 ? romanize(g) : g});
+}
+
+";
+		}
+
+		if($me_id == 10000)
+		{
+			$js[] = "
+function playSound(url) {
+	var audio = document.createElement('audio');
+	audio.setAttribute('src', url);
+	audio.setAttribute('autoplay', 'autoplay');
+	audio.addEventListener('load', function() {
+    	audioElement.play();
+	}, true);
+}
+
+			$('.thumb-up').click(function(){ playSound('http://www.wrk.ru/snd/this-is-sparta.mp3')})
+			$('.thumb-down').click(function(){ playSound('http://www.wrk.ru/snd/finish-him.mp3')})
+";
+		}
+
+		if(!$me_id)
+			return $js;
+
+		bors()->changed_save();
+
 		if($obj)
 		{
 			$obj->touch(bors()->user_id(), $time);
@@ -32,12 +114,6 @@ class user_js_touch extends bors_js
 					$js[] = "top.touch_info_{$k} = ".(is_numeric($v) ? $v : "'".addslashes($v)."'");
 			}
 		}
-
-		$me_id = bors()->user_id();
-		if(!$me_id)
-			return $js;
-
-		bors()->changed_save();
 
 		$answers_count = bors()->user()->unreaded_answers();
 
