@@ -29,7 +29,7 @@ class balancer_board_topics_go_new extends bors_object
 				$last_visit = bors_find_first('balancer_board_topics_visit', ['last_visit>' => 0])->modify_time();
 
 			// Первое нечитанное сообщение темы
-			$first_new_post = bors_find_first('balancer_board_post', [
+			$first_new_post = bors_find_first('balancer_board_posts_pure', [
 				'topic_id' => $this->id(),
 				'posted>' => $last_visit,
 				'order' => 'sort_order,id',

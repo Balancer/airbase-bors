@@ -13,7 +13,7 @@ function main()
 {
 	$count = 0;
 	foreach(bors_each('balancer_board_topic', array(
-		'keywords_string LIKE' => 'гидронавтика',
+		'keywords_string LIKE' => '%новост%',
 		'forum_id>' => 0,
 		'order' => '-id',
 	)) as $topic)

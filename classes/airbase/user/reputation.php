@@ -1,5 +1,7 @@
 <?php
 
+require_once ('engines/lcml/main.php');
+
 class airbase_user_reputation extends balancer_board_object_db
 {
 	function class_title_vp() { return ec('запись репутации'); }
@@ -47,6 +49,11 @@ class airbase_user_reputation extends balancer_board_object_db
 			'owner' => 'balancer_board_user(owner_id)',
 			'target_user' => 'balancer_board_user(user_id)',
 		));
+	}
+
+	function comment_html()
+	{
+		return lcml_bb($this->comment(), ['disabled_tags' => ['img']]);
 	}
 
 	function refer_link()
@@ -155,7 +162,7 @@ class airbase_user_reputation extends balancer_board_object_db
 			'ctime' => 'Дата',
 			'target_user()->reputation_titled_link()' => 'Кому',
 			'voter_titled_link' => 'От кого',
-			'comment_short' => 'Комментарий',
+			'comment_html' => 'Комментарий',
 		);
 	}
 

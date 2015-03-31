@@ -228,8 +228,8 @@ class balancer_board_user extends forum_user
 	{
 		$warn = bors_find_first('airbase_user_warning', array(
 			'user_id' => $this->id(),
-			'warn_class_id' => $object->class_id(),
-			'warn_object_id' => $object->id(),
+			'warn_class_id' => object_property($object, 'class_id'),
+			'warn_object_id' => object_property($object, 'id'),
 		));
 
 		if($warn)
@@ -321,5 +321,10 @@ class balancer_board_user extends forum_user
 			'((v.last_visit IS NULL AND posts.posted > '.(time()-31*86400).') OR (v.last_visit < posts.posted))',
 			'posts.posted>' =>  time()-31*86400,
 		));
+	}
+
+	function add_money($amount)
+	{
+		$this->set_money($this->money() + $amount);
 	}
 }

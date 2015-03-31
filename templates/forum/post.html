@@ -41,9 +41,9 @@
 				{if $me->is_coordinator()}<div id="pttools_{$p->id()}" class="to-left"></div><img src="/_bors/i/tools.gif" alt="*" onclick="sh('pttools', {$p->id()})"  width="16" height="16" title="Инструменты координатора" />{/if}
  </div>
 			{/if}
- <div class="to-left"><img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$p->id()},'up')"  width="16" height="16" title="+" /></div>
+ <div class="to-left"><img src="/_bors/i/thumb_up.gif" alt="+" onclick="ptrch({$p->id()},'up')" class="thumb-up" width="16" height="16" title="+" /></div>
  <div id="ptr{$p->id()}" class="to-left">{if $p->get('score') != NULL}{$p->score_colorized()}{/if}</div>
- <div class="to-left"><img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$p->id()},'down')" width="16" height="16" title="-" /></div>
+ <div class="to-left"><img src="/_bors/i/thumb_down.gif" alt="-" onclick="ptrch({$p->id()},'down')" class="thumb-down" width="16" height="16" title="-" /></div>
  <div class="half-transparent to-left">{$p->imaged_edit_url()}</div>
 			{if $is_first_post}<g:plusone size="small"></g:plusone>{/if}
 </div>
@@ -151,7 +151,7 @@
 <div class="pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}">
 	{foreach $reputation_records as $r}
 	<div class="alert alert-{if $r->score()>0}success{else}danger{/if} shadow8 ab-alert-small">
-		{$r->create_time()|date:"d.m.Y H:i"}, {$r->owner()->titled_link()}: {$r->score_html(lcml_bb($r->comment()))}<br/>
+		{$r->create_time()|date:"d.m.Y H:i"}, {$r->owner()->titled_link()}: {$r->score_html($r->comment_html())}<br/>
 	</div>
 	{/foreach}
 </div>
