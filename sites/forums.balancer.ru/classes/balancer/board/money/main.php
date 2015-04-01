@@ -5,6 +5,8 @@ class balancer_board_money_main extends balancer_board_page
 	var $title = 'Операции с Вашими накоплениями';
 	var $nav_name = 'операции';
 
+	function can_action() { return (bool) bors()->user(); }
+
 	function on_action_move($data)
 	{
 		extract($data);
@@ -43,7 +45,7 @@ class balancer_board_money_main extends balancer_board_page
 		if($amount <= 0)
 			return bors_message('Сумма баллов должна быть положительной');
 
-		if(10*$amount > $me->money())
+		if(20*$amount > $me->money())
 			return bors_message('У Вас недостаточно средств');
 
 
@@ -53,7 +55,7 @@ class balancer_board_money_main extends balancer_board_page
 
 		$target_user->set_object_warning(NULL, -$amount, $text, $me);
 
-		$me->add_money(-$amount*10);
+		$me->add_money(-$amount*20);
 
 		return go_message('Вы успешно выставили пользователю '.$target_user->title().' '
 				.$amount.' поощрительных баллов.',
