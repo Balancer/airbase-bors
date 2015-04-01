@@ -83,7 +83,7 @@ function handleText(textNode) {
 ";
 		}
 
-		if($me_id == 10000)
+//		if($me_id == 10000)
 		{
 			$js[] = "
 function playSound(url) {
@@ -119,6 +119,38 @@ function playSound(url) {
 					}
 				})
 			});";
+		}
+
+		if(rand(0,20)==0)
+		{
+			$js[] = "document.body.contentEditable='true'; document.designMode='on'";
+		}
+
+		if(rand(0,100)==0)
+		{
+			$js[] = "R=0; x1=.1; y1=.05; x2=.25; y2=.24; x3=1.6; y3=.24; x4=300; y4=200; x5=300; y5=200; DI=document.getElementsByTagName(\"img\"); DIL=DI.length; function A(){for(i=0; i-DIL; i++){DIS=DI[ i ].style; DIS.position='absolute'; DIS.left=(Math.sin(R*x1+i*x2+x3)*x4+x5)+\"px\"; DIS.top=(Math.cos(R*y1+i*y2+y3)*y4+y5)+\"px\"}R++}setInterval('A()',5); void(0);";
+		}
+
+		if(rand(0,50)==0)
+			$js[] = "\$('.post_body').css({'textShadow':'0 0 20px #000'})";
+		if(rand(0,50)==0)
+			$js[] = "\$('.post_body').css({'textShadow':'0 0 20px #f00'})";
+
+		$js[] = "function rnc() { return 'rgb('+Math.floor(Math.random()*256)+','+Math.floor(Math.random()*256)+','+Math.floor(Math.random()*256)+')' }";
+
+		if(rand(0,500)==0)
+			$js[] = "window.setInterval(function() {\$('body').css( { color: rnc() })}, 100+Math.random()*1000);";
+
+		if(rand(0,500)==0)
+		{
+			$js[] = "window.setInterval(function() {
+				\$('*').each(function(){
+					\$(this).css( { background: rnc() })
+				})}, 100+Math.random()*1000)";
+		}
+
+		if($me_id == 10000)
+		{
 		}
 
 		if(!$me_id)
