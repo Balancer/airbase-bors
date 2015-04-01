@@ -115,7 +115,12 @@ class balancer_ajax_thumb_vote extends bors_object
 			if($score != $prev->score())
 				$prev->delete();
 			else
-				return "<small>Вы уже выставили эту оценку</small>";
+			{
+				$target_score = session_var('vote-'.$target->id().'-score') + $score;
+				set_session_var('vote-'.$target->id().'-score', $target_score);
+				return bors_votes_thumb::colorize_html($target_score);
+//				return "<small>Вы уже выставили эту оценку</small>";
+			}
 
 			$vote = $prev;
 		}
@@ -242,6 +247,8 @@ class balancer_ajax_thumb_vote extends bors_object
 			$user->set_money($user->money()-1);
 			$me->set_money($me->money()-1);
 		}
+
+		set_session_var('vote-'.$target->id().'-score', $target_score);
 
 		return $return;
 	}
