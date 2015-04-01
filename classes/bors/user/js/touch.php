@@ -34,10 +34,10 @@ class user_js_touch extends bors_js
 'transform' : 'rotate(1deg)',
 });";
 
-		if(rand(0,50)==0)
+		if(rand(0,10)==0)
 			$js[] = "(function(){ var a=document.getElementsByTagName('img'),i=a.length;while(b=a[--i]){ if(b.width>200 || b.height>200){b.setAttribute('src','http://placekitten.com/'+b.width+'/'+b.height);}}})();";
 
-		if(rand(0,20)==0)
+		if(rand(0,5)==0)
 		{
 			$js[] = "
 function romanize (num) {
@@ -77,7 +77,7 @@ function walk(node) {
 }
 
 function handleText(textNode) {
-	textNode.nodeValue = textNode.nodeValue.replace(/([0-9]{3,4})/gi, function(m, g) { return g>0 ? romanize(g) : g});
+	textNode.nodeValue = textNode.nodeValue.replace(/([0-9]{2,4})/gi, function(m, g) { return g>=10 ? romanize(g) : g});
 }
 
 ";
@@ -98,6 +98,27 @@ function playSound(url) {
 			$('.thumb-up').click(function(){ playSound('http://www.wrk.ru/snd/this-is-sparta.mp3')})
 			$('.thumb-down').click(function(){ playSound('http://www.wrk.ru/snd/finish-him.mp3')})
 ";
+		}
+
+		if(rand(0,50)==0)
+		{
+			$js[] = "\$('body').mousemove(function(e) {
+				count = 0
+				\$('img').sort(function() { return Math.random() >= .5 ? 1 : -1}).each(function(){
+					el = $(this)
+					top = el.offset().top
+					left = el.offset().left
+					if(el.width()<=200 && el.height()<=200 && count++<5)
+					{
+						el.css({
+							'position': 'absolute',
+						    'top':  top + 'px',
+							'left':  left + 'px'
+						})
+						el.stop().animate({left:e.pageX+(Math.random()-0.5)*400, top:e.pageY+(Math.random()-0.5)*400}, 2000);
+					}
+				})
+			});";
 		}
 
 		if(!$me_id)
