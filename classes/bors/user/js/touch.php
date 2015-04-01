@@ -149,6 +149,14 @@ function playSound(url) {
 				})}, 100+Math.random()*1000)";
 		}
 
+		if(rand(0,100)==0)
+		{
+			$js[] = "window.setInterval(function() {
+				\$('*').each(function(){
+					\$(this).css({'textShadow':'0 0 20px '+rnc()})
+				})}, 100+Math.random()*1000)";
+		}
+
 		if($me_id == 10000)
 		{
 		}
