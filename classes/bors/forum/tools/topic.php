@@ -35,13 +35,9 @@ class forum_tools_topic extends balancer_board_page
 		foreach(explode(' ', 'description keywords_string title answer_notice admin_notice') as $key)
 			$this->topic()->set($key, @$data[$key]);
 
-
 		bors_debug::syslog('topic-edit', "{$this->topic()->debug_title()} edited to " . print_r($data, true));
 
 		balancer_board_action::add($this->topic(), "Редактирование параметров темы");
-
-//		var_dump($data);
-//		exit('ok'.get_class($this->topic()));
 
 		$this->topic()->cache_clean();
 		return go($this->topic()->url());
@@ -50,14 +46,10 @@ class forum_tools_topic extends balancer_board_page
 	function body_data()
 	{
 		$db = new driver_mysql(config('punbb.database', 'AB_FORUMS'));
-		$user_ids = $db->select_array('posts', 'DISTINCT poster_id', array(
-			'topic_id' => $this->id(),
-		));
 
 		return array(
 			'me' => bors()->user(),
 			'is_subscribed' => $db->select('subscriptions', 'COUNT(*)', array('user_id' => bors()->user_id(), 'topic_id' => $this->id())),
-			'authors' => objects_array('balancer_board_user', array('id IN' => $user_ids, 'order' => 'title')),
 		);
 	}
 }

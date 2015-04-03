@@ -23,11 +23,5 @@ ul.operations li {
 {else}
 <li><a href="http://www.balancer.ru/forum/punbb/misc.php?subscribe={$this->id()}">Подписаться на получение e-mail извещений при ответах в эту тему</a></li>
 {/if}
-</ul>
-
-<h2>Участники темы</h2>
-<ul>
-{foreach from=$authors item="x"}
-<li>{$x->titled_link()} [<a href="http://www.balancer.ru/forum/user-{$x->id()}-posts-in-topic-{$this->id()}/">сообщения в этой теме</a> ]</li>
-{/foreach}
+<li><a href="http://forums.balancer.ru/topics/{$this->id()}/users/">Подробно об участниках темы</a>
 </ul>
