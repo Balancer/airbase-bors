@@ -29,7 +29,7 @@ class balancer_ajax_thumb_vote extends bors_object
 		if(!bors()->request()->is_post())
 		{
 			if(bors()->request()->is_accept_text())
-				return '<img src="http://www.airbase.ru/forum/smilies/hacker.gif" />';
+				return '<img src="http://www.airbase.ru/forum/smilies/hacker.gif" />. Нажмите Ctr-F5. <a href="http://www.balancer.ru/g/p3795989" target="_blank">подробности</a>';
 
 			header("Content-type: " . image_type_to_mime_type(IMAGETYPE_GIF));
 			return file_get_contents('http://www.airbase.ru/forum/smilies/hacker.gif');
