@@ -323,8 +323,19 @@ class balancer_board_user extends forum_user
 		));
 	}
 
+	function set_money($amount, $db_up=true)
+	{
+		bors_debug::syslog('000-money-set', "amount=".$amount);
+//		bors_debug::syslog('000-money-set-'.bors()->user_id(), "amount=".$amount);
+
+		return $this->set('money', $amount, $db_up);
+	}
+
 	function add_money($amount)
 	{
+		bors_debug::syslog('000-money-add', "amount=".$amount);
+//		bors_debug::syslog('000-money-add-'.bors()->user_id(), "amount=".$amount);
+
 		$this->set_money($this->money() + $amount);
 	}
 }
