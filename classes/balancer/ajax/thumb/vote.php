@@ -26,6 +26,15 @@ class balancer_ajax_thumb_vote extends bors_object
 		if(!$target)
 			return "Неизвестный объект";
 
+		if(!bors()->request()->is_post())
+		{
+			if(bors()->request()->is_accept_text())
+				return '<img src="http://www.airbase.ru/forum/smilies/hacker.gif" />';
+
+			header("Content-type: " . image_type_to_mime_type(IMAGETYPE_GIF));
+			return file_get_contents('http://www.airbase.ru/forum/smilies/hacker.gif');
+		}
+
 		if(!$me_id)
 			return "Только для зарегистрированных пользователей!";
 
@@ -105,7 +114,7 @@ class balancer_ajax_thumb_vote extends bors_object
 
 		$prev = bors_find_first('bors_votes_thumb', array(
 			'user_id' => $me_id,
-			'target_class_id' => $target->class_id(),
+			'target_class_name' => $target->new_class_name(),
 			'target_object_id' => $target->id(),
 			'target_user_id' => $target->owner_id(),
 		));
@@ -115,12 +124,7 @@ class balancer_ajax_thumb_vote extends bors_object
 			if($score != $prev->score())
 				$prev->delete();
 			else
-			{
-				$target_score = session_var('vote-'.$target->id().'-score') + $score;
-				set_session_var('vote-'.$target->id().'-score', $target_score);
-				return bors_votes_thumb::colorize_html($target_score);
-//				return "<small>Вы уже выставили эту оценку</small>";
-			}
+				return "<small>Вы уже выставили эту оценку</small>";
 
 			$vote = $prev;
 		}
@@ -128,7 +132,7 @@ class balancer_ajax_thumb_vote extends bors_object
 		{
 			$vote = bors_new('bors_votes_thumb', array(
 				'user_id' => $me_id,
-				'target_class_name' => $target->class_name(),
+				'target_class_name' => $target->new_class_name(),
 				'target_class_id' => $target->class_id(),
 				'target_object_id' => $target->id(),
 				'target_user_id' => $target->owner_id(),
@@ -239,16 +243,14 @@ class balancer_ajax_thumb_vote extends bors_object
 
 		if($score>0)
 		{
-			$user->set_money($user->money()+1);
-			$me->set_money($me->money()-1);
+			$user->add_money(1);
+			$me->add_money(-1);
 		}
 		elseif($score<0)
 		{
-			$user->set_money($user->money()-1);
-			$me->set_money($me->money()-1);
+			$user->add_money(-1);
+			$me->add_money(-1);
 		}
-
-		set_session_var('vote-'.$target->id().'-score', $target_score);
 
 		return $return;
 	}

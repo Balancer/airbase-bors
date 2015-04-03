@@ -28,8 +28,6 @@ class user_js_touch extends bors_js
 		if(!$me_id)
 			return $js;
 
-		bors()->changed_save();
-
 		if($obj)
 		{
 			$obj->touch(bors()->user_id(), $time);
@@ -39,6 +37,9 @@ class user_js_touch extends bors_js
 					$js[] = "top.touch_info_{$k} = ".(is_numeric($v) ? $v : "'".addslashes($v)."'");
 			}
 		}
+
+		// Сохраняем результат touch(), чтобы корректно обсчиталось число непрочитанных ответов.
+		bors()->changed_save();
 
 		$answers_count = bors()->user()->unreaded_answers();
 

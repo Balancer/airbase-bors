@@ -154,7 +154,7 @@ if(top.me_is_coordinator)
 	document.write('<a href="http://www.balancer.ru/admin/users/'+uid+'/warnings.html?object='+o+'"><img src="http://www.balancer.ru/img/web/skull.gif"></a>')
 }
 
-function ptrch(p,t) { $("#ptr"+p).load("/_bors/ajax/thumb-"+t+"?object=forum_post://"+p); }
+function ptrch(p,t) { $("#ptr"+p).load("/_bors/ajax/thumb-"+t+"?object=balancer_board_post://"+p, {'hash': Math.random()})}
 
 function pdsh(p)
 {
