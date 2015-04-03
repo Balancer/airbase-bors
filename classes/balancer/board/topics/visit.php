@@ -20,4 +20,15 @@ class balancer_board_topics_visit extends balancer_board_object_db
 			'modify_time' => 'UNIX_TIMESTAMP(`modify_ts`)',
 		);
 	}
+
+	static function last_topic_user_visit($user_id, $topic_id)
+	{
+		$v = bors_find_first('balancer_board_topics_visit', [
+			'user_id' => $user_id,
+			//FIXME: добавить проверку класса
+			'target_object_id' => $topic_id,
+		]);
+
+		return $v;
+	}
 }
