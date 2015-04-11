@@ -45,9 +45,8 @@ class balancer_board_money_main extends balancer_board_page
 		if($amount <= 0)
 			return bors_message('Сумма баллов должна быть положительной');
 
-		if(100*$amount > $me->money())
-			return bors_message('У Вас недостаточно средств');
-
+		if(500*$amount > $me->money())
+			return bors_message('У Вас недостаточно средств: '.$me->money().' при необходимых '.(500*$amount));
 
 		$text = "Поощрительный балл от пользователя ".$me->title();
 		if(!empty($comment))
@@ -55,7 +54,7 @@ class balancer_board_money_main extends balancer_board_page
 
 		$target_user->set_object_warning(NULL, -$amount, $text, $me);
 
-		$me->add_money(-$amount*100);
+		$me->add_money(-$amount*500);
 
 		return go_message('Вы успешно выставили пользователю '.$target_user->title().' '
 				.$amount.' поощрительных баллов.',

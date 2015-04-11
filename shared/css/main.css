@@ -928,7 +928,7 @@ tr.bb-background-private td {
 	background-color: #ffc;
 }
 
-.post_body img {
+.post_body img, .post .body img  {
 	max-width: 100%;
 }
 
