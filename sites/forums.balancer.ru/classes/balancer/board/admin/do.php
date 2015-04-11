@@ -3,6 +3,8 @@
 class balancer_board_admin_do extends balancer_board_admin_page
 {
 	var $auto_map = true;
+	//FIXME: GET убрать!
+	var $can_action_method_get = true;
 
 	function pre_show()
 	{
@@ -14,6 +16,7 @@ class balancer_board_admin_do extends balancer_board_admin_page
 
 		switch(bors()->request()->data('act'))
 		{
+			//FIXME: Осторожнее с GET!
 			case 'logo_assign_by_post':
 				$topic = $post->topic();
 				$post_image = $post->__image(false);
