@@ -34,6 +34,8 @@ class balancer_board_money_main extends balancer_board_page
 
 	function on_action_award($data)
 	{
+		$price = 500;
+
 		extract($data);
 
 		$target_user = bors_load('balancer_board_user', $target_user_id);
@@ -45,16 +47,20 @@ class balancer_board_money_main extends balancer_board_page
 		if($amount <= 0)
 			return bors_message('Сумма баллов должна быть положительной');
 
-		if(500*$amount > $me->money())
-			return bors_message('У Вас недостаточно средств: '.$me->money().' при необходимых '.(500*$amount));
+		if($amount > 1000000)
+			return bors_message('Да ну вас, хакеров...');
+
+		if($price*$amount > $me->money())
+			return bors_message('У Вас недостаточно средств: '.$me->money().' при необходимых '.($price*$amount));
 
 		$text = "Поощрительный балл от пользователя ".$me->title();
 		if(!empty($comment))
 			$text .= ": ".$comment;
 
 		$target_user->set_object_warning(NULL, -$amount, $text, $me);
+		$me->add_money(-$amount*$price);
 
-		$me->add_money(-$amount*500);
+		bors()->changed_save();
 
 		return go_message('Вы успешно выставили пользователю '.$target_user->title().' '
 				.$amount.' поощрительных баллов.',
