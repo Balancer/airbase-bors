@@ -18,30 +18,33 @@ class wrk_news_tags_view extends balancer_board_paginated
 	{
 		$tags = explode('/', $this->id());
 
+		// ID всех новостных топиков за заданное время.
 		$topic_ids = bors_field_array_extract(bors_find_all('common_keyword_bind', [
 			'keyword_id' => common_keyword::loader('новости')->id(),
 			'target_class_name IN' => ['forum_topic', 'balancer_board_topic'],
 			'target_modify_time>' => time() - 86400*self::DAYS,
 		]), 'target_object_id');
 
-		foreach($tags as $t)
+		foreach($tags as $tag)
 		{
-			$kid = common_keyword::loader($t)->id();
-			if($kid)
+			$tids = [];
+			foreach(explode(',', $tag) as $t)
 			{
-				$tids = bors_field_array_extract(bors_find_all('common_keyword_bind', [
-					'keyword_id' => $kid,
-					'target_class_name IN' => ['forum_topic', 'balancer_board_topic'],
-					'target_modify_time>' => time() - 86400*self::DAYS,
-				]), 'target_object_id');
+				$kid = common_keyword::loader($t)->id();
+				if($kid)
+				{
+					$tids += bors_field_array_extract(bors_find_all('common_keyword_bind', [
+						'keyword_id' => $kid,
+						'target_class_name IN' => ['forum_topic', 'balancer_board_topic'],
+						'target_modify_time>' => time() - 86400*self::DAYS,
+					]), 'target_object_id');
+				}
 
-				$topic_ids = array_intersect($topic_ids, $tids);
 			}
-			else
-			{
-				$topic_ids = [];
-				break;
-			}
+
+			$topic_ids = array_intersect($topic_ids, $tids);
+
+//			bors_debug::syslog('0001', print_r(array_values($topic_ids), true));
 		}
 
 		return [
