@@ -694,7 +694,7 @@ if (isset($_POST['form_sent']))
 			);
 		}
 
-		$user->add_money(-2);
+		bors()->user()->add_money(-2);
 
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);
