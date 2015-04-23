@@ -9,4 +9,9 @@ class airbase_main extends airbase_page
 	function nav_name() { return ec('авиабаза'); }
 	function parents() { return array('http://www.balancer.ru/'); }
 	function create_time() { return strtotime('24.12.1997'); }
+
+	function body_data()
+	{
+		return json_decode(file_get_contents('http://www.wrk.ru/news/tags/авиация/last.json'), true);
+	}
 }

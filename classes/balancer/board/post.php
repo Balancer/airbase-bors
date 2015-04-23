@@ -240,7 +240,7 @@ class balancer_board_post extends forum_post
 			),
 			'post_id' => $this->id(),
 			'`i`.extension<>"gif"',
-			'order' => 'post_id',
+			'order' => '-post_id,-modify_time',
 		));
 
 		if($obj)

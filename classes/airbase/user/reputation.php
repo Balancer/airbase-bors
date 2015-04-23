@@ -53,7 +53,13 @@ class airbase_user_reputation extends balancer_board_object_db
 
 	function comment_html()
 	{
-		return lcml_bb($this->comment(), ['disabled_tags' => ['img']]);
+		return htmlspecialchars($this->comment());
+
+		return lcml_bb($this->comment(), [
+			'enabled_tags' => ['b', 's', 'i'],
+			'nocache' => true,
+			'enabled_functions' => ['smilies'],
+		]);
 	}
 
 	function refer_link()
