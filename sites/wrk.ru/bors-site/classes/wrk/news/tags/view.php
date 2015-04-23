@@ -14,6 +14,11 @@ class wrk_news_tags_view extends balancer_board_paginated
 		return join('/', $id);
 	}
 
+	function inner_join()
+	{
+		return 'balancer_board_topic ON balancer_board_topic.id = topic_id';
+	}
+
 	function where()
 	{
 		$tags = explode('/', $this->id());
@@ -43,16 +48,15 @@ class wrk_news_tags_view extends balancer_board_paginated
 			}
 
 			$topic_ids = array_intersect($topic_ids, $tids);
-
-//			bors_debug::syslog('0001', print_r(array_values($topic_ids), true));
 		}
 
 		return [
 			'topic_id IN' => $topic_ids,
 			'is_deleted' => false,
-//			'is_hidden' => false,
-//			'is_spam' => false,
-//			'is_incorrect' => false,
+			'is_public' => true,
+			'(is_hidden IS NULL OR is_hidden=0)',
+			'(is_spam IS NULL OR is_spam=0)',
+			'(is_incorrect IS NULL OR is_incorrect=0)',
 			'create_time>' => time() - 86400*self::DAYS,
 			'answer_to_id' => 0,
 			'(score>=0 OR score IS NULL)',
@@ -62,8 +66,6 @@ class wrk_news_tags_view extends balancer_board_paginated
 
 	function url_ex($page)
 	{
-//		config_set('debug_redirect_trace', true);
-
 		return 'http://www.wrk.ru/news/tags/'.$this->id().'/'.($page>1?$page.'.html':'');
 	}
 }

@@ -8,6 +8,8 @@ class balancer_board_news extends balancer_board_paginated
 
 	var $main_class = 'balancer_board_post';
 
+	function tags() { return trim($this->id(), ' /'); }
+
 	function where()
 	{
 		$xrefs = bors_find_all('common_keyword_bind', [

@@ -41,6 +41,9 @@ class balancer_ajax_thumb_vote extends bors_object
 		if($me->is_banned())
 			return "Вы находитесь в режиме «только чтение»";
 
+		if($me->money() <= 0)
+			return "У Вас недостаточно средств ☼ для оценки сообщений";
+
 		if($me_id == $target->owner_id())
 			return "<small>Нельзя ставить оценку себе!</small>";
 

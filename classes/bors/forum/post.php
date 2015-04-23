@@ -755,6 +755,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	function auto_objects()
 	{
 		return array_merge(parent::auto_objects(), array(
+			'original_topic' => 'balancer_board_topic(original_topic_id)',
 			'blog' => 'balancer_board_blog(id)',
 			'cache' => 'balancer_board_posts_cache(id)',
 			'owner' => 'balancer_board_user(owner_id)'

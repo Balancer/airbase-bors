@@ -50,6 +50,8 @@ $map = array(
 	'(/)new\-topics/ => balancer_board_new_topics',
 	'(/)new\-topics/(\d+)\.html => balancer_board_new_topics(NULL,2)',
 
+//	'/news/(.*) => balancer_board_news(1)',
+
 	'/post => balancer_board_post_edit',
 
 	'/stat/forums-activity\.png => balancer_board_stat_forumsActivity',
