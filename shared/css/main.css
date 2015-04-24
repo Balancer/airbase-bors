@@ -678,19 +678,38 @@ dt span.colright-100 {
 	border: 1px solid #9bd;
 	margin-top: 0;
 	padding-left: 4px;
-	font-size: 12pt;
-	font-family: monospace !important;
+	font-size: 0.9rem;
+	font-family: Consolas, monospace !important;
 }
 
 .code-head {
 	background: #9bd;
-	color: white;
+	color: #eef;
 	border-top: 1px solid #9bd;
 	border-left: 1px solid #9bd;
 	border-right: 1px solid #9bd;
 	margin-bottom: 0;
 	font-weight: bold;
-	font-size: 8pt;
+	font-size: 0.6rem;
+	padding-left: 8ex;
+}
+
+ol.code {
+	padding: 0.5em 0 0.2em 0;
+	background: #eee;
+	border-left: 2.8em solid #9bd;
+}
+
+.code li {
+	padding: 0 0 0 1ex;
+	color: #fff;
+ 	font-size: 0.6rem;
+	line-height: 0.9rem;
+}
+
+.code li>span, .code li>div {
+	color: #484340;
+	font-size: 0.8rem;
 }
 
 .top-ad {
