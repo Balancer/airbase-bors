@@ -58,19 +58,28 @@ if($is_banned)
 		.'<br/><br/>'.bbf_bans::message_ls()
 	);
 
+
 $topic = bors_load('balancer_board_topic', $tid);
 $forum_id = $fid ? $fid : $topic->forum_id();
 $forum = bors_load('balancer_board_forum', $forum_id);
 
 $me = bors()->user();
+
 if(!$me)
 	message("Вы не авторизованы на форуме.
-	Попробуйте <a href=\"{$forum->category()->category_base_full()}login.php\">авторизоваться</a> снова.");
+	Попробуйте <a href=\"{$forum->category()->category_base_full()}login.php\">авторизоваться</a> снова.<br/><br/>
+	<a href=\"http://www.wrk.ru/forums/register.php\" style=\"display: block; width: 24ex; font-size: 10pt; padding: 2px 4px; text-align: center; box-shadow: 2px 2px 4px rgba(0,0,0,0.5); color: white; background: rgb(28, 184, 65)\">Зарегистрироваться</a>
+");
 
 if($fid && !$tid && ($me->num_posts() < 3 || $me->create_time() > time() - 86400))
 {
-	debug_hidden_log('new-user-try-post', "Новичок пытается создать сообщение: [owner={$me}, num_posts={$me->num_posts()}, registered={$me->create_time()}]");
-	message('Извините, но с целью борьбы со спамерами только что зарегистрированным пользователям запрещено создавать новые темы. Поучаствуйте сперва в обсуждениях уже имеющихся тем (<a href="http://www.balancer.ru/tools/search/">Поиск в Вашем распоряжении</a>) или подождите сутки с момента регистрации. Можете также начать новое обсуждение в продолжение уже имеющейся темы с просьбой к координаторам о выносе сообщения с ответами в новую тему.');
+	message('Извините, но с целью борьбы со спамерами только что зарегистрированным'
+		.' пользователям запрещено создавать новые темы. Поучаствуйте сперва в обсуждениях'
+		.' уже имеющихся тем (<a href="http://www.balancer.ru/tools/search/">Поиск в Вашем распоряжении</a>)'
+		.' или подождите сутки с момента регистрации. Можете также начать новое'
+		.' обсуждение в продолжение уже имеющейся темы с просьбой к координаторам о выносе сообщения с ответами в новую тему.');
+
+	bors_debug::syslog('new-user-try-post', "Новичок пытается создать сообщение: [owner={$me}, num_posts={$me->num_posts()}, registered={$me->ctime()}]");
 }
 
 $messages_limit = $me->messages_daily_limit();
@@ -588,8 +597,11 @@ if (isset($_POST['form_sent']))
 
 		// Этот блок держать над пересчётами данных топика, чтобы аттачи в них уже учитывались.
 		// Attachment Mod Block Start
-		if (isset($_FILES['attached_file'])&&$_FILES['attached_file']['size']!=0&&is_uploaded_file($_FILES['attached_file']['tmp_name']))
-			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'],$_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
+		if(isset($_FILES['attached_file'])
+				&& $_FILES['attached_file']['size'] !=0
+				&& is_uploaded_file($_FILES['attached_file']['tmp_name'])
+		)
+			if(!attach_create_attachment($_FILES['attached_file']['name'],$_FILES['attached_file']['type'], $_FILES['attached_file']['size'],$_FILES['attached_file']['tmp_name'],$new_pid,count_chars($message)))
 				error('Error creating attachment, inform the owner of this bulletin board of this problem. (Most likely something to do with rights on the filesystem)',__FILE__,__LINE__);
 		// Attachment Mod Block End
 
@@ -682,6 +694,8 @@ if (isset($_POST['form_sent']))
 			);
 		}
 
+		bors()->user()->add_money(-2);
+
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);
 
@@ -691,7 +705,14 @@ if (isset($_POST['form_sent']))
 	}
 }
 
-
+// Если форумы в R/O, то на соответствующую страницу. Редирект тут, чтобы
+// при ответе оный не пропадал.
+if(bors_var::get('r/o-by-move-time-'.$forum->category_id()) > time())
+{
+	header("Status: 302 Moved Temporarily");
+	header("Location: http://ls.balancer.ru/blog/airbase/111.html");
+	bors_exit();
+}
 
 // If a topic id was specified in the url (it's a reply).
 if ($tid)
@@ -768,7 +789,13 @@ require PUN_ROOT.'header.php';
 ?>
 <div class="linkst">
 	<div class="inbox">
-		<ul><li><a href="<?php echo $pun_config['root_uri'];?>/index.php"><?php echo $lang_common['Index'] ?></a></li><li>&nbsp;&raquo;&nbsp;<?php echo $forum_name ?><?php if (isset($cur_posting['subject'])) echo '</li><li>&nbsp;&raquo;&nbsp;'.pun_htmlspecialchars($cur_posting['subject']) ?></li></ul>
+		<ul><li><a href="<?php echo $pun_config['root_uri'];?>/index.php"><?= $lang_common['Index'] ?></a></li>
+			<li>&nbsp;&raquo;&nbsp;<?= $forum_name ?></li>
+			<?php
+				if(isset($cur_posting['subject']))
+					echo '<li>&nbsp;&raquo;&nbsp;'.$topic->titled_link().'</li>';
+			?>
+		</ul>
 	</div>
 </div>
 

@@ -1,6 +1,9 @@
 {if $owner}
-<p><b>Здравствуйте, {$owner->titled_link()}!</b> [&nbsp;<a href="/actions/do-logout/">Выход</a>&nbsp;]
+<p>
+	<b>Здравствуйте, {$owner->titled_link()}!</b> [&nbsp;<a href="/actions/do-logout/">Выход</a>&nbsp;]
 </p>
+
+<div class="alert alert-info text-center" style="padding: 0"><div style="font-size: 1.1rem"><a href="http://forums.balancer.ru/money/" style="color: {if $owner->money()>0}green{elseif $owner->money()<0}red{/if}">☼{$owner->money()}</a></div><div style="font-size: 0,5rem">Ваш баланс</div></div>
 
 <b>Ваше:</b>
 <ul>

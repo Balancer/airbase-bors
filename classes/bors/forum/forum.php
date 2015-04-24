@@ -30,6 +30,7 @@ class forum_forum extends bors_object_db
 			'moderators',
 			'num_topics',
 			'num_posts',
+//			'modify_time' => 'last_post',
 			'last_post_time' => 'last_post',
 			'last_post_id',
 			'last_poster',

@@ -11,7 +11,7 @@
 {/foreach}
 </table>
 
-
+{$sum=0}
 <table class="btab w100p">
 <caption>Активность координаторов по числу штрафов за месяц</caption>
 <tr>
@@ -22,7 +22,33 @@
 <tr>
 	<td>{$x.coordinator_name}</td>
 	<td>{$x.warnings_count}</td>
+</tr>
+{$sum = $sum + $x.warnings_count}
 {/foreach}
+<tr>
+	<td><b>Итого</b></td>
+	<td>{$sum}</td>
+</tr>
+</table>
+
+{$sum=0}
+<table class="btab w100p">
+<caption>Активность координаторов по числу штрафов за месяц год назад</caption>
+<tr>
+	<th>Координатор</th>
+	<th>Число выставленных штрафов</th>
+</tr>
+{foreach from=$month_warns_toyear item="x"}
+<tr>
+	<td>{$x.coordinator_name}</td>
+	<td>{$x.warnings_count}</td>
+</tr>
+{$sum = $sum + $x.warnings_count}
+{/foreach}
+<tr>
+	<td><b>Итого</b></td>
+	<td>{$sum}</td>
+</tr>
 </table>
 
 <table class="btab w100p">

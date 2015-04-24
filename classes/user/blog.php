@@ -27,7 +27,7 @@ class user_blog extends balancer_board_page
 	function parents() { return array("balancer_board_user://".$this->id()); }
 
 	private $xdata = array();
-	function local_data()
+	function body_data()
 	{
 		$page_id = $this->page().','.$this->items_per_page();
 
@@ -39,6 +39,7 @@ class user_blog extends balancer_board_page
 					'owner_id' => $this->id(),
 					'is_microblog' => 0,
 					'order' => 'blogged_time',
+//					'create_time<=' => time(),
 					'page' => $this->page(),
 					'per_page' => $this->items_per_page(),
 					'is_public' => 1,
@@ -70,7 +71,7 @@ class user_blog extends balancer_board_page
 	{
 		if($this->last_post === false)
 		{
-			$data = $this->local_data();
+			$data = $this->body_data();
 			if(count(@$data['blog_records']))
 				$this->last_post = bors_load('balancer_board_post', $data['blog_records'][0]->id());
 			else

@@ -94,3 +94,7 @@ DIV.userinfo {
     color: #000066;
     background-color: #66ccff;
 }
+
+.imgbox .scrollbox img {
+	max-width: 100%;
+}

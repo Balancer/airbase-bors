@@ -13,7 +13,7 @@ class balancer_board_mobile_categories_view extends balancer_board_mobile_page
 		return array('category' => 'balancer_board_mobile_category(id)');
 	}
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'forums' => objects_array('balancer_board_mobile_forum', array(

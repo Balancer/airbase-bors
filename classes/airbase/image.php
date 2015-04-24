@@ -38,7 +38,7 @@ class airbase_image extends bors_image
 			&& file_exists($image->full_file_name())
 			&& stripos($image->full_file_name(), '/_cg/') === false
 			&& !preg_match('!cache/!', $image->relative_path())
-			&& preg_match('!\.(jpe?g|png)$!', $image->full_file_name())
+			&& preg_match('!\.(jpe?g|png)$!i', $image->full_file_name())
 			&& $image->width() >= 100
 			&& $image->height() >= 100
 		;

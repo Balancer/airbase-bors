@@ -4,6 +4,27 @@
 Обсудить концепцию можно в <a href="http://www.balancer.ru/support/2010/09/t73813--glavnaya-stranitsa-forumov.2468.html">соответствующей теме форума</a>.
 </div>
 
+<div id="w-login-block" class="pure-g" style="margin: 10px 0">
+	<div class="pure-u-1-4">
+		<a href="http://www.wrk.ru/forums/register.php" class="pure-button" style="color: white; background: rgb(28, 184, 65)">Зарегистрироваться</a>
+	</div>
+	<div class="pure-u-3-4">
+		<form id="login" class="pure-form" method="post" action="http://www.wrk.ru/forums/login.php?action=in">
+			<input name="req_username" type="text" placeholder="Логин или email">
+			<input name="req_password" type="password" placeholder="Пароль">
+			<button type="submit" name="login" class="pure-button pure-button-primary">Войти</button>
+			<input type="hidden" name="form_sent" value="1" />
+			<input type="hidden" name="redirect_url" value="http://www.wrk.ru/forums/" />
+		</form>
+	</div>
+</div>
+
+<div id="w-logged-welcome" style="display: none">
+	<div class="pure-u-1-2">
+		<div class="pure-alert pure-alert-success" style="margin:0; padding: .5em 1em">Здравствуйте!</div>
+	</div>
+</div>
+
 <div style="width: 100%; float: left; margin-right: -420px">
 
 <div style="width: 400px; float: right">
@@ -67,7 +88,7 @@ skin['CONTENT_SECONDARY_TEXT_COLOR'] = '#335588';
 skin['CONTENT_HEADLINE_COLOR'] = '#335588';
 skin['NUMBER_ROWS'] = '7';
 google.friendconnect.container.setParentUrl('/forum/' /* location of rpc_relay.html and canvas.html */);
-google.friendconnect.container.renderMembersGadget( { id: 'div-1588324028885489965',    site: '16648724237478339286' },     skin);
+google.friendconnect.container.renderMembersGadget( { id: 'div-1588324028885489965',	site: '16648724237478339286' },	 skin);
 
 skin['HEADER_TEXT'] = '\u0420\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0430\u0446\u0438\u0438';
 skin['RECOMMENDATIONS_PER_PAGE'] = '5';

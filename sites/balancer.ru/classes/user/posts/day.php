@@ -49,6 +49,12 @@ class user_posts_day extends balancer_board_page
 		return strtotime("{$this->year}-{$this->month}-{$this->day}") + 2*86400 > time();
 	}
 
+	function pre_show()
+	{
+		jquery::plugin('cookie');
+		return parent::pre_show();
+	}
+
 	function template()
 	{
 		template_noindex();

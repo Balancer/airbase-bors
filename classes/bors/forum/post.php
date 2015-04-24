@@ -21,6 +21,7 @@ class forum_post extends balancer_board_object_db
 			'id',
 			'title_raw' => 'title',
 			'topic_id',
+			'original_topic_id', // обычно NULL, выставляется, если был перенос
 			'topic_page' => 'page',
 			'create_time'	=> 'posted',
 			'edited',
@@ -76,6 +77,7 @@ class forum_post extends balancer_board_object_db
 					'answers_count_raw' => 'answers_total',
 					'answers_in_other_topics_count_raw' => 'answers_other_topics',
 					'best10_ts' => 'UNIX_TIMESTAMP(`best10_ts`)',
+					'root_post_id', // ID корневого сообщения ветки.
 				),
 			)
 		);
@@ -84,7 +86,14 @@ class forum_post extends balancer_board_object_db
 //	function __orm_setters() { return array('';); }
 
 function topic_id() { return @$this->data['topic_id']; }
-function set_topic_id($v, $dbup = true) { return $this->set('topic_id', $v, $dbup); }
+function set_topic_id($new_topic_id, $dbup = true)
+{
+	if(!$this->get('original_topic_id') && $this->topic_id() != $new_topic_id)
+		$this->set('original_topic_id', $this->topic_id());
+
+	return $this->set('topic_id', $new_topic_id, $dbup);
+}
+
 function topic_page()
 {
 	$page = @$this->data['topic_page'];
@@ -261,6 +270,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 					'uri' => $this->internal_uri(),
 					'nocache' => true,
 					'self' => $this,
+					'container' => $this->topic(),
 					'fast' => $fast,
 				)
 			);
@@ -405,7 +415,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		return "<ul><li><a href=\"{$this->url_in_topic()}\">Помотреть это сообщение в теме</a></li></ul>";
 	}
 */
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'p' => $this,
@@ -549,6 +559,26 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			$forum->recalculate();
 
 		$this->recalculate();
+/*
+		if(bors()->user_id() == 10000
+			&& $this->create_time() < time() - 86400
+			&& $this->create_time() > time() - 86400*30
+			&& $this->owner_id() != 10000
+		)
+		{
+			$key = 'r/o-by-move-time-'.$this->topic()->forum()->category_id();
+			$ro_time = intval(bors_var::get($key));
+			if($ro_time < time())
+				$ro_time = time();
+
+			$ro_time += 300;
+
+			if($ro_time > time() + 1800)
+				$ro_time = time() + 1800;
+
+			bors_var::set($key, $ro_time, 86400);
+		}
+*/
 	}
 
 	private function __move_tree_to_topic($new_tid, $old_tid)
@@ -651,7 +681,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		return false;
 	}
 
-	function edit_url() { return "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}"; }
+	function edit_url() { return $this->topic() ? "{$this->topic()->forum()->category()->category_base_full()}edit.php?id={$this->id()}" : NULL; }
 
 //	function pre_show() { return go($this->url_in_topic()); }
 	function igo($permanent = true) { return go($this->url_in_container(), $permanent); }
@@ -671,7 +701,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			return $this->score_positive_raw();
 
 		return $this->set_score_positive_raw(objects_count('bors_votes_thumb', array(
-			'target_class_name' => $this->extends_class_name(),
+			'target_class_name' => $this->new_class_name(),
 			'target_object_id' => $this->id(),
 			'score' => 1,
 		)), true);
@@ -683,7 +713,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			return $this->score_negative_raw();
 
 		return $this->set_score_negative_raw(objects_count('bors_votes_thumb', array(
-			'target_class_name' => $this->extends_class_name(),
+			'target_class_name' => $this->new_class_name(),
 			'target_object_id' => $this->id(),
 			'score' => -1,
 		)), true);
@@ -725,6 +755,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	function auto_objects()
 	{
 		return array_merge(parent::auto_objects(), array(
+			'original_topic' => 'balancer_board_topic(original_topic_id)',
 			'blog' => 'balancer_board_blog(id)',
 			'cache' => 'balancer_board_posts_cache(id)',
 			'owner' => 'balancer_board_user(owner_id)'
@@ -744,6 +775,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		$this->set_have_attach(NULL);
 		$this->attaches();
+		$this->score_colorized(true); // true = recalc. score
 	}
 
 	function joke_owner()
@@ -772,7 +804,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$text = str_replace("\n", " ", $text);
 		$text = preg_replace("/\s{2,}/", ' ', $text);
 		$text = str_replace('… …', '…', $text);
-		$text = blib_string::wordwrap($text, 16, ' ', true);
+		$text = blib_string::wordwrap($text, 32, ' ', true);
 		return bors_truncate($text, $size);
 	}
 }

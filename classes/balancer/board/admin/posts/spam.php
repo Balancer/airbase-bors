@@ -26,9 +26,9 @@ class balancer_board_admin_posts_spam extends balancer_board_paginated
 
 	function is_filtered()  { return !empty($_GET) && @$_GET['type']; }
 
-	function local_data()
+	function body_data()
 	{
-		return array_merge(parent::local_data(), array(
+		return array_merge(parent::body_data(), array(
 			'show_spam' => true,
 			'is_filtered_spam' => $this->is_filtered_spam(),
 			'is_filtered_ham'  => $this->is_filtered_ham(),

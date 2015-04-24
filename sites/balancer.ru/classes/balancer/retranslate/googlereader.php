@@ -1,6 +1,6 @@
 <?php
 
-class balancer_retranslate_googlereader extends base_page
+class balancer_retranslate_googlereader extends bors_page
 {
 	function render_engine() { return __CLASS__; }
 	function is_auto_url_mapped_class() { return true; }

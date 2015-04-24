@@ -51,7 +51,6 @@ $header[] = <<< __EOT__
 <link rel="stylesheet" type="text/css" href="$markitup_base/skins/simple/style.css" />
 <link rel="stylesheet" type="text/css" href="$markitup_sets/style.css" />
 
-<script type="text/javascript" src="/_bors3rdp/jquery/jquery.js"></script>
 <script type="text/javascript" src="$markitup_base/jquery.markitup.js"></script>
 <script type="text/javascript" src="$markitup_sets/set.js"></script>
 

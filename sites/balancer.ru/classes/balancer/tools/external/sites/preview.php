@@ -4,12 +4,16 @@ class balancer_tools_external_sites_preview extends bors_image_png
 {
 	function image()
 	{
+		$id = $this->id();
+		$cache_file = $_SERVER['DOCUMENT_ROOT'] . '/_cg/_st/000-long/'.md5($id).'.png';
+		if(file_exists($cache_file))
+			return file_get_contents($cache_file);
+
 		$url = bors()->request()->data('url');
 		$geo = bors()->request()->data('geo');
 
 		if(!$url && $this->page() == '_cg/_st')
 		{
-			$id = $this->id();
 			if(preg_match('/^(\S+)\-(\d+x\d+)$/', $id, $m))
 			{
 				$url = blib_string::base64_decode2($m[1]);
@@ -55,56 +59,64 @@ class balancer_tools_external_sites_preview extends bors_image_png
 
 //		debug_hidden_log('sites_preview', "Thumbnail $url ($geo); ".escapeshellcmd($url));
 
-//		$bin = config('bin.wkhtmltoimage', "/opt/bin/wkhtmltoimage-amd64");
-		$bin = config('bin.wkhtmltoimage', "/usr/bin/env");
-
-		if($args = config('bin.wkhtmltoimage.args', 'DISPLAY=:0 /opt/bin/wkhtmltoimage-amd64 --use-xserver'))
-			$bin .= " $args ";
-
-		if(($proxy=config('proxy.force_regexp')) && preg_match($proxy, $url))
-			$bin = "$bin -p ".config('proxy.forced');
-
 		$url = blib_urls::parts_encode($url);
-
-		$cmd = $bin
-			." --width 1024 --height 768"
-//			." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
-			." --minimum-font-size 20"
-			." --enable-plugins --encoding \"utf-8\""
-			." ".escapeshellcmd($url)." ".escapeshellcmd($file);
-
-		$cmd_nojs = "$bin --disable-javascript"
-			." --width 1024 --height 768"
-//			." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
-			." --minimum-font-size 20"
-//			." --load-error-handling ignore"
-			." --encoding \"utf-8\""
-			." ".escapeshellarg($url)." ".escapeshellarg($file);
 
 		mkpath(dirname($file));
 
-		if(!file_exists($file) || !filesize($file))
-		{
-			@unlink($file);
-			system($cmd);
-		}
+		// https://github.com/KnpLabs/snappy/blob/master/src/Knp/Snappy/Image.php
+		$snappy = new my_snappy(COMPOSER_ROOT . '/vendor/h4cc/wkhtmltoimage-amd64/bin/wkhtmltoimage-amd64');
+
+		$snappy->setTimeout(15);
+		$snappy->setOption('width', 1024);
+		$snappy->setOption('height', 768);
+		$snappy->setOption('minimum-font-size', 20);
+		$snappy->setOption('encoding', 'utf-8');
+//		." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
+
+		$js_disabled = preg_match('!(livejournal\.com|rudis\.ru)!', $url);
+
+		if(config('proxy.force_regexp') && preg_match(config('proxy.force_regexp'), $url))
+			$snappy->setOption('proxy',  'http://'.config('proxy.forced'));
 
 		if(!file_exists($file) || !filesize($file))
 		{
 			@unlink($file);
-			system($cmd_nojs);
-		}
 
-		if(!file_exists($file))
-		{
-			debug_hidden_log('sites_preview', "Image $url ($geo) error. File not exists. cmd=$cmd; cmd_nojs=$cmd_nojs;", 1);
-			return NULL;
-		}
+			$image = NULL;
 
-		if(!filesize($file))
-		{
-			debug_hidden_log('sites_preview', "Image $url ($geo) error: zero size. cmd=$cmd", 1);
-			return NULL;
+			if(!$js_disabled)
+			{
+				try {
+					$image = $snappy->getOutput($url);
+				} catch(Exception $e) {  }
+			}
+
+			if(!$image)
+			{
+				$snappy->setOption('disable-javascript', true);
+				try {
+					$image = $snappy->getOutput($url);
+				} catch(Exception $e)
+				{
+					bors_debug::syslog('sites_preview', "Exception: ".$e->getMessage());
+//					echo '<xmp>'; var_dump($snappy); exit('</xmp>');
+					$image = NULL;
+				}
+			}
+
+			if(!$image)
+			{
+				debug_hidden_log('sites_preview', "Image $url ($geo) error. Zero image", 1);
+				return NULL;
+			}
+
+			@file_put_contents($file, $image);
+
+			if(!file_exists($file) && $image)
+			{
+				file_put_contents($file = $cache_file, $image);
+				file_put_contents($cache_file.'.txt', $url);
+			}
 		}
 
 		if($geo && $thumb_url)
@@ -130,5 +142,21 @@ class balancer_tools_external_sites_preview extends bors_image_png
 		}
 
 		return file_get_contents($file);
+	}
+}
+
+class my_snappy extends Knp\Snappy\Image
+{
+	protected function checkProcessStatus($status, $stdout, $stderr, $command)
+	{
+        if (0 !== $status and '' !== $stderr) {
+            bors_debug::syslog('sites_preview', 'throw '.sprintf(
+                'The exit status code \'%s\' says something went wrong:'."\n"
+                .'stderr: "%s"'."\n"
+                .'stdout: "%s"'."\n"
+                .'command: %s.',
+                $status, $stderr, $stdout, $command
+            ));
+        }
 	}
 }

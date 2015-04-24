@@ -66,13 +66,15 @@ if(!empty($_GET['id']) && preg_match('/viewforum\.php/', $_SERVER['REQUEST_URI']
 <title><?php echo $page_title ?></title>
 <meta name="Description" content="Форумы Balancer'а и Авиабазы. Свободное общение на всевозможные интересные темы. Военная и гражданская техника, авиация, космонавтика, компютеры и информационные технологии, Linux, люди, страны, политика, просто радости и горести жизни. У нас есть всё!">
 <meta name="Keywords" content="форум, форумы, доска объявлений, авиабаза, люди, коллектив, клуб, сообщество, BORS, PHP, фреймворк, CMS, CMF, новости, мероприятия, авиация, видео, юмор, байки, космос, межпланетная космонавтика, ПВО, ПРО, флот, танки, наука, техника, радиоэлектроника, автомобили, метро, рельсовый транспорт, ракетостроение, ракетомоделизм, МосГИРД, Jabber, искусство, фантастика, города и страны, соционика, химия, биология">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $pun_config['root_uri'];?>/style/imports/colors.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $pun_config['root_uri'];?>/style/imports/fixes.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $pun_config['root_uri'];?>/style/<?php echo $pun_user['style'].'.css';/*"*/?>" />
 <meta property="fb:admins" content="100000278666723" />
 <?php
-if(!empty($GLOBALS['use_jquery']))
-	echo "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\" type=\"text/javascript\"></script>\n";
+//if(!empty($GLOBALS['use_jquery']))
+//	echo "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\" type=\"text/javascript\"></script>\n";
+	echo "<script src=\"https://code.jquery.com/jquery-1.11.2.min.js\"></script>\n";
 ?>
 
 <link rel="stylesheet" type="text/css" href="/_bors/css/bors/style.css" />
@@ -186,7 +188,7 @@ else
 {
 	$tpl_temp = '<div id="brdwelcome" class="inbox">'."\n\t\t\t".'<ul class="conl">'."\n\t\t\t\t".'<li>'.$lang_common['Logged in as'].' <strong>'.pun_htmlspecialchars($pun_user['username']).'</strong></li>'."\n\t\t\t\t".'<li>'.$lang_common['Last visit'].': '.format_time($pun_user['last_visit']).'</li>';
 
-	if ($pun_user['g_id'] < PUN_GUEST)
+	if (bors()->user() && bors()->user()->is_coordinator())
 	{
 		$result_header = $db->query('SELECT COUNT(id) FROM '.$db->prefix.'reports WHERE zapped IS NULL') or error('Unable to fetch reports info', __FILE__, __LINE__, $db->error());
 
@@ -246,16 +248,6 @@ if ($pun_config['o_announcement'] == '1')
 			<div><?php echo $pun_config['o_announcement_message'] ?></div>
 		</div>
 	</div>
-
-	<br/>
-	<div class="box">
-		<div class="inbox">
-			<div style="font-size: 16px; color: red">Форумы на техобслуживании. Можно скоротать время во
-				<b><a href="http://home.balancer.ru/lorduino/">временном чате</a></b>. Регистрации никакой не требуется.
-			</div>
-		</div>
-	</div>
-
 </div>
 
 <?php

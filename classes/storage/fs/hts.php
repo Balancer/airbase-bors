@@ -27,14 +27,14 @@ class storage_fs_hts extends base_null
 	function load($object)
 	{
 		$dir = $object->dir();
-		
+
 		if(!file_exists($file = "{$dir}/index.hts"))
 			return $object->set_is_loaded(false);
 
 		// По дефолту в index.hts разрешёны HTML и все BB-теги.
 		$object->set_html_disable(false, false);
 		$object->set_lcml_tags_enabled(NULL, false);
-		
+
 		if(!($hts = @file_get_contents($file)))
 			return $object->set_is_loaded(false);
 
@@ -98,39 +98,42 @@ class storage_fs_hts extends base_null
     	}
 
 	    if(!$object->type())
-    	{
         	$type='hts';
 
-	        $nav_sum="";
+        $nav_sum = "";
+        $last_nav = NULL;
 
-    	    for($i=0;$i<sizeof($hts);$i++)
-        	{
-            	if(preg_match("!^#lev\s+(.+)!",$hts[$i],$data))
-	            {
-    	            $nav_sum.="$data[1]\n";
-        	        $hts[$i]="";
-            	}
-	        }
-
-    	    if($nav_sum)
-        	{
-	            $navs++;
-    	        $nav="nav$navs";
-        	    $$nav=$nav_sum;
-            	$old=1;
+   	    for($i=0; $i<sizeof($hts); $i++)
+    	{
+        	if(preg_match("!^#lev\s+((.+?)\s*,\s*(.+?))$!", $hts[$i], $data))
+            {
+            	$last_nav = $data[2];
+	            $nav_sum .= "{$data[1]}\n";
+    	        $hts[$i] = "";
         	}
+        }
+
+	    if($nav_sum)
+    	{
+            @$navs++;
+	        $nav = "nav$navs";
+    	    $$nav = $nav_sum;
+        	$old = 1;
     	}
+
+		if($last_nav && $last_nav[0] != '/')
+			$last_nav = dirname($file).'/'.$last_nav;
 
 	    $hts = join("\n", $hts);
 
 	    if($old)
     	{
-        	$hts = preg_replace("!\n\n#p\s+!","\n#p\n",$hts);
-	        $hts = preg_replace("!\n\n#p(\n|$)!","\n#p$1",$hts);
-    	    $hts = preg_replace("!\n+#p(\n|$)!","\n$1",$hts);
-	        $hts = preg_replace("!\n#t\s+!","\n\n",$hts);
-    	    $hts = preg_replace("!\|(.+?)\|!","$1",$hts);
-	        $copyr =preg_replace("!\|(.+?)\|!","$1",$copyr);
+        	$hts = preg_replace("!\n\n#p\s+!", "\n#p\n", $hts);
+	        $hts = preg_replace("!\n\n#p(\n|$)!", "\n#p$1", $hts);
+    	    $hts = preg_replace("!\n+#p(\n|$)!", "\n$1", $hts);
+	        $hts = preg_replace("!\n#t\s+!", "\n\n", $hts);
+    	    $hts = preg_replace("!\|(.+?)\|!", "$1", $hts);
+	        $copyr = preg_replace("!\|(.+?)\|!", "$1", @$copyr);
     	}
 
 	    $hts = preg_replace("!^\n+!","",$hts);
@@ -139,16 +142,20 @@ class storage_fs_hts extends base_null
 	    if(!$title) $title="$h1, $h3, $h2";
     	if(!$h1)
 			$h1 = $title;
-		
+
 		$object->set_title($title, false);
 		$object->set_nav_name($h1, false);
-		$object->set_parents(array_keys($parents), false);
-		
-//		print_d($object->source());
-		
+
+		if($parents)
+			$object->set_attr('parents', array_keys($parents));
+		elseif($last_nav)
+			$object->set_attr('parents', array($last_nav));
+		else
+			bors_debug::syslog('000-old-code-append', "Не найден родитель. Добавить через dirname и проверить");
+
 		return $object->set_is_loaded(true);
 	}
-	
+
 	function save($object)
 	{
 		debug_exit("Try to save index.hts");

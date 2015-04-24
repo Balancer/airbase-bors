@@ -1,6 +1,6 @@
 <?php
 
-class balancer_blogs_tags_main extends base_page
+class balancer_blogs_tags_main extends bors_page
 {
 	function title() { return ec('Теги блогов Балансера'); }
 	function nav_name() { return ec('теги'); }

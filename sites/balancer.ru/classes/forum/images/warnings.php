@@ -1,6 +1,6 @@
 <?php
 
-class forum_images_warnings extends base_image_gif
+class forum_images_warnings extends bors_image_gif
 {
 	private $expired = NULL;
 

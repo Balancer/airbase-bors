@@ -31,7 +31,7 @@ class base_page_hts2 extends bors_page_db
 	}
 
 //	function can_cached() { return false; }
-	function cache_static() { return $this->modify_time() > time() - 86400*7 ? rand(3600, 7200) : rand(86400*7, 86400*30); }
+//	function cache_static() { return $this->modify_time() > time() - 86400*7 ? rand(3600, 7200) : rand(86400*7, 86400*30); }
 
 	function storage_engine() { return 'bors_storage_mysql'; }
 	function config_class() { return config('admin_config_class'); }
@@ -42,7 +42,13 @@ class base_page_hts2 extends bors_page_db
 	{
 		if(substr($this->id(), 0, 1) == '/')
 			return false;
-
+/*
+		if(preg_match('/.+#lev\s+(.+?)\s*,\s*(.+?).*?/s', @$this->data['source'], $m))
+		{
+			var_dump($m);
+			$this->set_attr('parents', array($m[1]));
+		}
+*/
 		return @$this->data['title'] && @$this->data['source'];
 	}
 
@@ -185,60 +191,65 @@ class base_page_hts2 extends bors_page_db
 	}
 
 /*
-hts__aliases	- будет использоваться таблица bors_uris (uri -> class(id))
-autolink -> таблица keywords
-keyword -> массив
-backup -> продумать wiki :-/
-category - категория тикетов.
-email - ? - торг?
-fax - ? - торг?
-height -> для картинок
+	hts__aliases	- будет использоваться таблица bors_uris (uri -> class(id))
+	autolink -> таблица keywords
+	keyword -> массив
+	backup -> продумать wiki :-/
+	category - категория тикетов.
+	email - ? - торг?
+	fax - ? - торг?
+	height -> для картинок
 
-child - таблица детей
+	child - таблица детей
 
-author - массив авторов
-copyright - объединить?
-flags - массив?
+	author - массив авторов
+	copyright - объединить?
+	flags - массив?
 
-access_level
-color
-description -> description_html
-description_source -> description
-forum_id -> comments_id
+	access_level
+	color
+	description -> description_html
+	description_source -> description
+	forum_id -> comments_id
 
-					    hts_data_local_path
-						 hts_data_logdir
-						  hts_data_marker
-							 hts_data_order
-							  hts_data_org
-							   hts_data_origin_uri
-							    hts_data_parent
-								 hts_data_phone
-								   hts_data_priority
-								    hts_data_public_time
-									 hts_data_publisher
-									  hts_data_referer
-									   hts_data_right_column
-										 hts_data_size
-										   hts_data_split_type
-										    hts_data_stop_time
-											 hts_data_style
-												 hts_data_type
-												  hts_data_version
-												   hts_data_views
-												    hts_data_views_first
-													 hts_data_views_last
-													  hts_data_width
-													   hts_ext_log
-													    hts_ext_referers
-														 hts_ext_system_data
-														  hts_hosts
-														   hts_host_redirect
-														    hts_ids
-															 hts_keys
-															  hts_logs
-
-
+	hts_data_local_path
+	hts_data_logdir
+	hts_data_marker
+	hts_data_order
+	hts_data_org
+	hts_data_origin_uri
+	hts_data_parent
+	hts_data_phone
+	hts_data_priority
+	hts_data_public_time
+	hts_data_publisher
+	hts_data_referer
+	hts_data_right_column
+	hts_data_size
+	hts_data_split_type
+	hts_data_stop_time
+	hts_data_style
+	hts_data_type
+	hts_data_version
+	hts_data_views
+	hts_data_views_first
+	hts_data_views_last
+	hts_data_width
+	hts_ext_log
+	hts_ext_referers
+	hts_ext_system_data
+	hts_hosts
+	hts_host_redirect
+	hts_ids
+	hts_keys
+	hts_logs
 */
-	
+
+	static function __dev()
+	{
+		config_set('lcml_cache_disable', true);
+		$x = bors_load_uri('http://www.airbase.ru/alpha/e/');
+		echo $x->source();
+		echo $x->body();
+	}
 }

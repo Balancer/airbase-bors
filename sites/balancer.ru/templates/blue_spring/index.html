@@ -27,9 +27,13 @@
 {if $bors_touch_params}
 <script type="text/javascript">$(function(){literal}{{/literal}$.getScript('/_bors/js/touch?{$bors_touch_params}'){literal}}{/literal});</script>
 {/if}
+
+	<script type="text/javascript" src="//vk.com/js/api/openapi.js?116"></script>
+
 </head>
 
 <body>
+
   <div id="main">
     <div id="links">
       <a href="http://www.balancer.ru/forum/">форумы</a>
@@ -126,6 +130,17 @@
 
 		{$body}
 
+
+<br/><br/>
+
+		<div id="vk_comments"></div>
+
+<br/>
+<hr/>
+<br/>
+
+<div id="disqus_thread"></div>
+
       </div>
     </div>
     <div id="footer">
@@ -134,4 +149,32 @@
     </div>
   </div>
 </body>
+
+<script type="text/javascript">
+  VK.init({ apiId: 3396525, onlyWidgets: true});
+</script>
+
+<script type="text/javascript">
+VK.Widgets.Comments("vk_comments", {
+	limit: 5,
+	width: "640",
+	attach: "*",
+	pageUrl: '{$this->url()}'
+}, '{$this->uuid_hash()}');
+</script>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'balancer-ru';
+	var disqus_identifier = '{$this->url()|addslashes}';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+
 </html>

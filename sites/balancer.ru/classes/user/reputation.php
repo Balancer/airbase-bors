@@ -34,7 +34,7 @@ class user_reputation extends balancer_board_page
 
 	function url_ex($page) { return '/user/'.$this->id().'/reputation'.((!$page || $page == $this->default_page()) ? '/' : ','.$page.'.html'); }
 
-	function local_data()
+	function body_data()
 	{
 		template_noindex();
 
@@ -178,6 +178,7 @@ class user_reputation extends balancer_board_page
 			);
 
 		$total = 0;
+		$pure = 0;
 		// Цикл по группам голосов от каждого юзера к данному
 		foreach($dbu->get_array("SELECT voter_id as id, SUM(score) as sum
 			FROM `reputation_votes`
@@ -202,12 +203,12 @@ class user_reputation extends balancer_board_page
 			if($dbf->get("SELECT num_posts FROM users WHERE id={$v['id']}") < 50)
 				$weight = 0;
 
-			$sum = atan($v['sum'])*2/pi() * $weight * $reput;
-			$total += $sum;
+			$total += atan($v['sum'])*2/pi() * $weight * $reput;
+			$pure  += atan($v['sum'])*2/pi() * $reput;
 		}
 
-		$dbf->query("UPDATE users SET reputation = '".str_replace(",",".",$total)."' WHERE id = $uid");
-
+		$dbf->query("UPDATE users SET reputation = '"     .str_replace(",",".",$total)."' WHERE id = $uid");
+		$dbf->query("UPDATE users SET pure_reputation = '".str_replace(",",".",$pure )."' WHERE id = $uid");
 
 		foreach (glob($target_user->user_dir().'/reputation*.html') as $filename)
 			unlink($filename);

@@ -1,6 +1,6 @@
 <?php
 
-class airbase_top_logo extends base_image_png
+class airbase_top_logo extends bors_image_png
 {
 	function make_image()
 	{

@@ -7,7 +7,7 @@ class balancer_board_users_interlocutors extends balancer_board_page
 	function can_be_empty() { return false; }
 	function is_loaded() { return $this->user() != NULL && bors()->user() && (bors()->user()->is_watcher() || bors()->user()->is_admin()); }
 
-	function title() { return $this->user()->title().ec(": дополнительная нформация"); }
+	function title() { return $this->user()->title().ec(": дополнительная информация"); }
 	function nav_name() { return 'дополнительно'; }
 
 	function parents()
@@ -29,16 +29,10 @@ class balancer_board_users_interlocutors extends balancer_board_page
 		$user = $this->user();
 		$user->set_reg_geo_ip(geoip_place($user->registration_ip()), false);
 
-		return array_merge(parent::body_data(), array(
-			'user' => $user,
-		));
-	}
-
-	function page_data()
-	{
 		$db = new driver_mysql(config('punbb.database'));
 
-		if(bors()->user() && ($is_watcher = bors()->user()->is_watcher() || bors()->user()->is_admin()))
+		$is_watcher = bors()->user()->is_watcher() || bors()->user()->is_admin();
+		if(bors()->user() && $is_watcher)
 		{
 			$interlocutors = $db->select_array('posts', 'poster_id, COUNT(*) as answers_count', array(
 				'is_deleted' => false,
@@ -74,7 +68,9 @@ class balancer_board_users_interlocutors extends balancer_board_page
 			$interlocutor_stats = false;
 		}
 
-		return array_merge(parent::page_data(), compact(
+		return array_merge(parent::body_data(), array(
+			'user' => $user,
+		),  compact(
 			'is_watcher',
 			'interlocutors',
 			'interlocutor_stats',

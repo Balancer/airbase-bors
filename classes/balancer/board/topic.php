@@ -2,6 +2,8 @@
 
 class balancer_board_topic extends forum_topic
 {
+	function type() { return 'topic'; }
+
 	function browser_title()
 	{
 		if($this->total_pages() <= 1)
@@ -26,6 +28,9 @@ class balancer_board_topic extends forum_topic
 
 	function cache_static()
 	{
+		if(config('skip_cache_static'))
+			return 0;
+
 		if(!$this->is_public_access())
 			return 0;
 
@@ -55,6 +60,8 @@ class balancer_board_topic extends forum_topic
 			'forum_id_raw' => 'forum_id',
 			'title'	=> 'subject',
 			'description',
+			'answer_notice',
+			'admin_notice',
 			'image_id',
 			'image_time' => 'UNIX_TIMESTAMP(`image_ts`)',
 			'create_time'	=> 'posted',
@@ -88,6 +95,32 @@ class balancer_board_topic extends forum_topic
 		));
 	}
 
+	function find_first_unvisited_post($user)
+	{
+		$uid = $user->id();
+
+		$visit = bors_find_first('balancer_board_topics_visit', [
+			'user_id' => $uid,
+			'target_object_id' => $this->id()
+		]);
+
+		if($visit)
+			$last_visit = $visit->last_visit();
+		else
+			// Если отметки о чтении топика нет, то считаем за дату последнего посещения
+			// дату модификации самой старой записи в таблице посещений.
+			$last_visit = bors_find_first('balancer_board_topics_visit', ['last_visit>' => 0])->modify_time();
+
+		// Первое нечитанное сообщение темы
+		$first_new_post = bors_find_first('balancer_board_post', [
+			'topic_id' => $this->id(),
+			'posted>' => $last_visit,
+			'order' => 'sort_order,id',
+		]);
+
+		return $first_new_post;
+	}
+
 	static function _forum_ids($domain)
 	{
 		static $fcache = array();
@@ -110,36 +143,6 @@ class balancer_board_topic extends forum_topic
 			return array(-1);
 
 		return $fcache[$domain];
-	}
-
-	static function sitemap_index($domain, $page, $per_page)
-	{
-		return array_reverse(objects_array('balancer_board_topic', array(
-			'forum_id IN' => self::_forum_ids($domain),
-			'page' => $page,
-			'per_page' => $per_page,
-			'order' => 'modify_time',
-		)));
-	}
-
-	static function sitemap_last_modify_time($domain, $page, $per_page)
-	{
-		$dbh = new driver_mysql(config('punbb.database'));
-		$dates = $dbh->select_array('topics', 'last_post', array(
-			'forum_id IN' => self::_forum_ids($domain),
-			'page' => $page,
-			'per_page' => $per_page,
-			'order' => 'last_post',
-		));
-
-		return $dates[count($dates)-1];
-	}
-
-	static function sitemap_total($domain)
-	{
-		return objects_count('balancer_board_topic', array(
-			'forum_id IN' => self::_forum_ids($domain),
-		));
 	}
 
 	static function create($forum, $title, $message, $user = NULL, $keywords_string = NULL, $as_blog = true, $data = array())
@@ -194,10 +197,21 @@ class balancer_board_topic extends forum_topic
 		return $this->titled_link_ex(array('page' => 'new'));
 	}
 
+	function answer_notice() { return NULL; }
+
 	function pre_show()
 	{
 		bors_lib_html::set_og_meta($this);
 		balancer_board_posts_view::container_init();
+		template_jquery_ui();
+
+		jquery::on_ready(__DIR__.'/topics/view.inc.ready.js');
+
+		if($this->answer_notice())
+		{
+			bors_use('/_bal/opt/sweet-alert.js');
+			bors_use('/_bal/opt/sweet-alert.css');
+		}
 
 		if($this->page() == $this->total_pages())
 			header("X-Accel-Expires: 30");
@@ -410,10 +424,10 @@ class balancer_board_topic extends forum_topic
 		if(!$this->is_public_access())
 			return false;
 
-		if(preg_match('/(airbase\.ru)/', @$_SERVER['HTTP_HOST']))
+		if(preg_match('/(airbase\.ru|wrk\.ru)/', @$_SERVER['HTTP_HOST']))
 			return true;
 
-		return $this->last_post_create_time() > time() - 86400*7;
+		return $this->last_post_create_time() > time() - 86400*365;
 	}
 
 	function tpl_ad_top()

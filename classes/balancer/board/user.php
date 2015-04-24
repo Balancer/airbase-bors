@@ -226,22 +226,25 @@ class balancer_board_user extends forum_user
 
 	function set_object_warning($object, $score, $message = NULL, $moderator = NULL, $type = 0, $referer = NULL)
 	{
-		$warn = bors_find_first('airbase_user_warning', array(
-			'user_id' => $this->id(),
-			'warn_class_id' => $object->class_id(),
-			'warn_object_id' => $object->id(),
-		));
-
-		if($warn)
+		if($object)
 		{
-			if($warn->moderator_id() < 1)
-			{
-				$warn->set_score($score);
-				if($message)
-					$warn->set_source($message);
-			}
+			$warn = bors_find_first('airbase_user_warning', array(
+				'user_id' => $this->id(),
+				'warn_class_id' => object_property($object, 'class_id'),
+				'warn_object_id' => object_property($object, 'id'),
+			));
 
-			return;
+			if($warn)
+			{
+				if($warn->moderator_id() < 1)
+				{
+					$warn->set_score($score);
+					if($message)
+						$warn->set_source($message);
+				}
+
+				return;
+			}
 		}
 
 		$data = array(
@@ -321,5 +324,21 @@ class balancer_board_user extends forum_user
 			'((v.last_visit IS NULL AND posts.posted > '.(time()-31*86400).') OR (v.last_visit < posts.posted))',
 			'posts.posted>' =>  time()-31*86400,
 		));
+	}
+
+	function set_money($amount, $db_up=true)
+	{
+		bors_debug::syslog('000-money-set', "amount=".$amount);
+//		bors_debug::syslog('000-money-set-'.bors()->user_id(), "amount=".$amount);
+
+		return $this->set('money', $amount, $db_up);
+	}
+
+	function add_money($amount)
+	{
+		bors_debug::syslog('000-money-add', "amount=".$amount);
+//		bors_debug::syslog('000-money-add-'.bors()->user_id(), "amount=".$amount);
+
+		$this->set_money($this->money() + $amount);
 	}
 }

@@ -110,7 +110,7 @@ BLOCKQUOTE {
  {if $t}
   {assign var="forum" value=$t->forum()}
    {include file="xfile:forum/post.html" 
-   		show_title=$t->titles_link()
+   		show_title=$t->titled_link()
    		strip="2000"
    		skip_message_footer=1
    		skip_votes=1

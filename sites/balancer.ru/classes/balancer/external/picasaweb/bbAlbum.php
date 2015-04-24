@@ -1,6 +1,6 @@
 <?php
 
-class balancer_external_picasaweb_bbAlbum extends base_page
+class balancer_external_picasaweb_bbAlbum extends bors_page
 {
 	function album_data()
 	{
@@ -32,7 +32,7 @@ class balancer_external_picasaweb_bbAlbum extends base_page
 		return $ch->set($data, 600);
 	}
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'data' => $this->album_data(),

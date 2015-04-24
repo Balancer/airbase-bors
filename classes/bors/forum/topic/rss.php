@@ -4,7 +4,7 @@ class forum_topic_rss extends bors_rss
 {
 
 	var $items_class_name = 'balancer_board_post';
-	var $limit = 100;
+	var $limit = 50;
 
 	function auto_objects()
 	{
@@ -46,7 +46,7 @@ class forum_topic_rss extends bors_rss
 		$mt = $this->modify_time();
 
 		if($mt < time() - 86400*365)
-			return 86400*rand(300, 900);
+			return 86400*rand(180, 360);
 
 		if($mt < time() - 86400*30)
 			return 86400*rand(7, 30);

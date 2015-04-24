@@ -8,7 +8,7 @@ class balancer_board_users_rateLowest extends balancer_board_page
 
 	function template() { return 'forum/_header.html'; }
 
-	function local_data()
+	function body_data()
 	{
 		$lowest = objects_array('bors_votes_thumb', array(
 				'create_time>' => time()-86400*90,

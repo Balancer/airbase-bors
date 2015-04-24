@@ -29,9 +29,9 @@ class balancer_board_users_untrustedPosts extends balancer_board_posts_list
 		return false;
 	}
 
-	function local_data()
+	function body_data()
 	{
-		return array_merge(parent::local_data(), array(
+		return array_merge(parent::body_data(), array(
 //			'show_title' => true,
 		));
 	}

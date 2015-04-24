@@ -8,7 +8,7 @@ include_once('engines/lcml.php');
 include_once('inc/browsers.php');
 include_once('inc/clients.php');
 
-class forum_post2 extends base_page_db
+class forum_post2 extends bors_page_db
 {
 	function config_class() { return 'balancer_board_config'; }
 	function template() { return 'forum/page.html'; }
@@ -358,7 +358,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		return "<ul><li><a href=\"{$this->url_in_topic()}\">Помотреть это сообщение в теме</a></li></ul>";
 	}
 */
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'p' => $this,

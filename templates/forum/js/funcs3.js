@@ -1,6 +1,9 @@
 function css_load(elem, value, id, def)
 {
-	document.getElementById(id).style[elem] = value
+	if(id != 'html')
+		document.getElementById(id).style[elem] = value
+	else
+		document.querySelector(":root").style[elem] = value
 
 	if(def != value)
 		createCookie(id+"."+elem, value, 180)
@@ -42,7 +45,7 @@ function eraseCookie(name)
 function createSelect(title, element, values, def)
 {
 	id = "\"id_select_"+element+"\""
-	document.write("<label class=\"tune\" for="+id+">"+title+"</label> ")
+	document.write("<label class=\"tune\" for="+id+">"+title+":</label><br/>")
 	var id = null
 	if(element.indexOf('.') >= 0)
 	{
@@ -51,7 +54,8 @@ function createSelect(title, element, values, def)
 		element = element[1];
 	}
 	else
-		id = 'body'
+		id = 'html'
+
 	cookie = readCookie(id+"."+element);
 	if(!cookie)
 		cookie = def
@@ -150,7 +154,7 @@ if(top.me_is_coordinator)
 	document.write('<a href="http://www.balancer.ru/admin/users/'+uid+'/warnings.html?object='+o+'"><img src="http://www.balancer.ru/img/web/skull.gif"></a>')
 }
 
-function ptrch(p,t) { $("#ptr"+p).load("/_bors/ajax/thumb-"+t+"?object=forum_post://"+p); }
+function ptrch(p,t) { $("#ptr"+p).load("/_bors/ajax/thumb-"+t+"?object=balancer_board_post://"+p, {'hash': Math.random()})}
 
 function pdsh(p)
 {
@@ -160,7 +164,7 @@ function pdsh(p)
 	else
 	{
 		o.html('<img src="/_bors/i/wait-16.gif" width="16" height="16" style="vertical-align: middle;" /> Загружаю...')
-		o.load("/_bors/ajax/post-footer-tools?object=forum_post://"+p);
+		o.load("/_bors/ajax/post-footer-tools?object=balancer_board_post://"+p);
 	}
 }
 

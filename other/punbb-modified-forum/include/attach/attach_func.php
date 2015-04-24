@@ -120,48 +120,41 @@ function attach_generate_filename($storagepath, $filename, $messagelenght=0, $fi
 
 function attach_create_attachment($name='', $mime='', $size=0, $tmp_name='', $post_id=0, $messagelenght=0)
 {
-		global $db, $pun_user, $pun_config;
+	global $db, $pun_user, $pun_config;
 
-		$base = $pun_config['attach_basefolder'];
+	$base = $pun_config['attach_basefolder'];
 
-		// fetch an unique name for the file
-		$unique_name = attach_generate_filename(
-			$base.$pun_config['attach_subfolder'].'/',
-			$name,
-			$messagelenght,
-			$size, $post_id);
+	// fetch an unique name for the file
+	$unique_name = attach_generate_filename(
+		$base.$pun_config['attach_subfolder'].'/',
+		$name,
+		$messagelenght,
+		$size, $post_id);
 
-		$rel_path = date('Y/m');
+	$rel_path = date('Y/m');
 
-/*
-		$sub1 = substr($unique_name, 0, 2);
-		$sub2 = substr($unique_name, 2, 2);
-		@mkdir($pun_config['attach_basefolder'].$sub1, 0775);
-		@mkdir($pun_config['attach_basefolder']."$sub1/$sub2", 0775);
-*/
+	mkpath($base.$rel_path, 0775);
 
-		mkpath($base.$rel_path, 0775);
+	// move the uploaded file from temp to the attachment folder and rename the file to the unique name
+	if(!move_uploaded_file($tmp_name, $base."$rel_path/".$unique_name))
+		error('Unable to move file from: '.$tmp_name.' to '.$base."$rel_path/".$unique_name.'',__FILE__,__LINE__);
+		//return false;
 
-//		exit("Аттачи в процессе отладки. Подождите минут 10-15.<br/>attach_basefolder = {$base}, rel=$rel_path, unique_name=$unique_name<br/>\n");
-		// move the uploaded file from temp to the attachment folder and rename the file to the unique name
-		if(!move_uploaded_file($tmp_name, $base."$rel_path/".$unique_name))
-			error('Unable to move file from: '.$tmp_name.' to '.$base."$rel_path/".$unique_name.'',__FILE__,__LINE__);
-			//return false;
+	if(strlen($mime)==0)
+		$mime = attach_create_mime(attach_find_extension($name));
 
-		if(strlen($mime)==0)
-			$mime = attach_create_mime(attach_find_extension($name));
+	$post = bors_load('balancer_board_post', $post_id);
+	$post->set_have_attach(NULL, true);
+	$post->store();
+	// update the database with this info
+	$result = $db->query('INSERT INTO '.$db->prefix
+		.'attach_2_files (owner,post_id,filename,extension,mime,location,size) VALUES (\''
+		.$pun_user['id'].'\',\''.$post_id.'\',\''.$db->escape($name).'\',\''
+		.attach_get_extension($name).'\',\''.$db->escape($mime).'\',\''
+		.$db->escape("$rel_path/".$unique_name).'\',\''.$size.'\')')
+			or error('Unable to insert attachment record into database.',__FILE__,__LINE__,$db->error());
 
-		$post = bors_load('balancer_board_post', $post_id);
-		$post->set_have_attach(NULL, true);
-		$post->store();
-		// update the database with this info
-		$result = $db->query('INSERT INTO '.$db->prefix
-			.'attach_2_files (owner,post_id,filename,extension,mime,location,size) VALUES (\''
-			.$pun_user['id'].'\',\''.$post_id.'\',\''.$db->escape($name).'\',\''
-			.attach_get_extension($name).'\',\''.$db->escape($mime).'\',\''
-			.$db->escape("$rel_path/".$unique_name).'\',\''.$size.'\')')
-				or error('Unable to insert attachment record into database.',__FILE__,__LINE__,$db->error());
-		return true;
+	return true;
 }
 
 function attach_create_subfolder($newfolder='')

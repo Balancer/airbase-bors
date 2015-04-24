@@ -1,4 +1,5 @@
 syntax: regexp
 ^sites/tanzpol.org/bors-site/config-host.php
+.*/cache-static/
 
 

@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_favorite extends base_object_db
+class balancer_board_favorite extends bors_object_db
 {
 	function db_name() { return 'AB_FORUMS'; }
 	function table_name() { return 'favorites'; }

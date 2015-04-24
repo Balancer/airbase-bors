@@ -15,7 +15,7 @@ class balancer_board_stat_registered extends balancer_board_page
 		$dbh = new driver_mysql('AB_FORUMS');
 
 		$regs_by_day = $dbh->select_array('users', 'YEAR(FROM_UNIXTIME(registered)) AS year,
-				MONTH(FROM_UNIXTIME(registered)) AS month,
+				MONTH(FROM_UNIXTIME(registered))-1 AS month,
 				DAY(FROM_UNIXTIME(registered)) AS day,
 				registered AS ts,
 				COUNT(*) AS count',
@@ -28,7 +28,7 @@ class balancer_board_stat_registered extends balancer_board_page
 		);
 
 		$regs_by_month = $dbh->select_array('users', 'YEAR(FROM_UNIXTIME(registered)) AS year,
-				MONTH(FROM_UNIXTIME(registered)) AS month,
+				MONTH(FROM_UNIXTIME(registered))-1 AS month,
 				registered AS ts,
 				COUNT(*) AS count',
 			array(

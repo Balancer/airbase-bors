@@ -67,10 +67,11 @@
 			{ 
 				global $host, $doc_root; 
 				$tmp = @file("http://{$_SERVER['HTTP_HOST']}$img"); 
+				bors_debug::syslog('000-image-debug', "Get image size for ".$tmp);
 				list($w,$h,$rest) = @getimagesize($tmp); 
 				return $w."x".$h; 
 			}
-			
+
             $ico640_url =($ow>640  || $oh>480)?"<a href=\"$ico640_url\">".img_x_size("$ico640_url")."</a>":"";
             $ico800_url =($ow>800  || $oh>600)?"<a href=\"$ico800_url\">".img_x_size("$ico800_url")."</a>":"";
             $ico1024_url=($ow>1024 || $oh>768)?"<a href=\"$ico1024_url\">".img_x_size("$ico1024_url")."</a>":"";
@@ -101,7 +102,6 @@
             echo "<li><nobr><a href=\"$parent\">$title</a></nobr>\n";
         }
 ?></ul></small></td></tr>
-<!--<tr><td colSpan="2"><a href="/admin/img.phtml?img=<?php echo$img?>">Редактировать параметры картинки</a></td></tr>-->
 </table>
 </body></html>
 <?php
@@ -112,6 +112,7 @@
     {
         echo "<html><head><link rel=stylesheet type=text/css href=/inc/css/style.phtml></head><body><center>";
         include("{$_SERVER['DOCUMENT_ROOT']}/inc/banners-top.phtml");
+		bors_debug::syslog('000-image-debug', "Get image size for "."{$_SERVER['DOCUMENT_ROOT']}$img");
         list($w,$h,$t,$x)=GetImageSize("{$_SERVER['DOCUMENT_ROOT']}$img");
         preg_match("!^(.+)/(.+?)\.([^\.]+?)$!",$img,$m);
         echo "<br>[ <a href=$m[1]/$m[2].htm>Назад на страницу картинки</a> ]<br><br><img src=/images$m[1]/$m[2].$m[3] $x><br>[ <a href=$m[1]/$m[2].htm>Назад на страницу картинки</a> ]</center></body></html>";

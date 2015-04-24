@@ -1,6 +1,6 @@
 <?php
 
-class forum_tools_post extends base_page
+class forum_tools_post extends bors_page
 {
 	function class_file() { return __FILE__; }
 	function can_be_empty() { return true; }

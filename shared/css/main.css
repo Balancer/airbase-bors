@@ -1,13 +1,18 @@
 @import url(/_bors/css/bors/core.css);
 
+html {
+	font-size: 18pt;
+	font-family: ScadaAB, Verdana, sans-serif;
+}
+
 body {
-	font-size: 14pt;
-	font-family: Georgia;
 	color: #358;
     background: #D8F0FF url(http://www.airbase.ru/images/web/sky-back.jpg);
 	margin: 0px; 
 	padding: 0px 0px 32px 4px;
 	clear: both;
+	line-height: 1.2;
+	font: inherit;
 }
 
 h1, h2, h3, h4, h5, h6 { 
@@ -84,13 +89,13 @@ dl.box dt, dl.box dt a {
 	color: white;
 	background-color: #9bd;
 	padding: 1px;
-	font-size: 0.9em;
+	font-size: 0.9rem;
 	font-weight: bold;
 }
 
 dl.box dd {margin: 4px; padding: 4px; }
 
-dl.w200 dd { margin: 2px; font-size: xx-small; padding: 2px; }
+dl.w200 dd { margin: 2px; font-size: 0.7rem; padding: 2px; }
 
 dl.box dt a {color: #ffffd0;}
 
@@ -290,7 +295,7 @@ div.avatar_block div {
 }
 
 .nav, .navleft {
-	font-size: 0.8em;
+	font-size: 0.8rem;
 }
 
 
@@ -379,7 +384,7 @@ span.clear {
 	margin-left: -1px;
 }
 
-@media only screen and (min-device-width: 640px) and (min-device-width: 10cm) {
+@media only screen and (min-device-width: 640px) and (min-device-width: 8cm) {
 	.outer {
 		margin-left: 215px;  /* L */
 	}
@@ -387,7 +392,7 @@ span.clear {
 	.tpl_column_left {
 		float: left;
 		position: relative;
-		width: 200px;  /* L */
+		width: 208px;  /* L */
 		margin-left: -210px;  /* -L-1 */
 		margin-right: 2px;
 	}
@@ -497,8 +502,9 @@ textarea.quickreplyform {
 div.postsignature {
 	text-align: right;
 	color: #bbc;
-	font-size: 0.8em;
-	margin-top: 10px;
+	font-size: 0.8rem;
+	margin-top: 2mm;
+	padding-top: 1mm;
 	clear: both;
 	border-top: 1px dotted #ccc;
 }
@@ -519,7 +525,7 @@ a tt.warnings small {
 .btab tr.neg_reputation td { background-color: #fee; color: #900; }
 
 .w200 ul {
-	font: 8pt Verdana;
+	font: 0.8rem Verdana;
 	padding-left: 16px;
 	margin: 0;
 }
@@ -553,7 +559,7 @@ blockquote .box {
 	text-align: right;
 }
 
-.red-box, .alert-error {
+.red-box {
 	clear: both;
 	border: 1px solid red !important;
 	padding: 4px;
@@ -572,22 +578,6 @@ blockquote .box {
 	background-color: #ffc;
 	font-size: x-small;
 	color: #884;
-}
-
-.alert {
-	clear: both;
-	border: 1px solid #cc9;
-	padding: 2px;
-	margin: 2px 0;
-	background-color: #ffc;
-	font-size: x-small;
-	color: #884;
-}
-
-.alert-success {
-	border: 1px solid #9c9;
-	background-color: #cfc;
-	color: #484;
 }
 
 .edited_note {
@@ -894,12 +884,6 @@ div.spinner {
 	display: none;
 }
 
-body {
-	font-size: 14pt;
-	font-family: Georgia;
-	line-height: 1.2;
-}
-
 li {
 	line-height: 1.1;
 }
@@ -944,7 +928,7 @@ tr.bb-background-private td {
 	background-color: #ffc;
 }
 
-.post_body img {
+.post_body img, .post .body img  {
 	max-width: 100%;
 }
 
@@ -1000,4 +984,45 @@ tr.bb-background-private td {
 
 div.answer_to_me div.body, div.answer_to_me div.body div.avatar_block {
 	background-color: #fffff0;
+}
+
+table.topic-list td > a > img {
+	min-width: 2cm;
+	min-height: 2cm;
+}
+
+.post .body .alert, .post-actions, .ab-alert-small {
+	font-size: 0.9rem;
+	padding: 2mm;
+	margin: 2mm 0;
+}
+
+/* Экран низкого разрешения или узкий */
+@media only screen and ((max-device-width: 639px) or (max-device-width: 8cm)) {
+	.tpl_column_left {
+		width: auto;
+	}
+	.w200 {
+		width: auto;
+	}
+}
+
+/* Экран высокого разрешения  */
+/*
+@media only screen and (min-resolution: 192dpi) {
+	.forum_actions {
+		background-size: 200%;
+	}
+	table.topic-list td > a > img {
+		min-width: 2cm;
+		min-height: 2cm;
+		-moz-transform: scale(2);
+		-ms-transform: scale(2);
+		-o-transform: scale(2);
+		-webkit-transform: scale(2);
+		transform: scale(2);
+	}
+	table.topic-list td {
+	}
+*/
 }
