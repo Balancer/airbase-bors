@@ -2,14 +2,13 @@
 
 require_once 'Image/Canvas.php';
 
-class balancer_users_images_repMap extends base_image_svg
+class balancer_users_images_repMap extends bors_image_svg
 {
-
 	function show_image()
 	{
 
 		$dbh = new driver_mysql('AB_FORUMS');
-		$dbh->query('CREATE TEMPORARY TABLE __minmaxrep SELECT rep_x, rep_y, rep_r, rep_g, rep_b FROM users WHERE rep_x<>0 ORDER BY last_post DESC LIMIT 150');
+		$dbh->query('CREATE TEMPORARY TABLE __minmaxrep SELECT rep_x, rep_y, rep_r, rep_g, rep_b FROM users WHERE rep_x<>0');
 		extract($dbh->get('SELECT
 			MIN(rep_x) as min_x,
 			MAX(rep_x) as max_x,
@@ -23,17 +22,17 @@ class balancer_users_images_repMap extends base_image_svg
 			MAX(rep_b) as max_b
 		FROM __minmaxrep'));
 
-		$this->min_x = $min_x = 0;
-		$this->max_x = $max_x = 50;
-		$this->min_y = $min_y = 0;
-		$this->max_y = $max_y = 50;
+		$this->min_x = $min_x = -100;
+		$this->max_x = $max_x = 100;
+		$this->min_y = $min_y = -100;
+		$this->max_y = $max_y = 100;
 
-		$min_r = 0;
-		$min_g = 0;
-		$min_b = 0;
-		$max_r = 10;
-		$max_g = 10;
-		$max_b = 10;
+		$min_r = -100;
+		$min_g = -100;
+		$min_b = -100;
+		$max_r = 100;
+		$max_g = 100;
+		$max_b = 100;
 
 		$dx = $max_x - $min_x;
 		$dy = $max_y - $min_y;
@@ -46,7 +45,7 @@ class balancer_users_images_repMap extends base_image_svg
 		$users = array();
 		foreach($dbh->select_array('user_relations', '*', array(
 //			'votes_plus + votes_minus + reputations_plus + reputations_minus > 30',
-			'(score < -20 OR score > 50)',
+//			'(score < -20 OR score > 50)',
 			'order' => '-score',
 		)) as $rel)
 		{
@@ -65,12 +64,12 @@ class balancer_users_images_repMap extends base_image_svg
 
 		$users = bors_find_all('balancer_board_user', array('id IN' => array_keys($users), 'by_id' => true));
 
-		$this->offset = $offset = 50;
+		$this->offset = $offset = 30;;
 
-		$width = 1500;
+		$width = 1000;
 		$height = $width*$dy/$dx;
 
-		$this->scale = $scale = ($width - 100) / $dx;
+		$this->scale = $scale = ($width - 60) / $dx;
 
 		// change the output format with the first parameter of factory()
 		$Canvas =& Image_Canvas::factory('svg', array(
@@ -84,15 +83,15 @@ class balancer_users_images_repMap extends base_image_svg
 
 		$Canvas->setLineColor('black');
 		$Canvas->setLineThickness(.1);
-		$Canvas->line(array('x0' => $this->x(25), 'y0' => $this->y($min_y), 'x1' => $this->x(25), 'y1' => $this->y($max_y)));
+		$Canvas->line(array('x0' => $this->x(0), 'y0' => $this->y($min_y), 'x1' => $this->x(0), 'y1' => $this->y($max_y)));
 		$Canvas->setLineColor('black');
 		$Canvas->setLineThickness(.1);
-		$Canvas->line(array('x0' => $this->x($min_x), 'y0' => $this->y(25), 'x1' => $this->x($max_x), 'y1' => $this->y(25)));
+		$Canvas->line(array('x0' => $this->x($min_x), 'y0' => $this->y(0), 'x1' => $this->x($max_x), 'y1' => $this->y(0)));
 
 //		$Canvas->addText(array('x' => $this->x($min_x), 'y' => $this->y($min_y), 'text' => "x=[{$min_x}..{$max_x}]\ny=[{$min_y}..{$max_y}]"));
 
 //		foreach($dbh->select_array('users', '*', array('rep_x<>0', 'order'=>'last_post DESC', 'limit' => 150)) as $r)
-		foreach($dbh->select_array('users', '*', array('id IN' => array_keys($users), 'rep_x>0', 'rep_y>0')) as $r)
+		foreach($dbh->select_array('users', '*', array('id IN' => array_keys($users), 'rep_x<>0', 'rep_y<>0')) as $r)
 		{
 			$user_id = $r['id'];
 
@@ -117,17 +116,20 @@ class balancer_users_images_repMap extends base_image_svg
 			{
 				foreach($rel as $voter_id => $score)
 				{
-//					if(abs($score) < 20)
-//						continue;
+					if($score > 0 and $score < 20)
+						continue;
+
+					if($score < 0 and $score > -25)
+						continue;
 
 					$dx = $r['rep_x'] - $users[$voter_id]->rep_x();
 					$dy = $r['rep_y'] - $users[$voter_id]->rep_y();
-					if($dx*$dx + $dy*$dy > abs($score*2))
-						continue;
+//					if($dx*$dx + $dy*$dy > abs($score*2))
+//						continue;
 
-					$weack = 127-min(127, 127*abs($score / ($score>0?100:20)));
-					$green = sprintf("#%02x%02x%02x", $weack, 255-$weack, $weack);
-					$red   = sprintf("#%02x%02x%02x", 255-$weack, $weack, $weack);
+					$strong = min(255, 255*abs($score / ($score>0?150:150)));
+					$green = sprintf("#%02x%02x%02x", 255-$strong, 255, 255-$strong);
+					$red   = sprintf("#%02x%02x%02x", 255, 255-$strong, 255-$strong);
 
 					$Canvas->setLineColor($score > 0 ? $green : $red);
 					$Canvas->setLineThickness(.001);

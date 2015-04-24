@@ -9,7 +9,7 @@
 	{/if}
 
 	{if $old_topic && $new_topic}
-	успешно перенесены из темы «{$old_topic->titled_link()}» в тему «{$new_topic->titled_link()}».
+	успешно перенесены из темы «{$old_topic->titled_link_ex('new')}» в тему «{$new_topic->titled_link_ex('new')}».
 	{/if}
 	</div>
 {else}

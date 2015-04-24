@@ -1,7 +1,7 @@
 <?php
 
 //class forum_topic extends balancer_board_object_db
-class forum_topic extends base_page_db
+class forum_topic extends bors_page_db
 {
 	function config_class() { return 'balancer_board_config'; }
 
@@ -23,6 +23,8 @@ class forum_topic extends base_page_db
 			'forum_id_raw' => 'forum_id',
 			'title'	=> 'subject',
 			'description',
+			'answer_notice',
+			'admin_notice',
 			'image_id',
 			'image_time' => 'UNIX_TIMESTAMP(`image_ts`)',
 			'create_time'	=> 'posted',
@@ -160,7 +162,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		if(!$this->is_repaged() && rand(0,5) == 0)
 			$this->repaging_posts();
 
-		$this->template_data_fill();
+//		$this->template_data_fill();
 
 		$body_cache = new Cache();
 		if($body_cache->get('bors_page_body-v3', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time()))
@@ -400,7 +402,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			$base = $this->forum()->category()->category_base_full();
 
 		// Если последний пост на странице свежий, то откручиваем на wrk.ru
-		if($this->get('last_post_create_time') > time() - 86400*30)
+		if($this->get('last_post_create_time') > 1388520000) // С 01.01.2014 — wrk.ru. Более старые — forums.balancer.ru
 			$base = str_replace('www.balancer.ru', 'www.wrk.ru', $base);
 		else
 			$base = str_replace('www.balancer.ru', 'forums.balancer.ru', $base);

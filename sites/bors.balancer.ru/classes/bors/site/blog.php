@@ -1,6 +1,6 @@
 <?php
 
-class bors_site_blog extends base_page_paged
+class bors_site_blog extends bors_paginated
 {
 	function title() { return ec('Блог проекта'); }
 	function nav_name() { return ec('блог'); }

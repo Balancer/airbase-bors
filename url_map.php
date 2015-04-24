@@ -7,6 +7,9 @@ $forums = '(/|/support/|/tech/forum/|/community/|/society/|/socionics/forum/|/fo
 $topic_view_class = config('topics.view_class');
 
 bors_url_map([
+	'/bal/login/?  => bal_login',	// Страница авторизации
+	'/bal/logout/? => bal_logout',
+
 	'/do/logout/ => bal_do_logout',
 	'/do/login/ => bal_do_login',
 	'/users/private/hactions/(\w+) => bors_user_hactions_dispatcher(1)',
@@ -15,6 +18,13 @@ bors_url_map([
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),new.* => balancer_board_topics_go_new(2)",
 	"{$forums}\d{4}/\d{1,2}/topic\-(\d+),new.* => balancer_board_topics_go_new(2)",
 ]);
+
+// Leagcy, ссылки старого формата
+bors_url_map(array(
+	// http://forums.airbase.ru/index.php/topic,37641.msg701468/topicseen.html#msg701468
+	// 	via http://www.balancer.ru/g/p701470
+	'/index\.php/topic,(\d+)\.msg(\d+)/topicseen\.html => balancer_board_post(2)',
+));
 
 $map = array(
 	'/g/(.+) => bors_system_go_redirect(1)',
@@ -78,6 +88,9 @@ $map = array(
 	"{$forums}\d{4}/\d{1,2}/topic\-(\d+).* => {$topic_view_class}(2)",
 	"{$forums}forum/punbb/viewtopic\.php\?pid=(\d+) => forum_post(2)",
 	"{$forums}viewtopic\.php\?id=(\d+) => {$topic_view_class}(2)",
+
+	"/posts/ajax/tools/(\d+)/? => balancer_board_posts_ajax_tools(1)",
+
 	"/forum/topic/\d+/(\d+),(\d+)/ => redirect:{$topic_view_class}(1,2)",
 	"(/forum/)topic/\d+/(\d+),new/ => {$topic_view_class}(2)",
 
@@ -104,20 +117,15 @@ $map = array(
 	'/\w{32}/cache(/.*/\d*x\d*\([^)]+\)/[^/]+\.(jpe?g|png|gif)) => bors_image_autothumb(1)',
 	'/cache(/sites/.*/\d*x\d*/[^/]+) => bors_image_autothumb(1)',
 	'.*/\w+\.phtml => airbase_page_hts_plain',
-//	'.*/\w+\.phtml => airbase_page_hts_plainu',
-	'.* => bors_page_fs_htsu(url)', //TODO: снести нафиг после конвертации старых hts Авиабазы
+	'.*/\w+\.phtml => airbase_page_hts_plainu',
 
 //	'.* => airbase_page_hts(url)',
 	'.* => airbase_pages_zim',
 	'.* => airbase_files_webroot',
 );
 
-if($_SERVER['HTTP_HOST'] != 'www.tanzpol.org')
+if(!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] != 'www.tanzpol.org')
 	$map[] = '.* => bal_pages_hts(url)';
 
-// Leagcy, ссылки старого формата
-bors_url_map(array(
-	// http://forums.airbase.ru/index.php/topic,37641.msg701468/topicseen.html#msg701468
-	// 	via http://www.balancer.ru/g/p701470
-	'/index\.php/topic,(\d+)\.msg(\d+)/topicseen\.html => balancer_board_post(2)',
-));
+$map[] = '.* => bors_page_fs_htsu(url)'; //TODO: снести нафиг после конвертации старых hts Авиабазы
+

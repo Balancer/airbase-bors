@@ -2,7 +2,7 @@
 
 //config_set('lcml_cache_disable', true);
 
-class balancer_page_db extends base_page_db
+class balancer_page_db extends bors_page_db
 {
 	function storage_engine() { return 'bors_storage_mysql'; }
 	function db_name() { return 'WRK'; }

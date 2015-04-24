@@ -14,6 +14,9 @@ bors_vhost_routes('balancer.ru', array(
 
 	'/forums/attaches/(\d+)/? => balancer_board_attaches_view(1)',
 
+	'(/forum/(\d+)/)news/ => airbase_forum_news(2)',
+	'(/forum/(\d+)/)news/(\d+)\.html => airbase_forum_news(2,3)',
+
 	'/lor/topics/(\d+)/reports/users-graph\.svg => lor_board_topic_usersGraphSVG(1)',
 	'/lor/topics/(\d+)/reports/users-ograph\.svg => lor_board_topic_usersGraphSVG(1,ordered=1)',
 
@@ -31,6 +34,8 @@ bors_vhost_routes('balancer.ru', array(
 
 	'(/blog)/(\d{4})/? => balancer_blog_year(2)',
 
+	'/_cg/(\d{4}-\d{1,2})/(\w+)\.(\w+) => b2f_cache_generated(2,ext=3,year=1)',
+
 	'.* => balancer_page_hts',
-	'.* => bal_pages_hts(url)',
+//	'.* => bal_pages_hts(url)',
 ));

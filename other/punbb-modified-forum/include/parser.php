@@ -48,7 +48,7 @@ include_once("engines/lcml/main.php");
 //
 // Parse message text
 //
-function parse_message($text, $hide_smilies, $nocache=false)
+function parse_message($text, $hide_smilies, $nocache=false, $post = NULL)
 {
 	global $pun_config, $lang_common, $pun_user, $cur_post;
 
@@ -81,6 +81,6 @@ function parse_message($text, $hide_smilies, $nocache=false)
 		)
 	);
 */
-	$body = bors_lcml::output_parse(pun_lcml($text, false));
+	$body = bors_lcml::output_parse(pun_lcml($text, false, $post));
 	return $ch->set($body, 60*86400);
 }

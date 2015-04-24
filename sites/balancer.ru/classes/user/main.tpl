@@ -72,10 +72,10 @@
 	</tr>
 	{foreach $friends_to as $u}
 	<tr>
-		<td>{$u->to_user()->titled_link()}</td>
+		<td>{object_property($u->to_user(), 'titled_link')}</td>
 		<td class="{if $u->score()>0}green{/if}">{$u->score()}</td>
 {$u2=$friends_to_quartal[$u@index]}
-		<td>{if $u2}{$u2->to_user()->titled_link()}{/if}</td>
+		<td>{if $u2}{object_property($u2->to_user(), 'titled_link')}{/if}</td>
 		<td class="{if $u2 && $u2->score()>0}green{/if}">{if $u2}{$u2->score()}{/if}</td>
 	</tr>
 	{/foreach}
@@ -146,6 +146,7 @@
 <li><a href="http://www.balancer.ru/forum/punbb/profile.php?id={$this->id()}">Профиль на старом форуме</a></li>
 {if $is_watcher}
 <li><a href="http://forums.balancer.ru/users/{$this->id()}/interlocutors/">Дополнительная административная информация по собеседникам</a></li>
+<li><a href="http://forums.balancer.ru/users/{$this->id()}/ips/">IP, с которых писал пользователь</a></li>
 {/if}
 </ul>
 

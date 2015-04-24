@@ -57,7 +57,7 @@ if(top.me_is_coordinator)
 	<td class="{$backcolor}">
 		<a href="http://www.balancer.ru/user/{$r->voter_id()}/">{object_property($u, 'title')}</a><br />
 		<a href="http://www.balancer.ru/user/{$r->voter_id()}/reputation/"><img src="http://www.balancer.ru/user/{$r->voter_id()}/rep.gif" width="100" height="16" border="0" /></a></td> 
-	<td class="{$backcolor}">{$r->comment()|truncate:500|lcml_bb}
+	<td class="{$backcolor}">{$r->comment_html()}
 		<script>add_warn('{$r->internal_uri()}', {$r->voter_id()})</script>
 		{if $r->refer()}
 			<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За: {$r->refer_link()}</div>

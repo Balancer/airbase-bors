@@ -22,10 +22,15 @@
 
     "require": {
 		"php": ">=5.3",
+
 		"balancer/bors-core": "@dev",
 		"balancer/bors-ext": "@dev",
 		"balancer/b2-core": "@dev",
-        "kzykhys/git": "*"
+
+		"components/font-awesome": "*",
+
+        "kzykhys/git": "*",
+		"gorkalaucirica/hipchat-v2-api-client": "*"
     },
 
     "autoload": {

@@ -1,6 +1,6 @@
 <?php
 
-class forum_topic_ipbst extends base_page
+class forum_topic_ipbst extends bors_page
 {
 	function pre_parse()
 	{

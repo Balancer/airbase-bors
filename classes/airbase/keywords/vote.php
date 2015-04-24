@@ -1,6 +1,6 @@
 <?php
 
-class airbase_keywords_vote extends base_object_db
+class airbase_keywords_vote extends bors_object_db
 {
 	function db_name() { return 'AB_BORS'; }
 	function table_name() { return 'keywords_votes'; }

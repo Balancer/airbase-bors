@@ -5,7 +5,7 @@ class balancer_board_archive_main extends balancer_board_page
 	function title() { return ec('Архив тем форума'); }
 	function nav_name() { return ec('архив'); }
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'years' => $this->db('AB_FORUMS')->select_array('topics', 

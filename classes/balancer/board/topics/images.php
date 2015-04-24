@@ -11,7 +11,8 @@ class balancer_board_topics_images extends balancer_board_topics_blog
 
 	function url_ex($page = NULL)
 	{
-		return $this->topic()->category()->url()
+//		var_dump($this->topic()->category()->category_base_full());
+		return $this->topic()->category()->category_base_full()
 			.date("Y/m", $this->topic()->create_time())."/t{$this->id()}/images"
 			.(is_null($page) || $page == $this->default_page() ? '' : "/{$page}.html");
 	}

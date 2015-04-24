@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_blogs_record extends base_page_db
+class balancer_board_blogs_record extends bors_page_db
 {
 	function db_name() { return 'AB_FORUMS'; }
 	function table_name() { return 'blog'; }

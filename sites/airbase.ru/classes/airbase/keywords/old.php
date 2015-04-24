@@ -1,6 +1,6 @@
 <?php
 
-class airbase_keywords_old extends base_object
+class airbase_keywords_old extends bors_object
 {
 	private $url = false;
 
@@ -11,7 +11,8 @@ class airbase_keywords_old extends base_object
 	{
 		$found = false;
 		$kw = $this->id();
-		foreach(file(BORS_SITE.'/webroot/system/keyword-links.map') as $s)
+//		foreach(file(BORS_SITE.'/webroot/system/keyword-links.map') as $s)
+		foreach(file('/var/www/airbase.ru/zim-airbase/Авиабаза/webroot/system/keyword-links.map') as $s)
 		{
 			if(preg_match('/^\s+/', $s))
 			{

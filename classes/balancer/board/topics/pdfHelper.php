@@ -14,7 +14,7 @@ class balancer_board_topics_pdfHelper extends bors_page
 
 	function template() { return "null.html"; }
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'posts' => objects_array('balancer_board_post', array(

@@ -308,7 +308,9 @@ generate_admin_menu('bans');
 			<div class="fakeform">
 <?php
 
-$result = $db->query('SELECT id, username, ip, email, message, expire FROM '.$db->prefix.'bans ORDER BY id') or error('Unable to fetch ban list', __FILE__, __LINE__, $db->error());
+$result = $db->query('SELECT id, username, ip, email, message, expire, create_time FROM '.$db->prefix.'bans ORDER BY id DESC')
+	or error('Unable to fetch ban list', __FILE__, __LINE__, $db->error());
+
 if ($db->num_rows($result))
 {
 	while ($cur_ban = $db->fetch_assoc($result))

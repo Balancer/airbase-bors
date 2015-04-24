@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_posts_cached extends base_object_db
+class balancer_board_posts_cached extends bors_object_db
 {
 	function storage_engine() { return 'bors_storage_mysql'; }
 	function db_name() { return config('punbb.database', 'AB_FORUMS'); }

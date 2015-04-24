@@ -4,8 +4,16 @@ define('REPO_DIR', "/var/www/forums.balancer.ru/data2");
 
 require_once('../config.php');
 
-$exp = new exporter(2014, 1);
-$exp->main();
+for($year = date('Y'); $year >= 2013; $year--)
+{
+	for($month = ($year == date('Y') ? date('m') : 12); $month > 0; $month--)
+	{
+		echo "*********************************\nExport for $year-$month\n*********************************\n";
+		$exp = new exporter($year, $month);
+		$exp->main();
+	}
+}
+
 bors_exit();
 
 // projects (1repo=1project) == categories
@@ -19,6 +27,10 @@ bors_exit();
 // /notes (score, reputation)
 // /data (sites-preview, site-image-caches) (/resources?)
 // /thumbnails
+
+
+//git remote add origin git@github.com:Balancer/forums-2014-10.git
+//git push -u origin master
 
 // По каждому пользователю:
 // Публичные данные (ник и т.п.)
@@ -67,7 +79,10 @@ class exporter
 
 		$total = 0;
 
-		$last_id = 0;
+		$last_id = bors_find_first('balancer_board_posts_pure', [
+			'*set' => 'MIN(id) AS min_id',
+			'posted BETWEEN' => array($start, $stop),
+		])->min_id() - 1;
 
 		do
 		{
@@ -83,8 +98,19 @@ class exporter
 			) as $p)
 			{
 				$t = self::make_topic($p);
-				if($p->is_public())
+				$f = self::make_forum($t);
+				if($p->is_public() && $t->is_public() && $f->is_public())
 				{
+					$fn_base = $t->repo_path()
+						.'/posts/'.date('d.His', $p->create_time())
+						.'.'.$p->id();
+
+					$post_file = $fn_base.'.json';
+
+					// Временно. Иначе при каждом обновлении переписывается другими данными private data
+					if(file_exists($post_file) && filemtime($post_file) >= $p->modify_time())
+						continue;
+
 					$data = $p->data;
 					$data['create_time'] = date('r', $data['create_time']);
 
@@ -100,15 +126,11 @@ class exporter
 
 					openssl_public_encrypt(json_encode($pd), $encrypted_pd, file_get_contents('ssl/pub.key'));
 
-					$data['project_private_data'] = base64_encode($encrypted_pd);
+//					$data['project_private_data'] = base64_encode($encrypted_pd);
 
 					$data = array_filter($data);
 
-					$fn_base = $t->repo_path()
-						.'/posts/'.date('d.His', $p->create_time())
-						.'.'.$p->id();
-
-					file_put_contents($post_file = $fn_base.'.json', json_encode($data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+					file_put_contents($post_file, json_encode($data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 					touch($post_file, $p->modify_time());
 
 					foreach($p->attaches() as $attach)
@@ -139,14 +161,14 @@ class exporter
 	}
 
 
+	private $categories = array();
 	function make_category($forum)
 	{
-		static $categories = array();
-		if(($cat = @$categories[$forum->category_id()]))
+		if(($cat = @$this->categories[$forum->category_id()]))
 			return $cat;
 
-		$categories[$forum->category_id()] = $cat = $forum->category();
-		mkpath($path = $this->repo.winfsname($cat->title()));
+		$this->categories[$forum->category_id()] = $cat = $forum->category();
+		mkpath($path = $this->repo . winfsname($cat->title()));
 //		echo "Make $path\n";
 		$cat->set_attr('repo_path', $path);
 
@@ -156,14 +178,19 @@ class exporter
 		return $cat;
 	}
 
+	private $forums = [];
 	function make_forum($topic)
 	{
-		static $forums = array();
-		if(($forum = @$forums[$topic->forum_id()]))
+		$this->forums = array();
+		if(($forum = @$this->forums[$topic->forum_id()]))
 			return $forum;
 
-		$forums[$topic->forum_id()] = $forum = $topic->forum();
+		$this->forums[$topic->forum_id()] = $forum = $topic->forum();
+
 		$cat = $this->make_category($forum);
+
+		if(!$forum->is_public())
+			return $forum;
 
 		mkpath($path = $cat->repo_path()."/".winfsname($forum->title()));
 		touch($path, $lt = $forum->last_post_time());
@@ -176,14 +203,18 @@ class exporter
 		return $forum;
 	}
 
+	private  $topics = array();
 	function make_topic($post)
 	{
-		static $topics = array();
-		if(($topic = @$topics[$post->topic_id()]))
+		if(($topic = @$this->topics[$post->topic_id()]))
 			return $topic;
 
-		$topics[$post->topic_id()] = $topic = $post->topic();
+		$this->topics[$post->topic_id()] = $topic = $post->topic();
+
 		$forum = $this->make_forum($topic);
+
+		if(!$topic->is_public())
+			return $topic;
 
 		$topic_name = date('d.His.', $topic->create_time())
 			.$topic->id().' '.winfsname($topic->title());

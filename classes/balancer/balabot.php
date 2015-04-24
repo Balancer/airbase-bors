@@ -1,6 +1,6 @@
 <?php
 
-class balancer_balabot extends base_object
+class balancer_balabot extends bors_object
 {
 	static function external_notify()
 	{

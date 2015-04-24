@@ -1,6 +1,6 @@
 <?php
 
-class wrk_mauth extends base_object_db
+class wrk_mauth extends bors_object_db
 {
 	function storage_engine() { return 'bors_storage_mysql'; }
 	function db_name() { return 'WRK'; }

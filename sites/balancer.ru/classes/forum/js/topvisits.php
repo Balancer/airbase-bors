@@ -2,7 +2,7 @@
 //TODO: под снос, если не нужна статика
 class forum_js_topvisits extends base_js
 {
-	function local_template_data_set()
+	function body_data()
 	{
 		$top = objects_array('balancer_board_topic', array(
 				'num_views>=' => 10,

@@ -1,13 +1,13 @@
 <?php
 
-class balancer_board_keywords_list extends base_page
+class balancer_board_keywords_list extends bors_page
 {
 	function title() { return ec('Теги'); }
 	function nav_name() { return ec('теги'); }
 //	function template() { return 'forum/common.html'; }
 	function template() { return 'forum/_header.html'; }
 
-	function local_data()
+	function body_data()
 	{
 		template_noindex();
 

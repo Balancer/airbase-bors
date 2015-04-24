@@ -4,7 +4,7 @@
 <tr><td align="right"><small>Автор:</small></td><td>{input name="u"  size="7"}</td></tr>
 <tr><td align="right"><small>Тема&nbsp;№:</small></td><td>{input name="t"  size="7"}</td></tr>
 <tr><td align="right"><small>Форум:</small></td>
-	<td colSpan="5">{dropdown multiple="multiple" name="f" list="airbase_forum_listfull" size="10" class="w100p"}</td>
+	<td colSpan="5">{dropdown multiple="multiple" name="f" list="airbase_forum_listfulld" size="10" class="w100p"}</td>
 </tr>
 <tr><td align="right"><small>Искать:</small></td><td>
 	{dropdown name="w" list="array(

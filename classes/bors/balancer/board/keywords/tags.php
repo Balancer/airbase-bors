@@ -54,9 +54,9 @@ class balancer_board_keywords_tags extends balancer_board_page
 		arsort($sub_keywords);
 		arsort($base_keywords);
 
-		if(count($this->items()) <= 50)
-			$filters = '';
-		else
+//		if(count($this->items()) <= 50)
+//			$filters = '';
+//		else
 			$filters = ec("Фильтр: ").
 			airbase_keywords_linkify(join(',', 
 				array_slice(array_keys($sub_keywords), 0, 7)

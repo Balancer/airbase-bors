@@ -1,8 +1,5 @@
 <?php
 
-//	require_once('/var/www/bors/bors-airbase/funcs/tools/ip_check.php');
-//	agava_ip_check();
-
 /*
 
 also it is possible to make your php script resume downloads, to do this you need to check $_SERVER['HTTP_RANGE'] which may contain something like this
@@ -41,7 +38,6 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")){
 
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
-require_once("funcs/tools/ip_check.php");
 
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file
 
@@ -49,76 +45,6 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 		message('No file specified, so no download possible');
 
 	$attach_item = intval($_GET['item']);	// make it a bit more secure
-
-	require_once("funcs/tools/ip_check.php");
-
-	//TODO: попробовать найти обходной способ!
-	if($ret = is_foreign_network())
-	{
-		$anon = "<br /><br />Вы можете попробовать получить доступ к этой странице через любой русский прокси или анонимайзер по адресу: http://www.anonymizer.ru/cgi-bin/webprox?session=demo&form=header&url=".urlencode("http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?{$_SERVER['QUERY_STRING']}");
-
-		if($pun_user['is_guest'] || $pun_user['id'] <= 2)
-			message($ret.$anon);
-
-//		if($pun_user['num_posts'] < 50)
-//			message($ret."<br/><br/>Также у вас менее 50 постингов на форуме, что блокирует возможность скачивания незавивисо от состояния соотношения трафика.".$anon);
-
-		if(!preg_match("!^(\d+)\.(\d+)\.(\d+)\.(\d+)$!", $_SERVER["REMOTE_ADDR"]))
-			exit("Извините, неопознанный формат Вашего IP: {$_SERVER['REMOTE_ADDR']}!");
-
-		if($_SERVER['REMOTE_ADDR'] == '217.145.160.136'
-			|| $_SERVER['REMOTE_ADDR'] == '89.138.104.246'
-			|| $_SERVER['REMOTE_ADDR'] == '208.65.71.66'
-			|| $_SERVER['REMOTE_ADDR'] == '217.21.40.1'
-			|| $_SERVER['REMOTE_ADDR'] == '84.54.186.11'
-			|| $_SERVER['REMOTE_ADDR'] == '80.94.160.207'
-			|| $_SERVER['REMOTE_ADDR'] == '91.76.20.211'
-			|| $_SERVER['REMOTE_ADDR'] == '88.204.203.250'
-			|| $_SERVER['REMOTE_ADDR'] == '217.14.97.163'
-			|| $_SERVER['REMOTE_ADDR'] == '91.145.222.44'
-			|| $_SERVER['REMOTE_ADDR'] == '66.249.70.155'
-			|| $_SERVER['REMOTE_ADDR'] == '140.78.165.22' // 2	28438	0.43%	27980	0.73%	707.42 MB	1.59%	362	0.10%	140.78.165.22	Austria
-
-			|| preg_match('!^66\.249\.!', $_SERVER['REMOTE_ADDR'])
-			|| preg_match('!^62\.80\.17!', $_SERVER['REMOTE_ADDR'])  //62.80.175.58, '62.80.172.224'
-		)
-			message("Ваш IP заблокирован в аттачах за создание очень высокого зарубежного трафика. Подробнее - http://www.balancer.ru/forum/punbb/viewtopic.php?pid=967737#p967737 ".$anon);
-
-		$ch = new Cache();
-		if(!($diff = $ch->get('stat', 'agava-rate')))
-		{
-			require_once "HTTP/Request.php";
-
-//			$req = new HTTP_Request("http://control.renter.ru/ipstat/");
-			$req = new HTTP_Request("http://clients.agava.ru/cl");
-			$req->setMethod(HTTP_REQUEST_METHOD_POST);
-			$req->addHeader("Accept-Charset", 'UTF-8');
-			$req->addHeader("Accept-Encoding", 'none');
-			$req->addPostData("user", config('agava_user'));
-			$req->addPostData("pass", config('agava_pass'));
-			$req->addPostData("from", "1/".strftime("%m/%y"));
-			$req->addPostData("to", strftime("%d/%m/%y"));
-			$req->addPostData("ip", "ALL");
-
-			$resp = $req->sendRequest();
-
-			if (!PEAR::isError($resp))
-    	 		$resp = $req->getResponseBody();
-	 		else 
-		    	$resp = $resp->getMessage();
-
-			//TODO: попробовать найти обходной способ!
-//			if(!preg_match("!Российский.+Исходящий:</td><td>([\d\.]+) Мб.+Зарубежный.+Исходящий:</td><td>([\d\.]+) Мб!us", $resp, $m))
-//				exit("Ошибка: Не могу получить данные о трафике! - $ resp");
-
-			$diff = $m[2] - $m[1] + 3000;
-			$ch->set($diff, -7200);
-		}
-
-		if($diff >= 0)
-			message($ret."<br /><br />Дефицит трафика на данный момент составляет $diff Мб. При отсутствии дефицита доступ к аттачам зарегистрированным зарубежным пользователям разрешён!".$anon);
-	}
-
 
 	//check that there is such an item
 	$result = $db->query("SELECT post_id, filename, extension, mime, location, size FROM {$db->prefix}attach_2_files WHERE id={$attach_item} LIMIT 1")

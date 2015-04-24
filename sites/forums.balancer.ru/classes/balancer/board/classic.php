@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_classic extends base_page
+class balancer_board_classic extends bors_page
 {
 	function title() { return ec('Классический вид новых форумов'); }
 	function nav_name() { return ec('классический вид'); }
@@ -8,7 +8,7 @@ class balancer_board_classic extends base_page
 	function is_auto_url_mapped_class() { return true; }
 	function template() { return 'forum/_header.html'; }
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'categories' => objects_array('balancer_board_category', array(

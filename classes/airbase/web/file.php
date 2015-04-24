@@ -1,6 +1,6 @@
 <?php
 
-class airbase_web_file extends base_object_db
+class airbase_web_file extends bors_object_db
 {
 	function db_name() { return 'AIRBASE'; }
 	function table_name() { return 'web_files_cache'; }

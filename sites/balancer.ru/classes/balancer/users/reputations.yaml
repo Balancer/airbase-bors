@@ -1,5 +1,6 @@
 extends: balancer_board_meta_main
 main_class: airbase_user_reputation
+cache_static(): rand(300,600)
 
 title: Изменения репутации пользователей
 

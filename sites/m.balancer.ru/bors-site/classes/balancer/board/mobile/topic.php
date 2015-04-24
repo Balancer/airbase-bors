@@ -20,7 +20,7 @@ class balancer_board_mobile_topic extends balancer_board_topic
 		));
 	}
 
-	function local_data()
+	function body_data()
 	{
 		return array(
 			'posts' => objects_array('balancer_board_mobile_post', array(

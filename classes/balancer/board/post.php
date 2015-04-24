@@ -240,7 +240,7 @@ class balancer_board_post extends forum_post
 			),
 			'post_id' => $this->id(),
 			'`i`.extension<>"gif"',
-			'order' => 'post_id',
+			'order' => '-post_id,-modify_time',
 		));
 
 		if($obj)
@@ -306,5 +306,21 @@ class balancer_board_post extends forum_post
 		$topic->cache_clean();
 		$topic->set_modify_time(time(), true);
 		$topic->store();
+	}
+
+	function attaches_html()
+	{
+		if(!($attaches = $this->get('attaches')))
+			return '';
+
+		$html = "<div style=\"margin-top: 10px; clear: both; border-top: 1px dotted #ccc;\">";
+		if($this->get('is_hidden'))
+			$html .= lcml_tag_pair_spoiler::make(balancer_board_attach::show_attaches($this));
+		else
+			$html .= balancer_board_attach::show_attaches($this);
+
+		$html .= "</div>";
+
+		return $html;
 	}
 }

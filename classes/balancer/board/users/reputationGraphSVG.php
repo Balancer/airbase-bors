@@ -2,7 +2,7 @@
 
 define('REPUTATION_GRAPH_LIMIT', 500);
 
-class balancer_board_users_reputationGraphSVG extends base_image_svg
+class balancer_board_users_reputationGraphSVG extends bors_image_svg
 {
 	private $edges_count = 0;
 

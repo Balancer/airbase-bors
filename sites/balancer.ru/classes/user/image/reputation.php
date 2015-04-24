@@ -1,6 +1,6 @@
 <?php
 
-class user_image_reputation extends base_image_gif
+class user_image_reputation extends bors_image_gif
 {
     function show_image()
 	{

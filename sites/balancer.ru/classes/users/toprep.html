@@ -46,7 +46,7 @@
 	<td>{$r->create_time()|full_time}</td>
 	<td>{$users|@get_array:$r->user_id()|get:reputation_titled_link}</td>
 	<td>{$users|@get_array:$r->voter_id()|get:titled_link}</td>
-	<td>{$r->comment()|truncate:500|lcml_bb}
+	<td>{$r->comment_html()}
 		<script>add_warn('{$r->internal_uri()}', {$r->voter_id()})</script>
 		{if $r->refer()}
 		<div style="font-size: 6pt; border-top: 1px dotted #888; color: #888;">// За: {$r->refer_link()}</div>

@@ -1,6 +1,6 @@
 <?php
 
-class lor_board_topic_usersGraphSVG extends base_image_svg
+class lor_board_topic_usersGraphSVG extends bors_image_svg
 {
 	private $edges_count = 0;
 

@@ -1,6 +1,6 @@
 <?php
 
-class balancer_ajax_thumb_vote extends base_object
+class balancer_ajax_thumb_vote extends bors_object
 {
 	function object() { return $this->__havec('object') ? $this->__lastc() : $this->__setc(object_load($this->id())); }
 
@@ -26,11 +26,23 @@ class balancer_ajax_thumb_vote extends base_object
 		if(!$target)
 			return "Неизвестный объект";
 
+		if(!bors()->request()->is_post())
+		{
+			if(bors()->request()->is_accept_text())
+				return '<img src="http://www.airbase.ru/forum/smilies/hacker.gif" />. Нажмите Ctr-F5. <a href="http://www.balancer.ru/g/p3795989" target="_blank">подробности</a>';
+
+			header("Content-type: " . image_type_to_mime_type(IMAGETYPE_GIF));
+			return file_get_contents('http://www.airbase.ru/forum/smilies/hacker.gif');
+		}
+
 		if(!$me_id)
 			return "Только для зарегистрированных пользователей!";
 
 		if($me->is_banned())
 			return "Вы находитесь в режиме «только чтение»";
+
+		if($me->money() <= 0)
+			return "У Вас недостаточно средств ☼ для оценки сообщений";
 
 		if($me_id == $target->owner_id())
 			return "<small>Нельзя ставить оценку себе!</small>";
@@ -52,7 +64,7 @@ class balancer_ajax_thumb_vote extends base_object
 				return "<small>Отрицательные оценки можно ставить только для свежих сообщений</small>";
 
 			if($me->warnings() >= 3)
-				return bors_message(ec('У Вас три или более активных штрафа. Вы можете ставить только положительные оценки'));
+				return '<small>У Вас три или более активных штрафа. Вы можете ставить только положительные оценки</small>';
 
 			$user_limit = $me->messages_daily_limit();
 
@@ -105,7 +117,7 @@ class balancer_ajax_thumb_vote extends base_object
 
 		$prev = bors_find_first('bors_votes_thumb', array(
 			'user_id' => $me_id,
-			'target_class_id' => $target->class_id(),
+			'target_class_name' => $target->new_class_name(),
 			'target_object_id' => $target->id(),
 			'target_user_id' => $target->owner_id(),
 		));
@@ -123,7 +135,7 @@ class balancer_ajax_thumb_vote extends base_object
 		{
 			$vote = bors_new('bors_votes_thumb', array(
 				'user_id' => $me_id,
-				'target_class_name' => $target->class_name(),
+				'target_class_name' => $target->new_class_name(),
 				'target_class_id' => $target->class_id(),
 				'target_object_id' => $target->id(),
 				'target_user_id' => $target->owner_id(),
@@ -174,7 +186,7 @@ class balancer_ajax_thumb_vote extends base_object
 		if(is_null($target->best10_ts()) && $positives >= 10)
 				$target->set_best10_ts(time(), true);
 
-		$target_score = $target->score();
+		$target_score = intval($target->score());
 		if($target_score >= 7)
 			balancer_balabot::on_thumb_up($target);
 
@@ -230,6 +242,17 @@ class balancer_ajax_thumb_vote extends base_object
 						"target score for award =".$target_score."; "
 						."target-data=".print_r($target->data, true));
 			}
+		}
+
+		if($score>0)
+		{
+			$user->add_money(1);
+			$me->add_money(-1);
+		}
+		elseif($score<0)
+		{
+			$user->add_money(-1);
+			$me->add_money(-1);
 		}
 
 		return $return;

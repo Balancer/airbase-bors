@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_stat_forumsActivity extends base_image_png
+class balancer_board_stat_forumsActivity extends bors_image_png
 {
 	var $points = 100;
 

@@ -40,26 +40,27 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/forum.php';
 
 if($pun_user['id'] > 1)
 {
-	$count = intval($cms_db->get("SELECT count FROM forum_visits WHERE user_id=".intval($pun_user['id'])." AND forum_id=".intval($id))) + 1;
-
-	$data = array(
-		'forum_id' => $id,
+	$visit = bors_find_first('balancer_board_forums_visit', [
 		'user_id' => $pun_user['id'],
-		'count' => $count,
-		'last_visit' => time(),
-		'is_disabled' => false,
-	);
+		'forum_id' => $id,
+	]);
 
-	if($count == 1)
-		$data['first_visit'] = time();
+	if($visit)
+	{
+		$visit->set_count($visit->count()+1);
+	}
+	else
+	{
+		$visit = bors_new('balancer_board_forums_visit', [
+			'user_id' => $pun_user['id'],
+			'forum_id' => $id,
+			'count' => 1,
+			'first_visit' => time(),
+		]);
+	}
 
-	$cms_db->store(
-		"{$db->prefix}forum_visits", 
-		"user_id=".intval($pun_user['id'])." AND forum_id=".intval($id),
-		$data,
-		false,
-		array('priority' => 'low')
-	);
+	$visit->set_last_visit(time());
+	$visit->set_is_disabled(false);
 }
 
 if(empty($pun_user['g_id']))

@@ -143,7 +143,11 @@ dl.forumposting dt a {color: #ffffd0;}
 		  </tr>
 		</table>
 	  </noindex>
+{if $description}
 	  <small><i>{$description}</i></small>
+{else}
+	  <small><i>{$this->get('description')}</i></small>
+{/if}
 	  <h1>{$title}</h1>
 	</td>
   </tr>

@@ -978,7 +978,7 @@ H2 {MARGIN: 0; COLOR: #FFFFFF; BACKGROUND-COLOR: #B84623; FONT-SIZE: 1.1em; PADD
 			echo "<br/><br/><b style=\"color: red; font-size: 14pt;\">Если проблема постоянна и к форуму нет доступа, попробуйте заглянуть
 			за подробностями на:
 <ul>
-<li><a href=\"http://vault.balancer.ru/chat/\" style=\"color: red; font-weight: bold\">Чат Убежища</a> (не требуется никакой регистрации)</li>
+<li><a href=\"http://www.hipchat.com/gvr76mZOy\" style=\"color: red; font-weight: bold\">Чат Убежища</a> (не требуется никакой регистрации)</li>
 <!--<li><a href=\"http://ls.balancer.ru/\">LSBR</a> (там работает форумная авторизация, те же логин с паролем, что и на форумах)</li>-->
 <li><a href=\"http://vault.balancer.ru/forum/\">ЗАПАСНОЙ ФОРУМ</a></li>
 </ul>

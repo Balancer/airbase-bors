@@ -36,6 +36,9 @@ $map = array(
 	'(/archive/)(\d+/\d+)/ => balancer_board_archive_month(2)',
 	'(/archive/)(\d+/\d+/\d+)/ => balancer_board_archive_day(2)',
 
+	'(/archive/posts/)(\d+/\d+/\d+)/ => balancer_board_archive_posts_day(2)',
+	'(/archive/posts/)(\d+/\d+/\d+)/(\d+)\.html => balancer_board_archive_posts_day(2,3)',
+
 	'/blogs/ => balancer_board_blogs_main',
 	'(/)blogs/(\d+)\.html => balancer_board_blogs_main(NULL,2)',
 
@@ -46,6 +49,8 @@ $map = array(
 
 	'(/)new\-topics/ => balancer_board_new_topics',
 	'(/)new\-topics/(\d+)\.html => balancer_board_new_topics(NULL,2)',
+
+//	'/news/(.*) => balancer_board_news(1)',
 
 	'/post => balancer_board_post_edit',
 

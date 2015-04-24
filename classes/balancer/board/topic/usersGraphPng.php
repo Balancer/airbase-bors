@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_topic_usersGraphPng extends base_image_png
+class balancer_board_topic_usersGraphPng extends bors_image_png
 {
 	function show_image()
 	{

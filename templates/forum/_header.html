@@ -1,9 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
-<head>
+<head id="html">
 	<title>{$this->browser_title()|htmlspecialchars}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="title" content="{$title|htmlspecialchars}" />
+	<meta name="disabled-viewport" content="width=680" />
+	<meta name="disabled-viewport" content="width=680,initial-scale=1.0">
 	<meta property="fb:admins" content="100000278666723" />
 {if $this->get('browser_description')}
 	<meta name="description" content="{$this->browser_description()|htmlspecialchars}"/>
@@ -12,6 +14,15 @@
 	<meta name="keywords" content="{$this->keywords_string()|htmlspecialchars}"/>
 {/if}
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+{*
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+	<link rel="stylesheet" href="http://forums.balancer.ru/css/pure-extras.css">
+*}
+
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
@@ -27,12 +38,53 @@ dd, dt { height: 1%; }
 .wrapper { margin-left: -404px; position: relative; }
 pre { word-wrap: break-word; }
 </style><![endif]-->
+
+<script>
+(function(){
+	var fontKey = 'ScadaABv2';
+
+    function addFont() {
+        var style = document.createElement('style');
+        style.rel = 'stylesheet';
+        document.head.appendChild(style);
+        style.textContent = localStorage[fontKey];
+    }
+
+    try {
+        if (localStorage[fontKey]) {
+            // The font is in localStorage, we can load it directly
+            addFont();
+        } else {
+            // We have to first load the font file asynchronously
+            var request = new XMLHttpRequest();
+            request.open('GET', '/_bal/css/scada-embed.woff.css', true);
+
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                    // We save the file in localStorage
+                    localStorage[fontKey] = request.responseText;
+
+                    // ... and load the font
+                    addFont();
+                }
+            }
+
+            request.send();
+        }
+    } catch(ex) {
+        // maybe load the font synchronously for woff-capable browsers
+        // to avoid blinking on every request when localStorage is not available
+    }
+}());
+</script>
+
+
 {* <script type="text/javascript" src="https://apis.google.com/js/plusone.js">{lang: 'ru'}</script> *}
 
 {foreach from=$js_include item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
-<script type="text/javascript" src="/_bors/js/funcs3.js"></script>
+<script type="text/javascript" src="/_bors/js/funcs3.js?"></script>
 <script type="text/javascript" src="/_bors/js/tune.js"></script>
 
 <script type="text/javascript"><!--
@@ -107,41 +159,22 @@ createCookie('readedTopics', readed.join(' '), 3)
 		<dl class="box">
 		<dt class="nav">{module class="module_nav_top"}</dt>
 		<dd>
+			{if $this->get('image')}
+				{$this->image()->thumbnail('128x128(up,crop)')->html(['append' => 'style="float: right"'])}
+			{/if}
 			<h1>{$this->page_title()|htmlspecialchars}</h1>
+{if $description}
 			{$description}
-<table class="nul"><tr valign="top">
-{*
-<td style="padding-top: 5px"><iframe src="http://www.facebook.com/plugins/like.php?app_id=139039169508594&href={$this->url_for_igo()}&send=false&layout=button_count&width=20&show_faces=false&action=recommend&colorscheme=light&height=21" scrolling="no" frameborder="0" style="border:none;" allowTransparency="true"></iframe></td>
-*}
-<td><g:plusone size="small" href="{$this->url_for_igo()}"></g:plusone></td>
-</tr></table>
-
-{* if $this->keywords_string()}<br /><i>Ключевые слова: {$this->keywords_string()}</i>{/if *}
-			{if $this->get('keywords_linked')}<div class="keywords">
-
-{if $me_id > 0}
-<script>{literal}
-        $(document).ready(function() {
-            $("#tags_def").hide()
-            $("#tags").tagEditor(
-            {
-                items: [{/literal}{$this->keywords_linked_q()}{literal}],
-                confirmRemoval: true,
-                separator: ',',
-                completeOnSeparator: true,
-                completeOnBlur: true,
-                confirmRemovalText: "Вы хотите удалить этот тег?",
-				imageTagUrl: 'http://www.balancer.ru/_bors3rdp/jquery/plugins/tageditor/minus_small.png',
-				object: '{/literal}{$this->internal_uri_ascii()}{literal}',
-            });
-		});
-{/literal}</script>
-{ec('Теги')}:<input id="tags" name="tags" type="text" value="" /><span id="tags_def">{$this->keywords_linked()}</span>
 {else}
-{ec('Теги')}: {$this->keywords_linked()}
+			{$this->get('description')}
 {/if}
-</div>
+
+{if $this->get('type') == 'topic'}
+			<div class="keywords">
+{ec('Теги')}:<input id="tags" name="tags" type="text" value="" /><span id="tags_def">{$this->keywords_linked()}</span>
+			</div>
 {/if}
+			<div class="clear">&nbsp;</div>
 		</dd>
 		</dl>
 
@@ -266,8 +299,8 @@ if(me_id > 1 && me_hash) {
 		<dt>{ec('Настройки')}</dt>
 		<dd>
 			<script type="text/javascript">
-				createSelect("{ec('Шрифт')}", "fontFamily", "default(Georgia):Georgia;Verdana;Ubuntu;Play;Scada;PT Sans;sans-serif;serif;monospace", "Georgia")
-				createSelect("{ec('Размер')}", "fontSize", "8pt;10pt;12pt;default(14pt):14pt;16pt;20pt;24pt", "14pt")
+				createSelect("{ec('Шрифт')}", "fontFamily", "default(ScadaAB):ScadaAB;Georgia;Verdana;Ubuntu;Play;PT Sans;sans-serif;serif;monospace", "ScadaAB")
+				createSelect("{ec('Размер')}", "fontSize", "8pt;10pt;12pt;14pt;default(16pt):16pt;18pt;20pt;24pt", "16pt")
 				createSelect("{ec('Расстояние до монитора')}", "incenter.width", "auto;30cm:14cm;45cm:21cm;70cm:30cm", "auto")
 			</script>
 			<noscript><p>Не работает без JavaScript</p></noscript>
@@ -301,9 +334,9 @@ else {ldelim}
 <noscript><p>Не работает без JavaScript</p></noscript>
 </dd></dl>
 
-{if ($this->new_class_name() == 'balancer_board_topic' || $this->new_class_name() == 'balancer_board_topics_view')}
+{* if ($this->new_class_name() == 'balancer_board_topic' || $this->new_class_name() == 'balancer_board_topics_view')}
 <script type="text/javascript" src="http://www.balancer.ru/js/board/topics/t{$this->id()}-similar.js"></script>
-{/if}
+{/if *}
 
 <dl class="box w200"><dt>{ec('Твиттер сайта')}</dt>
 <a class="twitter-timeline" href="https://twitter.com/AirbaseRu" data-widget-id="429908527918755840">{ec('Твиты пользователя')} @AirbaseRu</a>
@@ -356,6 +389,8 @@ $('#liveinternet').html("<a href='http://www.liveinternet.ru/click' "+
 --></span>
 </div>
 
+
+{*
 <div id="mapyourvisitors" style="width: 190px; height: 95px; margin: 0 0 5px 0">
 <span class="bors_lazy_load"><!--
 <script type="text/javascript">
@@ -363,6 +398,7 @@ $('#mapyourvisitors').html('<a href="http://www.mapyourvisitors.com/map2537.php"
 </script>
 --></span>
 </div>
+*}
 
 <span class="bors_lazy_load"><!--
 <center><a href="http://s02.flagcounter.com/more/NNik">
@@ -396,23 +432,47 @@ BORS_CORE={$smarty.const.BORS_CORE}
 {include file="xfile:airbase/inc/halloween.html"}
 {/if *}
 </body>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
 {foreach from=$js_include_post item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
+
 <script type="text/javascript"><!--
 {foreach from=$javascript_post item="s"}
 {$s}
 {/foreach}
-{if $jquery_document_ready}
-$(document).ready(function() {
-{foreach from=$jquery_document_ready item="s"}
-{$s}
-{/foreach}
 
+$(document).ready(function() {
+	{foreach from=$jquery_document_ready item="s"}
+	{$s}
+	{/foreach}
+
+{if $this->get('type') == 'topic'}
+	if(me_id > 1)
+	{
+		$("#tags_def").hide()
+		$("#tags").tagEditor(
+		{
+			items: [{$this->keywords_linked_q()}],
+			confirmRemoval: true,
+			separator: ',',
+			completeOnSeparator: true,
+			completeOnBlur: true,
+			confirmRemovalText: "Вы хотите удалить этот тег?",
+			imageTagUrl: 'http://www.balancer.ru/_bors3rdp/jquery/plugins/tageditor/minus_small.png',
+			object: '{$this->internal_uri_ascii()}',
+		})
+	}
+	else
+		$("#tags").hide()
+{/if}
 })
+
 {if 0 && $me}
 jQuery.getScript('http://forums.balancer.ru/ajax/pagemod.js?user_id='+0+'&target={$this->internal_uri_ascii()}&mtime={$this->modify_time()}&static={$this->cache_static()}')
 {/if}
 --></script>
-{/if}
+
 </html>

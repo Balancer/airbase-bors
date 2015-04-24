@@ -1,7 +1,7 @@
 <?php
 /* Поддержка старого *.hts формата файлов */
 
-class airbase_page_hts_plain extends base_page
+class airbase_page_hts_plain extends bors_page
 {
 	//TODO: на время отладки
 	function can_cached() { return false; }
@@ -9,9 +9,7 @@ class airbase_page_hts_plain extends base_page
 
 	function storage_engine() { return 'storage_fs_hts'; }
 
-	private $parents = array();
-	function parents() { return $this->parents; }
-	function set_parents($arr, $dbup) { return $this->parents = &$arr; }
+	function parents() { return $this->attr('parents'); }
 
 	var $type = 'hts';
 

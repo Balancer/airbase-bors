@@ -19,5 +19,10 @@ class forum_js_personal extends bors_jsh
 
 	function owner() { return $this->owner; }
 
-	function template_local_vars() { return parent::template_local_vars().' owner'; }
+	function body_data()
+	{
+		return array_merge(parent::body_data(), array(
+			'owner' => $this->owner(),
+		));
+	}
 }

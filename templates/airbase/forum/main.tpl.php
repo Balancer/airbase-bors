@@ -181,12 +181,14 @@ pageTracker._trackPageview();
 
 <span><!--<center><a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a></center>--></span>
 <br />
+{*
 <script type="text/javascript"><!--
 kod = 2537;
 width = 185;
 document.write('<span><!-'+'-<a href="http://www.mapyourvisitors.com/map' + kod + '.php"><img src="http://www.mapyourvisitors.com/' + width + '/' + kod + '.jpg?r=' + escape(document.referrer) + '&u=' + escape(document.URL) + '" alt="MapYourVisitors.COM" title="MapYourVisitors.COM - Нанесите на карту ваших посетителей" /></a>-'+'-></span><br />');
 --></script>
 <br />
+*}
 
 <span><!--<center><a href="http://s02.flagcounter.com/more/NNik"><img src="http://s02.flagcounter.com/count/NNik/bg=FFFFFF/txt=000000/border=CCCCCC/columns=2/maxflags=12/viewers=0/labels=0/" alt="free counters" border="0"></a></center>--></span>
 <br/>

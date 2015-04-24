@@ -19,7 +19,7 @@ forum_forum::all_forums_preload(true);
 
 include_once("include/subforums.php");
 $ich = new bors_cache();
-if($ich->get("subforums-text-v5", $pun_config['root_uri']))
+if($ich->get("subforums-text-v6", $pun_config['root_uri']))
 	$subforums = $ich->last();
 else
 {
