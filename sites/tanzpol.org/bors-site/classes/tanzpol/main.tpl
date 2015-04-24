@@ -17,6 +17,15 @@
 .tanz-news {
     margin: 0 0 8px 0;
     padding: 8px;
+
+}
+
+.clear, .tanz-news:after {
+   content: ".";
+   display: block;
+   clear: both;
+   visibility: hidden;
+   height: 0;
 }
 
 .tanz-news h2 {
