@@ -45,13 +45,15 @@ class lcml_parser_airbase extends bors_lcml_parser
 		if($this->lcml->params('airbase-warez-enabled'))
 			return $text;
 
-		$text = preg_replace_callback("!(https?://(www\.)?(rutracker\.org|film\.arjlover\.net)/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
-		$text = preg_replace_callback("!(https?://(www\.)?flibusta\.net/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
-		$text = preg_replace_callback("!(https?://(www\.)?tfile\.ru/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
-		$text = preg_replace_callback("!(https?://(www\.)?rutor\.org/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
-		$text = preg_replace_callback("!(https?://(www\.)?rapidshare\.(com|ru)/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
 		$text = preg_replace_callback("!(https?://(www\.)?depositfiles.com/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
+		$text = preg_replace_callback("!(https?://(www\.)?flibusta\.net/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
 		$text = preg_replace_callback("!(https?://(www\.)?ifile.it/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
+		$text = preg_replace_callback("!(https?://(www\.)?kinozal\.tv/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
+		$text = preg_replace_callback("!(https?://(www\.)?rapidshare\.(com|ru)/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
+		$text = preg_replace_callback("!(https?://(www\.)?rutor\.org/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
+		$text = preg_replace_callback("!(https?://(www\.)?rghost\.ru/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
+		$text = preg_replace_callback("!(https?://(www\.)?(rutracker\.org|film\.arjlover\.net)/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
+		$text = preg_replace_callback("!(https?://(www\.)?tfile\.ru/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
 
 		return $text;
 	}
