@@ -384,7 +384,7 @@ span.clear {
 	margin-left: -1px;
 }
 
-@media only screen and (min-device-width: 640px) and (min-device-width: 8cm) {
+@media only screen and (min-device-width: 640px) and (min-device-width: 11cm) {
 	.outer {
 		margin-left: 215px;  /* L */
 	}
