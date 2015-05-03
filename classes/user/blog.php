@@ -58,6 +58,7 @@ class user_blog extends balancer_board_page
 		if($this->total === false)
 			$this->total = intval(bors_count('balancer_board_blog', array(
 				'owner_id' => $this->id(),
+//				'create_time<=' => time(),
 				'is_microblog' => 0,
 				'is_public' => 1,
 				'is_deleted' => false,
