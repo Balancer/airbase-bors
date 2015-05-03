@@ -951,7 +951,7 @@ tr.bb-background-private td {
 	max-width: 100%;
 }
 
-.small_post img {
+.small_post img, .rs_box_nd, .rs_box_nd img, .rs_box, .rs_box img  {
 	max-width: 100%;
 }
 

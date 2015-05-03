@@ -29,6 +29,8 @@ bors_vhost_routes('balancer.ru', array(
 
 	'/rpc/json/find/(\w+) => bal_rpc_json_find(1)',
 
+	'/rpc/json/tanzpol => bal_rpc_json_tanzpol',
+
 	'/users?/(\d+)/? => user_main(1)',
 
 	'/users/reputations/? => balancer_users_reputations',

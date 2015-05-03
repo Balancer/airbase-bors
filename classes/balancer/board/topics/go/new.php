@@ -1,6 +1,6 @@
 <?php
 
-class balancer_board_topics_go_new extends bors_object
+class balancer_board_topics_go_new extends bors_page
 {
 	var $auto_map = true;
 

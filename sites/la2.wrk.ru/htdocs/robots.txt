@@ -2,4 +2,6 @@ User-Agent: *
 Disallow: /js/
 Disallow: /_bors/igo*
 
+Crawl-delay: 1
+
 Sitemap: http://la2.wrk.ru/sitemap-index.xml

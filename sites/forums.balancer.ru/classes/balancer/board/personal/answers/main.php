@@ -5,7 +5,7 @@ class balancer_board_personal_answers_main extends balancer_board_page
 	var $must_be_user = true;
 	function template() { return 'xfile:forum/_header.html'; }
 
-	var $title  = 'Не прочтённые ответы Вам';
+	var $title  = 'Непрочтённые ответы Вам';
 	var $nav_name = 'непрочтённые ответы';
 	var $auto_map = true;
 
