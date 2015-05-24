@@ -18,6 +18,7 @@
 	<br/>
 	За&nbsp;какие&nbsp;даты:&nbsp;{input name="d1" placeholder="ДД" size="2"}.{input name="m1" placeholder="ММ" size="2"}.{input name="y1" placeholder="ГГГГ" size="4"}&nbsp;—&nbsp;{input name="d2" placeholder="ДД" size="2"}.{input name="m2" placeholder="ММ" size="2"}.{input name="y2" placeholder="ГГГГ" size="4"}
 </td></tr>
+<tr><td align="right">&nbsp;</td><td>{checkbox name="origins" label="Не искать в ответах, только в стартах веток"}</td></tr>
 <tr><td align="right"><small>Сортировать:</small></td><td>{dropdown name="s" list="bors_tools_search_orders" is_int=false}</td></tr>
 <tr><td>&nbsp;</td><td>{submit value="Найти"}</td></tr>
 </table>

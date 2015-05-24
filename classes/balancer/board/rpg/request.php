@@ -14,6 +14,7 @@ class balancer_board_rpg_request extends balancer_board_object_db
 		return array(
 			'id',
 			'title',
+			'comment',
 			'request_class_name',
 			'request_id',
 			'target_user_id',
@@ -58,6 +59,23 @@ class balancer_board_rpg_request extends balancer_board_object_db
 
 	function info()
 	{
+		$stat = bors_find_first('balancer_board_rpg_vote', [
+			'*set' => 'COUNT(*) AS total, SUM(IF(score>0,1,0)) AS pos, SUM(IF(score<0,1,0)) AS neg',
+			'request_id' => $this->id(),
+		]);
+
+		if($stat && $stat->total())
+			$stat_html = "<small><span style=\"color:green\">За: {$stat->pos()}</span>, <span style=\"color:red\">против: {$stat->neg()}</span></small>";
+		else
+			$stat_html = "";
+
+		if($this->comment())
+		{
+			return '<h3>'.$this->title()."</h3>\n"
+				.bors_lcml::lcml(trim($this->comment()))
+				.$stat_html;
+		}
+
 		$target = $this->target();
 		$target_user = $this->target_user();
 
@@ -67,16 +85,26 @@ class balancer_board_rpg_request extends balancer_board_object_db
 
 		$html = $target->titled_link()
 			.'<div style="color: #999">'.$target->snip().'</div>'
-			."<small$color>".$this->title().'</small>';
+			."<small$color>".$this->title().'</small><br/>'
+			.$stat_html;
+
 		return $html;
 	}
 
 	function actions()
 	{
 		$actions = [];
-		$actions[] = "<a href=\"http://forums.balancer.ru/rpg/requests/approve?rid={$this->id()}&score=1\">Подтвердить</a>";
-		$actions[] = "<a href=\"http://forums.balancer.ru/rpg/requests/approve?rid={$this->id()}&score=-1\">Отклонить</a>";
-		return join('<br/>', $actions);
+		$actions[] = "<form action=\"http://forums.balancer.ru/rpg/requests/approve\" method=\"post\">"
+			."<input type=\"hidden\" name=\"rid\" value=\"{$this->id()}\">"
+			."<input type=\"hidden\" name=\"score\" value=\"1\">"
+			."<input type=\"submit\" value=\"Подтвердить\">"
+			."</form>";
+		$actions[] = "<form action=\"http://forums.balancer.ru/rpg/requests/approve\" method=\"post\">"
+			."<input type=\"hidden\" name=\"rid\" value=\"{$this->id()}\">"
+			."<input type=\"hidden\" name=\"score\" value=\"-1\">"
+			."<input type=\"submit\" value=\"Отклонить\">"
+			."</form>";
+		return join('', $actions);
 	}
 
 	function item_list_fields()

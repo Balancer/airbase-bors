@@ -246,13 +246,14 @@ class balancer_ajax_thumb_vote extends bors_object
 
 		if($score>0)
 		{
-			$user->add_money(1);
-			$me->add_money(-1);
+		//	function add_money($amount, $action=NULL, $comment=NULL, $object=NULL, $source=NULL)
+			$user->add_money(1, 'score_target', "Плюс за сообщение", $target, $me);
+			$me->add_money(-1, 'score_pay', "Выставление оценки", $target, $user);
 		}
 		elseif($score<0)
 		{
-			$user->add_money(-1);
-			$me->add_money(-1);
+			$user->add_money(-1, 'score_target', "Минус за сообщение", $target, $me);
+			$me->add_money(-1, 'score_pay', "Выставление оценки", $target, $user);
 		}
 
 		return $return;

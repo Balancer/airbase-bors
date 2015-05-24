@@ -52,6 +52,7 @@ function balancer_anniversary_html()
 			'title' => trim($title),
 			'image' => trim($image),
 			'url' => trim($url),
+			'diff' => date('Y') - $year,
 		];
 
 		if(empty($image))
@@ -99,9 +100,20 @@ function balancer_anniversary_html()
 
 	$info = getimagesize($image);
 
+	$s_year = $year;
+	if($diff%10 == 0)
+		$s_year = "<span class=\"b red\">{$year}</span>";
+
+	if($year && $diff)
+		$desc = "<div class=\"small center\">{$s_year}: {$title} (".sklonn($diff,'год,года,лет').").</div>";
+	else
+		$desc = "<div class=\"small center\">{$title}</div>";
+
 	$html = "
 		<dl class=\"box w200\">
-		<dd><a href=\"$url\"><img src=\"$image\" title=\"$title\" {$info[3]} /></a></dd>
+		<dd><a href=\"$url\"><img src=\"$image\" title=\"$title\" {$info[3]} /></a>
+		$desc
+		</dd>
 		</dl>
 ";
 

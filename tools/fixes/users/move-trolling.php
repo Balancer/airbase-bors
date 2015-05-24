@@ -7,8 +7,10 @@ bors_exit();
 
 function main()
 {
+	// 84463 — Lazy Rider
+
 	$uids = [84463, 105560];
-	$cat_ids = [6,26,27];
+	$cat_ids = [6,8,26,27]; // 8 = Клуб
 	$target_topic_id = 82617;
 
 	$posts = bors_each('balancer_board_post', [
