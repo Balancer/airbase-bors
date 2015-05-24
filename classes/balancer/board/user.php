@@ -328,17 +328,31 @@ class balancer_board_user extends forum_user
 
 	function set_money($amount, $db_up=true)
 	{
-		bors_debug::syslog('000-money-set', "amount=".$amount);
-//		bors_debug::syslog('000-money-set-'.bors()->user_id(), "amount=".$amount);
+		$trace = debug_backtrace();
+		$pos = 0;//count($trace)-2;
+		file_put_contents('/tmp/11111.log', print_r($trace, true));
+		$action = 'unknown_set';
+		$comment = $trace[$pos]['file'].':'.$trace[$pos]['line'];
+
+		airbase_money_log::add($this, $amount, $action, $comment);
 
 		return $this->set('money', $amount, $db_up);
 	}
 
-	function add_money($amount)
+	function add_money($amount, $action=NULL, $comment=NULL, $object=NULL, $source=NULL)
 	{
-		bors_debug::syslog('000-money-add', "amount=".$amount);
-//		bors_debug::syslog('000-money-add-'.bors()->user_id(), "amount=".$amount);
+		if(!$action)
+		{
+			$trace = debug_backtrace();
+			$pos = 0;//count($trace)-2;
+			file_put_contents('/tmp/11111.log', print_r($trace, true));
+			$action = 'unknown_add';
+			if(!$comment)
+				$comment = $trace[$pos]['file'].':'.$trace[$pos]['line'];
+		}
 
-		$this->set_money($this->money() + $amount);
+		airbase_money_log::add($this, $amount, $action, $comment, $object, $source);
+
+		return $this->set('money', $this->money() + $amount, true);
 	}
 }

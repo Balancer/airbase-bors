@@ -694,7 +694,8 @@ if (isset($_POST['form_sent']))
 			);
 		}
 
-		bors()->user()->add_money(-2);
+		//	function add_money($amount, $action=NULL, $comment=NULL, $object=NULL, $source=NULL)
+		bors()->user()->add_money(-2, 'post', "Сообщение", $post);
 
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);

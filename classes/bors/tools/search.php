@@ -53,6 +53,7 @@ class bors_tools_search extends balancer_board_page
 	function d2() { return ''; }
 	function m2() { return ''; }
 	function y2() { return ''; }
+	function origins() { return bors()->request()->data('origins'); }
 
 	function access() { return $this; }
 	function can_action() { return true; }
