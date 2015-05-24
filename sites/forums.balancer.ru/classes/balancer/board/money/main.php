@@ -27,7 +27,7 @@ class balancer_board_money_main extends balancer_board_page
 
 		$target_user->add_money($amount,
 			'move_from',
-			"Перевод средств от пользователя ".$target_user->title(),
+			"Перевод средств от пользователя ".$me->title(),
 			NULL /*object*/,
 			$me);
 

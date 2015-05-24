@@ -151,7 +151,7 @@
 <div class="pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}">
 	{foreach $reputation_records as $r}
 	<div class="alert alert-{if $r->score()>0}success{else}danger{/if} shadow8 ab-alert-small">
-		{$r->create_time()|date:"d.m.Y H:i"}, {$r->owner()->titled_link()}: {$r->score_html($r->comment_html())}<br/>
+		{$r->create_time()|date:"d.m.Y H:i"}, {$r->owner()->titled_link()}: {$r->score_html($r->comment_html(false))}<br/>
 	</div>
 	{/foreach}
 </div>
