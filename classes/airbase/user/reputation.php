@@ -51,11 +51,24 @@ class airbase_user_reputation extends balancer_board_object_db
 		));
 	}
 
-	function comment_html()
+	function comment_html($show_origin = true)
 	{
-		return htmlspecialchars($this->comment());
+		$html = htmlspecialchars($this->comment());
 
-		return lcml_bb($this->comment(), [
+		$warn = bors_find_first('airbase_user_warning', [
+			'warn_class_id' => $this->class_id(),
+			'warn_object_id' => $this->id(),
+		]);
+
+		if($warn)
+			$html .= '<div class="pull-right" title="'.htmlspecialchars($warn->title()).'" style="color:black">☠×'.intval($warn->score()).'</div>';
+
+		if($show_origin && $this->refer())
+			$html .= "<div style=\"font-size: 6pt; border-top: 1px dotted #888; color: #888;\">// За: {$this->refer_link()}</div>";
+
+		return $html;
+
+		$html = lcml_bb($this->comment(), [
 			'enabled_tags' => ['b', 's', 'i'],
 			'nocache' => true,
 			'enabled_functions' => ['smilies'],

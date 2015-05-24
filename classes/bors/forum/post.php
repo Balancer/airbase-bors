@@ -543,6 +543,21 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	function move_tree_to_topic($new_tid)
 	{
+		// Если это свежее (<14 дней) и не привязанное сообщение, то
+		// снимаем «солнышки» за промах
+		if(!$this->answer_to_id()
+			&& $this->create_time() > time() - 86400*14
+			&& !$this->original_topic_id() // Если ранее не переносилось
+			&& ($owner = $this->owner()) // Есть юзер
+		)
+		{
+			$owner->add_money(-10,
+				'move_first_thread',
+				"Перенос сообщения в начале цепочки в другую тему",
+				$this,
+				bors()->user());
+		}
+
 		$GLOBALS['move_tree_to_topic_changed_topics'] = array();
 
 		$this->__move_tree_to_topic($new_tid, $this->topic_id());
@@ -590,6 +605,20 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($this->topic_id() == $old_tid)
 		{
+			// Если это свежее (<14 дней), то
+			// снимаем «солнышки» за промах
+			if($this->create_time() > time() - 86400*14
+				&& !$this->original_topic_id() // Если ранее не переносилось
+				&& ($owner = $this->owner()) // Есть юзер
+			)
+			{
+				$owner->add_money(-1,
+					'move_to_other_thread',
+					"Перенос сообщения в другую тему",
+					$this,
+					bors()->user());
+			}
+
 			$this->set_topic_id($new_tid, true);
 			$this->cache_clean();
 			cache_static::drop($this);
