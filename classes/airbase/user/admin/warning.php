@@ -61,13 +61,26 @@ class airbase_user_admin_warning extends airbase_user_warning
 		$object->set_warning_id(NULL, true);
 		$object->set_modify_time(time());
 
+		$score = $data['score'];
+
+		if($score > 0)
+		{
+			$moderator = $this->moderator();
+			$user->add_money(-100*$score,
+				'warnings',
+				"Списание за штраф ($score от {$moderator->title()})",
+				$object,
+				$moderator);
+		}
+
 		@unlink('/var/www/balancer.ru/htdocs/user/'.$uid.'/warnings.gif');
-		if($object->extends_class_name() == 'forum_post' || $object->new_class_name() == 'balancer_board_post')
+		if($object->class_name() == 'forum_post' || $object->class_name() == 'balancer_board_post')
 		{
 			$topic = $object->topic();
 			balancer_board_action::add($topic, "Предупреждение пользователю: {$object->nav_named_link()}", true);
 		}
 
+		$object->cache_clean();
 		$object->call('recalculate');
 	}
 

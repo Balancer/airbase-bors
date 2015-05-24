@@ -5,6 +5,8 @@ class balancer_board_money_main extends balancer_board_page
 	var $title = 'Операции с Вашими накоплениями';
 	var $nav_name = 'операции';
 
+//	function template() { return 'forum/_header.html'; }
+
 	function can_action() { return (bool) bors()->user(); }
 
 	function on_action_move($data)
