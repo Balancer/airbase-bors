@@ -73,7 +73,7 @@ class balancer_tools_external_sites_preview extends bors_image_png
 		$snappy->setOption('encoding', 'utf-8');
 //		." --crop-w 800 --crop-h 600 --crop-x 200 --crop-y 64"
 
-		$js_disabled = preg_match('!(livejournal\.com|rudis\.ru)!', $url);
+		$js_disabled = preg_match('!(livejournal\.com|rudis\.ru|lrytas\.lt)!', $url);
 
 		if(config('proxy.force_regexp') && preg_match(config('proxy.force_regexp'), $url))
 			$snappy->setOption('proxy',  'http://'.config('proxy.forced'));

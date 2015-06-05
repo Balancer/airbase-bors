@@ -21,7 +21,7 @@ class lcml_tag_single_attach extends bors_lcml_tag_single
 			return "[{$params['orig']}]";
 
 		if(($post = @$params['self']) && balancer_board_post::is_post($post))
-			balancer_board_posts_object::register_object($post, $attach);
+			balancer_board_posts_object::register_object($post, $attach, true);
 
 //		if(config('is_developer')) { var_dump($post->id()); exit(__CLASS__); }
 

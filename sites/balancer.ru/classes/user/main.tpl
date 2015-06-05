@@ -21,6 +21,7 @@
 {if $user->username()}<li>Имя пользователя: {$user->username()}</li>{/if}
 {if $user->user_nick()}<li>Ник: {$user->user_nick()}</li>{/if}
 {if $user->realname()}<li>Настоящее имя: {$user->realname()}</li>{/if}
+<li>Всего сообщений: {$user->num_posts()}</li>
 <li>Последнее сообщение: <a href="http://www.balancer.ru/user/{$user->id()}/posts/last/">{$user->last_post_time()|full_time}</a></li>
 {if $user->messages_daily_limit() >= 0}<li>Ограничение числа сообщений в день на один форум: <span class="red">{$user->messages_daily_limit()}</span></li>{/if}
 <li>Сообщений на форуме за последние 24 часа: <b>{$today_total}</b></li>
@@ -156,9 +157,9 @@
 
 {if $best_of_month}
 <dl class="box">
-<dt>Лучшие {$best_of_month|@count} сообщени{$best_of_month|@count|sklon:'е,я,й'} за последний месяц</dt>
+<dt>Лучшие {$best_of_month|count} сообщени{$best_of_month|count|sklon:'е,я,й'} за последний месяц</dt>
 <dd>
-{foreach from=$best_of_month item="x"}
+{foreach $best_of_month as $x}
 &nbsp;&nbsp;&nbsp;<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_link()} {$x->target()->score_colorized()}<br/>
 {/foreach}
 </dd>
@@ -167,9 +168,9 @@
 
 {if $best}
 <dl class="box">
-<dt>Лучшие {$best|@count} сообщений {$best_of_month|@count|sklon:'е я й'} за всю историю</dt>
+<dt>Лучшие {$best|count} сообщений {$best|count|sklon:'е я й'} за всю историю</dt>
 <dd>
-{foreach from=$best item="x"}
+{foreach $best as $x}
 {if $x->target()}
 &nbsp;&nbsp;&nbsp;<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$x->target()->titled_link()} {$x->target()->score_colorized()}<br/>
 {/if}

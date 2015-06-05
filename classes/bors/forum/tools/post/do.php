@@ -19,6 +19,11 @@ class forum_tools_post_do extends bors_page
 		switch($this->page())
 		{
 			case 'drop-cache':
+
+				// Перецепляем все аттачи:
+				foreach(bors_find_all('balancer_board_attach', ['post_id' => $post->id()]) as $a)
+					balancer_board_posts_object::register_object($post, $a);
+
 				// Стираем превьюшки картинок
 				// Ищем все картинки темы:
 				if($objects = bors_find_all('balancer_board_posts_object', array(

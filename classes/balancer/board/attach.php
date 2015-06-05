@@ -68,11 +68,13 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 		$lcml_registered_attaches = bors_find_all('balancer_board_posts_object', array(
 			'post_id' => $post->id(),
 			'target_class_id' => bors_foo(__CLASS__)->class_id(),
+			'flag' => 'in_post',
 		));
 
 		$shown_attache_ids = bors_field_array_extract($lcml_registered_attaches, 'target_object_id');
 
 		$attaches = $post->attaches();
+
 		if(count($attaches) == 1)
 		{
 			$attach = $attaches[0];

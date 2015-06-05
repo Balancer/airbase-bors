@@ -154,6 +154,9 @@ function attach_create_attachment($name='', $mime='', $size=0, $tmp_name='', $po
 		.$db->escape("$rel_path/".$unique_name).'\',\''.$size.'\')')
 			or error('Unable to insert attachment record into database.',__FILE__,__LINE__,$db->error());
 
+	$attach_id = $db->insert_id();
+	balancer_board_posts_object::register_object($post, bors_load('balancer_board_attach', $attach_id));
+
 	return true;
 }
 

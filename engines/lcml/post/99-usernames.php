@@ -20,6 +20,17 @@ function lcml_usernames($text)
 			if(!$user)
 				$user = bors_find_first('balancer_board_user', array('login' => $name));
 
+			if(!$user)
+			{
+				$u2 = str_replace('_', ' ', $name);
+
+				$user = bors_find_first('balancer_board_user', ['user_nick' => $u2]);
+				if(!$user)
+					$user = bors_find_first('balancer_board_user', ['realname' => $u2]);
+				if(!$user)
+					$user = bors_find_first('balancer_board_user', ['login' => $u2]);
+			}
+
 			if($user)
 			{
 				require_once('inc/images.php');

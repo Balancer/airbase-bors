@@ -465,6 +465,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($this->have_attach() === NULL)
 		{
+
 			$this->_attaches = bors_find_all('balancer_board_attach', array('post_id' => $this->id()));
 
 			if($this->_attaches)

@@ -1,6 +1,8 @@
 <?php
 
-$last_id = bors_find_first('airbase_image', array('order' => '-id'))->id()+1;
+require '../config.php';
+
+$last_id = 1296093; // bors_find_first('airbase_image', array('order' => '-id'))->id()+1;
 
 do
 {
@@ -10,13 +12,13 @@ do
 
 	foreach(bors_find_all('airbase_image', array(
 		'full_file_name<>' => '',
-		'hash_y IS NULL',
+//		'hash_y IS NULL',
 		'id<' => $last_id,
 		'order' => '-id',
 		'limit' => 100,
 	)) as $img)
 	{
-		$img->hash_recalculate();
+		$img->hash_recalculate(true,true);
 		usleep(10000);
 		echo '.';
 	}

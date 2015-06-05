@@ -14,6 +14,7 @@ class balancer_board_posts_object extends balancer_board_object_db
 			'target_object_id',
 			'target_create_time',
 			'target_score',
+			'flag',
 		);
 	}
 
@@ -33,12 +34,12 @@ class balancer_board_posts_object extends balancer_board_object_db
 
 	function ignore_on_new_instance() { return true; }
 
-	static function register_object($post, $object)
+	static function register_object($post, $object, $inpost = false)
 	{
 		if(is_numeric($post))
 			$post = bors_load('balancer_board_post', $post);
 
-		return self::register($object, array('self' => $post));
+		return self::register($object, array('self' => $post, 'in_post' => $inpost));
 	}
 
 	static function register($object, $params = array())
@@ -51,8 +52,6 @@ class balancer_board_posts_object extends balancer_board_object_db
 
 		if(!($post = defval($params, 'self')))
 			return NULL;
-
-//		if(config('is_developer')) { var_dump($object, $post); exit('register'); }
 
 		if(is_array($object))
 			list($object_class_name, $object_id) = $object;
@@ -67,15 +66,15 @@ class balancer_board_posts_object extends balancer_board_object_db
 
 		$object_class_id = class_name_to_id($object_class_name);
 
-		if($x = bors_find_first('balancer_board_posts_object', array(
+		$x = bors_find_first('balancer_board_posts_object', [
 			'post_id' => $post->id(),
 //			'target_class_name' => $object_class_name,
 			'target_class_id' => $object_class_id,
 			'target_object_id' => $object_id,
-		)))
-			return $x;
+		]);
 
-		return bors_new('balancer_board_posts_object', array(
+		if(!$x)
+			$x = bors_new('balancer_board_posts_object', [
 			'post_id' => $post->id(),
 			'user_id' => $post->owner_id(),
 			'target_class_id' => $object_class_id,
@@ -83,7 +82,14 @@ class balancer_board_posts_object extends balancer_board_object_db
 			'target_object_id' => $object_id,
 			'target_create_time' => $post->create_time(),
 			'target_score' => $post->score(),
-		));
+		]);
+
+		if(empty($params['in_post']))
+			$x->set_flag(NULL);
+		else
+			$x->set_flag('in_post');
+
+		return $x;
 	}
 
 	static function find_containers($object)
