@@ -23,7 +23,7 @@
 				{$i->thumbnail('300x300')->html_code()}
 	<ul>
 				{foreach $posts as $x}
-		<li>{$x->titled_link_in_container()}</li>
+		<li><a href="{$x->url_for_igo()}">{$x->title()}</a></li>
 				{/foreach}
 	</ul>
 </div>
