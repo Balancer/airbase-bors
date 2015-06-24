@@ -47,7 +47,7 @@ class balancer_board_topics_votesGraphSVG extends bors_image_svg
 		foreach($votes as $r)
 		{
 			$voter = $r->owner();
-			$voter_id = $voter->id();
+			$voter_id = $voter ? $voter->id() : NULL;
 			$target = $r->target_user();
 			if(!$target)
 				continue;
@@ -55,8 +55,8 @@ class balancer_board_topics_votesGraphSVG extends bors_image_svg
 			$target_id = $target->id();
 			if(empty($users[$voter_id]))
 				$users[$voter_id] = array(
-					'name' => $voter->title(),
-					'link' => $voter->url(),
+					'name' => $voter ? $voter->title() : 'Unknown user '.$r->user_id()." (vote_id={$r->id()})",
+					'link' => $voter ? $voter->url() : NULL,
 					'count' => 1,
 				);
 			else
