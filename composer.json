@@ -23,9 +23,9 @@
     "require": {
 		"php": ">=5.3",
 
-		"balancer/bors-core": "@dev",
-		"balancer/bors-ext": "@dev",
-		"balancer/b2-core": "@dev",
+		"balancer/bors-core": "dev-master",
+		"balancer/bors-ext": "dev-master",
+		"balancer/b2-core": "dev-master",
 
 		"components/font-awesome": "*",
 
