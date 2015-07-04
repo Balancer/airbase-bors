@@ -546,7 +546,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if($this->warning_id())
 			return $this->warning = bors_load('airbase_user_warning', $this->warning_id());
 
-		$warn = objects_first('airbase_user_warning', array(
+		$warn = bors_find_first('airbase_user_warning', array(
 			'warn_class_id' => $this->extends_class_id(),
 			'warn_object_id='=>$this->id(),
 			'order' => '-time'));

@@ -91,7 +91,7 @@ class balancer_board_main extends balancer_board_page
 				'order' => '-score,-create_time',
 			)),
 
-			'last_post' => objects_first('balancer_board_post', array(
+			'last_post' => bors_find_first('balancer_board_post', array(
 				'inner_join' => array('balancer_board_topic ON topic_id = balancer_board_topic.id'),
 				'is_public' => 1,
 				'create_time>' => time()-86400,

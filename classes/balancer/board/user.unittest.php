@@ -20,7 +20,7 @@ class balancer_board_user_unittest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $class_id);
 
 		// Собственно, загрузка штрафа.
-		$warn = objects_first('airbase_user_warning', array('order' => '-create_time', 'warn_class_id' => $class_id));
+		$warn = bors_find_first('airbase_user_warning', array('order' => '-create_time', 'warn_class_id' => $class_id));
         $this->assertNotNull($warn);
 
 		$user = $warn->user();
