@@ -15,7 +15,7 @@ class airbase_board_show_latest extends bors_page
 
 	function body_data()
 	{
-		$topics = objects_array('balancer_board_topic', array(
+		$topics = bors_find_all('balancer_board_topic', array(
 				'limit' => 50,
 				'order' => '-modify_time',
 		));
@@ -24,7 +24,7 @@ class airbase_board_show_latest extends bors_page
 		foreach($topics as $t)
 			$forum_ids[$t->forum_id()] = $t->forum_id();
 
-		objects_array('airbase_board_forum', array('id IN' => array_keys($forum_ids)));
+		bors_find_all('airbase_board_forum', array('id IN' => array_keys($forum_ids)));
 
 		return array(
 			'topics' => $topics,

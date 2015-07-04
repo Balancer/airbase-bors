@@ -602,7 +602,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if(!$recalculate && !is_null($this->score_positive_raw()))
 			return $this->score_positive_raw();
 
-		return $this->set_score_positive_raw(objects_count('bors_votes_thumb', array(
+		return $this->set_score_positive_raw(bors_count('bors_votes_thumb', array(
 			'target_class_name' => $this->extends_class_name(),
 			'target_object_id' => $this->id(),
 			'score' => 1,
@@ -614,7 +614,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if(!$recalculate && !is_null($this->score_negative_raw()))
 			return $this->score_negative_raw();
 
-		return $this->set_score_negative_raw(objects_count('bors_votes_thumb', array(
+		return $this->set_score_negative_raw(bors_count('bors_votes_thumb', array(
 			'target_class_name' => $this->extends_class_name(),
 			'target_object_id' => $this->id(),
 			'score' => -1,

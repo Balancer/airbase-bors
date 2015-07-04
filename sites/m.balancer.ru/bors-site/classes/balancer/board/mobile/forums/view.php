@@ -43,7 +43,7 @@ class balancer_board_mobile_forums_view extends balancer_board_mobile_page
 	function body_data()
 	{
 		return array(
-			'topics' => objects_array('balancer_board_mobile_topic', array(
+			'topics' => bors_find_all('balancer_board_mobile_topic', array(
 				'forum_id' => $this->id(),
 				'page' => $this->page(),
 				'per_page' => $this->items_per_page(),

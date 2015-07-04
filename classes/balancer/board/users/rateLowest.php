@@ -10,21 +10,21 @@ class balancer_board_users_rateLowest extends balancer_board_page
 
 	function body_data()
 	{
-		$lowest = objects_array('bors_votes_thumb', array(
+		$lowest = bors_find_all('bors_votes_thumb', array(
 				'create_time>' => time()-86400*90,
 				'group' => 'target_class_id,target_object_id',
 				'order' => 'SUM(score)',
 				'limit' => 30,
 		));
 
-		$lowest_week = objects_array('bors_votes_thumb', array(
+		$lowest_week = bors_find_all('bors_votes_thumb', array(
 				'create_time>' => time()-86400*14,
 				'group' => 'target_class_id,target_object_id',
 				'order' => 'SUM(score)',
 				'limit' => 50,
 		));
 
-		$lowest_last = objects_array('bors_votes_thumb', array(
+		$lowest_last = bors_find_all('bors_votes_thumb', array(
 				'create_time>' => time()-86400*14,
 				'group' => 'target_class_id,target_object_id',
 				'order' => '-create_time',

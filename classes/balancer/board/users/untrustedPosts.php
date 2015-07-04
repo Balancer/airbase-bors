@@ -10,8 +10,8 @@ class balancer_board_users_untrustedPosts extends balancer_board_posts_list
 
 	function where()
 	{
-		$newby = array_keys(objects_array('balancer_board_user', array('create_time>' => time()-86400*7, 'num_posts>' => 0,'by_id' => true)));
-		$act_warns = array_keys(objects_array('balancer_board_user', array('warnings>' => 1, 'by_id' => true)));
+		$newby = array_keys(bors_find_all('balancer_board_user', array('create_time>' => time()-86400*7, 'num_posts>' => 0,'by_id' => true)));
+		$act_warns = array_keys(bors_find_all('balancer_board_user', array('warnings>' => 1, 'by_id' => true)));
 //		$tot_warns = array_keys(objects_array('balancer_board_user', array('warnings_total>' => 30, 'by_id' => true)));
 
 		$users = array_unique(array_merge($newby, $act_warns));

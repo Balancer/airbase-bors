@@ -4,7 +4,7 @@ class balancer_board_topic_usersGraphPng extends bors_image_png
 {
 	function show_image()
 	{
-		$posts = objects_array('forum_post', array('topic_id' => $this->id()));
+		$posts = bors_find_all('forum_post', array('topic_id' => $this->id()));
 
 		$users = array();
 		$edges = array();

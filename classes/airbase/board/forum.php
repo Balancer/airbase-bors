@@ -49,7 +49,7 @@ class airbase_board_forum extends bors_page_db
 
 	static function enabled_ids_list()
 	{
-		$forums = objects_array('airbase_board_forum', array(
+		$forums = bors_find_all('airbase_board_forum', array(
 			'redirect_url IS NULL',
 		));
 		
@@ -63,7 +63,7 @@ class airbase_board_forum extends bors_page_db
 
 	static function disabled_ids_list()
 	{
-		$forums = objects_array('airbase_board_forum', array(
+		$forums = bors_find_all('airbase_board_forum', array(
 			'redirect_url IS NULL',
 		));
 		

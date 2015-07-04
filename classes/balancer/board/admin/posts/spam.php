@@ -32,7 +32,7 @@ class balancer_board_admin_posts_spam extends balancer_board_paginated
 			'show_spam' => true,
 			'is_filtered_spam' => $this->is_filtered_spam(),
 			'is_filtered_ham'  => $this->is_filtered_ham(),
-			'items' => $this->is_filtered() ? objects_array('balancer_board_post', array(
+			'items' => $this->is_filtered() ? bors_find_all('balancer_board_post', array(
 				'id IN' => $this->selected_posts(),
 			)) : parent::items(),
 		));
@@ -46,7 +46,7 @@ class balancer_board_admin_posts_spam extends balancer_board_paginated
 
 		$is_spam = $type == 'spam';
 
-		foreach(objects_array('balancer_board_post', array('id IN' => $this->selected_posts())) as $post)
+		foreach(bors_find_all('balancer_board_post', array('id IN' => $this->selected_posts())) as $post)
 		{
 			if(!$is_spam && $post->is_spam())
 				balancer_akismet::factory()->submit_ham($post);

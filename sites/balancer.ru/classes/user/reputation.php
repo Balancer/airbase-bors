@@ -40,7 +40,7 @@ class user_reputation extends balancer_board_page
 
 		$dbf = new DataBase(config('punbb.database'));
 
-		$list = array_reverse(objects_array('airbase_user_reputation', array(
+		$list = array_reverse(bors_find_all('airbase_user_reputation', array(
 			'user_id' => $this->id(),
 			'is_deleted' => 0,
 			'order' => 'time',

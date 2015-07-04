@@ -28,7 +28,7 @@ class balancer_board_posts_worst extends balancer_board_page
 		if($this->__havefc())
 			return $this->__lastc();
 
-		return $this->__setc(objects_count('balancer_board_post', array(
+		return $this->__setc(bors_count('balancer_board_post', array(
 			'posted>' => time()-86400*14,
 			'score_negative_raw>' => 5,
 		)));
