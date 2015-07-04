@@ -101,6 +101,8 @@ $map = array(
 	'/js/users/touch.js\?(.+?)&.+ => user_js_touch(1)',
 	'/js/users/touch.js\?(.+) => user_js_touch(1)',
 
+	'/js/postload\.js => balancer_board_js_postload',
+
 //	'.* => page_fs_separate', - Временно отключено по причине ошибок определения загруженности страницы.
 
 //	'/test/ => airbase_main',

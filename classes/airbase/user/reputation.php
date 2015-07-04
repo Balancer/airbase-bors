@@ -66,7 +66,7 @@ class airbase_user_reputation extends balancer_board_object_db
 		if($show_origin && $this->refer())
 			$html .= "<div style=\"font-size: 6pt; border-top: 1px dotted #888; color: #888;\">// За: {$this->refer_link()}</div>";
 
-		return $html;
+		return blib_obscene::mask(str_replace("\n", "<br/>", $html));
 
 		$html = lcml_bb($this->comment(), [
 			'enabled_tags' => ['b', 's', 'i'],
