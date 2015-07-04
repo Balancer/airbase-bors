@@ -18,7 +18,7 @@
 			{if $f->can_read()}
 				{* if $f->is_public_access() *}
 				{assign var="show_title" value=$t->titled_link()}
-				{include file="xfile:forum/post.html" show_title=$t->titled_link() strip="8192"}
+				{include file="xfile:forum/post.html" show_title=$t->titled_link() strip="8192" topic=$t}
 			{else}
 				<div class="box">** Сообщение с ограниченным доступом **</div>
 			{/if}

@@ -57,6 +57,9 @@
 			{if not $avatar_size}{assign var="avatar_size" value=100}{/if}
 <div class="avatar_block">{include file="xfile:forum/post-avatar.html" object=$p avatar_size=$avatar_size owner=$p->owner()}</div>
 		{/if}
+
+{if $show_title && $topic}<div class="forum-link-small forum-topic-snippet-replies"><a href="{$topic->url_ex('new')}" target="_blank">К нечитанному в теме «{$topic->title()}»</a></div>{/if}
+
 		{assign var="keyword_links" value=$p|get:'keyword_links'}
 		{if $keyword_links}<div class="post_kws">{$keyword_links}</div>{/if}
 		{if $strip}
