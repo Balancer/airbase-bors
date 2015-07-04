@@ -75,7 +75,7 @@
 {foreach from=$posts item="p"}
 	{assign var="topic" value=$p->topic()}
 	{assign var="forum" value=object_property($topic,'forum')}
-	{assign var="show_title" value=$p->titled_link_in_container()}
+	{assign var="show_title" value=$p->titled_link_for_igo()}
 	{assign var="skip_author_name" value=1}
 	{assign var="skip_date" value=1}
 	{include file="xfile:forum/post.html"}
