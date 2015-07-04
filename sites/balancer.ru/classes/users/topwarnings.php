@@ -14,7 +14,7 @@ class users_topwarnings extends balancer_board_page
 	function body_data()
 	{
 		return array(
-			'warnings_last' => objects_array('airbase_user_warning', array('order' => '-create_time', 'limit' => 25)),
+			'warnings_last' => bors_find_all('airbase_user_warning', array('order' => '-create_time', 'limit' => 25)),
 			'top_warn_users' => bors_find_all('balancer_board_user', array(
 				'last_post>' => time() - 86400*31,
 				'last_post - registered >' => 86400*7,

@@ -13,7 +13,7 @@ class balancer_board_main extends balancer_board_page
 
 	function pre_show()
 	{
-		base_object::add_template_data_array('head_append', '<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>');
+		bors_object::add_template_data_array('head_append', '<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>');
 
 		return parent::pre_show();
 	}
@@ -27,7 +27,7 @@ class balancer_board_main extends balancer_board_page
 */
 	function body_data()
 	{
-		$new_topics = objects_array('balancer_board_topic', array(
+		$new_topics = bors_find_all('balancer_board_topic', array(
 			'order' => '-create_time',
 			'limit' => 10,
 			'closed' => 0,

@@ -68,7 +68,7 @@ class user_main extends balancer_board_page
 			'limit' => 20,
 		));
 
-		$best = objects_array('bors_votes_thumb', array(
+		$best = bors_find_all('bors_votes_thumb', array(
 				'target_user_id' => $this->id(),
 				'group' => 'target_class_name,target_object_id',
 				'having' => 'SUM(score) > 0',
@@ -76,7 +76,7 @@ class user_main extends balancer_board_page
 				'limit' => 20,
 		));
 
-		$best_of_month = objects_array('bors_votes_thumb', array(
+		$best_of_month = bors_find_all('bors_votes_thumb', array(
 				'target_user_id' => $this->id(),
 				'create_time>' => time()-86400*30,
 				'group' => 'target_class_name,target_object_id',

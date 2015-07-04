@@ -1051,7 +1051,7 @@ if ($tid && $pun_config['o_topic_review'] != '0')
 	$bg_switch = true;
 	$post_count = 0;
 
-	foreach(objects_array('forum_post', array('topic_id' => $tid, 'order' => '-id', 'limit' => $pun_config['o_topic_review'])) as $preview_post)
+	foreach(bors_find_all('forum_post', array('topic_id' => $tid, 'order' => '-id', 'limit' => $pun_config['o_topic_review'])) as $preview_post)
 	{
 		// Switch the background color for every message.
 		$bg_switch = ($bg_switch) ? $bg_switch = false : $bg_switch = true;

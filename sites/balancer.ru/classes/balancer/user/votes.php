@@ -18,7 +18,7 @@ class balancer_user_votes extends balancer_board_page
 	{
 		$last = array();
 
-		foreach(objects_array('bors_votes_thumb', array(
+		foreach(bors_find_all('bors_votes_thumb', array(
 				'target_user_id' => $this->id(),
 				'create_time>' => time() - 86400*30,
 				'order' => '-create_time',
@@ -30,7 +30,7 @@ class balancer_user_votes extends balancer_board_page
 
 		$last = array_splice(array_values($last), 0, 30);
 
-		$best = objects_array('bors_votes_thumb', array(
+		$best = bors_find_all('bors_votes_thumb', array(
 				'group' => 'target_class_name,target_object_id',
 				'order' => 'SUM(score) DESC',
 				'having' => 'SUM(score)>0',
@@ -38,7 +38,7 @@ class balancer_user_votes extends balancer_board_page
 				'target_user_id' => $this->id(),
 		));
 
-		$worst = objects_array('bors_votes_thumb', array(
+		$worst = bors_find_all('bors_votes_thumb', array(
 				'group' => 'target_class_name,target_object_id',
 				'having' => 'SUM(score)<0',
 				'order' => 'SUM(score)',

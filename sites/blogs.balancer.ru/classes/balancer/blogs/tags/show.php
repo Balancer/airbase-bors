@@ -157,7 +157,7 @@ class balancer_blogs_tags_show extends balancer_board_page
 		if($this->__havefc())
 			return $this->__lastc();
 
-		return $this->__setc(objects_count('common_keyword_bind', array(
+		return $this->__setc(bors_count('common_keyword_bind', array(
 			'keyword_id IN' => $this->_selected_keywords(),
 			'target_class_name IN' => array('balancer_board_blog', 'forum_blog', 'balancer_board_topic', 'forum_topic'),
 			'target_object_id<>target_container_object_id',
@@ -174,7 +174,7 @@ class balancer_blogs_tags_show extends balancer_board_page
 		if($this->__havefc())
 			return $this->__lastc();
 		$targets = array();
-		$bindings = objects_array('common_keyword_bind', array(
+		$bindings = bors_find_all('common_keyword_bind', array(
 			'keyword_id IN' => $this->_selected_keywords(),
 			'target_class_name IN' => array('balancer_board_blog', 'forum_blog', 'balancer_board_topic', 'forum_topic'),
 			'target_object_id<>target_container_object_id',
@@ -190,7 +190,7 @@ class balancer_blogs_tags_show extends balancer_board_page
 
 		$items = array();
 		foreach($targets as $class_name => $ids)
-			$items = array_merge($items, objects_array($class_name, array('id IN' => $ids)));
+			$items = array_merge($items, bors_find_all($class_name, array('id IN' => $ids)));
 
 		uasort($items, create_function('$a,$b', 'return $a->create_time() < $b->create_time();'));
 

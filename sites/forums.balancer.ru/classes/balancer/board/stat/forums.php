@@ -88,11 +88,11 @@ class balancer_board_stat_forums extends bors_page
 		}
 
 		$forums_stat = array();
-		$topics = objects_array('balancer_board_topic', array('id IN' => $topics_ids, 'by_id' => true));
-		$topics_prev = objects_array('balancer_board_topic', array('id IN' => $topics_ids_prev, 'by_id' => true));
-		$topics_prev_year = objects_array('balancer_board_topic', array('id IN' => $topics_ids_prev_year, 'by_id' => true));
-		$topics_prev_5year = objects_array('balancer_board_topic', array('id IN' => $topics_ids_prev_5year, 'by_id' => true));
-		$topics_prev_10year = objects_array('balancer_board_topic', array('id IN' => $topics_ids_prev_10year, 'by_id' => true));
+		$topics = bors_find_all('balancer_board_topic', array('id IN' => $topics_ids, 'by_id' => true));
+		$topics_prev = bors_find_all('balancer_board_topic', array('id IN' => $topics_ids_prev, 'by_id' => true));
+		$topics_prev_year = bors_find_all('balancer_board_topic', array('id IN' => $topics_ids_prev_year, 'by_id' => true));
+		$topics_prev_5year = bors_find_all('balancer_board_topic', array('id IN' => $topics_ids_prev_5year, 'by_id' => true));
+		$topics_prev_10year = bors_find_all('balancer_board_topic', array('id IN' => $topics_ids_prev_10year, 'by_id' => true));
 		foreach($topics as $x)
 			@$forums_stat[$x->forum_id()]['now'] += $topics_count[$x->id()] ;
 
@@ -111,7 +111,7 @@ class balancer_board_stat_forums extends bors_page
 		uasort($forums_stat, create_function('$x, $y', 'return @$y["now"] - @$x["now"];'));
 		$forums_stat = array_slice($forums_stat, 0, 50, true);
 
-		$forums = objects_array('balancer_board_forum', array('id IN' => array_keys($forums_stat), 'by_id' => true));
+		$forums = bors_find_all('balancer_board_forum', array('id IN' => array_keys($forums_stat), 'by_id' => true));
 
 		return array(
 			'forums' => $forums,

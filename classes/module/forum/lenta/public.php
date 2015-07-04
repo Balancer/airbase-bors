@@ -26,7 +26,7 @@ class module_forum_lenta_public extends bors_module
 			$where['forum_id IN'] = parse_condensed_list($forums);
 
 		$this->bdata[$page_id] = array(
-				'topics' => objects_array('balancer_board_blog', $where),
+				'topics' => bors_find_all('balancer_board_blog', $where),
 				'no_show_answers' => true,
 				'skip_message_footer' => true,
 			);

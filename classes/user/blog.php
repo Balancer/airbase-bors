@@ -35,7 +35,7 @@ class user_blog extends balancer_board_page
 			return $this->xdata[$page_id];
 
 		$this->xdata[$page_id] = array(
-				'blog_records' => array_reverse(objects_array('balancer_board_blog', array(
+				'blog_records' => array_reverse(bors_find_all('balancer_board_blog', array(
 					'owner_id' => $this->id(),
 					'is_microblog' => 0,
 					'order' => 'blogged_time',

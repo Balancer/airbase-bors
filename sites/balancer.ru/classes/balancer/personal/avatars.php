@@ -9,7 +9,7 @@ class balancer_personal_avatars extends bors_page
 	{
 		return array(
 			'user' => bors()->user(),
-			'avatars' => objects_array('balancer_user_avatar', array(
+			'avatars' => bors_find_all('balancer_user_avatar', array(
 				'user_id' => bors()->user_id(),
 				'order' => '-create_time',
 			)),

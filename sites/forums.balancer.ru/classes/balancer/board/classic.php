@@ -11,7 +11,7 @@ class balancer_board_classic extends bors_page
 	function body_data()
 	{
 		return array(
-			'categories' => objects_array('balancer_board_category', array(
+			'categories' => bors_find_all('balancer_board_category', array(
 				'parent_category_id' => 0,
 				'order' => 'sort_order',
 				'skip_common' => 0,

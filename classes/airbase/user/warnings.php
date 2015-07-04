@@ -31,7 +31,7 @@ class airbase_user_warnings extends balancer_board_page
 		);
 
 		if(!$skip_passive)
-			$data['passive_warnings'] = array_reverse(objects_array('airbase_user_warning', array(
+			$data['passive_warnings'] = array_reverse(bors_find_all('airbase_user_warning', array(
 				'user_id=' => $this->id(),
 				'`expired_timestamp` <= NOW()',
 				'order' => 'time',
@@ -40,7 +40,7 @@ class airbase_user_warnings extends balancer_board_page
 			)));
 
 		if(!$this->page() || $this->page() == $this->total_pages())
-			$data['active_warnings']  = array_reverse(objects_array('airbase_user_warning', array(
+			$data['active_warnings']  = array_reverse(bors_find_all('airbase_user_warning', array(
 				'user_id' => $this->id(),
 				'`expired_timestamp` > NOW()',
 				'order' => 'time',
