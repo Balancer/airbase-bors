@@ -11,7 +11,7 @@ class balancer_board_mobile_main extends balancer_board_mobile_page
 	function body_data()
 	{
 		return array(
-			'categories' => objects_array('balancer_board_mobile_category', array(
+			'categories' => bors_find_all('balancer_board_mobile_category', array(
 				'(categories.parent IS NULL OR categories.parent = 0)',
 				'inner_join' => 'balancer_board_forum ON balancer_board_forum.category_id = balancer_board_mobile_category.id',
 				'group' => 'categories.id',

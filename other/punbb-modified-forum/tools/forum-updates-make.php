@@ -22,10 +22,8 @@
 
 		if(!$limit || $limit > 100)
 			$limit = 20;
-			
-		include_once("inc.php");
-		include_once("funcs/Cache.php");
-		$ch = new Cache();
+
+		$ch = new bors_cache();
 		if($ch->get("punbb_all_subforums", $forum_id))
 			$forums = unserialize($ch->last());
 		else

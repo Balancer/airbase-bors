@@ -16,7 +16,7 @@ function main()
 		'balancer.ru/htdocs' => 'http://www.balancer.ru',
 	);
 
-	$thumbs = objects_array('bors_image_thumb', array(
+	$thumbs = bors_find_all('bors_image_thumb', array(
 		'create_time' => 0,
 		'limit' => 10000,
 	));

@@ -54,7 +54,7 @@ class forum_topic extends bors_page_db
 
 function set_forum_id($v, $dbup = true)
 {
-	if(($new_forum = object_load('balancer_board_forum', $v)))
+	if(($new_forum = bors_load('balancer_board_forum', $v)))
 		$this->set_is_public($new_forum->is_public(), true);
 
 	return $this->set('forum_id_raw', $v, $dbup);
@@ -164,7 +164,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 //		$this->template_data_fill();
 
-		$body_cache = new Cache();
+		$body_cache = new bors_cache();
 		if($body_cache->get('bors_page_body-v3', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time()))
 			return $this->attr['body'] = bors_lcml::output_parse($body_cache->last().'<!-- cached -->');
 
@@ -480,7 +480,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			if($first_pid)
 				$this->set_first_post_id($first_pid, true);
 
-			if($first_post = object_load('balancer_board_post', $first_pid))
+			if($first_post = bors_load('balancer_board_post', $first_pid))
 			{
 				$this->set_create_time($first_post->create_time(true), true);
 				$this->set_author_name($first_post->author_name(), true);
@@ -492,7 +492,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			if($last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id())))
 			{
 				$this->set_last_post_id($last_pid, true);
-				$last_post = object_load('balancer_board_post', $last_pid);
+				$last_post = bors_load('balancer_board_post', $last_pid);
 
 //			Но зачем? Пока не сносить, подумать.
 //			if($this->get('last_post_create_time') < $last_post->create_time(true))
@@ -518,8 +518,8 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 	function cache_children()
 	{
 		$res = array(
-			object_load('forum_printable', $this->id()),
-			object_load('forum_topic_rss', $this->id()),
+			bors_load('forum_printable', $this->id()),
+			bors_load('forum_topic_rss', $this->id()),
 			bors_load('balancer_board_topics_similar', $this->id()),
 		);
 
@@ -528,7 +528,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 //		TODO: убедиться, что модифицируется только автор сообщения при постинге: блоги, все сообщения и т.п.
 //		foreach($this->all_users() as $user_id)
-//			$res[] = object_load('balancer_board_user', $user_id);
+//			$res[] = bors_load('balancer_board_user', $user_id);
 
 		return $res;
 	}
@@ -692,7 +692,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 			return go($this->url_ex($this->total_pages()));
 
 		if($this->moved_to())
-			return go(object_load('balancer_board_topic', $this->moved_to())->url_ex($this->page()));
+			return go(bors_load('balancer_board_topic', $this->moved_to())->url_ex($this->page()));
 
 		$this->add_template_data_array('header', "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$this->rss_url()."\" title=\"Новые сообщения в теме '".htmlspecialchars($this->title())."'\" />");
 

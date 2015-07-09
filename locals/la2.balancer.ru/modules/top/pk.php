@@ -1,7 +1,7 @@
-<?
+<?php
     function modules_top_pk_main()
     {
-		$ch = new Cache();
+		$ch = new bors_cache();
 		if($ch->get("la2", "top-pk"))
 			return $ch->last;
 

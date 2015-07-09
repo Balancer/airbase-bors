@@ -175,7 +175,7 @@ class balancer_board_stat_forumsActivityYear extends bors_image_png
 		);
 
 
-		file_put_contents('/var/www/forums.balancer.ru/bors-site/classes/balancer/board/stat/chart.txt', print_r($chart, true));
+//		file_put_contents('/tmp/balancer-board-stat-chart.txt', print_r($chart, true));
 
 		$url = 'https://chart.googleapis.com/chart?chid=' . md5(uniqid(rand(), true));
 

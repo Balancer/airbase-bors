@@ -361,7 +361,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		if(!$topic->is_repaged())
 		{
 			$topic->repaging_posts();
-			$post = object_load($this->class_name(), $this->id());
+			$post = bors_load($this->class_name(), $this->id());
 		}
 		else
 			$post = $this;
@@ -638,7 +638,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		$this->set_topic_id($new_tid, true);
 
-		object_load('balancer_board_topic', $old_tid)->recalculate();
+		bors_load('balancer_board_topic', $old_tid)->recalculate();
 		$new_topic = bors_load('balancer_board_topic', $new_tid);
 		$new_topic->recalculate();
 
@@ -660,9 +660,9 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			return $this->warning = NULL;
 
 		if($this->warning_id())
-			return $this->warning = object_load('airbase_user_warning', $this->warning_id());
+			return $this->warning = bors_load('airbase_user_warning', $this->warning_id());
 
-		$warn = objects_first('airbase_user_warning', array(
+		$warn = bors_find_first('airbase_user_warning', array(
 			'warn_class_id' => $this->extends_class_id(),
 			'warn_object_id='=>$this->id(),
 			'order' => '-time'));
@@ -677,9 +677,9 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	function cache_children()
 	{
 		$res = array(
-			object_load('balancer_board_topic', $this->topic_id()),
-			object_load('airbase_user_topics', $this->owner_id()),
-			object_load('balancer_board_blog', $this->id()),
+			bors_load('balancer_board_topic', $this->topic_id()),
+			bors_load('airbase_user_topics', $this->owner_id()),
+			bors_load('balancer_board_blog', $this->id()),
 		);
 
 		return $res;
@@ -730,7 +730,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		if(!$recalculate && !is_null($this->score_positive_raw()))
 			return $this->score_positive_raw();
 
-		return $this->set_score_positive_raw(objects_count('bors_votes_thumb', array(
+		return $this->set_score_positive_raw(bors_count('bors_votes_thumb', array(
 			'target_class_name' => $this->new_class_name(),
 			'target_object_id' => $this->id(),
 			'score' => 1,
@@ -742,7 +742,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		if(!$recalculate && !is_null($this->score_negative_raw()))
 			return $this->score_negative_raw();
 
-		return $this->set_score_negative_raw(objects_count('bors_votes_thumb', array(
+		return $this->set_score_negative_raw(bors_count('bors_votes_thumb', array(
 			'target_class_name' => $this->new_class_name(),
 			'target_object_id' => $this->id(),
 			'score' => -1,

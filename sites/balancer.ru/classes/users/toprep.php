@@ -22,14 +22,14 @@ class users_toprep extends balancer_board_page
 
 
 		return array(
-			'high' => objects_array('balancer_board_user', array('order' => '-reputation', 'limit' => 50)),
-			'low' => objects_array('balancer_board_user', array('order' => 'reputation', 'limit' => 50)),
+			'high' => bors_find_all('balancer_board_user', array('order' => '-reputation', 'limit' => 50)),
+			'low' => bors_find_all('balancer_board_user', array('order' => 'reputation', 'limit' => 50)),
 
-			'pure_high' => objects_array('balancer_board_user', array('order' => '-pure_reputation', 'limit' => 50)),
-			'pure_low' => objects_array('balancer_board_user', array('order' => 'pure_reputation', 'limit' => 50)),
+			'pure_high' => bors_find_all('balancer_board_user', array('order' => '-pure_reputation', 'limit' => 50)),
+			'pure_low' => bors_find_all('balancer_board_user', array('order' => 'pure_reputation', 'limit' => 50)),
 
 			'latest' => $latest,
-			'users'	=> objects_array('balancer_board_user', array('id IN' => array_keys($user_ids), 'by_id' => true)),
+			'users'	=> bors_find_all('balancer_board_user', array('id IN' => array_keys($user_ids), 'by_id' => true)),
 
 			'total_votes' => bors_count('airbase_user_reputation', array('is_deleted' => false)),
 		);

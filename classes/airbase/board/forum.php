@@ -24,7 +24,7 @@ class airbase_board_forum extends bors_page_db
 		do {
 			$result[] = $current_forum->nav_name();
 			if($parent = $current_forum->parent_forum_id())
-				$current_forum = $forums ? $forums[$parent] : object_load('airbase_board_forum', $parent);
+				$current_forum = $forums ? $forums[$parent] : bors_load('airbase_board_forum', $parent);
 		} while($parent);
 
 		$cat = $cats ? $cats[$current_forum->category_id()] : $current_forum->category();
@@ -49,7 +49,7 @@ class airbase_board_forum extends bors_page_db
 
 	static function enabled_ids_list()
 	{
-		$forums = objects_array('airbase_board_forum', array(
+		$forums = bors_find_all('airbase_board_forum', array(
 			'redirect_url IS NULL',
 		));
 		
@@ -63,7 +63,7 @@ class airbase_board_forum extends bors_page_db
 
 	static function disabled_ids_list()
 	{
-		$forums = objects_array('airbase_board_forum', array(
+		$forums = bors_find_all('airbase_board_forum', array(
 			'redirect_url IS NULL',
 		));
 		
@@ -83,9 +83,9 @@ class airbase_board_forum extends bors_page_db
 	
 		$f = $this;
 		while($f->category_id() == 0)
-			$f = object_load('airbase_board_forum', $f->parent_forum_id());
+			$f = bors_load('airbase_board_forum', $f->parent_forum_id());
 
-		return $this->__category = object_load('airbase_board_category', $f->category_id());
+		return $this->__category = bors_load('airbase_board_category', $f->category_id());
 	}
 
 	function url() { return $this->category()->category_base_full().'viewforum.php?id='.$this->id(); }

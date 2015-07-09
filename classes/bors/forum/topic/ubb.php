@@ -27,7 +27,7 @@ class forum_topic_ubb extends bors_object
 		if(!$this->topic_id())
 			return false;
 
-		$topic = object_load('balancer_board_topic', $this->topic_id());
+		$topic = bors_load('balancer_board_topic', $this->topic_id());
 		return go($topic->url_ex($this->args('page')));
 	}
 

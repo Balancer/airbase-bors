@@ -10,14 +10,14 @@ class balancer_blogs_tags_main extends bors_page
 	{
 		template_noindex();
 
-		$top = objects_array('balancer_blogs_tag', array(
+		$top = bors_find_all('balancer_blogs_tag', array(
 				'targets_count>' => 100,
 				'order' => '-targets_count',
 				'limit' => 20,
 				'by_id' => true,
 		));
 
-		$tags = objects_array('balancer_blogs_tag', array(
+		$tags = bors_find_all('balancer_blogs_tag', array(
 				'targets_count>' => 1,
 				'order' => 'keyword',
 				'id NOT IN' => array_keys($top),

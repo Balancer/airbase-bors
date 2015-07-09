@@ -20,7 +20,7 @@ function main()
 	for($i=$max_id; $i>=0; $i-=$step)
 	{
 		echo ($i-$step).".. $i\n";
-		$posts = objects_array('balancer_board_post', array(
+		$posts = bors_find_all('balancer_board_post', array(
 			'id BETWEEN '.($i-$step).' AND '.($i+1),
 			'order' => '-create_time',
 		));

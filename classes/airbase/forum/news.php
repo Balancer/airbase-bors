@@ -10,7 +10,7 @@ class airbase_forum_news extends balancer_board_page
 		if($this->forum !== false)
 			return $this->forum;
 
-		return $this->forum = object_load('forum_forum', $this->id());
+		return $this->forum = bors_load('forum_forum', $this->id());
 	}
 
 	function nav_name(){ return ec('Лента'); }
@@ -19,7 +19,7 @@ class airbase_forum_news extends balancer_board_page
 	function body_data()
 	{
 		return array(
-			'topics' =>array_reverse(objects_array('balancer_board_topic', array(
+			'topics' =>array_reverse(bors_find_all('balancer_board_topic', array(
 				'forum_id IN' => $this->forum()->all_public_subforum_ids(),
 				'create_time>' => floor(time() - 86400*365.24),
 				'order' => 'create_time',

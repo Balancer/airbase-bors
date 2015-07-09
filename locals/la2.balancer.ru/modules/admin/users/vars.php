@@ -35,7 +35,7 @@
 		echo "<table cellSpacing=\"0\" class=\"btab\" width=\"100%\">\n";
 		echo "<tr><th>Пользователь</th><th>char_id</th><th>var</th><th>value</th></tr>\n";
 
-		$ch = new Cache;
+		$ch = new bors_cache;
 
 		foreach($db->get_array("SELECT c.char_name, c.obj_Id as char_id, q.var, q.value  $query LIMIT $start, $limit;", false) as $row)
 		{

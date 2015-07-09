@@ -16,7 +16,7 @@ class balancer_board_mobile_categories_view extends balancer_board_mobile_page
 	function body_data()
 	{
 		return array(
-			'forums' => objects_array('balancer_board_mobile_forum', array(
+			'forums' => bors_find_all('balancer_board_mobile_forum', array(
 				'category_id' => $this->id(),
 				'order' => '-num_posts',
 			)),

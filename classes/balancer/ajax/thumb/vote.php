@@ -2,7 +2,7 @@
 
 class balancer_ajax_thumb_vote extends bors_object
 {
-	function object() { return $this->__havec('object') ? $this->__lastc() : $this->__setc(object_load($this->id())); }
+	function object() { return $this->__havec('object') ? $this->__lastc() : $this->__setc(bors_load($this->id())); }
 
 	function content()
 	{

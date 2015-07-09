@@ -49,8 +49,8 @@ bors_vhost_routes('airbase.ru', [
 	'/([^/]+)/ => airbase_keywords_old(1)',
 	'/([^/]+) => airbase_keywords_old(1)',
 
-	'.*/\w+\.phtml => airbase_pages_hts(url)',
-	'.* => airbase_pages_hts(url)',
+//	'.*/\w+\.phtml => airbase_pages_hts(url)',
+//	'.* => airbase_pages_hts(url)',
 ]);
 
 /*

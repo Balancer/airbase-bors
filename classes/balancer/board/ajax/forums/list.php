@@ -90,7 +90,7 @@ class balancer_board_ajax_forums_list extends bors_pages_pure
 
 	function body()
 	{
-		$body_cache = new Cache();
+		$body_cache = new bors_cache();
 		if($body_cache->get('bootstrap-ajaxs', 'forums-tree'))
 			return $this->attr['body'] = $body_cache->last();
 

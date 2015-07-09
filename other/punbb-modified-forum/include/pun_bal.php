@@ -5,7 +5,7 @@ require_once('engines/lcml/main.php');
 
 	function pun_lcml($text, $can_be_cached = true, $post = NULL)
 	{
-		$ch = new Cache();
+		$ch = new bors_cache();
 		if($ch->get('lcml-compiled', $text) && $can_be_cached)
 			return $ch->last();
 

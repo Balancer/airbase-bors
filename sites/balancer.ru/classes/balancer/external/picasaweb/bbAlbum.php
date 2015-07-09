@@ -4,7 +4,7 @@ class balancer_external_picasaweb_bbAlbum extends bors_page
 {
 	function album_data()
 	{
-		$ch = new Cache();
+		$ch = new bors_cache();
 		if($ch->get('picasaweb-album-data-v3', $this->id()))
 			return $ch->last();
 

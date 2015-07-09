@@ -1,7 +1,7 @@
-<?
+<?php
     function clan_list($clan_id)
     {
-		$ch = new Cache();
+		$ch = new bors_cache();
 		if($ch->get("la2", "clanlist-$clan_id-v3"))
 			return $ch->last;
 

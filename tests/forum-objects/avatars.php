@@ -23,7 +23,7 @@ echo "thumb->width() = {$thumb->width()}\n";
 */
 
 // {module class='balancer_board_modules_avatar' user_id=$v->target_user()->id() size='50'}
-$avatar_module = object_load('balancer_board_modules_avatar', NULL, array(
+$avatar_module = bors_load('balancer_board_modules_avatar', NULL, array(
 	'geo' => '50x50',
 	'user_id' => 124,
 ///	'show_group' => false,

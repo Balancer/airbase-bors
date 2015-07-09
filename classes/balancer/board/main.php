@@ -13,7 +13,7 @@ class balancer_board_main extends balancer_board_page
 
 	function pre_show()
 	{
-		base_object::add_template_data_array('head_append', '<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>');
+		bors_object::add_template_data_array('head_append', '<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>');
 
 		return parent::pre_show();
 	}
@@ -27,7 +27,7 @@ class balancer_board_main extends balancer_board_page
 */
 	function body_data()
 	{
-		$new_topics = objects_array('balancer_board_topic', array(
+		$new_topics = bors_find_all('balancer_board_topic', array(
 			'order' => '-create_time',
 			'limit' => 10,
 			'closed' => 0,
@@ -82,7 +82,7 @@ class balancer_board_main extends balancer_board_page
 			)),
 
 			'last_youtube' => $youtube_objects[0]->target_object_id(),// 'SzJA2mF14fA',
-			'last_youtube_post' => object_load('balancer_board_post', $youtube_objects[0]->post_id()),
+			'last_youtube_post' => bors_load('balancer_board_post', $youtube_objects[0]->post_id()),
 
 			'best_post_of_days' => bors_find_first('balancer_board_post', array(
 //				'(warning_id IS NULL OR warning_id <= 0)',
@@ -91,7 +91,7 @@ class balancer_board_main extends balancer_board_page
 				'order' => '-score,-create_time',
 			)),
 
-			'last_post' => objects_first('balancer_board_post', array(
+			'last_post' => bors_find_first('balancer_board_post', array(
 				'inner_join' => array('balancer_board_topic ON topic_id = balancer_board_topic.id'),
 				'is_public' => 1,
 				'create_time>' => time()-86400,

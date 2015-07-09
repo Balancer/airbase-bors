@@ -11,14 +11,14 @@ class balancer_board_keywords_list extends bors_page
 	{
 		template_noindex();
 
-		$top = objects_array('common_keyword', array(
+		$top = bors_find_all('common_keyword', array(
 				'target_containers_count>' => 100,
 				'order' => '-target_containers_count',
 				'limit' => 20,
 				'by_id' => true,
 		));
 
-		$tags = objects_array('common_keyword', array(
+		$tags = bors_find_all('common_keyword', array(
 				'target_containers_count>' => 1,
 				'order' => 'keyword_original',
 				'id NOT IN' => array_keys($top),

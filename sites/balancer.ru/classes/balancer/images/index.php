@@ -82,7 +82,7 @@ class balancer_images_index extends bors_page
 		$images = array();
 		foreach($files as $file)
 		{
-			$img = objects_first('bors_image', array('relative_path' => $base, 'file_name' => secure_path($file)));
+			$img = bors_find_first('bors_image', array('relative_path' => $base, 'file_name' => secure_path($file)));
 			if(!$img)
 			{
 				$img = object_new('bors_image');

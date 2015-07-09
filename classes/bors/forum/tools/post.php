@@ -16,7 +16,7 @@ class forum_tools_post extends bors_page
 	function post()
 	{
 		if($this->post === false)
-			$this->post = object_load('forum_post', $this->id());
+			$this->post = bors_load('forum_post', $this->id());
 
 		return $this->post;
 	}
@@ -61,7 +61,7 @@ class forum_tools_post extends bors_page
 		if(empty($data['author_name']))
 			$data['author_name'] = $owner->title();
 
-		$post = object_load('forum_post', $this->id());
+		$post = bors_load('forum_post', $this->id());
 		$post->set_owner_id($owner->id(), true);
 		$post->set_author_name($owner->title(), true);
 

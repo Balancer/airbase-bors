@@ -1,7 +1,7 @@
-<?
+<?php
     function modules_top_money_main()
     {
-		$ch = new Cache();
+		$ch = new bors_cache();
 		if($ch->get("la2", "top-money"))
 			return $ch->last;
 

@@ -4,7 +4,7 @@ require_once('inc/clients/geoip-place.php');
 
 class balancer_board_posts_tools_footerAJAX extends balancer_board_page
 {
-	function object() { return $this->__havec('object') ? $this->__lastc() : $this->__setc(object_load($this->id())); }
+	function object() { return $this->__havec('object') ? $this->__lastc() : $this->__setc(bors_load($this->id())); }
 	function template() { return 'null.html'; }
 
 	function pre_show()

@@ -1,7 +1,7 @@
-<?
+<?php
 	function module_locale_info_killers_full()
 	{
-		$cache = new Cache();
+		$cache = new bors_cache();
 		
 		if($cache->get('LBR:Info', 'killers_full'))
 			return $cache->last;

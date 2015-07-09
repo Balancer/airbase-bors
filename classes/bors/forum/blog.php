@@ -46,7 +46,7 @@ class forum_blog extends bors_page_db
 	function cache_clean()
 	{
 //		debug_exit('clean'.$this->owner_id());
-		$blog = object_load('user_blog', $this->owner_id());
+		$blog = bors_load('user_blog', $this->owner_id());
 		if($blog)
 			$blog->cache_clean_self($this->id());
 	}
@@ -82,7 +82,7 @@ class forum_blog extends bors_page_db
 		);
 	}
 
-	function owner() { return object_load('balancer_board_user', $this->owner_id()); }
+	function owner() { return bors_load('balancer_board_user', $this->owner_id()); }
 	function title() { return $this->get('title_raw') ? $this->title_raw() : object_property($this->topic(), 'title'); }
 	function set_title($title, $up=true) { return $this->set_title_raw($title, $up); }
 

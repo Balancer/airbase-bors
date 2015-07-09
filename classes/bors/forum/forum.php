@@ -105,7 +105,7 @@ function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, 
 				break;
 		}
 
-		return $this->__category = $f->category_id() ? object_load('balancer_board_category', $f->category_id()) : NULL;
+		return $this->__category = $f->category_id() ? bors_load('balancer_board_category', $f->category_id()) : NULL;
 	}
 
 	function parents()
@@ -164,7 +164,7 @@ function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, 
 		if($access)
 			return $ch->set($access->can_read(), 600);
 
-		return $ch->set(object_load('forum_group', 3)->can_read(), 600);
+		return $ch->set(bors_load('forum_group', 3)->can_read(), 600);
 	}
 
 	function can_read()
@@ -198,7 +198,7 @@ function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, 
 		if($access)
 			return $ch->set($access->can_read(), 600);
 
-		return $ch->set(object_load('forum_group', $gid)->can_read(), 600);
+		return $ch->set(bors_load('forum_group', $gid)->can_read(), 600);
 	}
 
 	function cache_children()
@@ -263,7 +263,7 @@ function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, 
 			return;
 
 		$preloaded = true;
-		$all = objects_array(config('punbb.forum_class', 'balancer_board_forum'), array('order' => 'sort_order'));
+		$all = bors_find_all(config('punbb.forum_class', 'balancer_board_forum'), array('order' => 'sort_order'));
 		if($update_pos)
 			foreach($all as $f)
 				$f->set_tree_map(bors_lib_object::tree_map($f), true);
@@ -284,7 +284,7 @@ function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, 
 				continue;
 
 			$processed[] = $forum_id;
-			$subforum = object_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
+			$subforum = bors_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
 			$forums = array_merge($forums, $subforum->all_readable_subforum_ids($processed));
 		}
 
@@ -305,7 +305,7 @@ function set_skip_common($v, $dbup=true) { return $this->set('skip_common', $v, 
 				continue;
 
 			$processed[] = $forum_id;
-			$subforum = object_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
+			$subforum = bors_load(config('punbb.forum_class', 'forum_forum'), $forum_id);
 			if($subforum && $subforum->is_public_access())
 				$forums = array_merge($forums, $subforum->all_readable_subforum_ids($processed, false));
 		}

@@ -566,7 +566,7 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 			$topic_ids[] = $row['tid'];
 		}
 
-		objects_array('balancer_board_post', array('id IN' => array_unique($post_ids)));
+		bors_find_all('balancer_board_post', array('id IN' => array_unique($post_ids)));
 
 		$db->free_result($result);
 
@@ -577,8 +577,8 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 
 <ul><li><b>
 <?php
-	$self = object_load('http://www.balancer.ru/forum/');
-	$nav = object_load('module_nav_top', $self);
+	$self = bors_load('http://www.balancer.ru/forum/');
+	$nav = bors_load('module_nav_top', $self);
 	echo $nav->body();
 ?>
 </li></b></ul>
@@ -635,7 +635,7 @@ if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
 		$forum_list = array();
 		while ($forum_list[] = $db->fetch_row($result));
 
-		$topics = objects_array('balancer_board_topic', array('id IN' => $topic_ids, 'by_id' => true));
+		$topics = bors_find_all('balancer_board_topic', array('id IN' => $topic_ids, 'by_id' => true));
 
 		// Finally, lets loop through the results and output them
 		for ($i = 0; $i < count($search_set); ++$i)

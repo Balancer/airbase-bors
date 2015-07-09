@@ -69,7 +69,7 @@ function dispatcher($job)
 	// Это уже тело форка.
 
 	// Создаём класс-обработчик
-	$bors_worker = object_load($data['worker_class_name'], NULL);
+	$bors_worker = bors_load($data['worker_class_name'], NULL);
 	if($bors_worker)
 	{
 		if(empty($data['worker_method']))
