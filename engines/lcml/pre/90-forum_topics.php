@@ -59,7 +59,7 @@
 
 	function lcml_forum_topics_post($topic, $post)
 	{
-		$post = object_load('balancer_board_post', $post);
+		$post = bors_load('balancer_board_post', $post);
 
 		return "<a href=\"{$post->url_for_igo()}\">{$post->title()}</a>";
 	}

@@ -848,7 +848,7 @@ else if (isset($_POST['form_sent']))
 	}
 
 //	set_loglevel(10,0);
-	$user = object_load('forum_user', $id, array('no_load_cache' => true));
+	$user = bors_load('forum_user', $id, array('no_load_cache' => true));
 	$user->set_signature($form['signature'], true);
 	$user->set_signature_html(NULL, true);
 	$user->set_use_avatar($form['use_avatar'], true);

@@ -49,7 +49,7 @@ class aviatop_member extends balancer_board_object_db
 
 	function per_week()
 	{
-		$pw = objects_first('aviatop_week', array('top_id' => $this->id()));
+		$pw = bors_find_first('aviatop_week', array('top_id' => $this->id()));
 		return $pw->per_week();
 	}
 

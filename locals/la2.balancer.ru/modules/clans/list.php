@@ -1,7 +1,7 @@
-<?
+<?php
     function modules_la2_clans_clanlist_totallist()
     {
-		$ch = new Cache();
+		$ch = new bors_cache();
 		if($ch->get("la2", "clanlist-total-v4"))
 			return $ch->last;
 

@@ -14,7 +14,7 @@ setlocale(LC_ALL, "ru_RU.utf8");
 	require_once("funcs/DataBaseHTS.php");
 	require_once("funcs/Cache.php");
 
-$ch = new Cache();
+$ch = new bors_cache();
 //$ch->clear_check('last_all','all',120);
 if($ch->get('last_all','all'))
 {

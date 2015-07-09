@@ -17,7 +17,7 @@ class balancer_users_gmapm extends bors_page
 //		template_js_include("/js/tlabel.2.05.js");
 
 		$ll = array();
-		foreach(objects_array('balancer_board_post', [
+		foreach(bors_find_all('balancer_board_post', [
 			'*set' => 'COUNT(*) as `count`',
 			'create_time>' => time()-86400*30,
 			'poster_ip<>' => '',

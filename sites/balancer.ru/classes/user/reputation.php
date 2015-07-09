@@ -40,7 +40,7 @@ class user_reputation extends balancer_board_page
 
 		$dbf = new DataBase(config('punbb.database'));
 
-		$list = array_reverse(objects_array('airbase_user_reputation', array(
+		$list = array_reverse(bors_find_all('airbase_user_reputation', array(
 			'user_id' => $this->id(),
 			'is_deleted' => 0,
 			'order' => 'time',
@@ -50,7 +50,7 @@ class user_reputation extends balancer_board_page
 
 		for($i=0; $i<count($list); $i++)
 			if($r = $list[$i]->refer())
-				$list[$i]->set('target', object_load($r), false);
+				$list[$i]->set('target', bors_load($r), false);
 
 		return array(
 			'ref' => $this->ref() ? $this->ref() : @$_SERVER['HTTP_REFERER'],

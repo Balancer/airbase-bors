@@ -11,7 +11,7 @@ class airbase_forum_listfulld extends base_list
 
 		$forums_count = bors_count('balancer_board_forum', array());
 
-		$forums = objects_array('balancer_board_forum', array(
+		$forums = bors_find_all('balancer_board_forum', array(
 			'order' => 'cat_id, disp_position',
 			'by_id' => true,
 			'redirect_url IS NULL',
@@ -21,7 +21,7 @@ class airbase_forum_listfulld extends base_list
 			if(!in_array($cat_id = $f->category_id(), $cat_ids))
 				$cat_ids[] = $cat_id;
 
-		$cats = objects_array('airbase_forum_category', array('order' => 'disp_position', 'by_id' => true));
+		$cats = bors_find_all('airbase_forum_category', array('order' => 'disp_position', 'by_id' => true));
 
 		$result = array(0 => ' ');
 		foreach($forums as $id => $f)

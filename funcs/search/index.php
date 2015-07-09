@@ -219,7 +219,7 @@
             if(strlen($word) <= 2)
 				continue;
 
-	        $chkw = new Cache();
+	        $chkw = new bors_cache();
         	if($chkw->get("forum_titles_with_key-$ver", $word))
             	$topics = unserialize($chkw->last);
 			else

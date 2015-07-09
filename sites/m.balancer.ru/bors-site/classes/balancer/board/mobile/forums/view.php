@@ -26,9 +26,9 @@ class balancer_board_mobile_forums_view extends balancer_board_mobile_page
 
 		$f = $this->forum();
 		while($f->category_id() == 0)
-			$f = object_load(config('punbb.forum_class', 'balancer_board_mobile_forum'), $f->parent_forum_id());
+			$f = bors_load(config('punbb.forum_class', 'balancer_board_mobile_forum'), $f->parent_forum_id());
 
-		return $this->__setc(object_load('balancer_board_mobile_category', $f->category_id()));
+		return $this->__setc(bors_load('balancer_board_mobile_category', $f->category_id()));
 	}
 
 	function auto_objects()
@@ -43,7 +43,7 @@ class balancer_board_mobile_forums_view extends balancer_board_mobile_page
 	function body_data()
 	{
 		return array(
-			'topics' => objects_array('balancer_board_mobile_topic', array(
+			'topics' => bors_find_all('balancer_board_mobile_topic', array(
 				'forum_id' => $this->id(),
 				'page' => $this->page(),
 				'per_page' => $this->items_per_page(),

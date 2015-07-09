@@ -16,7 +16,7 @@ class balancer_users_favorites extends bors_page
 
 	function body_data()
 	{
-		$favorites = objects_array('bors_user_favorite', array(
+		$favorites = bors_find_all('bors_user_favorite', array(
 			'user_id' => bors()->user_id(),
 			'order' => '-create_time',
 		));

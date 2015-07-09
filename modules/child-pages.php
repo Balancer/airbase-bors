@@ -14,7 +14,7 @@ li.document{margin-bottom: 2px; list-style-image: URL("/img/design/icons/documen
         if(!$uri)
             $uri="http://{$_SERVER['HTTP_HOST']}{$GLOBALS['REQUEST_URI']}";
 
-        $ch = new Cache();
+        $ch = new bors_cache();
         if($ch->get('child_pages',$uri))
         {
             echo $ch->last();

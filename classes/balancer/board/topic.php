@@ -126,13 +126,13 @@ class balancer_board_topic extends forum_topic
 		static $fcache = array();
 		if(empty($fcache[$domain]))
 		{
-			$cat_ids = array_keys(objects_array('balancer_board_category', array("base_uri LIKE 'http://".addslashes($domain)."/%'", 'by_id' => true)));
+			$cat_ids = array_keys(bors_find_all('balancer_board_category', array("base_uri LIKE 'http://".addslashes($domain)."/%'", 'by_id' => true)));
 			if(!$cat_ids)
 				return $fcache[$domain] = array(-1);
-			$sub_cat_ids = array_keys(objects_array('balancer_board_category', array('parent IN' => $cat_ids, 'by_id' => true)));
+			$sub_cat_ids = array_keys(bors_find_all('balancer_board_category', array('parent IN' => $cat_ids, 'by_id' => true)));
 			$cat_ids = array_merge($cat_ids, $sub_cat_ids);
 
-			$fcache[$domain]  = array_keys(objects_array('balancer_board_forum', array(
+			$fcache[$domain]  = array_keys(bors_find_all('balancer_board_forum', array(
 				'cat_id IN' => $cat_ids, 
 				'is_public' => 1,
 				'by_id' => true,

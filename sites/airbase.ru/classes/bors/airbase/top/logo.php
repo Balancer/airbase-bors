@@ -94,7 +94,7 @@ class airbase_top_logo extends bors_image_png
 	function views_inc()
 	{
 		$time = time();
-		$prev = objects_first('aviatop_week', array('top_id' => $this->id(), 'check_time' => $time));
+		$prev = bors_find_first('aviatop_week', array('top_id' => $this->id(), 'check_time' => $time));
 		if(!$prev || !$prev->id())
 		{
 //			config_set('debug_mysql_queries_log', true);

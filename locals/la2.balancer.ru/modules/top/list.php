@@ -1,7 +1,7 @@
-<?
+<?php
     function modules_top_list_main()
     {
-		$cache = new Cache();
+		$cache = new bors_cache();
 		
 		if($cache->get('la2', 'top-100-main'))
 			return $cache->last;

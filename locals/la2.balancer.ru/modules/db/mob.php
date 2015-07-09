@@ -1,4 +1,4 @@
-<?
+<?php
 	echo module_local_db_mob();
 
 	function module_local_db_mob()
@@ -10,7 +10,7 @@
 
 		$GLOBALS['cms']['cache_disabled'] = false;
 
-		$cache = new Cache();
+		$cache = new bors_cache();
 		
 		if($cache->get('LBR:DB',"mob-$mob_id-3"))
 			return $cache->last();

@@ -6,7 +6,7 @@
     {
 		return "";
 	
-        $ch = new Cache();
+        $ch = new bors_cache();
 
         $title = preg_replace("![^\w\-А-Яа-я]+!u", " ", $title);
         $title = preg_replace("!\s+!", " ", $title);
