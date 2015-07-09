@@ -32,7 +32,7 @@ class airbase_forum_admin_posts_movetree extends balancer_board_admin_page
 	{
 		if($this->posts === false)
 			if($this->post_ids())
-				$this->posts = bors_find_all('balancer_board_post', array('id IN' => $this->post_ids(), 'order' => 'create_time')); 
+				$this->posts = bors_find_all('balancer_board_post', array('id IN' => $this->post_ids(), 'order' => 'create_time'));
 			else
 				$this->posts = array();
 
