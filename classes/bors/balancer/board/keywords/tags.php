@@ -87,7 +87,7 @@ class balancer_board_keywords_tags extends balancer_board_page
 
 	function keyword()
 	{
-//		return objects_first('common_keyword', '');
+//		return bors_find_first('common_keyword', '');
 	}
 
 	function body_data()

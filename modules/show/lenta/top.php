@@ -45,13 +45,13 @@ class module_nav_top extends balancer_board_page
 				continue;
 			}
 				
-			$parent_obj = object_load($parent);
+			$parent_obj = bors_load($parent);
 			if(!$parent_obj || $parent_obj == $obj)
 				continue;
 			
 			$shown[] = $parent_obj;
 
-			$parent_nav = object_load($this->class_name(), $parent_obj);
+			$parent_nav = bors_load($this->class_name(), $parent_obj);
 			$parent_link_line = $parent_nav->link_line(false, $shown);
 				
 			for($i = 0; $i < count($parent_link_line); $i++)

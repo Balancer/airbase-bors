@@ -338,7 +338,7 @@ function generate_profile_menu($page = '')
 //
 function update_forum($forum_id)
 {
-	bors_task::add(['balancer_board_forum', $forum_id, 'update_counts']);
+//	bors_task::add(['balancer_board_forum', $forum_id, 'update_counts']);
 }
 
 //
@@ -411,7 +411,7 @@ function delete_post($post_id, $topic_id)
 		// Otherwise we just decrement the reply counter
 		$db->query('UPDATE '.$db->prefix.'topics SET num_replies='.$num_replies.' WHERE id='.$topic_id) or error('Unable to update topic', __FILE__, __LINE__, $db->error());
 
-	$topic = object_load('balancer_board_topic', $topic_id);
+	$topic = bors_load('balancer_board_topic', $topic_id);
 	$topic->recalculate();
 
 }

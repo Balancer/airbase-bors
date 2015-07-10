@@ -323,7 +323,7 @@ function avatar_thumb($geo)
 	function cache_children()
 	{
 		$res = array(
-			object_load('airbase_user_warnings', $this->id()),
+			bors_load('airbase_user_warnings', $this->id()),
 		);
 
 		return $res;
@@ -616,7 +616,7 @@ function avatar_thumb($geo)
 		$next_domain = $domains[0];
 
 		$redirect = bors()->request()->referer(); // isset($_GET['redirect_url']) ? $_GET['redirect_url'] : @$_SERVER['HTTP_REFERER'];
-//		$refo = object_load($redirect);
+//		$refo = bors_load($redirect);
 //		if(!object_property($refo, 'is_public'))
 //			$redirect = NULL;
 

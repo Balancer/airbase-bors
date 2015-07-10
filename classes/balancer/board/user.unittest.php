@@ -4,7 +4,7 @@ class balancer_board_user_unittest extends PHPUnit_Framework_TestCase
 {
     public function test_balancer_board_user()
     {
-		$user = object_load('balancer_board_user', 10000); // Грузим Balancer'а
+		$user = bors_load('balancer_board_user', 10000); // Грузим Balancer'а
         $this->assertNotNull($user);
 
         $this->assertEquals($user->title(), 'Balancer');
@@ -13,7 +13,7 @@ class balancer_board_user_unittest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0, $user->warnings_in(25));
 
 		// Ищем последний штраф за постинг
-		$post = object_load('balancer_board_post', 2197802); // id от балды. Нам нужен только class_id, но почему бы не проверить и загрузку post'а?
+		$post = bors_load('balancer_board_post', 2197802); // id от балды. Нам нужен только class_id, но почему бы не проверить и загрузку post'а?
         $this->assertNotNull($post);
 
 		$class_id = $post->class_id();

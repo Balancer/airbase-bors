@@ -31,7 +31,7 @@
 
 		echo "pid=$pid\n";
 		
-		$post = object_load('forum_post', $pid);
+		$post = bors_load('forum_post', $pid);
 
 		if(!$post)
 		{
@@ -44,7 +44,7 @@
 		
 		echo "tid=".$post->topic_id()."\n";
 
-		$topic = object_load('balancer_board_topic', $post->topic_id());
+		$topic = bors_load('balancer_board_topic', $post->topic_id());
 		echo $topic->id()."\n";
 
 		$GLOBALS['bors']->_main_obj=$topic;

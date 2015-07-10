@@ -73,7 +73,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 		$cdb = new DataBase(config('punbb.database'));
 		if($attach_post_id == "".intval($attach_post_id))
 		{
-			$post = object_load('balancer_board_post', $attach_post_id);
+			$post = bors_load('balancer_board_post', $attach_post_id);
 			$title = $post ? $post->title() : ec("утерянное сообщение $attach_post_id");
 		}
 		else

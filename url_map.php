@@ -126,8 +126,8 @@ $map = array(
 	'.* => airbase_files_webroot',
 );
 
-if(!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] != 'www.tanzpol.org')
-	$map[] = '.* => bal_pages_hts(url)';
+//if(!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] != 'www.tanzpol.org')
+//	$map[] = '.* => bal_pages_hts(url)';
 
 $map[] = '.* => bors_page_fs_htsu(url)'; //TODO: снести нафиг после конвертации старых hts Авиабазы
 

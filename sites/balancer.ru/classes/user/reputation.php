@@ -50,7 +50,7 @@ class user_reputation extends balancer_board_page
 
 		for($i=0; $i<count($list); $i++)
 			if($r = $list[$i]->refer())
-				$list[$i]->set('target', object_load($r), false);
+				$list[$i]->set('target', bors_load($r), false);
 
 		return array(
 			'ref' => $this->ref() ? $this->ref() : @$_SERVER['HTTP_REFERER'],

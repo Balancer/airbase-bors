@@ -131,7 +131,7 @@ $sub_id	= $id % 1000;
 
 $_SERVER['REQUEST_URI'] = "/forum/topic/$sub_id/$id".(empty($_GET['p'])||$_GET['p']==1 ? "":",{$_GET['p']}")."/";
 
-$GLOBALS['global_cache'] = new Cache();
+$GLOBALS['global_cache'] = new bors_cache();
 
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads variables, functions and lang file

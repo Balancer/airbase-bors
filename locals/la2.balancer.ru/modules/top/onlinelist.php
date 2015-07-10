@@ -1,7 +1,7 @@
-<?
+<?php
     function modules_top_onlinelist_main($title, $database)
     {
-		$ch = new Cache();
+		$ch = new bors_cache();
 		if($ch->get('la2', "onlinelist-$database"))
 			return $ch->last;
 	

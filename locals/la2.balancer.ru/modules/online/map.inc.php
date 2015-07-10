@@ -1,9 +1,9 @@
-<?
+<?php
 	function lbr_module_online_map($db_name = 'l2jdb')
 	{
 		$GLOBALS['cms']['cache_disabled'] = false;
 
-		$cache = new Cache();
+		$cache = new bors_cache();
 		
 		if($cache->get('LBR:DB',"$db_name-online-v5"))
 			return $cache->last();

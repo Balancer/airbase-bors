@@ -32,7 +32,7 @@ require PUN_ROOT.'include/common_admin.php';
 
 if(!empty($_POST))
 {
-	$ich = new Cache();
+	$ich = new bors_cache();
 	$ich->get("subforums-text-1", "all");
 	$ich->set(NULL, NULL);
 }

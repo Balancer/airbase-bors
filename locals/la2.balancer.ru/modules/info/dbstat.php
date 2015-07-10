@@ -1,7 +1,7 @@
-<?
+<?php
 	function module_locale_info_dbstat()
 	{
-		$cache = new Cache();
+		$cache = new bors_cache();
 		
 		if($cache->get('LBR:Info', 'dbstat'))
 			return $cache->last;

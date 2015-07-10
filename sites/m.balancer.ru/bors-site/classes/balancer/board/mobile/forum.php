@@ -23,9 +23,9 @@ class balancer_board_mobile_forum extends balancer_board_forum
 
 		$f = $this->forum();
 		while($f->category_id() == 0)
-			$f = object_load(config('punbb.forum_class', 'balancer_board_mobile_forum'), $f->parent_forum_id());
+			$f = bors_load(config('punbb.forum_class', 'balancer_board_mobile_forum'), $f->parent_forum_id());
 
-		return $this->__setc(object_load('balancer_board_mobile_category', $f->category_id()));
+		return $this->__setc(bors_load('balancer_board_mobile_category', $f->category_id()));
 	}
 
 	function auto_objects()

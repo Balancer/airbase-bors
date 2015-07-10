@@ -4,7 +4,7 @@
 
     function show_keywords($page,$limit)
     {
-        $ch = new Cache();
+        $ch = new bors_cache();
 //        $ch->clear_check("forum_title_keywords:$limit", $page,900);
         if($ch->get("forum_title_keywords:$limit", $page))
         {

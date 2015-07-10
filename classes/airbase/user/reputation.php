@@ -80,7 +80,7 @@ class airbase_user_reputation extends balancer_board_object_db
 		$ref = $this->refer();
 		if(preg_match('/^\w+__\d+$/', $ref))
 		{
-			$object = object_load($ref);
+			$object = bors_load($ref);
 			if($snip = object_property_args($object, 'snip', array(200)))
 				$snip = " <span class=\"snip\">{$snip}</span>";
 			else
@@ -98,14 +98,14 @@ class airbase_user_reputation extends balancer_board_object_db
 
 		if(preg_match('!post://(\d+)/?!', $ref, $m))
 		{
-			$object = object_load('balancer_board_post', $m[1]);
+			$object = bors_load('balancer_board_post', $m[1]);
 			return object_property($object, 'titled_link_in_container');
 		}
 
 		if(preg_match('!topic://(\d+)/?!', $ref, $m))
 			return object_property(bors_load('balancer_board_topic', $m[1]), 'titled_link');
 
-		$object = object_load($ref);
+		$object = bors_load($ref);
 		if(is_a($object, 'bors_system_go_internal'))
 			$object = $object->target();
 

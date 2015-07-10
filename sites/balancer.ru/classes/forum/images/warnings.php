@@ -72,7 +72,7 @@ class forum_images_warnings extends bors_image_gif
 				}
 			}
 
-			$font = '/usr/share/fonts/corefonts/verdana.ttf';
+			$font = '/var/www/repos/bors-third-party/fonts/verdana.ttf';
 			$red   = imagecolorallocate($img, 255,   0,   0);
 			$black = imagecolorallocate($img,   0,   0,   0);
 			$white = imagecolorallocate($img, 255, 255, 255);
