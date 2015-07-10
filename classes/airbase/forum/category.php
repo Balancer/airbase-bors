@@ -25,7 +25,7 @@ class airbase_forum_category extends bors_object_db
 	{
 		$cat = $this;
 		while(!$cat->category_base() && $this->parent_category_id())
-			$cat = object_load('airbase_forum_category', $this->parent_category_id());
+			$cat = bors_load('airbase_forum_category', $this->parent_category_id());
 
 		return $cat->category_base();
 	}
@@ -48,7 +48,7 @@ class airbase_forum_category extends bors_object_db
 	{
 		$subcats = array();
 		foreach($this->direct_subcats_ids() as $cat_id)
-			$subcats[] = object_load('airbase_forum_category', $cat_id);
+			$subcats[] = bors_load('airbase_forum_category', $cat_id);
 		return $subcats;
 	}
 		
@@ -62,7 +62,7 @@ class airbase_forum_category extends bors_object_db
 				continue;
 
 			$processed[] = $forum_id;
-			$subforum = $cats[] = object_load('airbase_forum_category', $forum_id);
+			$subforum = $cats[] = bors_load('airbase_forum_category', $forum_id);
 			$cats = array_merge($cats, $subforum->all_subforums($processed));
 		}
 			
@@ -94,7 +94,7 @@ class airbase_forum_category extends bors_object_db
 		{
 			$result[] = $current_cat->nav_name();
 			if($parent = $current_cat->parent_category_id())
-				$current_cat = $cats ? $cats[$parent] : object_load('airbase_forum_category', $parent);
+				$current_cat = $cats ? $cats[$parent] : bors_load('airbase_forum_category', $parent);
 		} while($parent);
 
 		return join(' « ', $result);

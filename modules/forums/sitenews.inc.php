@@ -4,7 +4,7 @@ require_once('engines/smarty/assign.php');
 
     function get_site_news($limit = 10)
     {
-        $ch = new Cache();
+        $ch = new bors_cache();
 
         if($ch->get('sitenews-v3', $limit))
 			return $ch->last();

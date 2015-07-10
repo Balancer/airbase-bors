@@ -29,7 +29,7 @@ define('PUN_ADMIN_CONSOLE', 1);
 if(!empty($_POST))
 {
 	//TODO: добавить сброс кешей категорий.
-//	$ich = new Cache();
+//	$ich = new bors_cache();
 //	$ich->get("cat_names", "all");
 //	$ich->set(NULL);
 }

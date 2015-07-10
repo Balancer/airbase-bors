@@ -14,7 +14,7 @@ class forum_user_js_setvars extends bors_js
 
 	function url() { return "/user/".$this->id()."/setvars.js"; }
 
-	function user() { return object_load('bors_user', $this->id()); }
+	function user() { return bors_load('bors_user', $this->id()); }
 
 	function body_data()
 	{

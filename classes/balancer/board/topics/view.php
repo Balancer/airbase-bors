@@ -58,7 +58,7 @@ class balancer_board_topics_view extends bors_view_container
 
 	function body()
 	{
-		$body_cache = new Cache();
+		$body_cache = new bors_cache();
 		$state = $body_cache->get('bors_page_body-v3.alt', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time());
 //		if($state)
 //			return $this->attr['body'] = bors_lcml::output_parse($body_cache->last().'<!-- cached -->');

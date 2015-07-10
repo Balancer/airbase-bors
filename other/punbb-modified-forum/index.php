@@ -152,7 +152,7 @@ if(
 		|| preg_match('/pid=(\d+)?pid=\d+/', @$_SERVER['QUERY_STRING'], $m)
 )
 {
-	if($post = object_load('forum_post', $m[1] + $pdiff))
+	if($post = bors_load('forum_post', $m[1] + $pdiff))
 		return go($post->url_in_container());
 	bors_debug::syslog('__trap', "Unknown post in ".$_SERVER['QUERY_STRING']);
 	return go('/');
@@ -213,7 +213,7 @@ if(!empty($_GET['act']))
 	switch($_GET['act'])
 	{
 		case 'SF':
-			$obj = object_load('forum_forum', intval($_GET['f']));
+			$obj = bors_load('forum_forum', intval($_GET['f']));
 			return go($obj->url());
 	}
 
@@ -229,7 +229,7 @@ if(!empty($_GET['act']))
 
 if(!empty($_GET['showtopic']))
 {
-	$obj = object_load('forum_topic_ipbst', $_GET['showtopic'] + $tdiff, array('page' => intval($_GET['st'])));
+	$obj = bors_load('forum_topic_ipbst', $_GET['showtopic'] + $tdiff, array('page' => intval($_GET['st'])));
 	return go($obj->url());
 }
 
@@ -283,8 +283,8 @@ if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
 
 <ul><li><b>
 <?php
-	$self = object_load('http://www.balancer.ru/forum/');
-	$nav = object_load('module_nav_top', $self);
+	$self = bors_load('http://www.balancer.ru/forum/');
+	$nav = bors_load('module_nav_top', $self);
 	echo $nav->body();
 ?>
 </li></b></ul>
@@ -305,7 +305,7 @@ else
 	{
 		foreach($cms_db->get_array("SELECT id FROM forums") as $iid)
 //			if(!array_key_exists($iid, $subforums))
-				$subforums[$iid] = subforums_text(object_load('forum_forum', $iid));
+				$subforums[$iid] = subforums_text(bors_load('forum_forum', $iid));
 	}
 	else */
 //	{
@@ -346,7 +346,7 @@ $cat_count = 0;
 while ($cur_forum = $db->fetch($result))
 {
 	if($cur_forum['fid'])
-		$forum = object_load('forum_forum', intval($cur_forum['fid']));
+		$forum = bors_load('forum_forum', intval($cur_forum['fid']));
 
 	$moderators = '';
 

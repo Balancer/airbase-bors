@@ -4,7 +4,7 @@
 	{
 		include_once("engines/smarty/assign.php");
 
-		$obj = object_load($uri);
+		$obj = bors_load($uri);
 
 		if(!$obj)
 			return '';
@@ -20,7 +20,7 @@
 			{
 				foreach($children as $child_url)
 				{
-					$child = object_load($child_url);
+					$child = bors_load($child_url);
 					if(!$child)
 						debug_hidden_log('navigation-error', "Can't load '$child_url'");
 
@@ -90,7 +90,7 @@
 
 		foreach($parents as $parent_url)
 		{
-			$parent = object_load($parent_url);
+			$parent = bors_load($parent_url);
 //			echo "<span style=\"font-size: 6pt;\">$indent: $parent</span><br/>\n";
 			if(!$parent || ($parent->url() == $obj->url()))
 				continue;
@@ -103,7 +103,7 @@
 			{
 				foreach($parents as $bro_url)
 				{
-					$bro = object_load($bro_url);
+					$bro = bors_load($bro_url);
 //					echo "<span style=\"font-size: 6pt;\">-- $indent: $child</span><br/>\n";
 					if(!$bro || !$bro->nav_name())
 						continue;

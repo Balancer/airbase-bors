@@ -24,7 +24,7 @@ class airbase_forum_forum extends bors_page_db
 		do {
 			$result[] = $current_forum->nav_name();
 			if($parent = $current_forum->parent_forum_id())
-				$current_forum = $forums ? $forums[$parent] : object_load('airbase_forum_forum', $parent);
+				$current_forum = $forums ? $forums[$parent] : bors_load('airbase_forum_forum', $parent);
 		} while($parent);
 
 		$cat = $cats ? $cats[$current_forum->category_id()] : $current_forum->category();
@@ -46,7 +46,7 @@ class airbase_forum_forum extends bors_page_db
 		if($access = airbase_forum_access::load_fg($this->id(), $gid))
 			return $this->_can_read[$gid] = $access->can_read() ? 1 : 0;
 
-		return $this->_can_read[$gid] = object_load('forum_group', $gid)->can_read() ? 1 : 0;
+		return $this->_can_read[$gid] = bors_load('forum_group', $gid)->can_read() ? 1 : 0;
 	}
 
 	static function enabled_ids_list()

@@ -44,7 +44,7 @@ if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
 
 $cur_post = $db->fetch_assoc($result);
-$post = object_load('forum_post', $id);
+$post = bors_load('forum_post', $id);
 
 $cur_post['message'] = $post->source();
 
@@ -88,7 +88,7 @@ if (isset($_POST['delete']))
 	}
 	else
 	{
-		if($blog = object_load('balancer_board_blog', $id))
+		if($blog = bors_load('balancer_board_blog', $id))
 			$blog->delete();
 
 		attach_delete_post($id);	// Attachment Mod , delete the attachments in this post (orphan check is checked in this function)
@@ -96,7 +96,7 @@ if (isset($_POST['delete']))
 		delete_post($id, $cur_post['tid']);
 
 		update_forum($cur_post['fid']);
-		$topic = object_load('balancer_board_topic', $cur_post['tid'], array('no_load_cache' => true));
+		$topic = bors_load('balancer_board_topic', $cur_post['tid'], array('no_load_cache' => true));
 		$topic->cache_clean();
 
 		redirect('viewtopic.php?id='.$cur_post['tid'], $lang_delete['Post del redirect']);

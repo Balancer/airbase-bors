@@ -1,7 +1,7 @@
-<?
+<?php
     function modules_top_gmlist_main($title, $db)
     {
-		$ch = new Cache();
+		$ch = new bors_cache();
 		if($ch->get("la2", "gmlist2-$db"))
 			return $ch->last;
 

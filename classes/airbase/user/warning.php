@@ -67,11 +67,11 @@ class airbase_user_warning extends bors_object_db
 	{
 		if($this->warn_class_id() > 0)
 		{
-			$obj = object_load($this->warn_class_id(), $this->warn_object_id());
+			$obj = bors_load($this->warn_class_id(), $this->warn_object_id());
 			return $obj ? $obj->titled_link() : '?';
 		}
 
-		if($this->warn_object_id() && ($obj = object_load('balancer_board_post', $this->warn_object_id())))
+		if($this->warn_object_id() && ($obj = bors_load('balancer_board_post', $this->warn_object_id())))
 		{
 			$has = bors_find_first('airbase_user_warning', array('warn_class_id' => $obj->class_id(), 'warn_object_id' => $obj->id()));
 			$this->set_warn_class_id($obj->class_id(), !$has);
@@ -79,7 +79,7 @@ class airbase_user_warning extends bors_object_db
 			return $obj->titled_link();
 		}
 
-		if($obj = object_load($this->referer()))
+		if($obj = bors_load($this->referer()))
 		{
 			$has = bors_find_first('airbase_user_warning', array('warn_class_id' => $obj->class_id(), 'warn_object_id' => $obj->id()));
 			$this->set_warn_class_id($obj->class_id(), !$has);

@@ -44,7 +44,7 @@ class wrk_go extends balancer_board_page
 		}
 
 		$object_id  = base_convert($this->page(), 36, 10);
-		$object = object_load($class_name, $object_id);
+		$object = bors_load($class_name, $object_id);
 
 		if($object)
 			return go($object->url_in_container());

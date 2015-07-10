@@ -577,8 +577,8 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 
 <ul><li><b>
 <?php
-	$self = object_load('http://www.balancer.ru/forum/');
-	$nav = object_load('module_nav_top', $self);
+	$self = bors_load('http://www.balancer.ru/forum/');
+	$nav = bors_load('module_nav_top', $self);
 	echo $nav->body();
 ?>
 </li></b></ul>

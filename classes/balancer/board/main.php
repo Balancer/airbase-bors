@@ -82,7 +82,7 @@ class balancer_board_main extends balancer_board_page
 			)),
 
 			'last_youtube' => $youtube_objects[0]->target_object_id(),// 'SzJA2mF14fA',
-			'last_youtube_post' => object_load('balancer_board_post', $youtube_objects[0]->post_id()),
+			'last_youtube_post' => bors_load('balancer_board_post', $youtube_objects[0]->post_id()),
 
 			'best_post_of_days' => bors_find_first('balancer_board_post', array(
 //				'(warning_id IS NULL OR warning_id <= 0)',

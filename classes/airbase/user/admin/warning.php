@@ -86,7 +86,7 @@ class airbase_user_admin_warning extends airbase_user_warning
 
 	function delete()
 	{
-		$user = object_load('balancer_board_user', $this->user_id());
+		$user = bors_load('balancer_board_user', $this->user_id());
 		$ret = parent::delete();
 		bors()->changed_save();
 
@@ -101,9 +101,9 @@ class airbase_user_admin_warning extends airbase_user_warning
 		$user->set_warnings($warnings - $data['score'], true);
 		$user->set_warnings_total($warnings_total - $data['score'], true);
 		$user->cache_clean();
-		object_load('users_topwarnings')->cache_clean();
+		bors_load('users_topwarnings')->cache_clean();
 
-		$object = object_load($this->warn_class_id(), $this->warn_object_id());
+		$object = bors_load($this->warn_class_id(), $this->warn_object_id());
 		$object->set_warning_id($this->id(), true);
 
 		$object->set_modify_time(time());

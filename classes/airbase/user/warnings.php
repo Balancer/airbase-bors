@@ -16,7 +16,7 @@ class airbase_user_warnings extends balancer_board_page
 	function user()
 	{
 		if($this->user === NULL)
-			$this->user = object_load('bors_user', $this->id());
+			$this->user = bors_load('bors_user', $this->id());
 
 		return $this->user;
 	}

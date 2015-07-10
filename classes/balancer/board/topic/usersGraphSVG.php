@@ -9,7 +9,7 @@ class balancer_board_topic_usersGraphSVG extends bors_image_svg
 		if(bors()->client()->is_bot())
 		{
 			debug_hidden_log('002', 'bot trapped!');
-			return go(object_load('balancer_board_topic', $this->id())->url());
+			return go(bors_load('balancer_board_topic', $this->id())->url());
 		}
 
 		return false;
@@ -104,7 +104,7 @@ class balancer_board_topic_usersGraphSVG extends bors_image_svg
 			{
 				if(empty($users[$to_id]))
 				{
-					$user = object_load('balancer_board_user', $to_id);
+					$user = bors_load('balancer_board_user', $to_id);
 					$graph->addNode(
 						$to_id,
 						array(
@@ -116,7 +116,7 @@ class balancer_board_topic_usersGraphSVG extends bors_image_svg
 
 				if(empty($users[$from_id]))
 				{
-					$user = object_load('balancer_board_user', $from_id);
+					$user = bors_load('balancer_board_user', $from_id);
 					$graph->addNode(
 						$from_id,
 						array(

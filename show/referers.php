@@ -36,7 +36,7 @@
         if(!$uri)
             $uri=$GLOBALS['PHP_SELF'];
 
-        $ch = new Cache();
+        $ch = new bors_cache();
 //        $ch->clear_check('ext_referers',$uri,900);
 
         if($ch->get('ext_referers',$uri))

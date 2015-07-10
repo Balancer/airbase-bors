@@ -102,7 +102,7 @@ class balancer_blogs_tags_show extends balancer_board_page
 
 	function keyword()
 	{
-//		return objects_first('common_keyword', '');
+//		return bors_find_first('common_keyword', '');
 	}
 
 	function page_data()

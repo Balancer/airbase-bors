@@ -5,13 +5,13 @@ function lst_forum($txt)
 	if(!trim($txt))
 		return "";
 
-	if($ubb = object_load('forum_topic_ubb', "14/$txt"))
+	if($ubb = bors_load('forum_topic_ubb', "14/$txt"))
 		$tid = $ubb->topic_id();
 	else
 		$tid = $txt;
 
 	if($tid)
-		$topic = object_load('balancer_board_topic', $tid);
+		$topic = bors_load('balancer_board_topic', $tid);
 	else
 		return "";
 	

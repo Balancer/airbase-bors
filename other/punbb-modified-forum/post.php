@@ -313,7 +313,7 @@ if (isset($_POST['form_sent']))
 			message("Вы уже отправили это сообщение");
 
 		$me->set_last_message_md($md, true);
-		$answer_to_post = object_load('balancer_board_post', @$qid);
+		$answer_to_post = bors_load('balancer_board_post', @$qid);
 
 		// If it's a reply
 		if ($tid)
@@ -589,7 +589,7 @@ if (isset($_POST['form_sent']))
 			update_forum($fid);
 
 			include_once("engines/bors.php");
-			$topic = object_load('balancer_board_topic', $new_tid, array('no_load_cache' => true));
+			$topic = bors_load('balancer_board_topic', $new_tid, array('no_load_cache' => true));
 			$topic->recalculate(false);
 			$is_new_topic = true;
 			$post  = bors_load('balancer_board_post',  $new_pid, array('no_load_cache' => true));
@@ -721,7 +721,7 @@ if ($tid)
 	$action = $lang_post['Post a reply'];
 //	$form = '<form id="post" method="post" action="post.php?action=post&amp;tid='.$tid.'" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">';
 
-	$topic = object_load('balancer_board_topic', $tid);
+	$topic = bors_load('balancer_board_topic', $tid);
 
 	$form = "";
 //	if($topic->num_replies() >= 500)
@@ -732,7 +732,7 @@ if ($tid)
 	// If a quote-id was specified in the url.
 	if($qid)
 	{
-		$post = object_load('forum_post', $qid);
+		$post = bors_load('balancer_board_post', $qid);
 		$q_poster  = $post ? $post->author_name() : ec("Ошибка сообщения $qid");
 		$q_message = $post ? $post->source() : ec("Ошибка сообщения $qid");
 

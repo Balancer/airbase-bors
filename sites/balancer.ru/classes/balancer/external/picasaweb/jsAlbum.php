@@ -4,7 +4,7 @@ class balancer_external_picasaweb_jsAlbum extends base_js
 {
 	function album_data()
 	{
-		$ch = new Cache();
+		$ch = new bors_cache();
 		if($ch->get('picasaweb-album-data', $this->id()))
 			return $ch->last();
 

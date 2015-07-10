@@ -2,7 +2,7 @@
 
 class airbase_user_admin_warnings extends airbase_user_warnings
 {
-	function object() { return ($obj=$this->args('object')) ? object_load($obj) : NULL; }
+	function object() { return ($obj=$this->args('object')) ? bors_load($obj) : NULL; }
 
 	function body_data()
 	{
@@ -51,7 +51,7 @@ class airbase_user_admin_warnings extends airbase_user_warnings
 			return bors_message(ec('А аутентифицироваться кто будет??'));
 
 		if(!$this->args('object'))
-			return go(object_load('airbase_user_warnings', $this->id())->url());
+			return go(bors_load('airbase_user_warnings', $this->id())->url());
 		else
 			return false;
 	}

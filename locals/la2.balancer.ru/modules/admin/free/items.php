@@ -63,7 +63,7 @@
 
 //		$total = $db->get("SELECT COUNT(*) $query", false);
 
-		$ch = new Cache;
+		$ch = new bors_cache;
 
 		foreach($db->get_array("SELECT p.* $query LIMIT $start, $limit;", false) as $row)
 		{

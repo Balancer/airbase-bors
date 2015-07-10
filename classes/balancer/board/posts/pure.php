@@ -70,7 +70,7 @@ class balancer_board_posts_pure extends balancer_board_object_db
 		if(!$topic->is_repaged())
 		{
 			$topic->repaging_posts();
-			$post = object_load($this->class_name(), $this->id());
+			$post = bors_load($this->class_name(), $this->id());
 		}
 		else
 			$post = $this;

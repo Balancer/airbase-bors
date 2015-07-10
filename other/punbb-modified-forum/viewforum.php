@@ -66,7 +66,7 @@ if($pun_user['id'] > 1)
 if(empty($pun_user['g_id']))
 	$pun_user['g_id'] = 3;
 
-$forum = object_load('balancer_board_forum', $id);
+$forum = bors_load('balancer_board_forum', $id);
 $GLOBALS['forum_id'] = $id;
 
 // Fetch some info about the forum
@@ -123,7 +123,7 @@ echo get_subforums_html($id);
 <?php echo $post_link ?>
 <ul><li><b>
 <?php
-	$nav = object_load('module_nav_top', $forum);
+	$nav = bors_load('module_nav_top', $forum);
 	echo $nav->body();
 ?>
 </li></b></ul>

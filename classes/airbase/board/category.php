@@ -40,7 +40,7 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 	{
 		$cat = $this;
 		while(!$cat->category_base() && $this->parent_category_id())
-			$cat = object_load('airbase_board_category', $this->parent_category_id());
+			$cat = bors_load('airbase_board_category', $this->parent_category_id());
 
 		return $cat->category_base();
 	}
@@ -63,7 +63,7 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 	{
 		$subcats = array();
 		foreach($this->direct_subcats_ids() as $cat_id)
-			$subcats[] = object_load('airbase_board_category', $cat_id);
+			$subcats[] = bors_load('airbase_board_category', $cat_id);
 		return $subcats;
 	}
 		
@@ -77,7 +77,7 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 				continue;
 
 			$processed[] = $forum_id;
-			$subforum = $cats[] = object_load('airbase_board_category', $forum_id);
+			$subforum = $cats[] = bors_load('airbase_board_category', $forum_id);
 			$cats = array_merge($cats, $subforum->all_subforums($processed));
 		}
 
@@ -109,7 +109,7 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 		{
 			$result[] = $current_cat->nav_name();
 			if($parent = $current_cat->parent_category_id())
-				$current_cat = $cats ? $cats[$parent] : object_load('airbase_board_category', $parent);
+				$current_cat = $cats ? $cats[$parent] : bors_load('airbase_board_category', $parent);
 		} while($parent);
 
 		return join(' « ', $result);
