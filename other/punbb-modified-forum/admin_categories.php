@@ -34,7 +34,7 @@ if(!empty($_POST))
 //	$ich->set(NULL);
 }
 
-define('PUN_ROOT', dirname(__FILE__).'/');
+define('PUN_ROOT', __DIR__.'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/common_admin.php';
 

@@ -14,7 +14,7 @@ class airbase_top_logo extends bors_image_png
 		$x  = $db->get("SELECT SUM(visits) as sum, MIN(check_time) as min, MAX(check_time) as max FROM aviatop_week WHERE top_id = $id");
 		$rate = $x['sum']*86400/($x['max'] - $x['min']+1);
 
-		$img = ImageCreateFromPNG(dirname(__FILE__)."/aviatop.png");
+		$img = ImageCreateFromPNG(__DIR__."/aviatop.png");
 
         $text = ImageColorAllocate ($img, 0x00, 0x33, 0x66);
         $red = ImageColorAllocate ($img, 0xFF, 0x00, 0x00);
@@ -61,7 +61,7 @@ class airbase_top_logo extends bors_image_png
 		$x  = $db->get("SELECT SUM(visits) as sum, MIN(check_time) as min, MAX(check_time) as max FROM aviatop_week WHERE top_id = $id");
 		$rate = $x['sum']*86400/($x['max'] - $x['min']+1);
 
-		$img = ImageCreateFromPNG(dirname(__FILE__)."/aviatop.png");
+		$img = ImageCreateFromPNG(__DIR__."/aviatop.png");
 
         $text = ImageColorAllocate ($img, 0x00, 0x33, 0x66);
         $red = ImageColorAllocate ($img, 0xFF, 0x00, 0x00);

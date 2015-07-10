@@ -27,7 +27,7 @@
 if (isset($_GET['action']))
 	define('PUN_QUIET_VISIT', 1);
 
-define('PUN_ROOT', dirname(__FILE__).'/');
+define('PUN_ROOT', __DIR__.'/');
 require PUN_ROOT.'include/common.php';
 
 // Load the login.php language file

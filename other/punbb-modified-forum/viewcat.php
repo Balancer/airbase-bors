@@ -1,7 +1,7 @@
 <?php
 
 
-define('PUN_ROOT', dirname(__FILE__).'/');
+define('PUN_ROOT', __DIR__.'/');
 
 require_once PUN_ROOT.'include/common.php';
 

@@ -42,15 +42,15 @@ class balancer_board_module_post extends bors_module
 		$post = $this->post();
 
 		if($post->is_deleted())
-			return dirname(__FILE__).'/post.deleted.tpl';
+			return __DIR__.'/post.deleted.tpl';
 
 		if($post->is_hidden())
-			return dirname(__FILE__).'/post.hidden.tpl';
+			return __DIR__.'/post.hidden.tpl';
 
     	if(!$this->forum()->can_read())
-			return dirname(__FILE__).'/post.denied.tpl';
+			return __DIR__.'/post.denied.tpl';
 
-		return dirname(__FILE__).'/post.tpl';
+		return __DIR__.'/post.tpl';
 	}
 
 	function body_data()

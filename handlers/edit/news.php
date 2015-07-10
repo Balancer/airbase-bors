@@ -15,7 +15,7 @@
 		include_once("engines/smarty/assign.php");
 
 		$data = array(
-			'body'  =>  template_assign_data("xfile:".dirname(__FILE__)."/news-form.htm", array('main_uri' => $uri)),
+			'body'  =>  template_assign_data("xfile:".__DIR__."/news-form.htm", array('main_uri' => $uri)),
 			'title' => ec("Редактирование навигации страницы ").$hts->get_data($uri, 'title'),
 			);
 
