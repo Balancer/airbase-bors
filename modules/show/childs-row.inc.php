@@ -20,5 +20,5 @@
 		$data['links'] = $links;
 	
 		include_once("engines/smarty/assign.php");
-		return template_assign_data("xfile:".dirname(__FILE__)."/childs-row.htm", $data);
+		return template_assign_data("xfile:".__DIR__."/childs-row.htm", $data);
     }

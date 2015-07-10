@@ -23,7 +23,7 @@
 
 ************************************************************************/
 
-define('PUN_ROOT', dirname(__FILE__).'/');
+define('PUN_ROOT', __DIR__.'/');
 require PUN_ROOT.'include/common.php';
 
 if($_SERVER['HTTP_HOST'] != 'www.wrk.ru' || !preg_match('!^/forums/!', $_SERVER['REQUEST_URI']))

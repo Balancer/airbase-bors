@@ -103,7 +103,7 @@ $cms_db = new driver_mysql(config('punbb.database'));
 
 $archive_loaded = false;
 
-define('PUN_ROOT', dirname(__FILE__).'/');
+define('PUN_ROOT', __DIR__.'/');
 
 // If a post ID is specified we determine topic ID and page number so we can redirect to the correct message
 if($pid)

@@ -66,7 +66,7 @@
 
 		imagecopy($img_dst, $img_src, 1, 1, 0, 0, imagesx($img_src), imagesy($img_src));
 
-		imagettftext($img_dst, 8, 0, 2, $mx+13, $grey, dirname(__FILE__)."/verdana.ttf", $user_nick);
+		imagettftext($img_dst, 8, 0, 2, $mx+13, $grey, __DIR__."/verdana.ttf", $user_nick);
 
 		if($ext == 'jpg')
 			$type = IMAGETYPE_JPEG;

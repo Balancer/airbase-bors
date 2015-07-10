@@ -27,7 +27,7 @@
 // from the phpBB Group forum software phpBB2 (http://www.phpbb.com).
 
 
-define('PUN_ROOT', dirname(__FILE__).'/');
+define('PUN_ROOT', __DIR__.'/');
 require_once PUN_ROOT.'include/common.php';
 require_once('include/bors_config.php');
 

@@ -28,7 +28,7 @@ define('PUN_ADMIN_CONSOLE', 1);
 // Tell common.php that we don't want output buffering
 define('PUN_DISABLE_BUFFERING', 1);
 
-define('PUN_ROOT', dirname(__FILE__).'/');
+define('PUN_ROOT', __DIR__.'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/common_admin.php';
 
