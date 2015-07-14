@@ -548,7 +548,8 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		foreach(glob($this->cache_dir().'/t'.$this->id().'*.html') as $f)
 		{
 			if(!preg_match("!/t\d+,(\d+)--[^/+]\.html$!", $f, $m) || ($m[1] > $this->total_pages()-3))
-				unlink($f);
+				if(file_exists($f))
+					unlink($f);
 		}
 	}
 

@@ -45,7 +45,7 @@ class lcml_parser_airbase extends bors_lcml_parser
 		if($this->lcml->params('airbase-warez-enabled'))
 			return $text;
 
-		$text = preg_replace_callback("!(https?://(www\.)?depositfiles.com/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
+		$text = preg_replace_callback("@(?<!=|\")(https?://(www\.)?(depositfiles\.com|lostfilm\.tv)/[^\s\"]+)@", [$this, 'warez_do_spoiler'], $text);
 		$text = preg_replace_callback("!(https?://(www\.)?flibusta\.net/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
 		$text = preg_replace_callback("!(https?://(www\.)?ifile.it/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
 		$text = preg_replace_callback("!(https?://(www\.)?kinozal\.tv/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
@@ -58,13 +58,18 @@ class lcml_parser_airbase extends bors_lcml_parser
 		return $text;
 	}
 
-	function warez_do_spoiler($m)
+	function warez_do_spoiler($m, $pos=1)
 	{
-		$link = $m[1];
+		$link = $m[$pos];
 		if(preg_match('/\.jpg/', $link))
 			return save_format($this->lcml($link, ['airbase-warez-enabled' => true]));
 
 		return "[spoiler|Ссылка запрещена по требованию]".save_format($this->lcml($link, ['airbase-warez-enabled' => true]))."[/spoiler]";
+	}
+
+	function warez_do_spoiler2($m)
+	{
+		return $this->warez_do_spoiler($m, 2);
 	}
 
 	function __unit_test($suite)
