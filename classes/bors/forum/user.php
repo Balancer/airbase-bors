@@ -342,14 +342,14 @@ function avatar_thumb($geo)
 			return $this->attr['is_banned'];
 
 		$ch = new bors_cache_fast;
-		if($ch->check('user[3].is_banned', $this->id()))
+		if($ch->check('user[4].is_banned', $this->id()))
 			return $this->attr['is_banned'] = $ch->last();
 
 		if($this->warnings() >= 10)
 			return $ch->set($this->attr['is_banned'] = true, 600);
 
-		if($ban = balancer_board_ban::find_by_name($this->title()))
-			return $ch->set($this->attr['is_banned'] = $ban, 600);
+//		if($ban = balancer_board_ban::find_by_name($this->title()))
+//			return $ch->set($this->attr['is_banned'] = $ban, 600);
 
 		if($ban = balancer_board_ban::find_by_name($this->login()))
 			return $ch->set($this->attr['is_banned'] = $ban, 600);
@@ -363,11 +363,11 @@ function avatar_thumb($geo)
 			return $this->attr['is_banned'];
 
 		$ch = new bors_cache_fast;
-		if($ch->check('user.is_admin_banned', $this->id()))
+		if($ch->check('user.is_admin_banned.2', $this->id()))
 			return $this->attr['is_admin_banned'] = $ch->last();
 
-		if($ban = balancer_board_ban::find_by_name($this->title()))
-			return $ch->set($this->attr['is_admin_banned'] = $ban, 600);
+//		if($ban = balancer_board_ban::find_by_name($this->title()))
+//			return $ch->set($this->attr['is_admin_banned'] = $ban, 600);
 
 		if($ban = balancer_board_ban::find_by_name($this->login()))
 			return $ch->set($this->attr['is_admin_banned'] = $ban, 600);
@@ -382,8 +382,8 @@ function avatar_thumb($geo)
 		if($this->warnings() >= 10)
 			return true;
 
-		if($ban = balancer_board_ban::find_by_name($this->title()))
-			return $ban;
+//		if($ban = balancer_board_ban::find_by_name($this->title()))
+//			return $ban;
 
 		if($ban = balancer_board_ban::find_by_name($this->login()))
 			return $ban;
