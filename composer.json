@@ -27,6 +27,7 @@
 		"balancer/bors-ext": "dev-master",
 		"balancer/b2-core": "dev-master",
 
+		"balancer/bors-3rd-jquery-wysibb": "*",
 		"components/font-awesome": "*",
 
         "kzykhys/git": "*",
