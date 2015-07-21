@@ -42,6 +42,8 @@ if ($id < 2)
 if ($pun_user['g_read_board'] == '0' && ($action != 'change_pass' || !isset($_GET['key'])))
 	message($lang_common['No view']);
 
+$user = bors_load('balancer_board_user', $id, array('no_load_cache' => true));
+
 // Load the profile.php/register.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/prof_reg.php';
 
@@ -743,6 +745,13 @@ else if (isset($_POST['form_sent']))
 		{
 			$form = extract_elements(array('realname', 'user_nick', 'url', 'location'));
 
+			if(empty($form['user_nick']))
+				$form['user_nick'] = $user->login();
+			elseif(bors_count('balancer_board_user', ['id<>' => $id, 'username' => $form['user_nick']]) > 0)
+				message('Не могу изменить ник. Такое имя на форуме уже используется как логин пользователя.');
+			elseif(bors_count('balancer_board_user', ['id<>' => $id, 'user_nick' => $form['user_nick']]) > 0)
+				message('Не могу изменить ник. Такое имя на форуме уже используется как ник другого пользователя.');
+
 			if ($pun_user['g_id'] == PUN_ADMIN)
 				$form['title'] = trim($_POST['title']);
 			else if ($pun_user['g_set_title'] == '1')
@@ -848,7 +857,6 @@ else if (isset($_POST['form_sent']))
 	}
 
 //	set_loglevel(10,0);
-	$user = bors_load('forum_user', $id, array('no_load_cache' => true));
 	$user->set_signature($form['signature'], true);
 	$user->set_signature_html(NULL, true);
 	$user->set_use_avatar($form['use_avatar'], true);
