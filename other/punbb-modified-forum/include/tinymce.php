@@ -13,7 +13,7 @@ global $footer;
 
 if($profile == 'wysibb')
 {
-	wysibb::init("#bbcode");
+	wysibb::appear("#bbcode");
 
 	$jsinc = bors_page::template_data('js_include');
 	if($jsinc)
