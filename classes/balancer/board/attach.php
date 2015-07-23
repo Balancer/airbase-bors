@@ -118,7 +118,16 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			$image = $this->image();
 
 			if($image)
-				$thumbnail = $image->thumbnail($geo);
+			{
+				try
+				{
+					$thumbnail = $image->thumbnail($geo);
+				}
+				catch(Exception $e)
+				{
+					$thumbnail = false;
+				}
+			}
 			else
 				$thumbnail = false;
 

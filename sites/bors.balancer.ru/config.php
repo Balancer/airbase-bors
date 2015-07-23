@@ -10,3 +10,7 @@ config_set('lcml_cache_disable', false);
 config_set('obsolete_use_handlers_system', false);
 config_set('page_fs_separate_cache_static', 86400);
 config_set('page_fs_cache_static', 86400);
+
+config_set('access_default', 'bors_access_public');
+
+require 'config-host.php';
