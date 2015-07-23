@@ -19,8 +19,8 @@ class balancer_board_user_client_profile extends balancer_board_object_db
 			'title',
 			'is_default',
 			'cookie_hash',
-			'modify_time' => 'UNIX_TIMESTAMP(modify_time)',
-			'create_time' => 'UNIX_TIMESTAMP(create_time)',
+			'modify_time' => 'UNIX_TIMESTAMP(`modify_time`)',
+			'create_time' => 'UNIX_TIMESTAMP(`create_time`)',
 			'need_trafic_save',
 			'textarea_type',
 		);
