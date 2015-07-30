@@ -44,14 +44,14 @@ if ($pun_user['g_read_board'] == '0' && ($action != 'change_pass' || !isset($_GE
 
 $user = bors_load('balancer_board_user', $id, array('no_load_cache' => true));
 
-if(bors()->user()->warnings() > 0)
-	message('Вы не можете менять параметры профиля при наличии активных штрафов');
-
 // Load the profile.php/register.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/prof_reg.php';
 
 // Load the profile.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/profile.php';
+
+if($action && bors()->user()->warnings() > 0)
+	message('Вы не можете менять параметры профиля при наличии активных штрафов');
 
 if ($action == 'change_pass')
 {

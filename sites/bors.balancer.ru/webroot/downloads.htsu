@@ -1,0 +1,12 @@
+#description Hе бойся напpавить дpyгого по ложномy FTP, ибо неисповедимы пути...
+#nav_name скачать
+#title Скачать
+#create_time 19.01.2010
+
+Ядро движка можно скачать из Mercurial-репозитория с адреса [http://bitbucket.org/Balancer/bors-core http://bitbucket.org/Balancer/bors-core]
+
+Но обычно ставится всё необходимое через Composer
+
+{{{bash
+composer require balancer/b2-framefork=*
+}}}
