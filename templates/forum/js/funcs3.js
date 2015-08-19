@@ -1,3 +1,4 @@
+/* hbr */
 function css_load(elem, value, id, def)
 {
 	if(id != 'html')
