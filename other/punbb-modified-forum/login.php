@@ -46,7 +46,7 @@ if (isset($_POST['form_sent']) && $action == 'in')
 		$_POST['redirect_url'] = 'http://forums.balancer.ru/';
 
 	config_set('redirect_to', $_POST['redirect_url']);
-	$me = bors_user::do_login($form_username, $form_password, false);
+	$me = balancer_board_user::do_login($form_username, $form_password, false);
 
 	if($me === true)
 		bors_exit();

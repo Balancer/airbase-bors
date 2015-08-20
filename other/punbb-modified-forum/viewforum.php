@@ -132,12 +132,12 @@ echo get_subforums_html($id);
 </div>
 
 <?php
-if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
-{
-	echo '<div style="text-align: center; margin: 10px">';
-	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html");
-	echo '</div>';
-}
+//if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
+//{
+//	echo '<div style="text-align: center; margin: 10px">';
+//	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html");
+//	echo '</div>';
+//}
 ?>
 
 <div id="vf" class="blocktable">

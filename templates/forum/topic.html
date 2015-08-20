@@ -48,7 +48,11 @@
 	{/if}
 	{if $p@first}
 		{if $this->get('can_adsense')}
-			{include file="xfile:forum/ads/top-ad-google.html"}
+			{if $this->get('use_adaptive_banner')}
+				{include file="xfile:forum/ads/top-ad-google-adaptive.html"}
+			{else}
+				{include file="xfile:forum/ads/top-ad-google.html"}
+			{/if}
 		{elseif $this->get('can_yandex_direct')}
 			{include file="xfile:forum/ads/yandex-direct-h2-middle.html"}
 		{/if}

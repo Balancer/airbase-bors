@@ -97,7 +97,7 @@ if(preg_match('!^act=ST&f=\d+&t=(\d+)$!', $qs, $m))
 
 bors_debug::syslog('old-topic-link-format', $_SERVER['REQUEST_URI']);
 
-bors_throw("Incorrect topic format for qs='".$qs."'; srv=".$srv_save);
+exit("Incorrect topic format for qs='".$qs); // ."'; srv=<xmp>".$srv_save.'</xmp>');
 
 $cms_db = new driver_mysql(config('punbb.database'));
 

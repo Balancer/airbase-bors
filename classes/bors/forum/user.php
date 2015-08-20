@@ -552,6 +552,9 @@ function avatar_thumb($geo)
 //		config_set('redirect_by_html', true);
 		$check_user = bors_find_first('balancer_board_user', array('login' => $user));
 
+		if(!$check_user && strpos($user, '@') !== false)
+			$check_user = bors_find_first('balancer_board_user', array('email' => $user));
+
 		if(!$check_user)
 			return ec("Неизвестный пользователь '").$user."'";
 

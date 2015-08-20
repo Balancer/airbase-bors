@@ -586,12 +586,12 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 
 <?php
 
-if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
-{
-	echo '<div style="text-align: center; margin: 10px">';
-	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html");
-	echo '</div>';
-}
+//if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
+//{
+//	echo '<div style="text-align: center; margin: 10px">';
+//	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html");
+//	echo '</div>';
+//}
 
 		if($cat_ids)
 			echo "<div class=\"yellow_box\">Вы просматриваете список обновлений только одной категории форумов</div>";
