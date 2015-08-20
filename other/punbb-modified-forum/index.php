@@ -272,12 +272,12 @@ require PUN_ROOT.'header.php';
 forum_forum::all_forums_preload(true);
 
 // Блокировка AdSense
-if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
-{
-	echo '<div style="text-align: center; margin: 10px">';
-	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html");
-	echo '</div>';
-}
+//if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
+//{
+//	echo '<div style="text-align: center; margin: 10px">';
+//	readfile("/var/www/bors/bors-airbase/templates/forum/ads/google-ads-2.original.html");
+//	echo '</div>';
+//}
 
 ?>
 

@@ -424,7 +424,7 @@ class balancer_board_topic extends forum_topic
 		if(!$this->is_public_access())
 			return false;
 
-		if(preg_match('/(airbase\.ru|wrk\.ru)/', @$_SERVER['HTTP_HOST']))
+		if(!preg_match('/(balancer\.ru)/', @$_SERVER['HTTP_HOST']))
 			return true;
 
 		return $this->last_post_create_time() > time() - 86400*365;
@@ -442,4 +442,6 @@ class balancer_board_topic extends forum_topic
 		// {include file="xfile:forum/ads/begun-top-auto.html"}
 		return 'xfile:forum/ads/yandex-direct-h4.html';
 	}
+
+	function _use_adaptive_banner_def() { return rand(0,1); }
 }

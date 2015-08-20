@@ -182,12 +182,13 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 		if($container_style_append = defval($args, 'container_style_append'))
 			$container_style_append = ' '.$container_style_append;
 
-
 		// {$this->url()}
-		return "<div class=\"{$container_class}\" style=\"{$container_style}{$container_style_append}\">{$thumb}<br/>"
+		$html = "<div class=\"{$container_class}\" style=\"{$container_style}{$container_style_append}\">{$thumb}<br/>"
 			."<a href=\"{$this->url()}\">".wordwrap($this->title(), 30, ' ', true)." (скачать)</a> "
 			."[".smart_size($this->size()).",&nbsp;{$this->downloads()}&nbsp;".sklon($this->downloads(), 'загрузка', 'загрузки', 'загрузок')."]"
 			." [attach={$this->id()}]</div>";
+
+		return $html;
 	}
 
 	function image_url()

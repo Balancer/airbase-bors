@@ -4,7 +4,7 @@
 	<title>{$this->browser_title()|htmlspecialchars}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="title" content="{$title|htmlspecialchars}" />
-	<meta name="disabled-viewport" content="width=680" />
+	<meta name="viewport" content="width=680" />
 	<meta name="disabled-viewport" content="width=680,initial-scale=1.0">
 	<meta property="fb:admins" content="100000278666723" />
 {if $this->get('browser_description')}
@@ -108,6 +108,9 @@ if(top.me_is_coordinator) {
 }
 --></script>
 
+{if not $type}
+{$type=$this->get('type')}
+{/if}
 {if $type == 'topic' and $id}
 <script type="text/javascript"><!--
 var readed = readCookie('readedTopics', "").split(' ')
@@ -183,7 +186,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 {if not $skip_ad && not $skip_top_ad}
 {* include file="xfile:forum/ads/top-ad-podarini.html" *}
 {*  && !preg_match(config('ads.disabled_regexp'), $smarty.server.HTTP_HOST) *}
-	{if $this->get('can_adsense')}
+	{if $this->get('can_adsense') && ($type != 'topic' || !$this->get('use_adaptive_banner'))}
 		{include file="xfile:forum/ads/top-ad-google.html"}
 	{elseif $this->get('can_yandex_direct')}
 		{* include file="xfile:forum/ads/yandex-direct-h4.html" *}
@@ -232,7 +235,7 @@ if(me_id > 1 && me_hash) {
 </dl>
 
 {if not $skip_ad}
-{if $this->get('can_adsense')}
+{if $this->get('can_adsense') && ($type != 'topic' || !$this->get('use_adaptive_banner'))}
 	<div class="center"><div class="top-ad">
 	{include file="xfile:forum/ads/google-ads-bottom.html"}
 	</div></div>
@@ -255,6 +258,7 @@ if(me_id > 1 && me_hash) {
 	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
 		{if $views}{* {$views}-е посещение с {$views_first|strftime:"%d.%m.%Y"}<br/> *}{/if}
 		{if $views_average}В среднем посещений в день: {$views_average}<br/>{/if}
+		Связь с владельцами и администрацией сайта: <a href="mailto:anonisimov@gmail.com">anonisimov@gmail.com</a>, <a href="mailto:rwasp1957@yandex.ru">rwasp1957@yandex.ru</a> и <a href="mailto:admin@balancer.ru">admin@balancer.ru</a>.<br/>
 	  </div>
 
 
@@ -309,7 +313,7 @@ if(me_id > 1 && me_hash) {
 		</dd>
 		</dl>
 
-{if $this->get('can_adsense')}
+{if $this->get('can_adsense') && $type != 'topic'}
 	{include file="xfile:forum/ads/google-ads-left-200x200-lazy.html"}
 {elseif $this->get('can_yandex_direct')}
 	{include file="xfile:forum/ads/yandex-direct-menu-block.html"}
