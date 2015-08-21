@@ -443,5 +443,6 @@ class balancer_board_topic extends forum_topic
 		return 'xfile:forum/ads/yandex-direct-h4.html';
 	}
 
-	function _use_adaptive_banner_def() { return rand(0,1); }
+//	function _banners_type_def() { return bors()->user_id() == 10000 ? 1 : rand(0,2); }
+	function _banners_type_def() { return rand(0,2); }
 }
