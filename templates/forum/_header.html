@@ -80,7 +80,9 @@ pre { word-wrap: break-word; }
 
 
 {* <script type="text/javascript" src="https://apis.google.com/js/plusone.js">{lang: 'ru'}</script> *}
-
+{if $this->get('can_adsense')}
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+{/if}
 {foreach from=$js_include item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
@@ -186,7 +188,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 {if not $skip_ad && not $skip_top_ad}
 {* include file="xfile:forum/ads/top-ad-podarini.html" *}
 {*  && !preg_match(config('ads.disabled_regexp'), $smarty.server.HTTP_HOST) *}
-	{if $this->get('can_adsense') && ($type != 'topic' || !$this->get('use_adaptive_banner'))}
+	{if $this->get('can_adsense') && ($type != 'topic' || $this->get('banners_type') == 0)}
 		{include file="xfile:forum/ads/top-ad-google.html"}
 	{elseif $this->get('can_yandex_direct')}
 		{* include file="xfile:forum/ads/yandex-direct-h4.html" *}
@@ -235,7 +237,7 @@ if(me_id > 1 && me_hash) {
 </dl>
 
 {if not $skip_ad}
-{if $this->get('can_adsense') && ($type != 'topic' || !$this->get('use_adaptive_banner'))}
+{if $this->get('can_adsense') && ($type != 'topic' || $this->get('banners_type') == 0)}
 	<div class="center"><div class="top-ad">
 	{include file="xfile:forum/ads/google-ads-bottom.html"}
 	</div></div>
