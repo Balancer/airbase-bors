@@ -80,7 +80,8 @@ if(preg_match('!^pid=(\d+)$!', $qs, $m))
 		@header("HTTP/1.0 404 Not Found");
 		return go('http://www.balancer.ru/forum/', true);
 	}
-	return go($post->url_in_container(), true);
+
+	return go($post->url_in_topic(NULL, true), true);
 }
 
 if(preg_match('!/topic/\d+/(\d+),(\d+)$!', $_SERVER['REQUEST_URI'], $m))
@@ -98,6 +99,14 @@ if(preg_match('!^act=ST&f=\d+&t=(\d+)$!', $qs, $m))
 bors_debug::syslog('old-topic-link-format', $_SERVER['REQUEST_URI']);
 
 exit("Incorrect topic format for qs='".$qs); // ."'; srv=<xmp>".$srv_save.'</xmp>');
+
+// ==============================================================================
+// ******************************************************************************
+//
+// Дальше старый код, больше не используется, под снос.
+//
+// ******************************************************************************
+// ==============================================================================
 
 $cms_db = new driver_mysql(config('punbb.database'));
 

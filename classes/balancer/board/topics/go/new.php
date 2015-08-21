@@ -37,7 +37,7 @@ class balancer_board_topics_go_new extends bors_page
 
 			// Если мы нашли первое нечитанное сообщение, то переходим к нему
 			if($first_new_post)
-				return go($first_new_post->url_in_container());
+				return go($first_new_post->url_in_topic(NULL, true));
 
 			// Если не нашли, то тупо переходим на последнее сообщение.
 			$last_post = bors_find_first('balancer_board_posts_pure', [
@@ -47,7 +47,7 @@ class balancer_board_topics_go_new extends bors_page
 			]);
 
 			if($last_post)
-				return go($last_post->url_in_container());
+				return go($last_post->url_in_topic(NULL, true));
 		}
 
 		// Если гость или не нашли, куда перейти

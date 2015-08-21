@@ -701,7 +701,7 @@ if (isset($_POST['form_sent']))
 		unset($_SERVER['QUERY_STRING']);
 
 //		go("http://forums.balancer.ru/posts/{$post->id()}/process");
-		go($post->url_in_container());
+		go($post->url_in_topic(NULL, true));
 		pun_exit();
 	}
 }
