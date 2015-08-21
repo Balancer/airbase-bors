@@ -79,10 +79,10 @@ pre { word-wrap: break-word; }
 </script>
 
 
-{* <script type="text/javascript" src="https://apis.google.com/js/plusone.js">{lang: 'ru'}</script> *}
 {if $this->get('can_adsense')}
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 {/if}
+<script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script>
 {foreach from=$js_include item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
@@ -179,6 +179,15 @@ createCookie('readedTopics', readed.join(' '), 3)
 {ec('Теги')}:<input id="tags" name="tags" type="text" value="" /><span id="tags_def">{$this->keywords_linked()}</span>
 			</div>
 {/if}
+
+			<div class="yashare-auto-init"
+				data-yashareL10n="ru"
+				data-yashareType="small"
+				data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki,moimir,gplus"
+				data-yashareTheme="counter"
+				style="display: inline-block; height: 34px"
+			></div>
+
 			<div class="clear">&nbsp;</div>
 		</dd>
 		</dl>
@@ -323,24 +332,9 @@ if(me_id > 1 && me_hash) {
 	{* include file="xfile:forum/ads/begun-topleft-200x300.html" *}
 {/if}
 
-<dl class="box w200">
-<dt>{ec('Персональное')}</dt>
-<dd>
-<script type="text/javascript"><!--
-if(me_id < 2 || !me_hash)
-	document.writeln("<"+"script  type=\"text/javascript\" src=\"/_bal/js/login.js\"></"+"script>")
-else {ldelim}
-	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
-{if $this && ($this->class_name() == 'balancer_board_topic' || $this->class_name() == 'balancer_board_topics_view')}
-{*
-	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?obj={$this->internal_uri_ascii()}&time={$page_last_time}&user_ids={$user_ids}&rnd="+Math.random()+"\"></"+"script>")
-*}
-	$.getScript("/js/users/touch.js?obj={$this->internal_uri_ascii()}&time={$page_last_time}&user_ids={$user_ids}&rnd="+Math.random())
-{/if}
-{rdelim}
---></script>
-<noscript><p>Не работает без JavaScript</p></noscript>
-</dd></dl>
+<div id="personal-js-placeholder">
+<!-- У Вас не работает JavaScript. Значительная часть функций форума будет недоступна. -->
+</div>
 
 {* if ($this->new_class_name() == 'balancer_board_topic' || $this->new_class_name() == 'balancer_board_topics_view')}
 <script type="text/javascript" src="http://www.balancer.ru/js/board/topics/t{$this->id()}-similar.js"></script>
@@ -443,6 +437,12 @@ BORS_CORE={$smarty.const.BORS_CORE}
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
+<script type="text/javascript"><!--
+$(document).ready(function() {
+	jQuery.getScript("/js/users/touch.js?obj={$this->internal_uri_ascii()}&page={$this->page()}&time={$page_last_time}&user_ids={$user_ids}&rnd="+Math.random())
+})
+--></script>
+
 {foreach from=$js_include_post item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
@@ -453,6 +453,7 @@ BORS_CORE={$smarty.const.BORS_CORE}
 {/foreach}
 
 $(document).ready(function() {
+
 	{foreach from=$jquery_document_ready item="s"}
 	{$s}
 	{/foreach}
@@ -478,9 +479,12 @@ $(document).ready(function() {
 {/if}
 })
 
+
+
 {if 0 && $me}
 jQuery.getScript('http://forums.balancer.ru/ajax/pagemod.js?user_id='+0+'&target={$this->internal_uri_ascii()}&mtime={$this->modify_time()}&static={$this->cache_static()}')
 {/if}
+
 --></script>
 
 </html>

@@ -7,9 +7,9 @@ class balancer_board_topic extends forum_topic
 	function browser_title()
 	{
 		if($this->total_pages() <= 1)
-			return $this->title();
+			return $this->title() . ' [Форумы Balancer.Ru]';
 
-		return $this->title() . " ({$this->page()}/{$this->total_pages()})";
+		return $this->title() . " ({$this->page()}/{$this->total_pages()})" . ' [Форумы Balancer.Ru]';
 	}
 
 	function browser_description()
@@ -214,7 +214,10 @@ class balancer_board_topic extends forum_topic
 		}
 
 		if($this->page() == $this->total_pages())
-			header("X-Accel-Expires: 30");
+		{
+			header("X-Accel-Expires: 10");
+			template_nocache();
+		}
 		elseif($this->page() >= $this->total_pages() - 2)
 			header("X-Accel-Expires: 600");
 		else

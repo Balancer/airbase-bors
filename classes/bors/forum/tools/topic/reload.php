@@ -14,7 +14,7 @@ class forum_tools_topic_reload extends bors_object
 			$page = 1;
 
 		$topic->recalculate();
-		return go($topic->url_ex($page));
+		return go($topic->url_ex($page).'?');
 	}
 
 	function topic()

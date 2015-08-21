@@ -95,6 +95,6 @@ class forum_tools_post_do extends bors_page
 		$topic->cache_clean();
 		$topic->recalculate();
 
-		return go($post->url_for_igo());
+		return go($post->url_in_topic(NULL, true));
 	}
 }

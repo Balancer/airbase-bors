@@ -12,21 +12,37 @@ class user_js_touch extends bors_js
 
 		$time = bors()->request()->data('time');
 		$obj  = bors()->request()->data('obj');
+		$page  = bors()->request()->data('page');
 
 		if($obj)
 			$obj = bors_load_uri($obj);
 		else
 			$obj = bors_load($this->id());
 
+		$obj->set_page($page);
+
 		if(!$time)
 			$time = time();
 
+		$personal_html = bors_module::mod_html('balancer_board_ajax_personal', [
+			'object' => $obj,
+		]);
+
 		$js = [];
+
+		$js[] = '$("#personal-js-placeholder").html("'.str_replace("\n", " ", addslashes($personal_html)).'")';
 
 		$me_id = bors()->user_id();
 
-		if(!$me_id)
+		if(!$me_id || $me_id < 2)
+		{
+			$js = join("\n", $js);
+
+			if(!$js)
+				$js = 'true;';
+
 			return $js;
+		}
 
 		if($obj)
 		{
@@ -90,11 +106,12 @@ class user_js_touch extends bors_js
 
 
 		// Выводим отметку, если форумы в R/O
-		if(($ro = bors_var::get('r/o-by-move-time-'.$obj->forum()->category_id())) > time())
+		if(($f = $obj->get('forum')) && ($ro = bors_var::get('r/o-by-move-time-'.$f->category_id())) > time())
 		{
 			$js[] = '$(".theme_answer_button").css("background-color", "red").css("color","white").html("R/O всего раздела до '.date('d.m.Y H:i (?)', $ro).'")';
 			$js[] = '$(".reply_link").css("background-color", "red").css("color","white").html("R/O всего раздела до '.date('d.m.Y H:i (?)', $ro).'")';
 		}
+
 
 		$js = join("\n", $js);
 
