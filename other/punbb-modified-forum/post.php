@@ -763,7 +763,6 @@ else if ($fid)
 else
 	message($lang_common['Bad request']);
 
-
 $page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$action;
 $required_fields = array('req_email' => $lang_common['E-mail'], 'req_subject' => $lang_common['Subject'], 'req_message' => $lang_common['Message']);
 $focus_element = array('post');
@@ -788,6 +787,7 @@ include('include/tinymce.php');
 require PUN_ROOT.'header.php';
 
 ?>
+
 <div class="linkst">
 	<div class="inbox">
 		<ul><li><a href="<?php echo $pun_config['root_uri'];?>/index.php"><?= $lang_common['Index'] ?></a></li>
@@ -893,6 +893,60 @@ if(($warn_count = $me->warnings()) > 0)
 	echo "</div><br/>";
 }
 
+if($topic)
+{
+	$moved_topics = bors_find_all('balancer_board_topic', [
+		'inner_join' => 'balancer_board_post ON balancer_board_topic.id = balancer_board_post.topic_id',
+		'balancer_board_post.create_time>' => time()-183*86400,
+		'original_topic_id' => $topic->id(),
+		'group' => 'balancer_board_topic.id',
+		'order' => 'COUNT(*) DESC',
+		'limit' => 10,
+	]);
+
+	$moved_topics_html = [];
+	foreach($moved_topics as $t)
+	{
+		$desc = preg_replace('/Перенос из темы.+?»/u', '', $t->description());
+/*
+		if($t->answer_notice())
+		{
+			if($desc)
+				$desc .= '. ';
+			$desc .= 'x'.preg_replace('/^([^\.]+?).*$/', '$1', $t->answer_notice());
+		}
+*/
+		$moved_topics_html[] = "<li>&nbsp;&middot;&nbsp;<a href=\"{$t->url_ex('new')}\">{$t->title()}</a>".($desc ? " ({$desc})":'')."</li>";
+	}
+
+	if($moved_topics_html)
+		$moved_topics_html = "<p><b>Больше всего переносов за последнее время из этой темы было в следующие:</b><ul>".join("\n", $moved_topics_html)."</ul></p>";
+	else
+		$moved_topics_html = "";
+
+	if($topic->answer_notice())
+		echo "
+			<div class=\"alert alert-error\" style=\"padding: 4px; margin-bottom: 4px;\">
+				<b style=\"color: red\">Внимание!</b> В эту тему пишут ".lcml_bbh($topic->answer_notice())."
+				Если Ваше сообщение не отвечает данной тематике, то
+				сообщение может быть перенесено в более подходящую
+				тему а Вам выставлен штраф за офтопик или некорректный
+				выбор темы.
+				{$moved_topics_html}
+			</div>
+		";
+	elseif($moved_topics_html)
+	{
+		echo "
+			<div class=\"alert alert-warning\" style=\"padding: 4px; margin-bottom: 4px;\">
+				Обнаружено несколько переносов из этой темы в другие.
+				Посмотрите внимательно, не является ли одна из них более
+				подходящей для вашего сообщения?
+				{$moved_topics_html}
+			</div>
+		";
+	}
+}
 ?>
 
 <div class="blockform">

@@ -75,7 +75,9 @@ $map = array(
 	"{$forums}\d{4}/\d{1,2}/tpdfhelper\-(\d+)\-\-.*\.html => balancer_board_topics_pdfHelper(2)",
 	"{$forums}\d{4}/\d{1,2}/tpdfcover\-(\d+)\-\-.*\.html => balancer_board_topics_pdfCover(2)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-\-.+\.html\?? => {$topic_view_class}(2,4)",
+	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-\-.+\.html\?r=\d+ => {$topic_view_class}(2,4)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-.+\.html\?? => redirect:{$topic_view_class}(2,4)",
+	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-.+\.html\?r=\d+  => redirect:{$topic_view_class}(2,4)",
 
 	"{$forums}\d{4}/\d{1,2}/t(\d+)/blog/? => balancer_board_topics_blog(2)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)/blog/(\d+)\.html => balancer_board_topics_blog(2,3)",

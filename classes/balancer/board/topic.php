@@ -197,8 +197,6 @@ class balancer_board_topic extends forum_topic
 		return $this->titled_link_ex(array('page' => 'new'));
 	}
 
-	function answer_notice() { return NULL; }
-
 	function pre_show()
 	{
 		bors_lib_html::set_og_meta($this);
@@ -207,11 +205,13 @@ class balancer_board_topic extends forum_topic
 
 		jquery::on_ready(__DIR__.'/topics/view.inc.ready.js');
 
+/*
 		if($this->answer_notice())
 		{
 			bors_use('/_bal/opt/sweet-alert.js');
 			bors_use('/_bal/opt/sweet-alert.css');
 		}
+*/
 
 		if($this->page() == $this->total_pages())
 		{
@@ -446,6 +446,7 @@ class balancer_board_topic extends forum_topic
 		return 'xfile:forum/ads/yandex-direct-h4.html';
 	}
 
-//	function _banners_type_def() { return bors()->user_id() == 10000 ? 1 : rand(0,2); }
-	function _banners_type_def() { return rand(0,2); }
+//	function _banners_type_def() { return rand(0,2); }
+	function _banners_type_def() { return 2*rand(0,1); }
+//	function _banners_type_def() { return bors()->user_id() == 10000 ? 2 : rand(0,2); }
 }
