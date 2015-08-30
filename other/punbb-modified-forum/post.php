@@ -896,9 +896,11 @@ if(($warn_count = $me->warnings()) > 0)
 if($topic)
 {
 	$moved_topics = bors_find_all('balancer_board_topic', [
+		'*set' => 'COUNT(*) AS num_moved_posts',
 		'inner_join' => 'balancer_board_post ON balancer_board_topic.id = balancer_board_post.topic_id',
 		'balancer_board_post.create_time>' => time()-183*86400,
 		'original_topic_id' => $topic->id(),
+		'topic_id NOT IN' => [59483/*Мусор*/],
 		'group' => 'balancer_board_topic.id',
 		'order' => 'COUNT(*) DESC',
 		'limit' => 10,
@@ -916,7 +918,7 @@ if($topic)
 			$desc .= 'x'.preg_replace('/^([^\.]+?).*$/', '$1', $t->answer_notice());
 		}
 */
-		$moved_topics_html[] = "<li>&nbsp;&middot;&nbsp;<a href=\"{$t->url_ex('new')}\">{$t->title()}</a>".($desc ? " ({$desc})":'')."</li>";
+		$moved_topics_html[] = "<li>&nbsp;&middot;&nbsp;<a href=\"{$t->url_ex('new')}\">{$t->title()}</a>".($desc ? " ({$desc})":'')." [{$t->num_moved_posts()}]</li>";
 	}
 
 	if($moved_topics_html)
