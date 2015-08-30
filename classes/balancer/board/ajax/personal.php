@@ -6,7 +6,7 @@ class balancer_board_ajax_personal extends bors_module
 	{
 		return array_merge(parent::body_data(), array(
 			'owner' => bors()->user(),
-			'page' => $this->args('object')->page(),
+			'page' => object_property($this->args('object'), 'page'),
 		));
 	}
 }

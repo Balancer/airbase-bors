@@ -82,6 +82,13 @@ class airbase_user_admin_warning extends airbase_user_warning
 
 		$object->cache_clean();
 		$object->call('recalculate');
+
+		if($topic = $object->get('topic'))
+		{
+			$topic->cache_clean();
+			$topic->set_modify_time(time());
+			$topic->store();
+		}
 	}
 
 	function delete()

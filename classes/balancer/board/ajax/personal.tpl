@@ -39,7 +39,7 @@
 
 {/if}
 
-{if $object->get('type') == 'topic'}
+{if $object && $object->get('type') == 'topic'}
 	{$tid=$object->id()}
 	<b>Тема:</b>
 	<ul>
@@ -61,14 +61,14 @@
 <ul>
 <li><a href="http://forums.airbase.ru/guidelines/">Правила</a></li>
 <li><a href="http://forums.balancer.ru/help/">Помощь</a></li>
-<li><a href="http://www.wrk.ru/forum/punbb/search.php?action=show_24h">За сутки</a></li>
+<li><a href="http://www.wrk.ru/forums/search.php?action=show_24h">За сутки</a></li>
 <li><a href="http://forums.balancer.ru/news/" class="red">Новости</a></li>
-<li><a href="http://www.wrk.ru/chat/">Чат</a> <small><a href="http://www.wrk.ru/support/2011/03/t19123--na-aviabaze-zapuschen-novyj-chat.5520.html">[?]</a></small></li>
+<li><a href="http://www.balancer.ru/chat/">Чат</a> <small><a href="http://www.wrk.ru/support/2011/03/t19123--na-aviabaze-zapuschen-novyj-chat.5520.html">[?]</a></small></li>
 <li><a href="http://forums.balancer.ru/tags/">Теги</a></li>
 <li><a href="http://www.wrk.ru/tools/search/">Поиск</a></li>
-<li><a href="http://www.wrk.ru/users/toprep/">Репутации</a></li>
-<li><a href="http://www.wrk.ru/tools/votes/">Оценки</a></li>
-<li><a href="http://www.wrk.ru/users/warnings/">Штрафы</a></li>
+<li><a href="http://www.balancer.ru/users/toprep/">Репутации</a></li>
+<li><a href="http://www.balancer.ru/tools/votes/">Оценки</a></li>
+<li><a href="http://www.balancer.ru/users/warnings/">Штрафы</a></li>
 <li><a href="http://forums.balancer.ru/tools/">Инструменты</a></li>
 {if $owner && $owner->is_coordinator()}
 <li><a href="http://forums.balancer.ru/admin/">Админка</a></li>

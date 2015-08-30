@@ -15,7 +15,7 @@
 {/if}
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
 {*
 	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
@@ -28,6 +28,7 @@
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
 	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-786-min.css" />
+	<link rel="canonical" href="{$this->url_ex($this->page())}" />
 
 <!--[if IE]><style>
 .outer, .wide, h2, .wrapper, .minwidth { height: 0; height: auto; zoom: 1; }
@@ -265,7 +266,7 @@ if(me_id > 1 && me_hash) {
 <div id="bottom-append"></div>
 
 	  <div class="copyright">
-        Copyright &copy; <a href="https://plus.google.com/113730597040634449637?rel=author">Balancer</a> 1997..{0|strftime:"%Y"}<br/>
+        Copyright &copy; <a href="//plus.google.com/113730597040634449637?rel=author">Balancer</a> 1997..{0|strftime:"%Y"}<br/>
 	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
 		{if $views}{* {$views}-е посещение с {$views_first|strftime:"%d.%m.%Y"}<br/> *}{/if}
 		{if $views_average}В среднем посещений в день: {$views_average}<br/>{/if}
@@ -307,7 +308,7 @@ if(me_id > 1 && me_hash) {
 		<dt>Поддержка</dt>
 		{* Яндекс.Деньги *}
 		<dd>
-<center><table cellpadding="0" cellspacing="0" border="0" class="yandex_money" style="font: 0.8em Arial, sans-serif"><tr><td width="116" height="77" style="background:url(http://img.yandex.net/i/money/top-5rub-blue.gif) repeat-y; text-align:center" align="center" valign="bottom"><form style="margin: 0; padding: 0 0 2px;" action="https://money.yandex.ru/donate.xml" method="post"><input type="hidden" name="to" value="41001337361629"/><input type="hidden" name="s5" value="5rub"/><input type="submit" value="Дай пять"/></form></td></tr><tr><td width="116" height="38" style="background:url(http://img.yandex.net/i/money/bg-blue.gif) repeat-y; text-align:center; padding: 5px 0;" align="center" valign="top"><b><a href="http://www.balancer.ru/support/2009/09/t57564,last--pro-veb-mani.1634.html">Поддержи форум!</a></b></td></tr><tr><td><img src="http://img.yandex.net/i/money/bottom-blue.gif" width="116" height="40" alt="" usemap="#button" border="0" /><map name="button"><area alt="Яндекс" coords="38,2,49,21" href="http://www.yandex.ru"><area alt="Яндекс. Деньги" coords="52,1,84,28" href="https://money.yandex.ru"><area alt="Хочу такую же кнопку" coords="17,29,100,40" href="https://money.yandex.ru/choose-banner.xml"></map></td></tr></table></center>
+<center><table cellpadding="0" cellspacing="0" border="0" class="yandex_money" style="font: 0.8em Arial, sans-serif"><tr><td width="116" height="77" style="background:url(http://img.yandex.net/i/money/top-5rub-blue.gif) repeat-y; text-align:center" align="center" valign="bottom"><form style="margin: 0; padding: 0 0 2px;" action="//money.yandex.ru/donate.xml" method="post"><input type="hidden" name="to" value="41001337361629"/><input type="hidden" name="s5" value="5rub"/><input type="submit" value="Дай пять"/></form></td></tr><tr><td width="116" height="38" style="background:url(http://img.yandex.net/i/money/bg-blue.gif) repeat-y; text-align:center; padding: 5px 0;" align="center" valign="top"><b><a href="http://www.balancer.ru/support/2009/09/t57564,last--pro-veb-mani.1634.html">Поддержи форум!</a></b></td></tr><tr><td><img src="http://img.yandex.net/i/money/bottom-blue.gif" width="116" height="40" alt="" usemap="#button" border="0" /><map name="button"><area alt="Яндекс" coords="38,2,49,21" href="http://www.yandex.ru"><area alt="Яндекс. Деньги" coords="52,1,84,28" href="//money.yandex.ru"><area alt="Хочу такую же кнопку" coords="17,29,100,40" href="//money.yandex.ru/choose-banner.xml"></map></td></tr></table></center>
 		</dd>
 		</dl>
 {/if}
@@ -341,7 +342,7 @@ if(me_id > 1 && me_hash) {
 {/if *}
 
 <dl class="box w200"><dt>{ec('Твиттер сайта')}</dt>
-<a class="twitter-timeline" href="https://twitter.com/AirbaseRu" data-widget-id="429908527918755840">{ec('Твиты пользователя')} @AirbaseRu</a>
+<a class="twitter-timeline" href="//twitter.com/AirbaseRu" data-widget-id="429908527918755840">{ec('Твиты пользователя')} @AirbaseRu</a>
 <script>!function(d,s,id){ var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){ js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </dl>
 
@@ -435,7 +436,7 @@ BORS_CORE={$smarty.const.BORS_CORE}
 {/if *}
 </body>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
 <script type="text/javascript"><!--
 $(document).ready(function() {

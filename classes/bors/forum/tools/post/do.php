@@ -52,7 +52,6 @@ class forum_tools_post_do extends bors_page
 				if($owner = $post->owner())
 					$owner->set_signature_html(NULL);
 
-				echo 'recalc';
 				$post->recalculate();
 				$post->cache_clean();
 				$post->store();

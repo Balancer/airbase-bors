@@ -81,7 +81,7 @@ if(preg_match('!^pid=(\d+)$!', $qs, $m))
 		return go('http://www.balancer.ru/forum/', true);
 	}
 
-	return go($post->url_in_topic(NULL, true), true);
+	return go($post->url_in_topic(), true);
 }
 
 if(preg_match('!/topic/\d+/(\d+),(\d+)$!', $_SERVER['REQUEST_URI'], $m))

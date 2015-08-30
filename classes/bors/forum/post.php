@@ -366,7 +366,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		else
 			$post = $this;
 
-		return $topic->url_ex($post->topic_page()).($force ? '?' : '')."#p".$post->id();
+		return $topic->url_ex($post->topic_page()).($force ? '?r='.time() : '')."#p".$post->id();
 	}
 
 	function modify_time($exact = false)
