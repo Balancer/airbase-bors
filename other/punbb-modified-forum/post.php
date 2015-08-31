@@ -893,7 +893,7 @@ if(($warn_count = $me->warnings()) > 0)
 	echo "</div><br/>";
 }
 
-if($topic)
+if($topic && !$qid)
 {
 	$moved_topics = bors_find_all('balancer_board_topic', [
 		'*set' => 'COUNT(*) AS num_moved_posts',
