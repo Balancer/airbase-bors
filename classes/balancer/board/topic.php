@@ -34,17 +34,16 @@ class balancer_board_topic extends forum_topic
 		if(!$this->is_public_access())
 			return 0;
 
-		if($this->modify_time() < time() - 86400*365)
-			return 86400*rand(300, 900);
+		$age = time() - $this->modify_time();
 
-		if($this->modify_time() < time() - 86400*30)
-			return 86400*rand(7, 30);
+		if($age > 86400*30)
+			return rand(86400*300, 886400*900);
 
-		if($this->modify_time() < time() - 86400*7)
-			return rand(3600, 86400);
+		if($age > 86400*7)
+			return rand(86400*7, 86400*30);
 
-		if($this->modify_time() < time() - 86400)
-			return rand(600, 1200);
+		if($age > 86400)
+			return rand(3600, 7200);
 
 		return rand(60, 300);
 	}
