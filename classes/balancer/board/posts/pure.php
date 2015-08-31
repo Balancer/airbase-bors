@@ -55,17 +55,26 @@ class balancer_board_posts_pure extends balancer_board_object_db
 
 	function url_in_container()
 	{
+		return $this->url_in_topic();
+	}
+
+	//TODO: вынести вместе с forum_post в хелпер, код дублируется.
+	function url_in_topic($topic=NULL, $force=false)
+	{
 		$pid = $this->id();
 
-		$tid = $this->topic_id();
-
-		if(!$tid)
-			return "топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден";
-
-		$topic = bors_load('balancer_board_topic', $tid);
-
 		if(!$topic)
-			return "топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден";
+		{
+			$tid = $this->topic_id();
+
+			if(!$tid)
+				return "топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден";
+
+			$topic = bors_load('balancer_board_topic', $tid);
+
+			if(!$topic)
+				return "топик [topic_id={$this->topic_id()}, post_id={$this->id()}] не найден";
+		}
 
 		if(!$topic->is_repaged())
 		{
@@ -75,6 +84,6 @@ class balancer_board_posts_pure extends balancer_board_object_db
 		else
 			$post = $this;
 
-		return $topic->url_ex($post->topic_page())."#p".$post->id();
+		return $topic->url_ex($post->topic_page()).($force ? '?r='.time() : '')."#p".$post->id();
 	}
 }

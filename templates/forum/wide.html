@@ -24,9 +24,9 @@
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
-
+	<script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script>
 {foreach from=$js_include item="s"}
-<script type="text/javascript" src="{$s}"></script>
+	<script type="text/javascript" src="{$s}"></script>
 {/foreach}
 
 <script type="text/javascript"><!--
@@ -78,28 +78,40 @@ if(top.me_is_coordinator) {ldelim}
 </head>
 
 <body id="body">
-<div style="padding: 0 20px">
-<dl class="box">
-<dt class="nav">{module class="module_nav_top"}</dt>
-<dd><h1>{$this->page_title()}</h1>
-<div class="small i">{$description}</div></dd>
-</dl>
+	<div style="padding: 0 20px">
+		<dl class="box">
+			<dt class="nav">{module class="module_nav_top"}</dt>
+			<dd>
+				<h1>{$this->page_title()}</h1>
+				{if $description}<div class="small i">{$description}</div>{/if}
+
+				<div class="yashare-auto-init"
+					data-yashareL10n="ru"
+					data-yashareType="small"
+					data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki,moimir,gplus"
+					data-yashareTheme="counter"
+				></div>
+			</dd>
+		</dl>
 
 {* include file="xfile:forum/ads/yandex-direct-h4.html" *}
 
 {$body}
 
-<table>
-<tr><td rowspan="2">
+		<table>
+			<tr>
+				<td rowspan="2">
 
 {include file="xfile:airbase/counters/mail-ru-balancer-counter.tpl"}
 {include file="xfile:airbase/counters/mail-ru-balancer-logo.tpl"}
 
-</td><td rowspan="2">
+				</td>
+				<td rowspan="2">
 
 <a href="http://top.airbase.ru/"><img src="http://top.airbase.ru/?id=1" width="88" height="31" alt="АвиаТОП" title="Числа: место в рейтинге, хитов всего и хитов в сутки" /></a>
 
-</td><td>
+				</td>
+				<td>
 
 <!--LiveInternet counter--><script type="text/javascript"><!--
 document.write("<a href='http://www.liveinternet.ru/click' "+
@@ -113,7 +125,8 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
 "border='0' width='88' height='15'><\/a>")
 //--></script><!--/LiveInternet-->
 
-</td><td rowspan="2">
+				</td>
+				<td rowspan="2">
 
 {*
 <script type="text/javascript"><!--
@@ -123,18 +136,23 @@ document.write('<span><!-'+'-<a href="http://www.mapyourvisitors.com/map' + kod 
 --></script>
 *}
 
-</td></tr><tr><td>
+				</td>
+			</tr>
+			<tr>
+				<td>
 
 <a href="http://whos.amung.us/show/qz1y4sp9"><img src="http://whos.amung.us/swidget/qz1y4sp9.png" alt="website counter" width="80" height="15" /></a>
 
-
-</td></tr></table>
+				</td>
+			</tr>
+		</table>
 
 {include file="xfile:balancer/board/count-yandex.html"}
 
-<div class="copyright">Copyright &copy; <a href="https://plus.google.com/113730597040634449637?rel=author">Balancer</a> 1999 — {0|strftime:"%Y"}</div>
+		<div class="copyright">Copyright &copy; <a href="//plus.google.com/113730597040634449637?rel=author">Balancer</a> 1999 — {0|strftime:"%Y"}</div>
+		Связь с владельцами и администрацией сайта: <a href="mailto:anonisimov@gmail.com">anonisimov@gmail.com</a>, <a href="mailto:rwasp1957@yandex.ru">rwasp1957@yandex.ru</a> и <a href="mailto:admin@balancer.ru">admin@balancer.ru</a>.<br/>
 
-</div>
+	</div>
 
 </body>
 

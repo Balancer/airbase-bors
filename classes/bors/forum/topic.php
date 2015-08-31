@@ -154,21 +154,12 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 	function body()
 	{
-//		if($_SERVER['REMOTE_ADDR'] == '192.168.1.1')
-//			sleep(5);
-//		var_dump($_SERVER['REMOTE_ADDR']);
-
-
 		if(!$this->is_repaged() && rand(0,5) == 0)
 			$this->repaging_posts();
-
-//		$this->template_data_fill();
 
 		$body_cache = new bors_cache();
 		if($body_cache->get('bors_page_body-v3', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time()))
 			return $this->attr['body'] = bors_lcml::output_parse($body_cache->last().'<!-- cached -->');
-
-//		$GLOBALS['cms']['cache_disabled'] = true;
 
 		require_once("engines/smarty/assign.php");
 
@@ -182,9 +173,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 		$user_ids = [];
 		foreach($posts as $p)
-		{
 			$user_ids[] = $p->owner_id();
-		}
 
 		$user_ids = array_unique($user_ids);
 
@@ -343,6 +332,9 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 	{
 		if(!$page)
 			$page = $this->page();
+
+		if(!$page)
+			$page = 1;
 
 		$data = array(
 			'topic_id' => $this->id(),
@@ -639,7 +631,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		return $kws;
 	}
 
-	function set_keywords_string($words, $db_update)
+	function set_keywords_string($words, $db_update=true)
 	{
 		$this->set_keywords_string_db($words, $db_update);
 		if($db_update)
@@ -647,7 +639,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 	}
 
 	function keywords() { return array_map('trim', explode(',', $this->keywords_string())); }
-	function set_keywords($keywords, $up)
+	function set_keywords($keywords, $up=true)
 	{
 		sort($keywords, SORT_LOCALE_STRING);
 		$this->set_keywords_string(join(', ', array_unique($keywords)), $up);

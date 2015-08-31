@@ -4,7 +4,7 @@
 	<title>{$this->browser_title()|htmlspecialchars}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="title" content="{$title|htmlspecialchars}" />
-	<meta name="disabled-viewport" content="width=680" />
+	<meta name="viewport" content="width=680" />
 	<meta name="disabled-viewport" content="width=680,initial-scale=1.0">
 	<meta property="fb:admins" content="100000278666723" />
 {if $this->get('browser_description')}
@@ -15,7 +15,7 @@
 {/if}
 	<link rel="SHORTCUT ICON" href="/favicon.ico" />
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
 {*
 	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
@@ -28,6 +28,7 @@
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
 	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-786-min.css" />
+	<link rel="canonical" href="{$this->url_ex($this->page())}" />
 
 <!--[if IE]><style>
 .outer, .wide, h2, .wrapper, .minwidth { height: 0; height: auto; zoom: 1; }
@@ -79,8 +80,10 @@ pre { word-wrap: break-word; }
 </script>
 
 
-{* <script type="text/javascript" src="https://apis.google.com/js/plusone.js">{lang: 'ru'}</script> *}
-
+{if $this->get('can_adsense')}
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+{/if}
+<script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script>
 {foreach from=$js_include item="s"}
 <script type="text/javascript" src="{$s}"></script>
 {/foreach}
@@ -108,6 +111,9 @@ if(top.me_is_coordinator) {
 }
 --></script>
 
+{if not $type}
+{$type=$this->get('type')}
+{/if}
 {if $type == 'topic' and $id}
 <script type="text/javascript"><!--
 var readed = readCookie('readedTopics', "").split(' ')
@@ -174,6 +180,15 @@ createCookie('readedTopics', readed.join(' '), 3)
 {ec('Теги')}:<input id="tags" name="tags" type="text" value="" /><span id="tags_def">{$this->keywords_linked()}</span>
 			</div>
 {/if}
+
+			<div class="yashare-auto-init"
+				data-yashareL10n="ru"
+				data-yashareType="small"
+				data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki,moimir,gplus"
+				data-yashareTheme="counter"
+				style="display: inline-block; height: 34px"
+			></div>
+
 			<div class="clear">&nbsp;</div>
 		</dd>
 		</dl>
@@ -183,7 +198,7 @@ createCookie('readedTopics', readed.join(' '), 3)
 {if not $skip_ad && not $skip_top_ad}
 {* include file="xfile:forum/ads/top-ad-podarini.html" *}
 {*  && !preg_match(config('ads.disabled_regexp'), $smarty.server.HTTP_HOST) *}
-	{if $this->get('can_adsense')}
+	{if $this->get('can_adsense') && ($type != 'topic' || $this->get('banners_type') == 0)}
 		{include file="xfile:forum/ads/top-ad-google.html"}
 	{elseif $this->get('can_yandex_direct')}
 		{* include file="xfile:forum/ads/yandex-direct-h4.html" *}
@@ -232,7 +247,7 @@ if(me_id > 1 && me_hash) {
 </dl>
 
 {if not $skip_ad}
-{if $this->get('can_adsense')}
+{if $this->get('can_adsense') && ($type != 'topic' || $this->get('banners_type') == 0)}
 	<div class="center"><div class="top-ad">
 	{include file="xfile:forum/ads/google-ads-bottom.html"}
 	</div></div>
@@ -251,10 +266,11 @@ if(me_id > 1 && me_hash) {
 <div id="bottom-append"></div>
 
 	  <div class="copyright">
-        Copyright &copy; <a href="https://plus.google.com/113730597040634449637?rel=author">Balancer</a> 1997..{0|strftime:"%Y"}<br/>
+        Copyright &copy; <a href="//plus.google.com/113730597040634449637?rel=author">Balancer</a> 1997..{0|strftime:"%Y"}<br/>
 	    {if $create_time}Создано {$create_time|strftime:"%d.%m.%Y"}<br/>{/if}
 		{if $views}{* {$views}-е посещение с {$views_first|strftime:"%d.%m.%Y"}<br/> *}{/if}
 		{if $views_average}В среднем посещений в день: {$views_average}<br/>{/if}
+		Связь с владельцами и администрацией сайта: <a href="mailto:anonisimov@gmail.com">anonisimov@gmail.com</a>, <a href="mailto:rwasp1957@yandex.ru">rwasp1957@yandex.ru</a> и <a href="mailto:admin@balancer.ru">admin@balancer.ru</a>.<br/>
 	  </div>
 
 
@@ -292,7 +308,7 @@ if(me_id > 1 && me_hash) {
 		<dt>Поддержка</dt>
 		{* Яндекс.Деньги *}
 		<dd>
-<center><table cellpadding="0" cellspacing="0" border="0" class="yandex_money" style="font: 0.8em Arial, sans-serif"><tr><td width="116" height="77" style="background:url(http://img.yandex.net/i/money/top-5rub-blue.gif) repeat-y; text-align:center" align="center" valign="bottom"><form style="margin: 0; padding: 0 0 2px;" action="https://money.yandex.ru/donate.xml" method="post"><input type="hidden" name="to" value="41001337361629"/><input type="hidden" name="s5" value="5rub"/><input type="submit" value="Дай пять"/></form></td></tr><tr><td width="116" height="38" style="background:url(http://img.yandex.net/i/money/bg-blue.gif) repeat-y; text-align:center; padding: 5px 0;" align="center" valign="top"><b><a href="http://www.balancer.ru/support/2009/09/t57564,last--pro-veb-mani.1634.html">Поддержи форум!</a></b></td></tr><tr><td><img src="http://img.yandex.net/i/money/bottom-blue.gif" width="116" height="40" alt="" usemap="#button" border="0" /><map name="button"><area alt="Яндекс" coords="38,2,49,21" href="http://www.yandex.ru"><area alt="Яндекс. Деньги" coords="52,1,84,28" href="https://money.yandex.ru"><area alt="Хочу такую же кнопку" coords="17,29,100,40" href="https://money.yandex.ru/choose-banner.xml"></map></td></tr></table></center>
+<center><table cellpadding="0" cellspacing="0" border="0" class="yandex_money" style="font: 0.8em Arial, sans-serif"><tr><td width="116" height="77" style="background:url(http://img.yandex.net/i/money/top-5rub-blue.gif) repeat-y; text-align:center" align="center" valign="bottom"><form style="margin: 0; padding: 0 0 2px;" action="//money.yandex.ru/donate.xml" method="post"><input type="hidden" name="to" value="41001337361629"/><input type="hidden" name="s5" value="5rub"/><input type="submit" value="Дай пять"/></form></td></tr><tr><td width="116" height="38" style="background:url(http://img.yandex.net/i/money/bg-blue.gif) repeat-y; text-align:center; padding: 5px 0;" align="center" valign="top"><b><a href="http://www.balancer.ru/support/2009/09/t57564,last--pro-veb-mani.1634.html">Поддержи форум!</a></b></td></tr><tr><td><img src="http://img.yandex.net/i/money/bottom-blue.gif" width="116" height="40" alt="" usemap="#button" border="0" /><map name="button"><area alt="Яндекс" coords="38,2,49,21" href="http://www.yandex.ru"><area alt="Яндекс. Деньги" coords="52,1,84,28" href="//money.yandex.ru"><area alt="Хочу такую же кнопку" coords="17,29,100,40" href="//money.yandex.ru/choose-banner.xml"></map></td></tr></table></center>
 		</dd>
 		</dl>
 {/if}
@@ -309,7 +325,7 @@ if(me_id > 1 && me_hash) {
 		</dd>
 		</dl>
 
-{if $this->get('can_adsense')}
+{if $this->get('can_adsense') && $type != 'topic'}
 	{include file="xfile:forum/ads/google-ads-left-200x200-lazy.html"}
 {elseif $this->get('can_yandex_direct')}
 	{include file="xfile:forum/ads/yandex-direct-menu-block.html"}
@@ -317,31 +333,16 @@ if(me_id > 1 && me_hash) {
 	{* include file="xfile:forum/ads/begun-topleft-200x300.html" *}
 {/if}
 
-<dl class="box w200">
-<dt>{ec('Персональное')}</dt>
-<dd>
-<script type="text/javascript"><!--
-if(me_id < 2 || !me_hash)
-	document.writeln("<"+"script  type=\"text/javascript\" src=\"/_bal/js/login.js\"></"+"script>")
-else {ldelim}
-	document.writeln("<"+"script  type=\"text/javascript\" src=\"/user/"+me_id+"/personal.js\"></"+"script>")
-{if $this && ($this->class_name() == 'balancer_board_topic' || $this->class_name() == 'balancer_board_topics_view')}
-{*
-	document.writeln("<"+"script  type=\"text/javascript\" src=\"/js/users/touch.js?obj={$this->internal_uri_ascii()}&time={$page_last_time}&user_ids={$user_ids}&rnd="+Math.random()+"\"></"+"script>")
-*}
-	$.getScript("/js/users/touch.js?obj={$this->internal_uri_ascii()}&time={$page_last_time}&user_ids={$user_ids}&rnd="+Math.random())
-{/if}
-{rdelim}
---></script>
-<noscript><p>Не работает без JavaScript</p></noscript>
-</dd></dl>
+<div id="personal-js-placeholder">
+<!-- У Вас не работает JavaScript. Значительная часть функций форума будет недоступна. -->
+</div>
 
 {* if ($this->new_class_name() == 'balancer_board_topic' || $this->new_class_name() == 'balancer_board_topics_view')}
 <script type="text/javascript" src="http://www.balancer.ru/js/board/topics/t{$this->id()}-similar.js"></script>
 {/if *}
 
 <dl class="box w200"><dt>{ec('Твиттер сайта')}</dt>
-<a class="twitter-timeline" href="https://twitter.com/AirbaseRu" data-widget-id="429908527918755840">{ec('Твиты пользователя')} @AirbaseRu</a>
+<a class="twitter-timeline" href="//twitter.com/AirbaseRu" data-widget-id="429908527918755840">{ec('Твиты пользователя')} @AirbaseRu</a>
 <script>!function(d,s,id){ var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){ js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </dl>
 
@@ -435,7 +436,13 @@ BORS_CORE={$smarty.const.BORS_CORE}
 {/if *}
 </body>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript"><!--
+$(document).ready(function() {
+	jQuery.getScript("/js/users/touch.js?obj={$this->internal_uri_ascii()}&page={$this->page()}&time={$page_last_time}&user_ids={$user_ids}&rnd="+Math.random())
+})
+--></script>
 
 {foreach from=$js_include_post item="s"}
 <script type="text/javascript" src="{$s}"></script>
@@ -447,6 +454,7 @@ BORS_CORE={$smarty.const.BORS_CORE}
 {/foreach}
 
 $(document).ready(function() {
+
 	{foreach from=$jquery_document_ready item="s"}
 	{$s}
 	{/foreach}
@@ -472,9 +480,12 @@ $(document).ready(function() {
 {/if}
 })
 
+
+
 {if 0 && $me}
 jQuery.getScript('http://forums.balancer.ru/ajax/pagemod.js?user_id='+0+'&target={$this->internal_uri_ascii()}&mtime={$this->modify_time()}&static={$this->cache_static()}')
 {/if}
+
 --></script>
 
 </html>

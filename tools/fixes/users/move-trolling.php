@@ -2,16 +2,19 @@
 
 require_once('../../config.php');
 
+$target_topic_id = 82617;
+
 main();
 bors_exit();
 
 function main()
 {
+	global $target_topic_id;
+
 	// 84463 — Lazy Rider
 
 	$uids = [84463, 105560];
 	$cat_ids = [6,8,26,27]; // 8 = Клуб
-	$target_topic_id = 82617;
 
 	$posts = bors_each('balancer_board_post', [
 		'inner_join' => [
@@ -22,6 +25,28 @@ function main()
 		'balancer_board_forum.category_id IN' => $cat_ids,
 		'topic_id<>' => $target_topic_id,
 	]);
+
+	posts_move($posts);
+
+	$neznaiko = bors_find_all('balancer_board_user', [
+		'utmx IN' => ['96b302de414144a74f685bd3a61fdc1e', '51296554a9748a6bc21f33d1f110caba', '4fcb38f61c500bf2456b5558aaa8c636', '8ad78f96b01b056bc797909e4b090a07'],
+		'id<>' => 107867,
+		'by_id' => true,
+	]);
+
+	$uids = array_keys($neznaiko);
+
+	$posts = bors_each('balancer_board_post', [
+		'owner_id IN' => $uids,
+		'topic_id<>' => $target_topic_id,
+	]);
+
+	posts_move($posts);
+}
+
+function posts_move($posts)
+{
+	global $target_topic_id;
 
 	$topics = [];
 

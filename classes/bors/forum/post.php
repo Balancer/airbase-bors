@@ -341,7 +341,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	// Осторожнее и использованием $topic! Если, например, ищем ссылку на ответ, находящийся 
 	// не в текущей теме.
-	function url_in_topic($topic = NULL)
+	function url_in_topic($topic = NULL, $force = false)
 	{
 		$pid = $this->id();
 
@@ -366,7 +366,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		else
 			$post = $this;
 
-		return $topic->url_ex($post->topic_page())."#p".$post->id();
+		return $topic->url_ex($post->topic_page()).($force ? '?r='.time() : '')."#p".$post->id();
 	}
 
 	function modify_time($exact = false)

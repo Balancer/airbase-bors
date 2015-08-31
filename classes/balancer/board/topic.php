@@ -7,9 +7,9 @@ class balancer_board_topic extends forum_topic
 	function browser_title()
 	{
 		if($this->total_pages() <= 1)
-			return $this->title();
+			return $this->title() . ' [Форумы Balancer.Ru]';
 
-		return $this->title() . " ({$this->page()}/{$this->total_pages()})";
+		return $this->title() . " ({$this->page()}/{$this->total_pages()})" . ' [Форумы Balancer.Ru]';
 	}
 
 	function browser_description()
@@ -34,17 +34,16 @@ class balancer_board_topic extends forum_topic
 		if(!$this->is_public_access())
 			return 0;
 
-		if($this->modify_time() < time() - 86400*365)
-			return 86400*rand(300, 900);
+		$age = time() - $this->modify_time();
 
-		if($this->modify_time() < time() - 86400*30)
-			return 86400*rand(7, 30);
+		if($age > 86400*30)
+			return rand(86400*300, 886400*900);
 
-		if($this->modify_time() < time() - 86400*7)
-			return rand(3600, 86400);
+		if($age > 86400*7)
+			return rand(86400*7, 86400*30);
 
-		if($this->modify_time() < time() - 86400)
-			return rand(600, 1200);
+		if($age > 86400)
+			return rand(3600, 7200);
 
 		return rand(60, 300);
 	}
@@ -197,8 +196,6 @@ class balancer_board_topic extends forum_topic
 		return $this->titled_link_ex(array('page' => 'new'));
 	}
 
-	function answer_notice() { return NULL; }
-
 	function pre_show()
 	{
 		bors_lib_html::set_og_meta($this);
@@ -207,14 +204,19 @@ class balancer_board_topic extends forum_topic
 
 		jquery::on_ready(__DIR__.'/topics/view.inc.ready.js');
 
+/*
 		if($this->answer_notice())
 		{
 			bors_use('/_bal/opt/sweet-alert.js');
 			bors_use('/_bal/opt/sweet-alert.css');
 		}
+*/
 
 		if($this->page() == $this->total_pages())
-			header("X-Accel-Expires: 30");
+		{
+			header("X-Accel-Expires: 10");
+			template_nocache();
+		}
 		elseif($this->page() >= $this->total_pages() - 2)
 			header("X-Accel-Expires: 600");
 		else
@@ -424,7 +426,7 @@ class balancer_board_topic extends forum_topic
 		if(!$this->is_public_access())
 			return false;
 
-		if(preg_match('/(airbase\.ru|wrk\.ru)/', @$_SERVER['HTTP_HOST']))
+		if(!preg_match('/(balancer\.ru)/', @$_SERVER['HTTP_HOST']))
 			return true;
 
 		return $this->last_post_create_time() > time() - 86400*365;
@@ -442,4 +444,8 @@ class balancer_board_topic extends forum_topic
 		// {include file="xfile:forum/ads/begun-top-auto.html"}
 		return 'xfile:forum/ads/yandex-direct-h4.html';
 	}
+
+//	function _banners_type_def() { return rand(0,2); }
+	function _banners_type_def() { return 2*rand(0,1); }
+//	function _banners_type_def() { return bors()->user_id() == 10000 ? 2 : rand(0,2); }
 }
