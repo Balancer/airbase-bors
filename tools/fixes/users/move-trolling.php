@@ -29,7 +29,11 @@ function main()
 	posts_move($posts);
 
 	$neznaiko = bors_find_all('balancer_board_user', [
-		'utmx IN' => ['96b302de414144a74f685bd3a61fdc1e', '51296554a9748a6bc21f33d1f110caba', '4fcb38f61c500bf2456b5558aaa8c636', '8ad78f96b01b056bc797909e4b090a07'],
+		'utmx IN' => [
+			'96b302de414144a74f685bd3a61fdc1e', '51296554a9748a6bc21f33d1f110caba',
+			'4fcb38f61c500bf2456b5558aaa8c636', '8ad78f96b01b056bc797909e4b090a07',
+			'6dd62f39282dca5895918cc925ff7ade',
+		],
 		'id<>' => 107867,
 		'by_id' => true,
 	]);
