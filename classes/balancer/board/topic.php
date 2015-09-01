@@ -448,4 +448,18 @@ class balancer_board_topic extends forum_topic
 //	function _banners_type_def() { return rand(0,2); }
 	function _banners_type_def() { return 2*rand(0,1); }
 //	function _banners_type_def() { return bors()->user_id() == 10000 ? 2 : rand(0,2); }
+
+	function page_modify_time($page)
+	{
+		$last_post_in_page = bors_find_first('balancer_board_posts_pure', [
+			'topic_id' => $this->id(),
+			'topic_page' => $page,
+			'order' => 'COALESCE(`edited`,`posted`) DESC',
+		]);
+
+		if($last_post_in_page)
+			return max($last_post_in_page->create_time(), $last_post_in_page->edited());
+
+		return $this->modify_time();
+	}
 }
