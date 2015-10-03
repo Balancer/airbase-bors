@@ -1,12 +1,12 @@
 DIV.postmsg { 
-	font-size: small; 
+	font-size: 12pt;
 	text-align: justify;
 /*	overflow: hidden; */
 }
 
 .pun TEXTAREA {
-	FONT-FAMILY: monospace;
-	font-size: small; 
+	FONT-FAMILY: Consolas, monospace;
+	font-size: 12pt;
 }
 
 .pun A:link, .pun A:visited 

@@ -14,16 +14,16 @@ class balancer_board_stat_forums_posted extends balancer_board_page
 
 		$dbh = new driver_mysql('AB_FORUMS');
 
-		$posts_stat = $dbh->select_array('posts', 'YEAR(FROM_UNIXTIME(posts.posted)) AS year,
+		$posts_stat = $dbh->select_array('posts', '`year`,
 				MONTH(FROM_UNIXTIME(posts.posted)) AS month,
 				forum_id,
 				posts.posted AS ts,
 				COUNT(*) AS count',
 			array(
 				'inner_join' => 'topics ON posts.topic_id = topics.id',
-				'posts.posted>' => time() - 86400*365.25*5,
+				'posts.posted>' => time() - 86400*365.25*10,
 				'posts.posted<=' => time(),
-				'group' => 'YEAR(FROM_UNIXTIME(`posts`.`posted`)), MONTH(FROM_UNIXTIME(`posts`.`posted`)), forum_id',
+				'group' => '`posts`.`year`, MONTH(FROM_UNIXTIME(`posts`.`posted`)), forum_id',
 				'having' => 'COUNT(*) > 500',
 				'order' => '`posts`.`posted`',
 			)
@@ -47,7 +47,7 @@ class balancer_board_stat_forums_posted extends balancer_board_page
 			$posts_by_month[$fid]['data'][] = $x;
 		}
 
-		$posts_stat = $dbh->select_array('posts', 'YEAR(FROM_UNIXTIME(posts.posted)) AS year,
+		$posts_stat = $dbh->select_array('posts', '`year`,
 				forum_id,
 				posts.posted AS ts,
 				COUNT(*) AS count',
@@ -55,8 +55,8 @@ class balancer_board_stat_forums_posted extends balancer_board_page
 				'inner_join' => 'topics ON posts.topic_id = topics.id',
 				'posts.posted>' => strtotime('1999-01-01'),
 				'posts.posted<=' => time(),
-				'group' => 'YEAR(FROM_UNIXTIME(`posts`.`posted`)), forum_id',
-				'having' => 'COUNT(*) > 5000',
+				'group' => '`posts`.`year`, forum_id',
+				'having' => 'COUNT(*) > 3000',
 				'order' => '`posts`.`posted`',
 			)
 		);

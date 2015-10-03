@@ -92,13 +92,13 @@ $(function() {
 {if $me->can_move()}
 	<h6>Инструменты сообщения</h6>
 	<ul>
-		<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/as-new-topic">Вынести сообщение со всеми ответами в <b>новую</b> тему</a></li>
-		<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/move-tree">Перенести сообщение со всеми ответами в <b>другую</b>, уже имеющуюся тему</a></li>
-		<li><a href="/admin/forum/posts/move-tree">Перенести все <b>отмеченные</b> сообщения в другую тему</a></li>
+		<li><i class="fa fa-code-fork"></i>&nbsp;<a href="http://www.balancer.ru/admin/forum/post/{$id}/move-tree" target="_blank">Перенести сообщение со всеми ответами в <b>другую</b>, уже имеющуюся тему</a></li>
+		<li><i class="fa fa-check-circle-o"></i>&nbsp;<a href="/admin/forum/posts/move-tree" target="_blank">Перенести все <b>отмеченные</b> сообщения в другую тему</a></li>
+		<li><i class="fa fa-clone"></i>&nbsp;<a href="http://www.balancer.ru/admin/forum/post/{$id}/as-new-topic" target="_blank">Вынести сообщение со всеми ответами в <b>новую</b> тему</a></li>
 	{if not $p->sort_order()}
-		<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/do-pinned.bas">Закрепить сообщение в начале темы</a></li>
+		<li><i class="fa fa-thumb-tack"></i>&nbsp;<a href="http://www.balancer.ru/admin/forum/post/{$id}/do-pinned.bas">Закрепить сообщение в начале темы</a></li>
 	{else}
-		<li><a href="http://www.balancer.ru/admin/forum/post/{$id}/do-unpinned.bas">Открепить сообщение от начала темы</a></li>
+		<li><i class="fa fa-thumb-tack"></i>&nbsp;<a href="http://www.balancer.ru/admin/forum/post/{$id}/do-unpinned.bas">Открепить сообщение от начала темы</a></li>
 	{/if}
 	</ul>
 {/if}

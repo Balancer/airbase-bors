@@ -48,7 +48,7 @@ $('#mcontainer').highcharts({
 			name: "{$s.forum->title()|addslashes}",
 			data: [
 {foreach $s.data as $x}
-				[Date.UTC({$x.year}, {$x.month}, 1), {$x.count} ]{if !$x@last},{/if} 
+				[Date.UTC({$x.year}, {$x.month-1}, 1), {$x.count} ]{if !$x@last},{/if} 
 {/foreach}
 			]
 		}{if not $s@last}, {/if} 
@@ -86,7 +86,7 @@ $('#ycontainer').highcharts({
 			name: "{$s.forum->title()|addslashes}",
 			data: [
 {foreach $s.data as $x}
-				[Date.UTC({$x.year}, 1, 1), {$x.count} ]{if !$x@last},{/if} 
+				[Date.UTC({$x.year}, 0, 1), {$x.count} ]{if !$x@last},{/if} 
 {/foreach}
 			]
 		}{if not $s@last}, {/if} 

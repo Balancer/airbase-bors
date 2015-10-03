@@ -40,6 +40,9 @@ function main()
 
 	$uids = array_keys($neznaiko);
 
+	$uids[] = 108377; // Чингизхан, твинк Незнайко
+	$uids[] = 108394; // Марк Аврелий, твинк Незнайко
+
 	$posts = bors_each('balancer_board_post', [
 		'owner_id IN' => $uids,
 		'topic_id<>' => $target_topic_id,

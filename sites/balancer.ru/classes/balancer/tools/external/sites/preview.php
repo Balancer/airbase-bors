@@ -2,6 +2,8 @@
 
 class balancer_tools_external_sites_preview extends bors_image_png
 {
+	function class_title() { return 'Превью сайта'; }
+
 	function image()
 	{
 		$id = $this->id();
