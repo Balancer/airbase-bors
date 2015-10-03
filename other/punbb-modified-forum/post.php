@@ -310,7 +310,7 @@ if (isset($_POST['form_sent']))
 	{
 		$md = md5($message);
 		if($me->last_message_md() == $md)
-			message("Вы уже отправили это сообщение");
+			message('Вы уже отправили это сообщение', false, [$topic->url_ex('new') => 'Перейти в конец темы']);
 
 		$me->set_last_message_md($md, true);
 		$answer_to_post = bors_load('balancer_board_post', @$qid);
@@ -794,7 +794,9 @@ require PUN_ROOT.'header.php';
 			<li>&nbsp;&raquo;&nbsp;<?= $forum_name ?></li>
 			<?php
 				if(isset($cur_posting['subject']))
-					echo '<li>&nbsp;&raquo;&nbsp;'.$topic->titled_link().'</li>';
+					echo '<li>&nbsp;&raquo;&nbsp;'.$topic->titled_link_ex('new').'</li>';
+				if($qid && $quoted_post)
+					echo '<li>&nbsp;&raquo;&nbsp;<a href="'.$quoted_post->url_for_igo().'" target="_blank">'.$quoted_post->nav_name().'</a></li>';
 			?>
 		</ul>
 	</div>
@@ -895,6 +897,22 @@ if(($warn_count = $me->warnings()) > 0)
 
 if($topic && !$qid)
 {
+	if(in_array('новости', $topic->keywords()))
+		echo "
+			<div class=\"alert alert-error\" style=\"padding: 4px; margin-bottom: 4px; font-size: 150%\">
+
+				<b style=\"color: red\">Внимание!</b> Вы оставляете новое
+				непривязанное сообщение в тему, помеченную как лента
+				новостей. Если Ваше новое сообщение будет не новостью по
+				теме, Вы можете быть оштрафованы за офтопик или
+				некорректную привязку ответа, если вместо на чьё-то
+				конкретное сообщение отвечаете прямо в тему. В данный
+				топик непривязынными («ответ в тему», а не «ответ на
+				сообщение») можно писать только сообщения с <b>новостями по
+				теме «<i>{$topic->topic_title_with_description()}</i>»</b>.
+			</div>
+		";
+
 	$moved_topics = bors_find_all('balancer_board_topic', [
 		'*set' => 'COUNT(*) AS num_moved_posts',
 		'inner_join' => 'balancer_board_post ON balancer_board_topic.id = balancer_board_post.topic_id',

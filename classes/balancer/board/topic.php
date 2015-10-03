@@ -20,6 +20,15 @@ class balancer_board_topic extends forum_topic
 		return $this->description() . " (страница {$this->page()} из {$this->total_pages()})";
 	}
 
+	function topic_title_with_description()
+	{
+		$title = $this->title();
+		if($this->description())
+			$title .= " ({$this->description()})";
+
+		return $title;
+	}
+
 	function cache_static_can_be_dropped()
 	{
 		bors_debug::syslog('__pages_clean', "Clean {$this->static_file()}[{$this->page()}/{$this->total_pages()}]: ".($this->page() > $this->total_pages() - 3));
@@ -214,7 +223,7 @@ class balancer_board_topic extends forum_topic
 
 		if($this->page() == $this->total_pages())
 		{
-			header("X-Accel-Expires: 10");
+			header("X-Accel-Expires: 1");
 			template_nocache();
 		}
 		elseif($this->page() >= $this->total_pages() - 2)

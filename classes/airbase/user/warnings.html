@@ -19,7 +19,11 @@ if(top.me_is_coordinator)
    </table>
    <input type="hidden" name="object" value="{$object->internal_uri()}" />
    <input type="hidden" name="user_id" value="{$this->id()}" />
+{if method_exists($object, 'url_in_topic')}
    {go value=$object->url_in_topic(NULL,true)}
+{else}
+{/if}
+   {go value=$object->url_in_container()}
   {/form}
  {else}
   <div class="yellow_box">За это сообщение пользователь уже получил предупреждение «{$previous_warning->description()}»</div>
