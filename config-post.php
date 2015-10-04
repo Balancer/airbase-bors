@@ -1,5 +1,11 @@
 <?php
 
+if(@$_SERVER['HTTP_HOST'] == 'www.airbase.ru')
+{
+	echo 'x';
+	return;
+}
+
 /*
 config_set('user_class', NULL);
 config_set('user_class_skip', true);
