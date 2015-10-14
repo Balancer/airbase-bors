@@ -366,7 +366,10 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		else
 			$post = $this;
 
-		return $topic->url_ex($post->topic_page()).($force ? '?r='.time() : '')."#p".$post->id();
+		return $topic->url_ex([
+			'page' => $post->topic_page(),
+			'is_last_page' => time(),
+		])."#p".$post->id();
 	}
 
 	function modify_time($exact = false)
@@ -552,7 +555,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			&& ($owner = $this->owner()) // Есть юзер
 		)
 		{
-			$owner->add_money(-10,
+			$owner->add_money(-25,
 				'move_first_thread',
 				"Перенос сообщения в начале цепочки в другую тему",
 				$this,

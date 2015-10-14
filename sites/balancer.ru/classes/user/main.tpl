@@ -228,6 +228,18 @@
 </td></tr></table>
 *}
 
+{if $votes_by_categories}
+<table class="btab w100p">
+<caption>Суммарная оценка сообщений по категориям:</caption>
+<tr><th>Категория</th><th>Суммарная оценка</th></tr>
+{foreach $votes_by_categories as $p}
+<tr><td>{$p->topic()->forum()->category()->titled_link()}</td>
+	<td>{bors_votes_thumb::colorize_html($p->scores())} ({bors_votes_thumb::colorize_pm($p->scores_pos(), -$p->scores_neg())})</td>
+</tr>
+{/foreach}
+{/if}
+
+
 {if $messages_today}
 <table class="btab w100p">
 <caption>Количество сообщений по форумам за сутки:</caption>
@@ -251,6 +263,19 @@
 {foreach from=$messages_month_by_forums item="x"}
 {bors_object_load var="f" class="forum_forum" id=$x.forum_id}
 <tr><td>{$f->titled_link()}</td>
+	<td>{$x.count}</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
+{if $messages_month_by_categories}
+<table class="btab w100p">
+<caption>Количество сообщений по разделам за месяц:</caption>
+<tr><th>Раздел</th><th>Число сообщений</th></tr>
+{foreach $messages_month_by_categories as $x}
+	{bors_object_load var="c" class="balancer_board_category" id=$x.cat_id}
+<tr><td>{$c->titled_link()}</td>
 	<td>{$x.count}</td>
 </tr>
 {/foreach}

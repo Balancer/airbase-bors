@@ -28,7 +28,7 @@
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
 	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-786-min.css" />
-	<link rel="canonical" href="{$this->url_ex($this->page())}" />
+	<link rel="canonical" href="{$this->url_ex(['page'=>$this->page(),'force'=>false])}" />
 
 <!--[if IE]><style>
 .outer, .wide, h2, .wrapper, .minwidth { height: 0; height: auto; zoom: 1; }

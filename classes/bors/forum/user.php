@@ -515,13 +515,13 @@ function avatar_thumb($geo)
 //		$referer = isset($_GET['redirect_url']) ? $_GET['redirect_url'] : @$_SERVER['HTTP_REFERER'];
 		$redirect = config('redirect_to', bors()->request()->url()); // isset($_GET['redirect_url']) ? $_GET['redirect_url'] : @$_SERVER['HTTP_REFERER'];
 
-		$haction = bal_user_haction::add($this->id(), 'bal_users_helper', 'haction_domain_login', 120, array(
+		$haction = bal_user_haction::add($this->id(), 'bal_users_helper', 'haction_domain_login', 120, [
 			'domain' => $next_domain,
 			'redirect' => $redirect,
 			'cookie_hash' => $this->user_cookie_hash(),
 			'is_admin' => $this->is_admin(),
 			'expired' => $expired,
-		));
+		]);
 
 		config_set('__login_redir', true);
 		return go($haction->url_ex($next_domain), false, 0, true);

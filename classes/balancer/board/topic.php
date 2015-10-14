@@ -471,4 +471,10 @@ class balancer_board_topic extends forum_topic
 
 		return $this->modify_time();
 	}
+
+	function is_news()
+	{
+		return in_array('новости', $this->keywords());
+//		return preg_match('/новости/iu', $this->keywords_string());
+	}
 }

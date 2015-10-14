@@ -68,6 +68,15 @@ class user_main extends balancer_board_page
 			'limit' => 20,
 		));
 
+		$messages_month_by_categories = $db->select_array('posts', 'cat_id, count(*) AS `count`', [
+			'inner_join' => ['topics ON topics.id = topic_id', 'forums ON forums.id = forum_id'],
+			'posts.poster_id=' => $this->id(), 
+			'is_deleted' => false,
+			'posts.posted>' => time()-86400*30,
+			'group' => 'cat_id',
+			'order' => 'COUNT(*) DESC',
+		]);
+
 		$best = bors_find_all('bors_votes_thumb', array(
 				'target_user_id' => $this->id(),
 				'group' => 'target_class_name,target_object_id',
@@ -85,9 +94,24 @@ class user_main extends balancer_board_page
 				'limit' => 20,
 		));
 
+		$votes_by_categories = bors_find_all('balancer_board_post', [
+				'*set' => 'SUM(bors_thumb_votes.score) AS scores, SUM(IF(bors_thumb_votes.score>0,1,0)) AS scores_pos, SUM(IF(bors_thumb_votes.score>0,0,1)) AS scores_neg',
+				'inner_join' => [
+					'AB_BORS.bors_thumb_votes ON `bors_thumb_votes`.target_object_id = `posts`.`id`',
+					'topics ON topics.id = topic_id',
+					'forums ON forums.id = forum_id',
+				],
+
+				'`posts`.poster_id=' => $this->id(),
+				'`posts`.`posted`>' => time()-86400*30,
+				'AB_BORS.bors_thumb_votes.create_time>' => time()-86400*30,
+				'group' => 'cat_id',
+//				'having' => 'SUM(bors_thumb_votes.score) > 0',
+				'order' => 'SUM(bors_thumb_votes.score) DESC',
+		]);
+
 		bors_objects_targets_preload($best);
 		bors_objects_targets_preload($best_of_month);
-
 
 		$user = $this->user();
 		$user->set_reg_geo_ip(geoip_place($user->registration_ip()), false);
@@ -203,6 +227,9 @@ class user_main extends balancer_board_page
 			'messages_today_by_forums' => $by_forums,
 			'messages_month_by_forums' => $by_forums_for_month,
 			'messages_year_by_forums' => $by_forums_for_year,
+
+			'messages_month_by_categories' => $messages_month_by_categories,
+
 			'today_total' => bors_count('balancer_board_post', array(
 				'owner_id' => $this->id(),
 				'is_deleted' => false,
@@ -224,7 +251,8 @@ class user_main extends balancer_board_page
 			'scores_positive',
 			'scores_negative',
 			'votes_positive',
-			'votes_negative'
+			'votes_negative',
+			'votes_by_categories'
 		));
 	}
 }

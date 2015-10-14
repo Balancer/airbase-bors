@@ -165,6 +165,9 @@ if($qid)
 	$tid = $topic->id();
 }
 
+if($me->is_destructive() && $topic->is_news() && !$qid)
+	message("Вам запрещено размещать новости в новостных темах.");
+
 $GLOBALS['cms']['cache_disabled'] = true;
 
 $true_text = 100;
@@ -305,8 +308,59 @@ if (isset($_POST['form_sent']))
 
 	$was_notified = false;
 
+	$lcml_notice = [];
+
+	if(preg_match('!\[spoiler(.+?)\[/spoiler!si', $message, $m) && bors_strlen($m[1]) > 1900)
+		$lcml_notice[] = 'Текст спойлера слишком длинный. Он не будет скрыт. [<a href="http://www.balancer.ru/g/p3977037" target="_blank">Подробности</a>&nbsp;|&nbsp;<a href="http://ls.balancer.ru/topic/add" target="_blank">Добавить отдельной статьёй</a>]';
+
+	if(preg_match_all('!(https?://\S+)!', $message, $matches))
+	{
+		foreach($matches[1] as $url)
+		{
+			$x = airbase_external_link::find($url);
+			if($x)
+			{
+				$notice = 'Ссылка '.$url.' была найдена в сообщениях:<br/>';
+				foreach(bors_find_all('balancer_board_post', ['create_time>' => time()-86400*30, 'source LIKE \'%'.addslashes($url).'%\'', 'order' => '-create_time']) as $p)
+					$notice.="&nbsp;&middot;&nbsp;<a href=\"{$p->url_for_igo()}\" target=\"_blank\">{$p->title()}</a><br/>";
+				$notice .= 'Убедитесь, что вы не плодите дубль.';
+				$lcml_notice[] = $notice;
+			}
+		}
+	}
+
+	if(preg_match_all('!\[youtube[^\]]*?\](.+?)\[/youtube\]!', bors_external_youtube::parse_links($message), $matches))
+	{
+		foreach($matches[1] as $id)
+		{
+			$youtube_objects = bors_find_all('balancer_board_posts_object', array(
+				'target_class_name' => 'bors_external_youtube',
+				'target_object_id' => $id,
+				'order' => '-target_create_time',
+			));
+
+			if($youtube_objects)
+			{
+				$notice = 'Видеоролик Youtube id='.$id.' был найден в сообщениях:<br/>';
+				foreach($youtube_objects as $px)
+				{
+					$p = $px->post();
+					$notice.="&nbsp;&middot;&nbsp;<a href=\"{$p->url_for_igo()}\" target=\"_blank\">{$p->title()}</a><br/>";
+				}
+				$notice .= 'Убедитесь, что вы не плодите дубль.';
+				$lcml_notice[] = $notice;
+			}
+		}
+	}
+
+	if($qid && !preg_match('!^\S*>.+$!m', $message))
+		$lcml_notice[] = 'Вы отвечаете на чужое сообщение, но в нём нет цитируемого текста. Если это именно ответ на сообщение, то всё ок. Но если это самостоятельное сообщение в тему в виде ответа, то <b>Вы можете заработать штраф</b>. [<a href="http://www.balancer.ru/g/p3975540" target="_blank">Подробности</a>]';
+
+	if(!empty($_POST['lcml_confirmed']))
+		$lcml_notice = [];
+
 	// Did everything go according to plan?
-	if(empty($errors) && !isset($_POST['preview']) && $true_text > 40)
+	if(empty($errors) && !isset($_POST['preview']) && $true_text > 40 && !$lcml_notice)
 	{
 		$md = md5($message);
 		if($me->last_message_md() == $md)
@@ -695,7 +749,12 @@ if (isset($_POST['form_sent']))
 		}
 
 		//	function add_money($amount, $action=NULL, $comment=NULL, $object=NULL, $source=NULL)
-		bors()->user()->add_money(-2, 'post', "Сообщение", $post);
+		if(!$qid && $topic->is_news() && !$me->is_destructive())
+			// Новость, не привязанное
+			$me->add_money(20, 'news', "Новость", $post);
+		else
+			// Ответ
+			$me->add_money(1, 'post', "Сообщение", $post);
 
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);
@@ -868,6 +927,16 @@ if($true_text <= 40)
 </div><br/>";
 }
 
+if($lcml_notice)
+{
+	$lcml_notice[] = "Вы можете всё равно отправить это сообщение, отметив под ним галочку &laquo;Я подтверждаю корректность текста сообщения&raquo;, но будьте внимательны!";
+
+	foreach($lcml_notice as $s)
+		echo "<div class=\"alert alert-warning\" style=\"padding: 4px; margin-bottom: 4px; font-size: 150%\">{$s}</div>";
+
+	echo '<br/>';
+}
+
 if($messages_limit >= 0)
 {
 	echo "<div class=\"red-box\">Из-за активных штрафов число Ваших сообщений в одном форуме в сутки ограничено {$messages_limit}-ю. 
@@ -897,7 +966,7 @@ if(($warn_count = $me->warnings()) > 0)
 
 if($topic && !$qid)
 {
-	if(in_array('новости', $topic->keywords()))
+	if($topic->is_news())
 		echo "
 			<div class=\"alert alert-error\" style=\"padding: 4px; margin-bottom: 4px; font-size: 150%\">
 
@@ -1071,6 +1140,9 @@ else if ($pun_config['o_smilies'] == '1')
 
 if($true_text <= 40)
 	$checkboxes[] = "<label><input type=\"checkbox\" name=\"overquote_confirmed\" value=\"1\" tabindex=\"".($cur_index++)."\"/>Я подтверждаю избыточное цитирование</label>";
+
+if($lcml_notice)
+	$checkboxes[] = "<label><input type=\"checkbox\" name=\"lcml_confirmed\" value=\"1\" tabindex=\"".($cur_index++)."\"/>Я подтверждаю корректность текста сообщения</label>";
 
 if($me && $me->is_coordinator())
 	$checkboxes[] = "<label style=\"color:red\"><input type=\"checkbox\" name=\"is_moderatorial\" value=\"1\" tabindex=\"".($cur_index++)."\" />Данное сообщение - модераториал</label>";

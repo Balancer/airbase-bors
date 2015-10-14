@@ -84,6 +84,10 @@ class balancer_board_posts_pure extends balancer_board_object_db
 		else
 			$post = $this;
 
-		return $topic->url_ex($post->topic_page()).($force ? '?r='.time() : '')."#p".$post->id();
+		return $topic->url_ex([
+			'page' => $post->topic_page(),
+			'is_last_page' => time(),
+		])."#p".$post->id();
+//		return $topic->url_ex($post->topic_page()).($force ? '?r='.time() : '')."#p".$post->id();
 	}
 }

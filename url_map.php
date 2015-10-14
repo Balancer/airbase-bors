@@ -109,6 +109,7 @@ $map = array(
 
 //	'/test/ => airbase_main',
 	'/tools/search/ => bors_tools_search',
+	'(/tools/search/)result/\?(.+) => bors_tools_search_result(NULL,NULL,request=2)',
 	'/tools/search/result/ => bors_tools_search_result',
 	'/user/(\d+)/personal\.js => forum_js_personal(1)',
 	'/user/(\d+)/setvars.js => forum_user_js_setvars(1)',
