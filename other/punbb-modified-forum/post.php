@@ -71,6 +71,11 @@ if(!$me)
 	<a href=\"http://www.wrk.ru/forums/register.php\" style=\"display: block; width: 24ex; font-size: 10pt; padding: 2px 4px; text-align: center; box-shadow: 2px 2px 4px rgba(0,0,0,0.5); color: white; background: rgb(28, 184, 65)\">Зарегистрироваться</a>
 ");
 
+if($me->money() < -3000 && $tid<>82617)
+	message('При балансе ☼ менее -3000 запрещено писать в любые темы, кроме
+		 «<a href="http://www.wrk.ru/community/2015/11/t82617,new--zapovednik-goblinov.html">Заповедника&nbsp;Гоблинов</a>»&nbsp;[<a href="http://www.wrk.ru/community/2015/11/t82617,new--zapovednik-goblinov.html">Перейти&nbsp;в&nbsp;тему</a>].
+		 Вы можете дождаться, пока баланс станет положительным за счёт ежедневных начислений или попросить в этой теме других участников перевести вам нужную сумму.');
+
 if($fid && !$tid && ($me->num_posts() < 3 || $me->create_time() > time() - 86400))
 {
 	message('Извините, но с целью борьбы со спамерами только что зарегистрированным'
@@ -313,18 +318,31 @@ if (isset($_POST['form_sent']))
 	if(preg_match('!\[spoiler(.+?)\[/spoiler!si', $message, $m) && bors_strlen($m[1]) > 1900)
 		$lcml_notice[] = 'Текст спойлера слишком длинный. Он не будет скрыт. [<a href="http://www.balancer.ru/g/p3977037" target="_blank">Подробности</a>&nbsp;|&nbsp;<a href="http://ls.balancer.ru/topic/add" target="_blank">Добавить отдельной статьёй</a>]';
 
-	if(preg_match_all('!(https?://\S+)!', $message, $matches))
+	if(preg_match_all('@(^.*?)(https?://\S+)@mi', $message, $matches))
 	{
-		foreach($matches[1] as $url)
+		foreach($matches[2] as $id => $url)
 		{
+			if(preg_match('/^\S+>\s*/', $matches[1][$id]))
+				continue;
+
 			$x = airbase_external_link::find($url);
 			if($x)
 			{
-				$notice = 'Ссылка '.$url.' была найдена в сообщениях:<br/>';
+				$posts = [];
 				foreach(bors_find_all('balancer_board_post', ['create_time>' => time()-86400*30, 'source LIKE \'%'.addslashes($url).'%\'', 'order' => '-create_time']) as $p)
-					$notice.="&nbsp;&middot;&nbsp;<a href=\"{$p->url_for_igo()}\" target=\"_blank\">{$p->title()}</a><br/>";
-				$notice .= 'Убедитесь, что вы не плодите дубль.';
-				$lcml_notice[] = $notice;
+				{
+//					if(preg_match("#(?<!\S> )".preg_quote($url, '#').'#im', "\n".$p->source()))
+						$posts[] = $p;
+				}
+
+				if($posts)
+				{
+					$notice = 'Ссылка '.$url.' была найдена в сообщениях:<br/>';
+					foreach($posts as $p)
+						$notice.="&nbsp;&middot;&nbsp;<a href=\"{$p->url_for_igo()}\" target=\"_blank\">{$p->title()}</a> <small style=\"color: #999; font-size: 8pt;\">({$p->snip()})</small><br/>";
+					$notice .= 'Убедитесь, что вы не плодите дубль.';
+					$lcml_notice[] = $notice;
+				}
 			}
 		}
 	}
@@ -341,19 +359,29 @@ if (isset($_POST['form_sent']))
 
 			if($youtube_objects)
 			{
-				$notice = 'Видеоролик Youtube id='.$id.' был найден в сообщениях:<br/>';
+				$posts = [];
 				foreach($youtube_objects as $px)
 				{
 					$p = $px->post();
-					$notice.="&nbsp;&middot;&nbsp;<a href=\"{$p->url_for_igo()}\" target=\"_blank\">{$p->title()}</a><br/>";
+					if(preg_match('/'.preg_quote($id,'/').'/', $p->source()))
+						$posts[] = $p;
 				}
-				$notice .= 'Убедитесь, что вы не плодите дубль.';
-				$lcml_notice[] = $notice;
+
+				if($posts)
+				{
+					$notice = 'Видеоролик Youtube id='.$id.' был найден в сообщениях:<br/>';
+					foreach($posts as $p)
+					{
+						$notice.="&nbsp;&middot;&nbsp;<a href=\"{$p->url_for_igo()}\" target=\"_blank\">{$p->title()}</a><br/>";
+					}
+					$notice .= 'Убедитесь, что вы не плодите дубль.';
+					$lcml_notice[] = $notice;
+				}
 			}
 		}
 	}
 
-	if($qid && !preg_match('!^\S*>.+$!m', $message))
+	if($quoted_post && $quoted_post->owner_id() != bors()->user_id() && !preg_match('!^\S*>.+$!m', $message))
 		$lcml_notice[] = 'Вы отвечаете на чужое сообщение, но в нём нет цитируемого текста. Если это именно ответ на сообщение, то всё ок. Но если это самостоятельное сообщение в тему в виде ответа, то <b>Вы можете заработать штраф</b>. [<a href="http://www.balancer.ru/g/p3975540" target="_blank">Подробности</a>]';
 
 	if(!empty($_POST['lcml_confirmed']))
@@ -997,6 +1025,7 @@ if($topic && !$qid)
 	foreach($moved_topics as $t)
 	{
 		$desc = preg_replace('/Перенос из темы.+?»/u', '', $t->description());
+		$desc = preg_replace('/\)»/u', '', $desc);
 /*
 		if($t->answer_notice())
 		{

@@ -500,7 +500,10 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		}
 
 		foreach($this->posts() as $pid => $p)
-			$p->set_body(NULL, true);
+		{
+//			$p->set_body(NULL);
+//			$p->body();
+		}
 
 		$this->store(false);
 

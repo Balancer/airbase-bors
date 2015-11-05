@@ -60,6 +60,18 @@
 
 {if $show_title && $topic}<div class="forum-link-small forum-topic-snippet-replies"><a href="{$topic->url_ex('new')}" target="_blank">К нечитанному в теме «{$topic->title()}»</a></div>{/if}
 
+		{if $p->get('original_topic_id')
+			&& $p->topic_id() != $p->original_topic_id()
+			&& (!$p->answer_to_id() || !$p->answer_to() || $p->answer_to()->topic_id() != $p->topic_id())}
+	<div class="alert alert-warning ab-alert-small">
+			{if $p->original_topic()}
+		Сообщение было перенесено из темы {$p->original_topic()->titled_link('new')}.
+			{else}
+		Сообщение было перенесено из другой темы.
+			{/if}
+	</div>
+		{/if}
+
 		{assign var="keyword_links" value=$p|get:'keyword_links'}
 		{if $keyword_links}<div class="post_kws">{$keyword_links}</div>{/if}
 		{if $strip}

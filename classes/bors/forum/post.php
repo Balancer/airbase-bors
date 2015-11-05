@@ -176,18 +176,16 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	function set_body($value, $dbupd = true)
 	{
 		if($value == '' && !is_null($value) && $dbupd && !trim($this->source()))
-			debug_hidden_log('body', 'Set empty body in post '.$this->url_in_container());
+			bors_debug::syslog('body', 'Set empty body in post '.$this->url_in_container());
 
-		if($dbupd)
-		{
-			$this->cache_make([
-				'body' => $value,
-				'body_ts' => time(),
-			]);
-			$this->store();
-		}
-		else
-			$this->set_attr('body', $value);
+//		if(config('is_developer')) { var_dump("Set body to ", $value); echo bors_debug::trace(); }
+
+		$this->cache_make([
+			'body' => $value,
+			'body_ts' => time(),
+		]);
+
+		$this->set_attr('body', blib_html::close_tags($value));
 
 		return $value;
 	}
@@ -293,6 +291,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			foreach($attrs as $k => $v)
 				$cache->set($k, $v);
 
+			$cache->store();
 			return $cache;
 		}
 
@@ -303,7 +302,10 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$first = false;
 
 		if($attrs['id'] = $this->id())
+		{
 			$cache = bors_new('balancer_board_posts_cache', $attrs);
+			$cache->store();
+		}
 	}
 
 	function flag()

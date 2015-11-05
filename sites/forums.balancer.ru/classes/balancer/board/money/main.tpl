@@ -15,6 +15,9 @@
 <br/>
 
 <div class="alert alert-info">
-<a href="http://www.wrk.ru/support/2015/04/t91415,new--u-e-aviabazy-solnyshki.html">Обсуждение на форуме</a>
+<ul>
+<li><a href="http://forums.balancer.ru/personal/money/">Детализация баланса</a></li>
+<li><a href="http://www.wrk.ru/support/2015/04/t91415,new--u-e-aviabazy-solnyshki.html">Обсуждение на форуме</a></li>
+</ul>
 </div>
 

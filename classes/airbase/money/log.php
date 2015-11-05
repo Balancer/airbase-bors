@@ -26,6 +26,21 @@ class airbase_money_log extends bors_object_db
 		);
 	}
 
+	function auto_objects()
+	{
+		return array_merge(parent::auto_objects(), [
+			'user'  => 'balancer_board_user(user_id)',
+			'owner' => 'balancer_board_user(owner_id)',
+		]);
+	}
+
+	function auto_targets()
+	{
+		return array_merge(parent::auto_targets(), [
+			'target' => 'object_class_name(object_id)',
+		]);
+	}
+
 	static function add($user, $amount, $action, $comment=NULL, $object=NULL, $source=NULL)
 	{
 		$result = $user->money() + $amount;

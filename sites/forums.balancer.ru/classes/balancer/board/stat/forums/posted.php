@@ -21,10 +21,10 @@ class balancer_board_stat_forums_posted extends balancer_board_page
 				COUNT(*) AS count',
 			array(
 				'inner_join' => 'topics ON posts.topic_id = topics.id',
-				'posts.posted>' => time() - 86400*365.25*10,
-				'posts.posted<=' => time(),
+				'year>' => date('Y', time() - 86400*365.24*3),
+				'posts.posted<' => time(),
 				'group' => '`posts`.`year`, MONTH(FROM_UNIXTIME(`posts`.`posted`)), forum_id',
-				'having' => 'COUNT(*) > 500',
+				'having' => 'COUNT(*) > 1000',
 				'order' => '`posts`.`posted`',
 			)
 		);

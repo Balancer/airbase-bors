@@ -12,6 +12,7 @@ function main()
 	global $target_topic_id;
 
 	// 84463 — Lazy Rider
+	// 105560 — Lumen
 
 	$uids = [84463, 105560];
 	$cat_ids = [6,8,26,27]; // 8 = Клуб
@@ -19,10 +20,11 @@ function main()
 	$posts = bors_each('balancer_board_post', [
 		'inner_join' => [
 			'balancer_board_topic ON balancer_board_topic.id = topic_id',
-			'balancer_board_forum ON balancer_board_forum.id = forum_id',
+//			'balancer_board_forum ON balancer_board_forum.id = forum_id',
 		],
+		'create_time>' => time() - 86400*7,
 		'owner_id IN' => $uids,
-		'balancer_board_forum.category_id IN' => $cat_ids,
+//		'balancer_board_forum.category_id IN' => $cat_ids,
 		'topic_id<>' => $target_topic_id,
 	]);
 
@@ -42,6 +44,29 @@ function main()
 
 	$uids[] = 108377; // Чингизхан, твинк Незнайко
 	$uids[] = 108394; // Марк Аврелий, твинк Незнайко
+
+	$utmxs = [];
+
+	// ID юзеров под снос всех клонов по utmx
+	$uids_for_utmx = [
+		107818, // Scientist
+		108577, // wertwe, твинк mina
+		108543, // V-2, твинк Незнайко
+		108638, // ВоваИ, твинк Незнайко
+		108660, // Кобра, твинк Незнайко
+		108662, // Октябръ
+		108663, // Skyfly
+	];
+
+	foreach(bors_find_all('balancer_board_user', ['id IN' => $uids_for_utmx]) as $u)
+		$utmxs[] = $u->utmx();
+
+	$twinks = bors_find_all('balancer_board_user', [
+		'utmx IN' => $utmxs,
+		'by_id' => true,
+	]);
+
+	$uids = array_merge($uids, array_keys($twinks));
 
 	$posts = bors_each('balancer_board_post', [
 		'owner_id IN' => $uids,

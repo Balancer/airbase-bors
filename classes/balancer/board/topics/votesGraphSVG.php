@@ -130,30 +130,46 @@ class balancer_board_topics_votesGraphSVG extends bors_image_svg
 		{
 			foreach($to_ids as $to_id => $x)
 			{
-				$score = @$x['score1'] - @$x['score-1'];
+//				$score = @$x['score1'] - @$x['score-1'];
 
 				$xc = rand(70,256);
 				$c1 = sprintf('%02X', $xc);
 				$c2 = sprintf('%02X', rand(0, $xc/2));
 				$c3 = sprintf('%02X', rand(0, $xc/2));
 
-				$graph->addEdge(
-					array(
-						$from_id => $to_id,
-					),
+				if(@$x['score1'])
+				{
+					$graph->addEdge(
+						array(
+							$from_id => $to_id,
+						),
 
-					array(
-						'penwidth' => (max(1,abs($x['count']))-1)/$max*12+1,
-//						'label' => pow(@$x['score1'] + @$x['score-1'], 2),
-						'weight' => pow(@$x['score1'] + @$x['score-1'], 2)+1,
-//						'weight' => $x['count']*$x['count']+1,
-						'color' => $score > 0
-							? "#{$c2}{$c1}{$c3}"
-							: ($score < 0
-								? "#{$c1}{$c2}{$c3}"
-								: 'black'),
-					)
-				);
+						array(
+							'penwidth' => (max(1,abs($x['count']))-1)/$max*12+1,
+//							'label' => pow(@$x['score1'] + @$x['score-1'], 2),
+							'weight' => pow(@$x['score1'], 2)+1,
+//							'weight' => $x['count']*$x['count']+1,
+							'color' => /*$score > 0 ? */ "#{$c2}{$c1}{$c3}" /* : ($score < 0 ? "#{$c1}{$c2}{$c3}" : 'black')*/,
+						)
+					);
+				}
+
+				if(@$x['score-1'])
+				{
+					$graph->addEdge(
+						array(
+							$from_id => $to_id,
+						),
+
+						array(
+							'penwidth' => (max(1,abs($x['count']))-1)/$max*12+1,
+//							'label' => pow(@$x['score1'] + @$x['score-1'], 2),
+							'weight' => pow(@$x['score-1'], 2)+1,
+//							'weight' => $x['count']*$x['count']+1,
+							'color' => /*$score > 0 ? "#{$c2}{$c1}{$c3}" : ($score < 0 ? */ "#{$c1}{$c2}{$c3}" /*: 'black')*/,
+						)
+					);
+				}
 			}
 		}
 
