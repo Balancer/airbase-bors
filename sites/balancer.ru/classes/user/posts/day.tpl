@@ -13,7 +13,7 @@
 	{if $t}
 		{assign var="f" value=$t->forum()}
 		{if $p->is_hidden()}
-			<div class="box">** Это сообщение было скрыто координатором **</div>
+			<div class="box">** Это <a href="{$p->url_in_container()}">сообщение</a> было скрыто координатором **</div>
 		{else}
 			{if $f->can_read()}
 				{* if $f->is_public_access() *}

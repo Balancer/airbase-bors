@@ -127,10 +127,6 @@ $(function() {
 {if $me->is_coordinator() or $me->is_watcher()}
 	<h6>Информация для координаторов</h6>
 	<ul>
-		<li>IP адрес: {$p->poster_ip()}</li>
-		<li>GeoIP: {$p->poster_ip()|geoip_place}</li>
-		<li>User-Agent: {$p->poster_ua()}</li>
-		<li>Точное время сообщения: {$p->create_time()|date:'d.m.Y H:i:s'}</li>
 		<li{if $overquote_crit} style="color:red!important"{/if}>Уровень цитирования: {$overquote}%</li>
 		<li><a href="http://forums.balancer.ru/admin/posts/spam">Spam (авто)</a>: {if $spam}<span class="red">Да</span>{else}<span class="green">Нет</span>{/if}</li>
 	</ul>

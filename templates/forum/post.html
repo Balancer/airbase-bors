@@ -144,15 +144,13 @@
 
 		{if $p->topic() && $p->topic()->forum()}
 <ul class="postfooter">
-<li><a href="/_bors/ajax/post/info?post={$p->id()}" class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;{ec("инфо")}</a></li>
-<li><a href="#" onclick="pdsh('{$p->id()}'); return false;"
-	{if config('css_bootstrap_is_loaded')}class="btn btn-mini"{/if}
-><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;{ec("инструменты")}</a></li>
-<li{if not config('css_bootstrap_is_loaded')} class="pages_select"{/if}>
- <a href="{$p->topic()->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
-	class="{if config('css_bootstrap_is_loaded')}btn btn-mini btn-info{else}current_page reply_link{/if}"
-  >{ec("Ответить на сообщение")}</a>
-</li>
+	<li><a href="/_bors/ajax/post/info?post={$p->id()}"  class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;{ec("инфо")}</a></li>
+	<li><a href="/_bors/ajax/post-footer-tools?object=balancer_board_post://{$p->id()}" class="post_info_ajax"><img src="/_bors/i/tools.gif"  align="middle" alt="" />&nbsp;{ec("инструменты")}</a></li>
+	<li{if not config('css_bootstrap_is_loaded')} class="pages_select"{/if}>
+		<a href="{$p->topic()->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
+			class="{if config('css_bootstrap_is_loaded')}btn btn-mini btn-info{else}current_page reply_link{/if}"
+		>{ec("Ответить на сообщение")}</a>
+	</li>
 </ul>
 		{/if}
 	{else}{* is_deleted *}

@@ -66,8 +66,6 @@ $map = array(
 
 	'(/forum/)latest/ => airbase_board_show_latest',
 
-   	'/ => balancer_main',
-
 	'/_bors/ajax/thumb\-(up|down)\?object=(.+) => balancer_ajax_thumb_vote(2,vote=1)',
 	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
 

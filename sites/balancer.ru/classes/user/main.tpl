@@ -34,6 +34,14 @@
 {/if}
 </ul>
 
+<h2>Поиск в собщениях пользователя</h2>
+{form class="this" method="get" action="http://www.balancer.ru/tools/search/result/" uri="NULL" ref="NULL" class_name='NULL' form_class_name='NULL' no_auto_checkboxes=true go='NULL' label="-"}
+{input name="q" value="" label="Запрос" css_class="w100p"}
+{hidden name="u" value="{$user->login()|htmlspecialchars}"}
+{hidden name="w" value="a"}
+{submit label="Искать"}
+{/form}
+
 <h2>Отношения с пользователями</h2>
 <table class="nul w100p small"><tr><td width="50%">
 	<table class="btab w100p">

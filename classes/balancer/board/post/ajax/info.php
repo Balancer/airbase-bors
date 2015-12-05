@@ -20,6 +20,8 @@ class balancer_board_post_ajax_info extends balancer_board_ajax
 
 		return array(
 			'post' => $p,
+			'owner' => $p->owner(),
+			'topic' => $p->topic(),
 		);
 	}
 }

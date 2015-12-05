@@ -301,12 +301,6 @@ class balancer_board_user extends forum_user
 		));
 	}
 
-	static function __dev()
-	{
-		$u = bors_load('balancer_board_user', 95807);
-		var_dump($u->active_twinks_count());
-	}
-
 	function url() { return "http://www.balancer.ru/users/{$this->id()}/"; }
 	function url_ex($page) { return "http://www.balancer.ru/users/{$this->id()}/"; }
 
@@ -354,5 +348,33 @@ class balancer_board_user extends forum_user
 		airbase_money_log::add($this, $amount, $action, $comment, $object, $source);
 
 		return $this->set('money', $this->money() + $amount, true);
+	}
+
+
+	function is_subscribed($topic_id)
+	{
+		return balancer_board_subscription::find(['user_id' => $this->id(), 'topic_id' => $topic_id])->count() > 0;
+	}
+
+	function add_subscribe($topic_id)
+	{
+		return balancer_board_subscription::create(['user_id' => $this->id(), 'topic_id' => $topic_id]);
+	}
+
+	function remove_subscribe($topic_id)
+	{
+		return balancer_board_subscription::find(['user_id' => $this->id(), 'topic_id' => $topic_id])->first()->delete();
+	}
+
+	static function __dev()
+	{
+//		$u = bors_load('balancer_board_user', 95807);
+//		var_dump($u->active_twinks_count());
+		$user = balancer_board_user::load(10000);
+		$topic_id = 10668;
+		var_dump($user->is_subscribed($topic_id));
+//		$user->remove_subscribe($topic_id);
+//		$user->add_subscribe($topic_id);
+		var_dump($user->is_subscribed($topic_id));
 	}
 }
