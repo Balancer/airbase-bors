@@ -82,7 +82,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 			$title = $hts->get($attach_post_id, 'title');
 		}
 
-if(!$post->is_public() || $post->is_hidden())
+if(!$post || !$post->is_public() || $post->is_hidden())
 {
 	if(!bors()->user())
 		return message('Аттач недоступен гостям');

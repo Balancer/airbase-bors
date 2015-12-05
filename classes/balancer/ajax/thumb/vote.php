@@ -10,6 +10,15 @@ class balancer_ajax_thumb_vote extends bors_object
 		$me		= bors()->user();
 		$me_id	= bors()->user_id();
 
+		if(!$me)
+			return "Только для регистрированных пользователей";
+
+		if(!$target)
+		{
+			bors_debug::syslog('vote_error', "Не найден объект ".$this->id());
+			return "Не найден объект ".$this->id();
+		}
+
 		$target->score_colorized(true);
 		switch($this->args('vote'))
 		{

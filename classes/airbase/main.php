@@ -13,10 +13,9 @@ class airbase_main extends airbase_page
 	function body_data()
 	{
 		$data = json_decode(file_get_contents('http://www.wrk.ru/news/tags/авиация/last.json'), true);
+		$site_news = bors_load('airbase_pages_markdown', '/../news.md');
 
-		$site_news = bors_load('airbase_pages_markdown', '../news/');
-
-		echo 'sn:'. $site_news;
+		$data['site_news'] = $site_news;
 
 		return $data;
 	}

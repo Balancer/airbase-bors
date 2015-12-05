@@ -28,7 +28,7 @@ class user_posts extends balancer_board_page
 
 	function body_data()
 	{
-		$years = array();
+		$years = [];
 /*		$first = $this->db('AB_FORUMS')->select('posts', 'MIN(posted)', array('poster_id' => $this->id()));
 		$last  = $this->db('AB_FORUMS')->select('posts', 'MAX(posted)', array('poster_id' => $this->id()));
 		$y0 = strftime('%Y', $first);
@@ -41,14 +41,14 @@ class user_posts extends balancer_board_page
 		{
 			$d0 = strtotime("$y-01-01 00:00:00");
 			$d9 = strtotime("$y-12-31 23:59:59")+1;
-			if($cnt = $this->db('AB_FORUMS')->select('posts', 'count(*)', array(
+			if($cnt = balancer_board_posts_pure::find([
 				'poster_id' => $this->id(),
 				'is_deleted' => false,
 				"posted BETWEEN $d0 AND $d9",
-			)))
+			])->count())
 				$years[$y] = $cnt;
 		}
 
-		return array('years' => $years);
+		return ['years' => $years];
 	}
 }

@@ -283,7 +283,7 @@
 <tr><th>Раздел</th><th>Число сообщений</th></tr>
 {foreach $messages_month_by_categories as $x}
 	{bors_object_load var="c" class="balancer_board_category" id=$x.cat_id}
-<tr><td>{$c->titled_link()}</td>
+<tr><td>{if $c}{$c->titled_link()}{else}-{/if}</td>
 	<td>{$x.count}</td>
 </tr>
 {/foreach}

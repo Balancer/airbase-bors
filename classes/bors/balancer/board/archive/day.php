@@ -34,9 +34,10 @@ class balancer_board_archive_day extends base_page_list
 
 	function previous_day_link()
 	{
-		$prev = $this->db('AB_FORUMS')->select('topics', 'MAX(posted)', array(
+		$prev = balancer_board_topic::find([
 			'posted<' => strtotime("{$this->year}-{$this->month}-{$this->day}"),
-		));
+			'order' => '-create_time',
+		])->first()->create_time();
 
 		if($prev)
 			return 'http://forums.balancer.ru/archive/'.date('Y/m/d', $prev).'/';
@@ -46,9 +47,10 @@ class balancer_board_archive_day extends base_page_list
 
 	function next_day_link()
 	{
-		$next = $this->db('AB_FORUMS')->select('topics', 'MIN(posted)', array(
+		$next = balancer_board_topic::find([
 			'posted>=' => strtotime("{$this->year}-{$this->month}-{$this->day}")+86400,
-		));
+			'order' => 'create_time',
+		])->first()->create_time();
 
 		if($next)
 			return 'http://forums.balancer.ru/archive/'.date('Y/m/d', $next).'/';

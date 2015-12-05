@@ -18,10 +18,10 @@ class airbase_user_topics extends balancer_board_page
 	private function topics_ids()
 	{
 		if($this->ids === false)
-			$this->ids  = $this->db()->select_array('posts', 'DISTINCT topic_id', array(
+			$this->ids  = bors_field_array_extract(balancer_board_post::find([
 				'poster_id=' => $this->id(),
-				'posted > ' => time()-86400*31,
-			));
+				'posted>' => time()-86400*31,
+			])->group('topic_id')->all(), 'topic_id');
 
 		return $this->ids;
 	}

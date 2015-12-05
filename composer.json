@@ -21,7 +21,7 @@
 	"minimum-stability": "dev",
 
     "require": {
-		"php": ">=5.3",
+		"php": ">=5.5",
 
 		"balancer/bors-core": "dev-master",
 		"balancer/bors-ext": "dev-master",

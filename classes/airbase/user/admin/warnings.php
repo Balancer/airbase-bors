@@ -19,7 +19,7 @@ class airbase_user_admin_warnings extends airbase_user_warnings
 		else
 			$previous_warning = false;
 
-		$warns_from_me = intval($this->db('AB_FORUMS')->select('warnings', 'SUM(score)', array(
+		$warns_from_me = intval(driver_mysql::factory('AB_FORUMS')->select('warnings', 'SUM(score)', array(
 			'user_id' => $this->id(),
 			'moderator_id' => bors()->user_id(),
 			'`expired_timestamp` > NOW()',
