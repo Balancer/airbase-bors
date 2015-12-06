@@ -18,7 +18,7 @@ class balancer_board_topics_post extends balancer_board_tool
 		$ret = parent::pre_show();
 //		jquery_markitup::appear('#editor');
 		jquery_markitup::load();
-		wysibb::init('#editor');
+//		wysibb::init('#editor');
 		jquery::on_ready('$("#editor").focus()');
 		return $ret;
 	}
