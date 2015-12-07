@@ -40,10 +40,21 @@ class user_main extends balancer_board_page
 		$db = new driver_mysql(config('punbb.database'));
 		$db_bors = new driver_mysql('AB_BORS');
 
+		$last_post = balancer_board_post::find([
+			'owner_id' => $this->id(),
+			'create_time<=' => time(),
+			'order' => '-create_time',
+		])->first();
+
+		$last_post_time = $last_post->create_time();
+
+		if(!is_numeric($last_post_time))
+			$last_post_time = 0;
+
 		$by_forums = $db->select_array('posts', 'forum_id, count(*) AS `count`', array(
 			'posts.poster_id=' => $this->id(),
 			'is_deleted' => false,
-			'posts.posted>' => time()-86400,
+			'posts.posted BETWEEN' => [$last_post_time-86400, $last_post_time],
 			'inner_join' => 'topics ON topics.id = posts.topic_id',
 			'group' => 'forum_id',
 			'order' => 'COUNT(*) DESC',
@@ -52,7 +63,7 @@ class user_main extends balancer_board_page
 		$by_forums_for_month = $db->select_array('posts', 'forum_id, count(*) AS `count`', array(
 			'posts.poster_id=' => $this->id(), 
 			'is_deleted' => false,
-			'posts.posted>' => time()-86400*30,
+			'posts.posted BETWEEN' => [$last_post_time-86400*30, $last_post_time],
 			'inner_join' => 'topics ON topics.id = posts.topic_id',
 			'group' => 'forum_id',
 			'order' => 'COUNT(*) DESC',
@@ -61,7 +72,7 @@ class user_main extends balancer_board_page
 		$by_forums_for_year = $db->select_array('posts', 'forum_id, count(*) AS `count`', array(
 			'posts.poster_id=' => $this->id(), 
 			'is_deleted' => false,
-			'posts.posted>' => time()-86400*365,
+			'posts.posted BETWEEN' => [$last_post_time-86400*365, $last_post_time],
 			'inner_join' => 'topics ON topics.id = posts.topic_id',
 			'group' => 'forum_id',
 			'order' => 'COUNT(*) DESC',
@@ -72,7 +83,7 @@ class user_main extends balancer_board_page
 			'inner_join' => ['topics ON topics.id = topic_id', 'forums ON forums.id = forum_id'],
 			'posts.poster_id=' => $this->id(), 
 			'is_deleted' => false,
-			'posts.posted>' => time()-86400*30,
+			'posts.posted BETWEEN' => [$last_post_time-86400*30, $last_post_time],
 			'group' => 'cat_id',
 			'order' => 'COUNT(*) DESC',
 		]);
@@ -87,7 +98,7 @@ class user_main extends balancer_board_page
 
 		$best_of_month = bors_find_all('bors_votes_thumb', array(
 				'target_user_id' => $this->id(),
-				'create_time>' => time()-86400*30,
+				'create_time BETWEEN' => [$last_post_time-86400*30, $last_post_time],
 				'group' => 'target_class_name,target_object_id',
 				'having' => 'SUM(score) > 0',
 				'order' => 'SUM(score) DESC',
@@ -103,8 +114,8 @@ class user_main extends balancer_board_page
 				],
 
 				'`posts`.poster_id=' => $this->id(),
-				'`posts`.`posted`>' => time()-86400*30,
-				'AB_BORS.bors_thumb_votes.create_time>' => time()-86400*30,
+				'`posts`.`posted` BETWEEN' => [$last_post_time-86400*30, $last_post_time],
+				'AB_BORS.bors_thumb_votes.create_time BETWEEN' => [$last_post_time-86400*30, $last_post_time],
 				'group' => 'cat_id',
 //				'having' => 'SUM(bors_thumb_votes.score) > 0',
 				'order' => 'SUM(bors_thumb_votes.score) DESC',
@@ -119,7 +130,7 @@ class user_main extends balancer_board_page
 		$scores_positive = bors_find_all('bors_votes_thumb', array(
 			'*set' => 'SUM(score) AS total,SUM(IF(score>0,score,0)) AS pos,SUM(IF(score<0,score,0)) AS neg',
 			'target_user_id' => $this->id(),
-			'create_time>' => time() - 86400*30,
+			'create_time BETWEEN' => [$last_post_time - 86400*30, $last_post_time],
 			'group' => 'user_id',
 			'order' => 'SUM(score) DESC',
 			'limit' => 10,
@@ -128,7 +139,7 @@ class user_main extends balancer_board_page
 		$scores_negative = bors_find_all('bors_votes_thumb', array(
 			'*set' => 'SUM(score) AS total,SUM(IF(score>0,score,0)) AS pos,SUM(IF(score<0,score,0)) AS neg',
 			'target_user_id' => $this->id(),
-			'create_time>' => time() - 86400*30,
+			'create_time BETWEEN' => [$last_post_time - 86400*30, $last_post_time],
 			'group' => 'user_id',
 			'order' => 'SUM(score)',
 			'limit' => 10,
@@ -137,7 +148,7 @@ class user_main extends balancer_board_page
 		$votes_positive = bors_find_all('bors_votes_thumb', array(
 			'*set' => 'SUM(score) AS total,SUM(IF(score>0,score,0)) AS pos,SUM(IF(score<0,score,0)) AS neg',
 			'user_id' => $this->id(),
-			'create_time>' => time() - 86400*30,
+			'create_time BETWEEN' => [$last_post_time - 86400*30, $last_post_time],
 			'group' => 'target_user_id',
 			'order' => 'SUM(score) DESC',
 			'limit' => 10,
@@ -146,7 +157,7 @@ class user_main extends balancer_board_page
 		$votes_negative = bors_find_all('bors_votes_thumb', array(
 			'*set' => 'SUM(score) AS total,SUM(IF(score>0,score,0)) AS pos,SUM(IF(score<0,score,0)) AS neg',
 			'user_id' => $this->id(),
-			'create_time>' => time() - 86400*30,
+			'create_time BETWEEN' => [$last_post_time - 86400*30, $last_post_time],
 			'group' => 'target_user_id',
 			'order' => 'SUM(score)',
 			'limit' => 10,
@@ -223,7 +234,10 @@ class user_main extends balancer_board_page
 
 			'best' => $best,
 			'best_of_month' => $best_of_month,
-			'messages_today' => bors_count('balancer_board_post', array('owner_id' => $this->id(), 'create_time>' => time()-86400)),
+			'messages_today' => bors_count('balancer_board_post', array(
+				'owner_id' => $this->id(),
+				'create_time BETWEEN' => [$last_post_time-86400, $last_post_time],
+			)),
 			'messages_today_by_forums' => $by_forums,
 			'messages_month_by_forums' => $by_forums_for_month,
 			'messages_year_by_forums' => $by_forums_for_year,
@@ -233,13 +247,13 @@ class user_main extends balancer_board_page
 			'today_total' => bors_count('balancer_board_post', array(
 				'owner_id' => $this->id(),
 				'is_deleted' => false,
-				'create_time>' => time()-86400,
+				'create_time BETWEEN' => [$last_post_time-86400, $last_post_time],
 			)),
 
 			'tomonth_total' => bors_count('balancer_board_post', array(
 				'is_deleted' => false,
 				'owner_id' => $this->id(),
-				'create_time>' => time()-86400*30,
+				'create_time BETWEEN' => [$last_post_time-86400*30, $last_post_time],
 			)),
 			'votes_from' => bors_votes_thumb::colorize_pm(@$pluses_from, @$minuses_from),
 			'votes_to'   => bors_votes_thumb::colorize_pm(@$pluses_to  , @$minuses_to  ),

@@ -7,7 +7,7 @@
 
 class base_page_hts2 extends bors_page_db
 {
-	function access_engine() { return config('hts_access', 'balancer_board_access_public'); }
+	function _access_engine_def() { return config('hts_access', 'balancer_board_access_public'); }
 
 	function auto_map() { return true; }
 

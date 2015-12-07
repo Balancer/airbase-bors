@@ -304,7 +304,7 @@ class balancer_board_user extends forum_user
 	function url() { return "http://www.balancer.ru/users/{$this->id()}/"; }
 	function url_ex($page) { return "http://www.balancer.ru/users/{$this->id()}/"; }
 
-	function can_move() { return $this->group()->can_move(); }
+	function can_move() { return $this->group()->can_move() && !$this->is_destructive(); }
 
 	function unreaded_answers()
 	{

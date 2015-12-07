@@ -11,9 +11,11 @@ CREATE TEMPORARY TABLE tmp_vote_relations
 		SUM(IF(score > 0, 1, 0)) AS pos,
 		SUM(IF(score < 0, 1, 0)) AS neg
 	FROM
-		AB_BORS.bors_thumb_votes
+		AB_BORS.bors_thumb_votes v
+	INNER JOIN users u
+		ON v.target_user_id = u.id
 	WHERE
-		create_time > UNIX_TIMESTAMP() - 86400*365
+		v.create_time BETWEEN u.last_post - 86400*365*10 AND u.last_post + 86400*30
 	GROUP BY user_id, target_user_id;
 
 ALTER TABLE tmp_vote_relations
@@ -40,9 +42,11 @@ CREATE TEMPORARY TABLE tmp_reputation_relations
 		SUM(IF(score > 0, 1, 0)) AS pos,
 		SUM(IF(score < 0, 1, 0)) AS neg
 	FROM
-		USERS.reputation_votes
-	WHERE is_deleted = 0
-		AND `time` > UNIX_TIMESTAMP() - 86400*365
+		USERS.reputation_votes v
+	INNER JOIN users u
+		ON v.user_id = u.id
+	WHERE v.is_deleted = 0
+		AND `time` BETWEEN u.last_post - 86400*365*10 AND u.last_post + 86400*30
 	GROUP BY voter_id, user_id;
 
 ALTER TABLE tmp_reputation_relations

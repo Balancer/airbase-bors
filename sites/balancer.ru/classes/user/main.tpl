@@ -47,7 +47,7 @@
 	<table class="btab w100p">
 	<caption>Лучше всех к его сообщениям относятся</caption>
 	<tr>
-		<th colspan="2">За год</th>
+		<th colspan="2">За 10 лет</th>
 		<th colspan="2">За квартал</th>
 	</tr>
 	<tr>
@@ -70,7 +70,7 @@
 	<table class="btab w100p">
 	<caption>Лучше он относится к сообщениям</caption>
 	<tr>
-		<th colspan="2">За год</th>
+		<th colspan="2">За 10 лет</th>
 		<th colspan="2">За квартал</th>
 	</tr>
 	<tr>
@@ -95,7 +95,7 @@
 	<table class="btab w100p">
 	<caption>Хуже всех к его сообщениям относятся</caption>
 	<tr>
-		<th colspan="2">За год</th>
+		<th colspan="2">За 10 лет</th>
 		<th colspan="2">За квартал</th>
 	</tr>
 	<tr>
@@ -118,7 +118,7 @@
 	<table class="btab w100p">
 	<caption>Хуже он относится к сообщениям</caption>
 	<tr>
-		<th colspan="2">За год</th>
+		<th colspan="2">За 10 лет</th>
 		<th colspan="2">За квартал</th>
 	</tr>
 	<tr>
@@ -250,7 +250,7 @@
 
 {if $messages_today}
 <table class="btab w100p">
-<caption>Количество сообщений по форумам за сутки:</caption>
+<caption>Количество сообщений по форумам за последние сутки:</caption>
 <tr><th>Форум</th><th>Число сообщений</th></tr>
 {foreach from=$messages_today_by_forums item="x"}
 {bors_object_load var="f" class="forum_forum" id=$x.forum_id}
@@ -266,7 +266,7 @@
 
 {if $messages_month_by_forums}
 <table class="btab w100p">
-<caption>Количество сообщений по форумам за месяц:</caption>
+<caption>Количество сообщений по форумам за последний месяц:</caption>
 <tr><th>Форум</th><th>Число сообщений</th></tr>
 {foreach from=$messages_month_by_forums item="x"}
 {bors_object_load var="f" class="forum_forum" id=$x.forum_id}
@@ -279,7 +279,7 @@
 
 {if $messages_month_by_categories}
 <table class="btab w100p">
-<caption>Количество сообщений по разделам за месяц:</caption>
+<caption>Количество сообщений по разделам за последний месяц:</caption>
 <tr><th>Раздел</th><th>Число сообщений</th></tr>
 {foreach $messages_month_by_categories as $x}
 	{bors_object_load var="c" class="balancer_board_category" id=$x.cat_id}
@@ -292,7 +292,7 @@
 
 {if $messages_year_by_forums}
 <table class="btab w100p">
-<caption>Количество сообщений по форумам за год, первая 20-ка:</caption>
+<caption>Количество сообщений по форумам за последний год, первая 20-ка:</caption>
 <tr><th>Форум</th><th>Число сообщений</th></tr>
 {foreach from=$messages_year_by_forums item="x"}
 {bors_object_load var="f" class="forum_forum" id=$x.forum_id}
@@ -304,5 +304,14 @@
 {/if}
 
 {/if}
+</dd>
+</dl>
+
+<dl class="box">
+<dt>Ссылки</dt>
+<dd>
+<ul>
+	<li><a href="http://forums.balancer.ru/support/2015/12/t92264,new--obsuzhdenie-stranitsy-profilya-polzovatelya.html">Обсуждение страницы профиля на форуме</a></li>
+</ul>
 </dd>
 </dl>

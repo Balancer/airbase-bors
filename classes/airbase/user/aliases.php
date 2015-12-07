@@ -13,7 +13,7 @@ class airbase_user_aliases extends balancer_board_page
 		if($this->__havefc())
 			return $this->__lastc();
 
-		return $this->__setc($this->db(config('punbb.database'))->select('posts', 'MAX(posted)', array('poster_id' => $this->id())) + 1);
+		return $this->__setc(driver_mysql::factory(config('punbb.database'))->select('posts', 'MAX(posted)', array('poster_id' => $this->id())) + 1);
 	}
 
 	function begin() { return $this->last_post_time()-86400*30; }
@@ -25,10 +25,10 @@ class airbase_user_aliases extends balancer_board_page
 
 		$depth = $last_post-86400*30;
 
-		$ips = array_filter($this->db(config('punbb.database'))->select_array('posts', 'distinct(poster_ip)', array('poster_id' => $this->id(), "posted BETWEEN $depth AND $last_post")));
+		$ips = array_filter(driver_mysql::factory(config('punbb.database'))->select_array('posts', 'distinct(poster_ip)', array('poster_id' => $this->id(), "posted BETWEEN $depth AND $last_post")));
 
 		if($ips)
-			$users_list = $this->db(config('punbb.database'))->select_array('posts', 'poster_id, count(*) as count', array(
+			$users_list = driver_mysql::factory(config('punbb.database'))->select_array('posts', 'poster_id, count(*) as count', array(
 				'poster_ip IN' => "'".join("','",$ips)."'",
 				"posted BETWEEN $depth AND $last_post",
 				'group' => 'poster_id', 
