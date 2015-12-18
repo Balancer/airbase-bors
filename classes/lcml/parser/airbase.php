@@ -53,7 +53,7 @@ class lcml_parser_airbase extends bors_lcml_parser
 			return $text;
 
 		$text = preg_replace_callback("@(?<!=|\")(https?://(www\.)?(depositfiles\.com|lostfilm\.tv)/[^\s\"]+)@", [$this, 'warez_do_spoiler'], $text);
-		$text = preg_replace_callback("!(https?://(www\.)?flibusta\.net/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
+		$text = preg_replace_callback("!(https?://(www\.)?flibusta\.\w+/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
 		$text = preg_replace_callback("!(https?://(www\.)?ifile.it/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
 		$text = preg_replace_callback("!(https?://(www\.)?kinozal\.tv/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);
 		$text = preg_replace_callback("!(https?://(www\.)?rapidshare\.(com|ru)/[^\s\"]+)!", [$this, 'warez_do_spoiler'], $text);

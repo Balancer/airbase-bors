@@ -124,4 +124,48 @@ class balancer_board_forum extends forum_forum
 		$this->update_num_topics();
 		echo "{$this}: Counts updated = {$this->num_topics()}\n";
 	}
+
+	function infonesy_push()
+	{
+		if(!$this->is_public_access())
+			return;
+
+		$this->category()->infonesy_push();
+
+		require_once 'inc/functions/fs/file_put_contents_lock.php';
+		$storage = '/var/www/sync/airbase-forums-push';
+		$file = $storage.'/forum-'.$this->id().'.json';
+
+		$data = [
+			'UUID'		=> 'ru.balancer.board.forum.'.$this->id(),
+			'Node'		=> 'ru.balancer.board',
+			'Title'		=> $this->title(),
+			'Description'		=> $this->description(),
+			'CategoryUUID'	=> 'ru.balancer.board.category.'.$this->category_id(),
+//			'Date'		=> date('r', $this->create_time()),
+//			'Modify'	=> date('r', $this->modify_time()),
+			'Type'		=> 'Forum',
+		];
+
+		if($this->parent_forum_id())
+		{
+			$data['ParentUUID']	= 'ru.balancer.board.forum.'.$this->parent_forum_id();
+			$this->parent_forum()->infonesy_push();
+		}
+
+//		$dumper = new \Symfony\Component\Yaml\Dumper();
+//		$md = "---\n";
+//		$md .= $dumper->dump($data, 2);
+//		$md .= "---\n\n";
+
+//		foreach(balancer_board_topic::find(['forum_id' => $this->id(), 'order' => '-modify_time'])->all() as $t)
+//			$md .= '* ['.trim($t->title()).']('.$t->url().') '.date('d.m.Y H:i', $t->create_time()).'/'.date('d.m.Y H:i', $t->modify_time())."\n";
+
+//		$md .= '.';
+
+		@file_put_contents_lock($file, json_encode(array_filter($data), JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+//		@file_put_contents_lock($file, $md);
+		@chmod($file, 0666);
+		@unlink($storage.'/forum-'.$this->id().'.md');
+	}
 }

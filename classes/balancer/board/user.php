@@ -366,6 +366,31 @@ class balancer_board_user extends forum_user
 		return balancer_board_subscription::find(['user_id' => $this->id(), 'topic_id' => $topic_id])->first()->delete();
 	}
 
+	function infonesy_export()
+	{
+		$data = [
+			'UUID'		=> 'ru.balancer.board.user.'.$this->id(),
+			'EmailMD5'	=> md5($this->email()),
+			'Node'		=> 'ru.balancer.board',
+			'Title'		=> $this->title(),
+			'RegisterDate'	=> date('r', $this->create_time()),
+			'LastVisit'		=> date('r', $this->last_visit_time()),
+			'Type'		=> 'User',
+		];
+
+		return $data;
+	}
+
+	function infonesy_push()
+	{
+		require_once 'inc/functions/fs/file_put_contents_lock.php';
+		$storage = '/var/www/sync/airbase-forums-push';
+		$file = $storage.'/user-'.$this->id().'.json';
+
+		@file_put_contents_lock($file, json_encode($this->infonesy_export(), JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+		@chmod($file, 0666);
+	}
+
 	static function __dev()
 	{
 //		$u = bors_load('balancer_board_user', 95807);

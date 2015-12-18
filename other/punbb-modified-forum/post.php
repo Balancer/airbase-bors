@@ -170,7 +170,7 @@ if($qid)
 	$tid = $topic->id();
 }
 
-if($me->is_destructive() && $topic->is_news() && !$qid)
+if($me->is_destructive() && $topic && $topic->is_news() && !$qid)
 	message("Вам запрещено размещать новости в новостных темах.");
 
 $GLOBALS['cms']['cache_disabled'] = true;
@@ -786,6 +786,8 @@ if (isset($_POST['form_sent']))
 
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);
+
+		$post->infonesy_push();
 
 //		go("http://forums.balancer.ru/posts/{$post->id()}/process");
 		go($post->url_in_topic(NULL, true));

@@ -552,9 +552,10 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		// Если это свежее (<14 дней) и не привязанное сообщение, то
 		// снимаем «солнышки» за промах
 		if(!$this->answer_to_id()
-			&& $this->create_time() > time() - 86400*14
+			&& $this->create_time() > time() - 86400*30
 			&& !$this->original_topic_id() // Если ранее не переносилось
 			&& ($owner = $this->owner()) // Есть юзер
+			&& bors()->user_id() == 10000 // Перенос только от Balancer'а.
 		)
 		{
 			$owner->add_money(-25,
@@ -613,9 +614,10 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		{
 			// Если это свежее (<14 дней), то
 			// снимаем «солнышки» за промах
-			if($this->create_time() > time() - 86400*14
+			if($this->create_time() > time() - 86400*30
 				&& !$this->original_topic_id() // Если ранее не переносилось
 				&& ($owner = $this->owner()) // Есть юзер
+				&& bors()->user_id() == 10000 // Перенос только от Balancer'а.
 			)
 			{
 				$owner->add_money(-1,

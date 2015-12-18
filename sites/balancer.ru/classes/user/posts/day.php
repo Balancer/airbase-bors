@@ -1,7 +1,5 @@
 <?php
 
-//exit(500);
-
 include_once('inc/strings.php');
 
 class user_posts_day extends balancer_board_page
@@ -25,7 +23,7 @@ class user_posts_day extends balancer_board_page
 				'order' => '`posted` DESC',
 			])->first()->create_time();
 
-			$page = date('Y/m/d', $max);
+			$page = @date('Y/m/d', $max);
 		}
 		elseif($page == 'first')
 		{
@@ -34,12 +32,12 @@ class user_posts_day extends balancer_board_page
 				'order' => 'posted',
 			])->first()->create_time();
 
-			$page = date('Y/m/d', $min);
+			$page = @date('Y/m/d', $min);
 		}
 
 		@list($this->year, $this->month, $this->day) = @explode('/', $page);
 		if(empty($this->day))
-			debug_hidden_log('__trap', 'empty day in '.$page);
+			bors_debug::syslog('__trap', 'empty day in '.$page);
 
 		return parent::_configure();
 	}
@@ -51,6 +49,17 @@ class user_posts_day extends balancer_board_page
 
 	function pre_show()
 	{
+		if(!$this->user())
+			return bors_message('Пользователь '.$this->id().' не найден', ['http_status' => 404]);
+
+		$last = balancer_board_posts_pure::find([
+			'poster_id' => $this->id(),
+			'order' => '`posted` DESC',
+		])->first();
+
+		if(!$last || $last->is_null())
+			return bors_message('Сообщений пользователя '.$this->user()->title().' не найдено', ['http_status' => 404]);
+
 		jquery::plugin('cookie');
 		return parent::pre_show();
 	}

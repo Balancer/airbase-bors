@@ -477,4 +477,57 @@ class balancer_board_topic extends forum_topic
 		return in_array('новости', $this->keywords());
 //		return preg_match('/новости/iu', $this->keywords_string());
 	}
+
+	function infonesy_push()
+	{
+		if(!$this->is_public_access())
+			return;
+
+		$this->forum()->infonesy_push();
+
+		require_once 'inc/functions/fs/file_put_contents_lock.php';
+		$storage = '/var/www/sync/airbase-forums-push';
+//		$file = $storage.'/'.date('Y-m-d-H-i-s').'--topic-'.$this->id().'.md';
+		$file = $storage.'/topic-'.$this->id().'.json';
+
+		$data = [
+			'UUID'		=> 'ru.balancer.board.topic.'.$this->id(),
+			'Node'		=> 'ru.balancer.board',
+			'Title'		=> $this->title(),
+			'Date'		=> date('r', $this->create_time()),
+			'Modify'	=> date('r', $this->modify_time()),
+			'Type'		=> 'Topic',
+			'ForumUUID'	=> 'ru.balancer.board.forum.'.$this->forum_id(),
+		];
+
+		if($owner = $this->owner())
+		{
+			$data['Author']		= $owner->title();
+			$data['AuthorMD']	= md5($owner->email());
+			$data['AuthorEmailMD5']	= md5($owner->email());
+			$data['AuthorUUID']	= 'ru.balancer.board.user.'.$owner->id();
+		}
+
+//		$dumper = new \Symfony\Component\Yaml\Dumper();
+//		$md = "---\n";
+//		$md .= $dumper->dump($data, 2);
+//		$md .= "---\n\n";
+
+/*
+		foreach(balancer_board_post::find(['topic_id' => $this->id(), 'order' => 'create_time'])->all() as $p)
+			$md .= '* ['
+				.$p->author_name()
+				.', #'
+				.date('d.m.Y H:i', $p->create_time())
+				.']('.$p->url_for_igo().")\n";
+//		$md .= trim($this->source())."\n";
+*/
+
+//		$md .= '.';
+
+		@file_put_contents_lock($file, json_encode($data, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+//		@file_put_contents_lock($file, $md);
+		@chmod($file, 0666);
+		@unlink($storage.'/topic-'.$this->id().'.md');
+	}
 }

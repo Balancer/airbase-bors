@@ -89,6 +89,30 @@ class balancer_board_category extends forum_category
 		);
 	}
 
+	function infonesy_push()
+	{
+		$storage = '/var/www/sync/airbase-forums-push';
+		$file = $storage.'/category-'.$this->id().'.json';
+
+//		if(file_exists($file))
+//			return;
+
+		require_once 'inc/functions/fs/file_put_contents_lock.php';
+
+		$data = [
+			'UUID'		=> 'ru.balancer.board.category.'.$this->id(),
+			'Node'		=> 'ru.balancer.board',
+			'Title'		=> $this->title(),
+			'Type'		=> 'Category',
+		];
+
+		if($this->parent_category_id())
+			$data['ParentUUID']	= 'ru.balancer.board.category.'.$this->parent_category_id();
+
+		@file_put_contents_lock($file, json_encode(array_filter($data), JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+		@chmod($file, 0666);
+	}
+
 	static function __dev()
 	{
 //		$cat = bors_load('balancer_board_category', 1);
