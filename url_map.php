@@ -75,7 +75,9 @@ $map = array(
 	"{$forums}\d{4}/\d{1,2}/tpdfhelper\-(\d+)\-\-.*\.html => balancer_board_topics_pdfHelper(2)",
 	"{$forums}\d{4}/\d{1,2}/tpdfcover\-(\d+)\-\-.*\.html => balancer_board_topics_pdfCover(2)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-\-.+\.html\?? => {$topic_view_class}(2,4)",
+	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-\-.+\.html\?r=\d+ => {$topic_view_class}(2,4)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-.+\.html\?? => redirect:{$topic_view_class}(2,4)",
+	"{$forums}\d{4}/\d{1,2}/t(\d+)(,(\d+))?\-.+\.html\?r=\d+  => redirect:{$topic_view_class}(2,4)",
 
 	"{$forums}\d{4}/\d{1,2}/t(\d+)/blog/? => balancer_board_topics_blog(2)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)/blog/(\d+)\.html => balancer_board_topics_blog(2,3)",
@@ -107,6 +109,7 @@ $map = array(
 
 //	'/test/ => airbase_main',
 	'/tools/search/ => bors_tools_search',
+	'(/tools/search/)result/\?(.+) => bors_tools_search_result(NULL,NULL,request=2)',
 	'/tools/search/result/ => bors_tools_search_result',
 	'/user/(\d+)/personal\.js => forum_js_personal(1)',
 	'/user/(\d+)/setvars.js => forum_user_js_setvars(1)',

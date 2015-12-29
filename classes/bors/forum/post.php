@@ -176,18 +176,16 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	function set_body($value, $dbupd = true)
 	{
 		if($value == '' && !is_null($value) && $dbupd && !trim($this->source()))
-			debug_hidden_log('body', 'Set empty body in post '.$this->url_in_container());
+			bors_debug::syslog('body', 'Set empty body in post '.$this->url_in_container());
 
-		if($dbupd)
-		{
-			$this->cache_make([
-				'body' => $value,
-				'body_ts' => time(),
-			]);
-			$this->store();
-		}
-		else
-			$this->set_attr('body', $value);
+//		if(config('is_developer')) { var_dump("Set body to ", $value); echo bors_debug::trace(); }
+
+		$this->cache_make([
+			'body' => $value,
+			'body_ts' => time(),
+		]);
+
+		$this->set_attr('body', blib_html::close_tags($value));
 
 		return $value;
 	}
@@ -293,6 +291,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			foreach($attrs as $k => $v)
 				$cache->set($k, $v);
 
+			$cache->store();
 			return $cache;
 		}
 
@@ -303,7 +302,10 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$first = false;
 
 		if($attrs['id'] = $this->id())
+		{
 			$cache = bors_new('balancer_board_posts_cache', $attrs);
+			$cache->store();
+		}
 	}
 
 	function flag()
@@ -341,7 +343,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	// Осторожнее и использованием $topic! Если, например, ищем ссылку на ответ, находящийся 
 	// не в текущей теме.
-	function url_in_topic($topic = NULL)
+	function url_in_topic($topic = NULL, $force = false)
 	{
 		$pid = $this->id();
 
@@ -366,7 +368,10 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		else
 			$post = $this;
 
-		return $topic->url_ex($post->topic_page())."#p".$post->id();
+		return $topic->url_ex([
+			'page' => $post->topic_page(),
+			'is_last_page' => time(),
+		])."#p".$post->id();
 	}
 
 	function modify_time($exact = false)
@@ -547,12 +552,13 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		// Если это свежее (<14 дней) и не привязанное сообщение, то
 		// снимаем «солнышки» за промах
 		if(!$this->answer_to_id()
-			&& $this->create_time() > time() - 86400*14
+			&& $this->create_time() > time() - 86400*30
 			&& !$this->original_topic_id() // Если ранее не переносилось
 			&& ($owner = $this->owner()) // Есть юзер
+			&& bors()->user_id() == 10000 // Перенос только от Balancer'а.
 		)
 		{
-			$owner->add_money(-10,
+			$owner->add_money(-25,
 				'move_first_thread',
 				"Перенос сообщения в начале цепочки в другую тему",
 				$this,
@@ -608,9 +614,10 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		{
 			// Если это свежее (<14 дней), то
 			// снимаем «солнышки» за промах
-			if($this->create_time() > time() - 86400*14
+			if($this->create_time() > time() - 86400*30
 				&& !$this->original_topic_id() // Если ранее не переносилось
 				&& ($owner = $this->owner()) // Есть юзер
+				&& bors()->user_id() == 10000 // Перенос только от Balancer'а.
 			)
 			{
 				$owner->add_money(-1,

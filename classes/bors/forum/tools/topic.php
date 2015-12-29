@@ -32,15 +32,17 @@ class forum_tools_topic extends balancer_board_page
 
 	function on_action_topic_edit($data)
 	{
+		$topic = $this->topic();
+
 		foreach(explode(' ', 'description keywords_string title answer_notice admin_notice') as $key)
-			$this->topic()->set($key, @$data[$key]);
+			call_user_func([$topic, "set_{$key}"], empty($data[$key]) ? NULL : $data[$key], true);
 
-		bors_debug::syslog('topic-edit', "{$this->topic()->debug_title()} edited to " . print_r($data, true));
+		bors_debug::syslog('topic-edit', "{$topic->debug_title()} edited to " . print_r($data, true));
 
-		balancer_board_action::add($this->topic(), "Редактирование параметров темы");
+		balancer_board_action::add($topic, "Редактирование параметров темы");
 
-		$this->topic()->cache_clean();
-		return go($this->topic()->url());
+		$topic->cache_clean();
+		return go($topic->url());
 	}
 
 	function body_data()

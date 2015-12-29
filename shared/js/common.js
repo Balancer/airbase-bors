@@ -1,18 +1,33 @@
 // Общий JS
 
+//$.ajaxSetup ({
+	// Отменить кеширование AJAX запросов
+//	cache: false
+//});
+
 $(document).ready(function(){
 	$(".ab_rec").click(function() { alert($(this).html()); } );
 	$(".post_info_ajax").click(function() {
 		url = $(this).parent().children(':first-child').attr('href')
+
 		matches = url.match(/post=(\d+)$/)
+		if(!matches)
+			matches = url.match(/=balancer_board_post:\/\/(\d+)$/)
+
 		post_id = matches[1]
+
 		div = $("#pfo"+post_id)
-		if(div.html())
-			div.toggle(100)
+
+		if(div.data('ab_type') == url)
+		{
+			div.data('ab_type', null);
+			div.html('');
+		}
 		else
 		{
-			div.html('<img src="/_bors/i/wait-16.gif" width="16" height="16" style="vertical-align: middle;" /> Загружаю...')
-			div.load(url)
+			div.data('ab_type', url);
+			div.html('<img src="/_bors/i/wait-16.gif" width="16" height="16" style="vertical-align: middle;" /> Загружаю...');
+			div.load(url);
 		}
 
 		return false

@@ -34,12 +34,20 @@
 {/if}
 </ul>
 
+<h2>Поиск в собщениях пользователя</h2>
+{form class="this" method="get" action="http://www.balancer.ru/tools/search/result/" uri="NULL" ref="NULL" class_name='NULL' form_class_name='NULL' no_auto_checkboxes=true go='NULL' label="-"}
+{input name="q" value="" label="Запрос" css_class="w100p"}
+{hidden name="u" value="{$user->login()|htmlspecialchars}"}
+{hidden name="w" value="a"}
+{submit label="Искать"}
+{/form}
+
 <h2>Отношения с пользователями</h2>
 <table class="nul w100p small"><tr><td width="50%">
 	<table class="btab w100p">
 	<caption>Лучше всех к его сообщениям относятся</caption>
 	<tr>
-		<th colspan="2">За год</th>
+		<th colspan="2">За 10 лет</th>
 		<th colspan="2">За квартал</th>
 	</tr>
 	<tr>
@@ -62,7 +70,7 @@
 	<table class="btab w100p">
 	<caption>Лучше он относится к сообщениям</caption>
 	<tr>
-		<th colspan="2">За год</th>
+		<th colspan="2">За 10 лет</th>
 		<th colspan="2">За квартал</th>
 	</tr>
 	<tr>
@@ -87,7 +95,7 @@
 	<table class="btab w100p">
 	<caption>Хуже всех к его сообщениям относятся</caption>
 	<tr>
-		<th colspan="2">За год</th>
+		<th colspan="2">За 10 лет</th>
 		<th colspan="2">За квартал</th>
 	</tr>
 	<tr>
@@ -110,7 +118,7 @@
 	<table class="btab w100p">
 	<caption>Хуже он относится к сообщениям</caption>
 	<tr>
-		<th colspan="2">За год</th>
+		<th colspan="2">За 10 лет</th>
 		<th colspan="2">За квартал</th>
 	</tr>
 	<tr>
@@ -228,9 +236,21 @@
 </td></tr></table>
 *}
 
+{if $votes_by_categories}
+<table class="btab w100p">
+<caption>Суммарная оценка сообщений по категориям:</caption>
+<tr><th>Категория</th><th>Суммарная оценка</th></tr>
+{foreach $votes_by_categories as $p}
+<tr><td>{$p->topic()->forum()->category()->titled_link()}</td>
+	<td>{bors_votes_thumb::colorize_html($p->scores())} ({bors_votes_thumb::colorize_pm($p->scores_pos(), -$p->scores_neg())})</td>
+</tr>
+{/foreach}
+{/if}
+
+
 {if $messages_today}
 <table class="btab w100p">
-<caption>Количество сообщений по форумам за сутки:</caption>
+<caption>Количество сообщений по форумам за последние сутки:</caption>
 <tr><th>Форум</th><th>Число сообщений</th></tr>
 {foreach from=$messages_today_by_forums item="x"}
 {bors_object_load var="f" class="forum_forum" id=$x.forum_id}
@@ -246,7 +266,7 @@
 
 {if $messages_month_by_forums}
 <table class="btab w100p">
-<caption>Количество сообщений по форумам за месяц:</caption>
+<caption>Количество сообщений по форумам за последний месяц:</caption>
 <tr><th>Форум</th><th>Число сообщений</th></tr>
 {foreach from=$messages_month_by_forums item="x"}
 {bors_object_load var="f" class="forum_forum" id=$x.forum_id}
@@ -257,9 +277,22 @@
 </table>
 {/if}
 
+{if $messages_month_by_categories}
+<table class="btab w100p">
+<caption>Количество сообщений по разделам за последний месяц:</caption>
+<tr><th>Раздел</th><th>Число сообщений</th></tr>
+{foreach $messages_month_by_categories as $x}
+	{bors_object_load var="c" class="balancer_board_category" id=$x.cat_id}
+<tr><td>{if $c}{$c->titled_link()}{else}-{/if}</td>
+	<td>{$x.count}</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
 {if $messages_year_by_forums}
 <table class="btab w100p">
-<caption>Количество сообщений по форумам за год, первая 20-ка:</caption>
+<caption>Количество сообщений по форумам за последний год, первая 20-ка:</caption>
 <tr><th>Форум</th><th>Число сообщений</th></tr>
 {foreach from=$messages_year_by_forums item="x"}
 {bors_object_load var="f" class="forum_forum" id=$x.forum_id}
@@ -271,5 +304,14 @@
 {/if}
 
 {/if}
+</dd>
+</dl>
+
+<dl class="box">
+<dt>Ссылки</dt>
+<dd>
+<ul>
+	<li><a href="http://forums.balancer.ru/support/2015/12/t92264,new--obsuzhdenie-stranitsy-profilya-polzovatelya.html">Обсуждение страницы профиля на форуме</a></li>
+</ul>
 </dd>
 </dl>

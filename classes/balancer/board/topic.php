@@ -7,9 +7,9 @@ class balancer_board_topic extends forum_topic
 	function browser_title()
 	{
 		if($this->total_pages() <= 1)
-			return $this->title();
+			return $this->title() . ' [Форумы Balancer.Ru]';
 
-		return $this->title() . " ({$this->page()}/{$this->total_pages()})";
+		return $this->title() . " ({$this->page()}/{$this->total_pages()})" . ' [Форумы Balancer.Ru]';
 	}
 
 	function browser_description()
@@ -18,6 +18,15 @@ class balancer_board_topic extends forum_topic
 			return $this->description();
 
 		return $this->description() . " (страница {$this->page()} из {$this->total_pages()})";
+	}
+
+	function topic_title_with_description()
+	{
+		$title = $this->title();
+		if($this->description())
+			$title .= " ({$this->description()})";
+
+		return $title;
 	}
 
 	function cache_static_can_be_dropped()
@@ -34,17 +43,16 @@ class balancer_board_topic extends forum_topic
 		if(!$this->is_public_access())
 			return 0;
 
-		if($this->modify_time() < time() - 86400*365)
-			return 86400*rand(300, 900);
+		$age = time() - $this->modify_time();
 
-		if($this->modify_time() < time() - 86400*30)
-			return 86400*rand(7, 30);
+		if($age > 86400*30)
+			return rand(86400*300, 886400*900);
 
-		if($this->modify_time() < time() - 86400*7)
-			return rand(3600, 86400);
+		if($age > 86400*7)
+			return rand(86400*7, 86400*30);
 
-		if($this->modify_time() < time() - 86400)
-			return rand(600, 1200);
+		if($age > 86400)
+			return rand(3600, 7200);
 
 		return rand(60, 300);
 	}
@@ -197,8 +205,6 @@ class balancer_board_topic extends forum_topic
 		return $this->titled_link_ex(array('page' => 'new'));
 	}
 
-	function answer_notice() { return NULL; }
-
 	function pre_show()
 	{
 		bors_lib_html::set_og_meta($this);
@@ -207,14 +213,19 @@ class balancer_board_topic extends forum_topic
 
 		jquery::on_ready(__DIR__.'/topics/view.inc.ready.js');
 
+/*
 		if($this->answer_notice())
 		{
 			bors_use('/_bal/opt/sweet-alert.js');
 			bors_use('/_bal/opt/sweet-alert.css');
 		}
+*/
 
 		if($this->page() == $this->total_pages())
-			header("X-Accel-Expires: 30");
+		{
+			header("X-Accel-Expires: 1");
+			template_nocache();
+		}
 		elseif($this->page() >= $this->total_pages() - 2)
 			header("X-Accel-Expires: 600");
 		else
@@ -424,7 +435,7 @@ class balancer_board_topic extends forum_topic
 		if(!$this->is_public_access())
 			return false;
 
-		if(preg_match('/(airbase\.ru|wrk\.ru)/', @$_SERVER['HTTP_HOST']))
+		if(!preg_match('/(balancer\.ru)/', @$_SERVER['HTTP_HOST']))
 			return true;
 
 		return $this->last_post_create_time() > time() - 86400*365;
@@ -441,5 +452,82 @@ class balancer_board_topic extends forum_topic
 		// {*  include file="xfile:forum/ads/begun-forums.airbase.ru.html" *}
 		// {include file="xfile:forum/ads/begun-top-auto.html"}
 		return 'xfile:forum/ads/yandex-direct-h4.html';
+	}
+
+//	function _banners_type_def() { return rand(0,2); }
+	function _banners_type_def() { return 2*rand(0,1); }
+//	function _banners_type_def() { return bors()->user_id() == 10000 ? 2 : rand(0,2); }
+
+	function page_modify_time($page)
+	{
+		$last_post_in_page = bors_find_first('balancer_board_posts_pure', [
+			'topic_id' => $this->id(),
+			'topic_page' => $page,
+			'order' => 'COALESCE(`edited`,`posted`) DESC',
+		]);
+
+		if($last_post_in_page)
+			return max($last_post_in_page->create_time(), $last_post_in_page->edited());
+
+		return $this->modify_time();
+	}
+
+	function is_news()
+	{
+		return in_array('новости', $this->keywords());
+//		return preg_match('/новости/iu', $this->keywords_string());
+	}
+
+	function infonesy_push()
+	{
+		if(!$this->is_public_access())
+			return;
+
+		$this->forum()->infonesy_push();
+
+		require_once 'inc/functions/fs/file_put_contents_lock.php';
+		$storage = '/var/www/sync/airbase-forums-push';
+//		$file = $storage.'/'.date('Y-m-d-H-i-s').'--topic-'.$this->id().'.md';
+		$file = $storage.'/topic-'.$this->id().'.json';
+
+		$data = [
+			'UUID'		=> 'ru.balancer.board.topic.'.$this->id(),
+			'Node'		=> 'ru.balancer.board',
+			'Title'		=> $this->title(),
+			'Date'		=> date('r', $this->create_time()),
+			'Modify'	=> date('r', $this->modify_time()),
+			'Type'		=> 'Topic',
+			'ForumUUID'	=> 'ru.balancer.board.forum.'.$this->forum_id(),
+		];
+
+		if($owner = $this->owner())
+		{
+			$data['Author']		= $owner->title();
+			$data['AuthorMD']	= md5($owner->email());
+			$data['AuthorEmailMD5']	= md5($owner->email());
+			$data['AuthorUUID']	= 'ru.balancer.board.user.'.$owner->id();
+		}
+
+//		$dumper = new \Symfony\Component\Yaml\Dumper();
+//		$md = "---\n";
+//		$md .= $dumper->dump($data, 2);
+//		$md .= "---\n\n";
+
+/*
+		foreach(balancer_board_post::find(['topic_id' => $this->id(), 'order' => 'create_time'])->all() as $p)
+			$md .= '* ['
+				.$p->author_name()
+				.', #'
+				.date('d.m.Y H:i', $p->create_time())
+				.']('.$p->url_for_igo().")\n";
+//		$md .= trim($this->source())."\n";
+*/
+
+//		$md .= '.';
+
+		@file_put_contents_lock($file, json_encode($data, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+//		@file_put_contents_lock($file, $md);
+		@chmod($file, 0666);
+		@unlink($storage.'/topic-'.$this->id().'.md');
 	}
 }

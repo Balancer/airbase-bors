@@ -16,7 +16,7 @@ class forum_topic_ubb extends bors_object
 
 			list($forum_id, $topic_id) = explode('-', $fid);
 
-			$this->topic_id = $this->db('AB_FORUMS')->select('z_ubb_topics_map', 'new_topic_id', array('ubb_topic_id' => $topic_id, 'ubb_forum_id' => $forum_id));
+			$this->topic_id = driver_mysql::factory('AB_FORUMS')->select('z_ubb_topics_map', 'new_topic_id', array('ubb_topic_id' => $topic_id, 'ubb_forum_id' => $forum_id));
 		}
 
 		return $this->topic_id;

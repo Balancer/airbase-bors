@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\Yaml\Dumper;
+
 class balancer_board_post extends forum_post
 {
 	function extends_class_name() { return 'forum_post'; }
@@ -322,5 +324,73 @@ class balancer_board_post extends forum_post
 		$html .= "</div>";
 
 		return $html;
+	}
+
+	function infonesy_push()
+	{
+		if(!$this->is_public_access())
+			return;
+
+		$this->topic()->infonesy_push();
+		$this->owner()->infonesy_push();
+
+		require_once 'inc/functions/fs/file_put_contents_lock.php';
+		$storage = '/var/www/sync/airbase-forums-push';
+		$file = $storage.'/'.date('Y-m-d-H-i-s').'--post-'.$this->id().'.md';
+
+		$meta = [
+			'UUID'		=> 'ru.balancer.board.post.'.$this->id(),
+			'Node'		=> 'ru.balancer.board',
+			'TopicUUID'	=> 'ru.balancer.board.topic.'.$this->topic_id(),
+		];
+
+		if($t = $this->title())
+			$meta['Title'] = $t;
+
+		$meta = array_merge($meta, [
+			'Author'	=> $this->owner()->title(),
+			'AuthorMD'	=> md5($this->owner()->email()),
+			'AuthorEmailMD5'	=> md5($this->owner()->email()),
+			'AuthorUUID'=> 'ru.balancer.board.user.'.$this->owner()->id(),
+			'Date'		=> date('r', $this->create_time()),
+			'Modify'	=> date('r', $this->modify_time()),
+			'Type'		=> 'Post',
+			'Markup'	=> 'lcml',
+		]);
+
+		if($a = $this->answer_to_id())
+		{
+			$meta['AnswerTo'] = 'ru.balancer.board.post.'.$a;
+		}
+
+		$dumper = new Dumper();
+
+		$typo = new \EMT\EMTypograph;
+
+		$options = array(
+			'Text.paragraphs'		=> 'off',
+			'Text.breakline'		=> 'off',
+			'Text.auto_links'		=> 'off',
+			'Etc.unicode_convert'	=> 'on',
+			'OptAlign.oa_oquote'	=> 'off',
+			'OptAlign.oa_oquote_extra'	=> 'off',
+			'OptAlign.oa_obracket_coma'	=> 'off',
+		);
+
+		$typo->setup($options);
+
+		$typo->set_text($this->source());
+
+		$md = "---\n";
+		$md .= $dumper->dump($meta,2);
+		$md .= "---\n\n";
+
+//		$md .= $typo->apply()."\n";
+//		$md .= "\n\n";
+
+		$md .= trim($this->source())."\n";
+
+		@file_put_contents_lock($file, $md);
+		@chmod($file, 0666);
 	}
 }

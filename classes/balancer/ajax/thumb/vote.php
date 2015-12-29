@@ -10,6 +10,15 @@ class balancer_ajax_thumb_vote extends bors_object
 		$me		= bors()->user();
 		$me_id	= bors()->user_id();
 
+		if(!$me)
+			return "Только для регистрированных пользователей";
+
+		if(!$target)
+		{
+			bors_debug::syslog('vote_error', "Не найден объект ".$this->id());
+			return "Не найден объект ".$this->id();
+		}
+
 		$target->score_colorized(true);
 		switch($this->args('vote'))
 		{
@@ -247,13 +256,13 @@ class balancer_ajax_thumb_vote extends bors_object
 		if($score>0)
 		{
 		//	function add_money($amount, $action=NULL, $comment=NULL, $object=NULL, $source=NULL)
-			$user->add_money(1, 'score_target', "Плюс за сообщение", $target, $me);
+			$user->add_money(2, 'score_target', "Плюс за сообщение", $target, $me);
 			$me->add_money(-1, 'score_pay', "Выставление оценки", $target, $user);
 		}
 		elseif($score<0)
 		{
 			$user->add_money(-1, 'score_target', "Минус за сообщение", $target, $me);
-			$me->add_money(-1, 'score_pay', "Выставление оценки", $target, $user);
+			$me->add_money(-2, 'score_pay', "Выставление оценки", $target, $user);
 		}
 
 		return $return;

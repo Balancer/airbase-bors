@@ -49,7 +49,7 @@ class DBLayer
 
 		if ($this->link_id)
 		{
-			mysql_query('SET NAMES utf8', $this->link_id);
+			mysql_query('SET NAMES utf8mb4', $this->link_id);
 
 			if (@mysql_select_db($db_name, $this->link_id))
 				return $this->link_id;

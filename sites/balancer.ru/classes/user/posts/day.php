@@ -1,7 +1,5 @@
 <?php
 
-//exit(500);
-
 include_once('inc/strings.php');
 
 class user_posts_day extends balancer_board_page
@@ -20,26 +18,26 @@ class user_posts_day extends balancer_board_page
 // SELECT MAX(posted) FROM posts WHERE poster_id='853' AND is_deleted='' AND posted<'1388865600' LIMIT 1
 
 //  USE KEY(poster_id)
-			$max = $this->db('AB_FORUMS')->select('posts', 'posted', array(
+			$max = balancer_board_posts_pure::find([
 				'poster_id' => $this->id(),
-				'order' => 'posted DESC',
-				'limit' => 1,
-			));
-			$page = date('Y/m/d', $max);
+				'order' => '`posted` DESC',
+			])->first()->create_time();
+
+			$page = @date('Y/m/d', $max);
 		}
 		elseif($page == 'first')
 		{
-			$min = $this->db('AB_FORUMS')->select('posts', 'posted', array(
+			$min = balancer_board_posts_pure::find([
 				'poster_id' => $this->id(),
 				'order' => 'posted',
-				'limit' => 1,
-			));
-			$page = date('Y/m/d', $min);
+			])->first()->create_time();
+
+			$page = @date('Y/m/d', $min);
 		}
 
 		@list($this->year, $this->month, $this->day) = @explode('/', $page);
 		if(empty($this->day))
-			debug_hidden_log('__trap', 'empty day in '.$page);
+			bors_debug::syslog('__trap', 'empty day in '.$page);
 
 		return parent::_configure();
 	}
@@ -51,6 +49,17 @@ class user_posts_day extends balancer_board_page
 
 	function pre_show()
 	{
+		if(!$this->user())
+			return bors_message('Пользователь '.$this->id().' не найден', ['http_status' => 404]);
+
+		$last = balancer_board_posts_pure::find([
+			'poster_id' => $this->id(),
+			'order' => '`posted` DESC',
+		])->first();
+
+		if(!$last || $last->is_null())
+			return bors_message('Сообщений пользователя '.$this->user()->title().' не найдено', ['http_status' => 404]);
+
 		jquery::plugin('cookie');
 		return parent::pre_show();
 	}
@@ -90,34 +99,32 @@ class user_posts_day extends balancer_board_page
 
 	function previous_day_link()
 	{
-		$prev = $this->db('AB_FORUMS')->select('posts', 'posted', array(
+		$prev = balancer_board_posts_pure::find([
 			'poster_id' => $this->id(), 
 			'is_deleted' => false,
 			'posted<' => strtotime("{$this->year}-{$this->month}-{$this->day}"),
 			'order' => 'posted DESC',
-			'limit' => 1,
-		));
+		])->first();
 
-		if($prev)
-			return 'http://www.balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $prev).'/';
-		else
+		if($prev->is_null())
 			return NULL;
+
+		return 'http://www.balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $prev->create_time()).'/';
 	}
 
 	function next_day_link()
 	{
-		$next = $this->db('AB_FORUMS')->select('posts', 'posted', array(
+		$next = balancer_board_posts_pure::find([
 			'poster_id' => $this->id(), 
 			'is_deleted' => false,
 			'posted>=' => strtotime("{$this->year}-{$this->month}-{$this->day}")+86400,
 			'order' => 'posted',
-			'limit' => 1,
-		));
+		])->first();
 
-		if($next)
-			return 'http://www.balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $next).'/';
-		else
+		if($next->is_null())
 			return NULL;
+
+		return 'http://www.balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $next->create_time()).'/';
 	}
 
     function body_data()

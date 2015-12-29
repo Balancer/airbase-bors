@@ -37,6 +37,20 @@
 {/if}
 
 {foreach $posts as $p}
+	{if $p@last}
+		{if $this->get('can_adsense')}
+			{if $this->get('banners_type') == 2}
+				{include file="xfile:forum/ads/google/3x336x280.html"}
+			{elseif $this->get('banners_type') == 1}
+				{include file="xfile:forum/ads/top-ad-google-adaptive.html"}
+			{elseif $this->get('banners_type') == 0}
+				{include file="xfile:forum/ads/google/720x90-middle.html"}
+			{/if}
+		{elseif $this->get('can_yandex_direct')}
+			{include file="xfile:forum/ads/yandex-direct-h2-middle.html"}
+		{/if}
+	{/if}
+
 <!-- {$p->id()} -->
 	{if $this->new_class_name() == 'balancer_board_topic'}
 		{include file="xfile:forum/post.html"}
@@ -46,13 +60,8 @@
 			show_title=$p->topic()->titled_link_ex('new')
 		}
 	{/if}
-	{if $p@first}
-		{if $this->get('can_adsense')}
-			{include file="xfile:forum/ads/top-ad-google.html"}
-		{elseif $this->get('can_yandex_direct')}
-			{include file="xfile:forum/ads/yandex-direct-h2-middle.html"}
-		{/if}
-	{/if}
+
+
 {foreachelse}
 <div class="alert alert-warning shadow8">
 	В этой теме нет ни одного сообщения. Вероятно, они перенесены в другие,
@@ -73,5 +82,3 @@
 {/if}
 
 {if $this->pages_links()}<div class="pages_select">{"Страницы:"|ec} {$this->pages_links()}</div>{/if}
-
-<div id="answer_notice_content" style="display:none">{if $this->get('answer_notice')}{$this->answer_notice()|lcml_bb|trim}{/if}</div>

@@ -574,7 +574,7 @@ function paginate($num_pages, $cur_page, $link_to)
 //
 // Display a message
 //
-function message($message, $no_back_link = false)
+function message($message, $no_back_link = false, $links = [])
 {
 	global $db, $lang_common, $pun_config, $pun_start, $tpl_main;
 
@@ -589,12 +589,20 @@ function message($message, $no_back_link = false)
 ?>
 
 <div id="msg" class="block">
-	<h2><span><?php echo $lang_common['Info'] ?></span></h2>
+	<h2><span><?= $lang_common['Info'] ?></span></h2>
 	<div class="box">
 		<div class="inbox">
-		<p><?php echo $message ?></p>
-<?php if (!$no_back_link): ?>		<p><a href="javascript: history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
-<?php endif; ?>		</div>
+			<p style="font-size: 24pt;"><?= $message ?></p>
+<?php
+
+if(!$no_back_link)
+	echo "<p>&nbsp;&middot;&nbsp;<a href=\"javascript: history.go(-1)\">{$lang_common['Go back']}</a></p>\n";
+
+if($links)
+	foreach($links as $url => $title)
+		echo "<p>&nbsp;&middot;&nbsp;<a href=\"{$url}\">{$title}</a></p>\n";
+?>
+		</div>
 	</div>
 </div>
 <?php

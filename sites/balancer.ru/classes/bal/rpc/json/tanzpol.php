@@ -116,13 +116,17 @@ class bal_rpc_json_tanzpol extends bors_json
 
 		foreach($topics as $t)
 		{
+			$thumb = $t->image()->thumbnail($size);
+
 			$result[$t->id()] = [
 				'title' => $t->title(),
 				'snip' => $t->first_post()->snip(),
 				'create_time' => $t->create_time(),
 				'url' => $t->url(),
-				'thumb' => $t->image()->thumbnail($size)->url(),
-				'thumbnail_url' => $t->image()->thumbnail($size)->url(),
+				'thumb' => $thumb->url(),
+				'thumbnail_url' => $thumb->url(),
+				'ths' => $size,
+				'iu' => $t->image()->url(),
 			];
 		}
 

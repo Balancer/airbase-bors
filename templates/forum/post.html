@@ -60,6 +60,18 @@
 
 {if $show_title && $topic}<div class="forum-link-small forum-topic-snippet-replies"><a href="{$topic->url_ex('new')}" target="_blank">К нечитанному в теме «{$topic->title()}»</a></div>{/if}
 
+		{if $p->get('original_topic_id')
+			&& $p->topic_id() != $p->original_topic_id()
+			&& (!$p->answer_to_id() || !$p->answer_to() || $p->answer_to()->topic_id() != $p->topic_id())}
+	<div class="alert alert-warning ab-alert-small">
+			{if $p->original_topic()}
+		Сообщение было перенесено из темы {$p->original_topic()->titled_link('new')}.
+			{else}
+		Сообщение было перенесено из другой темы.
+			{/if}
+	</div>
+		{/if}
+
 		{assign var="keyword_links" value=$p|get:'keyword_links'}
 		{if $keyword_links}<div class="post_kws">{$keyword_links}</div>{/if}
 		{if $strip}
@@ -132,15 +144,13 @@
 
 		{if $p->topic() && $p->topic()->forum()}
 <ul class="postfooter">
-<li><a href="/_bors/ajax/post/info?post={$p->id()}" class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;{ec("инфо")}</a></li>
-<li><a href="#" onclick="pdsh('{$p->id()}'); return false;"
-	{if config('css_bootstrap_is_loaded')}class="btn btn-mini"{/if}
-><img src="/_bors/i/tools.gif" align="middle" alt="" />&nbsp;{ec("инструменты")}</a></li>
-<li{if not config('css_bootstrap_is_loaded')} class="pages_select"{/if}>
- <a href="{$p->topic()->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
-	class="{if config('css_bootstrap_is_loaded')}btn btn-mini btn-info{else}current_page reply_link{/if}"
-  >{ec("Ответить на сообщение")}</a>
-</li>
+	<li><a href="/_bors/ajax/post/info?post={$p->id()}"  class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;{ec("инфо")}</a></li>
+	<li><a href="/_bors/ajax/post-footer-tools?object=balancer_board_post://{$p->id()}" class="post_info_ajax"><img src="/_bors/i/tools.gif"  align="middle" alt="" />&nbsp;{ec("инструменты")}</a></li>
+	<li{if not config('css_bootstrap_is_loaded')} class="pages_select"{/if}>
+		<a href="{$p->topic()->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
+			class="{if config('css_bootstrap_is_loaded')}btn btn-mini btn-info{else}current_page reply_link{/if}"
+		>{ec("Ответить на сообщение")}</a>
+	</li>
 </ul>
 		{/if}
 	{else}{* is_deleted *}

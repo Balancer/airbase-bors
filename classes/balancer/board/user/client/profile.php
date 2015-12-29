@@ -44,7 +44,7 @@ class balancer_board_user_client_profile extends balancer_board_object_db
 	static function by_cookies()
 	{
 		if($profile_hash = @$_COOKIE['client_profile_hash'])
-			return bors_find_first('balancer_board_user_client_profile', array('cookie_hash' => $profile_hash));
+			return balancer_board_user_client_profile::find(['cookie_hash' => $profile_hash])->first();
 
 		return false;
 	}

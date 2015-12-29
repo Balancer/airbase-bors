@@ -301,16 +301,10 @@ class balancer_board_user extends forum_user
 		));
 	}
 
-	static function __dev()
-	{
-		$u = bors_load('balancer_board_user', 95807);
-		var_dump($u->active_twinks_count());
-	}
-
 	function url() { return "http://www.balancer.ru/users/{$this->id()}/"; }
 	function url_ex($page) { return "http://www.balancer.ru/users/{$this->id()}/"; }
 
-	function can_move() { return $this->group()->can_move(); }
+	function can_move() { return $this->group()->can_move() && !$this->is_destructive(); }
 
 	function unreaded_answers()
 	{
@@ -354,5 +348,58 @@ class balancer_board_user extends forum_user
 		airbase_money_log::add($this, $amount, $action, $comment, $object, $source);
 
 		return $this->set('money', $this->money() + $amount, true);
+	}
+
+
+	function is_subscribed($topic_id)
+	{
+		return balancer_board_subscription::find(['user_id' => $this->id(), 'topic_id' => $topic_id])->count() > 0;
+	}
+
+	function add_subscribe($topic_id)
+	{
+		return balancer_board_subscription::create(['user_id' => $this->id(), 'topic_id' => $topic_id]);
+	}
+
+	function remove_subscribe($topic_id)
+	{
+		return balancer_board_subscription::find(['user_id' => $this->id(), 'topic_id' => $topic_id])->first()->delete();
+	}
+
+	function infonesy_export()
+	{
+		$data = [
+			'UUID'		=> 'ru.balancer.board.user.'.$this->id(),
+			'EmailMD5'	=> md5($this->email()),
+			'Node'		=> 'ru.balancer.board',
+			'Title'		=> $this->title(),
+			'RegisterDate'	=> date('r', $this->create_time()),
+			'LastVisit'		=> date('r', $this->last_visit_time()),
+			'Type'		=> 'User',
+		];
+
+		return $data;
+	}
+
+	function infonesy_push()
+	{
+		require_once 'inc/functions/fs/file_put_contents_lock.php';
+		$storage = '/var/www/sync/airbase-forums-push';
+		$file = $storage.'/user-'.$this->id().'.json';
+
+		@file_put_contents_lock($file, json_encode($this->infonesy_export(), JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+		@chmod($file, 0666);
+	}
+
+	static function __dev()
+	{
+//		$u = bors_load('balancer_board_user', 95807);
+//		var_dump($u->active_twinks_count());
+		$user = balancer_board_user::load(10000);
+		$topic_id = 10668;
+		var_dump($user->is_subscribed($topic_id));
+//		$user->remove_subscribe($topic_id);
+//		$user->add_subscribe($topic_id);
+		var_dump($user->is_subscribed($topic_id));
 	}
 }

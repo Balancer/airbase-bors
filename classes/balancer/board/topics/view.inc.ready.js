@@ -4,7 +4,7 @@ if(window.location.hash && (g=/^#(p\d+)$/.exec(window.location.hash)))
 	if(!$('a[name='+h+']').length)
 	{
 		if(confirm("Сообщение "+h+" на странице не найдено. Вероятно, оно было перемещено. Перейти к этому сообщению?"))
-			window.location = "http://www.wrk.ru/g/"+h
+			window.location = "http://www.wrk.ru/g/"+h+'?'
 	}
 }
 

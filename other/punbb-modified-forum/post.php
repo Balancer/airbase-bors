@@ -71,6 +71,11 @@ if(!$me)
 	<a href=\"http://www.wrk.ru/forums/register.php\" style=\"display: block; width: 24ex; font-size: 10pt; padding: 2px 4px; text-align: center; box-shadow: 2px 2px 4px rgba(0,0,0,0.5); color: white; background: rgb(28, 184, 65)\">Зарегистрироваться</a>
 ");
 
+if($me->money() < -3000 && $tid<>82617)
+	message('При балансе ☼ менее -3000 запрещено писать в любые темы, кроме
+		 «<a href="http://www.wrk.ru/community/2015/11/t82617,new--zapovednik-goblinov.html">Заповедника&nbsp;Гоблинов</a>»&nbsp;[<a href="http://www.wrk.ru/community/2015/11/t82617,new--zapovednik-goblinov.html">Перейти&nbsp;в&nbsp;тему</a>].
+		 Вы можете дождаться, пока баланс станет положительным за счёт ежедневных начислений или попросить в этой теме других участников перевести вам нужную сумму.');
+
 if($fid && !$tid && ($me->num_posts() < 3 || $me->create_time() > time() - 86400))
 {
 	message('Извините, но с целью борьбы со спамерами только что зарегистрированным'
@@ -164,6 +169,9 @@ if($qid)
 	$topic = $quoted_post->topic();
 	$tid = $topic->id();
 }
+
+if($me->is_destructive() && $topic && $topic->is_news() && !$qid)
+	message("Вам запрещено размещать новости в новостных темах.");
 
 $GLOBALS['cms']['cache_disabled'] = true;
 
@@ -305,12 +313,86 @@ if (isset($_POST['form_sent']))
 
 	$was_notified = false;
 
+	$lcml_notice = [];
+
+	if(preg_match('!\[spoiler(.+?)\[/spoiler!si', $message, $m) && bors_strlen($m[1]) > 1900)
+		$lcml_notice[] = 'Текст спойлера слишком длинный. Он не будет скрыт. [<a href="http://www.balancer.ru/g/p3977037" target="_blank">Подробности</a>&nbsp;|&nbsp;<a href="http://ls.balancer.ru/topic/add" target="_blank">Добавить отдельной статьёй</a>]';
+
+	if(preg_match_all('@(^.*?)(https?://\S+)@mi', $message, $matches))
+	{
+		foreach($matches[2] as $id => $url)
+		{
+			if(preg_match('/^\S+>\s*/', $matches[1][$id]))
+				continue;
+
+			$x = airbase_external_link::find($url);
+			if($x)
+			{
+				$posts = [];
+				foreach(bors_find_all('balancer_board_post', ['create_time>' => time()-86400*30, 'source LIKE \'%'.addslashes($url).'%\'', 'order' => '-create_time']) as $p)
+				{
+//					if(preg_match("#(?<!\S> )".preg_quote($url, '#').'#im', "\n".$p->source()))
+						$posts[] = $p;
+				}
+
+				if($posts)
+				{
+					$notice = 'Ссылка '.$url.' была найдена в сообщениях:<br/>';
+					foreach($posts as $p)
+						$notice.="&nbsp;&middot;&nbsp;<a href=\"{$p->url_for_igo()}\" target=\"_blank\">{$p->title()}</a> <small style=\"color: #999; font-size: 8pt;\">({$p->snip()})</small><br/>";
+					$notice .= 'Убедитесь, что вы не плодите дубль.';
+					$lcml_notice[] = $notice;
+				}
+			}
+		}
+	}
+
+	if(preg_match_all('!\[youtube[^\]]*?\](.+?)\[/youtube\]!', bors_external_youtube::parse_links($message), $matches))
+	{
+		foreach($matches[1] as $id)
+		{
+			$youtube_objects = bors_find_all('balancer_board_posts_object', array(
+				'target_class_name' => 'bors_external_youtube',
+				'target_object_id' => $id,
+				'order' => '-target_create_time',
+			));
+
+			if($youtube_objects)
+			{
+				$posts = [];
+				foreach($youtube_objects as $px)
+				{
+					$p = $px->post();
+					if(preg_match('/'.preg_quote($id,'/').'/', $p->source()))
+						$posts[] = $p;
+				}
+
+				if($posts)
+				{
+					$notice = 'Видеоролик Youtube id='.$id.' был найден в сообщениях:<br/>';
+					foreach($posts as $p)
+					{
+						$notice.="&nbsp;&middot;&nbsp;<a href=\"{$p->url_for_igo()}\" target=\"_blank\">{$p->title()}</a><br/>";
+					}
+					$notice .= 'Убедитесь, что вы не плодите дубль.';
+					$lcml_notice[] = $notice;
+				}
+			}
+		}
+	}
+
+	if($quoted_post && $quoted_post->owner_id() != bors()->user_id() && !preg_match('!^\S*>.+$!m', $message))
+		$lcml_notice[] = 'Вы отвечаете на чужое сообщение, но в нём нет цитируемого текста. Если это именно ответ на сообщение, то всё ок. Но если это самостоятельное сообщение в тему в виде ответа, то <b>Вы можете заработать штраф</b>. [<a href="http://www.balancer.ru/g/p3975540" target="_blank">Подробности</a>]';
+
+	if(!empty($_POST['lcml_confirmed']))
+		$lcml_notice = [];
+
 	// Did everything go according to plan?
-	if(empty($errors) && !isset($_POST['preview']) && $true_text > 40)
+	if(empty($errors) && !isset($_POST['preview']) && $true_text > 40 && !$lcml_notice)
 	{
 		$md = md5($message);
 		if($me->last_message_md() == $md)
-			message("Вы уже отправили это сообщение");
+			message('Вы уже отправили это сообщение', false, [$topic->url_ex('new') => 'Перейти в конец темы']);
 
 		$me->set_last_message_md($md, true);
 		$answer_to_post = bors_load('balancer_board_post', @$qid);
@@ -695,13 +777,20 @@ if (isset($_POST['form_sent']))
 		}
 
 		//	function add_money($amount, $action=NULL, $comment=NULL, $object=NULL, $source=NULL)
-		bors()->user()->add_money(-2, 'post', "Сообщение", $post);
+		if(!$qid && $topic->is_news() && !$me->is_destructive())
+			// Новость, не привязанное
+			$me->add_money(20, 'news', "Новость", $post);
+		else
+			// Ответ
+			$me->add_money(1, 'post', "Сообщение", $post);
 
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);
 
+		$post->infonesy_push();
+
 //		go("http://forums.balancer.ru/posts/{$post->id()}/process");
-		go($post->url_in_container());
+		go($post->url_in_topic(NULL, true));
 		pun_exit();
 	}
 }
@@ -763,7 +852,6 @@ else if ($fid)
 else
 	message($lang_common['Bad request']);
 
-
 $page_title = pun_htmlspecialchars($pun_config['o_board_title']).' / '.$action;
 $required_fields = array('req_email' => $lang_common['E-mail'], 'req_subject' => $lang_common['Subject'], 'req_message' => $lang_common['Message']);
 $focus_element = array('post');
@@ -788,13 +876,16 @@ include('include/tinymce.php');
 require PUN_ROOT.'header.php';
 
 ?>
+
 <div class="linkst">
 	<div class="inbox">
 		<ul><li><a href="<?php echo $pun_config['root_uri'];?>/index.php"><?= $lang_common['Index'] ?></a></li>
 			<li>&nbsp;&raquo;&nbsp;<?= $forum_name ?></li>
 			<?php
 				if(isset($cur_posting['subject']))
-					echo '<li>&nbsp;&raquo;&nbsp;'.$topic->titled_link().'</li>';
+					echo '<li>&nbsp;&raquo;&nbsp;'.$topic->titled_link_ex('new').'</li>';
+				if($qid && $quoted_post)
+					echo '<li>&nbsp;&raquo;&nbsp;<a href="'.$quoted_post->url_for_igo().'" target="_blank">'.$quoted_post->nav_name().'</a></li>';
 			?>
 		</ul>
 	</div>
@@ -866,6 +957,16 @@ if($true_text <= 40)
 </div><br/>";
 }
 
+if($lcml_notice)
+{
+	$lcml_notice[] = "Вы можете всё равно отправить это сообщение, отметив под ним галочку &laquo;Я подтверждаю корректность текста сообщения&raquo;, но будьте внимательны!";
+
+	foreach($lcml_notice as $s)
+		echo "<div class=\"alert alert-warning\" style=\"padding: 4px; margin-bottom: 4px; font-size: 150%\">{$s}</div>";
+
+	echo '<br/>';
+}
+
 if($messages_limit >= 0)
 {
 	echo "<div class=\"red-box\">Из-за активных штрафов число Ваших сообщений в одном форуме в сутки ограничено {$messages_limit}-ю. 
@@ -893,6 +994,79 @@ if(($warn_count = $me->warnings()) > 0)
 	echo "</div><br/>";
 }
 
+if($topic && !$qid)
+{
+	if($topic->is_news())
+		echo "
+			<div class=\"alert alert-error\" style=\"padding: 4px; margin-bottom: 4px; font-size: 150%\">
+
+				<b style=\"color: red\">Внимание!</b> Вы оставляете новое
+				непривязанное сообщение в тему, помеченную как лента
+				новостей. Если Ваше новое сообщение будет не новостью по
+				теме, Вы можете быть оштрафованы за офтопик или
+				некорректную привязку ответа, если вместо на чьё-то
+				конкретное сообщение отвечаете прямо в тему. В данный
+				топик непривязынными («ответ в тему», а не «ответ на
+				сообщение») можно писать только сообщения с <b>новостями по
+				теме «<i>{$topic->topic_title_with_description()}</i>»</b>.
+			</div>
+		";
+
+	$moved_topics = bors_find_all('balancer_board_topic', [
+		'*set' => 'COUNT(*) AS num_moved_posts',
+		'inner_join' => 'balancer_board_post ON balancer_board_topic.id = balancer_board_post.topic_id',
+		'balancer_board_post.create_time>' => time()-183*86400,
+		'original_topic_id' => $topic->id(),
+		'topic_id NOT IN' => [59483/*Мусор*/],
+		'group' => 'balancer_board_topic.id',
+		'order' => 'COUNT(*) DESC',
+		'limit' => 10,
+	]);
+
+	$moved_topics_html = [];
+	foreach($moved_topics as $t)
+	{
+		$desc = preg_replace('/Перенос из темы.+?»/u', '', $t->description());
+		$desc = preg_replace('/\)»/u', '', $desc);
+/*
+		if($t->answer_notice())
+		{
+			if($desc)
+				$desc .= '. ';
+			$desc .= 'x'.preg_replace('/^([^\.]+?).*$/', '$1', $t->answer_notice());
+		}
+*/
+		$moved_topics_html[] = "<li>&nbsp;&middot;&nbsp;<a href=\"{$t->url_ex('new')}\">{$t->title()}</a>".($desc ? " ({$desc})":'')." [{$t->num_moved_posts()}]</li>";
+	}
+
+	if($moved_topics_html)
+		$moved_topics_html = "<p><b>Больше всего переносов за последнее время из этой темы было в следующие:</b><ul>".join("\n", $moved_topics_html)."</ul></p>";
+	else
+		$moved_topics_html = "";
+
+	if($topic->answer_notice())
+		echo "
+			<div class=\"alert alert-error\" style=\"padding: 4px; margin-bottom: 4px;\">
+				<b style=\"color: red\">Внимание!</b> В эту тему пишут ".lcml_bbh($topic->answer_notice())."
+				Если Ваше сообщение не отвечает данной тематике, то
+				сообщение может быть перенесено в более подходящую
+				тему а Вам выставлен штраф за офтопик или некорректный
+				выбор темы.
+				{$moved_topics_html}
+			</div>
+		";
+	elseif($moved_topics_html)
+	{
+		echo "
+			<div class=\"alert alert-warning\" style=\"padding: 4px; margin-bottom: 4px;\">
+				Обнаружено несколько переносов из этой темы в другие.
+				Посмотрите внимательно, не является ли одна из них более
+				подходящей для вашего сообщения?
+				{$moved_topics_html}
+			</div>
+		";
+	}
+}
 ?>
 
 <div class="blockform">
@@ -997,6 +1171,9 @@ else if ($pun_config['o_smilies'] == '1')
 
 if($true_text <= 40)
 	$checkboxes[] = "<label><input type=\"checkbox\" name=\"overquote_confirmed\" value=\"1\" tabindex=\"".($cur_index++)."\"/>Я подтверждаю избыточное цитирование</label>";
+
+if($lcml_notice)
+	$checkboxes[] = "<label><input type=\"checkbox\" name=\"lcml_confirmed\" value=\"1\" tabindex=\"".($cur_index++)."\"/>Я подтверждаю корректность текста сообщения</label>";
 
 if($me && $me->is_coordinator())
 	$checkboxes[] = "<label style=\"color:red\"><input type=\"checkbox\" name=\"is_moderatorial\" value=\"1\" tabindex=\"".($cur_index++)."\" />Данное сообщение - модераториал</label>";

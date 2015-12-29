@@ -3,7 +3,7 @@
 {foreach from=$users_list item="x"}
 {bors_object_load class="bors_user" id=$x.poster_id var="u"}
 {if $u}
-<tr><td>{$u->titled_link()}</td>
+<tr><td{if $u->is_admin_banned()} class="s"{/if}>{$u->titled_link()}</td>
 	<td>{$x.count}</td>
 	<td>{bal_users_helper::all_flags($u, $ips_where)}</td>
 </tr>

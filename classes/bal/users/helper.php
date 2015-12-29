@@ -87,6 +87,9 @@ class bal_users_helper extends bors_object
 
 	function haction_domain_login($attrs, $haction)
 	{
+		if(!is_array($attrs))
+			throw new Exception("Incorrect h-action attrs: '{$haction->actor_class_name()}({$haction->actor_target_id()})' = '{$haction->actor_attributes()}'");
+
 		extract($attrs);
 
 		$domains = config('balancer_board_domains');
@@ -110,13 +113,15 @@ class bal_users_helper extends bors_object
 		if($next_domain)
 		{
 			$haction->set_attr('need_save', true);
-			$haction->set_actor_attributes(json_encode(array(
+			$haction->set_actor_attributes(json_encode([
 				'domain' => $next_domain,
 				'redirect' => $redirect,
 				'cookie_hash' => $cookie_hash,
 				'is_admin' => $is_admin,
 				'expired' => $expired,
-			)));
+			]));
+
+			$haction->store();
 
 			return $haction->url_ex($next_domain);
 		}

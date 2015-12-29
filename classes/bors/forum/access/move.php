@@ -9,10 +9,10 @@ class forum_access_move extends access_base
 			return false;
 
 		$post = $this->id()->get('post');
-		if(is_object($post) && $post->owner() && $post->owner()->id() == $me->id())
+		if(is_object($post) && $post->owner() && $post->owner()->id() == $me->id() && !$me->is_destructive())
 			return true;
 
-		return $me && $me->group()->can_move();
+		return $me && $me->can_move();
 	}
 
 	function can_read() { return $this->can_edit(); }

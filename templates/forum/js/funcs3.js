@@ -157,15 +157,23 @@ if(top.me_is_coordinator)
 
 function ptrch(p,t) { $("#ptr"+p).load("/_bors/ajax/thumb-"+t+"?object=balancer_board_post://"+p, {'hash': Math.random()})}
 
+/*
+	Убрать, когда в кеше не останется вызовов. Так-то оно уже через привязки работает в js/common.js
+*/
 function pdsh(p)
 {
 	o=$("#pfo"+p);
-	if(o.html())
-		o.toggle(100)
+	if(o.html() && o.ab_type == 'tools')
+	{
+		o.toggle(100);
+		o.html(null);
+		o.ab_type = null;
+	}
 	else
 	{
-		o.html('<img src="/_bors/i/wait-16.gif" width="16" height="16" style="vertical-align: middle;" /> Загружаю...')
+		o.html('<img src="/_bors/i/wait-16.gif" width="16" height="16" style="vertical-align: middle;" /> Загружаю...');
 		o.load("/_bors/ajax/post-footer-tools?object=balancer_board_post://"+p);
+		o.ab_type = 'tools';
 	}
 }
 

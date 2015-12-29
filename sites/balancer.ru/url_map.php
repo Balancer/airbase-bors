@@ -1,6 +1,8 @@
 <?php
 
 bors_vhost_routes('balancer.ru', array(
+   	'/ => balancer_main',
+
 	'/cache/avatars/jpgto/(.+)\.jpg => balancer_cache_avatars_jpgto(1)',
 
 	'/_tools/external/sites/preview => balancer_tools_external_sites_preview',

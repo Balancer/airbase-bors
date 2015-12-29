@@ -50,7 +50,8 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/prof_reg.php';
 // Load the profile.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/profile.php';
 
-if($action && bors()->user()->warnings() > 0)
+if($action && bors()->user() && bors()->user()->warnings() > 0
+		&& !in_array($action, ['change_pass']))
 	message('Вы не можете менять параметры профиля при наличии активных штрафов');
 
 if ($action == 'change_pass')

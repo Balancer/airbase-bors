@@ -8,7 +8,7 @@ class balancer_board_archive_year extends balancer_board_page
 	function body_data()
 	{
 		return array(
-			'month' => $this->db('AB_FORUMS')->select_array('topics', 
+			'month' => driver_mysql::factory('AB_FORUMS')->select_array('topics', 
 				'MONTH(FROM_UNIXTIME(posted)) AS `month`, COUNT(*) AS `topics_count`', 
 				array(
 					'YEAR(FROM_UNIXTIME(posted))=' => $this->id(),

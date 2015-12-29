@@ -28,10 +28,6 @@ $map = array(
 	'.*viewforum\.php\?id=(\d+).* => forum_forum(1)',
 	'.*/index.php => forum_main',
 
-	'/_bors/local/search/result/ => bors_tools_search_result',
-	'/tools/search/result/ => bors_tools_search_result',
-	'/tools/search/ => bors_tools_search',
-
 	"(/forum/)topic/\d+/(\d+),new/ => {$topic_view_class}(2)",
 	'(/)forum(\d+)/ => redirect:forum_forum(2)',
 
@@ -69,8 +65,6 @@ $map = array(
 	'(/admin/forum/posts/)move-tree => airbase_forum_admin_posts_movetree',
 
 	'(/forum/)latest/ => airbase_board_show_latest',
-
-   	'/ => balancer_main',
 
 	'/_bors/ajax/thumb\-(up|down)\?object=(.+) => balancer_ajax_thumb_vote(2,vote=1)',
 	'/_bors/ajax/post\-footer\-tools\?object=(.+) => balancer_board_posts_tools_footerAJAX(1)',
@@ -117,9 +111,6 @@ $map = array(
 		'(/tools/backlinks/)\?object=(\d+) => bors_referer_backlinks(2)',
 		'/tools/backlinks/ => bors_referer_main',
 		'/tools/votes/ => bors_votes_last',
-
-		'(/tools/search/)result/ => bors_tools_search_result',
-		'(/tools/)search/ => bors_tools_search',
 
 		'(/users?/(\d+)/)use\-topics\.html => airbase_user_topics(2)',
 		'(/users?/(\d+)/)use\-topics,(\d+)\.html => airbase_user_topics(2,3)',

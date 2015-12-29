@@ -13,7 +13,7 @@ class airbase_user_warning extends bors_object_db
 
 //	function can_delete() { return bors()->user()->is_admin(); }
 //	Осторожно! У координаторов должен быть action-доступ
-//	function access_engine() { return 'balancer_board_access_balancer'; }
+//	function _access_engine_def() { return 'balancer_board_access_balancer'; }
 
 	function table_fields()
 	{

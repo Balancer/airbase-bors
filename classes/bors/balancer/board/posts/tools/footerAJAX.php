@@ -9,6 +9,8 @@ class balancer_board_posts_tools_footerAJAX extends balancer_board_page
 
 	function pre_show()
 	{
+		template_nocache();
+
 		if(!bors()->user_id())
 			return "Только для зарегистрированных пользователей!";
 

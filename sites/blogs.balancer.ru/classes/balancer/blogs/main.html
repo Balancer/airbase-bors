@@ -1,11 +1,16 @@
 {$this->pages_links_nul()}
 
 {foreach from=$items item=p}
-{assign var="t" value=$p->topic()}
-{assign var="f" value=$t->forum()}
-{if $f->is_public_access()}
-{include file="xfile:forum/post.html" show_title=$t->titled_link() strip="8192"}
-{/if}
+	{assign var="t" value=$p->topic()}
+	{if $t}
+		{assign var="f" value=$t->forum()}
+		{$title=$t->titled_link()}
+	{else}
+		{$title="???"}
+	{/if}
+	{if !$f || $f->is_public_access()}
+		{include file="xfile:forum/post.html" show_title=$title strip="8192"}
+	{/if}
 {/foreach}
 
 {$this->pages_links_nul()}

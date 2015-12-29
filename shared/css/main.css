@@ -1011,9 +1011,9 @@ table.topic-list td > a > img {
 }
 
 .post .body .alert, .post-actions, .ab-alert-small {
-	font-size: 0.9rem;
-	padding: 2mm;
-	margin: 2mm 0;
+	font-size: 0.8rem;
+	padding: 1mm;
+	margin: 1mm 0;
 }
 
 /* Экран низкого разрешения или узкий */

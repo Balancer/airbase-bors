@@ -103,7 +103,8 @@ class airbase_external_link extends balancer_board_object_db
 
 //		bors_debug::syslog('__test-check-no-arrays-in-data', print_r($data, true));
 
-		return bors_new(__CLASS__, $data);
+		$link = bors_new(__CLASS__, $data);
+		return $link;
 	}
 
 	static function default_bbshort($url, &$data=array())
@@ -118,7 +119,7 @@ class airbase_external_link extends balancer_board_object_db
 
 		$id = blib_string::base64_encode2($url);
 
-		$img = "http://www.balancer.ru/_cg/_st/{$host_parts[0]}/{$host_parts[1][0]}/{$host_parts[1]}/{$id}-400x300.png";
+		$img = blib_str_charset::utf8_fix("http://www.balancer.ru/_cg/_st/{$host_parts[0]}/{$host_parts[1][0]}/{$host_parts[1]}/{$id}-400x300.png");
 		// Дёрнем, чтобы сгенерировалось
 		$x = blib_http::get_bin($img, array('timeout' => 10));
 
