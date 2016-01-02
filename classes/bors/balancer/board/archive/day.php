@@ -27,7 +27,7 @@ class balancer_board_archive_day extends base_page_list
 		$end   = $this->id() + 86400;
 
 		return array_merge(parent::where(), array(
-			"posted BETWEEN $begin AND $end",
+			"`posted` BETWEEN $begin AND $end",
 			"forum_id<>" => 16,
 		));
 	}

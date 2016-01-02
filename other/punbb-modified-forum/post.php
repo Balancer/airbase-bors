@@ -25,6 +25,8 @@
 $GLOBALS['cms']['cache_disabled'] = true;
 $GLOBALS['cms']['cant_lock'] = true;
 
+$test_multi_upload = false;
+
 # $forum_temporary_redirect = 'http://home.balancer.ru/mybb/search.php?action=getdaily';
 
 define('PUN_ROOT', __DIR__.'/');
@@ -677,6 +679,10 @@ if (isset($_POST['form_sent']))
 			$post  = bors_load('balancer_board_post',  $new_pid, array('no_load_cache' => true));
 		}
 
+		if($test_multi_upload && $me->id() == 10000)
+		{
+			var_dump($_FILES); exit();
+		}
 		// Этот блок держать над пересчётами данных топика, чтобы аттачи в них уже учитывались.
 		// Attachment Mod Block Start
 		if(isset($_FILES['attached_file'])
@@ -787,7 +793,8 @@ if (isset($_POST['form_sent']))
 		require_once('inc/navigation.php');
 		unset($_SERVER['QUERY_STRING']);
 
-		$post->infonesy_push();
+//		$post->infonesy_push();
+		Airbase\Task::add('balancer_board_post->infonesy_push', $post->id());
 
 //		go("http://forums.balancer.ru/posts/{$post->id()}/process");
 		go($post->url_in_topic(NULL, true));
@@ -1133,7 +1140,15 @@ if($attach_allowed){
 					<legend><?php echo $lang_attach['Attachment'] ?></legend>
 					<div class="infldset">
 						<div class="rbox">
-							<input type="hidden" name="MAX_FILE_SIZE" value="<?=config('forum_attach_max_size')?>" /><input type="file" name="attached_file" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
+							<input type="hidden" name="MAX_FILE_SIZE" value="<?=config('forum_attach_max_size') ?>" />
+<?php if($test_multi_upload && $me->id() == 10000) { ?>
+							<input type="file" name="attached_files[]" size="80" tabindex="<?php echo $cur_index++ ?>" />
+							<input type="file" name="attached_files[]" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
+							<input type="file" name="attached_files[]" size="80" tabindex="<?php echo $cur_index++ ?>" />
+							<input type="file" name="attached_files[]" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
+<?php } else { ?>
+							<input type="file" name="attached_file" size="80" tabindex="<?php echo $cur_index++ ?>" /><br />
+<?php } ?>
 							<?php echo $lang_attach['Note'];/*"*/ ?>
 						</div>
 					</div>

@@ -43,6 +43,22 @@ function set_downloads($v, $dbup=true) { return $this->set('downloads', $v, $dbu
 function location() { return @$this->data['location']; }
 function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup); }
 
+	function create_time()
+	{
+		if($post = $this->post())
+			return $post->create_time();
+
+		return filectime($this->file_name_with_path());
+	}
+
+	function modify_time()
+	{
+		if($post = $this->post())
+			return $post->create_time();
+
+		return filemtime($this->file_name_with_path());
+	}
+
 	function url() { return "http://www.wrk.ru/forums/attachment.php?item=".$this->id(); }
 
 	function thumbnail_link($geometry, $css_class = NULL)
@@ -60,6 +76,7 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 	{
 		return array(
 			'post' => 'balancer_board_post(post_id)',
+			'owner' => 'balancer_board_user(owner_id)',
 		);
 	}
 
@@ -212,5 +229,45 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			return NULL;
 
 		return airbase_image::register_file($this->file_name_with_path());
+	}
+
+	function infonesy_uuid()
+	{
+		return 'ru.balancer.board.attach.' . $this->id();
+	}
+
+	function infonesy_push()
+	{
+		require_once 'inc/functions/fs/file_put_contents_lock.php';
+		$storage = '/var/www/sync/airbase-forums-push';
+		$file = $storage.'/attach-'.$this->id().'.json';
+
+		$ipfs = new B2\Ipfs\Api("10.0.3.1", "8080", "5001");
+
+		$hash = $ipfs->add(file_get_contents($this->file_name_with_path()));
+		$ipfs->pinAdd($hash);
+
+		$data = [
+			'UUID'		=> $this->infonesy_uuid(),
+			'Node'		=> 'ru.balancer.board',
+			'Date'		=> date('r', $this->create_time()),
+			'Modify'	=> date('r', $this->modify_time()),
+			'Type'		=> 'Attach',
+			'IpfsHash'	=> $hash,
+			'PostUUID'	=> object_property($this->post(), 'infonesy_uuid'),
+
+			'OwnerEmailMD5' => object_property($this->owner(), 'email_md5'),
+			'Filename'	=> $this->title(),
+			'MimeType'	=> $this->mime(),
+			'Size'		=> $this->size(),
+			'Original'	=> $this->original(),
+			'Source'	=> $this->source(),
+			'ParentURI'	=> $this->parent_uri(),
+		];
+
+		@file_put_contents_lock($file, json_encode(array_filter($data), JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+		@chmod($file, 0666);
+
+		return $hash;
 	}
 }

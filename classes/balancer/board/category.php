@@ -104,6 +104,7 @@ class balancer_board_category extends forum_category
 			'Node'		=> 'ru.balancer.board',
 			'Title'		=> $this->title(),
 			'Type'		=> 'Category',
+			'Project'	=> $this->data['project'],
 		];
 
 		if($this->parent_category_id())

@@ -326,10 +326,15 @@ class balancer_board_post extends forum_post
 		return $html;
 	}
 
+	function infonesy_uuid()
+	{
+		return 'ru.balancer.board.post.' . $this->id();
+	}
+
 	function infonesy_push()
 	{
 		if(!$this->is_public_access())
-			return;
+			return NULL;
 
 		$this->topic()->infonesy_push();
 		$this->owner()->infonesy_push();
@@ -339,7 +344,7 @@ class balancer_board_post extends forum_post
 		$file = $storage.'/'.date('Y-m-d-H-i-s').'--post-'.$this->id().'.md';
 
 		$meta = [
-			'UUID'		=> 'ru.balancer.board.post.'.$this->id(),
+			'UUID'		=> $this->infonesy_uuid(),
 			'Node'		=> 'ru.balancer.board',
 			'TopicUUID'	=> 'ru.balancer.board.topic.'.$this->topic_id(),
 		];
@@ -363,6 +368,21 @@ class balancer_board_post extends forum_post
 			$meta['AnswerTo'] = 'ru.balancer.board.post.'.$a;
 		}
 
+		$attach_list = [];
+		if($attaches = $this->attaches())
+		{
+			foreach($attaches as $a)
+			{
+				$hash = $a->infonesy_push();
+				$attach_list[] = [
+					'AttachUUID' => $a->infonesy_uuid(),
+					'AttachIpfsHash' => $hash,
+				];
+			}
+
+			$meta['Attaches'] = $attach_list;
+		}
+
 		$dumper = new Dumper();
 
 		$typo = new \EMT\EMTypograph;
@@ -382,7 +402,7 @@ class balancer_board_post extends forum_post
 		$typo->set_text($this->source());
 
 		$md = "---\n";
-		$md .= $dumper->dump($meta,2);
+		$md .= $dumper->dump(array_filter($meta), 2);
 		$md .= "---\n\n";
 
 //		$md .= $typo->apply()."\n";
@@ -392,5 +412,15 @@ class balancer_board_post extends forum_post
 
 		@file_put_contents_lock($file, $md);
 		@chmod($file, 0666);
+
+		return $file;
+	}
+
+	function do_work_infonesy_push()
+	{
+		if($file = $this->infonesy_push())
+			echo "{$this}: pushed to Infonesy as $file\n";
+		else
+			echo "{$this}: skip to pushed to Infonesy\n";
 	}
 }

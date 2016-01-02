@@ -168,4 +168,9 @@ class balancer_board_forum extends forum_forum
 		@chmod($file, 0666);
 		@unlink($storage.'/forum-'.$this->id().'.md');
 	}
+
+	function update_tree_map()
+	{
+		$this->set_tree_map(bors_lib_object::tree_map($this), true);
+	}
 }

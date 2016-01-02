@@ -339,6 +339,7 @@ function generate_profile_menu($page = '')
 function update_forum($forum_id)
 {
 //	bors_task::add(['balancer_board_forum', $forum_id, 'update_counts']);
+	Airbase\Task::add('balancer_board_forum->update_counts', $forum_id);
 }
 
 //

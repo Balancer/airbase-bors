@@ -41,23 +41,27 @@ class balancer_board_user extends forum_user
 
 		$stars_count = min(5,round(abs($reputation)/10)/2);
 
-//		☆★
+//		☆★❆❄
 
-		$stars = str_repeat('★', $full_stars = intval($stars_count));
+		$full_star_char = '❆';
+		$half_star_char = '❄';
+		$star_color = 'DeepSkyBlue';
+
+		$stars = str_repeat($full_star_char, $full_stars = intval($stars_count));
 
 		if($stars_count > $full_stars)
 		{
 			if($reputation >= 0)
-				$stars .= '☆';
+				$stars .= $half_star_char;
 			else
-				$stars = '☆'.$stars;
+				$stars = $half_star_char.$stars;
 		}
 
 		if(!$stars)
 			return '';
 
 		if($reputation >= 0)
-			return "<span class=\"rep\" style=\"color: gold\">{$stars}</span>";
+			return "<span class=\"rep\" style=\"color: {$star_color}\">{$stars}</span>";
 		else
 			return "<span class=\"rep rot180\" style=\"color: gray\">{$stars}</span>";
 	}
@@ -376,7 +380,11 @@ class balancer_board_user extends forum_user
 			'RegisterDate'	=> date('r', $this->create_time()),
 			'LastVisit'		=> date('r', $this->last_visit_time()),
 			'Type'		=> 'User',
+			'XAbVer'	=> 3,
 		];
+
+		if($ava = $this->old_avatar_image())
+			$data['AvatarImageIpfs'] = B2\Ipfs\File::add($ava->full_file_name());
 
 		return $data;
 	}

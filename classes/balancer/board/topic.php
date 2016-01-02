@@ -498,6 +498,7 @@ class balancer_board_topic extends forum_topic
 			'Modify'	=> date('r', $this->modify_time()),
 			'Type'		=> 'Topic',
 			'ForumUUID'	=> 'ru.balancer.board.forum.'.$this->forum_id(),
+			'Keywords'		=> $this->keywords(),
 		];
 
 		if($owner = $this->owner())

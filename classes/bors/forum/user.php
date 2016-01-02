@@ -211,7 +211,8 @@ function use_avatar()
 		$this->set_avatar_height($img_size[1], true);
 	}
 
-	return $this->set_use_avatar($user_avatar, true);
+	$this->set_use_avatar($user_avatar, true);
+	return $user_avatar;
 }
 
 /*
