@@ -43,9 +43,13 @@ class balancer_board_user extends forum_user
 
 //		☆★❆❄
 
-		$full_star_char = '❆';
-		$half_star_char = '❄';
-		$star_color = 'DeepSkyBlue';
+//		$full_star_char = '❆';
+//		$half_star_char = '❄';
+//		$star_color = 'DeepSkyBlue';
+
+		$full_star_char = '★';
+		$half_star_char = '☆';
+		$star_color = 'Gold';
 
 		$stars = str_repeat($full_star_char, $full_stars = intval($stars_count));
 
@@ -370,6 +374,11 @@ class balancer_board_user extends forum_user
 		return balancer_board_subscription::find(['user_id' => $this->id(), 'topic_id' => $topic_id])->first()->delete();
 	}
 
+	function infonesy_uuid()
+	{
+		return 'ru.balancer.board.user.' . $this->id();
+	}
+
 	function infonesy_export()
 	{
 		$data = [
@@ -391,11 +400,12 @@ class balancer_board_user extends forum_user
 
 	function infonesy_push()
 	{
-		require_once 'inc/functions/fs/file_put_contents_lock.php';
+		require_once BORS_CORE.'/inc/functions/fs/file_put_contents_lock.php';
 		$storage = '/var/www/sync/airbase-forums-push';
-		$file = $storage.'/user-'.$this->id().'.json';
+//		$file = $storage.'/user-'.$this->id().'.json';
+		$file = $storage.'/'.$this->infonesy_uuid().'.json';
 
-		@file_put_contents_lock($file, json_encode($this->infonesy_export(), JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+		file_put_contents_lock($file, json_encode($this->infonesy_export(), JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 		@chmod($file, 0666);
 	}
 

@@ -125,6 +125,11 @@ class balancer_board_forum extends forum_forum
 		echo "{$this}: Counts updated = {$this->num_topics()}\n";
 	}
 
+	function infonesy_uuid()
+	{
+		return 'ru.balancer.board.forum.' . $this->id();
+	}
+
 	function infonesy_push()
 	{
 		if(!$this->is_public_access())
@@ -134,7 +139,8 @@ class balancer_board_forum extends forum_forum
 
 		require_once 'inc/functions/fs/file_put_contents_lock.php';
 		$storage = '/var/www/sync/airbase-forums-push';
-		$file = $storage.'/forum-'.$this->id().'.json';
+//		$file = $storage.'/forum-'.$this->id().'.json';
+		$file = $storage.'/'.$this->infonesy_uuid().'.json';
 
 		$data = [
 			'UUID'		=> 'ru.balancer.board.forum.'.$this->id(),

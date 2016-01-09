@@ -89,10 +89,16 @@ class balancer_board_category extends forum_category
 		);
 	}
 
+	function infonesy_uuid()
+	{
+		return 'ru.balancer.board.category.' . $this->id();
+	}
+
 	function infonesy_push()
 	{
 		$storage = '/var/www/sync/airbase-forums-push';
-		$file = $storage.'/category-'.$this->id().'.json';
+//		$file = $storage.'/category-'.$this->id().'.json';
+		$file = $storage.'/'.$this->infonesy_uuid().'.json';
 
 //		if(file_exists($file))
 //			return;

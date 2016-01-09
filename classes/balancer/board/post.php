@@ -341,7 +341,8 @@ class balancer_board_post extends forum_post
 
 		require_once 'inc/functions/fs/file_put_contents_lock.php';
 		$storage = '/var/www/sync/airbase-forums-push';
-		$file = $storage.'/'.date('Y-m-d-H-i-s').'--post-'.$this->id().'.md';
+//		$file = $storage.'/'.date('Y-m-d-H-i-s').'--post-'.$this->id().'.md';
+		$file = $storage.'/'.$this->infonesy_uuid().'.md';
 
 		$meta = [
 			'UUID'		=> $this->infonesy_uuid(),

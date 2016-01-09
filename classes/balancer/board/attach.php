@@ -240,7 +240,8 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 	{
 		require_once 'inc/functions/fs/file_put_contents_lock.php';
 		$storage = '/var/www/sync/airbase-forums-push';
-		$file = $storage.'/attach-'.$this->id().'.json';
+//		$file = $storage.'/attach-'.$this->id().'.json';
+		$file = $storage.'/'.$this->infonesy_uuid().'.json';
 
 		$ipfs = new B2\Ipfs\Api("10.0.3.1", "8080", "5001");
 

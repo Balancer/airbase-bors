@@ -478,6 +478,11 @@ class balancer_board_topic extends forum_topic
 //		return preg_match('/новости/iu', $this->keywords_string());
 	}
 
+	function infonesy_uuid()
+	{
+		return 'ru.balancer.board.post.' . $this->id();
+	}
+
 	function infonesy_push()
 	{
 		if(!$this->is_public_access())
@@ -488,7 +493,9 @@ class balancer_board_topic extends forum_topic
 		require_once 'inc/functions/fs/file_put_contents_lock.php';
 		$storage = '/var/www/sync/airbase-forums-push';
 //		$file = $storage.'/'.date('Y-m-d-H-i-s').'--topic-'.$this->id().'.md';
-		$file = $storage.'/topic-'.$this->id().'.json';
+//		$file = $storage.'/topic-'.$this->id().'.json';
+
+		$file = $storage.'/'.$this->infonesy_uuid().'.json';
 
 		$data = [
 			'UUID'		=> 'ru.balancer.board.topic.'.$this->id(),
