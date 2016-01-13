@@ -117,7 +117,11 @@ class balancer_board_topic extends forum_topic
 		else
 			// Если отметки о чтении топика нет, то считаем за дату последнего посещения
 			// дату модификации самой старой записи в таблице посещений.
-			$last_visit = bors_find_first('balancer_board_topics_visit', ['last_visit>' => 0])->modify_time();
+//			$last_visit = bors_find_first('balancer_board_topics_visit', ['last_visit>' => 0])->modify_time();
+			$last_visit = 0;
+
+		if($last_visit < time() - 90*86400)
+			$last_visit = time() - 90*86400;
 
 		// Первое нечитанное сообщение темы
 		$first_new_post = bors_find_first('balancer_board_post', [

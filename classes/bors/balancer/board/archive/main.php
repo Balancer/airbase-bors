@@ -8,7 +8,7 @@ class balancer_board_archive_main extends balancer_board_page
 	function body_data()
 	{
 		return array(
-			'years' => $this->db('AB_FORUMS')->select_array('topics', 
+			'years' => driver_mysql::factory(config('punbb.database'))->select_array('topics', 
 				'YEAR(FROM_UNIXTIME(posted)) AS `year`, COUNT(*) AS `topics_count`', 
 				array(
 					'group' => '`year`',

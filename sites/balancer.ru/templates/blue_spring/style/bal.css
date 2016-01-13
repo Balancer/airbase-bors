@@ -104,3 +104,16 @@ div.box a {
 }
 
 .rs_box small.inbox { display: block; margin: 0 8px; }
+
+.forum-link-small {
+	font-size: 8pt;
+}
+
+.post_kws {
+	font-size: 8pt;
+	margin-bottom: 4px;
+}
+
+
+.forum-topic-snippet-replies {
+}
