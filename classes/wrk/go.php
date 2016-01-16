@@ -47,7 +47,14 @@ class wrk_go extends balancer_board_page
 		$object = bors_load($class_name, $object_id);
 
 		if($object)
+		{
+			if(config('is_debug'))
+			{
+				var_dump($object);
+				exit();
+			}
 			return go($object->url_in_container());
+		}
 
 		return false;
 	}

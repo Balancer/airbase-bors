@@ -484,7 +484,7 @@ class balancer_board_topic extends forum_topic
 
 	function infonesy_uuid()
 	{
-		return 'ru.balancer.board.post.' . $this->id();
+		return 'ru.balancer.board.topic.' . $this->id();
 	}
 
 	function infonesy_push()
