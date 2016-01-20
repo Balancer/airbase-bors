@@ -192,7 +192,9 @@ class balancer_blogs_tags_show extends balancer_board_page
 		foreach($targets as $class_name => $ids)
 			$items = array_merge($items, bors_find_all($class_name, array('id IN' => $ids)));
 
-		uasort($items, create_function('$a,$b', 'return $a->create_time() < $b->create_time();'));
+		uasort($items, function($a,$b) {
+			return $a->create_time() < $b->create_time();
+		});
 
 		return $this->__setc($items);
 	}
