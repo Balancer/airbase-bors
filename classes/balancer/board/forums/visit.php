@@ -5,6 +5,8 @@ class balancer_board_forums_visit extends balancer_board_object_db
 	function db_name() { return 'AB_FORUMS'; }
 	function table_name() { return 'forum_visits'; }
 
+	function replace_on_new_instance() { return true; }
+
 	function table_fields()
 	{
 		return array(

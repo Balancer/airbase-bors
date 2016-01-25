@@ -25,7 +25,7 @@ class airbase_forum_admin_post_asnewtopic extends bors_page
 		return $post->topic()->keywords_string();
 	}
 
-	function new_topic_description() { return ec('Перенос из темы «').$this->post()->topic()->title().ec('»'); }
+//	function new_topic_description() { return ec('Перенос из темы «').$this->post()->topic()->title().ec('»'); }
 	function dont_move_with_tree() { return false; }
 	function access_engine() { return 'airbase_forum_admin_access_split'; }
 
