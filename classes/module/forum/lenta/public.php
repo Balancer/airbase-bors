@@ -23,7 +23,7 @@ class module_forum_lenta_public extends bors_module
 		);
 
 		if($forums = $this->args('forums'))
-			$where['forum_id IN'] = parse_condensed_list($forums);
+			$where['forum_id IN'] = blib_list::parse_condensed($forums);
 
 		$this->bdata[$page_id] = array(
 				'topics' => bors_find_all('balancer_board_blog', $where),

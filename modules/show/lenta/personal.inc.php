@@ -7,7 +7,7 @@
 	
 		$db = new DataBase('punbb');
 
-		$forums = $forums ? "AND t.forum_id IN (".join(",", parse_condensed_list($forums)).")" : "";
+		$forums = $forums ? "AND t.forum_id IN (".join(",", blib_list::parse_condensed($forums)).")" : "";
 
 		$topics = array();
 		foreach($db->get_array("
