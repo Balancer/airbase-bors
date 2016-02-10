@@ -151,7 +151,14 @@ class balancer_board_post extends forum_post
 		}
 	}
 
-	static function create($topic, $message, $user, $keywords_string = NULL, $as_blog = NULL, $data = array())
+	static function create($data)
+	{
+//		return $this->create_post$topic, $message, $user, $keywords_string, $as_blog, $data);
+		throw new Exception("Try to create post by broken legacy");
+	}
+
+	// Нигде не используется? Выше ловушка. Если сработает — переводить сюда. Нет — сносить этот метод.
+	static function create_post($topic, $message, $user, $keywords_string = NULL, $as_blog = NULL, $data = [])
 	{
 		if(is_numeric($topic))
 			$topic = bors_load('balancer_board_topic', $topic);
@@ -423,5 +430,10 @@ class balancer_board_post extends forum_post
 			echo "{$this}: pushed to Infonesy as $file\n";
 		else
 			echo "{$this}: skip to pushed to Infonesy\n";
+	}
+
+	function is_news()
+	{
+		return !$this->answer_to_id() && $this->topic()->is_news();
 	}
 }

@@ -30,7 +30,7 @@ class forum_tools_post extends bors_page
 
 	function can_read() { return bors()->user(); }
 
-	function can_action()
+	function can_action($action, $data)
 	{
 		$me = bors()->user();
         if(!$me || !$me->id())

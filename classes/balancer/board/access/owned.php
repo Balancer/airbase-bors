@@ -2,7 +2,7 @@
 
 class balancer_board_access_owned extends balancer_board_access_personal
 {
-	function can_action()
+	function can_action($action, $data)
 	{
 		$owner = $this->id()->get('owner');
 		if(!$owner)

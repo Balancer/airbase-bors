@@ -1045,3 +1045,16 @@ table.topic-list td > a > img {
 	}
 */
 }
+
+div.topic_is_news {
+/*	padding-left: 100px; */
+}
+
+div.post_news {
+/*	xmargin-left: -100px; */
+}
+
+div.post_no_news {
+	font-size: 80%;
+	color: #557;
+}

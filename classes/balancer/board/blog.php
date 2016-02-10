@@ -4,7 +4,14 @@ class balancer_board_blog extends forum_blog
 {
 	function extends_class_name() { return 'forum_blog'; }
 
-	static function create($post, $keywords_string, $data = array())
+
+	static function create($data)
+	{
+		throw new Exception("Try to create post by broken legacy");
+	}
+
+	// Нигде не используется? Выше ловушка. Если сработает — переводить сюда. Нет — сносить этот метод.
+	static function create_blog($post, $keywords_string, $data = array())
 	{
 		$topic = $post->topic();
 		$user  = $post->owner();

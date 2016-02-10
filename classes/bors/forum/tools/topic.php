@@ -18,7 +18,7 @@ class forum_tools_topic extends balancer_board_page
 
 	function access() { return $this; }
 	function can_read() { return true; }
-	function can_action()
+	function can_action($action, $data)
 	{
 		$me = bors()->user();
         if(!$me || !$me->id())

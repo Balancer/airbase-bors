@@ -17,7 +17,7 @@
 <a name="p{$p->id()}"></a>
 		{assign var="owner" value=$p->owner()}
 		{assign var=a value=$p->get('answer_to')}
-<div class="post pby{$p->owner_id()}{if $a} pto{$a->owner_id()}{/if}{if $p->get('is_moderatorial')} moderatorial_post{/if}">
+<div class="post pby{$p->owner_id()}{if $a} pto{$a->owner_id()}{/if}{if $p->get('is_moderatorial')} moderatorial_post{/if}{if $p->topic()->get('is_news')}{if $p->get('is_news')} post_news{else} post_no_news{/if}{/if}">
 	<div class="head">
 		<div class="to-left">
 		{if $p->get('is_moderatorial')}<div class="red small">{ec("Данное сообщение является официальным предупреждением")}</div>{/if}
@@ -149,7 +149,7 @@
 	<li{if not config('css_bootstrap_is_loaded')} class="pages_select"{/if}>
 		<a href="{$p->topic()->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
 			class="{if config('css_bootstrap_is_loaded')}btn btn-mini btn-info{else}current_page reply_link{/if}"
-		>{ec("Ответить на сообщение")}</a>
+		>{if $p->topic()->get('is_news')}{if $p->get('is_news')}Прокомментировать новость{else}Ответить на комментарий{/if}{else}Ответить на сообщение{/if}</a>
 	</li>
 </ul>
 		{/if}

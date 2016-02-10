@@ -109,7 +109,8 @@ $max_subject_length = 30;
 
 
 define('PUN_ROOT', __DIR__.'/');
-@include PUN_ROOT.'config.php';
+require PUN_ROOT.'include/common.php';
+include PUN_ROOT.'config.php';
 
 // If PUN isn't defined, config.php is missing or corrupt
 if (!defined('PUN'))
@@ -118,10 +119,6 @@ if (!defined('PUN'))
 
 // Make sure PHP reports all errors except E_NOTICE
 error_reporting(E_ALL ^ E_NOTICE);
-
-// Turn off magic_quotes_runtime
-set_magic_quotes_runtime(0);
-
 
 // Load the functions script
 require_once PUN_ROOT.'include/functions.php';
@@ -213,7 +210,11 @@ if ($_GET['action'] == 'active' || $_GET['action'] == 'new')
 		echo "\t".'<language>en-us</language>'."\r\n";
 
 		// Fetch 15 topics
-		$result = $db->query('SELECT t.id, t.poster, t.subject, t.posted, t.last_post, f.id AS fid, f.forum_name FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id=3) WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.moved_to IS NULL'.$forum_sql.' ORDER BY '.$order_by.' DESC LIMIT 15') or error('Unable to fetch topic list', __FILE__, __LINE__, $db->error());
+		$result = $db->query('SELECT t.id, t.poster, t.subject, t.posted, t.last_post, f.id AS fid, f.forum_name FROM '
+			.$db->prefix.'topics AS t INNER JOIN '
+			.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '
+			.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id=3) WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.moved_to IS NULL'
+			.$forum_sql.' ORDER BY '.$order_by.' DESC LIMIT 15') or error('Unable to fetch topic list', __FILE__, __LINE__, $db->error());
 
 		while ($cur_topic = $db->fetch_assoc($result))
 		{
@@ -240,7 +241,12 @@ if ($_GET['action'] == 'active' || $_GET['action'] == 'new')
 			$show = 15;
 
 		// Fetch $show topics
-		$result = $db->query('SELECT t.id, t.subject FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id=3) WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.moved_to IS NULL'.$forum_sql.' ORDER BY '.$order_by.' DESC LIMIT '.$show) or error('Unable to fetch topic list', __FILE__, __LINE__, $db->error());
+		$result = $db->query('SELECT t.id, t.subject FROM '
+			.$db->prefix.'topics AS t INNER JOIN '
+			.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '
+			.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id=3) WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.moved_to IS NULL'
+			.$forum_sql.' ORDER BY '
+			.$order_by.' DESC LIMIT '.$show) or error('Unable to fetch topic list', __FILE__, __LINE__, $db->error());
 
 		while ($cur_topic = $db->fetch_assoc($result))
 		{
@@ -267,7 +273,7 @@ else if ($_GET['action'] == 'online' || $_GET['action'] == 'online_full')
 {
 	// Load the index.php language file
 	require PUN_ROOT.'lang/'.$pun_config['o_default_lang'].'/index.php';
-	
+
 	// Fetch users online info and generate strings for output
 	$num_guests = $num_users = 0;
 	$users = array();

@@ -2,6 +2,8 @@
 
 class airbase_user_admin_warnings extends airbase_user_warnings
 {
+	function access_engine() { return 'airbase_user_admin_access'; }
+
 	function object() { return ($obj=$this->args('object')) ? bors_load($obj) : NULL; }
 
 	function body_data()

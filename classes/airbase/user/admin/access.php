@@ -2,7 +2,7 @@
 
 class airbase_user_admin_access extends access_base
 {
-	function can_action()
+	function can_action($action, $data)
 	{
 		$me = bors()->user();
 		if(!in_array($me->group_id(), array(1,2,5,21)))

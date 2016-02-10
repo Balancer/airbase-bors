@@ -1,3 +1,4 @@
+
 <div class="pages_select right">
 
 <a href="http://ls.balancer.ru/question/add/"
@@ -18,7 +19,7 @@
 	{else}
 	<a href="{$this->forum()->category()->category_base_full()}post.php?tid={$this->id()}" 
 		class="{if config('css_bootstrap_is_loaded')}btn btn-small btn-primary{else}select_page{/if} theme_answer_button"
-	>{"Ответ в эту тему"|ec}</a>
+	>{if $this->get('is_news')}Добавить новость по теме{else}Написать сообщение в тему{/if}</a>
 	{/if}
 {/if}
 
@@ -27,6 +28,8 @@
 {if $this->pages_links()}<div class="pages_select">{"Страницы:"|ec} {$this->pages_links()}</div>{/if}
 
 {if not $this->is_public_access()}<div class="yellow_box">{"Тема с ограниченным доступом"|ec}</div>{/if}
+
+{if $this->get('is_news')}<div class="topic_is_news">{/if}
 
 {if $prev_actions}
 <br/><div class="box small"><ul>
@@ -80,5 +83,7 @@
 </ul></dd>
 </dl>
 {/if}
+
+{if $this->get('is_news')}</div>{/if}
 
 {if $this->pages_links()}<div class="pages_select">{"Страницы:"|ec} {$this->pages_links()}</div>{/if}

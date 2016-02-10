@@ -56,7 +56,7 @@ class bors_tools_search extends balancer_board_page
 	function origins() { return bors()->request()->data('origins'); }
 
 	function access() { return $this; }
-	function can_action() { return true; }
+	function can_action($action, $data) { return true; }
 	function can_read() { return true; }
 	function _can_list_def() { return $this->can_read(); }
 

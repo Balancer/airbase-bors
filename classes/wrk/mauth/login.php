@@ -14,7 +14,7 @@ class wrk_mauth_login extends bors_page
 	}
 
 	function access() { return $this; }
-	function can_action() { return true; }
+	function can_action($action, $data) { return true; }
 	function can_read() { return true; }
 
 	static function _domains()

@@ -2,6 +2,7 @@
 
 require_once('../../config.php');
 
+// Куда сносим, «Заповедник гоблинов»
 $target_topic_id = 82617;
 
 main();
@@ -11,11 +12,12 @@ function main()
 {
 	global $target_topic_id;
 
-	// 84463 — Lazy Rider
-	// 105560 — Lumen
-
-	$uids = [84463, 105560];
-	$cat_ids = [6,8,26,27]; // 8 = Клуб
+	$uids = [
+		84463,	// 84463 — Lazy Rider
+		105560,	// 105560 — Lumen
+		109082, // Бот, постящий только ссылки www.milkavkaz.net
+	];
+//	$cat_ids = [6,8,26,27]; // 8 = Клуб
 
 	$posts = bors_each('balancer_board_post', [
 		'inner_join' => [

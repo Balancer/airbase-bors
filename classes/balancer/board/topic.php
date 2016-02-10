@@ -157,7 +157,14 @@ class balancer_board_topic extends forum_topic
 		return $fcache[$domain];
 	}
 
-	static function create($forum, $title, $message, $user = NULL, $keywords_string = NULL, $as_blog = true, $data = array())
+	static function create($data)
+	{
+		throw new Exception("Try to create post by broken legacy");
+	}
+
+	// Нигде не используется? Выше ловушка. Если сработает — переводить сюда. Нет — сносить этот метод.
+
+	static function create_topic($forum, $title, $message, $user = NULL, $keywords_string = NULL, $as_blog = true, $data = [])
 	{
 //		echo "Pass new topic to {$forum->debug_title()}\n";
 

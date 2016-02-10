@@ -4,10 +4,10 @@ class balancer_board_access_public extends bors_access
 {
 	function is_balancer() { return bors()->user() && bors()->user()->id() == 10000; }
 
-	function can_action()
+	function can_action($action, $data)
 	{
 		if(method_exists($this->id(), 'can_action'))
-			return $this->id()->can_action();
+			return $this->id()->can_action($action, $data);
 
 		return $this->is_balancer();
 	}
