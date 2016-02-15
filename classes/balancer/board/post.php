@@ -424,12 +424,41 @@ class balancer_board_post extends forum_post
 		return $file;
 	}
 
+	function infonesy_notify()
+	{
+		if(!$this->is_public_access())
+			return NULL;
+
+		$storage = '/var/www/sync/infonesy-common';
+
+		$message = '*Тема: '.$this->topic()->title()."*\n\n"
+			.\B2\Lcml::Lcml2Markdown($this->source())."\n\n"
+			.$this->url_for_igo();
+
+		$file = $storage.'/'.$this->infonesy_uuid().'.json';
+
+		$data = [
+			'UUID'		=> $this->infonesy_uuid(),
+			'Node'		=> 'ru.balancer.board',
+			'TopicUUID'	=> 'ru.balancer.board.topic.'.$this->topic_id(),
+			'Author' => [
+				'Title' => $this->owner()->title(),
+			],
+			'Message' => $message,
+		];
+
+		file_put_contents_lock($file, json_encode($data, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+		chmod($file, 0666);
+	}
+
 	function do_work_infonesy_push()
 	{
 		if($file = $this->infonesy_push())
 			echo "{$this}: pushed to Infonesy as $file\n";
 		else
 			echo "{$this}: skip to pushed to Infonesy\n";
+
+		$this->infonesy_notify();
 	}
 
 	function is_news()

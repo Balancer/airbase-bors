@@ -244,17 +244,6 @@ class user_main extends balancer_board_page
 
 			'messages_month_by_categories' => $messages_month_by_categories,
 
-			'today_total' => bors_count('balancer_board_post', array(
-				'owner_id' => $this->id(),
-				'is_deleted' => false,
-				'create_time BETWEEN' => [$last_post_time-86400, $last_post_time],
-			)),
-
-			'tomonth_total' => bors_count('balancer_board_post', array(
-				'is_deleted' => false,
-				'owner_id' => $this->id(),
-				'create_time BETWEEN' => [$last_post_time-86400*30, $last_post_time],
-			)),
 			'votes_from' => bors_votes_thumb::colorize_pm(@$pluses_from, @$minuses_from),
 			'votes_to'   => bors_votes_thumb::colorize_pm(@$pluses_to  , @$minuses_to  ),
 			'ban' => $user->is_admin_banned(),

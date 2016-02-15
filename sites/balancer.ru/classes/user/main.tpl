@@ -24,8 +24,6 @@
 <li>Всего сообщений: {$user->num_posts()}</li>
 <li>Последнее сообщение: <a href="http://www.balancer.ru/user/{$user->id()}/posts/last/">{$user->last_post_time()|full_time}</a></li>
 {if $user->messages_daily_limit() >= 0}<li>Ограничение числа сообщений в день на один форум: <span class="red">{$user->messages_daily_limit()}</span></li>{/if}
-<li>Сообщений на форуме за последние 24 часа: <b>{$today_total}</b></li>
-<li>Сообщений на форуме за последние 30 суток: <b>{$tomonth_total}</b></li>
 {* <li>Карма: <b>{$user->karma()|sprintf:'%.2f'}</b></li> *}
 {* <li>Суточный прирост кармы: <b style="color: {if $user->karma_rate() > 0}green{else}red{/if}">{$user->karma_rate()|sprintf:'%.2f'}</b></li> *}
 {if $me}
@@ -47,8 +45,8 @@
 	<table class="btab w100p">
 	<caption>Лучше всех к его сообщениям относятся</caption>
 	<tr>
-		<th colspan="2">За 10 лет</th>
-		<th colspan="2">За квартал</th>
+		<th colspan="2">За 10 лет его активности</th>
+		<th colspan="2">За квартал его активности</th>
 	</tr>
 	<tr>
 		<th>Пользователь</th>
@@ -70,8 +68,8 @@
 	<table class="btab w100p">
 	<caption>Лучше он относится к сообщениям</caption>
 	<tr>
-		<th colspan="2">За 10 лет</th>
-		<th colspan="2">За квартал</th>
+		<th colspan="2">За 10 лет его активности</th>
+		<th colspan="2">За квартал его активности</th>
 	</tr>
 	<tr>
 		<th>Пользователь</th>
@@ -95,8 +93,8 @@
 	<table class="btab w100p">
 	<caption>Хуже всех к его сообщениям относятся</caption>
 	<tr>
-		<th colspan="2">За 10 лет</th>
-		<th colspan="2">За квартал</th>
+		<th colspan="2">За 10 лет его активности</th>
+		<th colspan="2">За квартал его активности</th>
 	</tr>
 	<tr>
 		<th>Пользователь</th>
@@ -118,8 +116,8 @@
 	<table class="btab w100p">
 	<caption>Хуже он относится к сообщениям</caption>
 	<tr>
-		<th colspan="2">За 10 лет</th>
-		<th colspan="2">За квартал</th>
+		<th colspan="2">За 10 лет его активности</th>
+		<th colspan="2">За квартал его активности</th>
 	</tr>
 	<tr>
 		<th>Пользователь</th>
