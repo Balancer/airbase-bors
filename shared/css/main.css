@@ -895,6 +895,7 @@ div.spinner {
 }
 
 .mtop8 {
+	clear: both;
 	margin-top: 8px !important;
 }
 
@@ -1017,12 +1018,19 @@ table.topic-list td > a > img {
 }
 
 /* Экран низкого разрешения или узкий */
-@media only screen and ((max-device-width: 639px) or (max-device-width: 8cm)) {
+/*@media only screen and ((max-device-width: 639px) or (max-device-width: 10cm)) { */
+@media only screen and (max-device-width: 10cm) {
 	.tpl_column_left {
 		width: auto;
 	}
 	.w200 {
 		width: auto;
+	}
+	.mtop8 {
+		clear:both;
+	}
+	.mtop8 img {
+		max-width: 100%;
 	}
 }
 
