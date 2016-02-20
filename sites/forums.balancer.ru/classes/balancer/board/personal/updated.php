@@ -28,8 +28,8 @@ class balancer_board_personal_updated extends balancer_board_page
 
 			"((topic_visits.last_visit < topics.last_post)
 				OR (topic_visits.last_visit IS NULL
-					AND topics.posted > $fence
-					AND forum_visits.is_disabled=0))",
+					AND topics.last_post > $fence
+					AND (forum_visits.is_disabled=0 OR forum_visits.is_disabled IS NULL)))",
 
 			'order' => '-last_post',
 			'page' => $this->page(),
@@ -127,7 +127,7 @@ class balancer_board_personal_updated extends balancer_board_page
 
 			"((topic_visits.last_visit < topics.last_post)
 				OR (topic_visits.last_visit IS NULL
-					AND topics.posted > $fence
+					AND topics.last_post > $fence
 					AND forum_visits.is_disabled=0))",
 		));
 	}

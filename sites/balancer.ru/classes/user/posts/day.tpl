@@ -1,4 +1,4 @@
-{module class="date_calend_month" year=$year month=$month list=$calend table="btab" now=$today}
+{module class="module_date_calend_month" year=$year month=$month list=$calend table="btab" now=$today}
 
 <div class="pages_select">
 {if $previous_day_link}<a href="{$previous_day_link}" class="select_page">Предыдущий день</a>{/if}
