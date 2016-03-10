@@ -74,7 +74,7 @@ class bal_rpc_json_find extends bors_json
 					$data[$f] = $x->get($f);
 
 			if($thumb =  bors()->request()->data('thumb'))
-				$data['thumbnail_url'] = $x->image()->thumbnail($thumb)->url();
+				$data['thumbnail_url'] = ($i = $x->image()) ? $i->thumbnail($thumb)->url() : NULL;
 
 			$data['url'] = $x->url_for_igo();
 			$data['topic_tags'] = $x->topic()->keywords();

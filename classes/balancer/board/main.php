@@ -9,7 +9,14 @@ class balancer_board_main extends balancer_board_page
 	function parents() { return array('http://www.balancer.ru/'); }
 	function template() { return 'forum/wide.html'; }
 
-	function cache_static() { return 60; }
+//	function cache_static() { return 60; }
+
+	function forums_where()
+	{
+		return [
+			'inner_join' => 'balancer_board_forum ON balancer_board_forum.id = forum_id',
+		];
+	}
 
 	function pre_show()
 	{
@@ -27,7 +34,9 @@ class balancer_board_main extends balancer_board_page
 */
 	function body_data()
 	{
-		$new_topics = bors_find_all('balancer_board_topic', array(
+		$fw = $this->forums_where();
+
+		$new_topics = bors_find_all('balancer_board_topic', array_merge([
 			'order' => '-create_time',
 			'limit' => 10,
 			'closed' => 0,
@@ -35,7 +44,7 @@ class balancer_board_main extends balancer_board_page
 			'first_post_id>' => 0,
 			'last_post_id>' => 0,
 			'is_public' => 1,
-		));
+		], $fw));
 
 		$youtube_objects = bors_find_all('balancer_board_posts_object', array(
 			'target_class_name' => 'bors_external_youtube',
@@ -44,7 +53,7 @@ class balancer_board_main extends balancer_board_page
 			'limit' => 20,
 		));
 
-		$top_visit_topics = bors_find_all('balancer_board_topic', array(
+		$top_visit_topics = bors_find_all('balancer_board_topic', array_merge([
 			'num_views>=' => 10,
 			'last_visit - first_visit > 600',
 			'create_time>' => time() - 86400*365,
@@ -53,7 +62,7 @@ class balancer_board_main extends balancer_board_page
 			'is_public' => true,
 			'forum_id NOT IN' => array(37),
 			'limit' => 20,
-		));
+		], $fw));
 
 		srand();
 		usort($youtube_objects, function($x, $y) {
@@ -65,11 +74,11 @@ class balancer_board_main extends balancer_board_page
 		bors_objects_preload(array_merge($new_topics, $top_visit_topics), 'forum_id', 'balancer_board_forum', 'forum');
 
 		return array(
-			'updated_topics' => bors_find_all('balancer_board_topic', array(
+			'updated_topics' => bors_find_all('balancer_board_topic', array_merge([
 				'order' => '-last_post_create_time',
 				'limit' => 20,
 				'is_public' => true,
-			)),
+			], $fw)),
 
 			'new_topics' => $new_topics,
 			'top_visit_topics' => $top_visit_topics,

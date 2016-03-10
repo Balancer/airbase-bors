@@ -147,8 +147,8 @@ class bal_rpc_json_tanzpol extends bors_json
 				'snip' => $p->snip(),
 				'create_time' => $p->create_time(),
 				'url' => $p->url_for_igo(),
-				'thumb' => $p->image()->thumbnail($size)->url(),
-				'thumbnail_url' => $p->image()->thumbnail($size)->url(),
+				'thumb' => ($i = $p->image()) ? $i->thumbnail($size)->url() : NULL,
+				'thumbnail_url' => $i ? $i->thumbnail($size)->url() : NULL,
 			];
 		}
 

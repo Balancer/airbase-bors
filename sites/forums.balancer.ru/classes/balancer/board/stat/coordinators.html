@@ -32,24 +32,71 @@
 </table>
 
 {$sum=0}
-<table class="btab w100p">
-<caption>Активность координаторов по числу штрафов за месяц год назад</caption>
-<tr>
-	<th>Координатор</th>
-	<th>Число выставленных штрафов</th>
-</tr>
-{foreach from=$month_warns_toyear item="x"}
-<tr>
-	<td>{$x.coordinator_name}</td>
-	<td>{$x.warnings_count}</td>
-</tr>
-{$sum = $sum + $x.warnings_count}
-{/foreach}
-<tr>
-	<td><b>Итого</b></td>
-	<td>{$sum}</td>
-</tr>
-</table>
+<table><tr>
+<td>
+	<table class="btab w100p">
+	<caption>Активность координаторов по числу штрафов за месяц год назад</caption>
+	<tr>
+		<th>Координатор</th>
+		<th>Число выставленных штрафов</th>
+	</tr>
+	{$sum=0}
+	{foreach $month_warns_toyear as $x}
+	<tr>
+		<td>{$x.coordinator_name}</td>
+		<td>{$x.warnings_count}</td>
+	</tr>
+	{$sum = $sum + $x.warnings_count}
+	{/foreach}
+	<tr>
+		<td><b>Итого</b></td>
+		<td>{$sum}</td>
+	</tr>
+	</table>
+</td>
+<td>
+	<table class="btab w100p">
+	<caption>Активность координаторов по числу штрафов за месяц 5 лет назад</caption>
+	<tr>
+		<th>Координатор</th>
+		<th>Число выставленных штрафов</th>
+	</tr>
+	{$sum=0}
+	{foreach $month_warns_to5year as $x}
+	<tr>
+		<td>{$x.coordinator_name}</td>
+		<td>{$x.warnings_count}</td>
+	</tr>
+	{$sum = $sum + $x.warnings_count}
+	{/foreach}
+	<tr>
+		<td><b>Итого</b></td>
+		<td>{$sum}</td>
+	</tr>
+	</table>
+</td>
+<td>
+	<table class="btab w100p">
+	<caption>Активность координаторов по числу штрафов за месяц 10 лет назад</caption>
+	<tr>
+		<th>Координатор</th>
+		<th>Число выставленных штрафов</th>
+	</tr>
+	{$sum=0}
+	{foreach $month_warns_to10year as $x}
+	<tr>
+		<td>{$x.coordinator_name}</td>
+		<td>{$x.warnings_count}</td>
+	</tr>
+	{$sum = $sum + $x.warnings_count}
+	{/foreach}
+	<tr>
+		<td><b>Итого</b></td>
+		<td>{$sum}</td>
+	</tr>
+	</table>
+</td>
+</tr></table>
 
 <table class="btab w100p">
 <caption>Активность координаторов по нештрафным действиям за год</caption>

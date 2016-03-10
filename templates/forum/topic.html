@@ -55,7 +55,7 @@
 	{/if}
 
 <!-- {$p->id()} -->
-	{if $this->new_class_name() == 'balancer_board_topic'}
+	{if $this->new_class_name() == 'balancer_board_topic' or $skip_post_titles}
 		{include file="xfile:forum/post.html"}
 	{else}
 		{include file="xfile:forum/post.html"

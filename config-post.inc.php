@@ -106,11 +106,11 @@ function balancer_anniversary_html()
 
 	$info = getimagesize($image);
 
-	$s_year = $year;
+	$s_year = intval($year);
 	if($diff%10 == 0)
 		$s_year = "<span class=\"b red\">{$year}</span>";
 
-	if($year && $diff)
+	if($s_year != '*' && $year && $diff)
 		$desc = "<div class=\"small center\">{$s_year}: {$title} (".sklonn($diff,'год,года,лет').").</div>";
 	else
 		$desc = "<div class=\"small center\">{$title}</div>";

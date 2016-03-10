@@ -465,4 +465,28 @@ class balancer_board_post extends forum_post
 	{
 		return !$this->answer_to_id() && $this->topic()->is_news();
 	}
+
+	function root_post_id()
+	{
+		if($this->data['root_post_id'])
+			return $this->data['root_post_id'];
+
+		if(!$this->answer_to_id())
+			return NULL;
+
+		$parent = $this->answer_to();
+		if(!$parent)
+			return NULL;
+
+		if($parent->topic_id() != $this->topic_id())
+			return NULL;
+
+		$prid = $parent->root_post_id();
+		if(!$prid)
+			$prid = $parent->id();
+
+		$this->set('root_post_id', $prid);
+
+		return $prid;
+	}
 }

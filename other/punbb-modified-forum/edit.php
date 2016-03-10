@@ -350,7 +350,8 @@ if (isset($_POST['form_sent']))
 
 		$post->cache_clean();
 
-		redirect('viewtopic.php?pid='.$id.'#p'.$id, $lang_post['Edit redirect']);
+//		redirect('viewtopic.php?pid='.$id.'#p'.$id, $lang_post['Edit redirect']);
+		go($post->url_for_igo());
 	}
 }
 

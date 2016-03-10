@@ -11,7 +11,7 @@ bors_vhost_routes('wrk.ru', array(
 ));
 
 bors_vhost_routes('tanzpol.org', array(
-	'/ => balancer_board_main',
+	'/ => tanzpol_main',
 	'/blogs/ => wrk_blogs_main',
 	'/login/ => wrk_mauth_login',
 	'/~(\w)(\w+) => wrk_go(1,2)',
@@ -19,4 +19,6 @@ bors_vhost_routes('tanzpol.org', array(
 	'/news/tags/(.+)/(\d+)\.html => wrk_news_tags_view(1,2)',
 	'/news/tags/(.+) => wrk_news_tags_view(1)',
 	'/news/(\d+)/? => wrk_news_topic(1)',
+	'/news/\d{4}/\d{2}/(\d+)--.*\.html => wrk_news_post(1)',
+	'/news/\d{4}/\d{2}/(\d+)/? => wrk_news_post(1)',
 ));

@@ -5,6 +5,12 @@ class forum_tools_post_moveTree extends balancer_board_admin_page
 	function title() { return ec('Перемещение сообщения<br /><i><small>').$this->post->title().'</small></i>'; }
 	function nav_name() { return ec('Перемещение сообщения'); }
 
+	function can_be_empty() { return false; }
+	function is_loaded()
+	{
+		return (bool) $this->post();
+	}
+
 	function dont_move_tree() { return false; }
 
 	function parents() { return array('balancer_board_post://'.$this->post()->id()); }

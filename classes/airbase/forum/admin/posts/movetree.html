@@ -18,7 +18,9 @@
 <div class="well">
 <h3>Перемещение в одну из крайних обновившихся тем</h3>
 {form subaction="by_topic_id" form_template_class="bors_forms_templates_bootstrap"}
-{assign var="curtid" value=$this->topic|get:id}
+{if $this->topic}
+	{assign var="curtid" value=$this->topic|get:id}
+{/if}
 {dropdown name="target_topic_id" list=$last_topics value=$this->target_topic_id()}
 <label class="checkbox">
 {checkbox name="dont_move_tree" value=false label="Не перемещать ответы на это сообщение"}

@@ -127,6 +127,9 @@ class airbase_forum_admin_posts_movetree extends balancer_board_admin_page
 
 	function pre_show()
 	{
+		if(!$this->posts())
+			return bors_message("Не выбрано ни одно сообщение для переноса");
+
 		jquery_select2::appear_ajax("'#target_topic_id'", 'balancer_board_topic', array(
 			'order' => '-modify_time',
 			'title_field' => 'title_with_forum',

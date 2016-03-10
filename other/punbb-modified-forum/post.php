@@ -724,6 +724,8 @@ if (isset($_POST['form_sent']))
 		$post->answer_to_user_id(); // Читаем, чтобы обновися кеш
 
 		$topic->store();
+		$post->root_post_id(); // Читаем, чтобы обновить ветку до корневого сообщения.
+
 		$post->store();
 
 		$topic->set_page($page);
@@ -797,7 +799,7 @@ if (isset($_POST['form_sent']))
 		Airbase\Task::add('balancer_board_post->infonesy_push', $post->id());
 
 //		go("http://forums.balancer.ru/posts/{$post->id()}/process");
-		go($post->url_in_topic(NULL, true));
+		go($post->url_for_igo());
 		pun_exit();
 	}
 }

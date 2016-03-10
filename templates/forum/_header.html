@@ -136,13 +136,16 @@ createCookie('readedTopics', readed.join(' '), 3)
 {/foreach}
 --></script>
 {/if}
-{foreach item=s from=$head_append}
-{$s}
-{/foreach}
-{foreach item=s from=$header_append}
-{$s}
-{/foreach}
-
+{if $head_append}
+	{foreach $head_append as $s}
+		{$s}
+	{/foreach}
+{/if}
+{if $header_append}
+	{foreach $header_append as $s}
+		{$s}
+	{/foreach}
+{/if}
 </head>
 
 <body id="body">

@@ -17,7 +17,10 @@
 <a name="p{$p->id()}"></a>
 		{assign var="owner" value=$p->owner()}
 		{assign var=a value=$p->get('answer_to')}
-<div class="post pby{$p->owner_id()}{if $a} pto{$a->owner_id()}{/if}{if $p->get('is_moderatorial')} moderatorial_post{/if}{if $p->topic()->get('is_news')}{if $p->get('is_news')} post_news{else} post_no_news{/if}{/if}">
+		{if not $topic}
+			{$topic = $p->get('topic')}
+		{/if}
+<div class="post pby{$p->owner_id()}{if $a} pto{$a->owner_id()}{/if}{if $p->get('is_moderatorial')} moderatorial_post{/if}{if $topic && $topic->get('is_news')}{if $p->get('is_news')} post_news{else} post_no_news{/if}{/if}">
 	<div class="head">
 		<div class="to-left">
 		{if $p->get('is_moderatorial')}<div class="red small">{ec("Данное сообщение является официальным предупреждением")}</div>{/if}
@@ -142,14 +145,14 @@
 
 <div id="pfo{$p->id()}" class="post-footer-tools"></div>
 
-		{if $p->topic() && $p->topic()->forum()}
+		{if $topic && $topic->forum()}
 <ul class="postfooter">
 	<li><a href="/_bors/ajax/post/info?post={$p->id()}"  class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;{ec("инфо")}</a></li>
 	<li><a href="/_bors/ajax/post-footer-tools?object=balancer_board_post://{$p->id()}" class="post_info_ajax"><img src="/_bors/i/tools.gif"  align="middle" alt="" />&nbsp;{ec("инструменты")}</a></li>
 	<li{if not config('css_bootstrap_is_loaded')} class="pages_select"{/if}>
-		<a href="{$p->topic()->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
+		<a href="{$topic->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
 			class="{if config('css_bootstrap_is_loaded')}btn btn-mini btn-info{else}current_page reply_link{/if}"
-		>{if $p->topic()->get('is_news')}{if $p->get('is_news')}Прокомментировать новость{else}Ответить на комментарий{/if}{else}Ответить на сообщение{/if}</a>
+		>{if $topic->get('is_news')}{if $p->get('is_news')}Прокомментировать новость{else}Ответить на комментарий{/if}{else}Ответить на сообщение{/if}</a>
 	</li>
 </ul>
 		{/if}
