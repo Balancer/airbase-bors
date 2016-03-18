@@ -60,6 +60,7 @@ function main()
 		108663, // Skyfly, твинк Незнайко
 		108676, // Федор, твинк Незнайко
 		108690, // Шаказулу, твинк Незнайко
+		109485, // Суднийден, твинк Незнайко
 	];
 
 	foreach(bors_find_all('balancer_board_user', ['id IN' => $uids_for_utmx]) as $u)

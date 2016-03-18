@@ -81,6 +81,8 @@ $map = array(
 
 	'/users/(\d+)/votes/lastgraph\.svg => balancer_board_users_votes_lastgraph(1)',
 
+	'/users/money/ => balancer_board_users_money',
+
 	'(/users/)(\d+)/? => user_main(2)',
 
 	'/\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+)\-\-.+\.html => forum_printable(1)',

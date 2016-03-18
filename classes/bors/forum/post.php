@@ -427,7 +427,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		);
 	}
 
-	function base_url()
+	function base_url($page=NULL)
 	{
 		return $this->topic()->forum()->category()->category_base_full();
 	}

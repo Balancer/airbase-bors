@@ -361,20 +361,18 @@ class balancer_board_post extends forum_post
 			$meta['Title'] = $t;
 
 		$meta = array_merge($meta, [
-			'Author'	=> $this->owner()->title(),
-			'AuthorMD'	=> md5($this->owner()->email()),
-			'AuthorEmailMD5'	=> md5($this->owner()->email()),
-			'AuthorUUID'=> 'ru.balancer.board.user.'.$this->owner()->id(),
+			'Author'	=> [
+				'Title' => $this->owner()->title(),
+				'EmailMD5'	=> md5($this->owner()->email()),
+				'UUID'=> 'ru.balancer.board.user.'.$this->owner()->id() ],
 			'Date'		=> date('r', $this->create_time()),
 			'Modify'	=> date('r', $this->modify_time()),
-			'Type'		=> 'Post',
+			'Type'		=> $this->is_news() ? 'News' : 'Post',
 			'Markup'	=> 'lcml',
 		]);
 
 		if($a = $this->answer_to_id())
-		{
 			$meta['AnswerTo'] = 'ru.balancer.board.post.'.$a;
-		}
 
 		$attach_list = [];
 		if($attaches = $this->attaches())

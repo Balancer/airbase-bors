@@ -93,6 +93,7 @@ class balancer_board_topic extends forum_topic
 			'closed',
 			'keywords_string_db' => 'keywords_string',
 			'bot_note',
+			'topic_data_raw' => 'topic_data',
 		);
 	}
 
@@ -469,8 +470,54 @@ class balancer_board_topic extends forum_topic
 	function _banners_type_def() { return 2*rand(0,1); }
 //	function _banners_type_def() { return bors()->user_id() == 10000 ? 2 : rand(0,2); }
 
+	function topic_data()
+	{
+		if(empty($this->data['topic_data_raw']))
+			return [];
+
+		return json_decode($this->data['topic_data_raw'], true);
+	}
+
+	function set_topic_datum($key, $value)
+	{
+		$data = $this->topic_data();
+		$data[$key] = $value;
+//		bors_debug::syslog('debug/set-data', 'topic='.$this->debug_title().'; enc='.json_encode($data).'; data='.print_r($data, true));
+		$this->set('topic_data_raw', json_encode($data));
+	}
+
+	function topic_datum($key, $default = NULL)
+	{
+		$data = $this->topic_data();
+		if(!empty($data[$key]))
+			return $data[$key];
+
+		if(is_callable($default))
+		{
+			$value = $default();
+			$this->set_topic_datum($key, $value);
+			return $value;
+		}
+
+		return $default;
+	}
+
 	function page_modify_time($page)
 	{
+
+//		if(!is_numeric($page))
+//			bors_debug::syslog('notice/topic-pages', "Non numeric page: ".$page." for ".$this->debug_title());
+
+		if($page == 'new')
+			return $this->modify_time();
+
+		if(!$page)
+			$page = 1;
+
+		$page_modify_times = $this->topic_datum('page_modify_times', []);
+		if(!empty($page_modify_times[$page]))
+			return $page_modify_times[$page];
+
 		$last_post_in_page = bors_find_first('balancer_board_posts_pure', [
 			'topic_id' => $this->id(),
 			'topic_page' => $page,
@@ -478,9 +525,14 @@ class balancer_board_topic extends forum_topic
 		]);
 
 		if($last_post_in_page)
-			return max($last_post_in_page->create_time(), $last_post_in_page->edited());
+			$pmt = max($last_post_in_page->create_time(), $last_post_in_page->edited());
+		else
+			$pmt = $this->modify_time();
 
-		return $this->modify_time();
+		$page_modify_times[$page] = $pmt;
+		$this->set_topic_datum('page_modify_times', $page_modify_times);
+
+		return $pmt;
 	}
 
 	function is_news()

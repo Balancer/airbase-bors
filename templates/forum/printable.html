@@ -9,7 +9,10 @@
 <body>
 
 <p><small><i>{module class="module_nav_top"}</i></small></p>
-<h1>{$title}</h1>
+
+{if $this->pages_links()}<div class="pages_select">{"Страницы:"|ec} {$this->pages_links()}</div>{/if}
+
+<h1>{$title}{if $this->total_items()>$this->items_per_page()} (страница {$this->page()} из {$this->total_pages()}){/if}</h1>
 
 {$body}
 

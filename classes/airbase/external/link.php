@@ -40,7 +40,8 @@ class airbase_external_link extends balancer_board_object_db
 		return $url;
 	}
 
-	static function find($original_url)
+	// Формат для совместимости с bors_object::find($where)
+	static function find($original_url = [])
 	{
 		$url_index = self::normalize($original_url);
 		try

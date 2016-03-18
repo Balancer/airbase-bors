@@ -13,12 +13,12 @@ class user_blog_rss extends bors_rss
 		return bors_find_all('balancer_board_blog', array(
 			'where' => array('owner_id=' => $this->id()),
 			'order' => '-blogged_time',
-			'create_time>' => time()-31*86400,
+			'create_time BETWEEN' => [time()-31*86400, time()],
 			'limit' => 25,
 		));
 	}
 
-	function cache_static() { return config('static_forum') ? rand(600, 1200) : 0; }
+//	function cache_static() { return config('static_forum') ? rand(600, 1200) : 0; }
 
 	function url() { return $this->blog()->url().'rss.xml'; }
 //	function rss_url() { return $this->blog()->url(); }

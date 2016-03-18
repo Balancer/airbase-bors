@@ -49,6 +49,7 @@ class forum_topic extends bors_page_db
 			'closed',
 			'keywords_string_db' => 'keywords_string',
 			'bot_note',
+			'topic_data_raw' => 'topic_data',
 		);
 	}
 
@@ -387,7 +388,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 	function is_public_access() { return $this->forum_id() && $this->forum()->is_public_access(); }
 
-	function base_url()
+	function base_url($page=NULL)
 	{
 		$base = '/';
 		if($this->forum_id() && $this->forum())
@@ -395,7 +396,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 		// Если последний пост на странице свежий, то откручиваем на wrk.ru
 //		if($this->get('last_post_create_time') > 1388520000) // С 01.01.2014 — wrk.ru. Более старые — forums.balancer.ru
-		if($this->page_modify_time($this->page()) > time()-86400*7)
+		if($this->page_modify_time($page) > time()-86400*7)
 			$base = str_replace('www.balancer.ru', 'www.wrk.ru', $base);
 		else
 			$base = str_replace('www.balancer.ru', 'forums.balancer.ru', $base);
@@ -454,6 +455,8 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 	{
 		// Ставим текущее время изменения
 		$this->set_modify_time(time());
+
+		$this->set('topic_data', NULL);
 
 		bors()->changed_save(); // Сохраняем всё. А то в памяти могут быть модифицированные объекты, с которыми сейчас будем работать.
 
