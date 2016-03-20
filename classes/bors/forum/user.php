@@ -688,17 +688,25 @@ function avatar_thumb($geo)
 	{
 		$w = $this->warnings();
 
-		if($w <= 0)
-			return -1;
-
+		// Временный R/O
 		if($w >= 10)
 			return 0;
 
-//		$offset = max(2, round(15 - (time() - 1247947991)/86400));
+		$limit = 999999;
 
-		$limit = round(max(0, 300/($w*$w) * $this->reputation_weight() + 2 ));
-		if($limit > 40)
-			return -1;
+		if($w>0)
+		{
+//			$offset = max(2, round(15 - (time() - 1247947991)/86400));
+
+			$limit = round(max(0, 300/($w*$w) * $this->reputation_weight() + 2 ));
+		}
+
+		$m = $this->money();
+		if($m < 0)
+			$limit = min($limit, max(3, round(-50000/$m)));
+
+		if($limit > 50)
+			$limit = -1;
 
 		return $limit;
 	}

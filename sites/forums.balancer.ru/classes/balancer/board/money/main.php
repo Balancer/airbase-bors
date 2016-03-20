@@ -9,6 +9,13 @@ class balancer_board_money_main extends balancer_board_page
 
 	function can_action() { return (bool) bors()->user(); }
 
+	function body_data()
+	{
+		return array_merge(parent::body_data(), [
+			'target_user_id' => bors()->request()->data('target_user_id'),
+		]);
+	}
+
 	function on_action_move($data)
 	{
 		extract($data);

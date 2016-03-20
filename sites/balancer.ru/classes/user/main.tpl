@@ -24,7 +24,10 @@
 <li>Всего сообщений: {$user->num_posts()}</li>
 <li>Последнее сообщение: <a href="http://www.balancer.ru/user/{$user->id()}/posts/last/">{$user->last_post_time()|full_time}</a></li>
 <li><a href="http://www.balancer.ru/users/{$this->id()}/posts/chart/">График форумной активности</a></li>
-{if $user->messages_daily_limit() >= 0}<li>Ограничение числа сообщений в день на один форум: <span class="red">{$user->messages_daily_limit()}</span></li>{/if}
+{if $user->messages_daily_limit() >= 0}
+<li>Ограничение числа сообщений в день на один форум: <span class="red">{$user->messages_daily_limit()}</span></li>
+<li>Баланс: <span style="color: {if $user->money()>0}green{elseif $user->money()<0}red{/if}">☼{$user->money()}</span> [<a href="http://forums.balancer.ru/money/?target_user_id={$user->id()}">перевести пользователю ☼☼</a>]</li>
+{/if}
 {* <li>Карма: <b>{$user->karma()|sprintf:'%.2f'}</b></li> *}
 {* <li>Суточный прирост кармы: <b style="color: {if $user->karma_rate() > 0}green{else}red{/if}">{$user->karma_rate()|sprintf:'%.2f'}</b></li> *}
 {if $me}

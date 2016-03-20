@@ -1,6 +1,6 @@
 {form subaction="move" th="Перевод средств другому пользователю (комиссия ☼1)"}
 {input name="amount" value="" th="Количество"}
-{select2 name="target_user_id" th="Пользователь" main_class="balancer_board_user" value="" title_field="username" order="username" search_fields="username"}
+{select2 name="target_user_id" th="Пользователь" main_class="balancer_board_user" value="{$target_user_id}" title_field="username" order="username" search_fields="username"}
 {submit value="Отправить" type="button" css_class="btn"}
 {/form}
 <div class="alert alert-warning">Если не видите форму выбора пользователей — отключите на этой странице AdBlock</div>
