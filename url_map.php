@@ -100,6 +100,10 @@ $map = array(
 	'(.+\.htm) => airbase_images_show(1)',
 	'.*/index.php => forum_main',
 	'/js/board/comments/(\d+)\.js => balancer_board_js_comments(1)',
+	'/js/users/pre-show.js\?(.+?)&.+ => user_js_preShow(1)',
+	'/js/users/pre-show.js\?(.+) => user_js_preShow(1)',
+	'/js/users/touch-fast.js\?(.+?)&.+ => user_js_touchFast(1)',
+	'/js/users/touch-fast.js\?(.+) => user_js_touchFast(1)',
 	'/js/users/touch.js\?(.+?)&.+ => user_js_touch(1)',
 	'/js/users/touch.js\?(.+) => user_js_touch(1)',
 

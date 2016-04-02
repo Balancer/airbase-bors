@@ -24,7 +24,7 @@ function main()
 			'balancer_board_topic ON balancer_board_topic.id = topic_id',
 //			'balancer_board_forum ON balancer_board_forum.id = forum_id',
 		],
-		'create_time>' => time() - 86400*7,
+		'create_time>' => time() - 86400*30,
 		'owner_id IN' => $uids,
 //		'balancer_board_forum.category_id IN' => $cat_ids,
 		'topic_id<>' => $target_topic_id,
@@ -61,6 +61,8 @@ function main()
 		108676, // Федор, твинк Незнайко
 		108690, // Шаказулу, твинк Незнайко
 		109485, // Суднийден, твинк Незнайко
+		109494, // Substantia — несёт бред про безопорное движение.
+		108646, // Волк, твинк Незнайко
 	];
 
 	foreach(bors_find_all('balancer_board_user', ['id IN' => $uids_for_utmx]) as $u)
@@ -74,6 +76,7 @@ function main()
 	$uids = array_merge($uids, array_keys($twinks));
 
 	$posts = bors_each('balancer_board_post', [
+		'create_time>' => time() - 86400*30,
 		'owner_id IN' => $uids,
 		'topic_id<>' => $target_topic_id,
 	]);
@@ -105,7 +108,10 @@ function posts_move($posts)
 
 	foreach(array_keys($topics) as $tid)
 		if($topic = bors_load('balancer_board_topic', $tid))
+		{
 			$topic->recalculate();
+			sleep(2);
+		}
 
 	bors_load('balancer_board_topic', $target_topic_id)->recalculate();
 }

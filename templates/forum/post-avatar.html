@@ -10,10 +10,12 @@
 </a>
 </div>
 {else}
+<div>
 <a href="{$owner->url()}" class="avatar-image">
 <img src="http://www.gravatar.com/avatar/{$owner->email()|trim|bors_lower|md5}?d=wavatar" width="{$avatar_size}" height="{$avatar_size}" alt="" />
 {if $owner->get('is_dead')}<span class="mourning-ribbon"></span>{/if}
 </a>
+</div>
 {/if}
 {if $object}
 	{assign var="owner_title" value=$object->get('author_name')}

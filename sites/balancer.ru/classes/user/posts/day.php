@@ -127,6 +127,8 @@ class user_posts_day extends balancer_board_page
 		return 'http://www.balancer.ru/user/'.$this->id().'/posts/'.date('Y/m/d', $next->create_time()).'/';
 	}
 
+	function user_ids() { return $this->id(); }
+
     function body_data()
 	{
 		$year	= $this->year;

@@ -450,7 +450,8 @@ class balancer_board_topic extends forum_topic
 		if(!preg_match('/(balancer\.ru)/', @$_SERVER['HTTP_HOST']))
 			return true;
 
-		return $this->last_post_create_time() > time() - 86400*365;
+//		return $this->last_post_create_time() > time() - 86400*365;
+		return false;
 	}
 
 	function tpl_ad_top()
@@ -579,25 +580,14 @@ class balancer_board_topic extends forum_topic
 			$data['AuthorUUID']	= 'ru.balancer.board.user.'.$owner->id();
 		}
 
-//		$dumper = new \Symfony\Component\Yaml\Dumper();
-//		$md = "---\n";
-//		$md .= $dumper->dump($data, 2);
-//		$md .= "---\n\n";
+		$posts = [];
 
-/*
 		foreach(balancer_board_post::find(['topic_id' => $this->id(), 'order' => 'create_time'])->all() as $p)
-			$md .= '* ['
-				.$p->author_name()
-				.', #'
-				.date('d.m.Y H:i', $p->create_time())
-				.']('.$p->url_for_igo().")\n";
-//		$md .= trim($this->source())."\n";
-*/
+			$posts[] = $p->infonesy_uuid();
 
-//		$md .= '.';
+		$data['Posts'] = $posts;
 
 		@file_put_contents_lock($file, json_encode($data, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-//		@file_put_contents_lock($file, $md);
 		@chmod($file, 0666);
 		@unlink($storage.'/topic-'.$this->id().'.md');
 	}

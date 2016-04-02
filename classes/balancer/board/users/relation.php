@@ -17,6 +17,7 @@ class balancer_board_users_relation extends balancer_board_object_db
 			'reputations_plus',
 			'reputations_minus',
 			'score',
+			'ignore',
 		);
 	}
 
@@ -26,5 +27,39 @@ class balancer_board_users_relation extends balancer_board_object_db
 			'from_user' => 'balancer_board_user(from_user_id)',
 			'to_user' => 'balancer_board_user(to_user_id)',
 		));
+	}
+
+	static function set_ignore($from_uid, $to_uid)
+	{
+		bors_debug::syslog('funs/ignore', "Ignore from $from_uid to $to_uid");
+
+		$rel = self::find(['from_user_id' => $from_uid, 'to_user_id' => $to_uid])->first();
+
+		if($rel && !$rel->get('is_empty'))
+			return $rel->set('ignore', true);
+
+//		var_dump(airbase_user::load($to_uid)->title()); exit();
+
+		$rel = bors_new(__CLASS__, [
+			'from_user_id' => $from_uid,
+			'to_user_id' => $to_uid,
+			'from_user_name' => airbase_user::load($from_uid)->title(),
+			'to_user_name' => airbase_user::load($to_uid)->title(),
+			'ignore' => true,
+		]);
+
+		var_dump($rel); exit();
+//		$rel->store();
+		return $rel;
+	}
+
+	static function unset_ignore($from_uid, $to_uid)
+	{
+		$rel = self::find(['from_user_id' => $from_uid, 'to_user_id' => $to_uid])->first();
+
+		if($rel)
+			return $rel->set('ignore', false);
+
+		return NULL;
 	}
 }

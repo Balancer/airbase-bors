@@ -703,7 +703,7 @@ function avatar_thumb($geo)
 
 		$m = $this->money();
 		if($m < 0)
-			$limit = min($limit, max(3, round(-50000/$m)));
+			$limit = min($limit, max(2, round(-50000/$m)));
 
 		if($limit > 50)
 			$limit = -1;

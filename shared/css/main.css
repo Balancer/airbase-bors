@@ -421,7 +421,7 @@ span.clear {
 	margin-right: 1px;
 }
 .minwidth {
-	border-left: 404px solid #fff;
+	border-left: 404px solid transparent;
 }
 .wrapper {
 	margin-left: -404px;
@@ -1065,4 +1065,13 @@ div.post_news {
 div.post_no_news {
 	font-size: 80%;
 	color: #557;
+}
+
+.mirror {
+	-moz-transform: scaleX(-1);
+	-o-transform: scaleX(-1);
+	-webkit-transform: scaleX(-1);
+	transform: scaleX(-1);
+	filter: FlipH;
+	-ms-filter: "FlipH";
 }

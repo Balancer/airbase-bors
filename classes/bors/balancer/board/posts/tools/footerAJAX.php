@@ -47,6 +47,7 @@ class balancer_board_posts_tools_footerAJAX extends balancer_board_page
 			'owner' => $x ? $x->owner() : NULL,
 			'spam' => object_property($x, 'is_spam'),
 			'warning' => $warning,
+			'rel_to' => $x ? balancer_board_users_relation::find(['from_user_id' => bors()->user_id(), 'to_user_id' => $x->owner_id()])->first() : NULL,
 		);
 
 		if($warning && $x

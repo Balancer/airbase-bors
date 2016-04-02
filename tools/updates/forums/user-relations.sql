@@ -42,7 +42,7 @@ CREATE TEMPORARY TABLE tmp_reputation_relations
 		SUM(IF(score > 0, 1, 0)) AS pos,
 		SUM(IF(score < 0, 1, 0)) AS neg
 	FROM
-		USERS.reputation_votes v
+		AB_USERS.reputation_votes v
 	INNER JOIN users u
 		ON v.user_id = u.id
 	WHERE v.is_deleted = 0

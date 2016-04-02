@@ -36,6 +36,17 @@
 {/if}
 </ul>
 
+{if $me_id && $this->id() != $me_id }
+<h2>Администрирование</h2>
+<ul>
+{if $rel_to && !$rel_to->get('is_empty') && $rel_to->ignore()}
+	<li><a href="http://forums.balancer.ru/personal/?act=undelete&uid={$this->id()}">Восстановить сообщения пользователя из архива</a></li>
+{else}
+	<li><a href="http://forums.balancer.ru/personal/?act=delete&uid={$this->id()}">Удалить все сообщения пользователя без возможности восстановления</a></li>
+{/if}
+</ul>
+{/if}
+
 <h2>Поиск в собщениях пользователя</h2>
 {form class="this" method="get" action="http://www.balancer.ru/tools/search/result/" uri="NULL" ref="NULL" class_name='NULL' form_class_name='NULL' no_auto_checkboxes=true go='NULL' label="-"}
 {input name="q" value="" label="Запрос" css_class="w100p"}

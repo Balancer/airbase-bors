@@ -13,6 +13,7 @@
 	$strip - сколько резать символов.
 *}
 {if $p}
+	{assign var="post_is_news" value=$p->get('is_news')}
 	{if !$p->is_deleted()}
 <a name="p{$p->id()}"></a>
 		{assign var="owner" value=$p->owner()}
@@ -20,7 +21,10 @@
 		{if not $topic}
 			{$topic = $p->get('topic')}
 		{/if}
-<div class="post pby{$p->owner_id()}{if $a} pto{$a->owner_id()}{/if}{if $p->get('is_moderatorial')} moderatorial_post{/if}{if $topic && $topic->get('is_news')}{if $p->get('is_news')} post_news{else} post_no_news{/if}{/if}">
+		{if $topic}
+			{assign var="topic_is_news" value=$topic->get('is_news')}
+		{/if}
+<div class="post pby{$p->owner_id()}{if $a} pto{$a->owner_id()}{/if}{if $p->get('is_moderatorial')} moderatorial_post{/if}{if $topic_is_news}{if $post_is_news} post_news{else} post_no_news{/if}{/if}">
 	<div class="head">
 		<div class="to-left">
 		{if $p->get('is_moderatorial')}<div class="red small">{ec("Данное сообщение является официальным предупреждением")}</div>{/if}
@@ -150,9 +154,17 @@
 	<li><a href="/_bors/ajax/post/info?post={$p->id()}"  class="post_info_ajax"><img src="/_bors/i16/info.png" align="middle" alt="" />&nbsp;{ec("инфо")}</a></li>
 	<li><a href="/_bors/ajax/post-footer-tools?object=balancer_board_post://{$p->id()}" class="post_info_ajax"><img src="/_bors/i/tools.gif"  align="middle" alt="" />&nbsp;{ec("инструменты")}</a></li>
 	<li{if not config('css_bootstrap_is_loaded')} class="pages_select"{/if}>
-		<a href="{$topic->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}" 
-			class="{if config('css_bootstrap_is_loaded')}btn btn-mini btn-info{else}current_page reply_link{/if}"
-		>{if $topic->get('is_news')}{if $p->get('is_news')}Прокомментировать новость{else}Ответить на комментарий{/if}{else}Ответить на сообщение{/if}</a>
+		<a href="{$topic->forum()->category()->category_base_full()}post.php?tid={$p->topic_id()}&amp;qid={$p->id()}"
+			class="{if config('css_bootstrap_is_loaded')}btn btn-mini btn-info{else}current_page reply_link{/if}">
+		{if $topic_is_news}
+			{if $post_is_news}
+				Прокомментировать новость
+			{else}
+				Ответить на комментарий
+			{/if}
+		{else}
+			Ответить на сообщение
+		{/if}</a>
 	</li>
 </ul>
 		{/if}
@@ -164,7 +176,7 @@
 
 {assign var="reputation_records" value=$p->get('reputation_records')}
 {if $reputation_records}
-<div class="pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}">
+<div class="pby{$p->owner_id()}{if $a} pby{$a->owner_id()}{/if}{if $topic_is_news and not $post_is_news} post_no_news{/if}">
 	{foreach $reputation_records as $r}
 	<div class="alert alert-{if $r->score()>0}success{else}danger{/if} shadow8 ab-alert-small">
 		{$r->create_time()|date:"d.m.Y H:i"}, {$r->owner()->titled_link()}: {$r->score_html($r->comment_html(false))}<br/>
@@ -174,7 +186,7 @@
 {/if}
 
 {if $p->get('actions')}
-<br/><div class="alert alert-info shadow8 post-actions">
+<br/><div class="alert alert-info shadow8 post-actions{if $topic_is_news and not $post_is_news} post_no_news{/if}">
 <ul>
 {foreach from=$p->actions() item="a"}
 <li{$a->type_class()}>{$a->owner()->title()} [{$a->create_time()|full_time}]: {$a->message()}</li>

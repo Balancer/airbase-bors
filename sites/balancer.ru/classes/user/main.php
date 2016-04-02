@@ -168,20 +168,13 @@ class user_main extends balancer_board_page
 		bors_objects_preload($votes_positive, 'target_user_id', 'balancer_board_user');
 		bors_objects_preload($votes_negative, 'target_user_id', 'balancer_board_user');
 
-		if($me_id = bors()->user_id())
-		{
-			$pluses_from = bors_count('bors_votes_thumb', array('target_user_id' => $me_id, 'user_id' => $this->id(), 'score>' => 0));
-			$minuses_from = bors_count('bors_votes_thumb', array('target_user_id' => $me_id, 'user_id' => $this->id(), 'score<' => 0));
-			$pluses_to = bors_count('bors_votes_thumb', array('user_id' => $me_id, 'target_user_id' => $this->id(), 'score>' => 0));
-			$minuses_to = bors_count('bors_votes_thumb', array('user_id' => $me_id, 'target_user_id' => $this->id(), 'score<' => 0));
-		}
-
 		$best_of_month	= array_filter($best_of_month,	function($p) { return !$p->target()->is_deleted();});
 		$best			= array_filter($best,			function($p) { return !$p->target()->is_deleted();});
 
 		$data = array(
 			'user' => $user,
 			'owner' => $user,
+			'me_id' => bors()->user_id(),
 
 			'friends_from' => bors_find_all('balancer_board_users_relation', array(
 				'to_user_id' => $this->id(),
@@ -249,6 +242,16 @@ class user_main extends balancer_board_page
 			'ban' => $user->is_admin_banned(),
 			'is_watcher' => (bors()->user() && (bors()->user()->is_watcher() || bors()->user()->is_admin())),
 		);
+
+		if($me_id = bors()->user_id())
+		{
+			$pluses_from = bors_count('bors_votes_thumb', array('target_user_id' => $me_id, 'user_id' => $this->id(), 'score>' => 0));
+			$minuses_from = bors_count('bors_votes_thumb', array('target_user_id' => $me_id, 'user_id' => $this->id(), 'score<' => 0));
+			$pluses_to = bors_count('bors_votes_thumb', array('user_id' => $me_id, 'target_user_id' => $this->id(), 'score>' => 0));
+			$minuses_to = bors_count('bors_votes_thumb', array('user_id' => $me_id, 'target_user_id' => $this->id(), 'score<' => 0));
+
+			$data['rel_to'] = balancer_board_users_relation::find(['from_user_id' => $me_id, 'to_user_id' => $this->id()])->first();
+		}
 
 		return array_merge(parent::body_data(), $data, compact(
 			'scores_positive',
