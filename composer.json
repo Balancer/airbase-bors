@@ -41,7 +41,8 @@
 	},
 
 	"extra": {
-		"bors-classes": "classes",
+		"bors-classes": ["classes", "sites/forums.balancer.ru/classes"],
+		"bors-route-maps": ["url_map.php", "sites/forums.balancer.ru/url_map.php"],
 		"bors-templates": "templates",
 		"bors-smarty-plugins": "engines/smarty/plugins"
 	}

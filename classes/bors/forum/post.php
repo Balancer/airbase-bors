@@ -6,6 +6,8 @@ include_once('engines/lcml.php');
 include_once('inc/browsers.php');
 include_once('inc/clients.php');
 
+require_once BORS_CORE.'/inc/functions/text/truncate.php';
+
 class forum_post extends balancer_board_object_db
 {
 	function config_class() { return 'balancer_board_config'; }
