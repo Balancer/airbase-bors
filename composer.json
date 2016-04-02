@@ -23,11 +23,7 @@
 	"require": {
 		"php": ">=5.5",
 
-		"balancer/bors-core": "dev-master",
-		"balancer/bors-ext": "dev-master",
-		"balancer/b2-core": "dev-master",
-
-		"bors/composer-plugin": "*",
+		"balancer/b2-framework": "*",
 
 		"balancer/bors-3rd-jquery-wysibb": "*",
 		"components/font-awesome": "*",
@@ -38,7 +34,10 @@
 	},
 
 	"autoload": {
-		"classmap": ["classes/"]
+		"classmap": ["classes/"],
+		"psr-4": {
+			"Airbase\\": "src"
+		}
 	},
 
 	"extra": {
