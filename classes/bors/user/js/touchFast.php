@@ -39,13 +39,6 @@ class user_js_touchFast extends bors_js
 			return $js;
 		}
 
-		// 1 апреля ////////////////////////////////////////////
-
-			// Avatars — all
-//			$js[] = "\$('.avatar_block img').addClass('mirror');";
-
-		////////////////////////////////////////////////////////
-
 		$js = join("\n", $js);
 
 		if(!$js)

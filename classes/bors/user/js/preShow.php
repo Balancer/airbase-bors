@@ -39,8 +39,6 @@ class user_js_preShow extends bors_js
 			return $js;
 		}
 
-if($me_id == 10000)
-{
 		$uids = bors()->request()->data('user_ids');
 
 		if($uids)
@@ -58,7 +56,6 @@ if($me_id == 10000)
 			}
 			$js[] = "document.write('</style>');";
 		}
-}
 
 		$js = join("\n", $js);
 

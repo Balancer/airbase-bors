@@ -799,11 +799,6 @@ if (isset($_POST['form_sent']))
 		Airbase\Task::add('balancer_board_post->infonesy_push', $post->id());
 
 //		go("http://forums.balancer.ru/posts/{$post->id()}/process");
-		if(rand(0,10) == 0 && date('dm') == '0104')
-		{
-			go('http://www.balancer.ru/hi/1a/nf.php?go=' . urlencode($post->url_for_igo()));
-			pun_exit();
-		}
 
 		go($post->url_for_igo());
 		pun_exit();

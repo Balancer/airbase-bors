@@ -14,38 +14,45 @@
 {else}
 <ul>
 {if $ban && is_object($ban)}
-<li class="red">Пользователь забанен перманентно по причине: {$ban->message()}</li>
+	<li class="red">Пользователь забанен перманентно по причине: {$ban->message()}</li>
 {/if}
-<li>RPG-уровень: <span class="b big red">{$user->rpg_level()}</span> (вес голоса: <b>{pow(3,$user->rpg_level())})</b></li>
-<li>Зарегистрирован: {$user->create_time()|full_time}</li>
-{if $user->username()}<li>Имя пользователя: {$user->username()}</li>{/if}
-{if $user->user_nick()}<li>Ник: {$user->user_nick()}</li>{/if}
-{if $user->realname()}<li>Настоящее имя: {$user->realname()}</li>{/if}
-<li>Всего сообщений: {$user->num_posts()}</li>
-<li>Последнее сообщение: <a href="http://www.balancer.ru/user/{$user->id()}/posts/last/">{$user->last_post_time()|full_time}</a></li>
-<li><a href="http://www.balancer.ru/users/{$this->id()}/posts/chart/">График форумной активности</a></li>
+	<li>RPG-уровень: <span class="b big red">{$user->rpg_level()}</span> (вес голоса: <b>{pow(3,$user->rpg_level())})</b></li>
+	<li>Зарегистрирован: {$user->create_time()|full_time}</li>
+{if $user->username()}
+	<li>Имя пользователя: {$user->username()}</li>
+{/if}
+{if $user->user_nick()}
+	<li>Ник: {$user->user_nick()}</li>
+{/if}
+{if $user->realname()}
+	<li>Настоящее имя: {$user->realname()}</li>
+{/if}
+	<li>Всего сообщений: {$user->num_posts()}</li>
+	<li>Последнее сообщение: <a href="http://www.balancer.ru/user/{$user->id()}/posts/last/">{$user->last_post_time()|full_time}</a></li>
+	<li><a href="http://www.balancer.ru/users/{$this->id()}/posts/chart/">График форумной активности</a></li>
 {if $user->messages_daily_limit() >= 0}
-<li>Ограничение числа сообщений в день на один форум: <span class="red">{$user->messages_daily_limit()}</span></li>
-<li>Баланс: <span style="color: {if $user->money()>0}green{elseif $user->money()<0}red{/if}">☼{$user->money()}</span> [<a href="http://forums.balancer.ru/money/?target_user_id={$user->id()}">перевести пользователю ☼☼</a>]</li>
+	<li>Ограничение числа сообщений в день на один форум: <span class="red">{$user->messages_daily_limit()}</span></li>
+	<li>Баланс: <span style="color: {if $user->money()>0}green{elseif $user->money()<0}red{/if}">☼{$user->money()}</span> [<a href="http://forums.balancer.ru/money/?target_user_id={$user->id()}">перевести пользователю ☼☼</a>]</li>
 {/if}
 {* <li>Карма: <b>{$user->karma()|sprintf:'%.2f'}</b></li> *}
 {* <li>Суточный прирост кармы: <b style="color: {if $user->karma_rate() > 0}green{else}red{/if}">{$user->karma_rate()|sprintf:'%.2f'}</b></li> *}
 {if $me}
-{if 0 && $votes_from}<li>Оценки от этого пользователя Вам: {$votes_from}</li>{/if}
-{if $votes_to}<li>Оценки сообщений этого пользователя Вами: {$votes_to}</li>{/if}
+{if 0 && $votes_from}
+	<li>Оценки от этого пользователя Вам: {$votes_from}</li>
+{/if}
+{if $votes_to}
+	<li>Оценки сообщений этого пользователя Вами: {$votes_to}</li>
+{/if}
+{if $me_id && $this->id() != $me_id }
+	{if $rel_to && !$rel_to->get('is_empty') && $rel_to->ignore()}
+	<li><a href="http://forums.balancer.ru/personal/?act=undelete&uid={$this->id()}">Перестать игнорировать пользователя</a></li>
+	{else}
+	<li><a href="http://forums.balancer.ru/personal/?act=delete&uid={$this->id()}">Игнорировать сообщения пользователя</a></li>
+	{/if}
+{/if}
 {/if}
 </ul>
 
-{if $me_id && $this->id() != $me_id }
-<h2>Администрирование</h2>
-<ul>
-{if $rel_to && !$rel_to->get('is_empty') && $rel_to->ignore()}
-	<li><a href="http://forums.balancer.ru/personal/?act=undelete&uid={$this->id()}">Восстановить сообщения пользователя из архива</a></li>
-{else}
-	<li><a href="http://forums.balancer.ru/personal/?act=delete&uid={$this->id()}">Удалить все сообщения пользователя без возможности восстановления</a></li>
-{/if}
-</ul>
-{/if}
 
 <h2>Поиск в собщениях пользователя</h2>
 {form class="this" method="get" action="http://www.balancer.ru/tools/search/result/" uri="NULL" ref="NULL" class_name='NULL' form_class_name='NULL' no_auto_checkboxes=true go='NULL' label="-"}

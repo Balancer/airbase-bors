@@ -100,17 +100,10 @@ $(function() {
 	{else}
 		<li><i class="fa fa-thumb-tack"></i>&nbsp;<a href="http://www.balancer.ru/admin/forum/post/{$id}/do-unpinned.bas">Открепить сообщение от начала темы</a></li>
 	{/if}
+	<li><a href="http://forums.balancer.ru/personal/?act=delete&uid={$owner_id}">Игнорировать сообщения пользователя</a></li>
 	</ul>
 {/if}
 
-<h6>Инструменты администратора</h6>
-<ul>
-{if $rel_to && !$rel_to->get('is_empty') && $rel_to->ignore()}
-	<li><a href="http://forums.balancer.ru/personal/?act=undelete&uid={$owner_id}">Восстановить сообщения пользователя из архива</a></li>
-{else}
-	<li><a href="http://forums.balancer.ru/personal/?act=delete&uid={$owner_id}">Удалить все сообщения пользователя без возможности восстановления</a></li>
-{/if}
-</ul>
 
 {if $me->is_coordinator()}
 {* <script type="text/javascript" src="/_bors/js/funcs3.js"></script> *}

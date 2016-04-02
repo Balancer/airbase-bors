@@ -66,6 +66,7 @@ class user_js_touch extends bors_js
 			$js[] = '$("#pers_answ_cont > a").addClass("red")';
 		}
 
+/*
 if(rand(0,10) == 0)
 {
 		$user_ids = explode(',', bors()->request()->data('user_ids'));
@@ -102,6 +103,7 @@ if(rand(0,10) == 0)
 			}
 		}
 }
+*/
 
 		// Ответы нам (ptoNNNN) выделяем цветом
 		$js[] = '$(".pto'.$me_id.'").addClass("answer_to_me")';
@@ -114,111 +116,6 @@ if(rand(0,10) == 0)
 		{
 			$js[] = '$(".theme_answer_button").css("background-color", "red").css("color","white").html("R/O всего раздела до '.date('d.m.Y H:i (?)', $ro).'")';
 			$js[] = '$(".reply_link").css("background-color", "red").css("color","white").html("R/O всего раздела до '.date('d.m.Y H:i (?)', $ro).'")';
-		}
-
-			// All images
-//			if(rand(0,10) == 0)
-//				$js[] = "\$('img').addClass('mirror');";
-
-			// Рэндомный бэкграунд
-			if(rand(0,5) == 0)
-			{
-				$js[] = "\$('html').addClass('random-background');";
-				$js[] = "\$('body').css('background-image', 'none').css('background-color', 'none');";
-				$js[] = "\$('.wrapper').css('background', 'transparent');";
-				$js[] = "\$('body').css('background', 'transparent');";
-			}
-
-//			if(rand(0,20)==0)
-			{
-			$js[] = "\$('.avatar-image img').each(function(){
-				i=\$(this);
-				i.attr('width',  100);
-				i.attr('height', 100);
-				i.parent().parent().removeAttr('style');
-				i.parent().removeAttr('style');
-				i.closest('div').css('height', '100px');
-				i.addClass('fun-image');
-				s=i.parent().attr('href')
-				u = s.replace(/^.+?(\d+)\/$/, '\$1');
-//				console.log('s='+s+';u='+u)
-				i.attr('src', 'http://www.balancer.ru/img/blank.gif');
-				i.css('background-image', 'url(http://www.balancer.ru/hi/1a/av.php?id='+u+'&s='+s+')');
-				i.removeClass('mirror');
-			})";
-			}
-
-
-if($me_id == 10000 || rand(0,2)==0)
-		{
-			$js[] = "
-
-walk(\$('body').get(0));
-
-function walk(node) {
-  var child, next;
-
-  switch (node.nodeType) {
-    case 1:  // Element
-    case 9:  // Document
-    case 11: // Document fragment
-      child = node.firstChild;
-      while (child) {
-        next = child.nextSibling;
-        walk(child);
-        child = next;
-      }
-      break;
-    case 3: // Text node
-      handleText(node);
-      break;
-  }
-}
-
-function handleText(textNode) {
-	txt = textNode.nodeValue
-	txt = txt.replace(/резидент/g, 'атр####иарх');
-	txt = txt.replace(/атриарх/g, 'рез####идент');
-	txt = txt.replace(/невменяемый/g, 'вменяемый');
-	txt = txt.replace(/икому/g, 'екоторым');
-	txt = txt.replace(/оспарив/g, 'нахвалив');
-	txt = txt.replace(/Аватар/g, 'Портрет');
-	txt = txt.replace(/аватар/g, 'портрет');
-	txt = txt.replace(/крымча/g, 'критя');
-	txt = txt.replace(/Крым/g, 'Кр####ит');
-	txt = txt.replace(/Киев/g, 'Ваш####ингтон');
-	txt = txt.replace(/Вашингтон/g, 'Киев');
-	txt = txt.replace(/американ/g, 'укра####ин');
-	txt = txt.replace(/Америк/g, 'Укра####ин');
-	txt = txt.replace(/россий/g, 'японск');
-	txt = txt.replace(/Росси/g, 'Яп####они');
-	txt = txt.replace(/Болгар/g, 'Гер####ман');
-	txt = txt.replace(/болгар/g, 'гер####ман');
-	txt = txt.replace(/Герман/g, 'Мон####гол');
-	txt = txt.replace(/Путин/g, 'Доктор');
-	txt = txt.replace(/Украин/g, 'Ан####тарктид');
-	txt = txt.replace(/украинс/g, 'ант####арктичес');
-	txt = txt.replace(/сирий/g, 'нарний');
-	txt = txt.replace(/Сири/g, 'Нарни');
-	txt = txt.replace(/бред(?=([^а-я]))/g, 'бурлеск');
-	txt = txt.replace(/Цыган/g, 'Центавриан');
-	txt = txt.replace(/цыган/g, 'центавриан');
-	txt = txt.replace(/координа/g, 'махина');
-	txt = txt.replace(/Координа/g, 'Махина');
-	txt = txt.replace(/Модера/g, 'Махина');
-	txt = txt.replace(/модера/g, 'махина');
-	txt = txt.replace(/мигрант/g, 'зерг');
-	txt = txt.replace(/Мигрант/g, 'Зерг');
-	txt = txt.replace(/Бежен/g, 'Сажен');
-	txt = txt.replace(/бежен/g, 'сажен');
-	txt = txt.replace(/ФРГ/g, 'МНР');
-
-
-	txt = txt.replace(/####/g, '');
-	textNode.nodeValue = txt
-}
-
-";
 		}
 
 		/////////////////////
