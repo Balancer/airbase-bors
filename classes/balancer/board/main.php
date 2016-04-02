@@ -1,6 +1,6 @@
 <?php
 
-bors_function_include('time/smart_time');
+require_once BORS_CORE.'/inc/functions/time/smart_time.php';
 
 class balancer_board_main extends balancer_board_page
 {

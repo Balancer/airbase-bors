@@ -1,15 +1,15 @@
 {
-    "name": "balancer/airbase-bors",
-    "description": "airbase.ru/balancer.ru project sources",
-    "license": "GPL-3.0",
+	"name": "balancer/airbase-bors",
+	"description": "airbase.ru/balancer.ru project sources",
+	"license": "GPL-3.0",
 	"homepage": "http://balancer.ru/",
 
-    "authors": [
-        {
-            "name": "Balancer",
-            "email": "balancer@balancer.ru"
-        }
-    ],
+	"authors": [
+		{
+			"name": "Balancer",
+			"email": "balancer@balancer.ru"
+		}
+	],
 
 	"support": {
 		"issues": "https://bitbucket.org/Balancer/bors-airbase/issues",
@@ -20,22 +20,30 @@
 	"prefer-stable": true,
 	"minimum-stability": "dev",
 
-    "require": {
+	"require": {
 		"php": ">=5.5",
 
 		"balancer/bors-core": "dev-master",
 		"balancer/bors-ext": "dev-master",
 		"balancer/b2-core": "dev-master",
 
+		"bors/composer-plugin": "*",
+
 		"balancer/bors-3rd-jquery-wysibb": "*",
 		"components/font-awesome": "*",
 
-        "kzykhys/git": "*",
+		"kzykhys/git": "*",
 		"gorkalaucirica/hipchat-v2-api-client": "*",
-        "kix/mdash": "*"
-    },
+		"kix/mdash": "*"
+	},
 
-    "autoload": {
+	"autoload": {
 		"classmap": ["classes/"]
-    }
+	},
+
+	"extra": {
+		"bors-classes": "classes",
+		"bors-templates": "templates",
+		"bors-smarty-plugins": "engines/smarty/plugins"
+	}
 }
