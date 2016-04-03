@@ -32,7 +32,13 @@ class user_reputation extends balancer_board_page
 		return parent::pre_parse();
 	}
 
-	function url_ex($page) { return '/user/'.$this->id().'/reputation'.((!$page || $page == $this->default_page()) ? '/' : ','.$page.'.html'); }
+	function url_ex($page)
+	{
+		$url = '/user/'.$this->id().'/reputation'.((!$page || $page == $this->default_page()) ? '/' : ','.$page.'.html');
+		if(!empty($_SERVER['QUERY_STRING']))
+			$url .= '?'.$_SERVER['QUERY_STRING'];
+		return $url;
+	}
 
 	function body_data()
 	{
