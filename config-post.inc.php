@@ -45,7 +45,7 @@ if(config('is_developer'))
 
 function balancer_anniversary_html()
 {
-	$file = '/var/www/bors/bors-airbase/data/anniversary/'.date('md').'.txt';
+	$file = __DIR__.'/data/anniversary/'.date('md').'.txt';
 	if(!file_exists($file))
 		return '';
 

@@ -1,5 +1,7 @@
 <?php
 
+require_once BORS_CORE.'/inc/strings.php';
+
 class balancer_board_attach extends balancer_board_object_db
 {
 	function class_title() { return ec('вложение'); }

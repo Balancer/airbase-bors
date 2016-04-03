@@ -29,7 +29,7 @@ class balancer_board_post extends forum_post
 			'strip' => 1024, // - сколько резать символов.
 		), $data);
 
-		return bors_templates_smarty::fetch('xfile:/var/www/bors/bors-airbase/templates/forum/post.html', $data);
+		return bors_templates_smarty::fetch('xfile:templates/forum/post.html', $data);
 	}
 
 	function html2()
@@ -52,7 +52,7 @@ class balancer_board_post extends forum_post
 			'strip' => 1024, // - сколько резать символов.
 		), $data);
 
-		return bors_templates_smarty::render_data('xfile:/var/www/bors/bors-airbase/templates/forum/post.text', $data);
+		return bors_templates_smarty::render_data('xfile:templates/forum/post.text', $data);
 	}
 
 	function auto_objects()

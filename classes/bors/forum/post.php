@@ -116,7 +116,7 @@ function set_edited_by($v, $dbup = true) { return $this->set('edited_by', $v, $d
 function owner_id() { return @$this->data['owner_id']; }
 function set_owner_id($v, $dbup = true)
 {
-//	if($dbup && config('is_developer')) echo debug_trace();
+//	if($dbup && config('is_developer')) echo bors_debug::trace();
 	return $this->set('owner_id', $v, $dbup);
 }
 
@@ -142,7 +142,7 @@ function author_name()
 }
 function set_author_name($v, $dbup = true)
 {
-//	if($dbup && config('is_developer')) echo debug_trace();
+//	if($dbup && config('is_developer')) echo bors_debug::trace();
 	return $this->set('author_name', $v, $dbup);
 }
 function answer_to_id() { return @$this->data['answer_to_id']; }
@@ -160,8 +160,8 @@ function set_have_answers($v, $dbup = true) { return $this->set('have_answers', 
 function score() { return @$this->data['score']; }
 function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
-	function body()
-	{
+function body()
+{
 		if($body = @$this->attr['body'])
 			return $body;
 
@@ -173,7 +173,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$this->set_body($body);
 
 		return blib_html::close_tags($body);
-	}
+}
 
 	function set_body($value, $dbupd = true)
 	{
@@ -260,20 +260,18 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		}
 		else
 		{
-			$html = lcml($this->post_source(),
-				array(
-					'cr_type' => 'save_cr',
-					'forum_type' => 'punbb',
-					'forum_base_uri' => 'http://www.balancer.ru/forum',
-					'sharp_not_comment' => true,
-					'html_disable' => 'direct',
-					'uri' => $this->internal_uri(),
-					'nocache' => true,
-					'self' => $this,
-					'container' => $this->topic(),
-					'fast' => $fast,
-				)
-			);
+			$html = lcml($this->post_source(), [
+				'cr_type' => 'save_cr',
+				'forum_type' => 'punbb',
+				'forum_base_uri' => 'http://www.balancer.ru/forum',
+				'sharp_not_comment' => true,
+				'html_disable' => 'direct',
+				'uri' => $this->internal_uri(),
+				'nocache' => true,
+				'self' => $this,
+				'container' => $this->topic(),
+				'fast' => $fast,
+			]);
 		}
 
 		return $html;
