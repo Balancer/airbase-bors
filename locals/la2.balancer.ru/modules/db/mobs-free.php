@@ -30,7 +30,7 @@
 			
 		$query = "$query $join WHERE n.name != '' AND n.id != 0 $where ORDER BY n.name";
 
-		$db = new DataBase('l2jdb','la2','la2kkk');
+		$db = new driver_mysql('l2jdb','la2','la2kkk');
 
 		$total = $db->get("SELECT COUNT(*) $query");
 		include_once('funcs/design/page_split.php');

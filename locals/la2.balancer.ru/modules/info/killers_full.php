@@ -6,7 +6,7 @@
 		if($cache->get('LBR:Info', 'killers_full'))
 			return $cache->last;
 	
-		$hts = new DataBase('l2jdb','la2', 'la2kkk');
+		$hts = new driver_mysql('l2jdb','la2', 'la2kkk');
 		
 		$res = "<table class=\"btab\" cellSpacing=\"0\" width=\"100%\">\n";
 /*		$res .= "<tr><th colSpan=\"3\">Лучшие убийцы мобов по рейтингу:</th></tr>\n";

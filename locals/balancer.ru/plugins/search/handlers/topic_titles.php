@@ -30,7 +30,7 @@
 				case 'vd': $order = " ORDER BY t.num_views DESC"; break;
 			}
 		
-			$db = new DataBase('punbb');
+			$db = new driver_mysql('punbb');
 //			$GLOBALS['log_level'] = 10;
 			if(@$_GET['type'] == 'm')
 				$objects = bors_search_in_bodies($query);

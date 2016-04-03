@@ -6,7 +6,7 @@
 			return $ch->last;
 	
         include_once('funcs/DataBase.php');
-        $hts = new DataBase($database,'la2', 'la2kkk');
+        $hts = new driver_mysql($database,'la2', 'la2kkk');
         $list = $hts->get_array("SELECT cl.clan_name, ch.* FROM `characters` `ch` LEFT JOIN `clan_data` `cl` ON (cl.clan_id = ch.clanid) WHERE `online` > ".(0*(time()-1000))." ORDER BY `onlinetime` DESC, `char_name`;");
 
 		$res = "";

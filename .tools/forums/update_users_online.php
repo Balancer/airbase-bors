@@ -15,7 +15,7 @@ update_users_online();
 
 function update_users_online()
 {
-	$db = new DataBase(config('punbb.database'));
+	$db = new driver_mysql(config('punbb.database'));
 
 	$timeout = time() - 900;
 	$idle    = time() - 300;

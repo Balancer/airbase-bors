@@ -9,7 +9,7 @@
 		$res = "";
 	
         include_once('funcs/DataBase.php');
-        $hts = new DataBase('l2jdb','la2', 'la2kkk');
+        $hts = new driver_mysql('l2jdb','la2', 'la2kkk');
         $list = $hts->get_array("
 			SELECT cl.clan_name, ch.char_name, ch.sex, ac.lastactive, s.class_id, s.level
 			FROM character_subclasses s

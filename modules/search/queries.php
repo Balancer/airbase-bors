@@ -3,7 +3,7 @@
 
     function lcml_module_search_queries()
     {
-        $db = new DataBase('mnoGoSearch','mnogo','mnogokuku');
+        $db = new driver_mysql('mnoGoSearch','mnogo','mnogokuku');
 
         $out = array();
         $res = $db->get_array('SELECT DISTINCT qwords FROM qtrack ORDER BY qtime DESC LIMIT 100');

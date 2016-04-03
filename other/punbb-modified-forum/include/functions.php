@@ -480,7 +480,7 @@ function get_title($user)
 
 	if(empty($GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']]))
 	{
-		$cdb = new DataBase(config('punbb.database'));
+		$cdb = new driver_mysql(config('punbb.database'));
 		$group  = $cdb->get("SELECT * FROM groups WHERE g_id = ".intval($user['group_id']));
 		$GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']] = serialize($group);
 //		$cdb->close();

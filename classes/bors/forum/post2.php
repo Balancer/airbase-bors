@@ -446,7 +446,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		return 0;
 
-//		$db = new DataBase(config('punbb.database'));
+//		$db = new driver_mysql(config('punbb.database'));
 //		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
 	}
 

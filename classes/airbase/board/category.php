@@ -87,7 +87,7 @@ function set_category_base($v, $dbup) { return $this->set('category_base', $v, $
 	function direct_subforums_ids()
 	{
 		// Получаем одни forum_id для дочерних форумов первого уровня
-		$db = new DataBase(self::db_name());
+		$db = new driver_mysql(self::db_name());
 		$result = $this->db()->select_array('forums', 'id', array('cat_id' => $this->id()));
 		$db->close();
 		return $result;
