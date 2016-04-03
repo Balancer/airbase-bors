@@ -1,9 +1,10 @@
 <?php
+
 	function log_action($type, $uri, $text = NULL)
 	{
 		$owner = bors()->user()->id();
-		
-		$db = new DataBase('HTS');
+
+		$db = new driver_mysql('HTS');
 		$db->query("INSERT INTO `hts_logs` SET
 			`type` = '".addslashes($type)."',
 			`uri` = '".addslashes($uri)."',
@@ -17,7 +18,7 @@
 	function log_session_update()
 	{
 		$session_max_time = 60*10; // 10 минут
-	
+
 		if(!($owner = bors()->user()))
 			return;
 
@@ -28,8 +29,8 @@
 			return;
 
 		$owner = intval($owner);
-		
-		$db = new DataBase('HTS');
+
+		$db = new driver_mysql('HTS');
 		$query = "
 			SELECT `record_id`, `time`
 			FROM `hts_logs`

@@ -112,7 +112,7 @@ class balancer_board_blog extends forum_blog
 
 		if(empty($topic))
 		{
-			debug_hidden_log('lost_topic', "Lost topic {$this->topic_id()} for post {$this}");
+			bors_debug::syslog('lost_topic', "Lost topic {$this->topic_id()} for post {$this}");
 			return;
 		}
 

@@ -2,7 +2,7 @@
 	function get_categories($host, $cat)
 	{
 		$hts = new DataBaseHTS('WWW');
-		$db  = new DataBase('WWW');
+		$db  = new driver_mysql('WWW');
 		$cats = array();
 //		$GLOBALS['log_level'] = 10;
 		foreach($db->get_array("

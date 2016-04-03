@@ -29,9 +29,9 @@ class balancer_board_posts_tools_footerAJAX extends balancer_board_page
 			if($x->is_spam())
 			{
 				if($x->owner())
-					debug_hidden_log('spam-ajax', "Marked as spam: [owner={$x->owner()}, num_posts={$x->owner()->num_posts()}, registered={$x->owner()->create_time()}]".$x->source());
+					bors_debug::syslog('spam-ajax', "Marked as spam: [owner={$x->owner()}, num_posts={$x->owner()->num_posts()}, registered={$x->owner()->create_time()}]".$x->source());
 				else
-					debug_hidden_log('spam-ajax', "Marked as spam: [owner={$x->owner()}]".$x->source());
+					bors_debug::syslog('spam-ajax', "Marked as spam: [owner={$x->owner()}]".$x->source());
 			}
 		}
 */

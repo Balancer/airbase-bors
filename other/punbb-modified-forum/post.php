@@ -640,7 +640,7 @@ if (isset($_POST['form_sent']))
 			else
 			{
 				// Create the post ("topic post")
-				$tdb = new DataBase(config('punbb.database'));
+				$tdb = new driver_mysql(config('punbb.database'));
 				$data = array(
 					'poster' => $username, 
 					'poster_ip' => get_remote_address(), 
@@ -758,7 +758,7 @@ if (isset($_POST['form_sent']))
 			$post->set_is_spam(balancer_akismet::factory()->classify($post) ? 1 : 0, true);
 			if($post->is_spam())
 			{
-				debug_hidden_log('spam', "Marked as spam: [owner={$post->owner()}, num_posts={$post->owner()->num_posts()}, registered={$post->owner()->create_time()}]".$post->source());
+				bors_debug::syslog('spam', "Marked as spam: [owner={$post->owner()}, num_posts={$post->owner()->num_posts()}, registered={$post->owner()->create_time()}]".$post->source());
 //				message('Ваше сообщение похоже на спам. Оно оставлено на проверку координаторам. Если сообщение корректно, оно будет размещено на форуме');
 			}
 		}

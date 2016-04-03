@@ -92,7 +92,7 @@ class balancer_ajax_thumb_vote extends bors_object
 
 				if($user_limit < $today_user_negatives * $twinks)
 				{
-					debug_hidden_log('_vote_limits', "User votes limits stop. user_limit=$user_limit, today_user_negatives=$today_user_negatives", 1);
+					bors_debug::syslog('_vote_limits', "User votes limits stop. user_limit=$user_limit, today_user_negatives=$today_user_negatives", 1);
 					return "<small>Вы исчерпали сегодняшний лимит отрицательных оценок ($user_limit)</small>";
 				}
 
@@ -108,10 +108,10 @@ class balancer_ajax_thumb_vote extends bors_object
 					'create_time>' => time() - 86400*30,
 				));
 
-				debug_hidden_log('_test_limits', "User votes month limits test. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
+				bors_debug::syslog('_test_limits', "User votes month limits test. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
 				if($tomonth_user_negatives > $tomonth_user_positives + 10/$twinks)
 				{
-					debug_hidden_log('_vote_limits', "User votes angry limits stop. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
+					bors_debug::syslog('_vote_limits', "User votes angry limits stop. negatives=$tomonth_user_negatives, positives=$tomonth_user_positives", 1);
 					return "<small>Вы слишком озлоблены. Расслабьтесь и будьте добрее.</small>";
 				}
 			}

@@ -8,7 +8,7 @@ class balancer_board_topic_usersGraphSVG extends bors_image_svg
 	{
 		if(bors()->client()->is_bot())
 		{
-			debug_hidden_log('002', 'bot trapped!');
+			bors_debug::syslog('002', 'bot trapped!');
 			return go(bors_load('balancer_board_topic', $this->id())->url());
 		}
 
@@ -17,7 +17,7 @@ class balancer_board_topic_usersGraphSVG extends bors_image_svg
 
 	function image()
 	{
-		debug_hidden_log('000', 'check for balancer_board_topic_usersGraphSVG');
+		bors_debug::syslog('000', 'check for balancer_board_topic_usersGraphSVG');
 
 		$posts = bors_find_all('balancer_board_posts_pure', array(
 			'topic_id' => $this->id(),
@@ -72,7 +72,7 @@ class balancer_board_topic_usersGraphSVG extends bors_image_svg
 		}
 
 		$this->edges_count = count($edges);
-		debug_hidden_log('001', "Total edges: {$this->edges_count}", false);
+		bors_debug::syslog('001', "Total edges: {$this->edges_count}", false);
 
 		$title = 'Граф взаимных ответов участников темы «'.$topic->title().'»';
 
@@ -154,7 +154,7 @@ class balancer_board_topic_usersGraphSVG extends bors_image_svg
 	{
 		$base = max($this->edges_count, 5);
 		$ttl = rand(100*$base, 200*$base);
-		debug_hidden_log('001', "TTL for {$this->edges_count} = $ttl", false);
+		bors_debug::syslog('001', "TTL for {$this->edges_count} = $ttl", false);
 		return $ttl;
 	}
 }

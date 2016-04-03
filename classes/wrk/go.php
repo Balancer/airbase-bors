@@ -15,14 +15,14 @@ class wrk_go extends balancer_board_page
 				$class_id = 't';
 				break;
 			default:
-				debug_hidden_log('wrk_go_error', 'Unknown class type for '.$object->debug_title());
+				bors_debug::syslog('wrk_go_error', 'Unknown class type for '.$object->debug_title());
 				return false;
 		}
 
 		$object_id = $object->id();
 		if(!is_numeric($object_id))
 		{
-			debug_hidden_log('wrk_go_error', 'Non integer object id for '.$object->debug_title());
+			bors_debug::syslog('wrk_go_error', 'Non integer object id for '.$object->debug_title());
 			return false;
 		}
 

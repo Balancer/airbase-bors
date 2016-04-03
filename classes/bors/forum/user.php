@@ -29,7 +29,7 @@ class forum_user extends balancer_board_object_db
 		if($id == -1)
 		{
 			$id = $this->id_by_cookie();
-			debug_hidden_log('__critical', 'user_id is -1 =>'.$id);
+			bors_debug::syslog('__critical', 'user_id is -1 =>'.$id);
 		}
 
 		parent::__construct($id);

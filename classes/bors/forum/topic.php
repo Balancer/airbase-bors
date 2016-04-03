@@ -485,7 +485,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 				$this->set_owner_id($first_post->owner() ? $first_post->owner()->id() : NULL, true);
 			}
 			else
-				debug_hidden_log('post_error', "Unknown first post $first_pid in {$this}->recalculate()");
+				bors_debug::syslog('post_error', "Unknown first post $first_pid in {$this}->recalculate()");
 
 			if($last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id())))
 			{
@@ -500,7 +500,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 			}
 			else
-				debug_hidden_log('post_error', "Unknown last post $first_pid in {$this}->recalculate()");
+				bors_debug::syslog('post_error', "Unknown last post $first_pid in {$this}->recalculate()");
 
 			$this->repaging_posts($full_repaging ? 1 : -1);
 		}
@@ -752,7 +752,7 @@ $(function() {
 	{
 		if(!$user)
 		{
-			debug_hidden_log('users_error', 'Попытка определить обновлялся ли топик для нерегистрированного пользователя');
+			bors_debug::syslog('users_error', 'Попытка определить обновлялся ли топик для нерегистрированного пользователя');
 			return false;
 		}
 

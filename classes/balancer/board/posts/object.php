@@ -46,7 +46,7 @@ class balancer_board_posts_object extends balancer_board_object_db
 	{
 		if(!$object)
 		{
-			debug_hidden_log('post-objects-error', "Try to register empty object with ".print_r($params, true));
+			bors_debug::syslog('post-objects-error', "Try to register empty object with ".print_r($params, true));
 			return NULL;
 		}
 
@@ -60,7 +60,7 @@ class balancer_board_posts_object extends balancer_board_object_db
 
 		if($post->class_name() != 'balancer_board_post' && $post->class_name() != 'forum_post')
 		{
-			debug_hidden_log('objects_register_not_yet', "Try to register {$post} width $object_class_name($object_id)");
+			bors_debug::syslog('objects_register_not_yet', "Try to register {$post} width $object_class_name($object_id)");
 			return NULL;
 		}
 

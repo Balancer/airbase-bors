@@ -64,6 +64,7 @@ class wrk_news_tags_view extends balancer_board_paginated
 		];
 	}
 
+	function url() { return $this->url_ex(NULL); }
 	function url_ex($page)
 	{
 		return 'http://www.wrk.ru/news/tags/'.$this->id().'/'.($page>1?$page.'.html':'');

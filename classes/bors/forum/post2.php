@@ -119,7 +119,7 @@ function author_name()
 {
 	if(empty($this->data['author_name']))
 	{
-		debug_hidden_log('empty-data', 'no author name');
+		bors_debug::syslog('empty-data', 'no author name');
 		if($author = $this->owner())
 			$this->set_author_name($author->title(), true);
 		else
@@ -148,7 +148,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function set_post_body($value, $dbupd)
 	{
 		if($value == '' && $value !== NULL && $dbupd)
-			debug_hidden_log('body', 'Set empty body');
+			bors_debug::syslog('body', 'Set empty body');
 		$this->set('post_body', $value, $dbupd); 
 	}
 
@@ -162,7 +162,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	function set_topic_page($page, $dbupd)
 	{
 		if($page && !is_numeric($page)/*gettype($page) != 'integer'*/)
-			debug_hidden_log('type-mismatch-page', 'Set topic_page to '.gettype($page).'('.$page.')');
+			bors_debug::syslog('type-mismatch-page', 'Set topic_page to '.gettype($page).'('.$page.')');
 
 		$this->set('topic_page', $page, $dbupd);
 	}
@@ -186,7 +186,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 		if($ps = $this->post_source())
 			return $ps;
 
-		debug_hidden_log('messages-lost-3', 'Empty post source!');
+		bors_debug::syslog('messages-lost-3', 'Empty post source!');
 		return '';
 	}
 
@@ -196,7 +196,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 	{
 		if(!$message)
 		{
-			debug_hidden_log('data-lost', 'Set to empty post source!');
+			bors_debug::syslog('data-lost', 'Set to empty post source!');
 			bors_exit('Set to empty post source!');
 		}
 
@@ -429,7 +429,7 @@ function set_score($v, $dbup) { return $this->set('score', $v, $dbup); }
 
 		if(!($attach = bors_load('balancer_board_attach', $this->have_attach())))
 		{
-			debug_hidden_log('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
+			bors_debug::syslog('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
 			return array();
 		}
 		return $this->_attaches = array($attach);

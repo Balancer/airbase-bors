@@ -1,5 +1,7 @@
 <?php
 
+require BORS_CORE.'/inc/texts.php';
+
 class balancer_balabot extends bors_object
 {
 	static function external_notify()
@@ -49,7 +51,7 @@ class balancer_balabot extends bors_object
 		$text = strip_text($target->source(), $limit, '…', true);
 		$msg = $pre.$text.$post;
 
-		debug_hidden_log('balabot', "Limit=$limit, text lenth=".bors_strlen($text).", full length=".bors_strlen($msg).', text=|'.$msg.'|', false);
+		bors_debug::syslog('balabot', "Limit=$limit, text lenth=".bors_strlen($text).", full length=".bors_strlen($msg).', text=|'.$msg.'|', false);
 
 /*
 		if($blog_object_id = bors_external_twitter::send($bot, $msg))
@@ -77,7 +79,7 @@ class balancer_balabot extends bors_object
 			);
 		}
 
-		debug_hidden_log('balabot', "{$target->debug_title()} posted in twitter as ".@$blog_object_id, false);
+		bors_debug::syslog('balabot', "{$target->debug_title()} posted in twitter as ".@$blog_object_id, false);
 	}
 
 	static function send_tweet($msg)
@@ -99,12 +101,12 @@ class balancer_balabot extends bors_object
 			$twitter->setOAuth($oauth);
 
 			$msg = $twitter->statuses->update($msg);
-//			debug_hidden_log('twitter', 'result :'.print_r($msg, true));
+//			bors_debug::syslog('twitter', 'result :'.print_r($msg, true));
 			return $msg;
 		}
 		catch (Services_Twitter_Exception $e)
 		{
-			debug_hidden_log('twitter', 'Exception :'.$e);
+			bors_debug::syslog('twitter', 'Exception :'.$e);
 //			echo $e->getMessage();
 		}
 	}

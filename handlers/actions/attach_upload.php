@@ -35,7 +35,7 @@
 		if(strlen($mime)==0)
 			$mime = attach_create_mime(attach_find_extension($name));
 
-		$db = new DataBase(config('punbb.database'));
+		$db = new driver_mysql(config('punbb.database'));
 
 		// update the database with this info
 		$db->replace('attach_2_files', array(

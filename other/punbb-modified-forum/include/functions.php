@@ -195,7 +195,7 @@ function check_bans()
 				.bbf_bans::message_ls().'<br/><br/>'
 				.$lang_common['Ban message 4']
 				.' <a href="mailto:'.$pun_config['o_admin_email'].'">'.$pun_config['o_admin_email'].'</a>. [1]', true);
-			debug_hidden_log('__ban_test', 'ban1');
+			bors_debug::syslog('__ban_test', 'ban1');
 		}
 
 		if ($cur_ban['ip'] != '')
@@ -218,7 +218,7 @@ function check_bans()
 						.bbf_bans::message_ls().'<br/><br/>'
 						.$lang_common['Ban message 4']
 						.' <a href="mailto:'.$pun_config['o_admin_email'].'">'.$pun_config['o_admin_email'].'</a>. [2]', true);
-					debug_hidden_log('__ban_test', 'ban2');
+					bors_debug::syslog('__ban_test', 'ban2');
 				}
 			}
 		}

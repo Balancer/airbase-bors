@@ -130,7 +130,7 @@ function author_name()
 {
 	if(empty($this->data['author_name']))
 	{
-		debug_hidden_log('empty-data', 'no author name');
+		bors_debug::syslog('empty-data', 'no author name');
 		if($author = $this->owner())
 			$this->set_author_name($author->title(), true);
 		else
@@ -212,7 +212,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	function set_topic_page($page, $dbupd)
 	{
 		if($page && !is_numeric($page)/*gettype($page) != 'integer'*/)
-			debug_hidden_log('type-mismatch-page', 'Set topic_page to '.gettype($page).'('.$page.')');
+			bors_debug::syslog('type-mismatch-page', 'Set topic_page to '.gettype($page).'('.$page.')');
 
 		$this->set('topic_page', $page, $dbupd);
 	}
@@ -224,7 +224,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		if($ps = $this->post_source())
 			return $ps;
 
-		debug_hidden_log('messages-lost-3', 'Empty post '.$this->id().' source!');
+		bors_debug::syslog('messages-lost-3', 'Empty post '.$this->id().' source!');
 		return '';
 	}
 
@@ -234,7 +234,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	{
 		if(!$message)
 		{
-			debug_hidden_log('data-lost', 'Set to empty post source!');
+			bors_debug::syslog('data-lost', 'Set to empty post source!');
 			bors_exit('Set to empty post source!');
 		}
 
@@ -392,7 +392,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			return $this->url_in_topic($topic);
 //			return dirname($topic->url()).'/p'.$this->id().'.html';
 
-		debug_hidden_log('empty topic', $this, false);
+		bors_debug::syslog('empty topic', $this, false);
 		return 'http://forums.balancer.ru/0000/00/p'.$this->id().'.html';
 //		require_once("inc/urls.php");
 //		return 'http://www.balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
@@ -494,7 +494,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if(!($attach = bors_load('balancer_board_attach', $this->have_attach())))
 		{
-//			debug_hidden_log('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
+//			bors_debug::syslog('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
 			return array();
 		}
 

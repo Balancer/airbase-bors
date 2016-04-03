@@ -45,7 +45,7 @@ class balancer_akismet extends bors_object
 		$this->akismet->setCommentContent($object->source());
 		$this->akismet->setPermalink($object->url());
 
-		debug_hidden_log('akismet-submit-spam', "{$object->debug_title()}: {$object->source()}");
+		bors_debug::syslog('akismet-submit-spam', "{$object->debug_title()}: {$object->source()}");
 
 		return $this->akismet->submitSpam();
 	}
@@ -64,7 +64,7 @@ class balancer_akismet extends bors_object
 		$this->akismet->setCommentContent($object->source());
 		$this->akismet->setPermalink($object->url());
 
-//		debug_hidden_log('akismet-submit-ham', "{$object->debug_title()}: {$object->source()}");
+//		bors_debug::syslog('akismet-submit-ham', "{$object->debug_title()}: {$object->source()}");
 
 		return $this->akismet->submitHam();
 	}

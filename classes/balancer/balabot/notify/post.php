@@ -16,11 +16,11 @@ class balancer_balabot_notify_post extends bors_object
 		$post = bors_load('balancer_board_post', $post_id);
 
 		if(!$post)
-			return debug_hidden_log('worker_error', 'Not found post '.$post_id);
+			return bors_debug::syslog('worker_error', 'Not found post '.$post_id);
 
 		$topic = $post->topic();
 		if(!$topic)
-			return debug_hidden_log('worker_error', 'Not found topic for post '.$post->debug_title());
+			return bors_debug::syslog('worker_error', 'Not found topic for post '.$post->debug_title());
 
 		$post_owner = $post->owner();
 

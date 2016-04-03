@@ -70,7 +70,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 	{ // show the imageview page
 		$page_title = htmlspecialchars($pun_config['o_board_title']).' / Image view - '.$attach_filename.' - ';
 		require 'header.php';
-		$cdb = new DataBase(config('punbb.database'));
+		$cdb = new driver_mysql(config('punbb.database'));
 		if($attach_post_id == "".intval($attach_post_id))
 		{
 			$post = bors_load('balancer_board_post', $attach_post_id);

@@ -21,7 +21,7 @@
         if(!$uri)
             $uri=$GLOBALS['PHP_SELF'];
 
-        $dbh = new DataBase();
+        $dbh = new driver_mysql();
         $hts = new DataBaseHTS();
         $id  = $hts->page_id_by_uri($uri);
         $ref = $hts->page_id_by_uri($_SERVER['HTTP_REFERER']);
@@ -45,7 +45,7 @@
             return;
         }
 
-        $dbh = new DataBase();
+        $dbh = new driver_mysql();
         $hts = new DataBaseHTS();
         $out = NULL;
 
