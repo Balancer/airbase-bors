@@ -5,7 +5,8 @@ require_once('../../../config.php');
 main();
 bors_exit();
 
-config_set('debug_stop_on', 2);
+//config_set('debug_stop_on', 2);
+config_set('is_debug', true);
 
 function main()
 {
@@ -15,17 +16,20 @@ function main()
 	$step = 1000;
 
 	$rdbh = new driver_mysql('AB_FORUMS');
-	$max_id = $rdbh->select('posts', 'MAX(id)', array());
+	$max_id = $rdbh->select('posts', 'MAX(id)', []);
+	$min_id = 0; // $rdbh->select('posts', 'MIN(id)', ['posted>' => strtotime('2016-04-03 06:00')]);
 	echo "Total posts: $max_id\n";
-//	for($i=$max_id; $i>=0; $i-=$step)
-	for($i=226750; $i>=0; $i-=$step)
+//	for($i=$max_id; $i>=$min_id; $i-=$step)
+	for($i=1160866; $i>=$min_id; $i-=$step)
 	{
-		$topics = array();
+		$topics = [];
+		$begin = max($i-$step, $min_id);
 
-		echo ($i-$step).".. $i\n";
+		echo $begin.".. $i\n";
 		$pcs = bors_find_all('balancer_board_posts_cache', array(
-			'id BETWEEN '.($i-$step).' AND '.($i+1),
-			'body_ts>=' => strtotime('Fri Sep 05 06:43:35 2014 +0400'),
+			'id BETWEEN '.$begin.' AND '.($i+1),
+			'body_ts>=' => strtotime('2016-04-03 00:00:00'),
+			"body LIKE \"%http%\"",
 			'order' => '-id',
 			'by_id' => true,
 		));
