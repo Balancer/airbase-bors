@@ -28,6 +28,8 @@ class balancer_board_admin_do extends balancer_board_admin_page
 				$topic->store();
 //				echo '<xmp>'; var_dump($post_image_id, $topic->image_id(), $topic->data['image_id'], $topic->image()->id(), $topic->image()->url()); exit();
 
+				balancer_board_action::add($topic, "Назначено лого темы: {$post_image->url()}", true);
+
 				$topic->cache_clean();
 				$topic->set_modify_time(time(), true);
 				$topic->store();
