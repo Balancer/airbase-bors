@@ -1,2 +1,0 @@
-extends: balancer_board_meta_main
-where(): "['is_public' => true]"

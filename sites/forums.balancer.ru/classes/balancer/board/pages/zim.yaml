@@ -1,2 +1,0 @@
-extends: bors_pages_zim
-webroot: /var/www/forums.balancer.ru/bors-site/webroot-zim
