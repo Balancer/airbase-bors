@@ -2,10 +2,9 @@
 
 // bors_exit('Форум в стадии модификации базы данных. Минут 30 (до ~03:50) будет недоступен. Можете пока сходить на <a href="http://home.balancer.ru/mybb/index.php">Запасные форумы</a>.');
 
-include_once('engines/lcml.php');
-include_once('inc/browsers.php');
-include_once('inc/clients.php');
-
+require_once BORS_CORE.'/engines/lcml.php';
+require_once BORS_CORE.'/inc/browsers.php';
+require_once BORS_CORE.'/inc/clients.php';
 require_once BORS_CORE.'/inc/functions/text/truncate.php';
 
 class forum_post extends balancer_board_object_db
