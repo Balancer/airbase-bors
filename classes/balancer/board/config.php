@@ -49,7 +49,6 @@ class balancer_board_config extends bors_config
 		return array_merge(parent::view_data(), array(
 			'template' => 'forum/_header.html',
 			'search_request_url' => 'http://www.balancer.ru/tools/search/result/',
-			'project' => bors_load('balancer_board_project', NULL),
 			'copyright_line' => '© Balancer 1998—'.date('Y'),
 			'user_bar' => $user_bar,
 			'nav_bar' => $nav_bar,
@@ -63,4 +62,11 @@ class balancer_board_config extends bors_config
 		));
 	}
 */
+
+	function object_data()
+	{
+		return array_merge(parent::object_data(), [
+			'app' => bors_load(balancer_board_app::class, NULL),
+		]);
+	}
 }
