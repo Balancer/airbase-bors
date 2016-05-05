@@ -18,6 +18,7 @@
 {/if}
 	<li>RPG-уровень: <span class="b big red">{$user->rpg_level()}</span> (вес голоса: <b>{pow(3,$user->rpg_level())})</b></li>
 	<li>Зарегистрирован: {$user->create_time()|full_time}</li>
+	<li>Последнее посещение: {$user->last_visit_time()|full_time}</li>
 {if $user->username()}
 	<li>Имя пользователя: {$user->username()}</li>
 {/if}

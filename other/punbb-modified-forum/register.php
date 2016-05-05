@@ -85,7 +85,7 @@ else if (isset($_POST['form_sent']))
 	if($crc != @$_POST['test_hash'])
 		return message('Вы ввели неверный результат выражения. Попробуйте ещё раз.');
 
-	debug_hidden_log('users-register-captcha-success', 'result='.$_POST['test_result'].', crc='.$crc.', hash='.$_POST['test_hash']);
+	bors_debug::syslog('users-register-captcha-success', 'result='.$_POST['test_result'].', crc='.$crc.', hash='.$_POST['test_hash']);
 
 	// Check that someone from this IP didn't register a user within the last hour (DoS prevention)
 	$result = $db->query('SELECT 1 FROM '.$db->prefix.'users WHERE registration_ip=\''.get_remote_address().'\' AND registered>'.(time() - 3600)) or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());

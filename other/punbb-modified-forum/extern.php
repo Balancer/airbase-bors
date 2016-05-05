@@ -127,7 +127,7 @@ require_once PUN_ROOT.'include/functions.php';
 require PUN_ROOT.'include/dblayer/common_db.php';
 
 // Load cached config
-@include PUN_ROOT.'cache/cache_config.php';
+include PUN_ROOT.'cache/cache_config.php';
 if (!defined('PUN_CONFIG_LOADED'))
 {
     require PUN_ROOT.'include/cache.php';
@@ -142,7 +142,7 @@ if ($db->result($result) == '0')
 
 
 // Attempt to load the common language file
-@include PUN_ROOT.'lang/'.$pun_config['o_default_lang'].'/common.php';
+include PUN_ROOT.'lang/'.$pun_config['o_default_lang'].'/common.php';
 if (!isset($lang_common))
 	exit('There is no valid language pack \''.$pun_config['o_default_lang'].'\' installed. Please reinstall a language of that name.');
 

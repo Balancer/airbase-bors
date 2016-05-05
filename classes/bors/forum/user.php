@@ -705,6 +705,9 @@ function avatar_thumb($geo)
 		if($m < 0)
 			$limit = min($limit, max(2, round(-50000/$m)));
 
+		if($this->create_time() > time() - 86400)
+			$limit = min($limit, 10);
+
 		if($limit > 50)
 			$limit = -1;
 

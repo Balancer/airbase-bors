@@ -8,14 +8,13 @@ define('BORS_3RD_PARTY', '/var/www/repos/bors-third-party');
 define('BORS_LOCAL', '/var/www/bors/bors-airbase');
 require_once(BORS_CORE.'/init.php');
 
-require_once('obsolete/DataBase.php');
 require_once('inc/js.php');
 
 update_users_online();
 
 function update_users_online()
 {
-	$db = new DataBase(config('punbb.database'));
+	$db = new driver_mysql(config('punbb.database'));
 
 	$timeout = time() - 900;
 	$idle    = time() - 300;

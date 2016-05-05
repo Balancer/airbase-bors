@@ -1,6 +1,6 @@
 <?php
 
-    require_once('obsolete/DataBaseHTS.php');
+//    require_once('obsolete/DataBaseHTS.php');
     require_once('obsolete/users.php');
     require_once('inc/filesystem.php');
 

@@ -33,7 +33,7 @@
 		}
 
 		$topics = array();
-		$db = new DataBase('AB_FORUMS');
+		$db = new driver_mysql('AB_FORUMS');
 		if($forums)
 			foreach($db->get_array("SELECT id as topic_id, subject as title,  id mod 1000 as sub FROM topics WHERE last_post > ".(time()-90*86400)." AND forum_id IN($forums) ORDER BY last_post DESC LIMIT $limit") as $t)
 				$topics[] = $t;

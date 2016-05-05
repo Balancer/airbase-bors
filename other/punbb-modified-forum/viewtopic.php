@@ -48,7 +48,7 @@ function go_topic($tid, $page = 1)
 	if($topic = bors_load('balancer_board_topic', $tid))
 		return go($topic->url_ex($page), true);
 
-	debug_hidden_log('topics_error', "Can't find topic $tid");
+	bors_debug::syslog('topics_error', "Can't find topic $tid");
 	return go('http://forums.balancer.ru/', true);
 }
 
@@ -76,7 +76,7 @@ if(preg_match('!^pid=(\d+)$!', $qs, $m))
 	$post = bors_load('balancer_board_post', $m[1]+$pdiff);
 	if(!$post)
 	{
-		debug_hidden_log('__trap', "Пустой постинг {$m[1]}");
+		bors_debug::syslog('__trap', "Пустой постинг {$m[1]}");
 		@header("HTTP/1.0 404 Not Found");
 		return go('http://www.balancer.ru/forum/', true);
 	}

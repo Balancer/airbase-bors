@@ -38,7 +38,7 @@ class user_reputation extends balancer_board_page
 	{
 		template_noindex();
 
-		$dbf = new DataBase(config('punbb.database'));
+		$dbf = new driver_mysql(config('punbb.database'));
 
 		$list = array_reverse(bors_find_all('airbase_user_reputation', array(
 			'user_id' => $this->id(),
@@ -217,7 +217,7 @@ class user_reputation extends balancer_board_page
 //		class_load('cache_group', "user-{$uid}-reputation")->clean();
 
 		include_once("inc/navigation.php");
-		return go($this->url_ex($this->total_pages(), false));
+		return go(preg_replace('/\?.+$/', '', $this->url_ex($this->total_pages()), false));
 	}
 
 	function access() { return $this; }

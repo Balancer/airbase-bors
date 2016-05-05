@@ -1,5 +1,7 @@
 <?php
 
+throw new Exception("Load old code");
+
 class balancer_board_user extends forum_user
 {
 	function extends_class_name() { return 'forum_user'; }

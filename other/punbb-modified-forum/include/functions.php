@@ -39,14 +39,16 @@ function check_cookie(&$pun_user)
 	$cookie = array('user_id' => 1, 'password_hash' => 'Guest');
 
 	require_once('obsolete/users.php');
-	try
+	require_once('punbb-old-user.php');
+//	try
 	{
 		$me = new User();
 	}
-	catch(Exception $e)
+//	catch(Exception $e)
 	{
-		$me = NULL;
+//		$me = NULL;
 	}
+
 //	echo "Check cookie: me=".($me->data('id'));
 
 	if($me && $me->data('id') > 1)
@@ -195,7 +197,7 @@ function check_bans()
 				.bbf_bans::message_ls().'<br/><br/>'
 				.$lang_common['Ban message 4']
 				.' <a href="mailto:'.$pun_config['o_admin_email'].'">'.$pun_config['o_admin_email'].'</a>. [1]', true);
-			debug_hidden_log('__ban_test', 'ban1');
+			bors_debug::syslog('__ban_test', 'ban1');
 		}
 
 		if ($cur_ban['ip'] != '')
@@ -218,7 +220,7 @@ function check_bans()
 						.bbf_bans::message_ls().'<br/><br/>'
 						.$lang_common['Ban message 4']
 						.' <a href="mailto:'.$pun_config['o_admin_email'].'">'.$pun_config['o_admin_email'].'</a>. [2]', true);
-					debug_hidden_log('__ban_test', 'ban2');
+					bors_debug::syslog('__ban_test', 'ban2');
 				}
 			}
 		}
@@ -469,7 +471,7 @@ function get_title($user)
 	// If not already loaded in a previous call, load the cached ranks
 	if ($pun_config['o_ranks'] == '1' && empty($pun_ranks))
 	{
-		@include PUN_ROOT.'cache/cache_ranks.php';
+		include PUN_ROOT.'cache/cache_ranks.php';
 		if (!defined('PUN_RANKS_LOADED'))
 		{
 			require_once PUN_ROOT.'include/cache.php';
@@ -480,7 +482,7 @@ function get_title($user)
 
 	if(empty($GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']]))
 	{
-		$cdb = new DataBase(config('punbb.database'));
+		$cdb = new driver_mysql(config('punbb.database'));
 		$group  = $cdb->get("SELECT * FROM groups WHERE g_id = ".intval($user['group_id']));
 		$GLOBALS['bors_data']['cache']['punbb_group'][$user['group_id']] = serialize($group);
 //		$cdb->close();

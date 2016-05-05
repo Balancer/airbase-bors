@@ -70,7 +70,7 @@ require PUN_ROOT.'include/attach/attach_incl.php'; //Attachment Mod row, loads v
 	{ // show the imageview page
 		$page_title = htmlspecialchars($pun_config['o_board_title']).' / Image view - '.$attach_filename.' - ';
 		require 'header.php';
-		$cdb = new DataBase(config('punbb.database'));
+		$cdb = new driver_mysql(config('punbb.database'));
 		if($attach_post_id == "".intval($attach_post_id))
 		{
 			$post = bors_load('balancer_board_post', $attach_post_id);
@@ -134,7 +134,7 @@ if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
 
 		// open a pointer to the file
 		if(!file_exists($pun_config['attach_basefolder'].$attach_location))
-			debug_exit('Not exists file attach '.$attach_item.': '.$pun_config['attach_basefolder'].$attach_location);
+			throw new Exception('Not exists file attach '.$attach_item.': '.$pun_config['attach_basefolder'].$attach_location);
 
 		$fp = fopen($pun_config['attach_basefolder'].$attach_location, "rb");
 		if(!$fp)
