@@ -78,7 +78,7 @@ if($me->money() < -3000 && $tid<>82617)
 		 «<a href="http://www.wrk.ru/community/2015/11/t82617,new--zapovednik-goblinov.html">Заповедника&nbsp;Гоблинов</a>»&nbsp;[<a href="http://www.wrk.ru/community/2015/11/t82617,new--zapovednik-goblinov.html">Перейти&nbsp;в&nbsp;тему</a>].
 		 Вы можете дождаться, пока баланс станет положительным за счёт ежедневных начислений или попросить в этой теме других участников перевести вам нужную сумму.');
 
-if($fid && !$tid && ($me->num_posts() < 3 || $me->create_time() > time() - 86400))
+if($fid && !$tid && ($me->num_posts() < 5 || $me->create_time() > time() - 86400))
 {
 	message('Извините, но с целью борьбы со спамерами только что зарегистрированным'
 		.' пользователям запрещено создавать новые темы. Поучаствуйте сперва в обсуждениях'
@@ -133,7 +133,8 @@ if ($cur_posting['redirect_url'] != '')
 $mods_array = ($cur_posting['moderators'] != '') ? unserialize($cur_posting['moderators']) : array();
 $is_admmod = ($pun_user['g_id'] == PUN_ADMIN || ($pun_user['g_id'] == PUN_MOD && array_key_exists($pun_user['username'], $mods_array))) ? true : false;
 
-//var_dump($cur_posting); var_dump($pun_user);
+//var_dump($cur_posting);
+//var_dump($pun_user);
 // Do we have permission to post?
 if((
 		($tid && (($cur_posting['post_replies'] == '' && $pun_user['g_post_replies'] == '0') || $cur_posting['post_replies'] == '0'))
@@ -770,7 +771,7 @@ if (isset($_POST['form_sent']))
 		$post->full_recalculate_and_clean();
 
 		if(!empty($_POST['as_blog']) && !$post->get('is_spam'))
-			$blog = balancer_board_blog::create($post, @$_POST['keywords']);
+			$blog = balancer_board_blog::create_blog($post, @$_POST['keywords']);
 
 		if(!empty($_POST['is_translate']) && !$post->get('is_spam'))
 		{

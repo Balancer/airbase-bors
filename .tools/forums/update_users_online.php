@@ -8,7 +8,6 @@ define('BORS_3RD_PARTY', '/var/www/repos/bors-third-party');
 define('BORS_LOCAL', '/var/www/bors/bors-airbase');
 require_once(BORS_CORE.'/init.php');
 
-require_once('obsolete/DataBase.php');
 require_once('inc/js.php');
 
 update_users_online();

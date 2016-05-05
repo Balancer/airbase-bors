@@ -21,6 +21,6 @@ class aviatop_main extends balancer_board_paginated
 		if(!is_null($this->_total))
 			return $this->_total;
 
-		return $this->_total = DataBase::factory('AVIATOP')->get('SELECT COUNT(DISTINCT(top_id)) FROM `aviatop_week`');
+		return $this->_total = driver_mysql::factory('AVIATOP')->get('SELECT COUNT(DISTINCT(top_id)) FROM `aviatop_week`');
 	}
 }

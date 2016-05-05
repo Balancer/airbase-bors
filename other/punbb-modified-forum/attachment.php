@@ -134,7 +134,7 @@ if(!in_array($_SERVER['HTTP_HOST'], array('balancer.ru', 'www.balancer.ru')))
 
 		// open a pointer to the file
 		if(!file_exists($pun_config['attach_basefolder'].$attach_location))
-			debug_exit('Not exists file attach '.$attach_item.': '.$pun_config['attach_basefolder'].$attach_location);
+			throw new Exception('Not exists file attach '.$attach_item.': '.$pun_config['attach_basefolder'].$attach_location);
 
 		$fp = fopen($pun_config['attach_basefolder'].$attach_location, "rb");
 		if(!$fp)

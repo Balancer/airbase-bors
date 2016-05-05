@@ -2,7 +2,9 @@
 
 {foreach from=$items item="v"}
 {assign var="p" value=$v->post()}
+{if $p->is_public()}
 {include file="xfile:forum/post.html" show_title=$p->topic()->titled_link()}
+{/if}
 {/foreach}
 
 {$this->pages_links_nul()}

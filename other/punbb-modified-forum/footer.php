@@ -64,7 +64,7 @@ if ($footer_style == 'viewforum' || $footer_style == 'viewtopic')
 	if ($pun_config['o_quickjump'] == '1')
 	{
 		// Load cached quickjump
-		@include PUN_ROOT.'cache/cache_quickjump_'.$pun_user['g_id'].'.php';
+		include PUN_ROOT.'cache/cache_quickjump_'.$pun_user['g_id'].'.php';
 		if (!defined('PUN_QJ_LOADED'))
 		{
 			require_once 'include/cache.php';

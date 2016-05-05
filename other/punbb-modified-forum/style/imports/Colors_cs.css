@@ -5,8 +5,26 @@
 /* 1.1 Default background colour and text colour */
 
 BODY {
-/*	background: #D8F0FF url(http://www.airbase.ru/images/web/sky-back.jpg); */
-	background: #99731e url(http://s.wrk.ru/w/ua-sky.jpg);
+	background: #D8F0FF url(http://www.airbase.ru/images/web/sky-back.jpg);
+/*	background: #99731e url(http://s.wrk.ru/w/ua-sky.jpg); */
+}
+
+body{
+  position: relative;
+  background-color: black;
+}
+
+xbody::before {
+    background: url("/_bal/img/bg/003-sky-cloud.jpg") no-repeat center center;
+    background-size: cover;
+    content: ' ';
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    will-change: transform;
+    z-index: -1000;
 }
 
 .pun {COLOR: #333}

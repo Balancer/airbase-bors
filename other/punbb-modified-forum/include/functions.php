@@ -39,14 +39,16 @@ function check_cookie(&$pun_user)
 	$cookie = array('user_id' => 1, 'password_hash' => 'Guest');
 
 	require_once('obsolete/users.php');
-	try
+	require_once('punbb-old-user.php');
+//	try
 	{
 		$me = new User();
 	}
-	catch(Exception $e)
+//	catch(Exception $e)
 	{
-		$me = NULL;
+//		$me = NULL;
 	}
+
 //	echo "Check cookie: me=".($me->data('id'));
 
 	if($me && $me->data('id') > 1)
@@ -469,7 +471,7 @@ function get_title($user)
 	// If not already loaded in a previous call, load the cached ranks
 	if ($pun_config['o_ranks'] == '1' && empty($pun_ranks))
 	{
-		@include PUN_ROOT.'cache/cache_ranks.php';
+		include PUN_ROOT.'cache/cache_ranks.php';
 		if (!defined('PUN_RANKS_LOADED'))
 		{
 			require_once PUN_ROOT.'include/cache.php';

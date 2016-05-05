@@ -223,7 +223,7 @@ class user_reputation extends balancer_board_page
 //		class_load('cache_group', "user-{$uid}-reputation")->clean();
 
 		include_once("inc/navigation.php");
-		return go($this->url_ex($this->total_pages(), false));
+		return go(preg_replace('/\?.+$/', '', $this->url_ex($this->total_pages()), false));
 	}
 
 	function access() { return $this; }

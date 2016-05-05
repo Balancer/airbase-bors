@@ -38,13 +38,15 @@
 					$cids2 = $cids;
 					$checked[] = $cid;
 					foreach($db->get_array("SELECT id FROM categories WHERE parent = $cid ORDER BY disp_position") as $id)
+					{
 						if(!in_array($id, $cids2))
 							$cids2[] = $id;
+					}
 					$cids = $cids2;
 					$append = true;
 				}
 		} while($append);
-		
+
 		array_shift($cids);
 		return $cids;
 	}

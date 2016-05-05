@@ -58,13 +58,22 @@ $result = $db->query('SELECT f.id AS fid, f.forum_name, f.moderators, f.redirect
 if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
 
+$me = bors()->user();
+
+if(!$me)
+	message($lang_common['Bad request']);
+
 $cur_post = $db->fetch_assoc($result);
 $blog = bors_load('balancer_board_blog', $id);
 $post = bors_load('balancer_board_post', $id);
 $topic = $post->topic();
 $forum = $topic->forum();
 
-$me = bors()->user();
+if($post->warning() && $post->owner_id() == $me->id())
+	message("Нельзя редактировать оштрафованные сообщения");
+
+if($me->is_destructive() && $post->create_time() < time()-86400)
+	message("Деструктивным пользователям запрещено редактировать свои сообщения старше суток");
 
 $cur_post['message'] = $post->source();
 

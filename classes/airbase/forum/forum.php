@@ -68,12 +68,12 @@ class airbase_forum_forum extends bors_page_db
 		$forums = bors_find_all('airbase_forum_forum', array(
 			'redirect_url IS NULL',
 		));
-		
+
 		$result = array();
 		foreach($forums as $f)
 			if(!$f->can_read())
 				$result[] = $f->id();
-		
+
 		return $result;
 	}
 }

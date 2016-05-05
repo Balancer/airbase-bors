@@ -27,7 +27,7 @@
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
-	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-787-min.css" />
+	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-791-min.css" />
 	<link rel="canonical" href="{$this->url_ex(['page'=>$this->page(),'force'=>false])}" />
 
 <!--[if IE]><style>
@@ -171,7 +171,7 @@ if(me_id > 1 && me_hash) {
 
 		<dl class="box">
 		<dt class="nav">{module class="module_nav_top"}</dt>
-		<dd>
+		<dd><!-- {$this->internal_uri_ascii()}: {$this->get('image')} -->
 			{if $this->get('image')}
 				{$this->image()->thumbnail('128x128(up,crop)')->html(['append' => 'style="float: right"'])}
 			{/if}
@@ -284,6 +284,10 @@ if(me_id > 1 && me_hash) {
 	</div></div> <!-- end center div -->
 
 	<div class="tpl_column_left" id="inleft"><div class="inleft">
+
+	<dl class="box w200" style="background-color: black">
+		<dd><a href="http://www.balancer.ru/g/p4172471" target="_blank" style="color: white"><img src="http://www.airbase.ru/cache/staff/varban/img/190x/varban.jpg" width="188" height="244" /><br/><center>Погиб Варбан</center></a></dd>
+	</dl>
 
 	{0|balancer_anniversary_html}
 {*	<dl class="box w200"> *}

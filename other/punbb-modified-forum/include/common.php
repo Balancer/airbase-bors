@@ -70,7 +70,7 @@ require_once PUN_ROOT.'include/functions.php';
 if (@ini_get('register_globals'))
 	unregister_globals();
 
-@include PUN_ROOT.'config.php';
+include PUN_ROOT.'config.php';
 
 // If PUN isn't defined, config.php is missing or corrupt
 if (!defined('PUN'))
@@ -149,7 +149,7 @@ if ($pun_config['o_maintenance'] && $pun_user['g_id'] > PUN_ADMIN && !defined('P
 	maintenance_message();
 
 // Load cached bans
-@include PUN_ROOT.'cache/cache_bans.php';
+include PUN_ROOT.'cache/cache_bans.php';
 if (!defined('PUN_BANS_LOADED'))
 {
 	require_once PUN_ROOT.'include/cache.php';
