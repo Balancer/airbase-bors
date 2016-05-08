@@ -77,6 +77,8 @@ function main()
 
 	$uids = array_merge($uids, array_keys($twinks));
 
+	$uids = array_diff($uids, [108646]); // Оставляем Волк'а.
+
 	$posts = bors_each('balancer_board_post', [
 		'create_time>' => time() - 86400*30,
 		'owner_id IN' => $uids,
