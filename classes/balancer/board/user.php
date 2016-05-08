@@ -1,6 +1,6 @@
 <?php
 
-throw new Exception("Load old code");
+// throw new Exception("Load old code");
 
 class balancer_board_user extends forum_user
 {
