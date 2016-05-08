@@ -36,7 +36,7 @@
 	"autoload": {
 		"classmap": ["classes/"],
 		"psr-4": {
-			"Airbase\\": "src"
+			"Airbase\\": "src/"
 		}
 	},
 
