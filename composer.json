@@ -36,7 +36,12 @@
     },
 
     "autoload": {
-		"classmap": ["classes/"],
-		"smarty-plugins": ["engines/smarty/plugins"]
+		"classmap": ["classes/"]
+    },
+
+    "extra": {
+        "bors-classes": "classes",
+        "bors-templates": "templates",
+        "bors-smarty-plugins": "engines/smarty/plugins"
     }
 }
