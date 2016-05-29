@@ -36,6 +36,7 @@
     },
 
     "autoload": {
-		"classmap": ["classes/"]
+		"classmap": ["classes/"],
+		"smarty-plugins": ["engines/smarty/plugins"]
     }
 }
