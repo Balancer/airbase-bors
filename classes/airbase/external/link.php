@@ -62,7 +62,7 @@ class airbase_external_link extends balancer_board_object_db
 	{
 		$max_length = defval($params, 'max_length', 1000000);
 
-		$req = blib_http::get_ex($url, array('is_raw' => false));
+		$req = blib_http::get_ex($url, ['is_raw' => false]);
 		$content = $req['content'];
 
 		// Запоминаем не более одного мегабайта, а то по max_allowed_packet можно влететь.
@@ -70,7 +70,7 @@ class airbase_external_link extends balancer_board_object_db
 			$content = substr($content, 0, $max_length);
 
 		if($content)
-			$data = bors_external_common::content_extract($url, array('html' => $content));
+			$data = bors_external_common::content_extract($url, ['html' => $content]);
 		else
 		{
 			$data['title'] = self::normalize(blib_urls::host($url));
@@ -120,11 +120,9 @@ class airbase_external_link extends balancer_board_object_db
 
 		$id = blib_string::base64_encode2($url);
 
-		$img = blib_str_charset::utf8_fix("http://www.balancer.ru/_cg/_st/{$host_parts[0]}/{$host_parts[1][0]}/{$host_parts[1]}/{$id}-400x300.png");
-		// Дёрнем, чтобы сгенерировалось
-		$x = blib_http::get_bin($img, array('timeout' => 10));
-
-		$img = "[img={$img} 200x200 left flow nohref resize]";
+		$thumb_url = "http://200x150.st.cg.a0z.ru/".base64_encode($url).".jpg";
+		$img = "<div class=\"rs_box_nd float_left mtop8\" style=\"width:200px; height:150px;\">"
+			."<img src=\"{$thumb_url}\" width=\"200\" height=\"150\" alt=\"\" class=\"main\"></div>";
 
 		$data['title'] = self::normalize(blib_urls::host($url));
 		$data['bbshort'] = "[round_box]{$img}[h][a href=\"{$url}\"]{$data['title']}[/a][/h]

@@ -384,7 +384,7 @@ class balancer_board_user extends forum_user
 	function infonesy_export()
 	{
 		$data = [
-			'UUID'		=> 'ru.balancer.board.user.'.$this->id(),
+			'UUID'		=> $this->infonesy_uuid(),
 			'EmailMD5'	=> md5($this->email()),
 			'Node'		=> 'ru.balancer.board',
 			'Title'		=> $this->title(),

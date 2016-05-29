@@ -811,4 +811,31 @@ function avatar_thumb($geo)
 			@$pcr[$r->category_id()] += $r->summ() * $r->voter()->weight();
 		}
 	}
+
+	function is_oldtimer() { return false; }
+
+	function titled_link()
+	{
+		$css = [];
+
+		if($this->is_admin_banned())
+			$css[] = 's';
+
+		if($this->is_banned())
+			$css[] = 'gray';
+
+		if($this->is_admin())
+			$css[] = 'red';
+		elseif($this->is_moderator())
+			$css[] = 'red';
+		elseif($this->is_coordinator())
+			$css[] = 'orange';
+		elseif($this->is_oldtimer())
+			$css[] = 'green';
+
+		if($css)
+			$css = ' class="'.join(' ', $css).'"';
+
+		return "<a href=\"{$this->url()}\"{$css}>{$this->title()}</a>";
+	}
 }

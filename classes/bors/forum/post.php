@@ -825,9 +825,9 @@ function body()
 		return $this->owner();
 	}
 
-	function snip($size = 200)
+	function snip($size = 200, $show_hidden = false)
 	{
-		if(!$this->is_public())
+		if(!$this->is_public() && !$show_hidden)
 			return ec('<i>Сообщение с ограниченным доступом</i>');
 
 		$text = $this->body();
