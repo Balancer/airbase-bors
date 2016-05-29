@@ -830,7 +830,7 @@ function body()
 		if(!$this->is_public() && !$show_hidden)
 			return ec('<i>Сообщение с ограниченным доступом</i>');
 
-		$text = $this->body();
+		$text = ($c = $this->cache()) ? $c->body() : '~~~'.$this->source();
 		$text = restore_format($text);
 		$text = preg_replace('!<span class="q">.+?</span>!', ' … ', $text);
 		// Снос спойлеров

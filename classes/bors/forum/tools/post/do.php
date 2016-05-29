@@ -11,12 +11,24 @@ class forum_tools_post_do extends bors_page
 		$post = bors_load('balancer_board_post', intval($this->id()));
 		$topic = $post->topic();
 
-		if(!bors()->user() || !bors()->user()->group()->is_coordinator())
+		$action = $this->page();
+
+		$allowed = false;
+		if(bors()->user())
+		{
+			if(bors()->user()->group()->is_coordinator())
+				$allowed = true;
+
+			if($action == 'drop-cache')
+				$allowed = true;
+		}
+
+		if(!$allowed)
 			return bors_message(ec('У Вас нет прав для выполнения этой операции'));
 
 		config_set('lcml_cache_disable', true);
 
-		switch($this->page())
+		switch($action)
 		{
 			case 'drop-cache':
 
@@ -32,8 +44,10 @@ class forum_tools_post_do extends bors_page
 				)))
 				{
 					foreach($objects as $obj)
+					{
 						if($t = $obj->target())
 							$t->clear_thumbnails();
+					}
 				}
 
 				$votes = $post->score();

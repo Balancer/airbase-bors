@@ -30,7 +30,10 @@
 
 		"kzykhys/git": "*",
 		"gorkalaucirica/hipchat-v2-api-client": "*",
-		"kix/mdash": "*"
+		"kix/mdash": "*",
+
+		"vexxhost/cloud-flare-api": "*"
+
 	},
 
 	"autoload": {

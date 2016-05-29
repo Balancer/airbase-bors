@@ -4,7 +4,6 @@ class balancer_board_blog extends forum_blog
 {
 	function extends_class_name() { return 'forum_blog'; }
 
-
 	static function create($data)
 	{
 		throw new Exception("Try to create post by broken legacy");

@@ -101,7 +101,7 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			if(in_array($attach->id(), $shown_attache_ids))
 				return NULL;
 
-			return $attach->html(640);
+			return $attach->html('640x480');
 		}
 
 		$html = array();
@@ -122,9 +122,16 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 		$size = defval($args, 'geo');
 
 		if(preg_match('/\d*x\d*/', $size))
-			$geo = $size;
+		{
+			$geo = $size.'(up,crop)';
+			list($w, $h) = explode('x', $size);
+		}
 		else
-			$geo = "{$size}x{$size}";
+		{
+			$geo = "{$size}x{$size}(up,crop)";
+			$w = $size;
+			$h = $size;
+		}
 
 //		if(config('is_developer')) { var_dump($this->data); exit(); }
 
@@ -134,36 +141,12 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			$full_url = "http://files.balancer.ru/forums/attaches/" . $this->location();
 			$thumb_url = "http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/{$geo}/$1", $this->location());
 
-			$image = $this->image();
+			$thumb = "<a href=\"{$full_url}\" class=\"cloud-zoom thumbnailed-image-link\" id=\"zoom-"
+				.rand()."\" rel=\"position:'inside'\" title=\""
+				.htmlspecialchars($this->title())."\">";
 
-			if($image)
-			{
-				try
-				{
-					$thumbnail = $image->thumbnail($geo);
-				}
-				catch(Exception $e)
-				{
-					$thumbnail = false;
-				}
-			}
-			else
-				$thumbnail = false;
-
-			if($thumbnail && $thumbnail->width() && $thumbnail->height())
-			{
-				$thumb = "<a href=\"{$full_url}\" class=\"cloud-zoom thumbnailed-image-link\" id=\"zoom-"
-					.rand()."\" rel=\"position:'inside'\" title=\""
-					.htmlspecialchars($this->title())."\">";
-
-				$thumb .= "<img src=\"{$thumb_url}\" {$thumbnail->wxh()} alt=\"\" class=\"main\" /></a>";
-				$width = $thumbnail->width();
-			}
-			else
-			{
-				$thumb = ec('Ошибка изображения ').$full_url;
-				$width = 300;
-			}
+			$thumb .= "<img src=\"{$thumb_url}\" width=\"$w\" height=\"$h\" alt=\"\" class=\"main\" /></a>";
+			$width = $w;
 		}
 		elseif(preg_match("!^(mp3)$!i", $this->extension()))
 		{

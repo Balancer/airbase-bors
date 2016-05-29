@@ -76,7 +76,7 @@ class balancer_board_user extends forum_user
 	{
 		$warnings = $this->warnings();
 
-		if(is_object($this->is_banned()))
+		if($this->is_admin_banned())
 			return "<span style=\"color: red; font-size: 7pt\">админ. бан</span>";
 
 		if(!$warnings)

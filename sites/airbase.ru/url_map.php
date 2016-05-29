@@ -33,6 +33,8 @@ bors_vhost_routes('airbase.ru', [
 	'(/)forum/(\d+/\d+)/(\d+)\.htm => forum_topic_ubb(2,3)',
 	'(/)forum/(\d+/\d+)/(\d+)/?$ => forum_topic_ubb(2,3)',
 
+	'/forum/smilies/? => balancer_board_smilies',
+
 	'(/news/\d{4}/\d{1,2}/\d{1,2}/)(\d+)\.html => airbase_news_page(2)',
 
 	'(.*/)index\.htm => common_redirect(1)',

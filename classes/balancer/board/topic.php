@@ -311,11 +311,12 @@ class balancer_board_topic extends forum_topic
 			'topic_id' => $this->id(),
 			'width>=' => 100,
 			'height>=' => 100,
-			'target_class_id' => 202, // airbase_image
+			'target_class_id IN' => [202, 208], // airbase_image, balancer_board_image
 			'`i`.extension IN ("jpg", "jpeg", "png")',
 			'full_file_name NOT LIKE "%/_cg/%"',
 			'order' => '-post_id',
 		));
+
 /*
 		if(config('is_debug'))
 		{
@@ -376,6 +377,9 @@ class balancer_board_topic extends forum_topic
 
 			exit('?'. $this->id());
 		}
+
+//		if(config('is_debug'))
+//			throw new Exception("Set image_id = 0");
 
 		$this->set('image_id', 0);
 
