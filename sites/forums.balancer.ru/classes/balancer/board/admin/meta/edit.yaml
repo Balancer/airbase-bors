@@ -1,3 +1,0 @@
-extends: bors_admin_meta_edit
-config_class: balancer_board_admin_config
-auto_map: true

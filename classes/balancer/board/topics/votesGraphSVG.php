@@ -10,7 +10,7 @@ class balancer_board_topics_votesGraphSVG extends bors_image_svg
 	{
 		if(bors()->client()->is_bot())
 		{
-			debug_hidden_log('002', 'bot trapped!');
+			bors_debug::syslog('002', 'bot trapped!');
 			return go('http://www.balancer.ru/forum/');
 		}
 
@@ -19,7 +19,7 @@ class balancer_board_topics_votesGraphSVG extends bors_image_svg
 
 	function image()
 	{
-//		debug_hidden_log('003', 'test user');
+//		bors_debug::syslog('003', 'test user');
 
 		$topic_id = $this->id();
 		$topic = bors_load('balancer_board_topic', $topic_id);

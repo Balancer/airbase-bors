@@ -8,7 +8,7 @@ class lor_board_topic_usersGraphSVG extends bors_image_svg
 	{
 		if(bors()->client()->is_bot())
 		{
-//			debug_hidden_log('002', 'bot trapped!');
+//			bors_debug::syslog('002', 'bot trapped!');
 			return go('http://www.balancer.ru/forum/');
 		}
 
@@ -17,7 +17,7 @@ class lor_board_topic_usersGraphSVG extends bors_image_svg
 
 	function image()
 	{
-//		debug_hidden_log('001', 'check for lor_board_topic_usersGraphSVG');
+//		bors_debug::syslog('001', 'check for lor_board_topic_usersGraphSVG');
 
 		require_once('inc/http.php');
 
@@ -72,7 +72,7 @@ class lor_board_topic_usersGraphSVG extends bors_image_svg
 					$answ = $starter;
 				}
 				else
-					debug_hidden_log('lor', "Unknown string '$s'");
+					bors_debug::syslog('lor', "Unknown string '$s'");
 
 
 				if(!$starter)
@@ -115,7 +115,7 @@ class lor_board_topic_usersGraphSVG extends bors_image_svg
 		}
 
 		$this->edges_count = count($edges);
-//		debug_hidden_log('001', "Total edges LOR: {$this->edges_count}", false);
+//		bors_debug::syslog('001', "Total edges LOR: {$this->edges_count}", false);
 
 		$title = "Граф взаимных ответов участников темы «{$title}»";
 
@@ -172,7 +172,7 @@ class lor_board_topic_usersGraphSVG extends bors_image_svg
 	{
 		$base = max($this->edges_count, 5);
 		$ttl = rand(10*$base, 20*$base);
-//		debug_hidden_log('001', "TTL LOR for {$this->edges_count} = $ttl", false);
+//		bors_debug::syslog('001', "TTL LOR for {$this->edges_count} = $ttl", false);
 		return $ttl;
 	}
 }

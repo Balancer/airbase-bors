@@ -8,7 +8,7 @@ class balancer_balabot_parser extends bors_object
 
 	function do_work($data)
 	{
-//		debug_hidden_log('users_clients_balabot_parser', print_r($data['payload'], true));
+//		bors_debug::syslog('users_clients_balabot_parser', print_r($data['payload'], true));
 
 		$this->data = $data;
 
@@ -18,7 +18,7 @@ class balancer_balabot_parser extends bors_object
 		$this->from = $data['payload']['from'];
 		$this->message = trim($data['payload']['body']);
 
-		debug_hidden_log('balabot_talks', "{$this->from}: {$this->message}", false);
+		bors_debug::syslog('balabot_talks', "{$this->from}: {$this->message}", false);
 
 		if(preg_match('/^\?\s+(.+)$/s', $this->message, $m))
 			return $this->do__search(trim($m[1]));
@@ -50,7 +50,7 @@ class balancer_balabot_parser extends bors_object
 				&& method_exists($this, $method = 'do__'.$m[1]))
 			return $this->$method(trim($m[2]));
 
-		debug_hidden_log('balabot_error', 'Incorrect reenter for '.$this->message);
+		bors_debug::syslog('balabot_error', 'Incorrect reenter for '.$this->message);
 		return $this->send('Внутренняя ошибка. Администратор извещён о детаях');
 	}
 
@@ -59,7 +59,7 @@ class balancer_balabot_parser extends bors_object
 		if(!preg_match('/^([\w\.\-]+@[\w\.\-]+)/', $this->from, $m))
 		{
 			$this->send('Ошибка формата JID: '.$this->from);
-			debug_hidden_log('balabot_error', 'Ошибка формата JID: '.$this->from);
+			bors_debug::syslog('balabot_error', 'Ошибка формата JID: '.$this->from);
 			return NULL;
 		}
 
@@ -101,7 +101,7 @@ class balancer_balabot_parser extends bors_object
 		);
 
 		$client->doBackground('balabot.jabber.send', serialize($data));
-		debug_hidden_log('balabot_talks', "BalaBOT: $message", false);
+		bors_debug::syslog('balabot_talks', "BalaBOT: $message", false);
 	}
 
 	//**************************************************************************************

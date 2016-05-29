@@ -116,7 +116,7 @@ class airbase_images_site extends airbase_image
 		if(!is_writable($lp))
 		{
 			bors_use('debug_hidden_log');
-			debug_hidden_log('access_error', "Can't write to ".$lp);
+			bors_debug::syslog('access_error', "Can't write to ".$lp);
 			return NULL;
 		}
 

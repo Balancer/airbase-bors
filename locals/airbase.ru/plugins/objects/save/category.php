@@ -14,7 +14,7 @@
 
 		$data = array();
 
-		$db = new DataBase('AIRBASE');
+		$db = new driver_mysql('AIRBASE');
 		
 		$data['list'] = $db->get_array("
 			SELECT DISTINCT 

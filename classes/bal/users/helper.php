@@ -93,7 +93,6 @@ class bal_users_helper extends bors_object
 		extract($attrs);
 
 		$domains = config('balancer_board_domains');
-
 		foreach(array('user_id' => $this->id(), 'cookie_hash' => $cookie_hash, 'isa' => $is_admin) as $k => $v)
 			SetCookie($k, $v, $expired, "/", '.'.$domain);
 

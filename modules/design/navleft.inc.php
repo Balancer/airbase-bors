@@ -22,7 +22,7 @@
 				{
 					$child = bors_load($child_url);
 					if(!$child)
-						debug_hidden_log('navigation-error', "Can't load '$child_url'");
+						bors_debug::syslog('navigation-error', "Can't load '$child_url'");
 
 					if($child && $child->nav_name())
 						$data[$child->url()] = array(

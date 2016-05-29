@@ -4,7 +4,6 @@ class balancer_board_blog extends forum_blog
 {
 	function extends_class_name() { return 'forum_blog'; }
 
-
 	static function create($data)
 	{
 		throw new Exception("Try to create post by broken legacy");
@@ -112,7 +111,7 @@ class balancer_board_blog extends forum_blog
 
 		if(empty($topic))
 		{
-			debug_hidden_log('lost_topic', "Lost topic {$this->topic_id()} for post {$this}");
+			bors_debug::syslog('lost_topic', "Lost topic {$this->topic_id()} for post {$this}");
 			return;
 		}
 

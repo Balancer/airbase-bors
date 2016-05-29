@@ -1,7 +1,0 @@
-extends: bors_admin_meta_main
-access_engine: balancer_board_access_admin
-auto_map: true
-
-main_class: balancer_board_category
-order: sort_order
-items_per_page: 50

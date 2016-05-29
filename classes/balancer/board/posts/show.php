@@ -41,7 +41,7 @@ class balancer_board_posts_show extends bors_view
 	{
 		if(!($topic = $this->post()->topic()))
 		{
-			debug_hidden_log('error_post_lost', "Lost post (not found topic {$this->post()->topic_id()}) ".$this->post()->id(), false);
+			bors_debug::syslog('error_post_lost', "Lost post (not found topic {$this->post()->topic_id()}) ".$this->post()->id(), false);
 			return bors_message(ec("Тема данного сообщения была утеряна<br/>\n=====================================<br/>\n<small>").lcml_bbh($this->post()->source())."</small>");
 		}
 

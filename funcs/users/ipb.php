@@ -46,7 +46,7 @@
             }
         }
 
-        $db = new DataBase('USERS');
+        $db = new driver_mysql('USERS');
 		
         if($user && !preg_match("!^\d+$!", $user))
             $member_id = $db->get("SELECT `id` FROM `forums_airbase_ru`.`ib_members` WHERE `name` LIKE '".addslashes($user)."'", false);
@@ -102,7 +102,7 @@
         if(!$member_id)
             return false;
 
-        $db = new DataBase('USERS');
+        $db = new driver_mysql('USERS');
         if(empty($forums_data[$key]))
             $db->store('users_data',"`member_id`=$member_id AND `key`='".addslashes($key)."'",array('member_id'=>$member_id,'key'=>$key,'value'=>$value));
         else
@@ -138,7 +138,7 @@
         if(is_global_key('user_data_array',$member_id.'_'.$key))
             return global_key('user_data_array',$member_id.'_'.$key);
 
-        $db = new DataBase('USERS');
+        $db = new driver_mysql('USERS');
         $value = $db->get_array("SELECT `value` FROM `users_data` WHERE `member_id`=$member_id AND `key`='".addslashes($key)."'");
 
         if(!$value) $value=$def;
@@ -150,7 +150,7 @@
     {
         if(!$member_id = get_user($user)) return false;
 
-        $db = new DataBase('USERS');
+        $db = new driver_mysql('USERS');
 
         $fields=array();
         foreach($value as $v)
@@ -170,7 +170,7 @@
 
     function get_member_id_by_name($name)
     {
-        $db = new DataBase('forums_airbase_ru');
+        $db = new driver_mysql('forums_airbase_ru');
         return intval($db->get("SELECT `id` FROM `ib_members` WHERE `name`='".addslashes($name)."'"));
     }
 

@@ -14,7 +14,7 @@
 
 		$query .= " ORDER BY q.var, q.value";
 
-		$db = new DataBase('l2jdb','la2','la2kkk');
+		$db = new driver_mysql('l2jdb','la2','la2kkk');
 
 		$total = $db->get("SELECT COUNT(*) $query");
 		include_once('funcs/design/page_split.php');

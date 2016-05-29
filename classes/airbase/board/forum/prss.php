@@ -20,7 +20,7 @@ class airbase_board_forum_prss extends base_rss
 
 	function rss_items()
 	{
-//		debug_hidden_log('rss-catch', "canr=".$this->forum()->can_read().", is_public_access=".$this->forum()->is_public_access());
+//		bors_debug::syslog('rss-catch', "canr=".$this->forum()->can_read().", is_public_access=".$this->forum()->is_public_access());
 
 		$tids = $this->db('AB_FORUMS')->select_array('topics', 'DISTINCT(id)', array(
 			'last_post>' => time() - 86400,

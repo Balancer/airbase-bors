@@ -835,6 +835,8 @@ function avatar_thumb($geo)
 
 		if($css)
 			$css = ' class="'.join(' ', $css).'"';
+		else
+			$css = '';
 
 		return "<a href=\"{$this->url()}\"{$css}>{$this->title()}</a>";
 	}

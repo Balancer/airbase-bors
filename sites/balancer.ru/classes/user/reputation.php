@@ -32,7 +32,13 @@ class user_reputation extends balancer_board_page
 		return parent::pre_parse();
 	}
 
-	function url_ex($page) { return '/user/'.$this->id().'/reputation'.((!$page || $page == $this->default_page()) ? '/' : ','.$page.'.html'); }
+	function url_ex($page)
+	{
+		$url = '/user/'.$this->id().'/reputation'.((!$page || $page == $this->default_page()) ? '/' : ','.$page.'.html');
+		if(!empty($_SERVER['QUERY_STRING']))
+			$url .= '?'.$_SERVER['QUERY_STRING'];
+		return $url;
+	}
 
 	function body_data()
 	{
@@ -120,8 +126,8 @@ class user_reputation extends balancer_board_page
 			return bors_message(ec("Не задан ID пользователя."));
 
 		$me = bors()->user();
-		$dbf = new DataBase(config('punbb.database'));
-		$dbu = new DataBase('USERS');
+		$dbf = new driver_mysql(config('punbb.database'));
+		$dbu = new driver_mysql('USERS');
 		$me_id = $me->id();
 
 		if($me_id == 1)

@@ -5,7 +5,7 @@
 {assign var="p" value=$x->object()}
 &nbsp;&nbsp;&nbsp;
 {if $p->warning_id() >0 }<s style="font-size: 8pt">{/if}
-<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$p->titled_link()} {$p->score_colorized()}<br/>
+<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$p->titled_url_for_igo()} {$p->score_colorized()}<br/>
 {if $p->warning_id()}</s>{/if}
 {/foreach}
 </dd>
@@ -18,7 +18,7 @@
 {assign var="p" value=$x->object()}
 &nbsp;&nbsp;&nbsp;
 {if $p->warning_id() > 0}<s style="font-size: 8pt">{/if}
-<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$p->titled_link()} {$p->score_colorized()}<br/>
+<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$p->titled_url_for_igo()} {$p->score_colorized()}<br/>
 {if $p->warning_id()}</s>{/if}
 {/foreach}
 </dd>
@@ -31,7 +31,7 @@
 {assign var="p" value=$x->object()}
 &nbsp;&nbsp;&nbsp;
 {if $p->warning_id() >0}<s>{/if}
-<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$p->titled_link()} {$p->score_colorized()}<br/>
+<img src="http://www.balancer.ru/_bors/i/thumb_{if $x->score() > 0}up{else}down{/if}.gif" />&nbsp;{$p->titled_url_for_igo()} {$p->score_colorized()}<br/>
 {if $p->warning_id() >0}</s>{/if}
 {/foreach}
 </dd>

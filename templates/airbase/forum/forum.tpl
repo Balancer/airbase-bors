@@ -32,6 +32,7 @@
 			{/if}
 		</td>
 		{/if}
+
 		<td id="vtt_{$t->id()}">
 			<div class="title_actions"><a href="{$t->url_ex('new')}"{if $updated} class="b{if $t->get('too_old')} red{/if}"{/if}{if $updated_count > 0  and $updated_count < 10} style="opacity: {if $updated_count >= 5}0.8{else}0.5{/if}"{/if}>{$t->title()}</a>
 		{if $t->total_pages() > 1}
@@ -52,11 +53,11 @@
 		</div>
 		{if $t->num_replies() > 0}
 			{if $updated_count > 0 && $t->get('first_post')}
-			<div class="forum-topic-snippet-post"><span class="time">{$t->first_post()->create_time()|airbase_time}, {$t->first_post()->author_name()}:</span> {$t->first_post()->snip()}</i></div>
+			<div class="forum-topic-snippet-post"><span class="time">{$t->first_post()->create_time()|airbase_time}, {$t->first_post()->author_name()}:</span> {$t->first_post()->snip(256,$show_hidden)}</i></div>
 			{/if}
 			{if $updated_count == 0 or $updated_count > 1}
 			<div class="forum-topic-snippet-post"><span class="time">{$t->last_post_create_time()|airbase_time}
-			{if $t->get('last_post')}, {$t->last_post()->author_name()}:</span> {$t->last_post()->snip()}{/if}</i></div>
+			{if $t->get('last_post')}, {$t->last_post()->author_name()}:</span> {$t->last_post()->snip(256,$show_hidden)}{/if}</i></div>
 			{/if}
 		{/if}
 	</td>

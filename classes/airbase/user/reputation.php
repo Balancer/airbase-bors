@@ -168,7 +168,7 @@ class airbase_user_reputation extends balancer_board_object_db
 		$voter = $this->owner();
 		if(!$voter)
 		{
-			debug_hidden_log('fix-needed', "Unknown voter in ".$this->id());
+			bors_debug::syslog('fix-needed', "Unknown voter in ".$this->id());
 			return ec('Guest');
 		}
 

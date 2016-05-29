@@ -11,14 +11,15 @@ class balancer_board_users_untrustedPosts extends balancer_board_posts_list
 	function where()
 	{
 		$newby = array_keys(bors_find_all('balancer_board_user', array('create_time>' => time()-86400*7, 'num_posts>' => 0,'by_id' => true)));
-		$act_warns = array_keys(bors_find_all('balancer_board_user', array('warnings>' => 1, 'by_id' => true)));
+		$act_warns = array_keys(bors_find_all('balancer_board_user', array('warnings>' => 2, 'by_id' => true)));
+		$act_lowrep = array_keys(bors_find_all('balancer_board_user', array('reputation<' => -5, 'by_id' => true)));
 //		$tot_warns = array_keys(bors_find_all('balancer_board_user', array('warnings_total>' => 30, 'by_id' => true)));
 
-		$users = array_unique(array_merge($newby, $act_warns));
+		$users = array_unique(array_merge($newby, $act_warns, $act_lowrep));
 
 		return array_merge(parent::where(), array(
 			'poster_id IN' => $users,
-			'create_time>' => time()-86400,
+			'create_time>' => time()-86400*14,
 			'warning_id<=' => 0,
 		));
 	}

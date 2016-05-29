@@ -12,7 +12,7 @@ class forum_topic_ipbst extends bors_page
 		$topic = bors_load('balancer_board_topic', $this->id());
 		if(!$topic)
 		{
-			debug_hidden_log('incorrect-urls', $this->id());
+			bors_debug::syslog('incorrect-urls', $this->id());
 			return 'http://www.balancer.ru/forums/';
 		}
 

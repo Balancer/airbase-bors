@@ -2,9 +2,10 @@
 
 // bors_exit('Форум в стадии модификации базы данных. Минут 30 (до ~03:50) будет недоступен. Можете пока сходить на <a href="http://home.balancer.ru/mybb/index.php">Запасные форумы</a>.');
 
-include_once('engines/lcml.php');
-include_once('inc/browsers.php');
-include_once('inc/clients.php');
+require_once BORS_CORE.'/engines/lcml.php';
+require_once BORS_CORE.'/inc/browsers.php';
+require_once BORS_CORE.'/inc/clients.php';
+require_once BORS_CORE.'/inc/functions/text/truncate.php';
 
 class forum_post extends balancer_board_object_db
 {
@@ -114,7 +115,7 @@ function set_edited_by($v, $dbup = true) { return $this->set('edited_by', $v, $d
 function owner_id() { return @$this->data['owner_id']; }
 function set_owner_id($v, $dbup = true)
 {
-//	if($dbup && config('is_developer')) echo debug_trace();
+//	if($dbup && config('is_developer')) echo bors_debug::trace();
 	return $this->set('owner_id', $v, $dbup);
 }
 
@@ -128,7 +129,7 @@ function author_name()
 {
 	if(empty($this->data['author_name']))
 	{
-		debug_hidden_log('empty-data', 'no author name');
+		bors_debug::syslog('empty-data', 'no author name');
 		if($author = $this->owner())
 			$this->set_author_name($author->title(), true);
 		else
@@ -140,7 +141,7 @@ function author_name()
 }
 function set_author_name($v, $dbup = true)
 {
-//	if($dbup && config('is_developer')) echo debug_trace();
+//	if($dbup && config('is_developer')) echo bors_debug::trace();
 	return $this->set('author_name', $v, $dbup);
 }
 function answer_to_id() { return @$this->data['answer_to_id']; }
@@ -158,8 +159,8 @@ function set_have_answers($v, $dbup = true) { return $this->set('have_answers', 
 function score() { return @$this->data['score']; }
 function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
-	function body()
-	{
+function body()
+{
 		if($body = @$this->attr['body'])
 			return $body;
 
@@ -171,7 +172,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$this->set_body($body);
 
 		return blib_html::close_tags($body);
-	}
+}
 
 	function set_body($value, $dbupd = true)
 	{
@@ -210,7 +211,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	function set_topic_page($page, $dbupd)
 	{
 		if($page && !is_numeric($page)/*gettype($page) != 'integer'*/)
-			debug_hidden_log('type-mismatch-page', 'Set topic_page to '.gettype($page).'('.$page.')');
+			bors_debug::syslog('type-mismatch-page', 'Set topic_page to '.gettype($page).'('.$page.')');
 
 		$this->set('topic_page', $page, $dbupd);
 	}
@@ -222,7 +223,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		if($ps = $this->post_source())
 			return $ps;
 
-		debug_hidden_log('messages-lost-3', 'Empty post '.$this->id().' source!');
+		bors_debug::syslog('messages-lost-3', 'Empty post '.$this->id().' source!');
 		return '';
 	}
 
@@ -232,7 +233,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	{
 		if(!$message)
 		{
-			debug_hidden_log('data-lost', 'Set to empty post source!');
+			bors_debug::syslog('data-lost', 'Set to empty post source!');
 			bors_exit('Set to empty post source!');
 		}
 
@@ -258,20 +259,18 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		}
 		else
 		{
-			$html = lcml($this->post_source(),
-				array(
-					'cr_type' => 'save_cr',
-					'forum_type' => 'punbb',
-					'forum_base_uri' => 'http://www.balancer.ru/forum',
-					'sharp_not_comment' => true,
-					'html_disable' => 'direct',
-					'uri' => $this->internal_uri(),
-					'nocache' => true,
-					'self' => $this,
-					'container' => $this->topic(),
-					'fast' => $fast,
-				)
-			);
+			$html = lcml($this->post_source(), [
+				'cr_type' => 'save_cr',
+				'forum_type' => 'punbb',
+				'forum_base_uri' => 'http://www.balancer.ru/forum',
+				'sharp_not_comment' => true,
+				'html_disable' => 'direct',
+				'uri' => $this->internal_uri(),
+				'nocache' => true,
+				'self' => $this,
+				'container' => $this->topic(),
+				'fast' => $fast,
+			]);
 		}
 
 		return $html;
@@ -390,7 +389,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 			return $this->url_in_topic($topic);
 //			return dirname($topic->url()).'/p'.$this->id().'.html';
 
-		debug_hidden_log('empty topic', $this, false);
+		bors_debug::syslog('empty topic', $this, false);
 		return 'http://forums.balancer.ru/0000/00/p'.$this->id().'.html';
 //		require_once("inc/urls.php");
 //		return 'http://www.balancer.ru/'.strftime("%Y/%m/%d/post-", $this->modify_time()).$this->id().".html";
@@ -492,7 +491,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if(!($attach = bors_load('balancer_board_attach', $this->have_attach())))
 		{
-//			debug_hidden_log('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
+//			bors_debug::syslog('lost-objects', "Incorrect attach {$this->have_attach()} in post {$this->id()}");
 			return array();
 		}
 
@@ -510,7 +509,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 	{
 		return 0;
 
-//		$db = new DataBase(config('punbb.database'));
+//		$db = new driver_mysql(config('punbb.database'));
 //		return intval($db->get("SELECT COUNT(*) FROM posts WHERE answer_to = {$this->id}"));
 	}
 
@@ -831,7 +830,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		if(!$this->is_public() && !$show_hidden)
 			return ec('<i>Сообщение с ограниченным доступом</i>');
 
-		$text = $this->body();
+		$text = ($c = $this->cache()) ? $c->body() : '~~~'.$this->source();
 		$text = restore_format($text);
 		$text = preg_replace('!<span class="q">.+?</span>!', ' … ', $text);
 		// Снос спойлеров

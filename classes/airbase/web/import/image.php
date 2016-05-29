@@ -161,7 +161,7 @@ class airbase_web_import_image extends web_import_image
 				if(!is_writable(dirname($file)))
 				{
 					bors_use('debug_hidden_log');
-					debug_hidden_log('access_error', "Can't write to ".dirname($file));
+					bors_debug::syslog('access_error', "Can't write to ".dirname($file));
 					return "<a href=\"{$params['url']}\">{$params['url']}</a><small class=\"gray\"> [can't write '$file']</small>";
 				}
 
@@ -185,7 +185,7 @@ class airbase_web_import_image extends web_import_image
 						&& !preg_match('!img-fotki\.yandex\.ru/get/\d+!', $params['url'])
 					)
 				{
-//					debug_hidden_log('images-error', $params['url'].ec(': is not image. ').$content_type."\n".$content); // Это не картинка
+//					bors_debug::syslog('images-error', $params['url'].ec(': is not image. ').$content_type."\n".$content); // Это не картинка
 					return lcml_urls_title($params['url']).'<small> [not image]</small>';
 				}
 
@@ -232,7 +232,7 @@ class airbase_web_import_image extends web_import_image
 		{
 			if(!file_exists($file))
 			{
-				debug_hidden_log('error_lcml_tag_img', "Incorrect image {$params['url']}");
+				bors_debug::syslog('error_lcml_tag_img', "Incorrect image {$params['url']}");
 				return lcml_urls_title($params['url']).'<small> [image link error]</small>';
 			}
 

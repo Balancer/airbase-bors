@@ -28,7 +28,7 @@ class airbase_image extends bors_image
 /*
 		if(config('is_debug') && stripos($image->full_file_name(), 'BmpK_erCMAEkqmv.jpg'))
 		{
-			echo debug_trace();
+			echo bors_debug::trace();
 			echo '<xmp>';
 			var_dump($image->data, $image->thumbnail('96x96')->url());
 			exit();

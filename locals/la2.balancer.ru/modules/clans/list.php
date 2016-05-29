@@ -7,7 +7,7 @@
 
 		$res = "";
 
-        $db = new DataBase('l2jdb','la2', 'la2kkk');
+        $db = new driver_mysql('l2jdb','la2', 'la2kkk');
         $list = $db->get_array("SELECT * FROM `clan_data` WHERE `clan_level` > 0 ORDER BY `clan_level` DESC, `clan_name`;");
 
         $res .= "<table cellSpacing=\"0\" class=\"btab\" width=\"100%\">\n";

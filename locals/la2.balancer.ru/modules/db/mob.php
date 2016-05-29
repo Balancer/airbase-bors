@@ -15,7 +15,7 @@
 		if($cache->get('LBR:DB',"mob-$mob_id-3"))
 			return $cache->last();
 		
-		$db = new DataBase('l2jdb', 'la2', 'la2kkk');
+		$db = new driver_mysql('l2jdb', 'la2', 'la2kkk');
 		$para = $db->get("SELECT * FROM `npc` WHERE `id`=$mob_id", false);
 
 		if(!$para['name'])

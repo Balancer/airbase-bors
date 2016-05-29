@@ -27,12 +27,14 @@ class users_posts_chart extends balancer_board_page
 	function body_data()
 	{
 		$first = balancer_board_posts_pure::find([
+				'use_index' => 'poster_id__is_deleted__posted',
 				'poster_id' => $this->id(),
 				'is_deleted' => false,
 				'create_time>' => 86400,
 			])->order('create_time')->first();
 
 		$last = balancer_board_posts_pure::find([
+				'use_index' => 'poster_id__is_deleted__posted',
 				'poster_id' => $this->id(),
 				'is_deleted' => false,
 				'create_time<=' => time(),
@@ -52,6 +54,7 @@ class users_posts_chart extends balancer_board_page
 				$d9 = $d0 + 86400*$days;
 
 				if($cnt = balancer_board_posts_pure::find([
+					'use_index' => 'poster_id__is_deleted__posted',
 					'poster_id' => $this->id(),
 					'is_deleted' => false,
 					"posted BETWEEN $d0 AND $d9",

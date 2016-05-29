@@ -10,7 +10,7 @@ class balancer_board_users_reputationGraphSVG extends bors_image_svg
 	{
 		if(bors()->client()->is_bot())
 		{
-			debug_hidden_log('002', 'bot trapped!');
+			bors_debug::syslog('002', 'bot trapped!');
 			return go('http://www.balancer.ru/forum/');
 		}
 

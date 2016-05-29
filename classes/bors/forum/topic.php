@@ -485,7 +485,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 				$this->set_owner_id($first_post->owner() ? $first_post->owner()->id() : NULL, true);
 			}
 			else
-				debug_hidden_log('post_error', "Unknown first post $first_pid in {$this}->recalculate()");
+				bors_debug::syslog('post_error', "Unknown first post $first_pid in {$this}->recalculate()");
 
 			if($last_pid = $this->db()->select('posts', 'MAX(id)', array('topic_id='=>$this->id())))
 			{
@@ -500,7 +500,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 
 			}
 			else
-				debug_hidden_log('post_error', "Unknown last post $first_pid in {$this}->recalculate()");
+				bors_debug::syslog('post_error', "Unknown last post $first_pid in {$this}->recalculate()");
 
 			$this->repaging_posts($full_repaging ? 1 : -1);
 		}
@@ -540,15 +540,40 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		return dirname($this->static_file());
 	}
 
+	function cached_files()
+	{
+		$mask = $this->cache_dir().'/../../*/*/t'.$this->id().'*.html';
+		$files = glob($mask);
+
+		$mask = str_replace('htdocs', 'htdocs/cache-static', $mask);
+		$files += glob($mask);
+
+		foreach(cache_static::find(['target_class_name IN' => ['forum_topic', 'balancer_board_topic', 'forum_printable', 'forum_topic_rss'], 'target_id' => $this->id()])->all() as $x)
+			$files[] = $x->id();
+
+		if(!empty($_SERVER['HTTP_REFERER']))
+		{
+			$ud = parse_url($_SERVER['HTTP_REFERER']);
+			if(preg_match("!^(.*/t\d+)(,\d+)?--[^/]+\.html!", $ud['path'], $m))
+				$files += glob("/var/www/{$ud['host']}/htdocs/cache-static{$m[1]}*");
+		}
+
+//		if(config('is_developer'))
+//			~r($this->cache_dir(), $files, $mask);
+
+		return $files;
+	}
+
 	function cache_clean_self($page = NULL)
 	{
+		// Если указана только страница, то удаляется только она и всё.
 		if(!$page)
 			parent::cache_clean_self($page);
 
 		//TODO: подумать на тему неполной чистки.
-		foreach(glob($this->cache_dir().'/t'.$this->id().'*.html') as $f)
+		foreach($this->cached_files() as $f)
 		{
-			if(!preg_match("!/t\d+,(\d+)--[^/+]\.html$!", $f, $m) || ($m[1] > $this->total_pages()-3))
+//			if(!preg_match("!/t\d+,(\d+)--[^/]+\.html$!", $f, $m) || ($m[1] > $this->total_pages()-3))
 				if(file_exists($f))
 					unlink($f);
 		}
@@ -752,7 +777,7 @@ $(function() {
 	{
 		if(!$user)
 		{
-			debug_hidden_log('users_error', 'Попытка определить обновлялся ли топик для нерегистрированного пользователя');
+			bors_debug::syslog('users_error', 'Попытка определить обновлялся ли топик для нерегистрированного пользователя');
 			return false;
 		}
 

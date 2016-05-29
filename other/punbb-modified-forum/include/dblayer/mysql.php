@@ -56,7 +56,7 @@ class DBLayer
 			else
 			{
 //				bors_use('debug_trace');
-//				echo debug_trace();
+//				echo bors_debug::trace();
 				error('Unable to select database. MySQL reported: '.mysql_error(), __FILE__, __LINE__);
 			}
 		}

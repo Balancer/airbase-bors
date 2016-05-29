@@ -12,7 +12,7 @@
 			return;
 		}
 		
-        $db = new DataBase('l2jdb');
+        $db = new driver_mysql('l2jdb');
         $max = $db->get("select max(count) from online;");
 
 		$d = array();

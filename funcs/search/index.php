@@ -9,7 +9,7 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = new DataBase('SEARCH');
+		$db = new driver_mysql('SEARCH');
 
 		$Stemmer = new Lingua_Stem_Ru();
 				
@@ -55,7 +55,7 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = new DataBase('SEARCH');
+		$db = new driver_mysql('SEARCH');
 
 		$Stemmer = new Lingua_Stem_Ru();
 				
@@ -102,7 +102,7 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = new DataBase(config('punbb.database'));
+		$db = new driver_mysql(config('punbb.database'));
 
 		$Stemmer = new Lingua_Stem_Ru();
 				
@@ -154,7 +154,7 @@
 			return 0;
 			
 		if(!$db)
-			$db = new DataBase('SEARCH');
+			$db = new driver_mysql('SEARCH');
 
 		$Stemmer = new Lingua_Stem_Ru();
 		$word = $Stemmer->stem_word($word);
@@ -181,7 +181,7 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = new DataBase(config('punbb.database'));
+		$db = new driver_mysql(config('punbb.database'));
 
 		$Stemmer = new Lingua_Stem_Ru();
 				
@@ -285,7 +285,7 @@
 
 		include_once("include/classes/text/Stem_ru.php");
 			
-		$db = new DataBase(config('punbb.database'));
+		$db = new driver_mysql(config('punbb.database'));
 
 		$Stemmer = new Lingua_Stem_Ru();
 				

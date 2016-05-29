@@ -6,7 +6,7 @@
 		if($cache->get('LBR:Info', 'dbstat'))
 			return $cache->last;
 	
-		$hts = new DataBase('l2jdb','la2', 'la2kkk');
+		$hts = new driver_mysql('l2jdb','la2', 'la2kkk');
 		
 		$res = "<table class=\"btab\" cellSpacing=\"0\" width=\"100%\">\n";
 		$res .= "<tr><th colSpan=\"4\">На нашем сервере (всего / видов):</th></tr>\n";

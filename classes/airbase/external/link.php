@@ -58,7 +58,7 @@ class airbase_external_link extends balancer_board_object_db
 
 	}
 
-	static function register($url, $params = array(), $test=false)
+	static function register($url, $params=[], $test=false)
 	{
 		$max_length = defval($params, 'max_length', 1000000);
 
@@ -81,8 +81,6 @@ class airbase_external_link extends balancer_board_object_db
 
 		}
 
-//		$html = lcml($data['bbshort']);
-//		var_dump($url, $data);
 		if($test)
 			return $data;
 
@@ -134,8 +132,6 @@ class airbase_external_link extends balancer_board_object_db
 
 	static function find_or_register($url)
 	{
-		if(config('is_debug')) exit('stop:'.__FILE__.':'.__LINE__);
-
 		if(!($x = self::find($url)))
 		{
 			$x = self::register($url);
@@ -143,7 +139,7 @@ class airbase_external_link extends balancer_board_object_db
 		}
 		elseif(config('lcml_cache_disable_full'))
 		{
-			$data = self::register($url, array(), true); // При сбросе кеша выполняем все расчёты, но не регистрируем
+			$data = self::register($url, [], true); // При сбросе кеша выполняем все расчёты, но не регистрируем
 			$bbshort = $data['bbshort'];
 			$x->set_bbshort($bbshort);
 		}

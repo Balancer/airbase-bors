@@ -5,7 +5,7 @@
 		include_once("inc/lists.php");
 		include_once("other/punbb-modified-forum/include/pun_bal.php");
 	
-		$db = new DataBase('punbb');
+		$db = new driver_mysql('punbb');
 
 		$forums = $forums ? "AND t.forum_id IN (".join(",", blib_list::parse_condensed($forums)).")" : "";
 

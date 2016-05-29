@@ -18,7 +18,7 @@ class balancer_board_topics_blog extends balancer_board_paginated
 		$cat_url = $this->topic()->category()->url();
 		if(preg_match('/viewcat.php/', $cat_url))
 		{
-			debug_hidden_log('error_category', "Incorrect category '{$this->topic()->category()->debug_title()}' URL: ".$cat_url);
+			bors_debug::syslog('error_category', "Incorrect category '{$this->topic()->category()->debug_title()}' URL: ".$cat_url);
 			$cat_url = "http://www.balancer.ru/";
 		}
 

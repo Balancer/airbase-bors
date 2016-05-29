@@ -94,7 +94,7 @@ class balancer_board_mailing_stat extends bors_object_db
 				unlink($pdf);
 				break;
 			default:
-				debug_hidden_log('mailing-errors', "Unknown mail format {$user_stat->mail_format()} at id {$user_stat->mail_format()->id()}");
+				bors_debug::syslog('mailing-errors', "Unknown mail format {$user_stat->mail_format()} at id {$user_stat->mail_format()->id()}");
 				break;
 		}
 	}

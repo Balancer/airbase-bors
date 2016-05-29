@@ -1,6 +1,6 @@
 <?php
 
-bors_function_include('time/smart_time');
+require_once BORS_CORE.'/inc/functions/time/smart_time.php';
 
 class balancer_board_main extends balancer_board_page
 {
@@ -36,7 +36,7 @@ class balancer_board_main extends balancer_board_page
 	{
 		$fw = $this->forums_where();
 
-		$new_topics = bors_find_all('balancer_board_topic', array_merge([
+		$new_topics = bors_find_all($this->app()->topic_class(), array_merge([
 			'order' => '-create_time',
 			'limit' => 10,
 			'closed' => 0,
