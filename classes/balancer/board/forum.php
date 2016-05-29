@@ -143,7 +143,7 @@ class balancer_board_forum extends forum_forum
 		$file = $storage.'/'.$this->infonesy_uuid().'.json';
 
 		$data = [
-			'UUID'		=> 'ru.balancer.board.forum.'.$this->id(),
+			'UUID'		=> $this->infonesy_uuid(),
 			'Node'		=> 'ru.balancer.board',
 			'Title'		=> $this->title(),
 			'Description'		=> $this->description(),

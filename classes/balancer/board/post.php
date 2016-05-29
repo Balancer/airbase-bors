@@ -29,7 +29,7 @@ class balancer_board_post extends forum_post
 			'strip' => 1024, // - сколько резать символов.
 		), $data);
 
-		return bors_templates_smarty::fetch('xfile:/var/www/bors/bors-airbase/templates/forum/post.html', $data);
+		return bors_templates_smarty::fetch('xfile:templates/forum/post.html', $data);
 	}
 
 	function html2()
@@ -52,7 +52,7 @@ class balancer_board_post extends forum_post
 			'strip' => 1024, // - сколько резать символов.
 		), $data);
 
-		return bors_templates_smarty::render_data('xfile:/var/www/bors/bors-airbase/templates/forum/post.text', $data);
+		return bors_templates_smarty::render_data('xfile:templates/forum/post.text', $data);
 	}
 
 	function auto_objects()
@@ -132,7 +132,7 @@ class balancer_board_post extends forum_post
 		foreach($this->direct_answers() as $a)
 			$summ += $a->answers_count($recount_child) + 1;
 
-//		debug_hidden_log('__answers', "{$this->debug_title}=$summ");
+//		bors_debug::syslog('__answers', "{$this->debug_title}=$summ");
 		return $this->set_answers_count_raw($summ, true);
 	}
 
@@ -354,7 +354,7 @@ class balancer_board_post extends forum_post
 		$meta = [
 			'UUID'		=> $this->infonesy_uuid(),
 			'Node'		=> 'ru.balancer.board',
-			'TopicUUID'	=> 'ru.balancer.board.topic.'.$this->topic_id(),
+			'TopicUUID'	=> $this->topic()->infonesy_uuid(),
 		];
 
 		if($t = $this->title())
@@ -364,7 +364,8 @@ class balancer_board_post extends forum_post
 			'Author'	=> [
 				'Title' => $this->owner()->title(),
 				'EmailMD5'	=> md5($this->owner()->email()),
-				'UUID'=> 'ru.balancer.board.user.'.$this->owner()->id() ],
+				'UUID'=> $this->owner()->infonesy_uuid(),
+			],
 			'Date'		=> date('r', $this->create_time()),
 			'Modify'	=> date('r', $this->modify_time()),
 			'Type'		=> $this->is_news() ? 'News' : 'Post',
@@ -389,8 +390,10 @@ class balancer_board_post extends forum_post
 			$meta['Attaches'] = $attach_list;
 		}
 
+		// symfony/yaml=*
 		$dumper = new Dumper();
 
+		// kix/mdash=*
 		$typo = new \EMT\EMTypograph;
 
 		$options = array(
@@ -461,7 +464,7 @@ class balancer_board_post extends forum_post
 
 	function is_news()
 	{
-		return !$this->answer_to_id() && $this->topic()->is_news();
+		return !$this->answer_to_id() && ($t = $this->topic()) && $t->is_news();
 	}
 
 	function root_post_id()
@@ -486,5 +489,10 @@ class balancer_board_post extends forum_post
 		$this->set('root_post_id', $prid);
 
 		return $prid;
+	}
+
+	function titled_url_for_igo()
+	{
+		return "<a href=\"{$this->url_for_igo()}\">{$this->title()}</a>";
 	}
 }

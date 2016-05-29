@@ -65,6 +65,9 @@ function main()
 		108646, // Волк, твинк Незнайко
 		108704, // Топорь, твинк Незнайко
 		109636, // Гром, твинк Незнайко
+		109825, // Fline104 -> Fline
+		109834, // Fline105 -> Fline
+		109835, // fline106@yandex.ru
 	];
 
 	foreach(bors_find_all('balancer_board_user', ['id IN' => $uids_for_utmx]) as $u)

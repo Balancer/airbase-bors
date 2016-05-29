@@ -562,22 +562,23 @@ class balancer_board_topic extends forum_topic
 		$file = $storage.'/'.$this->infonesy_uuid().'.json';
 
 		$data = [
-			'UUID'		=> 'ru.balancer.board.topic.'.$this->id(),
+			'UUID'		=> $this->infonesy_uuid(),
 			'Node'		=> 'ru.balancer.board',
 			'Title'		=> $this->title(),
 			'Date'		=> date('r', $this->create_time()),
 			'Modify'	=> date('r', $this->modify_time()),
 			'Type'		=> 'Topic',
-			'ForumUUID'	=> 'ru.balancer.board.forum.'.$this->forum_id(),
+			'ForumUUID'	=> $this->forum()->infonesy_uuid(),
 			'Keywords'		=> $this->keywords(),
 		];
 
 		if($owner = $this->owner())
 		{
-			$data['Author']		= $owner->title();
-			$data['AuthorMD']	= md5($owner->email());
-			$data['AuthorEmailMD5']	= md5($owner->email());
-			$data['AuthorUUID']	= 'ru.balancer.board.user.'.$owner->id();
+			$data['Author']		= [
+				'Title' 	=> $owner->title(),
+				'EmailMD5'	=> md5($owner->email()),
+				'UUID'		=> $owner->infonesy_uuid(),
+			];
 		}
 
 		$posts = [];
