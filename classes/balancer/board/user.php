@@ -1,6 +1,6 @@
 <?php
 
-throw new Exception("Load old code");
+// throw new Exception("Load old code");
 
 class balancer_board_user extends forum_user
 {
@@ -76,7 +76,7 @@ class balancer_board_user extends forum_user
 	{
 		$warnings = $this->warnings();
 
-		if(is_object($this->is_banned()))
+		if($this->is_admin_banned())
 			return "<span style=\"color: red; font-size: 7pt\">админ. бан</span>";
 
 		if(!$warnings)
@@ -166,7 +166,7 @@ class balancer_board_user extends forum_user
 		$client->addServer();
 		if($this->jabber())
 		{
-//			debug_hidden_log('balabot_talks', "Notify to {$this->jabber()} <= $text", false);
+//			bors_debug::syslog('balabot_talks', "Notify to {$this->jabber()} <= $text", false);
 			$client->doBackground('balabot.jabber.send', serialize(array('to' => $this->jabber(), 'message' => htmlspecialchars($text))));
 		}
 	}
@@ -175,7 +175,7 @@ class balancer_board_user extends forum_user
 	{
 		if($this->last_mailing() > time() - 3*24*3600)
 		{
-//			debug_hidden_log('_answer_test_mailing', "Skip notify to {$this->debug_title()} ({$this->email()}) as |$text|", false);
+//			bors_debug::syslog('_answer_test_mailing', "Skip notify to {$this->debug_title()} ({$this->email()}) as |$text|", false);
 			return;
 		}
 
@@ -360,6 +360,10 @@ class balancer_board_user extends forum_user
 		return $this->set('money', $this->money() + $amount, true);
 	}
 
+	function rpg_score()
+	{
+		return pow(3,$this->rpg_level());
+	}
 
 	function is_subscribed($topic_id)
 	{
