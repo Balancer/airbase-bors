@@ -8,7 +8,7 @@
 
 <table cellSpacing="0" class="btab" width="100%">
 <tr>
-	<th colSpan="4">Высшие оценки:</th>
+	<th colSpan="5">Высшие оценки:</th>
 	<th colSpan="3">Низшие оценки:</th>
 </tr>
 <tr>
@@ -16,9 +16,9 @@
 	<th>Пользователь</th>
 	<th>Репутация</th>
 	<th>RPG-уровень</th>
+	<th>Вес голоса</th>
 	<th>Пользователь</th>
 	<th>Репутация</th>
-	<th>RPG-уровень</th>
 </tr>
 {foreach $high as $idx => $u}
 <tr>
@@ -28,12 +28,12 @@
 		<a href="/user/{$u->id()}/reputation/">{$u->reputation_html()}</a>&nbsp;({$u->reputation()|sprintf:"%.1f"})
 	</td>
 	<td>{$u->rpg_level()}</td>
+	<td>{$u->rpg_score()}</td>
 {$ub=$low[$idx]}
 	<td>{$ub->titled_link()}</td>
 	<td>
 		<a href="/user/{$u->id()}/reputation/">{$ub->reputation_html()}</a>&nbsp;({$ub->reputation()|sprintf:"%.1f"})
 	</td>
-	<td>{$ub->rpg_level()}</td>
 </tr>
 {/foreach}
 </table>

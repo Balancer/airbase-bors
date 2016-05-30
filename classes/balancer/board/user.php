@@ -360,6 +360,10 @@ class balancer_board_user extends forum_user
 		return $this->set('money', $this->money() + $amount, true);
 	}
 
+	function rpg_score()
+	{
+		return pow(3,$this->rpg_level());
+	}
 
 	function is_subscribed($topic_id)
 	{

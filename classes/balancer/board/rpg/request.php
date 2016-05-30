@@ -104,6 +104,11 @@ class balancer_board_rpg_request extends balancer_board_object_db
 			."<input type=\"hidden\" name=\"score\" value=\"-1\">"
 			."<input type=\"submit\" value=\"Отклонить\">"
 			."</form>";
+		$actions[] = "<form action=\"http://forums.balancer.ru/rpg/requests/approve\" method=\"post\">"
+			."<input type=\"hidden\" name=\"rid\" value=\"{$this->id()}\">"
+			."<input type=\"hidden\" name=\"score\" value=\"0\">"
+			."<input type=\"submit\" value=\"Отозвать голос (если был)\">"
+			."</form>";
 		return join('', $actions);
 	}
 

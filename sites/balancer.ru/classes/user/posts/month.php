@@ -12,10 +12,10 @@ class user_posts_month extends balancer_board_page
 
 	private $year, $month;
 
-	function _configure()
+	function b2_configure()
 	{
 		list($this->year, $this->month) = explode('/', $this->args('page'));
-		return parent::_configure();
+		return parent::b2_configure();
 	}
 
 	function template()

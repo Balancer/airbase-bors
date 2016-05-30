@@ -8,7 +8,7 @@ class user_posts_day extends balancer_board_page
 
 	function cache_static() { return false; } // Только так, пока показываются приватные сообщения!
 
-	function _configure()
+	function b2_configure()
 	{
 		$page = $this->args('page');
 
@@ -39,7 +39,7 @@ class user_posts_day extends balancer_board_page
 		if(empty($this->day))
 			bors_debug::syslog('__trap', 'empty day in '.$page);
 
-		return parent::_configure();
+		return parent::b2_configure();
 	}
 
 	function is_today()

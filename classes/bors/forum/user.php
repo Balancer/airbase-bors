@@ -812,7 +812,7 @@ function avatar_thumb($geo)
 		}
 	}
 
-	function is_oldtimer() { return false; }
+	function is_oldtimer() { return in_array($this->group_id(), [6,19,20]); }
 
 	function titled_link()
 	{
