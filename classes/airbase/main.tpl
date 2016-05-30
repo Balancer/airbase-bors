@@ -10,6 +10,20 @@
 	float: left;
 	margin: 0 8px 0 0;
 }
+
+.airbase-news h2 {
+	font-size: 14pt;
+	border-bottom: 1px dotted #06c;
+}
+
+.airbase-news h3 {
+	font-size: 12pt;
+}
+
+.airbase-news {
+	margin-bottom: 30px;
+	font-size: 11pt;
+}
 </style>
 
 <h2 style="color: red">Сайт находится на реконструкции</h2>
