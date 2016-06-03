@@ -34,6 +34,9 @@ if(top.me_is_coordinator)
  {/if}
 {/if}
 
+{if $ban && is_object($ban)}
+	<p class="alert alert-danger">Пользователь забанен перманентно по причине: {$ban->message()}</p>
+{/if}
 
 {$this->pages_links_nul()}
 

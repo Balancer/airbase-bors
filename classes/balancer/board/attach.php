@@ -123,17 +123,19 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 
 		if(preg_match('/\d*x\d*/', $size))
 		{
-			$geo = $size.'(up,crop)';
+			$geo = $size;
 			list($w, $h) = explode('x', $size);
 		}
 		else
 		{
-			$geo = "{$size}x{$size}(up,crop)";
+			$geo = "{$size}x{$size}";
 			$w = $size;
 			$h = $size;
 		}
 
 //		if(config('is_developer')) { var_dump($this->data); exit(); }
+
+		$container = '%s';
 
 		if(preg_match("!(jpe?g|png|gif)!i", $this->extension()))
 		{
@@ -145,8 +147,11 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 				.rand()."\" rel=\"position:'inside'\" title=\""
 				.htmlspecialchars($this->title())."\">";
 
-			$thumb .= "<img src=\"{$thumb_url}\" width=\"$w\" height=\"$h\" alt=\"\" class=\"main\" /></a>";
-			$width = $w;
+			$thumb .= "<img src=\"{$thumb_url}\" alt=\"\" class=\"main\" class=\"rs_box shadow8\"/></a>";
+			$width = $w+16;
+			$height = $h+32;
+
+//			$container = "<div style=\"width: ".($w+16)."px; height: ".($h+16)."px; float: left;\">%s</div>";
 		}
 		elseif(preg_match("!^(mp3)$!i", $this->extension()))
 		{
@@ -176,8 +181,8 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			$width = 300;
 		}
 
-		$container_style = defval($args, 'container_style', "width: {$width}px;");
-		$container_class = defval($args, 'container_class', "rs_box float_left center mtop8");
+		$container_style = defval($args, 'container_style', "width: {$width}px; height: {$height}px; padding: auto;");
+		$container_class = defval($args, 'container_class', "float_left center mtop8");
 
 		$container_style = str_replace('%ATTACH_WIDTH%', "{$width}px", $container_style);
 
@@ -185,10 +190,10 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			$container_style_append = ' '.$container_style_append;
 
 		// {$this->url()}
-		$html = "<div class=\"{$container_class}\" style=\"{$container_style}{$container_style_append}\">{$thumb}<br/>"
+		$html = sprintf($container, "<div class=\"{$container_class}\" style=\"{$container_style}{$container_style_append}\">{$thumb}<br/>"
 			."<a href=\"{$this->url()}\">".wordwrap($this->title(), 30, ' ', true)." (скачать)</a> "
 			."[".smart_size($this->size()).",&nbsp;{$this->downloads()}&nbsp;".sklon($this->downloads(), 'загрузка', 'загрузки', 'загрузок')."]"
-			." [attach={$this->id()}]</div>";
+			." [attach={$this->id()}]</div>");
 
 		return $html;
 	}

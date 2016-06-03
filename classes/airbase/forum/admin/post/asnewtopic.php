@@ -29,7 +29,7 @@ class airbase_forum_admin_post_asnewtopic extends bors_page
 	function dont_move_with_tree() { return false; }
 	function access_engine() { return 'airbase_forum_admin_access_split'; }
 
-	function pre_action($data)
+	function pre_action(&$data)
 	{
 		if(!$this->post())
 			return bors_message(ec('Хрень какая-то. Не найден постинг ').intval($this->id()));

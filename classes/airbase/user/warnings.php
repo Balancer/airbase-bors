@@ -21,14 +21,17 @@ class airbase_user_warnings extends balancer_board_page
 		return $this->user;
 	}
 
-	function body_data($skip_passive = false)
+	function body_data()
 	{
+		$skip_passive = false;
+
 		template_noindex();
 
-		$data = array(
+		$data = [
 			'ref' => urldecode(@$_GET['ref']) or @$_SERVER['HTTP_REFERER'],
 			'skip_passive' => $skip_passive,
-		);
+			'ban' => $this->user->is_admin_banned(),
+		];
 
 		if(!$skip_passive)
 			$data['passive_warnings'] = array_reverse(bors_find_all('airbase_user_warning', array(

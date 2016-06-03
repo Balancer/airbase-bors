@@ -19,7 +19,7 @@ class users_topwarnings extends balancer_board_page
 				'last_post>' => time() - 86400*31,
 				'last_post - registered >' => 86400*7,
 				'order' => '86400.0*warnings_total/(last_post - registered) DESC',
-				'limit' => 50)),
+				'limit' => 20)),
 			'top_warn_relative_users' => @$top_warn_reltive_users,
 		);
 	}

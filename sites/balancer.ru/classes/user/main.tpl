@@ -38,7 +38,7 @@
 {* <li>Карма: <b>{$user->karma()|sprintf:'%.2f'}</b></li> *}
 {* <li>Суточный прирост кармы: <b style="color: {if $user->karma_rate() > 0}green{else}red{/if}">{$user->karma_rate()|sprintf:'%.2f'}</b></li> *}
 {if $me}
-{if 0 && $votes_from}
+{if ($me->id() == 10000) && $votes_from}
 	<li>Оценки от этого пользователя Вам: {$votes_from}</li>
 {/if}
 {if $votes_to}

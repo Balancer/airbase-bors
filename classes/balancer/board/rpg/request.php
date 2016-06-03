@@ -88,7 +88,7 @@ class balancer_board_rpg_request extends balancer_board_object_db
 			."<small$color>".$this->title().'</small><br/>'
 			.$stat_html;
 
-		return $html;
+		return $this->id().'. '.$html;
 	}
 
 	function actions()
@@ -97,12 +97,12 @@ class balancer_board_rpg_request extends balancer_board_object_db
 		$actions[] = "<form action=\"http://forums.balancer.ru/rpg/requests/approve\" method=\"post\">"
 			."<input type=\"hidden\" name=\"rid\" value=\"{$this->id()}\">"
 			."<input type=\"hidden\" name=\"score\" value=\"1\">"
-			."<input type=\"submit\" value=\"Подтвердить\">"
+			."<input type=\"submit\" value=\"Подтвердить («За»)\">"
 			."</form>";
 		$actions[] = "<form action=\"http://forums.balancer.ru/rpg/requests/approve\" method=\"post\">"
 			."<input type=\"hidden\" name=\"rid\" value=\"{$this->id()}\">"
 			."<input type=\"hidden\" name=\"score\" value=\"-1\">"
-			."<input type=\"submit\" value=\"Отклонить\">"
+			."<input type=\"submit\" value=\"Отклонить («Против»)\">"
 			."</form>";
 		$actions[] = "<form action=\"http://forums.balancer.ru/rpg/requests/approve\" method=\"post\">"
 			."<input type=\"hidden\" name=\"rid\" value=\"{$this->id()}\">"
