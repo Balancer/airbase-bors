@@ -18,20 +18,20 @@ class balancer_board_stat_forums_posted extends balancer_board_page
 				MONTH(FROM_UNIXTIME(posts.posted)) AS month,
 				forum_id,
 				posts.posted AS ts,
-				COUNT(*) AS count',
-			array(
+				COUNT(*) AS count /*timeout=60*/',
+			[
 				'inner_join' => 'topics ON posts.topic_id = topics.id',
-				'year>' => date('Y', time() - 86400*365.24*3),
-				'posts.posted<' => time(),
+				'year>' => date('Y', time() - 86400*365.24*2),
+//				'posts.posted<' => time(),
 				'group' => '`posts`.`year`, MONTH(FROM_UNIXTIME(`posts`.`posted`)), forum_id',
 				'having' => 'COUNT(*) > 1000',
 				'order' => '`posts`.`posted`',
-			)
+			]
 		);
 
 		$mstart = $posts_stat[0]['ts'];
 
-		$posts_by_month = array();
+		$posts_by_month = [];
 
 		foreach($posts_stat as $x)
 		{

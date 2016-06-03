@@ -18,8 +18,8 @@ class balancer_board_rpg_requests_main extends balancer_board_paginated
 	function where()
 	{
 		return [
-			'have_score<need_score',
-			'create_time>' => time() - 86400*14,
+			'(have_score<need_score OR request_class_name = "")',
+			'(create_time > ' . (time() - 86400*14) . ' OR (request_class_name = "" AND create_time > ' . (time() - 86400*90) . '))',
 		];
 	}
 }
