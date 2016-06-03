@@ -38,7 +38,7 @@ class DBLayer
 	var $num_queries = 0;
 
 
-	function DBLayer($db_host, $db_username, $db_password, $db_name, $db_prefix, $foo)
+	function __construct($db_host, $db_username, $db_password, $db_name, $db_prefix, $foo)
 	{
 		$this->prefix = $db_prefix;
 
@@ -54,7 +54,7 @@ class DBLayer
 		if (!$this->link_id)
 			error('Unable to connect to MySQL and select database. MySQL reported: '.mysqli_connect_error(), __FILE__, __LINE__);
 
-		echo 'connect mysqli';
+//		echo 'connect mysqli';
 	}
 
 

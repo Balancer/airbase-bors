@@ -197,7 +197,9 @@ else if ($action == 'change_email')
 	}
 	else if (isset($_POST['form_sent']))
 	{
-		if (pun_hash($_POST['req_password'], $pun_user['username']) !== $pun_user['password'])
+//		if (pun_hash($_POST['req_password'], $pun_user['username']) !== $pun_user['password'])
+//			message($lang_profile['Wrong pass'].'[2]');
+		if(!$user->check_password($_POST['req_password'], false))
 			message($lang_profile['Wrong pass'].'[2]');
 
 		require PUN_ROOT.'include/email.php';

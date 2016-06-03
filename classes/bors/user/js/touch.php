@@ -118,9 +118,10 @@ if(rand(0,10) == 0)
 			$js[] = '$(".reply_link").css("background-color", "red").css("color","white").html("R/O всего раздела до '.date('d.m.Y H:i (?)', $ro).'")';
 		}
 
-//		if(preg_match('/@mail.ru/', $me->email()))
-//		if($me->id() == 10000)
-//			$js[] = "\$('#incenter dl.box').first().after('<p class=\"alert alert-danger\">Внимание! Вы используете почту @mail.ru, но этот почтовый сервис сейчас забанил наши форумы. Вы не сможете получить почту (личные сообщения, забытые пароли, рассылки) на свой e-mail!</p>')";
+		$bl = config('mail.to.blacklist.domains.nopm');
+		list($mail_user, $mail_domain) = explode('@', $me->email());
+		if($bl && in_array($mail_domain, explode(' ', $bl)))
+			$js[] = "\$('#incenter dl.box').first().after('<p class=\"alert alert-warning\">Внимание! Вы используете почту @{$mail_domain}, но этот почтовый сервис сейчас ввёл ограничений на приём сообщений. Вы не сможете получить личные сообщения на свой e-mail! <a href=\"http://www.balancer.ru/g/p4198486\">Подробности...</a></p>')";
 
 		/////////////////////
 

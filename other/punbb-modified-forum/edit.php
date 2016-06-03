@@ -72,8 +72,8 @@ $forum = $topic->forum();
 if($post->warning() && $post->owner_id() == $me->id())
 	message("Нельзя редактировать оштрафованные сообщения");
 
-if($me->is_destructive() && $post->create_time() < time()-86400)
-	message("Деструктивным пользователям запрещено редактировать свои сообщения старше суток");
+if($me->is_destructive() && $post->create_time() < time()-900)
+	message("Деструктивным пользователям запрещено редактировать свои сообщения старше 15 минут");
 
 $cur_post['message'] = $post->source();
 
