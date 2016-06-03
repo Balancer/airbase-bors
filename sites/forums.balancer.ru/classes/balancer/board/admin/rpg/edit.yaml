@@ -1,3 +1,0 @@
-extends: balancer_board_admin_meta_edit
-access_engine: airbase_access_balancer
-main_class: balancer_board_rpg_request

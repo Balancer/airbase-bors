@@ -1,6 +1,0 @@
-extends: bors_admin_meta_main
-access_engine: airbase_access_balancer
-main_class: balancer_board_rpg_request
-auto_map: true
-template: forum/common.html
-
