@@ -287,7 +287,6 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		}
 
 		bors_objects_preload($data['posts'], 'owner_id', 'balancer_board_user', 'owner');
-		bors_objects_preload($data['posts'], 'id', 'balancer_board_posts_cache', 'cache');
 
 		$data['this'] = $this;
 //		$html = template_assign_data("xfile:forum/topic.html", $data);

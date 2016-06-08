@@ -13,6 +13,8 @@ class user_js_reputation extends base_js
 			if($me->warnings() > 3)
 				$me_id = 0;
 
+			if($me->is_destructive())
+				$me_id = 0;
 		}
 
 		return array(

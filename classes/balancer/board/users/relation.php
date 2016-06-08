@@ -31,6 +31,9 @@ class balancer_board_users_relation extends balancer_board_object_db
 
 	static function set_ignore($from_uid, $to_uid)
 	{
+		if($from_uid < 2 || $to_uid < 2)
+			return;
+
 		bors_debug::syslog('funs/ignore', "Ignore from $from_uid to $to_uid");
 
 		$rel = self::find(['from_user_id' => $from_uid, 'to_user_id' => $to_uid])->first();
@@ -48,13 +51,16 @@ class balancer_board_users_relation extends balancer_board_object_db
 			'ignore' => true,
 		]);
 
-		var_dump($rel); exit();
+//		var_dump($rel); exit();
 //		$rel->store();
 		return $rel;
 	}
 
 	static function unset_ignore($from_uid, $to_uid)
 	{
+		if($from_uid < 2 || $to_uid < 2)
+			return;
+
 		$rel = self::find(['from_user_id' => $from_uid, 'to_user_id' => $to_uid])->first();
 
 		if($rel)

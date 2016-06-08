@@ -136,6 +136,9 @@ class user_reputation extends balancer_board_page
 		if($me->is_banned())
 			return bors_message(ec('Вы не можете изменять репутацию  по причине запрета общения на форуме.'));
 
+		if($me->is_destructive())
+			return bors_message("Вы помечены как деструктивный пользователь. Изменения репутации запрещены.");
+
 		if($me->warnings() > 3)
 			return bors_message(ec('У Вас более трёх активных штрафов'));
 

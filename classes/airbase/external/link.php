@@ -66,8 +66,8 @@ class airbase_external_link extends balancer_board_object_db
 		$content = $req['content'];
 
 		// Запоминаем не более одного мегабайта, а то по max_allowed_packet можно влететь.
-		if(strlen($content) > $max_length)
-			$content = substr($content, 0, $max_length);
+//		if(strlen($content) > $max_length)
+//			$content = substr($content, 0, $max_length);
 
 		if($content)
 			$data = bors_external_common::content_extract($url, ['html' => $content]);
@@ -84,7 +84,7 @@ class airbase_external_link extends balancer_board_object_db
 		if($test)
 			return $data;
 
-		$data = array(
+		$data = [
 			'url_index' => self::normalize($url),
 			'url_real' => $url,
 
@@ -94,15 +94,32 @@ class airbase_external_link extends balancer_board_object_db
 //			'description' => array('type' => 'bbcode'),
 //			'image_id',
 //			'owner_id',
-			'html_source' => preg_match('!^text/!', $req['content_type']) ? $content : NULL,
+//			'html_source' => preg_match('!^text/!', $req['content_type']) ? $content : NULL,
 			'content_type' => $req['content_type'],
 			'last_error' => $req['error'],
 			'last_check_time' => time(),
-		);
+		];
 
 //		bors_debug::syslog('__test-check-no-arrays-in-data', print_r($data, true));
 
 		$link = bors_new(__CLASS__, $data);
+
+		if(preg_match('!^text/!', $req['content_type']))
+		{
+			$path = $link->html_source_path();
+			$html_path = $path.'.html';
+
+			require_once BORS_CORE.'/inc/functions/fs/file_put_contents_lock.php';
+			file_put_contents_lock($html_path, $content);
+			file_put_contents_lock($path.'.json', json_encode([
+				'id' => $link->id(),
+				'url' => $link->url_real(),
+				'title' => $link->title(),
+				'content_type' => $link->content_type(),
+				'last_check' => date('r', $link->last_check_time()),
+			], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+		}
+
 		return $link;
 	}
 
@@ -151,6 +168,47 @@ class airbase_external_link extends balancer_board_object_db
 		}
 
 		return $x;
+	}
+
+	function html_source_path()
+	{
+		$dir = '/data/json/links/by-id/'.sprintf('%04d', floor($this->id()/1000));
+		@mkdir($dir);
+		@chmod($dir, 0777);
+		return $dir.'/'.sprintf('%03d', $this->id());
+	}
+
+	function html_source()
+	{
+		$path = $this->html_source_path();
+		$html_path = $path.'.html';
+		$fe = file_exists($html_path) && filesize($html_path) > 0;
+
+		if(!empty($this->data['html_source']))
+			$html = $this->data['html_source'];
+		elseif($fe)
+			$html = file_get_contents($html_path);
+		else
+			$html = NULL;
+//			throw new \Exception("Unknown source for ".$this->debug_title());
+
+		if(!$fe)
+		{
+			require_once BORS_CORE.'/inc/functions/fs/file_put_contents_lock.php';
+			file_put_contents_lock($html_path, $html);
+			file_put_contents_lock($path.'.json', json_encode([
+				'id' => $this->id(),
+				'url' => $this->url_real(),
+				'title' => $this->title(),
+				'content_type' => $this->content_type(),
+				'last_check' => date('r', $this->last_check_time()),
+			], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+		}
+
+		if(file_exists($html_path))
+			$this->set('html_source', NULL, true);
+
+		return $html;
 	}
 
 	static function __dev()

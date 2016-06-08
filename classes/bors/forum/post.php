@@ -159,20 +159,44 @@ function set_have_answers($v, $dbup = true) { return $this->set('have_answers', 
 function score() { return @$this->data['score']; }
 function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
-function body()
-{
-		if($body = @$this->attr['body'])
+	function body()
+	{
+		$body = $this->cached_body();
+		if($body)
 			return $body;
-
-		$cache = $this->cache();
-		if($cache && ($body = $cache->body()))
-			return blib_html::close_tags($body);
 
 		$body = $this->_make_html();
 		$this->set_body($body);
 
 		return blib_html::close_tags($body);
-}
+	}
+
+	function cached_body()
+	{
+		if($body = @$this->attr['body'])
+			return $body;
+
+		$html_file = $this->post_html_file();
+		if(file_exists($html_file) && filesize($html_file) > 0)
+			return file_get_contents($html_file);
+
+		$cache = bors_load('balancer_board_posts_cache', $this->id());
+		if($cache && ($body = $cache->body()))
+		{
+			require_once BORS_CORE.'/inc/functions/fs/file_put_contents_lock.php';
+			file_put_contents_lock($html_file, $body);
+			touch($html_file, $cache->body_ts());
+
+			if(file_exists($html_file))
+				$cache->delete();
+
+			$this->set_attr('body', $body);
+
+			return blib_html::close_tags($body);
+		}
+
+		return NULL;
+	}
 
 	function set_body($value, $dbupd = true)
 	{
@@ -231,6 +255,12 @@ function body()
 
 	function set_source($message, $db_update = true)
 	{
+		$prev_source = $this->post_source();
+		if($prev_source && $prev_source != $message)
+		{
+			file_put_contents('/data/json/post-history/'.$this->id().'-'.max($this->create_time(), $this->edited()).'.txt', $prev_source);
+		}
+
 		if(!$message)
 		{
 			bors_debug::syslog('data-lost', 'Set to empty post source!');
@@ -281,30 +311,36 @@ function body()
 		$this->set_body($this->_make_html(false));
 	}
 
+	function post_html_file()
+	{
+		$dir = '/data/json/post-bodies/'.date('Y/m', $this->create_time());
+
+		if(!file_exists($dir))
+			@mkpath($dir, 0777);
+
+		return $dir.'/'.sprintf('%04d', $this->id()).'.html';
+	}
+
 	function cache_make($attrs = [])
 	{
+		require_once BORS_CORE.'/inc/functions/fs/file_put_contents_lock.php';
+
+		$html_file = $this->post_html_file();
+		$html = $attrs['body'];
+		$html_ts = $attrs['body_ts']; // time() or NULL
+
+		if(is_null($html))
+			unlink($html_file);
+		else
+		{
+			file_put_contents_lock($html_file, $html);
+			touch($html_file, $html_ts);
+		}
+
 		$cache = bors_load('balancer_board_posts_cache', $this->id());
 
 		if($cache)
-		{
-			foreach($attrs as $k => $v)
-				$cache->set($k, $v);
-
-			$cache->store();
-			return $cache;
-		}
-
-		static $first = true;
-		if(!$first && config('is_debug'))
-			bors_debug::syslog('posts-optimize', "Second call for cache");
-
-		$first = false;
-
-		if($attrs['id'] = $this->id())
-		{
-			$cache = bors_new('balancer_board_posts_cache', $attrs);
-			$cache->store();
-		}
+			$cache->delete();
 	}
 
 	function flag()
@@ -793,7 +829,6 @@ function body()
 		return array_merge(parent::auto_objects(), array(
 			'original_topic' => 'balancer_board_topic(original_topic_id)',
 			'blog' => 'balancer_board_blog(id)',
-			'cache' => 'balancer_board_posts_cache(id)',
 			'owner' => 'balancer_board_user(owner_id)'
 		));
 	}
@@ -830,7 +865,7 @@ function body()
 		if(!$this->is_public() && !$show_hidden)
 			return ec('<i>Сообщение с ограниченным доступом</i>');
 
-		$text = ($c = $this->cache()) ? $c->body() : '~~~'.$this->source();
+		$text = ($html = $this->cached_body()) ? $html : '~~~'.$this->source();
 		$text = restore_format($text);
 		$text = preg_replace('!<span class="q">.+?</span>!', ' … ', $text);
 		// Снос спойлеров
