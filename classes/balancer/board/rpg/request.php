@@ -23,6 +23,8 @@ class balancer_board_rpg_request extends balancer_board_object_db
 			'request_data',
 			'need_score',
 			'have_score',
+			'is_closed' => ['title' => 'Запрос закрыт'],
+			'expire_time' => ['name' => 'UNIX_TIMESTAMP(`expire_ts`)', 'edit_type' => 'date_simple'],
 			'create_time' => array('name' => 'UNIX_TIMESTAMP(`create_ts`)'),
 			'modify_time' => array('name' => 'UNIX_TIMESTAMP(`modify_ts`)'),
 			'owner_id',
@@ -69,11 +71,13 @@ class balancer_board_rpg_request extends balancer_board_object_db
 		else
 			$stat_html = "";
 
+		$stat_html .= " <span style=\"color: #ccc; font-size: x-small;\">// ".$this->id().'</span>';
+
 		if($this->comment())
 		{
 			return '<h3>'.$this->title()."</h3>\n"
 				.bors_lcml::lcml(trim($this->comment()))
-				.$stat_html;
+				.' '.$stat_html;
 		}
 
 		$target = $this->target();
@@ -86,9 +90,9 @@ class balancer_board_rpg_request extends balancer_board_object_db
 		$html = $target->titled_link()
 			.'<div style="color: #999">'.$target->snip().'</div>'
 			."<small$color>".$this->title().'</small><br/>'
-			.$stat_html;
+			.' '.$stat_html;
 
-		return $this->id().'. '.$html;
+		return $html;
 	}
 
 	function actions()
