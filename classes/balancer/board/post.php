@@ -130,7 +130,7 @@ class balancer_board_post extends forum_post
 
 		$summ = 0;
 		foreach($this->direct_answers() as $a)
-			$summ += $a->answers_count($recount_child) + 1;
+			$summ += $a->answers_count($recount_child, $recount_child) + 1;
 
 //		bors_debug::syslog('__answers', "{$this->debug_title}=$summ");
 		return $this->set_answers_count_raw($summ, true);

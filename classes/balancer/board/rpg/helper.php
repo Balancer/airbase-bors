@@ -21,7 +21,7 @@ class balancer_board_rpg_helper extends bors_object
 		return $this;
 	}
 
-	function set_data($data)
+	function set_data($data, $foo)
 	{
 		$this->set_attr('request_data', $data);
 		return $this;
@@ -39,7 +39,7 @@ class balancer_board_rpg_helper extends bors_object
 		return $this;
 	}
 
-	function set_title($title)
+	function set_title($title, $foo=true)
 	{
 		$this->set_attr('title', $title);
 		return $this;

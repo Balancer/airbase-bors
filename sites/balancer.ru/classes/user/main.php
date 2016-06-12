@@ -178,7 +178,7 @@ class user_main extends balancer_board_page
 			$pluses_to = bors_count('bors_votes_thumb', array('user_id' => $me_id, 'target_user_id' => $this->id(), 'score>' => 0));
 			$minuses_to = bors_count('bors_votes_thumb', array('user_id' => $me_id, 'target_user_id' => $this->id(), 'score<' => 0));
 
-			$data['rel_to'] = balancer_board_users_relation::find(['from_user_id' => $me_id, 'to_user_id' => $this->id()])->first();
+			$rel_to = balancer_board_users_relation::find(['from_user_id' => $me_id, 'to_user_id' => $this->id()])->first();
 		}
 
 		$data = array(
@@ -254,6 +254,7 @@ class user_main extends balancer_board_page
 		);
 
 		return array_merge(parent::body_data(), $data, compact(
+			'rel_to',
 			'scores_positive',
 			'scores_negative',
 			'votes_positive',

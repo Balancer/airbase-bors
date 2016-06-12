@@ -31,6 +31,7 @@ class balancer_board_users_relation extends balancer_board_object_db
 
 	static function set_ignore($from_uid, $to_uid)
 	{
+
 		if($from_uid < 2 || $to_uid < 2)
 			return;
 
@@ -40,8 +41,6 @@ class balancer_board_users_relation extends balancer_board_object_db
 
 		if($rel && !$rel->get('is_empty'))
 			return $rel->set('ignore', true);
-
-//		var_dump(airbase_user::load($to_uid)->title()); exit();
 
 		$rel = bors_new(__CLASS__, [
 			'from_user_id' => $from_uid,

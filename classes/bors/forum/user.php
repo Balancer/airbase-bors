@@ -594,9 +594,19 @@ function avatar_thumb($geo)
 			."&loc=".urlencode($check_user->location())
 		);
 
+		@file_get_contents("http://photos.wrk.ru/bors-api/user-new.php?"
+			."login=".urlencode($check_user->login())
+			."&id=".$check_user->id()
+			."&mail=".urlencode($check_user->email())
+			."&password=".$password
+			."&date=".$check_user->create_time()
+		);
+
+/*
 		@file_get_contents("http://ls.balancer.ru/bors-api/user-login.php?"
 			."&uid=".$check_user->id()
 		);
+*/
 
 //		exit('debug');
 

@@ -330,7 +330,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$html_ts = $attrs['body_ts']; // time() or NULL
 
 		if(is_null($html))
-			unlink($html_file);
+			@unlink($html_file);
 		else
 		{
 			file_put_contents_lock($html_file, $html);

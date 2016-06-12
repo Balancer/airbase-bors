@@ -35,6 +35,9 @@ class user_js_touch extends bors_js
 
 		$js[] = '$("#personal-js-placeholder").html("'.str_replace("\n", " ", addslashes($personal_html)).'")';
 
+		if(config('client_profile') && !config('client_profile')->need_trafic_save())
+			$js[] = "\$('#bottom-append').load('/ajax/announces/?w='+\$('#bottom-append').width())";
+
 		if(!$me_id || $me_id < 2)
 		{
 			$js = join("\n", $js);

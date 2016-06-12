@@ -198,6 +198,11 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 		return $html;
 	}
 
+	function thumbnail_fast_url($geo)
+	{
+		return "http://files.balancer.ru/cache/forums/attaches/".preg_replace("!/([^/]+)$!", "/{$geo}/$1", $this->location());
+	}
+
 	function image_url()
 	{
 		if(!preg_match("!(jpe?g|png|gif)!i", $this->extension()))

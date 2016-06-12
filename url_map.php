@@ -34,6 +34,7 @@ bors_url_map([
 	'/_bors/j/users/(\d+)/personal\.js => forum_js_personal(1)',
 	'/_bors/local/search/result/ => bors_tools_search_result',
 
+	'/ajax/announces/? => balancer_board_ajax_announces',
 	'/ajax/forums/list/? => balancer_board_ajax_forums_list',
 
 	'/\d{4}/\d{1,2}/\d{1,2}/post\-(\d+)\.html => balancer_board_post(1)',

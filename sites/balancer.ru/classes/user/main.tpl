@@ -46,7 +46,7 @@
 {/if}
 {if $me_id && $this->id() != $me_id }
 	{if $rel_to && !$rel_to->get('is_empty') && $rel_to->ignore()}
-	<li><a href="http://forums.balancer.ru/personal/?act=undelete&uid={$this->id()}">Перестать игнорировать пользователя</a></li>
+	<li><span class="red">Вы игнорируете пользователя.</span> <a href="http://forums.balancer.ru/personal/?act=undelete&uid={$this->id()}">Перестать игнорировать</a></li>
 	{else}
 	<li><a href="http://forums.balancer.ru/personal/?act=delete&uid={$this->id()}">Игнорировать сообщения пользователя</a></li>
 	{/if}
