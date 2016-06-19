@@ -35,7 +35,7 @@ class balancer_board_users_relation extends balancer_board_object_db
 		if($from_uid < 2 || $to_uid < 2)
 			return;
 
-		bors_debug::syslog('funs/ignore', "Ignore from $from_uid to $to_uid");
+//		bors_debug::syslog('funs/ignore', "Ignore from $from_uid to $to_uid");
 
 		$rel = self::find(['from_user_id' => $from_uid, 'to_user_id' => $to_uid])->first();
 

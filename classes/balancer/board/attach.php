@@ -182,7 +182,7 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 		}
 
 		$container_style = defval($args, 'container_style', "width: {$width}px; height: {$height}px; padding: auto;");
-		$container_class = defval($args, 'container_class', "float_left center mtop8");
+		$container_class = defval($args, 'container_class', "float_left center mtop8 shadow8");
 
 		$container_style = str_replace('%ATTACH_WIDTH%', "{$width}px", $container_style);
 
@@ -190,7 +190,7 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			$container_style_append = ' '.$container_style_append;
 
 		// {$this->url()}
-		$html = sprintf($container, "<div class=\"{$container_class}\" style=\"{$container_style}{$container_style_append}\">{$thumb}<br/>"
+		$html = sprintf($container, "<div class=\"attach-desc {$container_class}\" style=\"{$container_style}{$container_style_append}\">{$thumb}<br/>"
 			."<a href=\"{$this->url()}\">".wordwrap($this->title(), 30, ' ', true)." (скачать)</a> "
 			."[".smart_size($this->size()).",&nbsp;{$this->downloads()}&nbsp;".sklon($this->downloads(), 'загрузка', 'загрузки', 'загрузок')."]"
 			." [attach={$this->id()}]</div>");

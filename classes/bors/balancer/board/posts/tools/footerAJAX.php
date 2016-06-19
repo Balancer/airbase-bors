@@ -50,13 +50,15 @@ class balancer_board_posts_tools_footerAJAX extends balancer_board_page
 			'rel_to' => $x ? balancer_board_users_relation::find(['from_user_id' => bors()->user_id(), 'to_user_id' => $x->owner_id()])->first() : NULL,
 		);
 
+		$owner_level = object_property($x->owner(), 'rpg_level');
+
 		if($warning && $x
-				&& bors()->user()->rpg_level() >= $x->owner()->rpg_level() - 2
+				&& bors()->user()->rpg_level() >= $owner_level - 2
 				&& bors()->user()->warnings() <= 0
 		)
 		{
 //			var_dump($warning);
-			$new_score = max(1, pow(3, $x->owner()->rpg_level() - bors()->user()->rpg_level()));
+			$new_score = max(1, pow(3, $owner_level - bors()->user()->rpg_level()));
 			if($new_score < 10)
 			{
 				$data['can_take_warning'] = true;

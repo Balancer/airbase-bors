@@ -180,6 +180,10 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		if(file_exists($html_file) && filesize($html_file) > 0)
 			return file_get_contents($html_file);
 
+		$html_file_old = $this->post_html_file_old();
+		if(file_exists($html_file_old) && filesize($html_file_old) > 0)
+			return file_get_contents($html_file_old);
+
 		$cache = bors_load('balancer_board_posts_cache', $this->id());
 		if($cache && ($body = $cache->body()))
 		{
@@ -313,10 +317,17 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	function post_html_file()
 	{
-		$dir = '/data/json/post-bodies/'.date('Y/m', $this->create_time());
+		$dir = '/data/post-bodies/post-bodies/'.date('Y/m', $this->create_time());
 
 		if(!file_exists($dir))
 			@mkpath($dir, 0777);
+
+		return $dir.'/'.sprintf('%04d', $this->id()).'.html';
+	}
+
+	function post_html_file_old()
+	{
+		$dir = '/data/json/post-bodies/'.date('Y/m', $this->create_time());
 
 		return $dir.'/'.sprintf('%04d', $this->id()).'.html';
 	}
