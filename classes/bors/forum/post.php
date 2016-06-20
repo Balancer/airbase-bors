@@ -193,35 +193,66 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		blib_json::file_update($json_file, [$this->id() => ['html' => $html]]);
 	}
 
+	function set_json($data)
+	{
+		$json_file = $this->post_json_file();
+		blib_json::file_update($json_file, [$this->id() => $data]);
+	}
+
 	function cached_body()
 	{
 		if($body = @$this->attr['body'])
 			return $body;
 
 		if($html = $this->get_json_html())
+		{
+			$html_file = $this->post_html_file();
+			if(file_exists($html_file))
+			{
+				$this->set_json(['ts' => filemtime($html_file)]);
+				@unlink($html_file);
+			}
+
+			$html_file = $this->post_html_file_old();
+			if(file_exists($html_file))
+			{
+				$this->set_json(['ts' => filemtime($html_file)]);
+				@unlink($html_file);
+			}
+
 			return $html;
+		}
 
 		$html_file = $this->post_html_file();
 		if(file_exists($html_file) && filesize($html_file) > 0)
 		{
 			$html = file_get_contents($html_file);
-			$this->set_json_html($html);
+			$this->set_json(['html' => $html, 'ts' => filemtime($html_file)]);
+			@unlink($html_file);
 			return $html;
 		}
 
 		$html_file_old = $this->post_html_file_old();
 		if(file_exists($html_file_old) && filesize($html_file_old) > 0)
-			return file_get_contents($html_file_old);
+		{
+			$html = file_get_contents($html_file_old);
+			$this->set_json(['html' => $html, 'ts' => filemtime($html_file_old)]);
+			@unlink($html_file_old);
+			return $html;
+		}
 
 		$cache = bors_load('balancer_board_posts_cache', $this->id());
 		if($cache && ($body = $cache->body()))
 		{
-			$this->set_json_html($body);
+			$this->set_json([
+				'html' => $body,
+				'ts' => $cache->body_ts(),
+			]);
 
+/*
 			require_once BORS_CORE.'/inc/functions/fs/file_put_contents_lock.php';
 			file_put_contents_lock($html_file, $body);
-			touch($html_file, $cache->body_ts());
-
+*/
 			if(file_exists($html_file))
 				$cache->delete();
 
@@ -375,18 +406,23 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	function cache_make($attrs = [])
 	{
-		require_once BORS_CORE.'/inc/functions/fs/file_put_contents_lock.php';
+//		require_once BORS_CORE.'/inc/functions/fs/file_put_contents_lock.php';
 
 		$html_file = $this->post_html_file();
+		@unlink($html_file);
+
 		$html = $attrs['body'];
 		$html_ts = $attrs['body_ts']; // time() or NULL
 
 		if(is_null($html))
-			@unlink($html_file);
+		{
+			$this->set_json([]);
+		}
 		else
 		{
-			file_put_contents_lock($html_file, $html);
-			@touch($html_file, $html_ts);
+//			file_put_contents_lock($html_file, $html);
+			$this->set_json(['html' => $html, 'ts' => $html_ts]);
+//			@touch($html_file, $html_ts);
 		}
 
 		$cache = bors_load('balancer_board_posts_cache', $this->id());
