@@ -232,7 +232,7 @@ register_vhost('www.wrk.ru');
 config_set('seo_domains_whitelist_regexp', '(www.balancer.ru|www.airbase.ru|www.bionco.ru|www.wrk.ru|www.tanzpol.org|www.aviaport.ru|balancer.endofinternet.net)$');
 
 //config_set('balancer_board_domains', array('balancer.ru', 'airbase.ru', 'wrk.ru', 'tanzpol.org', 'bionco.ru'));
-config_set('balancer_board_domains', array('balancer.ru', 'airbase.ru', 'wrk.ru'));
+config_set('balancer_board_domains', array('balancer.ru', 'airbase.ru', 'wrk.ru', 'tanzpol.org'));
 
 /*
 if(config('is_developer'))

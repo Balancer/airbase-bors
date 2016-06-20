@@ -109,6 +109,9 @@ class bal_users_helper extends bors_object
 			}
 		}
 
+		if(config('is_debug'))
+			var_dump($domains, $domain, $next_domain, $i);
+
 		if($next_domain)
 		{
 			$haction->set_attr('need_save', true);

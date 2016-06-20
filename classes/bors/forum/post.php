@@ -100,7 +100,9 @@ function topic_page()
 	$page = @$this->data['topic_page'];
 	if(!$page)
 	{
-		$this->topic()->repaging_posts();
+		if($t = $this->topic())
+			$t->repaging_posts();
+
 		$post = bors_load('balancer_board_post', $this->id(), array('no_load_cache' => true));
 		$page = @$post->data['topic_page'];
 	}
@@ -171,14 +173,41 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		return blib_html::close_tags($body);
 	}
 
+	function get_json_html()
+	{
+		$json_file = $this->post_json_file();
+		if(file_exists($json_file))
+		{
+			$json = file_get_contents($json_file);
+			$data = json_decode($json, true);
+			if($data && ($d = @$data[$this->id()]) && ($html = @$d['html']))
+				return $html;
+		}
+
+		return NULL;
+	}
+
+	function set_json_html($html)
+	{
+		$json_file = $this->post_json_file();
+		blib_json::file_update($json_file, [$this->id() => ['html' => $html]]);
+	}
+
 	function cached_body()
 	{
 		if($body = @$this->attr['body'])
 			return $body;
 
+		if($html = $this->get_json_html())
+			return $html;
+
 		$html_file = $this->post_html_file();
 		if(file_exists($html_file) && filesize($html_file) > 0)
-			return file_get_contents($html_file);
+		{
+			$html = file_get_contents($html_file);
+			$this->set_json_html($html);
+			return $html;
+		}
 
 		$html_file_old = $this->post_html_file_old();
 		if(file_exists($html_file_old) && filesize($html_file_old) > 0)
@@ -187,6 +216,8 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$cache = bors_load('balancer_board_posts_cache', $this->id());
 		if($cache && ($body = $cache->body()))
 		{
+			$this->set_json_html($body);
+
 			require_once BORS_CORE.'/inc/functions/fs/file_put_contents_lock.php';
 			file_put_contents_lock($html_file, $body);
 			touch($html_file, $cache->body_ts());
@@ -244,7 +275,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$this->set('topic_page', $page, $dbupd);
 	}
 
-	function is_public() { return $this->topic()->is_public(); }
+	function is_public() { return object_property($this->topic(), 'is_public', true); }
 
 	function source()
 	{
@@ -315,6 +346,16 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		$this->set_body($this->_make_html(false));
 	}
 
+	function post_json_file()
+	{
+		$dir = '/data/post-bodies/post-bodies/'.date('Y/m', $this->create_time());
+
+		if(!file_exists($dir))
+			@mkpath($dir, 0777);
+
+		return $dir.'/'.sprintf('%04d', floor($this->id()/10)).'x.json';
+	}
+
 	function post_html_file()
 	{
 		$dir = '/data/post-bodies/post-bodies/'.date('Y/m', $this->create_time());
@@ -345,7 +386,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		else
 		{
 			file_put_contents_lock($html_file, $html);
-			touch($html_file, $html_ts);
+			@touch($html_file, $html_ts);
 		}
 
 		$cache = bors_load('balancer_board_posts_cache', $this->id());
