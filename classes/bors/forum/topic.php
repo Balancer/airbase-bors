@@ -138,19 +138,6 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 	function is_sticky() { return $this->sticky() ? true : false; }
 	function is_closed() { return $this->closed() ? true : false; }
 
-	function pre_parse()
-	{
-		$me = bors()->user();
-
-		if(!$this->forum() || !$this->forum()->can_read())
-		{
-			template_noindex();
-			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
-		}
-
-		return false;
-	}
-
 	function is_last_page() { return $this->page() == $this->total_pages(); }
 
 	function user_ids()
@@ -377,7 +364,7 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		if($this->total_pages() < 2)
 			return "";
 
-		include_once('inc/design/page_split.php');
+		require_once BORS_CORE.'/inc/design/page_split.php';
 		return join(" ", pages_show($this, $this->total_pages(), 5, false));
 	}
 
@@ -700,6 +687,12 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		$me = bors()->user();
 		if($me)
 			$me->utmx_update();
+
+		if(!$this->forum() || !$this->forum()->can_read())
+		{
+			template_noindex();
+			return bors_message("Извините, запрашиваемый материал отсутствет, был удалён или у Вас отсутствует к нему доступ");
+		}
 
 		if($this->page() == 'new')
 		{

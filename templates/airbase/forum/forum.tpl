@@ -26,9 +26,9 @@
 		{/if}
 	<tr class="tr_forum_{$f->id()}{if !$f->is_public()} bb-background-private{/if}">
 		{if $with_images}
-		<td style="padding: 4px; line-height: 0;">
+		<td style="padding: 4px; line-height: 0; width: 105px;">
 			{if $img=$t->image()}
-			<a href="{$t->url()}">{$img->thumbnail_96x96()->html_code()}</a>
+			<a href="{$t->url()}">{$img->thumbnail('96x96(up,crop)')->html_code()}</a>
 			{/if}
 		</td>
 		{/if}

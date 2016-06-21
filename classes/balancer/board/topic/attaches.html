@@ -1,22 +1,26 @@
 {$this->pages_links_nul()}
 
-<table class="btab small" style="width: 600px">
-<tr>
-	{foreach from=$items item="x" name="loop"}
-	<td>
-		{$x->thumbnail_link('300x300(crop)')}<br/>
-		<a href="{$x->url()}">{$x->title()}</a><br/>
-		[{$x->size()|smart_size}, {$x->downloads()} {$x->downloads()|sklon:'загрузка':'загрузки':'загрузок'}]<br />
-		Сообщение: {$x->post()->nav_named_url()}<br/>
-	</td>
-	{if $smarty.foreach.loop.iteration % 2 == 0 and not $smarty.foreach.loop.last}
-</tr><tr>
-	{/if}
-	{foreachelse}
-		В этой теме нет ни одного приложения
-	{/foreach}
-</tr>
-</table>
+{foreach $items as $x}
+{$p=$x->post()}
+<div class="a_cont">
+	<div class="a_attach">
+		{if not $p->is_hidden()}
+		<img src="{$x->thumbnail_fast_url('300x300')}" />
+		{else}
+		[<b><a href="{$p->url_for_igo()}">Сообщение</a> скрыто координатором</b>]
+		{/if}
+	</div>
+	<div class="a_desc">
+		<div class="snip name"><a href="{$x->url()}">{$x->title()}</a></div>
+		<div class="snip text">{$p->snip(128, true)}</div>
+		<div class="snip ref">// Сообщение: {$p->nav_named_url()}</div>
+	</div>
+</div>
+{foreachelse}
+	В этой теме нет ни одного приложения
+{/foreach}
+
+<div class="clear">&nbsp;</div>
 
 {$this->pages_links_nul()}
 

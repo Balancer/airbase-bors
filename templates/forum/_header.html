@@ -40,6 +40,14 @@ dd, dt { height: 1%; }
 pre { word-wrap: break-word; }
 </style><![endif]-->
 
+{if not empty($style)}
+<style type="text/css" media="all"><!--
+{foreach from=$style item="s"}
+{$s}
+{/foreach}
+--></style>
+{/if}
+
 <script>
 (function(){
 	var fontKey = 'ScadaABv2';
@@ -445,6 +453,7 @@ BORS_CORE={$smarty.const.BORS_CORE}
 {* if date('d')==31 and date('m') == 10 and rand(0,10)==1}
 {include file="xfile:airbase/inc/halloween.html"}
 {/if *}
+
 </body>
 
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>

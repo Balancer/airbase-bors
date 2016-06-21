@@ -1,6 +1,6 @@
 <?php
 
-require_once('inc/strings.php');
+require_once BORS_CORE.'/inc/strings.php';
 
 class airbase_board_category extends bors_object_db
 {

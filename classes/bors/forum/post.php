@@ -436,7 +436,7 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 		// Вторая часть условия - проверка на баг обрезания строки.
 		if(!$this->flag_db() || !preg_match("!>$!", $this->flag_db()))
 		{
-			require_once('inc/clients/geoip-place.php');
+			require_once __DIR__.'/../../../../bors-core/inc/clients/geoip-place.php';
 //			$db = new driver_mysql(config('punbb.database'));
 //			$db->insert_ignore('posts_cached_fields', array('post_id' => $this->id()));
 			$this->set_flag_db(geoip_flag($this->poster_ip(), $this->owner_id() == 10000, true, $this->create_time()), true);

@@ -596,4 +596,11 @@ class balancer_board_topic extends forum_topic
 		@chmod($file, 0666);
 		@unlink($storage.'/topic-'.$this->id().'.md');
 	}
+
+	function static_file()
+	{
+		$base = $this->url_ex($this->page()); // $this->forum()->category()->category_base_full();
+		$base = preg_replace('!http://([^/]+)(.*)!', '/var/www/$1/htdocs/cache-static$2', $base);
+		return $base;
+	}
 }

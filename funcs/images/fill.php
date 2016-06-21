@@ -1,8 +1,8 @@
 <?php
 
 //    require_once('obsolete/DataBaseHTS.php');
-    require_once('obsolete/users.php');
-    require_once('inc/filesystem.php');
+    require_once BORS_CORE.'/obsolete/users.php';
+    require_once BORS_CORE.'/inc/filesystem.php';
 
     function fill_image_data($image, $page = NULL)
     {

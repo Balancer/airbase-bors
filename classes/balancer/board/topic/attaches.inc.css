@@ -1,0 +1,54 @@
+.a_cont {
+	width: 300px;
+	display: block;
+	float: left;
+	margin: 0 4px 4px 0;
+	background-color: #eee;
+	border: 1px solid #9bd;
+}
+
+/* http://stackoverflow.com/a/18516474 */
+.a_attach {
+	width: 300px;
+	height: 300px;
+	text-align: center;  /* align the inline(-block) elements horizontally */
+	font: 0/0 a;         /* remove the gap between inline(-block) elements */
+}
+
+.a_attach:before {    /* create a full-height inline block pseudo=element */
+	content: ' ';
+	display: inline-block;
+	vertical-align: middle;  /* vertical alignment of the inline element */
+	height: 100%;
+}
+
+.a_attach img {
+	display: inline-block;
+	vertical-align: bottom;  /* vertical alignment of the inline element */
+}
+
+.a_desc {
+	padding: 4px;
+}
+
+.snip {
+	font-size: 14px;
+}
+
+.snip.name {
+	font-weight: bold;
+	height: 16px;
+	overflow: hidden;
+	text-align: center;
+}
+
+.snip.text {
+	height: 34px;
+	overflow: hidden;
+}
+
+.snip.ref {
+	height: 14px;
+	font-size: 12px;
+	overflow: hidden;
+}
