@@ -30,9 +30,6 @@ class base_page_hts2 extends bors_page_db
 		return $url;
 	}
 
-//	function can_cached() { return false; }
-//	function cache_static() { return $this->modify_time() > time() - 86400*7 ? rand(3600, 7200) : rand(86400*7, 86400*30); }
-
 	function storage_engine() { return 'bors_storage_mysql'; }
 	function config_class() { return config('admin_config_class'); }
 	function html_disable() { return false; }

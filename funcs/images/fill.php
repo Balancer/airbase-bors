@@ -11,7 +11,7 @@
 
 		$image2 = abs_path_from_relative($image, "{$page}img/");
 
-        $hts = new DataBaseHTS();
+//        $hts = new DataBaseHTS();
 
 		$data = url_parse($image2);
 
@@ -77,10 +77,10 @@
 				$remote = $image;
 				$image = str_replace(config('sites_store_path'), config('sites_store_url'), $path);
 				$data['local'] = true;
-				if(!$hts->get_data($image,'origin_uri'))
-					$hts->set_data($image, 'origin_uri', $remote);
-				if(!$hts->get_data($image,'local_path'))
-					$hts->set_data($image, 'local_path', $path);
+//				if(!$hts->get_data($image,'origin_uri'))
+//					$hts->set_data($image, 'origin_uri', $remote);
+//				if(!$hts->get_data($image,'local_path'))
+//					$hts->set_data($image, 'local_path', $path);
 			}
 
 			$image2 = $image;
@@ -97,23 +97,23 @@
         if(!file_exists(preg_replace("!http://{$data['host']}!",$data['root'],$image)))
             return false;
 
-        if(!$hts->get_data($image, 'create_time'))
-            $hts->set_data($image, 'create_time', time());
+//        if(!$hts->get_data($image, 'create_time'))
+  //          $hts->set_data($image, 'create_time', time());
 
-        if(!$hts->get_data($image, 'width') || !$hts->get_data($image, 'height') || !$hts->get_data($image, 'size'))
+//        if(!$hts->get_data($image, 'width') || !$hts->get_data($image, 'height') || !$hts->get_data($image, 'size'))
         {
 			$img = airbase_image::register_file($image);
 
-            $hts->set_data($image, 'width' , $img->width());
-            $hts->set_data($image, 'height', $img->height());
-            $hts->set_data($image, 'type'  , $img->extension());
-			$hts->set_data($image, 'size'  , $img->size());
+//            $hts->set_data($image, 'width' , $img->width());
+//            $hts->set_data($image, 'height', $img->height());
+//            $hts->set_data($image, 'type'  , $img->extension());
+//			$hts->set_data($image, 'size'  , $img->size());
         }
 
-        if(!$hts->get_data($image, 'author'))
-            $hts->set_data($image, 'author', user_data('member_id'));
+//        if(!$hts->get_data($image, 'author'))
+//            $hts->set_data($image, 'author', user_data('member_id'));
 
-        $hts->set_data($image, 'modify_time', time());
+//        $hts->set_data($image, 'modify_time', time());
 
         return $image;
     }

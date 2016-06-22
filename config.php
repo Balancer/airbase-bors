@@ -2,7 +2,7 @@
 
 config_set('timing_limit', 1);
 
-require_once(__DIR__.'/config-host.php');
+require_once(COMPOSER_ROOT.'/config-host.php');
 
 config_set('locked_db', @file_get_contents('/tmp/mysqldump.lock'));
 if($fm = @filemtime('/tmp/mysqldump.lock'))
@@ -207,6 +207,6 @@ config_set('debug.mysql_queries_logs', array(
 ));
 */
 
-bors_config_ini(__DIR__.'/config-host.ini');
+bors_config_ini(COMPOSER_ROOT.'/config-host.ini');
 
 require_once(__DIR__.'/config-post.inc.php');
