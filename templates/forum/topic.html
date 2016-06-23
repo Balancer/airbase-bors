@@ -1,4 +1,3 @@
-
 <div class="pages_select right">
 
 <a href="http://ls.balancer.ru/question/add/"
@@ -25,7 +24,7 @@
 
 </div>
 
-{if $this->pages_links()}<div class="pages_select">{"Страницы:"|ec} {$this->pages_links()}</div>{/if}
+{if $this->pages_links()}<div class="pages_select">{$this->pages_links()}</div>{/if}
 
 {if not $this->is_public_access()}<div class="yellow_box">{"Тема с ограниченным доступом"|ec}</div>{/if}
 
@@ -86,4 +85,4 @@
 
 {if $this->get('is_news')}</div>{/if}
 
-{if $this->pages_links()}<div class="pages_select">{"Страницы:"|ec} {$this->pages_links()}</div>{/if}
+{if $this->pages_links()}<div class="pages_select">{$this->pages_links()}</div>{/if}

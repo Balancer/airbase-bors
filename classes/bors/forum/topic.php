@@ -155,9 +155,9 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 		if(!$this->is_repaged() && rand(0,5) == 0)
 			$this->repaging_posts();
 
-		$body_cache = new bors_cache();
-		if($body_cache->get('bors_page_body-v3', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time()))
-			return $this->attr['body'] = bors_lcml::output_parse($body_cache->last().'<!-- cached -->');
+//		$body_cache = new bors_cache();
+//		if($body_cache->get('bors_page_body-v3', $this->internal_uri_ascii().':'.$this->page().':'.(object_property(bors()->user(), 'group')).':'.$this->modify_time()))
+//			return $this->attr['body'] = bors_lcml::output_parse($body_cache->last().'<!-- cached -->');
 
 		require_once("engines/smarty/assign.php");
 
@@ -279,7 +279,8 @@ function set_keywords_string_db($v, $dbup = true) { return $this->set('keywords_
 //		$html = template_assign_data("xfile:forum/topic.html", $data);
 		$html = bors_templates_smarty::fetch("xfile:forum/topic.html", $data);
 
-		return bors_lcml::output_parse($body_cache->set($html, 86400));
+//		return bors_lcml::output_parse($body_cache->set($html, 86400));
+		return bors_lcml::output_parse($html);
 	}
 
 	private $__all_posts_ids;

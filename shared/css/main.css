@@ -384,7 +384,7 @@ span.clear {
 	margin-left: -1px;
 }
 
-@media only screen and (min-device-width: 640px) and (min-device-width: 11cm) {
+@media only screen and (min-device-width: 640px) and (min-device-width: 10cm) {
 	.outer {
 		margin-left: 215px;  /* L */
 	}
@@ -434,29 +434,9 @@ span.clear {
 
 .w200 { width: 198px; }
 
-dl.box input {
-	border: 1px solid #9bd;
-    margin: 1px 3px;
-}
-
-input, textarea, select, option {
+textarea, select, option {
 	border: 1px solid #9bd; 
 	background: #f0faff;
-}
-
-input.text {
-	font-weight: bold; 
-}
-
-dl.box input.text {
-	width: 160px;
-	font-size: 9pt;
-}
-
-input.submit {
-	font-weight: bold; 
-	background-color: #9bd;
-	color: white;
 }
 
 ul.postfooter {
@@ -525,7 +505,7 @@ a tt.warnings small {
 .btab tr.neg_reputation td { background-color: #fee; color: #900; }
 
 .w200 ul {
-	font: 0.8rem Verdana;
+	font: 0.7rem;
 	padding-left: 16px;
 	margin: 0;
 }
@@ -879,14 +859,6 @@ a.reply_link {
 	padding: 2px 20px 2px 2px !important;
 }
 
-input[type="text"] {
-	box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
-}
-
-input[type="submit"] {
-	box-shadow: 0 0 2px rgba(0,0,0,0.3);
-}
-
 div.spinner {
 	background-image: url(/_bors/i/wait-16.gif);
 	background-position: left center;
@@ -895,10 +867,8 @@ div.spinner {
 }
 
 .mtop8 {
-	clear: both;
 	margin-top: 8px !important;
 }
-
 
 .bors_lazy_ad code {
 	display: none;
@@ -1018,8 +988,9 @@ table.topic-list td > a > img {
 }
 
 /* Экран низкого разрешения или узкий */
-/*@media only screen and ((max-device-width: 639px) or (max-device-width: 10cm)) { */
-@media only screen and (max-device-width: 10cm) {
+/*@media only screen and ((max-device-width: 639px) or (max-device-width: 10cm)) */
+
+@media only screen and (max-device-width: 9.99cm) {
 	.tpl_column_left {
 		width: auto;
 	}
@@ -1051,8 +1022,8 @@ table.topic-list td > a > img {
 	}
 	table.topic-list td {
 	}
-*/
 }
+*/
 
 div.topic_is_news {
 /*	padding-left: 100px; */
@@ -1063,8 +1034,29 @@ div.post_news {
 }
 
 div.post_no_news {
+	margin-left: 100px;
+}
+
+div.post_no_news div.body {
 	font-size: 80%;
 	color: #557;
+	padding-left: 110px;
+}
+
+div.post_no_news div.avatar_block
+{
+	margin-left: -110px;
+	float: left;
+}
+
+div.post_no_news div.avatar-text
+{
+	display: none;
+}
+
+div.post_no_news div.postsignature
+{
+	display: none;
 }
 
 .mirror {
@@ -1074,4 +1066,47 @@ div.post_no_news {
 	transform: scaleX(-1);
 	filter: FlipH;
 	-ms-filter: "FlipH";
+}
+
+.random-background {
+    background: url(http://www.balancer.ru/hi/1a/wp.php) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100%;
+}
+
+.fun-image {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-image: url(http://www.balancer.ru/hi/1a/wp.php);
+}
+
+/*
+xbody{
+  position: relative;
+  background-color: black;
+}
+
+xbody::before {
+    background: url("/_bal/img/bg/003-sky-cloud.jpg") no-repeat center center;
+    background-size: cover;
+    content: ' ';
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    will-change: transform;
+    z-index: -1000;
+}
+*/
+
+.post .body .attach-desc  {
+	font-size: 0.7rem;
+	color: #999;
 }

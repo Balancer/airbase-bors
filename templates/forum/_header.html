@@ -4,8 +4,7 @@
 	<title>{$this->browser_title()|htmlspecialchars}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="title" content="{$title|htmlspecialchars}" />
-	<meta name="viewport" content="width=900" />
-	<meta name="disabled-viewport" content="width=680,initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta property="fb:admins" content="100000278666723" />
 {if $this->get('browser_description')}
 	<meta name="description" content="{$this->browser_description()|htmlspecialchars}"/>
@@ -27,7 +26,7 @@
 {foreach item=css from=$css_list}
 	<link rel="stylesheet" type="text/css" href="{$css}" />
 {/foreach}
-	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-791-min.css" />
+	<link rel="stylesheet" type="text/css" href="/_bal/css/balancer-792.css" />
 	<link rel="canonical" href="{$this->url_ex(['page'=>$this->page(),'force'=>false])}" />
 
 <!--[if IE]><style>
