@@ -384,7 +384,7 @@ span.clear {
 	margin-left: -1px;
 }
 
-@media only screen and (min-device-width: 640px) and (min-device-width: 10cm) {
+@media only screen and (min-device-width: 640px) and (min-device-width: 12cm) {
 	.outer {
 		margin-left: 215px;  /* L */
 	}
@@ -938,16 +938,6 @@ tr.bb-background-private td {
 	line-height: 16px;
 }
 
-@media only screen and (max-device-width: 10cm) {
-	div.rs_box {
-		width: 100%;
-	}
-	img.main {
-		width: 100%;
-		height: auto;
-	}
-}
-
 .forum-topic-snippet-replies {
 	font-size: 8pt;
 	color: #ccc;
@@ -989,8 +979,15 @@ table.topic-list td > a > img {
 
 /* Экран низкого разрешения или узкий */
 /*@media only screen and ((max-device-width: 639px) or (max-device-width: 10cm)) */
+@media only screen and (max-device-width: 11.99cm) {
+	div.rs_box {
+		width: 100%;
+	}
+	img.main {
+		width: 100%;
+		height: auto;
+	}
 
-@media only screen and (max-device-width: 9.99cm) {
 	.tpl_column_left {
 		width: auto;
 	}
@@ -1025,38 +1022,33 @@ table.topic-list td > a > img {
 }
 */
 
-div.topic_is_news {
-/*	padding-left: 100px; */
-}
+@media only screen and (min-device-width: 640px) and (min-device-width: 12cm) {
 
-div.post_news {
-/*	xmargin-left: -100px; */
-}
+	div.post_no_news {
+		margin-left: 100px;
+	}
 
-div.post_no_news {
-	margin-left: 100px;
-}
+	div.post_no_news div.body {
+		font-size: 80%;
+		color: #557;
+		padding-left: 110px;
+	}
 
-div.post_no_news div.body {
-	font-size: 80%;
-	color: #557;
-	padding-left: 110px;
-}
+	div.post_no_news div.avatar_block
+	{
+		margin-left: -110px;
+		float: left;
+	}
 
-div.post_no_news div.avatar_block
-{
-	margin-left: -110px;
-	float: left;
-}
+	div.post_no_news div.avatar-text
+	{
+		display: none;
+	}
 
-div.post_no_news div.avatar-text
-{
-	display: none;
-}
-
-div.post_no_news div.postsignature
-{
-	display: none;
+	div.post_no_news div.postsignature
+	{
+		display: none;
+	}
 }
 
 .mirror {
