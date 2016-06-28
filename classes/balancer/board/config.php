@@ -47,7 +47,7 @@ class balancer_board_config extends bors_config
 			);
 
 		return array_merge(parent::view_data(), array(
-			'template' => 'forum/_header.html',
+			'template' => 'xfile:forum/_header.html',
 			'search_request_url' => 'http://www.balancer.ru/tools/search/result/',
 			'copyright_line' => '© Balancer 1998—'.date('Y'),
 			'user_bar' => $user_bar,

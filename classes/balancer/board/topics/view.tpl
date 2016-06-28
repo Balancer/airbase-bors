@@ -21,7 +21,7 @@
 {if not $topic->is_public_access()}<div class="yellow_box">Тема с ограниченным доступом</div>{/if}
 
 {foreach $posts as $p}
-{if $use_bootstrap}
+{if $use_bootstrap && 0}
 	{$p->view()->template('bootstrap')->html()}
 {else}
 	{module class="balancer_board_module_post" post=$p topic=$topic forum=$forum}
