@@ -17,7 +17,7 @@ class balancer_board_topics_pdfHelper extends bors_page
 	function body_data()
 	{
 		return array(
-			'posts' => bors_find_all('balancer_board_post', array(
+			'posts' => bors_each('balancer_board_post', array(
 				'topic_id' => $this->id(),
 				'order' => '`order`, `posted`',
 			)),

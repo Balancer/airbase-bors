@@ -195,6 +195,9 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 	function set_json($data)
 	{
+		if(getmyuid() == 0)
+			bors_debug::syslog('warning-user-root', "Root user makes json!");
+
 		$json_file = $this->post_json_file();
 		blib_json::file_update($json_file, [$this->id() => $data]);
 	}
@@ -292,6 +295,19 @@ function set_score($v, $dbup = true) { return $this->set('score', $v, $dbup); }
 
 		if($topic = bors_load('balancer_board_topic', $this->topic_id()))
 			return $this->__setc($topic);
+
+		if($this->topic_id())
+		{
+			$topic = bors_new('balancer_board_topic', [
+				'id' => $this->topic_id(),
+				'title' => 'Утерянный топик',
+				'forum_id' => 1, // Флейм и тесты
+				'description' => 'Данный топик был когда-то утерян, сообщения остались. Требуется переименовать и переместить в нужный форум',
+			]);
+
+			$topic->recalculate();
+			return $topic;
+		}
 
 		return NULL;
 	}

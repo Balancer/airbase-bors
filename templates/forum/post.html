@@ -112,7 +112,7 @@
 				</div>
 
 				{if $p->get('attaches')}
-					<div style="margin-top: 10px; clear: both; border-top: 1px dotted #ccc;">
+					<div class="attaches" style="margin-top: 10px; clear: both; border-top: 1px dotted #ccc;">
 						<i style="margin-left: 8px">{ec("Прикреплённые файлы:")}</i><br/>
 						{if $p->get('is_hidden')}
 							{lcml_tag_pair_spoiler::make(balancer_board_attach::show_attaches($p))}

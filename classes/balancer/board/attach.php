@@ -149,7 +149,7 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 
 			$thumb .= "<img src=\"{$thumb_url}\" alt=\"\" class=\"main\" class=\"rs_box shadow8\"/></a>";
 			$width = $w+16;
-			$height = $h+32;
+			$height = $h+48;
 
 //			$container = "<div style=\"width: ".($w+16)."px; height: ".($h+16)."px; float: left;\">%s</div>";
 		}
@@ -181,7 +181,7 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			$width = 300;
 		}
 
-		$container_style = defval($args, 'container_style', "width: {$width}px; height: {$height}px; padding: auto;");
+		$container_style = defval($args, 'container_style', "width: {$width}px; height: {$height}px;");
 		$container_class = defval($args, 'container_class', "float_left center mtop8 shadow8");
 
 		$container_style = str_replace('%ATTACH_WIDTH%', "{$width}px", $container_style);
@@ -190,10 +190,14 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			$container_style_append = ' '.$container_style_append;
 
 		// {$this->url()}
-		$html = sprintf($container, "<div class=\"attach-desc {$container_class}\" style=\"{$container_style}{$container_style_append}\">{$thumb}<br/>"
-			."<a href=\"{$this->url()}\">".wordwrap($this->title(), 30, ' ', true)." (скачать)</a> "
-			."[".smart_size($this->size()).",&nbsp;{$this->downloads()}&nbsp;".sklon($this->downloads(), 'загрузка', 'загрузки', 'загрузок')."]"
-			." [attach={$this->id()}]</div>");
+		$html = sprintf($container, "
+<div class=\"attach-desc {$container_class}\" style=\"{$container_style}{$container_style_append}\">
+	{$thumb}
+	<a href=\"{$this->url()}\">".wordwrap($this->title(), 30, ' ', true)." (скачать)</a>
+	[".smart_size($this->size()).",&nbsp;{$this->downloads()}&nbsp;".sklon($this->downloads(), 'загрузка', 'загрузки', 'загрузок')."]
+	[attach={$this->id()}]
+	<div class=\"clear\">&nbsp;</div>
+</div>");
 
 		return $html;
 	}
@@ -238,7 +242,7 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 //		$file = $storage.'/attach-'.$this->id().'.json';
 		$file = $storage.'/'.$this->infonesy_uuid().'.json';
 
-		$ipfs = new B2\Ipfs\Api("10.0.3.1", "8080", "5001");
+		$ipfs = new B2\Ipfs\Api("10.0.3.1", "58080", "55001");
 
 		$hash = $ipfs->add(file_get_contents($this->file_name_with_path()));
 		$ipfs->pinAdd($hash);

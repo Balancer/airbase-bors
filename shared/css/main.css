@@ -977,31 +977,6 @@ table.topic-list td > a > img {
 	margin: 1mm 0;
 }
 
-/* Экран низкого разрешения или узкий */
-/*@media only screen and ((max-device-width: 639px) or (max-device-width: 10cm)) */
-@media only screen and (max-device-width: 11.99cm) {
-	div.rs_box {
-		width: 100%;
-	}
-	img.main {
-		width: 100%;
-		height: auto;
-	}
-
-	.tpl_column_left {
-		width: auto;
-	}
-	.w200 {
-		width: auto;
-	}
-	.mtop8 {
-		clear:both;
-	}
-	.mtop8 img {
-		max-width: 100%;
-	}
-}
-
 /* Экран высокого разрешения  */
 /*
 @media only screen and (min-resolution: 192dpi) {
@@ -1101,4 +1076,81 @@ xbody::before {
 .post .body .attach-desc  {
 	font-size: 0.7rem;
 	color: #999;
+}
+.post_kws, .post_kws a {
+	color: #9bd !important;
+}
+
+.post_kws a {
+	background-color:#fff;
+	border-color: #def;
+}
+
+.post .body .attach-desc  {
+	font-size: 14px;
+	line-height: 16px;
+	color: #999;
+}
+
+.attach-desc {
+	max-width: 100%;
+	display: table-cell;
+	padding: 8px;
+}
+
+.attaches img {
+	display: block;
+	margin: auto;
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+}
+
+/* Экран низкого разрешения или узкий */
+/*@media only screen and ((max-device-width: 639px) or (max-device-width: 10cm)) */
+@media only screen and (max-device-width: 11.99cm) {
+	body {
+		padding-left: 0;
+	}
+
+	div.post {
+		border-left: none;
+		border-right: none;
+	}
+
+	div.rs_box {
+		width: 100%;
+	}
+
+	.tpl_column_left {
+		width: auto;
+	}
+	.w200 {
+		width: auto;
+	}
+	.mtop8 {
+		clear:both;
+	}
+	.mtop8 img {
+		max-width: 100%;
+	}
+
+	.attach-desc {
+		padding: 0;
+	}
+
+	.incenter {
+		width: 100%;
+		padding: 0;
+	}
+
+	.minwidth {
+		min-width: 0;
+		border: none;
+	}
+
+	.wrapper {
+		margin: 0;
+	}
 }
