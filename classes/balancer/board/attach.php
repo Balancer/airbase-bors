@@ -181,7 +181,7 @@ function set_location($v, $dbup=true) { return $this->set('location', $v, $dbup)
 			$width = 300;
 		}
 
-		$container_style = defval($args, 'container_style', "width: {$width}px; height: {$height}px;");
+		$container_style = defval($args, 'container_style', "width: {$width}px;");
 		$container_class = defval($args, 'container_class', "float_left center mtop8 shadow8");
 
 		$container_style = str_replace('%ATTACH_WIDTH%', "{$width}px", $container_style);

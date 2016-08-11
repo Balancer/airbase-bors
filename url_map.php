@@ -48,7 +48,8 @@ bors_url_map([
 	"{$forums}\d{4}/\d{1,2}/t(\d+)/attaches/ => balancer_board_topic_attaches(2)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)/attaches/(\d+)\.html => balancer_board_topic_attaches(2,3)",
 
-	"{$forums}\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+)\-\-.* => redirect:forum_printable(2)",
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+)\-\-.* => forum_printable(2)",
+	"{$forums}\d{4}/\d{1,2}/\d{1,2}/printable\-(\d+),(\d+)\-\-.* => forum_printable(2,3)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-.+\.html\?? => redirect:{$topic_view_class}(2,4)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+),(\d+).* => redirect:{$topic_view_class}(2,3)",
 	"{$forums}\d{4}/\d{1,2}/\d{1,2}/topic\-(\d+)(,(\d+))?\-\-.+ => redirect:{$topic_view_class}(2,4)",
@@ -61,6 +62,7 @@ bors_url_map([
 	"{$forums}\d{4}/\d{1,2}/p(\d+)\.html\?? => balancer_board_posts_show(2)",
 
 	"{$forums}\d{4}/\d{1,2}/printable\-(\d+)\-\-.* => forum_printable(2)",
+	"{$forums}\d{4}/\d{1,2}/printable\-(\d+),(\d+)\-\-.* => forum_printable(2,3)",
 	"{$forums}\d{4}/\d{1,2}/tpc(\d+)\-\-.* => balancer_board_topics_printableCurrent(2)",
 	"{$forums}\d{4}/\d{1,2}/tpc(\d+),(\d+)\-\-.* => balancer_board_topics_printableCurrent(2,3)",
 	"{$forums}\d{4}/\d{1,2}/t(\d+)\-\-.*\.pdf => balancer_board_topics_pdf(2)",
@@ -135,4 +137,5 @@ bors_url_map([
 
 bors_url_map([
 	'.* => bors_page_fs_htsu(url)', //TODO: снести нафиг после конвертации старых hts Авиабазы
+	'/sites/\w/\w/.+\.(jpe?g|png|gif) => balancer_board_sites_reload(url)',
 ]);
