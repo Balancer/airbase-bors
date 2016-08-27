@@ -117,3 +117,8 @@ div.box a {
 
 .forum-topic-snippet-replies {
 }
+
+a, #column2 a {
+	color: #5050a0;
+	border-color: #5A6390;
+}

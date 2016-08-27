@@ -13,8 +13,10 @@ class lcml_tag_pair_post extends bors_lcml_tag_pair
 				'description' => $post->snip(500),
 				'reference' => $post->topic()->forum()->titled_link(),
 			));
-		else
+		elseif($post)
 			$html = $post->titled_link_in_container();
+		else
+			$html = "[Сообщение №$post_id не найдено!]";
 
 		return $html;
 	}
