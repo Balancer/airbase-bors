@@ -114,6 +114,7 @@ class bal_users_helper extends bors_object
 
 		if($next_domain)
 		{
+			//TODO: разобраться, почему на Авиабазе не выставляется need_save для tanzpol.org
 			$haction->set_attr('need_save', true);
 			$haction->set_actor_attributes(json_encode([
 				'domain' => $next_domain,

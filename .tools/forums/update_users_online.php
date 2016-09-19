@@ -5,7 +5,7 @@ $_SERVER['DOCUMENT_ROOT'] = '/var/www/balancer.ru/htdocs';
 define('BORS_CORE', '/var/www/bors/composer/vendor/balancer/bors-core');
 define('BORS_3RD_PARTY', '/var/www/repos/bors-third-party');
 
-define('BORS_LOCAL', '/var/www/bors/bors-airbase');
+define('BORS_LOCAL', '/var/www/bors/composer/vendor/balancer/airbase-bors');
 require_once(BORS_CORE.'/init.php');
 
 require_once('inc/js.php');

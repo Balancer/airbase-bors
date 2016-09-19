@@ -1,7 +1,7 @@
 <?php
 
 define('BORS_CORE', '/var/www/bors/bors-core');
-define('BORS_LOCAL', '/var/www/bors/bors-airbase');
+define('BORS_LOCAL', '/var/www/bors/composer/vendor/balancer/airbase-bors');
 include_once(BORS_CORE.'/init.php');
 
 forum_clean(190, 3, 'АвиаПорт.Ru');

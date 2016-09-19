@@ -14,10 +14,14 @@ class balancer_board_topic extends forum_topic
 
 	function browser_description()
 	{
-		if($this->total_pages() <= 1)
-			return $this->description();
+		$desc = trim($this->description());
+		if(bors_strlen($desc) < 180)
+			$desc .= ($desc ? ': ' : '') . $this->first_post_on_page()->snip(max(32, 200-bors_strlen($desc)));
 
-		return $this->description() . " (страница {$this->page()} из {$this->total_pages()})";
+		if($this->total_pages() <= 1)
+			return $desc;
+
+		return $desc . " (стр. ".max(1,$this->page())." из {$this->total_pages()})";
 	}
 
 	function topic_title_with_description()
@@ -102,6 +106,16 @@ class balancer_board_topic extends forum_topic
 		return array_merge(parent::auto_objects(), array(
 			'folder' => 'balancer_board_forum(forum_id)',
 		));
+	}
+
+	function _first_post_on_page_def()
+	{
+		return balancer_board_post::find([
+			'topic_id' => $this->id(),
+			'`page`=' => $this->page(),
+			'is_deleted' => false,
+			'order' => 'sort_order,create_time,id',
+		])->first();
 	}
 
 	function find_first_unvisited_post($user)

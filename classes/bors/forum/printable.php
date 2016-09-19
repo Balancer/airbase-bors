@@ -4,6 +4,15 @@ class forum_printable extends balancer_board_topic
 {
 	function uri_name() { return 'printable'; }
 
+	function title()
+	{
+		$t = parent::title();
+		if($this->total_pages() > 1)
+			$t .= ". [стр. {$this->page()}/{$this->total_pages()}]";
+
+		return $t;
+	}
+
     function parents() { return array("balancer_board_topic://".$this->id()); }
     function nav_name() { return ec('Версия для печати'); }
 

@@ -107,5 +107,5 @@ class forum_blog extends bors_page_db
 	// При уброке проверить http://forums.balancer.ru/tags/лингвистика/
 	function num_replies() { return $this->post()->answers_count(); }
 	// При уброке проверить http://forums.balancer.ru/tags/лингвистика/
-	function author_name() { return $this->post()->author_name(); }
+	function author_name() { return object_property($this->post(), 'author_name'); }
 }

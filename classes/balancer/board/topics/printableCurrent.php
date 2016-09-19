@@ -11,7 +11,29 @@ class balancer_board_topics_printableCurrent extends balancer_board_paginated
 
 	function can_be_empty() { return false; }
 	function is_loaded() { return $this->topic() != NULL; }
-	function title() { return $this->topic()->title().', страница '.max(1, $this->page()); }
+	function title()
+	{
+		$t = $this->topic()->title();
+		if($this->total_pages() > 1)
+			$t .= " (страница ".max(1,$this->page())." из {$this->total_pages()})";
+
+		return $t;
+	}
+
+	function browser_description()
+	{
+		$topic = $this->topic();
+		$desc = trim($topic->description());
+
+		if(!$desc)
+			return NULL;
+
+		if($this->total_pages() <= 1)
+			return $desc;
+
+		return $desc . " (стр. ".max(1,$this->page())." из {$this->total_pages()})";
+	}
+
 	function nav_name() { return 'версия для печати страницы '.max(1, $this->page()); }
 	function parents() { return array($this->topic()->url_ex($this->page())); }
 

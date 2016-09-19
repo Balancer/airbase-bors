@@ -18,7 +18,7 @@ class balancer_board_topics_view extends bors_view_container
 	function uri_name() { return 't'; }
 	function nav_name() { return truncate($this->title(), 60); }
 
-	function use_bootstrap() { return config('is_developer'); }
+	function use_bootstrap() { return 0 && config('is_developer'); }
 
 	function where()
 	{

@@ -2,7 +2,7 @@
 
 class wrk_news_tags_view extends balancer_board_paginated
 {
-	const DAYS=93;
+	const DAYS=193;
 
 	function title() { return 'Новости по теме «'.$this->id().'»'; }
 	var $main_class = 'balancer_board_post';
