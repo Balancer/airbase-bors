@@ -1,5 +1,7 @@
 # Общий репозиторий проектов сервера Airbase.
 
+[![Stories in Ready](https://badge.waffle.io/Balancer/airbase-bors.png?label=ready&title=Ready)](http://waffle.io/Balancer/airbase-bors)
+
 ## Новости кодописания
 
 ### 2015-07-14
